@@ -1,6 +1,6 @@
 /* Container chính bọc Sidebar và Content */
 .container {
-    display: flex;
+    /* display: flex; */
     height: 100vh;
   }
   
@@ -105,13 +105,14 @@
   
   /* Content Area */
   .contentContainer {
-    flex-grow: 1;
-    margin-left: 250px; /* Để không bị che bởi Sidebar */
+    margin-top: 80px;
+    /* flex-grow: 1; */
+    margin-left: 300px; /* Để không bị che bởi Sidebar */
     padding: 20px;
     background-color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    /* display: flex; */
+    /* align-items: center;
+    justify-content: center; */
     height: 100vh;
     transition: margin-left 0.3s ease;
   }
@@ -141,4 +142,25 @@
     transform: translateX(-50%);
     text-align: center;
     border-radius: 5px;
+}
+
+/* Arrow styles */
+.arrowUp {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 5px; /* Space between text and arrow */
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid white; /* Change color as needed */
+}
+
+.arrowDown {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 5px; /* Space between text and arrow */
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid white; /* Change color as needed */
 }
