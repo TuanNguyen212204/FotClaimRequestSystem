@@ -17,7 +17,6 @@ const Header: React.FC = () => {
         <FaBell className={styles.icon} />
         <FaUserCircle className={styles.icon} onClick={() => {
           navigate(PATH.userinfo)
-          console.log("a")
         }} />
         <span className={styles.username}>Administrator</span>
       </div>
