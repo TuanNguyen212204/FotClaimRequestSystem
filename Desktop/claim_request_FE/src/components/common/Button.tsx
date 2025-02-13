@@ -2,6 +2,8 @@ import { ButtonProps } from "../../types/button.type";
 
 export const Button: React.FC<ButtonProps> = ({
   border,
+  width,
+  height,
   color,
   name,
   backgroundColor,
@@ -13,7 +15,16 @@ export const Button: React.FC<ButtonProps> = ({
   return (
     <button
       onClick={onClick}
-      style={{ border, color, backgroundColor, borderRadius, padding, margin }}
+      style={{
+        border,
+        color,
+        backgroundColor,
+        borderRadius,
+        padding,
+        margin,
+        width,
+        height,
+      }}
     >
       {name}
     </button>
