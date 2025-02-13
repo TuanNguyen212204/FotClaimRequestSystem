@@ -169,6 +169,45 @@ export const Sidebar = () => {
                   </li>
                 </>
               )}
+              {role === "user" && (
+                <>
+                  <li
+                    key="draft"
+                    className={`${styles.claimItem} ${selectedClaim === "draft" ? styles.active : ""}`}
+                    onClick={() => handleSelect("draft")}
+                  >
+                    {!isCollapsed && "Draft"}
+                  </li>
+                  <li
+                    key="pending"
+                    className={`${styles.claimItem} ${selectedClaim === "pending" ? styles.active : ""}`}
+                    onClick={() => handleSelect("pending")}
+                  >
+                    {!isCollapsed && "Pending Approval"}
+                  </li>
+                  <li
+                    key="approved"
+                    className={`${styles.claimItem} ${selectedClaim === "approved" ? styles.active : ""}`}
+                    onClick={() => handleSelect("approved")}
+                  >
+                    {!isCollapsed && "Approved"}
+                  </li>
+                  <li
+                    key="paid"
+                    className={`${styles.claimItem} ${selectedClaim === "paid" ? styles.active : ""}`}
+                    onClick={() => handleSelect("paid")}
+                  >
+                    {!isCollapsed && "Paid"}
+                  </li>
+                  <li
+                    key="rejected"
+                    className={`${styles.claimItem} ${selectedClaim === "rejected" ? styles.active : ""}`}
+                    onClick={() => handleSelect("rejected")}
+                  >
+                    {!isCollapsed && "Rejected"}
+                  </li>
+                </>
+              )}
             </ul>
           )}
         </div>
