@@ -17,6 +17,14 @@ const RejectedComponent = () => (
   <div className={styles.content}>Rejected Content</div>
 );
 
+const StaffInformationComponent = () => (
+  <div className={styles.content}>Staff Information Content</div>
+);
+
+const ProjectInformationComponent = () => (
+  <div className={styles.content}>Project Information Content</div>
+);
+
 export const Sidebar = () => {
   const [selectedClaim, setSelectedClaim] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -51,7 +59,10 @@ export const Sidebar = () => {
           <img src="/imgs/logo.png" alt="logo" className={styles.logoImage} />
         </div>
 
-        <button className={styles.createClaim}>Create Claims</button>
+        {/* Conditionally render Create Claims button */}
+        {role !== "admin" && (
+          <button className={styles.createClaim}>Create Claims</button>
+        )}
 
         <div className={styles.menu}>
           <h3 onClick={toggleMenu} className={styles.claimHeader}>
@@ -111,6 +122,8 @@ export const Sidebar = () => {
         {selectedClaim === "approved" && <ApprovedComponent />}
         {selectedClaim === "paid" && <PaidComponent />}
         {selectedClaim === "rejected" && <RejectedComponent />}
+        {selectedClaim === "staff" && <StaffInformationComponent />}
+        {selectedClaim === "project" && <ProjectInformationComponent />}
       </div>
     </div>
   );

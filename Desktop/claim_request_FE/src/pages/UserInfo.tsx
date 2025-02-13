@@ -1,6 +1,9 @@
+import { UserInfoComponent } from "../components/ui/user/UserInfoComponent";
 
 export const UserInfo = () => {
   return (
-    <div>User</div>
-  )
-}
+    <div>
+      <UserInfoComponent />
+    </div>
+  );
+};
