@@ -1,3 +1,4 @@
+import { UserInfo } from "../../../pages/UserInfo";
 import styles from "./Sidebar.module.css";
 import { useState } from "react";
 
@@ -77,6 +78,7 @@ export const Sidebar = () => {
                     { key: "project", label: "Project Information" },
                   ]
                 : [
+                    { key: "info", label: "info" },
                     { key: "draft", label: "Draft" },
                     { key: "pending", label: "Pending Approval" },
                     { key: "approved", label: "Approved" },
@@ -103,6 +105,7 @@ export const Sidebar = () => {
 
       {/* Content Area */}
       <div className={styles.contentContainer}>
+        {selectedClaim === "info" && <UserInfo />}
         {selectedClaim === "draft" && <DraftComponent />}
         {selectedClaim === "pending" && <PendingApprovalComponent />}
         {selectedClaim === "approved" && <ApprovedComponent />}
