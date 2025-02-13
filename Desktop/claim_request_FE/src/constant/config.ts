@@ -1,5 +1,6 @@
 export const PATH = {
     home: '/',
     userinfo: '/userinfo',
-    draft: '/draft'
+    draft: '/draft',
+    pending: "/pending",
 }
