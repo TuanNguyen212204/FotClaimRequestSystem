@@ -1,4 +1,6 @@
 export type ButtonProps = {
+  width?: number;
+  height?: number;
   color?: string;
   name: string;
   backgroundColor?: string;
