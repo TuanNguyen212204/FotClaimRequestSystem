@@ -1,29 +1,7 @@
-import { UserInfo } from "../../../pages/UserInfo";
 import styles from "./Sidebar.module.css";
-import { useState } from "react";
-
-// Các component content tương ứng với từng tab
-const DraftComponent = () => (
-  <div className={styles.content}>Draft Content</div>
-);
-const PendingApprovalComponent = () => (
-  <div className={styles.content}>Pending Approval Content</div>
-);
-const ApprovedComponent = () => (
-  <div className={styles.content}>Approved Content</div>
-);
-const PaidComponent = () => <div className={styles.content}>Paid Content</div>;
-const RejectedComponent = () => (
-  <div className={styles.content}>Rejected Content</div>
-);
-
-const StaffInformationComponent = () => (
-  <div className={styles.content}>Staff Information Content</div>
-);
-
-const ProjectInformationComponent = () => (
-  <div className={styles.content}>Project Information Content</div>
-);
+import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { PATH } from "../../../constant/config";
 
 export const Sidebar = () => {
   const [selectedClaim, setSelectedClaim] = useState("");
@@ -31,8 +9,46 @@ export const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [role, setRole] = useState("user");
 
+  const location = useLocation();
+  const currentPath = location.pathname;
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (currentPath === PATH.userinfo) {
+      setSelectedClaim("userinfo");
+    }
+  }, [currentPath]);
+
   const handleSelect = (claim: string) => {
     setSelectedClaim(claim);
+    switch (claim) {
+      case "draft":
+        navigate(PATH.draft);
+        break;
+      // case "pending":
+      //   navigate(PATH.pending);
+      //   break;
+      // case "approved":
+      //   navigate(PATH.approved);
+      //   break;
+      // case "paid":
+      //   navigate(PATH.paid);
+      //   break;
+      // case "rejected":
+      //   navigate(PATH.rejected);
+      //   break;
+      // case "staff":
+      //   navigate(PATH.staff);
+      //   break;
+      // case "project":
+      //   navigate(PATH.project);
+      //   break;
+      case "userinfo":
+        navigate(PATH.userinfo);
+        break;
+      default:
+        break;
+    }
   };
 
   const toggleMenu = () => {
@@ -59,71 +75,144 @@ export const Sidebar = () => {
           <img src="/imgs/logo.png" alt="logo" className={styles.logoImage} />
         </div>
 
-        {/* Conditionally render Create Claims button */}
-        {role !== "admin" && (
+        {/* Bỏ nút Create Claims nếu vai trò là approve hoặc finance */}
+        {role !== "approve" && role !== "finance" && role !== "admin" && (
           <button className={styles.createClaim}>Create Claims</button>
         )}
 
         <div className={styles.menu}>
           <h3 onClick={toggleMenu} className={styles.claimHeader}>
-            {role === "admin" ? "Configuration" : "My Claims"}
+            {role === "admin"
+              ? "Configuration"
+              : role === "approve"
+              ? "Claims for Approval"
+              : role === "finance"
+              ? "Finance Claims"
+              : "My Claims"}
             <span className={isOpen ? styles.arrowUp : styles.arrowDown}></span>
           </h3>
 
           {isOpen && (
             <ul className={styles.claimList}>
               {role === "admin" && (
-                <li
-                  key="dashboard"
-                  className={`${styles.claimItem} ${
-                    selectedClaim === "dashboard" ? styles.active : ""
-                  }`}
-                  onClick={() => handleSelect("dashboard")}
-                >
-                  {!isCollapsed && "Dashboard"}
-                </li>
+                <>
+                  <li
+                    key="dashboard"
+                    className={`${styles.claimItem} ${
+                      selectedClaim === "dashboard" ? styles.active : ""
+                    }`}
+                    onClick={() => handleSelect("dashboard")}
+                  >
+                    {!isCollapsed && "Dashboard"}
+                  </li>
+                  <li
+                    key="configuration"
+                    className={`${styles.claimItem} ${
+                      selectedClaim === "configuration" ? styles.active : ""
+                    }`}
+                    onClick={() => handleSelect("configuration")}
+                  >
+                    {!isCollapsed && "Configuration"}
+                  </li>
+                </>
               )}
-              {(role === "admin"
-                ? [
-                    { key: "staff", label: "Staff Information" },
-                    { key: "project", label: "Project Information" },
-                  ]
-                : [
-                    { key: "info", label: "info" },
-                    { key: "draft", label: "Draft" },
-                    { key: "pending", label: "Pending Approval" },
-                    { key: "approved", label: "Approved" },
-                    { key: "paid", label: "Paid" },
-                    { key: "rejected", label: "Rejected" },
-                  ]
-              ).map((item) => (
-                <li
-                  key={item.key}
-                  className={`${styles.claimItem} ${
-                    selectedClaim === item.key ? styles.active : ""
-                  }`}
-                  onClick={() => handleSelect(item.key)}
-                >
-                  {!isCollapsed && item.label}
-                </li>
-              ))}
+              {role === "approve" && (
+                <>
+                  <li
+                    key="vetting"
+                    className={`${styles.claimItem} ${
+                      selectedClaim === "vetting" ? styles.active : ""
+                    }`}
+                    onClick={() => handleSelect("vetting")}
+                  >
+                    {!isCollapsed && "For My Vetting"}
+                  </li>
+                  <li
+                    key="approved_paid"
+                    className={`${styles.claimItem} ${
+                      selectedClaim === "approved_paid" ? styles.active : ""
+                    }`}
+                    onClick={() => handleSelect("approved_paid")}
+                  >
+                    {!isCollapsed && "Approved or Paid"}
+                  </li>
+                  <li
+                    key="employee_profile"
+                    className={`${styles.claimItem} ${
+                      selectedClaim === "employee_profile" ? styles.active : ""
+                    }`}
+                    onClick={() => handleSelect("employee_profile")}
+                  >
+                    {!isCollapsed && "Employee Profile"}
+                  </li>
+                </>
+              )}
+              {role === "finance" && (
+                <>
+                  <li
+                    key="approved"
+                    className={`${styles.claimItem} ${
+                      selectedClaim === "approved" ? styles.active : ""
+                    }`}
+                    onClick={() => handleSelect("approved")}
+                  >
+                    {!isCollapsed && "Approved"}
+                  </li>
+                  <li
+                    key="paid"
+                    className={`${styles.claimItem} ${
+                      selectedClaim === "paid" ? styles.active : ""
+                    }`}
+                    onClick={() => handleSelect("paid")}
+                  >
+                    {!isCollapsed && "Paid"}
+                  </li>
+                </>
+              )}
+              {role === "user" && (
+                <>
+                  <li
+                    key="draft"
+                    className={`${styles.claimItem} ${selectedClaim === "draft" ? styles.active : ""}`}
+                    onClick={() => handleSelect("draft")}
+                  >
+                    {!isCollapsed && "Draft"}
+                  </li>
+                  <li
+                    key="pending"
+                    className={`${styles.claimItem} ${selectedClaim === "pending" ? styles.active : ""}`}
+                    onClick={() => handleSelect("pending")}
+                  >
+                    {!isCollapsed && "Pending Approval"}
+                  </li>
+                  <li
+                    key="approved"
+                    className={`${styles.claimItem} ${selectedClaim === "approved" ? styles.active : ""}`}
+                    onClick={() => handleSelect("approved")}
+                  >
+                    {!isCollapsed && "Approved"}
+                  </li>
+                  <li
+                    key="paid"
+                    className={`${styles.claimItem} ${selectedClaim === "paid" ? styles.active : ""}`}
+                    onClick={() => handleSelect("paid")}
+                  >
+                    {!isCollapsed && "Paid"}
+                  </li>
+                  <li
+                    key="rejected"
+                    className={`${styles.claimItem} ${selectedClaim === "rejected" ? styles.active : ""}`}
+                    onClick={() => handleSelect("rejected")}
+                  >
+                    {!isCollapsed && "Rejected"}
+                  </li>
+                </>
+              )}
             </ul>
           )}
         </div>
 
         <button className={styles.logout}>Logout</button>
-      </div>
-
-      {/* Content Area */}
-      <div className={styles.contentContainer}>
-        {selectedClaim === "info" && <UserInfo />}
-        {selectedClaim === "draft" && <DraftComponent />}
-        {selectedClaim === "pending" && <PendingApprovalComponent />}
-        {selectedClaim === "approved" && <ApprovedComponent />}
-        {selectedClaim === "paid" && <PaidComponent />}
-        {selectedClaim === "rejected" && <RejectedComponent />}
-        {selectedClaim === "staff" && <StaffInformationComponent />}
-        {selectedClaim === "project" && <ProjectInformationComponent />}
       </div>
     </div>
   );
