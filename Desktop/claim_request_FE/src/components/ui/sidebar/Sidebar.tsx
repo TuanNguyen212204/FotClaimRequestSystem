@@ -1,28 +1,7 @@
 import styles from "./Sidebar.module.css";
-import { useState } from "react";
-
-// Các component content tương ứng với từng tab
-const DraftComponent = () => (
-  <div className={styles.content}>Draft Content</div>
-);
-const PendingApprovalComponent = () => (
-  <div className={styles.content}>Pending Approval Content</div>
-);
-const ApprovedComponent = () => (
-  <div className={styles.content}>Approved Content</div>
-);
-const PaidComponent = () => <div className={styles.content}>Paid Content</div>;
-const RejectedComponent = () => (
-  <div className={styles.content}>Rejected Content</div>
-);
-
-const StaffInformationComponent = () => (
-  <div className={styles.content}>Staff Information Content</div>
-);
-
-const ProjectInformationComponent = () => (
-  <div className={styles.content}>Project Information Content</div>
-);
+import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { PATH } from "../../../constant/config";
 
 export const Sidebar = () => {
   const [selectedClaim, setSelectedClaim] = useState("");
@@ -30,8 +9,46 @@ export const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [role, setRole] = useState("user");
 
+  const location = useLocation();
+  const currentPath = location.pathname;
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (currentPath === PATH.userinfo) {
+      setSelectedClaim("userinfo");
+    }
+  }, [currentPath]);
+
   const handleSelect = (claim: string) => {
     setSelectedClaim(claim);
+    switch (claim) {
+      case "draft":
+        navigate(PATH.draft);
+        break;
+      // case "pending":
+      //   navigate(PATH.pending);
+      //   break;
+      // case "approved":
+      //   navigate(PATH.approved);
+      //   break;
+      // case "paid":
+      //   navigate(PATH.paid);
+      //   break;
+      // case "rejected":
+      //   navigate(PATH.rejected);
+      //   break;
+      // case "staff":
+      //   navigate(PATH.staff);
+      //   break;
+      // case "project":
+      //   navigate(PATH.project);
+      //   break;
+      case "userinfo":
+        navigate(PATH.userinfo);
+        break;
+      default:
+        break;
+    }
   };
 
   const toggleMenu = () => {
@@ -88,7 +105,6 @@ export const Sidebar = () => {
                     { key: "project", label: "Project Information" },
                   ]
                 : [
-                    { key: "info", label: "info" },
                     { key: "draft", label: "Draft" },
                     { key: "pending", label: "Pending Approval" },
                     { key: "approved", label: "Approved" },
@@ -111,17 +127,6 @@ export const Sidebar = () => {
         </div>
 
         <button className={styles.logout}>Logout</button>
-      </div>
-
-      {/* Content Area */}
-      <div className={styles.contentContainer}>
-        {selectedClaim === "draft" && <DraftComponent />}
-        {selectedClaim === "pending" && <PendingApprovalComponent />}
-        {selectedClaim === "approved" && <ApprovedComponent />}
-        {selectedClaim === "paid" && <PaidComponent />}
-        {selectedClaim === "rejected" && <RejectedComponent />}
-        {selectedClaim === "staff" && <StaffInformationComponent />}
-        {selectedClaim === "project" && <ProjectInformationComponent />}
       </div>
     </div>
   );
