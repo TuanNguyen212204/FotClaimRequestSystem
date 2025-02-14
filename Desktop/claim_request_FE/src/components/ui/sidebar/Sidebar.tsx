@@ -28,9 +28,9 @@ export const Sidebar = () => {
       // case "pending":
       //   navigate(PATH.pending);
       //   break;
-      // case "approved":
-      //   navigate(PATH.approved);
-      //   break;
+      case "approved":
+        navigate(PATH.approved);
+        break;
       // case "paid":
       //   navigate(PATH.paid);
       //   break;
@@ -173,35 +173,45 @@ export const Sidebar = () => {
                 <>
                   <li
                     key="draft"
-                    className={`${styles.claimItem} ${selectedClaim === "draft" ? styles.active : ""}`}
+                    className={`${styles.claimItem} ${
+                      selectedClaim === "draft" ? styles.active : ""
+                    }`}
                     onClick={() => handleSelect("draft")}
                   >
                     {!isCollapsed && "Draft"}
                   </li>
                   <li
                     key="pending"
-                    className={`${styles.claimItem} ${selectedClaim === "pending" ? styles.active : ""}`}
+                    className={`${styles.claimItem} ${
+                      selectedClaim === "pending" ? styles.active : ""
+                    }`}
                     onClick={() => handleSelect("pending")}
                   >
                     {!isCollapsed && "Pending Approval"}
                   </li>
                   <li
                     key="approved"
-                    className={`${styles.claimItem} ${selectedClaim === "approved" ? styles.active : ""}`}
+                    className={`${styles.claimItem} ${
+                      selectedClaim === "approved" ? styles.active : ""
+                    }`}
                     onClick={() => handleSelect("approved")}
                   >
                     {!isCollapsed && "Approved"}
                   </li>
                   <li
                     key="paid"
-                    className={`${styles.claimItem} ${selectedClaim === "paid" ? styles.active : ""}`}
+                    className={`${styles.claimItem} ${
+                      selectedClaim === "paid" ? styles.active : ""
+                    }`}
                     onClick={() => handleSelect("paid")}
                   >
                     {!isCollapsed && "Paid"}
                   </li>
                   <li
                     key="rejected"
-                    className={`${styles.claimItem} ${selectedClaim === "rejected" ? styles.active : ""}`}
+                    className={`${styles.claimItem} ${
+                      selectedClaim === "rejected" ? styles.active : ""
+                    }`}
                     onClick={() => handleSelect("rejected")}
                   >
                     {!isCollapsed && "Rejected"}
