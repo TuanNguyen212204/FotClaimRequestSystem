@@ -1,6 +1,5 @@
-import { EyeIcon, TrashIcon, CheckIcon } from "lucide-react";
 import { ArrowLeftSquare, ArrowRightSquare } from "lucide-react";
-import styles from "./DetailsComponents.module.css";
+import styles from "./DetailsApproval.module.css";
 export const DetailsComponents: React.FC = () => {
   const claims = [
     {

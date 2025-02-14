@@ -1,6 +1,6 @@
 import { EyeIcon, TrashIcon, CheckIcon } from "lucide-react";
 import { ArrowLeftSquare, ArrowRightSquare } from "lucide-react";
-import styles from "./PendingComponent.module.css";
+import styles from "./PendingApproval.module.css";
 import { useNavigate } from "react-router-dom";
 
 export const PendingComponent: React.FC = () => {

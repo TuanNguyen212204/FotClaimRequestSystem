@@ -1,4 +1,4 @@
-import { PendingComponent } from "../components/ui/user/PendingComponents/PendingComponent";
+import { PendingComponent } from "./PendingApproval/PendingApproval";
 
 export const PendingApproval:React.FC = () => {
   return (
