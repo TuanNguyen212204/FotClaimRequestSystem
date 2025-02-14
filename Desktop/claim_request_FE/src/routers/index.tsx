@@ -6,22 +6,22 @@ import DraftCoponent from "../components/ui/user/DraftCoponent";
 import { UserInfoComponent } from "../components/ui/user/UserInfoComponent";
 
 const router: RouteObject[] = [
-    {
-        element: <MainLayout />,
-        children: [
-            {
-                path: PATH.home,
-                element: <HomePage />,
-            }, 
-            {
-                path: PATH.draft,
-                element: <DraftCoponent />
-            },
-            {
-                path: PATH.userinfo,
-                element: <UserInfoComponent />
-            }
-        ]
-    }
-]
-export const Router = () => useRoutes(router)
+  {
+    element: <MainLayout />,
+    children: [
+      {
+        path: PATH.home,
+        element: <HomePage />,
+      },
+      {
+        path: PATH.draft,
+        element: <DraftCoponent />,
+      },
+      {
+        path: PATH.userinfo,
+        element: <UserInfoComponent />,
+      },
+    ],
+  },
+];
+export const Router = () => useRoutes(router);
