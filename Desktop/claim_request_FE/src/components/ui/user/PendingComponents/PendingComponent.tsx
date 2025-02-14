@@ -1,6 +1,7 @@
 import { EyeIcon, TrashIcon, CheckIcon } from "lucide-react";
 import { ArrowLeftSquare, ArrowRightSquare } from "lucide-react";
 import styles from "./PendingComponent.module.css";
+import { useNavigate } from "react-router-dom";
 
 export const PendingComponent: React.FC = () => {
       const claims = [
@@ -45,6 +46,13 @@ export const PendingComponent: React.FC = () => {
       approver: "Marco",
     },
   ];
+
+  const navigator = useNavigate();
+
+  function details() {
+    navigator("/details");
+  }
+  
     return (
       <div className={styles.container}>
         <h1 className={styles.title}>Pending Approval Claims</h1>
@@ -71,7 +79,7 @@ export const PendingComponent: React.FC = () => {
                 <td>{claim.hours}</td>
                 <td>{claim.approver}</td>
                 <td className={styles.actions}>
-                  <EyeIcon className={styles.icon} />
+                  <EyeIcon onClick={details} className={styles.icon} />
                   <TrashIcon className={styles.icon} />
                   <CheckIcon className={styles.icon} />
                 </td>

@@ -1,6 +1,6 @@
-import { PendingComponent } from "../components/ui/user/PendingComponent";
+import { PendingComponent } from "../components/ui/user/PendingComponents/PendingComponent";
 
-export const PendingApproval = () => {
+export const PendingApproval:React.FC = () => {
   return (
     <div>
       <PendingComponent />

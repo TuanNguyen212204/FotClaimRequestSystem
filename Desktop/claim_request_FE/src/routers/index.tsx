@@ -4,7 +4,8 @@ import { HomePage } from "../pages/HomePage";
 import { PATH } from "../constant/config";
 import DraftCoponent from "../components/ui/user/DraftCoponent";
 import { UserInfoComponent } from "../components/ui/user/UserInfoComponent";
-import { PendingComponent } from "../components/ui/user/PendingComponent";
+import { PendingComponent } from "../components/ui/user/PendingComponents/PendingComponent";
+import { DetailsComponents } from "../components/ui/user/PendingComponents/DetailsComponents";
 
 const router: RouteObject[] = [
     {
@@ -25,6 +26,10 @@ const router: RouteObject[] = [
             {
                 path: PATH.pending,
                 element: <PendingComponent />
+            },
+            {
+                path: PATH.details,
+                element: <DetailsComponents />
             }
         ]
     }
