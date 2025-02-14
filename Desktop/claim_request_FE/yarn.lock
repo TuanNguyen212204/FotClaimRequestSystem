@@ -1506,7 +1506,7 @@ supports-color@^7.1.0:
   dependencies:
     has-flag "^4.0.0"
 
-tailwindcss@^4.0.6, tailwindcss@4.0.6:
+tailwindcss@4.0.6:
   version "4.0.6"
   resolved "https://registry.npmjs.org/tailwindcss/-/tailwindcss-4.0.6.tgz"
   integrity sha512-mysewHYJKaXgNOW6pp5xon/emCsfAMnO8WMaGKZZ35fomnR/T5gYnRg2/yRTTrtXiEl1tiVkeRt0eMO6HxEZqw==
