@@ -1,13 +1,13 @@
-import './App.css'
-import { Router } from './routers'
+
+import "./App.css";
+import ClaimStatus from "./pages/Finance/PaidClaims";
 
 function App() {
-
   return (
-    <>
-      <Router />
-    </>
-  )
+    <div className="app-container">
+      <ClaimStatus />
+    </div>
+  );
 }
 
-export default App
+export default App;

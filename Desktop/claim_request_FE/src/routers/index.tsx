@@ -4,10 +4,12 @@ import { HomePage } from "../pages/HomePage";
 import { PATH } from "../constant/config";
 import DraftCoponent from "../components/ui/user/DraftCoponent";
 import { UserInfoComponent } from "../components/ui/user/UserInfoComponent";
+import PaidClaims from "../pages/Finance/PaidClaims";
+import ClaimStatus from "../pages/Finance/ClaimStatus";
 
 const router: RouteObject[] = [
     {
-        element: <MainLayout />,
+        element: <MainLayout />, 
         children: [
             {
                 path: PATH.home,
@@ -20,6 +22,14 @@ const router: RouteObject[] = [
             {
                 path: PATH.userinfo,
                 element: <UserInfoComponent />
+            },
+            {
+                path: PATH.paidClaims,
+                element: <PaidClaims />
+            },
+            {
+                path: PATH.claimStatus,
+                element: <ClaimStatus />
             }
         ]
     }
