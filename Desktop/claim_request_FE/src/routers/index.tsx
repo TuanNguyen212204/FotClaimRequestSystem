@@ -16,7 +16,7 @@ const router: RouteObject[] = [
       {
         path: PATH.draft,
         element: <DraftCoponent />,
-      },
+      },  
       {
         path: PATH.userinfo,
         element: <UserInfoComponent />,
