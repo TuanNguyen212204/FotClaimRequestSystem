@@ -4,18 +4,8 @@ import { HomePage } from "../pages/HomePage";
 import { PATH } from "../constant/config";
 import DraftCoponent from "../components/ui/user/DraftCoponent";
 import { UserInfoComponent } from "../components/ui/user/UserInfoComponent";
-import LoginForm from "../components/ui/login/LoginForm";
-import ResetPassword from "../components/ui/login/ResetPassword";
 import CreateClaimPage from "../pages/CreateClaim";
 const router: RouteObject[] = [
-  {
-    element: <LoginForm />,
-    path: PATH.login,
-  },
-  {
-    element: <ResetPassword />,
-    path: PATH.resetPassword,
-  },
   {
     element: <MainLayout />,
     children: [

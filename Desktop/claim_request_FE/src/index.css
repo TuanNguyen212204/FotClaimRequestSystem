@@ -1,18 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=ABeeZee:ital@0;1&display=swap');
-@import "tailwindcss/utilities.css" layer(utilities);
 @layer theme, base, components, utilities;
 @import "tailwindcss/theme.css" layer(theme);
-* {
-    font-family: "ABeeZee", serif;
-    font-style: normal;
-}
-
-body{
-    padding: 0;
-    margin: 0;
-}
 /* @import "tailwindcss/preflight.css" layer(base); */
-
+@import "tailwindcss/utilities.css" layer(utilities);
 @theme {
   --color-dark-gray: #2d3142;
   --color-light-gray: #4f5d75;
