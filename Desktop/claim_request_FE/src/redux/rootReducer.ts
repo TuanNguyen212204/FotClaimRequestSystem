@@ -1,3 +1,7 @@
 import { combineReducers } from "@reduxjs/toolkit";
-
-export const rootReducer = combineReducers({});
+import { pendingSlice } from "./slice/pendingSlice";
+import { detailsSlice } from "./slice/detailsSlice";
+export const rootReducer = combineReducers({
+    pending: pendingSlice.reducer,
+    details: detailsSlice.reducer,
+});
