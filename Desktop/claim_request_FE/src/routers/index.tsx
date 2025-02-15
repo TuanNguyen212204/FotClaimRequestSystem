@@ -4,8 +4,8 @@ import { HomePage } from "../pages/HomePage";
 import { PATH } from "../constant/config";
 import DraftCoponent from "../components/ui/user/DraftCoponent";
 import { UserInfoComponent } from "../components/ui/user/UserInfoComponent";
-import { PendingComponent } from "../pages/PendingApproval/PendingApproval";
-import { DetailsComponents } from "../pages/PendingApproval/DetailsApproval";
+import { PendingComponent } from "../components/ui/approve/PendingApproval";
+import { DetailsComponents } from "../components/ui/approve/DetailsApproval";
 
 const router: RouteObject[] = [
     {
