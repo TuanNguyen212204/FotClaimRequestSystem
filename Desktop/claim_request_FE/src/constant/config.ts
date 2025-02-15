@@ -4,4 +4,5 @@ export const PATH = {
     draft: '/draft',
     login: '/login',
     resetPassword: '/reset-password',
+    createRequest: 'createClaim',
 }

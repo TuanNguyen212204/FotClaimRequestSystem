@@ -22,6 +22,9 @@ export const Sidebar = () => {
   const handleSelect = (claim: string) => {
     setSelectedClaim(claim);
     switch (claim) {
+      case "createClaim":
+        navigate(PATH.createRequest);
+        break;
       case "draft":
         navigate(PATH.draft);
         break;
@@ -77,7 +80,14 @@ export const Sidebar = () => {
 
         {/* Bỏ nút Create Claims nếu vai trò là approve hoặc finance */}
         {role !== "approve" && role !== "finance" && role !== "admin" && (
-          <button className={styles.createClaim}>Create Claims</button>
+          <button
+            onClick={() => {
+              handleSelect("createClaim");
+            }}
+            className={styles.createClaim}
+          >
+            Create Claims
+          </button>
         )}
 
         <div className={styles.menu}>

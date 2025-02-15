@@ -6,7 +6,7 @@ import DraftCoponent from "../components/ui/user/DraftCoponent";
 import { UserInfoComponent } from "../components/ui/user/UserInfoComponent";
 import LoginForm from "../components/ui/login/LoginForm";
 import ResetPassword from "../components/ui/login/ResetPassword";
-
+import CreateClaimPage from "../pages/CreateClaim";
 const router: RouteObject[] = [
   {
     element: <LoginForm />,
@@ -22,6 +22,10 @@ const router: RouteObject[] = [
       {
         path: PATH.home,
         element: <HomePage />,
+      },
+      {
+        path: PATH.createRequest,
+        element: <CreateClaimPage />,
       },
       {
         path: PATH.draft,
