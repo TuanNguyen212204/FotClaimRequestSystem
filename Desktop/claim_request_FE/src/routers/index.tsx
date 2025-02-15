@@ -9,6 +9,8 @@ import ResetPassword from "../components/ui/login/ResetPassword";
 import CreateClaimPage from "../pages/CreateClaim";
 import { PendingComponent } from "../components/ui/approve/PendingApproval";
 import { DetailsComponents } from "../components/ui/approve/DetailsApproval.tsx";
+import UserClaims from "../pages/User/UserClaims.tsx";
+import { UserClaimDetails } from "../pages/User/UserClaimDetails.tsx";
 const router: RouteObject[] = [
   {
     element: <LoginForm />,
@@ -29,6 +31,14 @@ const router: RouteObject[] = [
         path: PATH.createRequest,
         element: <CreateClaimPage />,
       },
+      {
+        path: PATH.myclaims,
+        element: <UserClaims />
+      },
+      {
+        path: PATH.userclaimdetails,
+        element: <UserClaimDetails />
+      },    
       {
         path: PATH.draft,
         element: <DraftCoponent />,

@@ -7,4 +7,6 @@ export const PATH = {
     createRequest: '/createClaim',
     pending: '/pending',
     details: '/details/:id',
+    myclaims: '/myclaims',
+    userclaimdetails: '/userclaim/:id',
 }
