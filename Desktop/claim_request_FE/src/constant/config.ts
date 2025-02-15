@@ -1,5 +1,7 @@
 export const PATH = {
     home: '/',
     userinfo: '/userinfo',
-    draft: '/draft'
-}
+    draft: '/draft',
+    paidClaims: '/paid-claims',
+    claimStatus: '/claim-status'
+} as const;
