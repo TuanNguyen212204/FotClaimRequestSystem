@@ -4,6 +4,8 @@ import { HomePage } from "../pages/HomePage";
 import { PATH } from "../constant/config";
 import DraftCoponent from "../components/ui/user/DraftCoponent";
 import { UserInfoComponent } from "../components/ui/user/UserInfoComponent";
+import UserClaims from "../pages/User/UserClaims";
+import { UserClaimDetails } from "../pages/User/UserClaimDetails";
 
 const router: RouteObject[] = [
     {
@@ -16,6 +18,14 @@ const router: RouteObject[] = [
             {
                 path: PATH.draft,
                 element: <DraftCoponent />
+            },
+            {
+                path: PATH.myclaims,
+                element: <UserClaims />
+            },
+            {
+                path: PATH.userclaimdetails,
+                element: <UserClaimDetails/>
             },
             {
                 path: PATH.userinfo,
