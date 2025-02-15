@@ -1,13 +1,13 @@
-import './App.css'
-import { Router } from './routers'
+import "./App.css";
+import ApproveDetail from "./pages/ClaimRequest/ApproveDetail";
+import { Router } from "./routers";
 
 function App() {
-
   return (
     <>
-      <Router />
+      <ApproveDetail />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
