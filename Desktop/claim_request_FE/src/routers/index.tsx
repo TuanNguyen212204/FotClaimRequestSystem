@@ -4,24 +4,28 @@ import { HomePage } from "../pages/HomePage";
 import { PATH } from "../constant/config";
 import DraftCoponent from "../components/ui/user/DraftCoponent";
 import { UserInfoComponent } from "../components/ui/user/UserInfoComponent";
-
+import CreateClaimPage from "../pages/CreateClaim";
 const router: RouteObject[] = [
-    {
-        element: <MainLayout />,
-        children: [
-            {
-                path: PATH.home,
-                element: <HomePage />,
-            }, 
-            {
-                path: PATH.draft,
-                element: <DraftCoponent />
-            },
-            {
-                path: PATH.userinfo,
-                element: <UserInfoComponent />
-            }
-        ]
-    }
-]
-export const Router = () => useRoutes(router)
+  {
+    element: <MainLayout />,
+    children: [
+      {
+        path: PATH.home,
+        element: <HomePage />,
+      },
+      {
+        path: PATH.createRequest,
+        element: <CreateClaimPage />,
+      },
+      {
+        path: PATH.draft,
+        element: <DraftCoponent />,
+      },
+      {
+        path: PATH.userinfo,
+        element: <UserInfoComponent />,
+      },
+    ],
+  },
+];
+export const Router = () => useRoutes(router);
