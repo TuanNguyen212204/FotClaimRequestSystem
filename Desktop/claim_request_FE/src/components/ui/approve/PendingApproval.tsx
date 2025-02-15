@@ -2,9 +2,10 @@ import { EyeIcon, TrashIcon, CheckIcon } from "lucide-react";
 import { ArrowLeftSquare, ArrowRightSquare } from "lucide-react";
 import styles from "./PendingApproval.module.css";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export const PendingComponent: React.FC = () => {
-      const claims = [
+  const claims = [
     {
       id: "001",
       staff: "Ben",
@@ -46,58 +47,88 @@ export const PendingComponent: React.FC = () => {
       approver: "Marco",
     },
   ];
+  
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5; // Adjust this number to change the number of items per page
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = claims.slice(indexOfFirstItem, indexOfLastItem);
+
+  const totalPages = Math.ceil(claims.length / itemsPerPage);
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
 
   const navigator = useNavigate();
 
   function details() {
     navigator("/details");
   }
-  
-    return (
-      <div className={styles.container}>
-        <h1 className={styles.title}>Pending Approval Claims</h1>
-        <hr />
-        <table className={styles.claimsTable}>
-          <thead>
-            <tr>
-              <th>Claim ID</th>
-              <th>Staff Name</th>
-              <th>Project Name</th>
-              <th>Project Duration</th>
-              <th>Total Hours Working</th>
-              <th>Approver Name</th>
-              <th>Action</th>
+
+  return (
+    <div className={styles.container}>
+      <h1 className={styles.title}>Pending Approval Claims</h1>
+      <hr />
+      <table className={styles.claimsTable}>
+        <thead>
+          <tr>
+            <th>Claim ID</th>
+            <th>Staff Name</th>
+            <th>Project Name</th>
+            <th>Project Duration</th>
+            <th>Total Hours Working</th>
+            <th>Approver Name</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {currentItems.map((claim) => (
+            <tr key={claim.id}>
+              <td>{claim.id}</td>
+              <td>{claim.staff}</td>
+              <td>{claim.project}</td>
+              <td>{claim.duration}</td>
+              <td>{claim.hours}</td>
+              <td>{claim.approver}</td>
+              <td className={styles.actions}>
+                <EyeIcon onClick={details} className={styles.icon} />
+                <TrashIcon className={styles.icon} />
+                <CheckIcon className={styles.icon} />
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {claims.map((claim) => (
-              <tr key={claim.id}>
-                <td>{claim.id}</td>
-                <td>{claim.staff}</td>
-                <td>{claim.project}</td>
-                <td>{claim.duration}</td>
-                <td>{claim.hours}</td>
-                <td>{claim.approver}</td>
-                <td className={styles.actions}>
-                  <EyeIcon onClick={details} className={styles.icon} />
-                  <TrashIcon className={styles.icon} />
-                  <CheckIcon className={styles.icon} />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <div className={styles.pagination}>
-          <span className={styles.pageIcon}>
-            <ArrowLeftSquare />
+          ))}
+        </tbody>
+      </table>
+      <div className={styles.pagination}>
+        <span className={styles.pageIcon} onClick={handlePreviousPage}>
+          <ArrowLeftSquare />
+        </span>
+        {[...Array(totalPages)].map((_, index) => (
+          <span
+            key={index}
+            className={`${styles.pageNumber} ${
+              currentPage === index + 1 ? styles.activePage : ""
+            }`}
+            onClick={() => setCurrentPage(index + 1)}
+          >
+            {index + 1}
           </span>
-          <span className={styles.pageNumber}>1</span>
-          <span className={styles.pageNumber}>2</span>
-          <span className={styles.pageNumber}>3</span>
-          <span className={styles.pageIcon}>
-            <ArrowRightSquare />
-          </span>
-        </div>
+        ))}
+        <span className={styles.pageIcon} onClick={handleNextPage}>
+          <ArrowRightSquare />
+        </span>
       </div>
-    );
-}
+    </div>
+  );
+};

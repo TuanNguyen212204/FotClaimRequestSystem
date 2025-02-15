@@ -1,5 +1,7 @@
 import { ArrowLeftSquare, ArrowRightSquare } from "lucide-react";
 import styles from "./DetailsApproval.module.css";
+import { useState } from "react";
+
 export const DetailsComponents: React.FC = () => {
   const claims = [
     {
@@ -38,6 +40,28 @@ export const DetailsComponents: React.FC = () => {
       status: "Done",
     },
   ];
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 2; // Adjust this number to change the number of items per page
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = claims.slice(indexOfFirstItem, indexOfLastItem);
+
+  const totalPages = Math.ceil(claims.length / itemsPerPage);
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Claims Status</h1>
@@ -65,7 +89,7 @@ export const DetailsComponents: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {claims.map((claim) => (
+          {currentItems.map((claim) => (
             <tr key={claim.id}>
               <td>{claim.id}</td>
               <td>{claim.duration}</td>
@@ -77,13 +101,21 @@ export const DetailsComponents: React.FC = () => {
         </tbody>
       </table>
       <div className={styles.pagination}>
-        <span className={styles.pageIcon}>
+        <span className={styles.pageIcon} onClick={handlePreviousPage}>
           <ArrowLeftSquare />
         </span>
-        <span className={styles.pageNumber}>1</span>
-        <span className={styles.pageNumber}>2</span>
-        <span className={styles.pageNumber}>3</span>
-        <span className={styles.pageIcon}>
+        {[...Array(totalPages)].map((_, index) => (
+          <span
+            key={index}
+            className={`${styles.pageNumber} ${
+              currentPage === index + 1 ? styles.activePage : ""
+            }`}
+            onClick={() => setCurrentPage(index + 1)}
+          >
+            {index + 1}
+          </span>
+        ))}
+        <span className={styles.pageIcon} onClick={handleNextPage}>
           <ArrowRightSquare />
         </span>
       </div>
