@@ -3,5 +3,5 @@ export const PATH = {
     userinfo: '/userinfo',
     draft: '/draft',
     pending: "/pending",
-    details: "/details",
+    details: "/details/:id",
 }

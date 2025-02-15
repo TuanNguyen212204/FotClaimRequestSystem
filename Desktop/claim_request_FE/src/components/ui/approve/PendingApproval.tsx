@@ -2,55 +2,22 @@ import { EyeIcon, TrashIcon, CheckIcon } from "lucide-react";
 import { ArrowLeftSquare, ArrowRightSquare } from "lucide-react";
 import styles from "./PendingApproval.module.css";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { fetchAllClaims } from "../../../redux/slice/pendingSlice";
+import { useAppDispatch } from "../../../redux/index";
+import type { RootState } from "../../../redux/index";
 
 export const PendingComponent: React.FC = () => {
-  const claims = [
-    {
-      id: "001",
-      staff: "Ben",
-      project: "A Night To Remember",
-      duration: "From: 1/1/2025 To: 1/15/2025",
-      hours: "100 hours",
-      approver: "Marco",
-    },
-    {
-      id: "002",
-      staff: "Tyler",
-      project: "Dreamer",
-      duration: "From: 1/1/2025 To: 1/15/2025",
-      hours: "100 hours",
-      approver: "Marco",
-    },
-    {
-      id: "003",
-      staff: "Doran",
-      project: "From The Start",
-      duration: "From: 1/1/2025 To: 1/15/2025",
-      hours: "100 hours",
-      approver: "Marco",
-    },
-    {
-      id: "004",
-      staff: "Faker",
-      project: "Bored",
-      duration: "From: 1/1/2025 To: 1/15/2025",
-      hours: "100 hours",
-      approver: "Marco",
-    },
-    {
-      id: "005",
-      staff: "Nichole",
-      project: "Fragile",
-      duration: "From: 1/1/2025 To: 1/15/2025",
-      hours: "100 hours",
-      approver: "Marco",
-    },
-  ];
-  
+  const dispatch = useAppDispatch();
+  const claims = useSelector((state: RootState) => state.pending.listClaims);
+
+  useEffect(() => {
+    dispatch(fetchAllClaims());
+  }, [dispatch]);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5; // Adjust this number to change the number of items per page
+  const itemsPerPage = 5; 
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -72,8 +39,8 @@ export const PendingComponent: React.FC = () => {
 
   const navigator = useNavigate();
 
-  function details() {
-    navigator("/details");
+  function details(id: string) {
+    navigator(`/details/${id}`);
   }
 
   return (
@@ -96,13 +63,13 @@ export const PendingComponent: React.FC = () => {
           {currentItems.map((claim) => (
             <tr key={claim.id}>
               <td>{claim.id}</td>
-              <td>{claim.staff}</td>
-              <td>{claim.project}</td>
+              <td>{claim.staffName}</td>
+              <td>{claim.projectName}</td>
               <td>{claim.duration}</td>
-              <td>{claim.hours}</td>
-              <td>{claim.approver}</td>
+              <td>{claim.hours}{" "}hours</td>
+              <td>{claim.approveName}</td>
               <td className={styles.actions}>
-                <EyeIcon onClick={details} className={styles.icon} />
+                <EyeIcon onClick={() => details(claim.id)} className={styles.icon} />
                 <TrashIcon className={styles.icon} />
                 <CheckIcon className={styles.icon} />
               </td>

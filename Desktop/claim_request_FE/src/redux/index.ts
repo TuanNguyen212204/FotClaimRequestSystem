@@ -8,11 +8,8 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk),
 });
 
-type Store = typeof store;
-type AppDispatch = Store["dispatch"];
+export type AppDispatch = typeof store.dispatch;
+export type RootState = ReturnType<typeof store.getState>;
 
-
-
-export const useAppDispatch: () => AppDispatch = useDispatch;
-
-export type RootState = ReturnType<Store["getState"]>;
+// Custom hook to use the typed dispatch
+export const useAppDispatch = () => useDispatch<AppDispatch>();

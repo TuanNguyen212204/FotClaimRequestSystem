@@ -1,48 +1,26 @@
 import { ArrowLeftSquare, ArrowRightSquare } from "lucide-react";
 import styles from "./DetailsApproval.module.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchAllDetails } from "../../../redux/slice/detailsSlice";
+import { RootState, AppDispatch } from "../../../redux/index";
+import { fetchAllClaims } from "../../../redux/slice/pendingSlice.ts";
 
 export const DetailsComponents: React.FC = () => {
-  const claims = [
-    {
-      id: "001",
-      duration: "From: 1/1/2025 To: 1/15/2025",
-      date: "1/5/2025",
-      hours: "5 hours",
-      status: "Done",
-    },
-    {
-      id: "002",
-      duration: "From: 1/1/2025 To: 1/15/2025",
-      date: "1/6/2025",
-      hours: "5 hours",
-      status: "Done",
-    },
-    {
-      id: "003",
-      duration: "From: 1/1/2025 To: 1/15/2025",
-      date: "1/7/2025",
-      hours: "5 hours",
-      status: "Done",
-    },
-    {
-      id: "004",
-      duration: "From: 1/1/2025 To: 1/15/2025",
-      date: "1/8/2025",
-      hours: "5 hours",
-      status: "Done",
-    },
-    {
-      id: "005",
-      duration: "From: 1/1/2025 To: 1/15/2025",
-      date: "1/9/2025",
-      hours: "5 hours",
-      status: "Done",
-    },
-  ];
+  const dispatch = useDispatch<AppDispatch>();
+  const claims = useSelector((state: RootState) => state.details.listClaims);
+  const pendingClaims = useSelector((state: RootState) => state.pending.listClaims);
+
+  useEffect(() => {
+    dispatch(fetchAllDetails());
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchAllClaims());
+  }, [dispatch]);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 2; // Adjust this number to change the number of items per page
+  const itemsPerPage = 5; // Adjust this number to change the number of items per page
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -68,13 +46,21 @@ export const DetailsComponents: React.FC = () => {
       <hr />
       <div className={styles.detailsContainer}>
         <div className={styles.detailsLeft}>
-          <h3>Claim ID: 001</h3>
-          <h3>Project Name: Kimochi</h3>
-          <h3>Project Duration: (based on selected pj)</h3>
+          {pendingClaims.length > 0 && (
+            <>
+              <h3>Claim ID: {pendingClaims[0].id}</h3>
+              <h3>Project Name: {pendingClaims[0].projectName}</h3>
+              <h3>Project Duration: {pendingClaims[0].duration}</h3>
+            </>
+          )}
         </div>
         <div className={styles.detailsRight}>
-          <h3>Staff Name: Ben</h3>
-          <h3>Project ID: (based on selected pj)</h3>
+          {pendingClaims.length > 0 && (
+            <>
+              <h3>Staff Name: {pendingClaims[0].staffName}</h3>
+              <h3>Project ID: {pendingClaims[0].id}</h3>
+            </>
+          )}
         </div>
       </div>
 
@@ -92,10 +78,12 @@ export const DetailsComponents: React.FC = () => {
           {currentItems.map((claim) => (
             <tr key={claim.id}>
               <td>{claim.id}</td>
-              <td>{claim.duration}</td>
-              <td>{claim.date}</td>
-              <td>{claim.hours}</td>
-              <td style={{ color: "#B8D576" }}>{claim.status}</td>
+              <td>{claim.otDuration}</td>
+              <td>{claim.otDate}</td>
+              <td>{claim.hours}{" "}hours</td>
+              <td style={{ color: claim.status === "Done" ? "green" : claim.status === "Rejected" ? "red" : "#B8D576" }}>
+                {claim.status}
+              </td>
             </tr>
           ))}
         </tbody>
@@ -107,9 +95,8 @@ export const DetailsComponents: React.FC = () => {
         {[...Array(totalPages)].map((_, index) => (
           <span
             key={index}
-            className={`${styles.pageNumber} ${
-              currentPage === index + 1 ? styles.activePage : ""
-            }`}
+            className={`${styles.pageNumber} ${currentPage === index + 1 ? styles.activePage : ""
+              }`}
             onClick={() => setCurrentPage(index + 1)}
           >
             {index + 1}
