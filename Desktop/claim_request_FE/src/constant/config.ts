@@ -1,6 +1,8 @@
 export const PATH = {
-  home: "/",
-  userinfo: "/userinfo",
-  draft: "/draft",
-  createRequest: "createClaim",
-};
+    home: '/',
+    userinfo: '/userinfo',
+    draft: '/draft',
+    login: '/login',
+    resetPassword: '/reset-password',
+    createRequest: 'createClaim',
+}
