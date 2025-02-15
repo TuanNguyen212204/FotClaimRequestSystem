@@ -1,12 +1,14 @@
-
 import "./App.css";
-import ClaimStatus from "./pages/Finance/PaidClaims";
+import UserSettings from "./pages/admin/UserSettings";
+import ApproveDetail from "./pages/ClaimRequest/ApproveDetail";
+import { Router } from "./routers";
 
 function App() {
   return (
-    <div className="app-container">
-      <ClaimStatus />
-    </div>
+    <>
+      {/* <Router /> */}
+      <Router />
+    </>
   );
 }
 
