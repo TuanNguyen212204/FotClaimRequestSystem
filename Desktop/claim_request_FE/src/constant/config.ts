@@ -2,6 +2,9 @@ export const PATH = {
     home: '/',
     userinfo: '/userinfo',
     draft: '/draft',
-    pending: "/pending",
-    details: "/details/:id",
+    login: '/login',
+    resetPassword: '/reset-password',
+    createRequest: '/createClaim',
+    pending: '/pending',
+    details: '/details/:id',
 }
