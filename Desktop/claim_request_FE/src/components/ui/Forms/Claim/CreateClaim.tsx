@@ -63,7 +63,7 @@ export default function CreateClaim() {
             label="From:"
             type="time"
             register={register}
-            disabled
+            // disabled
             error={errors.workingHoursFrom}
           />
           <InputField
