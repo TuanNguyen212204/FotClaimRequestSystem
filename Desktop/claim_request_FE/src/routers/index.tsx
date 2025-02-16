@@ -11,6 +11,8 @@ import { PendingComponent } from "../components/ui/approve/PendingApproval";
 import { DetailsComponents } from "../components/ui/approve/DetailsApproval.tsx";
 import UserClaims from "../pages/User/UserClaims.tsx";
 import { UserClaimDetails } from "../pages/User/UserClaimDetails.tsx";
+import UserSettings from "../pages/Admin/UserSettings.tsx";
+import ApproveDetail from "../pages/ClaimRequest/ApproveDetail.tsx";
 const router: RouteObject[] = [
   {
     element: <LoginForm />,
@@ -33,12 +35,12 @@ const router: RouteObject[] = [
       },
       {
         path: PATH.myclaims,
-        element: <UserClaims />
+        element: <UserClaims />,
       },
       {
         path: PATH.userclaimdetails,
-        element: <UserClaimDetails />
-      },    
+        element: <UserClaimDetails />,
+      },
       {
         path: PATH.draft,
         element: <DraftCoponent />,
@@ -54,6 +56,14 @@ const router: RouteObject[] = [
       {
         path: PATH.details,
         element: <DetailsComponents />,
+      },
+      {
+        path: PATH.usersettings,
+        element: <UserSettings />,
+      },
+      {
+        path: PATH.approvedetails,
+        element: <ApproveDetail />,
       },
     ],
   },
