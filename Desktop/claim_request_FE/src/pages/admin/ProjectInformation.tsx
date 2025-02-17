@@ -1,7 +1,7 @@
 import styles from "./UserSetting.module.css";
 import { FilePen, Trash2 } from "lucide-react";
 
-const ProjectInfomation = () => {
+const ProjectInformation = () => {
   return (
     <div>
       <div>
@@ -67,4 +67,4 @@ const ProjectInfomation = () => {
   );
 };
 
-export default ProjectInfomation;
+export default ProjectInformation;

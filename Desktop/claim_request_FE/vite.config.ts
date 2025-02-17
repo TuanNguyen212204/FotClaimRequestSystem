@@ -12,6 +12,7 @@ export default defineConfig({
       "@components": fileURLToPath(
         new URL("./src/components", import.meta.url)
       ),
+      "@ui": fileURLToPath(new URL("./src/components/ui", import.meta.url)),
       "@constant": fileURLToPath(new URL("./src/constant", import.meta.url)),
       "@context": fileURLToPath(new URL("./src/context", import.meta.url)),
       "@routes": fileURLToPath(new URL("./src/routers", import.meta.url)),
@@ -20,6 +21,7 @@ export default defineConfig({
       "@redux": fileURLToPath(new URL("./src/redux", import.meta.url)),
       "@pages": fileURLToPath(new URL("./src/pages", import.meta.url)),
       "@Hooks": fileURLToPath(new URL("./src/Hooks", import.meta.url)),
+      "@user": fileURLToPath(new URL("./src/pages/User", import.meta.url)),
     },
   },
   server: {

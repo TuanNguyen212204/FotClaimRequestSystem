@@ -1,23 +1,22 @@
 import { RouteObject, useRoutes } from "react-router-dom";
-import { MainLayout } from "../components/layouts/MainLayout";
-import { HomePage } from "../pages/HomePage";
-import { PATH } from "../constant/config";
-import DraftCoponent from "../components/ui/user/DraftCoponent";
-import { UserInfoComponent } from "../components/ui/user/UserInfoComponent";
-import LoginForm from "../components/ui/login/LoginForm";
-import ResetPassword from "../components/ui/login/ResetPassword";
-import CreateClaimPage from "../pages/CreateClaim";
-import { PendingComponent } from "../components/ui/approve/PendingApproval";
-import { DetailsComponents } from "../components/ui/approve/DetailsApproval.tsx";
-import UserClaims from "../pages/User/UserClaims.tsx";
-import { UserClaimDetails } from "../pages/User/UserClaimDetails.tsx";
-import UserSettings from "../pages/Admin/UserSettings.tsx";
-import ApproveDetail from "../pages/ClaimRequest/ApproveDetail.tsx";
-import ClaimStatus from "../pages/Finance/ClaimStatus.tsx";
-import PaidClaims from "../pages/Finance/PaidClaims.tsx";
-import ProjectInfomation from "../pages/Admin/ProjectInformation.tsx";
-import StaffInfomation from "../pages/Admin/StaffInformation.tsx";
-import Approved from "../pages/Approved/Approved.tsx";
+import { MainLayout } from "@components/layouts/MainLayout";
+import { HomePage } from "@pages/HomePage";
+import { PATH } from "@constant/config";
+import { UserInfoComponent } from "@ui/user/UserInfoComponent";
+import LoginForm from "@ui/login/LoginForm";
+import ResetPassword from "@ui/login/ResetPassword";
+import CreateClaimPage from "@pages/CreateClaim";
+import { PendingComponent } from "@ui/approve/PendingApproval";
+import { DetailsComponents } from "@ui/approve/DetailsApproval";
+import UserClaims from "@pages/User/UserClaims";
+import { UserClaimDetails } from "@pages/User/UserClaimDetails";
+import UserSettings from "@pages/Admin/UserSettings";
+import ApproveDetail from "@pages/ClaimRequest/ApproveDetail";
+import ClaimStatus from "@pages/Finance/ClaimStatus";
+import PaidClaims from "@pages/Finance/PaidClaims";
+import ProjectInformation from "@pages/Admin/ProjectInformation";
+import StaffInformation from "@pages/Admin/StaffInformation";
+import Approved from "@pages/Approved/Approved";
 const router: RouteObject[] = [
   {
     element: <LoginForm />,
@@ -46,10 +45,7 @@ const router: RouteObject[] = [
         path: PATH.userClaimDetails,
         element: <UserClaimDetails />,
       },
-      {
-        path: PATH.draft,
-        element: <DraftCoponent />,
-      },
+
       {
         path: PATH.userInfo,
         element: <UserInfoComponent />,
@@ -84,11 +80,11 @@ const router: RouteObject[] = [
       },
       {
         path: PATH.projectInformation,
-        element: <ProjectInfomation />,
+        element: <ProjectInformation />,
       },
       {
         path: PATH.staffInformation,
-        element: <StaffInfomation />,
+        element: <StaffInformation />,
       },
     ],
   },

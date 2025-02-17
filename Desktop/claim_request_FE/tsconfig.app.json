@@ -9,7 +9,7 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@/*" :["./src/*"],
+      "@/*": ["./src/*"],
       "@components/*": ["./src/components/*"],
       "@constant/*": ["./src/constant/*"],
       "@context/*": ["./src/context/*"],
@@ -19,6 +19,7 @@
       "@redux/*": ["./src/redux/*"],
       "@pages/*": ["./src/pages/*"],
       "@Hooks/*": ["./src/Hooks/*"],
+      "@ui/*": ["./src/components/ui/*"]
     },
     /* Bundler mode */
     "moduleResolution": "bundler",

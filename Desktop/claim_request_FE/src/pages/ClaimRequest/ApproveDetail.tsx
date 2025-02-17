@@ -1,6 +1,5 @@
-import React from "react";
 import styles from "./ApproveDetail.module.css";
-import { ArrowLeftSquare, ArrowRightSquare, EyeIcon } from "lucide-react";
+import { ArrowLeftSquare, ArrowRightSquare } from "lucide-react";
 const ApproveDetail = () => {
   return (
     <div>
