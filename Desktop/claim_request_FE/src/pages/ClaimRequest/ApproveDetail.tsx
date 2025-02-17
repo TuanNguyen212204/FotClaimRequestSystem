@@ -1,10 +1,8 @@
 import React from "react";
 import styles from "./ApproveDetail.module.css";
-import { Router } from "../../routers";
 const ApproveDetail = () => {
   return (
     <div>
-      <Router />
       <div className={styles.container}>
         <div>
           <h1 className={styles.claimStatus_h1}>Claim Status</h1>
@@ -25,11 +23,11 @@ const ApproveDetail = () => {
           style={{
             overflow: "hidden",
             borderRadius: "10px",
-            border: "2px solid black",
+            border: "1px solid black",
           }}
         >
-          <table className={styles.table}>
-            <tr className={styles.style_tr}>
+          <table className={styles.table1}>
+            <tr>
               <th className={styles.style_th}>No.</th>
               <th className={styles.style_th}>Overtime Duration</th>
               <th className={styles.style_th}>Overtime Date</th>
