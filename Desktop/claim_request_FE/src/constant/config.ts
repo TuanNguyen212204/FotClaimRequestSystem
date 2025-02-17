@@ -1,3 +1,5 @@
+import StaffInfomation from "../pages/Admin/StaffInformation";
+
 export const PATH = {
   home: "/",
   userInfo: "/userInfo",
@@ -13,4 +15,6 @@ export const PATH = {
   approveDetails: "/approveDetails",
   claimStatus: "/claimStatus",
   paidClaim: "/paidClaim",
+  projectInformation: "/projectInformation",
+  staffInformation: "/staffInformation",
 };
