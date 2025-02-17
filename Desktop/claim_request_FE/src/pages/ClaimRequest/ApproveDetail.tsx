@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./ApproveDetail.module.css";
+import { ArrowLeftSquare, ArrowRightSquare, EyeIcon } from "lucide-react";
 const ApproveDetail = () => {
   return (
     <div>
@@ -79,13 +80,21 @@ const ApproveDetail = () => {
         </div>
         <div>
           <div className={styles.pagination}>
-            <button>&laquo;</button>
+            <button
+              style={{ paddingTop: "5px", paddingLeft: "4px", border: "0" }}
+            >
+              <ArrowLeftSquare />
+            </button>
             <button className={styles.active}>1</button>
             <button>2</button>
             <button>3</button>
             <button>4</button>
             <button>5</button>
-            <button>&raquo;</button>
+            <button
+              style={{ paddingTop: "5px", paddingLeft: "4px", border: "0" }}
+            >
+              <ArrowRightSquare />
+            </button>
           </div>
         </div>
       </div>
