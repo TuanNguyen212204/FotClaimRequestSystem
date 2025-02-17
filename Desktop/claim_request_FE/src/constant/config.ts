@@ -13,4 +13,5 @@ export const PATH = {
   approveDetails: "/approveDetails",
   claimStatus: "/claimStatus",
   paidClaim: "/paidClaim",
+  approved: "/approved",
 };

@@ -28,6 +28,12 @@ export const Sidebar = () => {
       case "draft":
         navigate(PATH.draft);
         break;
+      // case "pending":
+      //   navigate(PATH.pending);
+      //   break;
+      case "approved":
+        navigate(PATH.approved);
+        break;
       case "pending":
         navigate(PATH.pending);
         break;
