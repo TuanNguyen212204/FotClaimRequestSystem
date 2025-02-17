@@ -11,4 +11,6 @@ export const PATH = {
   userclaimdetails: "/userclaim/:id",
   usersettings: "/usersettings",
   approvedetails: "/approvedetails",
+  paidClaims : "/paid-claims",
+  claimStatus : "/claim-status",
 };

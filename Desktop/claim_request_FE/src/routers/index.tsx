@@ -13,6 +13,8 @@ import UserClaims from "../pages/User/UserClaims.tsx";
 import { UserClaimDetails } from "../pages/User/UserClaimDetails.tsx";
 import UserSettings from "../pages/Admin/UserSettings.tsx";
 import ApproveDetail from "../pages/ClaimRequest/ApproveDetail.tsx";
+import PaidClaims from "../pages/Finance/PaidClaims";
+import ClaimStatus from "../pages/Finance/ClaimStatus";
 const router: RouteObject[] = [
   {
     element: <LoginForm />,
@@ -64,6 +66,14 @@ const router: RouteObject[] = [
       {
         path: PATH.approvedetails,
         element: <ApproveDetail />,
+      },
+      {
+        path: PATH.paidClaims ,
+        element: <PaidClaims />
+      },
+      {
+        path: PATH.claimStatus ,
+        element: <ClaimStatus />
       },
     ],
   },
