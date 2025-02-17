@@ -35,11 +35,11 @@ const router: RouteObject[] = [
         element: <CreateClaimPage />,
       },
       {
-        path: PATH.myclaims,
+        path: PATH.myClaims,
         element: <UserClaims />,
       },
       {
-        path: PATH.userclaimdetails,
+        path: PATH.userClaimDetails,
         element: <UserClaimDetails />,
       },
       {
@@ -47,7 +47,7 @@ const router: RouteObject[] = [
         element: <DraftCoponent />,
       },
       {
-        path: PATH.userinfo,
+        path: PATH.userInfo,
         element: <UserInfoComponent />,
       },
       {
@@ -63,13 +63,25 @@ const router: RouteObject[] = [
         element: <DetailsComponents />,
       },
       {
-        path: PATH.usersettings,
+        path: PATH.userSettings,
         element: <UserSettings />,
       },
       {
-        path: PATH.approvedetails,
+        path: PATH.approveDetails,
         element: <ApproveDetail />,
       },
+      {
+        path: PATH.claimStatus,
+        element: <ClaimStatus />,
+      },
+      {
+        path: PATH.paidClaim,
+        element: <PaidClaims />,
+      },
+      {
+        path:PATH.projectInformation,
+        element:<ProjectI
+      }
     ],
   },
 ];
