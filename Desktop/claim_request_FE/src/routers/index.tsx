@@ -7,6 +7,8 @@ import { UserInfoComponent } from "../components/ui/user/UserInfoComponent";
 import LoginForm from "../components/ui/login/LoginForm";
 import ResetPassword from "../components/ui/login/ResetPassword";
 import CreateClaimPage from "../pages/CreateClaim";
+import { PendingComponent } from "../components/ui/approve/PendingApproval";
+import { DetailsComponents } from "../components/ui/approve/DetailsApproval.tsx";
 const router: RouteObject[] = [
   {
     element: <LoginForm />,
@@ -34,6 +36,14 @@ const router: RouteObject[] = [
       {
         path: PATH.userinfo,
         element: <UserInfoComponent />,
+      },
+      {
+        path: PATH.pending,
+        element: <PendingComponent />,
+      },
+      {
+        path: PATH.details,
+        element: <DetailsComponents />,
       },
     ],
   },
