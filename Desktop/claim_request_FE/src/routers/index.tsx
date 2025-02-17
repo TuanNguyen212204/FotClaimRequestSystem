@@ -11,11 +11,13 @@ import { PendingComponent } from "../components/ui/approve/PendingApproval";
 import { DetailsComponents } from "../components/ui/approve/DetailsApproval.tsx";
 import UserClaims from "../pages/User/UserClaims.tsx";
 import { UserClaimDetails } from "../pages/User/UserClaimDetails.tsx";
-import UserSettings from "../pages/admin/UserSettings.tsx";
+import UserSettings from "../pages/Admin/UserSettings.tsx";
 import ApproveDetail from "../pages/ClaimRequest/ApproveDetail.tsx";
 import ClaimStatus from "../pages/Finance/ClaimStatus.tsx";
 import PaidClaims from "../pages/Finance/PaidClaims.tsx";
-import projectInformation from "../pages/Admin/"
+import ProjectInfomation from "../pages/Admin/ProjectInformation.tsx";
+import StaffInfomation from "../pages/Admin/StaffInformation.tsx";
+import Approved from "../pages/Approved/Approved.tsx";
 const router: RouteObject[] = [
   {
     element: <LoginForm />,
