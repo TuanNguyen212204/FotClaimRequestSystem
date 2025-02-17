@@ -19,7 +19,7 @@
   justify-content: space-between;
   font-size: 1.5em;
 }
-.table1 {
+.table {
   width: 100%;
   border-collapse: collapse;
 }
@@ -35,7 +35,7 @@
   border-right: 1px solid black;
   border-radius: 0px;
   width: 8em;
-  height: 3em;
+  height: 4em;
   background-color: #dddd;
 }
 .style_td_Status {
@@ -49,29 +49,23 @@
 }
 .pagination {
   display: flex;
-  justify-content: center;
-  gap: 10px;
+  justify-content: right;
+  gap: 8px;
   padding: 10px 0;
 }
-
 .pagination button {
+  background-color: white;
   border: none;
   color: #333;
+  padding: 8px 12px;
   cursor: pointer;
-  padding-top: 5px;
   font-size: 1em;
   border-radius: 4px;
-  width: 2.1em;
-  border: 1px solid #d1d5db;
-  height: 2em;
-  text-align: centerSu;
   transition: background-color 0.3s ease;
 }
-
 .pagination button:hover {
   background-color: #ddd;
 }
-
 .pagination button.active {
   background-color: #007bff;
   color: white;

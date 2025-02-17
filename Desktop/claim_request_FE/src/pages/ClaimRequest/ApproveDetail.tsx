@@ -1,10 +1,9 @@
 import React from "react";
 import styles from "./ApproveDetail.module.css";
-import { Router } from "../../routers";
+import { ArrowLeftSquare, ArrowRightSquare, EyeIcon } from "lucide-react";
 const ApproveDetail = () => {
   return (
     <div>
-      <Router />
       <div className={styles.container}>
         <div>
           <h1 className={styles.claimStatus_h1}>Claim Status</h1>
@@ -25,11 +24,11 @@ const ApproveDetail = () => {
           style={{
             overflow: "hidden",
             borderRadius: "10px",
-            border: "2px solid black",
+            border: "1px solid black",
           }}
         >
-          <table className={styles.table}>
-            <tr className={styles.style_tr}>
+          <table className={styles.table1}>
+            <tr>
               <th className={styles.style_th}>No.</th>
               <th className={styles.style_th}>Overtime Duration</th>
               <th className={styles.style_th}>Overtime Date</th>
@@ -81,13 +80,21 @@ const ApproveDetail = () => {
         </div>
         <div>
           <div className={styles.pagination}>
-            <button>&laquo;</button>
+            <button
+              style={{ paddingTop: "5px", paddingLeft: "4px", border: "0" }}
+            >
+              <ArrowLeftSquare />
+            </button>
             <button className={styles.active}>1</button>
             <button>2</button>
             <button>3</button>
             <button>4</button>
             <button>5</button>
-            <button>&raquo;</button>
+            <button
+              style={{ paddingTop: "5px", paddingLeft: "4px", border: "0" }}
+            >
+              <ArrowRightSquare />
+            </button>
           </div>
         </div>
       </div>

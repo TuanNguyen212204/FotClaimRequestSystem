@@ -1,52 +1,77 @@
 import React, { useState, useEffect } from "react";
-//import "./CSS/Request.css";
-//import "./App.css";
 import styles from "../components/ui/Forms/Claim/Claim.module.css";
 import CreateClaim from "../components/ui/Forms/Claim/CreateClaim";
-function CreateClaimPage() {
-  const [selectedProject, setSelectedProject] = useState<string>("");
+
+const CreateClaimPage: React.FC = () => {
+  const [selectedProject, setSelectedProject] = useState<Project | null>();
 
   useEffect(() => {
     console.log(selectedProject);
   }, [selectedProject]);
 
-  const projects = ["test1", "test2", "test3"];
+  const testProjects: Project[] = [
+    {
+      name: "Project Alpha",
+      id: "alpha-001",
+      role: "Developer",
+      startDate: new Date("2023-01-15"),
+      endDate: new Date("2023-06-30"),
+    },
+    {
+      name: "Project Beta",
+      id: "beta-002",
+      role: "Tester",
+      startDate: new Date("2023-03-01"),
+      endDate: new Date("2023-09-15"),
+    },
+    {
+      name: "Project Gamma",
+      id: "gamma-003",
+      role: "Project Manager",
+      startDate: new Date("2023-05-10"),
+      endDate: new Date("2024-01-31"),
+    },
+    {
+      name: "Project Delta",
+      id: "delta-004",
+      role: "Designer",
+      startDate: new Date("2023-07-01"),
+      endDate: new Date("2023-12-20"),
+    },
+    {
+      name: "Project Epsilon",
+      id: "epsilon-005",
+      role: "Developer",
+      startDate: new Date("2024-01-01"),
+      endDate: new Date("2024-06-30"),
+    },
+  ];
+  //const projects = ["test1", "test2", "test3"];
 
   return (
     <div className={styles.container}>
-      <div className=" flex flex-col box-border ">
-        <div className="flex flex-row-reverse border-b-2 box-border border-black px-2.5 mb-8 w-full">
-          <h1 className="text-black text-3xl font-semibold">Claim Status</h1>
-        </div>
-
+      <div className="flex flex-col box-border">
+        <ProjectTitle title="Claim Status" />
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-4">
-          <div className="text-left">
-            <label className="text-black font-normal">Project Name: </label>
-            <select
-              title="select-project"
-              className="rounded-lg bg-lighter-gray text-black text-left p-2"
-              onChange={(e) => setSelectedProject(e.target.value)}
-              defaultValue=""
-            >
-              <option value="" disabled hidden>
-                Choose a project
-              </option>
-              {projects.map((project, index) => (
-                <option key={index} value={project}>
-                  {project}
-                </option>
-              ))}
-            </select>
-          </div>
+          <ProjectSelector
+            projects={testProjects}
+            //selectedProject={testProjects[0]}
+            setSelectedProject={setSelectedProject}
+          />
 
           {selectedProject && (
             <>
-              <ProjectDetail label="Project ID" value={selectedProject} />
+              <ProjectDetail label="Project ID" value={selectedProject.id} />
               <ProjectDetail
                 label="Project Duration"
-                value={`date (${selectedProject})`}
+                value={`(${
+                  selectedProject.startDate.toISOString().split("T")[0]
+                })-( ${selectedProject.endDate.toISOString().split("T")[0]})`}
               />
-              <ProjectDetail label="Role In Project" value={selectedProject} />
+              <ProjectDetail
+                label="Role In Project"
+                value={selectedProject.role}
+              />
             </>
           )}
         </div>
@@ -60,7 +85,7 @@ function CreateClaimPage() {
       </div>
     </div>
   );
-}
+};
 
 interface ProjectDetailProps {
   label: string;
@@ -69,9 +94,64 @@ interface ProjectDetailProps {
 
 const ProjectDetail: React.FC<ProjectDetailProps> = ({ label, value }) => (
   <div className="self-center text-left">
-    <label className="text-black font-normal">{label}: </label>
-    <span className="text-black">{value}</span>
+    <label className="text-black font-bold">{label}: </label>
+    <span className="text-gray-600">{value}</span>
   </div>
 );
 
+interface ProjectTitleProps {
+  title: string;
+}
+
+const ProjectTitle: React.FC<ProjectTitleProps> = ({ title }) => (
+  <div className="flex border-b-1 box-border border-black px-2 mb-8 w-full">
+    <h1 className="text-black text-3xl font-semibold">{title}</h1>
+  </div>
+);
+
+interface ProjectSelectorProps {
+  projects: Project[];
+  // selectedProject: Project;
+  setSelectedProject: (project: Project) => void;
+}
+type Project = {
+  name: string;
+  id: string;
+  role: string;
+  startDate: Date;
+  endDate: Date;
+};
+const ProjectSelector: React.FC<ProjectSelectorProps> = ({
+  projects,
+  setSelectedProject,
+}) => {
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedId = e.target.value;
+    const selectedProject = projects.find(
+      (project) => project.id === selectedId
+    );
+    if (selectedProject) setSelectedProject(selectedProject);
+  };
+
+  return (
+    <div className="text-left">
+      <label className="text-black font-normal">Project Name: </label>
+      <select
+        title="select-project"
+        className="rounded-lg bg-lighter-gray text-black text-left p-2"
+        onChange={handleChange}
+        defaultValue=""
+      >
+        <option value="" disabled hidden>
+          Choose a project
+        </option>
+        {projects.map((project) => (
+          <option key={project.id} value={project.id}>
+            {project.name}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+};
 export default CreateClaimPage;
