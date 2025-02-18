@@ -45,7 +45,6 @@ const router: RouteObject[] = [
         path: PATH.userClaimDetails,
         element: <UserClaimDetails />,
       },
-
       {
         path: PATH.userInfo,
         element: <UserInfoComponent />,
