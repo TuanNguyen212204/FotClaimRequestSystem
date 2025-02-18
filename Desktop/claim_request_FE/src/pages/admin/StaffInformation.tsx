@@ -2,7 +2,7 @@ import { Router } from "../../routers";
 import styles from "./UserSetting.module.css";
 import { FilePen, Trash2 } from "lucide-react";
 
-const StaffInfomation = () => {
+const StaffInformation = () => {
   return (
     <div>
       <Router />
@@ -69,4 +69,4 @@ const StaffInfomation = () => {
   );
 };
 
-export default StaffInfomation;
+export default StaffInformation;
