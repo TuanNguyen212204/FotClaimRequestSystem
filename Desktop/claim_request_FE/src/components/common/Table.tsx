@@ -30,7 +30,7 @@ const TableComponent = <T extends DataRecord>({
   pagination = false,
 }: TableComponentProps<T>) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 7;
+  const pageSize = 8;
   const totalPages = Math.ceil(dataSource.length / pageSize);
 
   // Paginate the data
@@ -50,6 +50,7 @@ const TableComponent = <T extends DataRecord>({
       <div className={styles.container}>
         {loading && <div className="loading">Loading...</div>}
         <section className={styles.table_header}>{page}</section>
+
         <section className={styles.table_body}>
           <table className={styles.table}>
             <thead className={styles.thead}>
