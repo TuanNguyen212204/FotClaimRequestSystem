@@ -32,7 +32,7 @@ const InputField: React.FC<InputFieldProps> = ({
 
   return (
     <div className="flex-1">
-      <div className="mb-4" w-ful>
+      <div className="mb-4 w-full" >
         <label className="block text-black font-medium mb-1" htmlFor={name}>
           {label}
         </label>
