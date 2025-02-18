@@ -4,9 +4,9 @@ import styles from "./PendingApproval.module.css";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { fetchAllClaims } from "../../../redux/slice/pendingSlice";
-import { useAppDispatch } from "../../../redux/index";
-import type { RootState } from "../../../redux/index";
+import { fetchAllClaims, deleteClaim } from "@redux/slice/pendingSlice";
+import { useAppDispatch } from "@redux/index";
+import type { RootState } from "@redux/index";
 
 export const PendingComponent: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -43,6 +43,10 @@ export const PendingComponent: React.FC = () => {
     navigator(`/details/${id}`);
   }
 
+  const handleDelete = (id: string) => {
+    dispatch(deleteClaim(id));
+  };
+
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Pending Approval Claims</h1>
@@ -70,7 +74,7 @@ export const PendingComponent: React.FC = () => {
               <td>{claim.approveName}</td>
               <td className={styles.actions}>
                 <EyeIcon onClick={() => details(claim.id)} className={styles.icon} />
-                <TrashIcon className={styles.icon} />
+                <TrashIcon onClick={() => handleDelete(claim.id)} className={styles.icon} />
                 <CheckIcon className={styles.icon} />
               </td>
             </tr>

@@ -23,6 +23,14 @@ export const fetchAllClaims = createAsyncThunk("pending/fetchAllClaims", async (
     return res.data;
 });
 
+export const deleteClaim = createAsyncThunk("pending/deleteClaim", async (id: string) => {
+    if(window.confirm("Are you sure you want to delete this claim?")){
+        const res = await axios.delete(`https://67263146302d03037e6cb422.mockapi.io/pending/${id}`);
+        console.log("Data", res.data);
+        return id;
+    }
+});
+
 export const pendingSlice = createSlice({
     name: "pending",
     initialState,
@@ -30,6 +38,9 @@ export const pendingSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(fetchAllClaims.fulfilled, (state, action) => {
             state.listClaims = action.payload;
+        });
+        builder.addCase(deleteClaim.fulfilled, (state, action) => {
+            state.listClaims = state.listClaims.filter(claim => claim.id !== action.payload);
         });
     }
 })

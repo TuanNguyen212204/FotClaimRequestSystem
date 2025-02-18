@@ -2,9 +2,9 @@ import { ArrowLeftSquare, ArrowRightSquare } from "lucide-react";
 import styles from "./DetailsApproval.module.css";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllDetails } from "../../../redux/slice/detailsSlice";
-import { RootState, AppDispatch } from "../../../redux/index";
-import { fetchAllClaims } from "../../../redux/slice/pendingSlice.ts";
+import { fetchAllDetails } from "@redux/slice/detailsSlice";
+import { RootState, AppDispatch } from "@redux/index";
+import { fetchAllClaims } from "@redux/slice/pendingSlice.ts";
 
 export const DetailsComponents: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();

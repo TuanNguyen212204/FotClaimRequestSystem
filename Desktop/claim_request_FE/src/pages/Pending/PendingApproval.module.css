@@ -81,10 +81,10 @@
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-.pageNumber:hover {
+/* .pageNumber:hover {
   background-color: #2563eb;
   color: #fff;
-}
+} */
 
 .pageIcon {
   display: flex;
@@ -97,4 +97,9 @@
 
 .pageIcon:hover {
   color: #2563eb;
+}
+
+.activePage {
+  background-color: #2563eb;
+  color: #fff;
 }

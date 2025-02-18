@@ -6,8 +6,8 @@ import { UserInfoComponent } from "@ui/user/UserInfoComponent";
 import LoginForm from "@ui/login/LoginForm";
 import ResetPassword from "@ui/login/ResetPassword";
 import CreateClaimPage from "@pages/CreateClaim";
-import { PendingComponent } from "@ui/approve/PendingApproval";
-import { DetailsComponents } from "@ui/approve/DetailsApproval";
+import { PendingComponent } from "@/pages/Pending/PendingApproval";
+import { DetailsComponents } from "@/pages/Pending/DetailsApproval";
 import UserClaims from "@pages/User/UserClaims";
 import { UserClaimDetails } from "@pages/User/UserClaimDetails";
 import UserSettings from "@pages/Admin/UserSettings";
@@ -17,6 +17,7 @@ import PaidClaims from "@pages/Finance/PaidClaims";
 import ProjectInformation from "@pages/Admin/ProjectInformation";
 import StaffInformation from "@pages/Admin/StaffInformation";
 import Approved from "@pages/Approved/Approved";
+import TableDraftPage from "@/pages/TableDraftPage.tsx";
 const router: RouteObject[] = [
   {
     element: <LoginForm />,
@@ -46,7 +47,7 @@ const router: RouteObject[] = [
         element: <UserClaimDetails />,
       },
       {
-        path: PATH.userInfo,
+        path: PATH.userinfo,
         element: <UserInfoComponent />,
       },
       {
@@ -85,6 +86,10 @@ const router: RouteObject[] = [
         path: PATH.staffInformation,
         element: <StaffInformation />,
       },
+      {
+        path: PATH.table,
+        element: <TableDraftPage />,
+      }
     ],
   },
 ];

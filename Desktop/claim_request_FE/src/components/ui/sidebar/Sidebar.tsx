@@ -1,7 +1,7 @@
 import styles from "./Sidebar.module.css";
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { PATH } from "../../../constant/config";
+import { PATH } from "@constant/config";
 
 export const Sidebar = () => {
   const [selectedClaim, setSelectedClaim] = useState("");

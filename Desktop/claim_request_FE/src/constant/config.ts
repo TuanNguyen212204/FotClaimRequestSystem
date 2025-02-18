@@ -1,6 +1,6 @@
 export const PATH = {
   home: "/",
-  userInfo: "/user-info",
+  userinfo: "/user-info",
   draft: "/draft",
   login: "/login",
   resetPassword: "/reset-password",
@@ -16,4 +16,5 @@ export const PATH = {
   approved: "/approved",
   projectInformation: "/project-information",
   staffInformation: "/staff-information",
+  table: "/table",
 };
