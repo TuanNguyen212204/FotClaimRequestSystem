@@ -7,7 +7,7 @@ export default function AdditionalInfo() {
         <textarea
           rows={4}
           placeholder="Enter addtional remarks"
-          className="w-full p-2 mb-2.5 border border-gray-400 box-border rounded-sm"
+          className="w-full p-2 mb-2.5 border-2 border-white box-border rounded-sm"
         ></textarea>
       </div>
 
@@ -17,7 +17,7 @@ export default function AdditionalInfo() {
           rows={4}
           readOnly
           placeholder="System audit trail"
-          className="w-full p-2 mb-2.5 border border-gray-400 box-border rounded-sm"
+          className="w-full p-2 mb-2.5 border-2 border-white box-border rounded-sm"
         ></textarea>
       </div>
     </div>
