@@ -33,7 +33,7 @@ export default function ProjectInfo({
         <span className="block mb-1 font-bold"></span>
         <select
           title="Projects"
-          className="w-full p-2.5 mb-2.5 border-2 border-gray-200 box-border rounded-sm"
+          className="w-full p-3.5 mb-2.5 border-2 border-gray-200 box-border rounded-sm"
           defaultValue={""}
           onChange={(e) => {
             const project = ProjectList.find(
