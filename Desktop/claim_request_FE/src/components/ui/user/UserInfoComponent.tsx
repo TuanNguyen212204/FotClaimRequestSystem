@@ -1,12 +1,9 @@
-import React, { useEffect, useState } from "react";
-import styles from "../user/UserInfoComponent.module.css";
-import { useNavigate } from "react-router-dom";
-import axios, { AxiosError } from "axios";
-import { toast } from "react-toastify";
-import { User } from "../../../types/User.type";
+import React, { useState } from "react";
+import styles from "@components/ui/user/UserInfoComponent.module.css";
+
+import { User } from "@types/User.type";
 
 export const UserInfoComponent: React.FC = () => {
-  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [staffInfo, setStaffInfo] = useState<User | null>({
     gender: "Male",
@@ -59,11 +56,11 @@ export const UserInfoComponent: React.FC = () => {
     },
     picture: {
       large:
-        "https://i.pinimg.com/736x/a8/ee/99/a8ee991141c6bc4c81e7eadfb4e2b4b5.jpg",
+        "https://i.pinimg.com/736x/63/f0/0d/63f00d6ebe2c93b945be3c39135503c2.jpg",
       medium:
-        "https://i.pinimg.com/736x/a8/ee/99/a8ee991141c6bc4c81e7eadfb4e2b4b5.jpg",
+        "https://i.pinimg.com/736x/63/f0/0d/63f00d6ebe2c93b945be3c39135503c2.jpg",
       thumbnail:
-        "https://i.pinimg.com/736x/a8/ee/99/a8ee991141c6bc4c81e7eadfb4e2b4b5.jpg",
+        "https://i.pinimg.com/736x/63/f0/0d/63f00d6ebe2c93b945be3c39135503c2.jpg",
     },
     nat: "VietNam",
   });
@@ -154,15 +151,22 @@ export const UserInfoComponent: React.FC = () => {
     const { name, value } = e.target;
 
     setStaffInfo((prev) => {
-      if (name === "email") return { ...prev, email: value };
-      if (name === "firstName")
-        return { ...prev, name: { ...prev!.name, first: value } };
-      if (name === "lastName")
-        return { ...prev, name: { ...prev!.name, last: value } };
-      if (name === "city")
-        return { ...prev, location: { ...prev!.location, city: value } };
+      if (!prev) return prev;
 
-      return prev;
+      return {
+        ...prev,
+        email: name === "email" ? value : prev.email,
+        name: {
+          ...prev.name,
+          first: name === "firstName" ? value : prev.name?.first ?? "",
+          last: name === "lastName" ? value : prev.name?.last ?? "",
+        },
+        location: {
+          ...prev.location,
+          city: name === "city" ? value : prev.location?.city ?? "",
+        },
+        gender: prev.gender ?? "", // Đảm bảo gender không bị undefined
+      };
     });
   };
 
@@ -184,19 +188,19 @@ export const UserInfoComponent: React.FC = () => {
   const handleSave = async () => {
     // TODO: Sau này khi có API, hãy mở comment phần này
     /*
-    try {
-      const formData = new FormData();
-      formData.append("name", staffInfo.name);
-      formData.append("email", staffInfo.email);
-      formData.append("department", staffInfo.department);
-      formData.append("avatar", file); // Gửi ảnh lên server
+      try {
+        const formData = new FormData();
+        formData.append("name", staffInfo.name);
+        formData.append("email", staffInfo.email);
+        formData.append("department", staffInfo.department);
+        formData.append("avatar", file); // Gửi ảnh lên server
 
-      await axios.put("/api/staff/update", formData);
-      toast.success("Profile updated successfully!");
-    } catch (error) {
-      toast.error("Failed to update profile.");
-    }
-    */
+        await axios.put("/api/staff/update", formData);
+        toast.success("Profile updated successfully!");
+      } catch (error) {
+        toast.error("Failed to update profile.");
+      }
+      */
     setIsEditing(false);
   };
   return (
@@ -218,6 +222,7 @@ export const UserInfoComponent: React.FC = () => {
             id="avatarUpload"
             accept="image/*"
             style={{ display: "none" }}
+            onChange={handleImageChange}
           ></input>
         )}
         {isEditing ? (
@@ -254,12 +259,15 @@ export const UserInfoComponent: React.FC = () => {
               value={staffInfo?.location.city}
               onChange={handleChange}
             />
-            <button onClick={handleSave} className={styles.saveBtn}>
+            <button
+              onClick={handleSave}
+              className={`${styles.saveBtn} ${styles.userInfoBtn}`}
+            >
               💾 Save
             </button>
             <button
               onClick={() => setIsEditing(false)}
-              className={styles.cancelBtn}
+              className={`${styles.cancelBtn} ${styles.userInfoBtn}`}
             >
               ❌ Cancel
             </button>
@@ -267,7 +275,7 @@ export const UserInfoComponent: React.FC = () => {
         ) : (
           <>
             <button
-              className={styles.editBtn}
+              className={`${styles.editBtn} ${styles.userInfoBtn}`}
               onClick={() => setIsEditing(true)}
             >
               ✎ Edit Profile
@@ -275,23 +283,23 @@ export const UserInfoComponent: React.FC = () => {
             <div className={styles.info}>
               <div className={styles.row}>
                 <p>
-                  <span className={styles.icon}>👤</span>{" "}
-                  <strong>Staff Name:</strong>{" "}
+                  <span className={styles.icon}>👤</span>
+                  <strong>Staff Name:</strong>
                   {`${staffInfo?.name.title} ${staffInfo?.name.first} ${staffInfo?.name.last}`}
                 </p>
                 <p>
-                  <span className={styles.icon}>🆔</span>{" "}
-                  <strong>Staff ID:</strong>{" "}
+                  <span className={styles.icon}>🆔</span>
+                  <strong>Staff ID:</strong>
                   {`${staffInfo?.id.name} ${staffInfo?.id.value}`}
                 </p>
               </div>
               <p>
-                <span className={styles.icon}>📧</span>{" "}
+                <span className={styles.icon}>📧</span>
                 <strong>Staff Email:</strong> {staffInfo?.email}
               </p>
               <p>
-                <span className={styles.icon}>🏢</span>{" "}
-                <strong>Staff Department:</strong>{" "}
+                <span className={styles.icon}>🏢</span>
+                <strong>Staff Department:</strong>
                 {`${staffInfo?.location.street.number} ${staffInfo?.location.street.name} , ${staffInfo?.location.city}`}
               </p>
             </div>
