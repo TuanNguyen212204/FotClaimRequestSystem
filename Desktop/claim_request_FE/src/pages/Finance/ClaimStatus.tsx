@@ -9,17 +9,38 @@ const ClaimStatus: React.FC = () => {
   const claimData = {
     '001': {
       claimId: '001',
-      projectName: 'Example Project',
-      duration: 'From 1/5/2025 To 1/15/2025',
+      projectName: 'A Night To Remember',
+      duration: 'From: 1/1/2025 To: 1/15/2025',
       staffName: 'Ben',
       projectId: 'P001'
     },
     '002': {
       claimId: '002',
       projectName: 'Dreamer',
-      duration: 'From 1/1/2025 To 1/15/2025',
+      duration: 'From: 1/1/2025 To: 1/15/2025',
       staffName: 'Tyler',
       projectId: 'P002'
+    },
+    '003': {
+      claimId: '003',
+      projectName: 'Sunshine Project',
+      duration: 'From: 2/1/2025 To: 2/28/2025',
+      staffName: 'Emma',
+      projectId: 'P003'
+    },
+    '004': {
+      claimId: '004',
+      projectName: 'Digital Transform',
+      duration: 'From: 3/1/2025 To: 3/15/2025',
+      staffName: 'Michael',
+      projectId: 'P004'
+    },
+    '005': {
+      claimId: '005',
+      projectName: 'Cloud Migration',
+      duration: 'From: 4/1/2025 To: 4/30/2025',
+      staffName: 'Sophie',
+      projectId: 'P005'
     }
   };
 
@@ -73,18 +94,42 @@ const ClaimStatus: React.FC = () => {
           <tbody>
             <tr>
               <td className={styles.style_td}>001</td>
-              <td className={styles.style_td}>From 1/5/2025 To: 1/15/2025</td>
+              <td className={styles.style_td}>From: 1/1/2025 To: 1/15/2025</td>
               <td className={styles.style_td}>1/5/2025</td>
-              <td className={styles.style_td}>5 hours</td>
+              <td className={styles.style_td}>100 hours</td>
               <td className={styles.style_td}>250.000.000 VND</td>
               <td className={styles.style_td_Status}>Paid</td>
             </tr>
             <tr>
               <td className={styles.style_td}>002</td>
-              <td className={styles.style_td}>From 1/5/2025 To: 1/15/2025</td>
+              <td className={styles.style_td}>From: 1/1/2025 To: 1/15/2025</td>
               <td className={styles.style_td}>1/6/2025</td>
-              <td className={styles.style_td}>5 hours</td>
+              <td className={styles.style_td}>100 hours</td>
               <td className={styles.style_td}>250.000.000 VND</td>
+              <td className={styles.style_td_Status}>Paid</td>
+            </tr>
+            <tr>
+              <td className={styles.style_td}>003</td>
+              <td className={styles.style_td}>From: 2/1/2025 To: 2/28/2025</td>
+              <td className={styles.style_td}>2/15/2025</td>
+              <td className={styles.style_td}>160 hours</td>
+              <td className={styles.style_td}>400.000.000 VND</td>
+              <td className={styles.style_td_Status}>Paid</td>
+            </tr>
+            <tr>
+              <td className={styles.style_td}>004</td>
+              <td className={styles.style_td}>From: 3/1/2025 To: 3/15/2025</td>
+              <td className={styles.style_td}>3/7/2025</td>
+              <td className={styles.style_td}>80 hours</td>
+              <td className={styles.style_td}>200.000.000 VND</td>
+              <td className={styles.style_td_Status}>Paid</td>
+            </tr>
+            <tr>
+              <td className={styles.style_td}>005</td>
+              <td className={styles.style_td}>From: 4/1/2025 To: 4/30/2025</td>
+              <td className={styles.style_td}>4/15/2025</td>
+              <td className={styles.style_td}>200 hours</td>
+              <td className={styles.style_td}>500.000.000 VND</td>
               <td className={styles.style_td_Status}>Paid</td>
             </tr>
           </tbody>

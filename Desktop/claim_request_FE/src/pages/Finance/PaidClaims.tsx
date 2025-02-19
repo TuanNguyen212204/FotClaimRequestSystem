@@ -39,7 +39,7 @@ const PaidClaims: React.FC = () => {
               <td className={styles.style_td}>From: 1/1/2025 To: 1/15/2025</td>
               <td className={styles.style_td}>100 hours</td>
               <td className={styles.style_td}>Marco</td>
-              <td className={styles.style_td_Action}>
+              <td className={styles.style_td}>
                 <button 
                   onClick={() => navigate(`${PATH.claimStatus}/001`)}
                   style={{ background: 'none', border: 'none', cursor: 'pointer' }}
@@ -55,9 +55,57 @@ const PaidClaims: React.FC = () => {
               <td className={styles.style_td}>From: 1/1/2025 To: 1/15/2025</td>
               <td className={styles.style_td}>100 hours</td>
               <td className={styles.style_td}>Marco</td>
-              <td className={styles.style_td_Action}>
+              <td className={styles.style_td}>
                 <button 
                   onClick={() => navigate(`${PATH.claimStatus}/002`)}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+                >
+                  👁️
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td className={styles.style_td}>003</td>
+              <td className={styles.style_td}>Emma</td>
+              <td className={styles.style_td}>Sunshine Project</td>
+              <td className={styles.style_td}>From: 2/1/2025 To: 2/28/2025</td>
+              <td className={styles.style_td}>160 hours</td>
+              <td className={styles.style_td}>Sarah</td>
+              <td className={styles.style_td}>
+                <button 
+                  onClick={() => navigate(`${PATH.claimStatus}/003`)}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+                >
+                  👁️
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td className={styles.style_td}>004</td>
+              <td className={styles.style_td}>Michael</td>
+              <td className={styles.style_td}>Digital Transform</td>
+              <td className={styles.style_td}>From: 3/1/2025 To: 3/15/2025</td>
+              <td className={styles.style_td}>80 hours</td>
+              <td className={styles.style_td}>John</td>
+              <td className={styles.style_td}>
+                <button 
+                  onClick={() => navigate(`${PATH.claimStatus}/004`)}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+                >
+                  👁️
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td className={styles.style_td}>005</td>
+              <td className={styles.style_td}>Sophie</td>
+              <td className={styles.style_td}>Cloud Migration</td>
+              <td className={styles.style_td}>From: 4/1/2025 To: 4/30/2025</td>
+              <td className={styles.style_td}>200 hours</td>
+              <td className={styles.style_td}>David</td>
+              <td className={styles.style_td}>
+                <button 
+                  onClick={() => navigate(`${PATH.claimStatus}/005`)}
                   style={{ background: 'none', border: 'none', cursor: 'pointer' }}
                 >
                   👁️
