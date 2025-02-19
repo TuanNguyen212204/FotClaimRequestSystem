@@ -25,6 +25,16 @@ const ClaimStatus: React.FC = () => {
 
   const currentClaim = claimData[id as keyof typeof claimData];
 
+  if (!currentClaim) {
+    return (
+      <div className={styles.container}>
+        <h1 className={styles.claimStatus_h1}>Claim Status</h1>
+        <p>Không tìm thấy thông tin claim với ID: {id}</p>
+        <button onClick={() => navigate(-1)}>Quay lại</button>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.container}>
       <div>
@@ -92,3 +102,4 @@ const ClaimStatus: React.FC = () => {
 };
 
 export default ClaimStatus;
+

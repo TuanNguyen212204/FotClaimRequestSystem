@@ -41,7 +41,7 @@ const PaidClaims: React.FC = () => {
               <td className={styles.style_td}>Marco</td>
               <td className={styles.style_td_Action}>
                 <button 
-                  onClick={() => navigate(PATH.claimStatus)}
+                  onClick={() => navigate(`${PATH.claimStatus}/001`)}
                   style={{ background: 'none', border: 'none', cursor: 'pointer' }}
                 >
                   👁️
