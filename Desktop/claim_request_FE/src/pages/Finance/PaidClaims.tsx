@@ -1,10 +1,13 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from 'react-redux';
+import { selectClaims } from '../../redux/slices/claimsSlice'; // Import selector
 import styles from "./PaidClaims.module.css";
 import { PATH } from "../../constant/config";
 
 const PaidClaims: React.FC = () => {
   const navigate = useNavigate();
+  const claims = useSelector(selectClaims); // Get claims from Redux
 
   return (
     <div className={styles.container}>
@@ -32,38 +35,24 @@ const PaidClaims: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td className={styles.style_td}>001</td>
-              <td className={styles.style_td}>Ben</td>
-              <td className={styles.style_td}>A Night To Remember</td>
-              <td className={styles.style_td}>From: 1/1/2025 To: 1/15/2025</td>
-              <td className={styles.style_td}>100 hours</td>
-              <td className={styles.style_td}>Marco</td>
-              <td className={styles.style_td_Action}>
-                <button 
-                  onClick={() => navigate(PATH.claimStatus)}
-                  style={{ background: 'none', border: 'none', cursor: 'pointer' }}
-                >
-                  👁️
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td className={styles.style_td}>002</td>
-              <td className={styles.style_td}>Tyler</td>
-              <td className={styles.style_td}>Dreamer</td>
-              <td className={styles.style_td}>From: 1/1/2025 To: 1/15/2025</td>
-              <td className={styles.style_td}>100 hours</td>
-              <td className={styles.style_td}>Marco</td>
-              <td className={styles.style_td_Action}>
-                <button 
-                  onClick={() => navigate(`${PATH.claimStatus}/002`)}
-                  style={{ background: 'none', border: 'none', cursor: 'pointer' }}
-                >
-                  👁️
-                </button>
-              </td>
-            </tr>
+            {claims.map(claim => (
+              <tr key={claim.claimId}>
+                <td className={styles.style_td}>{claim.claimId}</td>
+                <td className={styles.style_td}>{claim.staffName}</td>
+                <td className={styles.style_td}>{claim.projectName}</td>
+                <td className={styles.style_td}>{claim.duration}</td>
+                <td className={styles.style_td}>100 hours</td>
+                <td className={styles.style_td}>Marco</td>
+                <td className={styles.style_td}>
+                  <button 
+                    onClick={() => navigate(`${PATH.claimStatus}/${claim.claimId}`)}
+                    style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+                  >
+                    👁️
+                  </button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

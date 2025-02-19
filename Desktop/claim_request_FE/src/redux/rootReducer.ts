@@ -3,6 +3,7 @@ import { pendingSlice } from "./slice/pendingSlice";
 import { detailsSlice } from "./slice/detailsSlice";
 <<<<<<< Updated upstream
 import { financeSlice } from "./slices/financeSlice";
+import  claimsReducer  from "./slices/claimsSlice";
 export const rootReducer = combineReducers({
   pending: pendingSlice.reducer,
   details: detailsSlice.reducer,
@@ -14,4 +15,5 @@ export const rootReducer = combineReducers({
     details: detailsSlice.reducer,
     claims: userClaimSlice.reducer,
 >>>>>>> Stashed changes
+  claims: claimsReducer,
 });
