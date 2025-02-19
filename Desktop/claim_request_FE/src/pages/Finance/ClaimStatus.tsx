@@ -1,9 +1,29 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styles from "./ClaimStatus.module.css";
 
 const ClaimStatus: React.FC = () => {
   const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
+
+  const claimData = {
+    '001': {
+      claimId: '001',
+      projectName: 'Example Project',
+      duration: 'From 1/5/2025 To 1/15/2025',
+      staffName: 'Ben',
+      projectId: 'P001'
+    },
+    '002': {
+      claimId: '002',
+      projectName: 'Dreamer',
+      duration: 'From 1/1/2025 To 1/15/2025',
+      staffName: 'Tyler',
+      projectId: 'P002'
+    }
+  };
+
+  const currentClaim = claimData[id as keyof typeof claimData];
 
   return (
     <div className={styles.container}>
@@ -13,13 +33,13 @@ const ClaimStatus: React.FC = () => {
       </div>
       <div className={styles.box}>
         <div style={{ marginLeft: "50px" }}>
-          <p>Claim ID : 001</p>
-          <p>Project Name : Example Project</p>
-          <p>Project Duration : From 1/5/2025 To 1/15/2025</p>
+          <p>Claim ID : {currentClaim.claimId}</p>
+          <p>Project Name : {currentClaim.projectName}</p>
+          <p>Project Duration : {currentClaim.duration}</p>
         </div>
         <div>
-          <p>Staff Name : Ben </p>
-          <p>Project ID : P001</p>
+          <p>Staff Name : {currentClaim.staffName}</p>
+          <p>Project ID : {currentClaim.projectId}</p>
         </div>
       </div>
       <div
