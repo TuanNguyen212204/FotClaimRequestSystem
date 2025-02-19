@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-<<<<<<< Updated upstream
 import styles from "./UserClaims.module.css";
-import axios from "axios";
 import {
   AiFillDelete,
   AiFillEdit,
@@ -9,10 +7,6 @@ import {
   AiOutlineLeft,
   AiOutlineRight,
 } from "react-icons/ai";
-=======
-import styles from "./UserClaims.module.css"
-import { AiFillDelete, AiFillEdit, AiFillEye, AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
->>>>>>> Stashed changes
 import { PATH } from "../../constant/config";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -30,29 +24,8 @@ const UserClaims = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-<<<<<<< Updated upstream
-    axios
-      .get("https://6780c0ac85151f714b07bbd0.mockapi.io/myclaims")
-      .then((response) => {
-        const formattedData: Claim[] = response.data.map(
-          (item: Claim, index: number) => ({
-            ...item,
-            claimID: index + 1,
-          })
-        );
-        setClaims(formattedData);
-        setFilteredClaims(
-          formattedData.filter((claim) => claim.status === "Processing")
-        );
-      })
-      .catch((error) => {
-        console.error("Error fetching claims:", error);
-      });
-  }, []);
-=======
     dispatch(fetchUserClaims());
   }, [dispatch]);
->>>>>>> Stashed changes
 
   const handleDelete = (id: string) => {
     if (window.confirm("Are you sure you want to delete this claim?")) {
