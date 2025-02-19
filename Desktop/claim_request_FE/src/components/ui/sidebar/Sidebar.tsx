@@ -2,8 +2,10 @@ import styles from "./Sidebar.module.css";
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { PATH } from "../../../constant/config";
+import { useTranslation } from "react-i18next";
 
 export const Sidebar = () => {
+  const { t } = useTranslation();
   const [selectedClaim, setSelectedClaim] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -92,19 +94,19 @@ export const Sidebar = () => {
             }}
             className={styles.createClaim}
           >
-            Create Claims
+            {t("Create Claims")}
           </button>
         )}
 
         <div className={styles.menu}>
           <h3 onClick={toggleMenu} className={styles.claimHeader}>
             {role === "admin"
-              ? "Configuration"
+              ? t("Configuration")
               : role === "approve"
-              ? "Claims for Approval"
+              ? t("Claims for Approval")
               : role === "finance"
-              ? "Finance Claims"
-              : "My Claims"}
+              ? t("Finance Claims")
+              : t("My Claims")}
             <span className={isOpen ? styles.arrowUp : styles.arrowDown}></span>
           </h3>
 
@@ -238,8 +240,9 @@ export const Sidebar = () => {
           )}
         </div>
 
-        <button className={styles.logout}>Logout</button>
+        <button className={styles.logout}>{t("Log out")}</button>
       </div>
     </div>
   );
 };
+

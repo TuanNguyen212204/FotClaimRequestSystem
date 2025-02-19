@@ -6,7 +6,7 @@ import { ArrowLeftSquare, ArrowRightSquare, EyeIcon } from "lucide-react";
 
 export const ApprovedFinanceComponent: React.FC = () => {
   const dispatch = useDispatch();
-  const listClaims = useSelector((state) => state.finance.listClaims);
+  const listClaims = useSelector((state: any) => state.finance.listClaims);
 
   useEffect(() => {
     dispatch(fetchAllClaims());
