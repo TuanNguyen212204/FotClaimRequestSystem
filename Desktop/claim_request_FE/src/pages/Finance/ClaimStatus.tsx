@@ -1,50 +1,15 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useSelector } from 'react-redux';
+import { selectClaims } from '../../redux/slices/claimsSlice'; // Import selector
 import styles from "./ClaimStatus.module.css";
 
 const ClaimStatus: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
+  const claims = useSelector(selectClaims); // Get claims from Redux
 
-  const claimData = {
-    '001': {
-      claimId: '001',
-      projectName: 'A Night To Remember',
-      duration: 'From: 1/1/2025 To: 1/15/2025',
-      staffName: 'Ben',
-      projectId: 'P001'
-    },
-    '002': {
-      claimId: '002',
-      projectName: 'Dreamer',
-      duration: 'From: 1/1/2025 To: 1/15/2025',
-      staffName: 'Tyler',
-      projectId: 'P002'
-    },
-    '003': {
-      claimId: '003',
-      projectName: 'Sunshine Project',
-      duration: 'From: 2/1/2025 To: 2/28/2025',
-      staffName: 'Emma',
-      projectId: 'P003'
-    },
-    '004': {
-      claimId: '004',
-      projectName: 'Digital Transform',
-      duration: 'From: 3/1/2025 To: 3/15/2025',
-      staffName: 'Michael',
-      projectId: 'P004'
-    },
-    '005': {
-      claimId: '005',
-      projectName: 'Cloud Migration',
-      duration: 'From: 4/1/2025 To: 4/30/2025',
-      staffName: 'Sophie',
-      projectId: 'P005'
-    }
-  };
-
-  const currentClaim = claimData[id as keyof typeof claimData];
+  const currentClaim = claims.find(claim => claim.claimId === id);
 
   if (!currentClaim) {
     return (
