@@ -1,11 +1,11 @@
-import { useState } from "react";
-
-type TProjectInfo = {
+import { useSelector, useDispatch } from "react-redux";
+import { selectProject,selectedProject } from "@/redux/slices/Project/projectSlice";
+export type TProjectInfo = {
   ProjectName: string;
   RoleInTheProject: string;
   ProjectDuration: {
-    from: Date;
-    to: Date;
+    from: string;
+    to: string;
   };
 };
 export interface IProjectInfoProps {
@@ -14,15 +14,20 @@ export interface IProjectInfoProps {
 export default function ProjectInfo({
   ProjectList,
 }: IProjectInfoProps): JSX.Element {
-  const [selectedProject, setSelectedProject] = useState<TProjectInfo>();
-  function formatDateRange(from: Date, to: Date): string {
-    const fromMonth = from.toLocaleString('default', { month: 'short' });
-    const fromYear = from.getFullYear();
-    const toMonth = to.toLocaleString('default', { month: 'short' });
-    const toYear = to.getFullYear();
+  const dispatch = useDispatch();
+  const project = useSelector(selectProject);
+  function formatDateRange(from: string, to: string): string {
+    console.log(from )
+    const fromDate = new Date(from);
+    const toDate = new Date(to);
+    const fromMonth = fromDate.toLocaleString("default", { month: "short" });
+    const fromYear = fromDate.getFullYear();
+    const toMonth = toDate.toLocaleString("default", { month: "short" });
+    const toYear = toDate.getFullYear();
   
     return `${fromMonth} ${fromYear} - ${toMonth} ${toYear}`;
   }
+  
 
   return (
     <div className="mb-5 box-border">
@@ -40,7 +45,7 @@ export default function ProjectInfo({
               (p) => p.ProjectName === e.target.value
             );
             if (project) {
-              setSelectedProject(project);
+              dispatch(selectedProject(project));
               console.log(project);
             }
           }}
@@ -61,7 +66,7 @@ export default function ProjectInfo({
           disabled
           placeholder="Role in Project"
           className="w-full p-2 mb-2.5 border-2 border-white box-border rounded-sm"
-          value={selectedProject?.RoleInTheProject || ""}
+          value={project?.selectedProject.RoleInTheProject|| ""}
         />
       </div>
 
@@ -72,8 +77,11 @@ export default function ProjectInfo({
           placeholder="Project Duration"
           className="w-full p-2 mb-2.5 border-2 border-white box-border rounded-sm"
           value={
-            selectedProject
-              ? `${formatDateRange(selectedProject.ProjectDuration.from,selectedProject.ProjectDuration.to)}`
+            project.selectedProject.ProjectDuration
+              ? `${formatDateRange(
+                  project.selectedProject.ProjectDuration.from,
+                  project.selectedProject.ProjectDuration.to
+                )}`
               : ""
           }
         />

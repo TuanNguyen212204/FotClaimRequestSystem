@@ -1,29 +1,38 @@
 import { useEffect, useState } from "react";
 import styles from "@ui/Forms/Create-Claim/Claim.module.css";
-interface ICreateRequest {
+import { useSelector } from "react-redux";
+import { selectProject } from "@/redux/slices/Project/projectSlice";
+export interface ICreateRequest {
   date: string;
   from: string;
   to: string;
   hours: number;
   remark: string;
 }
-
+// 1: la phai disable table nay neu chua select project
+// 2: dua vao project da chon phai set max - min cua cai project do
+//
 export default function ClaimTable() {
-  const [claims, setClaims] = useState<ICreateRequest[]>([]);
-  useEffect(() => {
-    addRow();
-  }, []);
+  const [claims, setClaims] = useState<ICreateRequest[]>([
+    { date: "", from: "", to: "", hours: 0, remark: "" },
+  ]);
+  // useEffect(() => {
+  //   addRow();
+  // }, []);
   const addRow = () => {
     setClaims([
       ...claims,
       { date: "", from: "", to: "", hours: 0, remark: "" },
     ]);
   };
-
+  function getTime(time: string): string {
+    return time ? time.split("T")[0] : "";
+  }
+  const project = useSelector(selectProject);
   return (
     <div className="mb-5 box-border overflow-auto">
       <h2 className="text-lg pb-1.5 mb-4 border-b-1 border-gray-400">
-      Claim Table
+        Claim Table
       </h2>
       <table className="border box-border border-spacing-2 border-gray-300 mb-2.5 w-full ">
         <thead>
@@ -43,6 +52,8 @@ export default function ClaimTable() {
                   title="Claim Date"
                   type="date"
                   value={claim.date}
+                  min={getTime(project?.selectedProject?.ProjectDuration?.from)}
+                  max={getTime(project?.selectedProject?.ProjectDuration?.to)}
                   onChange={(e) => {
                     const newClaims = [...claims];
                     newClaims[index].date = e.target.value;
@@ -77,7 +88,7 @@ export default function ClaimTable() {
               <td>
                 <input
                   type="number"
-                  step="0.1"
+                  disabled
                   placeholder="0"
                   value={claim.hours}
                   onChange={(e) => {
@@ -110,7 +121,7 @@ export default function ClaimTable() {
         className={`mt-2 p-2 max-w-24 rounded ${styles.add_button} `}
       >
         Add Row
-      </button> 
+      </button>
       <div className="mb-2.5">
         <span className="block mb-1 font-bold">Total Working Hours</span>
         <input
