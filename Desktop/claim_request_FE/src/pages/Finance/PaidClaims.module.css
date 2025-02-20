@@ -1,12 +1,11 @@
 .container {
   width: 70%;
   position: absolute;
-  top: 50%;
+  top: 45%;
   left: 60%;
   transform: translate(-50%, -50%);
   font-weight: 400;
   font-size: 1em;
-  margin-top: 30px;
 }
 .claimStatus_h1 {
   text-align: left;
