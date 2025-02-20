@@ -1,4 +1,5 @@
-import { EyeIcon, TrashIcon, CheckIcon } from "lucide-react";
+import { EyeIcon, TrashIcon, CheckIcon, Trash2Icon } from "lucide-react";
+import { FaEye } from "react-icons/fa";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import styles from "./PendingApproval.module.css";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +8,8 @@ import { useSelector } from "react-redux";
 import { fetchAllClaims, deleteClaim } from "@/redux/Claim/store/pendingSlice";
 import { useAppDispatch } from "@redux/index";
 import type { RootState } from "@redux/index";
+import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 export const PendingComponent: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -17,7 +20,9 @@ export const PendingComponent: React.FC = () => {
   }, [dispatch]);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5; 
+  const itemsPerPage = 5;
+  const [selectedClaims, setSelectedClaims] = useState<string[]>([]);
+  const [selectAll, setSelectAll] = useState(false);
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -43,38 +48,96 @@ export const PendingComponent: React.FC = () => {
     navigator(`/details/${id}`);
   }
 
+  const handleSelectClaim = (id: string) => {
+    setSelectedClaims((prevSelected) =>
+      prevSelected.includes(id)
+        ? prevSelected.filter((claimId) => claimId !== id)
+        : [...prevSelected, id]
+    );
+  };
+
+  const handleSelectAll = () => {
+    if (selectAll) {
+      setSelectedClaims([]);
+    } else {
+      setSelectedClaims(currentItems.map((claim) => claim.id));
+    }
+    setSelectAll(!selectAll);
+  };
+
+  const handleDeleteSelected = () => {
+    selectedClaims.forEach((id) => {
+      dispatch(deleteClaim(id));
+    });
+    setSelectedClaims([]);
+    toast.success("Selected claims deleted successfully!");
+  };
+
   const handleDelete = (id: string) => {
     dispatch(deleteClaim(id));
+    toast.success("Claim deleted successfully!");
   };
 
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Pending Approval Claims</h1>
-      <hr />
+      {/* <hr /> */}
+      <nav className={styles.breadcrumb}>
+        <Link to="/">My Claims</Link> &gt;{" "}
+        <Link to="/pending">Pending Approval</Link>
+      </nav>
+      {/* <Link to="" style={{ textDecoration: "none", color: "#212121" }}>
+        My Claims
+      </Link> */}
+      <button className={styles.deleteButton} onClick={handleDeleteSelected}
+        disabled={selectedClaims.length === 0} style={{textDecoration: "none"}}>
+        <Trash2Icon />&nbsp;
+        Delete Selected
+      </button>
       <table className={styles.claimsTable}>
         <thead>
           <tr>
+            <th>
+              <input
+                type="checkbox"
+                checked={selectAll}
+                onChange={handleSelectAll}
+              />
+            </th>
             <th>Claim ID</th>
             <th>Staff Name</th>
             <th>Project Name</th>
             <th>Project Duration</th>
             <th>Total Hours Working</th>
             <th>Approver Name</th>
-            <th>Action</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
           {currentItems.map((claim) => (
             <tr key={claim.id}>
+              <td>
+                <input
+                  type="checkbox"
+                  checked={selectedClaims.includes(claim.id)}
+                  onChange={() => handleSelectClaim(claim.id)}
+                />
+              </td>
               <td>{claim.id}</td>
               <td>{claim.staffName}</td>
               <td>{claim.projectName}</td>
               <td>{claim.duration}</td>
-              <td>{claim.hours}{" "}hours</td>
+              <td>{claim.hours} hours</td>
               <td>{claim.approveName}</td>
               <td className={styles.actions}>
-                <EyeIcon onClick={() => details(claim.id)} className={styles.icon} />
-                <TrashIcon onClick={() => handleDelete(claim.id)} className={styles.icon} />
+                <EyeIcon
+                  onClick={() => details(claim.id)}
+                  className={styles.icon}
+                />
+                <TrashIcon
+                  onClick={() => handleDelete(claim.id)}
+                  className={styles.icon}
+                />
                 <CheckIcon className={styles.icon} />
               </td>
             </tr>
