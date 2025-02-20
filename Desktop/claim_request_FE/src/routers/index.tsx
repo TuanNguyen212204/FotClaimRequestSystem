@@ -71,7 +71,7 @@ const router: RouteObject[] = [
         element: <ApproveDetail />,
       },
       {
-        path: PATH.claimStatus,
+        path: `${PATH.claimStatus}/:id`,
         element: <ClaimStatus />,
       },
       {
