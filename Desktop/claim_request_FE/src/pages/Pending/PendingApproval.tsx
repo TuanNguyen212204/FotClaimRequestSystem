@@ -20,7 +20,7 @@ export const PendingComponent: React.FC = () => {
   }, [dispatch]);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const itemsPerPage = 10;
   const [selectedClaims, setSelectedClaims] = useState<string[]>([]);
   const [selectAll, setSelectAll] = useState(false);
 
@@ -89,10 +89,14 @@ export const PendingComponent: React.FC = () => {
       {/* <Link to="" style={{ textDecoration: "none", color: "#212121" }}>
         My Claims
       </Link> */}
-      <button className={styles.deleteButton} onClick={handleDeleteSelected}
-        disabled={selectedClaims.length === 0} style={{textDecoration: "none"}}>
-        <Trash2Icon />&nbsp;
-        Delete Selected
+      <button
+        className={styles.deleteButton}
+        onClick={handleDeleteSelected}
+        disabled={selectedClaims.length === 0}
+        style={{ textDecoration: "none" }}
+      >
+        <Trash2Icon />
+        &nbsp; Delete Selected
       </button>
       <table className={styles.claimsTable}>
         <thead>
@@ -134,10 +138,12 @@ export const PendingComponent: React.FC = () => {
                   onClick={() => details(claim.id)}
                   className={styles.icon}
                 />
+                &nbsp;&nbsp;&nbsp;
                 <TrashIcon
                   onClick={() => handleDelete(claim.id)}
                   className={styles.icon}
                 />
+                &nbsp;&nbsp;&nbsp;
                 <CheckIcon className={styles.icon} />
               </td>
             </tr>
