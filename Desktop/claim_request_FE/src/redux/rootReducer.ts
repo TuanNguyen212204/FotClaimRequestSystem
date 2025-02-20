@@ -1,6 +1,6 @@
 import { combineReducers } from "@reduxjs/toolkit";
-import { pendingSlice } from "./slice/pendingSlice";
-import { detailsSlice } from "./slice/detailsSlice";
+import { pendingSlice } from "./Claim/store/pendingSlice";
+import { detailsSlice } from "./Claim/store/detailsSlice";
 import { financeSlice } from "./slices/financeSlice";
 export const rootReducer = combineReducers({
   pending: pendingSlice.reducer,

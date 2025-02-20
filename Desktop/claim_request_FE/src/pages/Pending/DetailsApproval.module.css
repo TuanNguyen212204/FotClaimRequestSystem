@@ -1,9 +1,9 @@
 .container {
     padding: 20px;
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f9fafb;
+    /* background-color: #f9fafb; */
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
 }
 
 .title {
@@ -94,6 +94,7 @@
     color: #6b7280;
     cursor: pointer;
     transition: color 0.2s ease;
+    transform: scale(0.9);
 }
 
 .pageIcon:hover {
@@ -124,7 +125,7 @@
   display: flex;
   justify-content: end;
   margin-top: 20px;
-  margin-right: 20px;
+  margin-right: 40px;
 }
 
 .buttonStyle {
@@ -141,14 +142,14 @@
   transition: background-color 0.3s ease;
 }
 
-.rejectedButton {
+/* .rejectedButton {
   background-color: #ff4d4d;
   color: white;
 }
 
 .rejectedButton:hover {
   background-color: #ff1a1a;
-}
+} */
 
 .approvedButton {
   background-color: #4caf50;

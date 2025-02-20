@@ -1,10 +1,10 @@
 import { EyeIcon, TrashIcon, CheckIcon } from "lucide-react";
-import { ArrowLeftSquare, ArrowRightSquare } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import styles from "./PendingApproval.module.css";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { fetchAllClaims, deleteClaim } from "@redux/slice/pendingSlice";
+import { fetchAllClaims, deleteClaim } from "@/redux/Claim/store/pendingSlice";
 import { useAppDispatch } from "@redux/index";
 import type { RootState } from "@redux/index";
 
@@ -83,7 +83,7 @@ export const PendingComponent: React.FC = () => {
       </table>
       <div className={styles.pagination}>
         <span className={styles.pageIcon} onClick={handlePreviousPage}>
-          <ArrowLeftSquare />
+          <ArrowLeft />
         </span>
         {[...Array(totalPages)].map((_, index) => (
           <span
@@ -97,7 +97,7 @@ export const PendingComponent: React.FC = () => {
           </span>
         ))}
         <span className={styles.pageIcon} onClick={handleNextPage}>
-          <ArrowRightSquare />
+          <ArrowRight />
         </span>
       </div>
     </div>
