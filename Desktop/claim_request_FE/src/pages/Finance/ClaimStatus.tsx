@@ -1,9 +1,25 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useSelector } from 'react-redux';
+import { selectClaims } from '../../redux/slices/claimsSlice'; // Import selector
 import styles from "./ClaimStatus.module.css";
 
 const ClaimStatus: React.FC = () => {
   const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
+  const claims = useSelector(selectClaims); // Get claims from Redux
+
+  const currentClaim = claims.find(claim => claim.claimId === id);
+
+  if (!currentClaim) {
+    return (
+      <div className={styles.container}>
+        <h1 className={styles.claimStatus_h1}>Claim Status</h1>
+        <p>Không tìm thấy thông tin claim với ID: {id}</p>
+        <button onClick={() => navigate(-1)}>Quay lại</button>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.container}>
@@ -13,13 +29,13 @@ const ClaimStatus: React.FC = () => {
       </div>
       <div className={styles.box}>
         <div style={{ marginLeft: "50px" }}>
-          <p>Claim ID : 001</p>
-          <p>Project Name : Example Project</p>
-          <p>Project Duration : From 1/5/2025 To 1/15/2025</p>
+          <p>Claim ID : {currentClaim.claimId}</p>
+          <p>Project Name : {currentClaim.projectName}</p>
+          <p>Project Duration : {currentClaim.duration}</p>
         </div>
         <div>
-          <p>Staff Name : Ben </p>
-          <p>Project ID : P001</p>
+          <p>Staff Name : {currentClaim.staffName}</p>
+          <p>Project ID : {currentClaim.projectId}</p>
         </div>
       </div>
       <div
@@ -43,18 +59,42 @@ const ClaimStatus: React.FC = () => {
           <tbody>
             <tr>
               <td className={styles.style_td}>001</td>
-              <td className={styles.style_td}>From 1/5/2025 To: 1/15/2025</td>
+              <td className={styles.style_td}>From: 1/1/2025 To: 1/15/2025</td>
               <td className={styles.style_td}>1/5/2025</td>
-              <td className={styles.style_td}>5 hours</td>
+              <td className={styles.style_td}>100 hours</td>
               <td className={styles.style_td}>250.000.000 VND</td>
               <td className={styles.style_td_Status}>Paid</td>
             </tr>
             <tr>
               <td className={styles.style_td}>002</td>
-              <td className={styles.style_td}>From 1/5/2025 To: 1/15/2025</td>
+              <td className={styles.style_td}>From: 1/1/2025 To: 1/15/2025</td>
               <td className={styles.style_td}>1/6/2025</td>
-              <td className={styles.style_td}>5 hours</td>
+              <td className={styles.style_td}>100 hours</td>
               <td className={styles.style_td}>250.000.000 VND</td>
+              <td className={styles.style_td_Status}>Paid</td>
+            </tr>
+            <tr>
+              <td className={styles.style_td}>003</td>
+              <td className={styles.style_td}>From: 2/1/2025 To: 2/28/2025</td>
+              <td className={styles.style_td}>2/15/2025</td>
+              <td className={styles.style_td}>160 hours</td>
+              <td className={styles.style_td}>400.000.000 VND</td>
+              <td className={styles.style_td_Status}>Paid</td>
+            </tr>
+            <tr>
+              <td className={styles.style_td}>004</td>
+              <td className={styles.style_td}>From: 3/1/2025 To: 3/15/2025</td>
+              <td className={styles.style_td}>3/7/2025</td>
+              <td className={styles.style_td}>80 hours</td>
+              <td className={styles.style_td}>200.000.000 VND</td>
+              <td className={styles.style_td_Status}>Paid</td>
+            </tr>
+            <tr>
+              <td className={styles.style_td}>005</td>
+              <td className={styles.style_td}>From: 4/1/2025 To: 4/30/2025</td>
+              <td className={styles.style_td}>4/15/2025</td>
+              <td className={styles.style_td}>200 hours</td>
+              <td className={styles.style_td}>500.000.000 VND</td>
               <td className={styles.style_td_Status}>Paid</td>
             </tr>
           </tbody>
@@ -72,3 +112,4 @@ const ClaimStatus: React.FC = () => {
 };
 
 export default ClaimStatus;
+

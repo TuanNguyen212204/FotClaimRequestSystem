@@ -1,18 +1,22 @@
 import { RouteObject, useRoutes } from "react-router-dom";
-import { MainLayout } from "../components/layouts/MainLayout";
-import { HomePage } from "../pages/HomePage";
-import { PATH } from "../constant/config";
-import DraftCoponent from "../components/ui/user/DraftCoponent";
-import { UserInfoComponent } from "../components/ui/user/UserInfoComponent";
-import LoginForm from "../components/ui/login/LoginForm";
-import ResetPassword from "../components/ui/login/ResetPassword";
-import CreateClaimPage from "../pages/CreateClaim";
-import { PendingComponent } from "../components/ui/approve/PendingApproval";
-import { DetailsComponents } from "../components/ui/approve/DetailsApproval.tsx";
-import UserClaims from "../pages/User/UserClaims.tsx";
-import { UserClaimDetails } from "../pages/User/UserClaimDetails.tsx";
-import UserSettings from "../pages/Admin/UserSettings.tsx";
-import ApproveDetail from "../pages/ClaimRequest/ApproveDetail.tsx";
+import { MainLayout } from "@components/layouts/MainLayout";
+import { HomePage } from "@pages/HomePage";
+import { PATH } from "@constant/config";
+import { UserInfoComponent } from "@ui/user/UserInfoComponent";
+import LoginForm from "@ui/login/LoginForm";
+import ResetPassword from "@ui/login/ResetPassword";
+import CreateClaimPage from "@pages/CreateClaim";
+import { PendingComponent } from "@ui/approve/PendingApproval";
+import { DetailsComponents } from "@ui/approve/DetailsApproval";
+import UserClaims from "@pages/User/UserClaims";
+import { UserClaimDetails } from "@pages/User/UserClaimDetails";
+import UserSettings from "@pages/Admin/UserSettings";
+import ApproveDetail from "@pages/ClaimRequest/ApproveDetail";
+import ClaimStatus from "@pages/Finance/ClaimStatus";
+import PaidClaims from "@pages/Finance/PaidClaims";
+import ProjectInformation from "@pages/Admin/ProjectInformation";
+import StaffInformation from "@pages/Admin/StaffInformation";
+import Approved from "@pages/Approved/Approved";
 const router: RouteObject[] = [
   {
     element: <LoginForm />,
@@ -34,20 +38,20 @@ const router: RouteObject[] = [
         element: <CreateClaimPage />,
       },
       {
-        path: PATH.myclaims,
+        path: PATH.myClaims,
         element: <UserClaims />,
       },
       {
-        path: PATH.userclaimdetails,
+        path: PATH.userClaimDetails,
         element: <UserClaimDetails />,
       },
       {
-        path: PATH.draft,
-        element: <DraftCoponent />,
+        path: PATH.userInfo,
+        element: <UserInfoComponent />,
       },
       {
-        path: PATH.userinfo,
-        element: <UserInfoComponent />,
+        path: PATH.approved,
+        element: <Approved />,
       },
       {
         path: PATH.pending,
@@ -58,12 +62,28 @@ const router: RouteObject[] = [
         element: <DetailsComponents />,
       },
       {
-        path: PATH.usersettings,
+        path: PATH.userSettings,
         element: <UserSettings />,
       },
       {
-        path: PATH.approvedetails,
+        path: PATH.approveDetails,
         element: <ApproveDetail />,
+      },
+      {
+        path: `${PATH.claimStatus}/:id`,
+        element: <ClaimStatus />,
+      },
+      {
+        path: PATH.paidClaim,
+        element: <PaidClaims />,
+      },
+      {
+        path: PATH.projectInformation,
+        element: <ProjectInformation />,
+      },
+      {
+        path: PATH.staffInformation,
+        element: <StaffInformation />,
       },
     ],
   },
