@@ -50,7 +50,6 @@ const TableComponent = <T extends DataRecord>({
       <div className={styles.container}>
         {loading && <div className="loading">Loading...</div>}
         <section className={styles.table_header}>{page}</section>
-
         <section className={styles.table_body}>
           <table className={styles.table}>
             <thead className={styles.thead}>
