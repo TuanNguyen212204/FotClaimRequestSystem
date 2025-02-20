@@ -23,7 +23,7 @@ export default function ClaimTable() {
   return (
     <div className="mb-5 box-border overflow-auto">
       <h2 className="text-lg pb-1.5 mb-4 border-b-1 border-gray-400">
-        Project Information
+      Claim Table
       </h2>
       <table className="border box-border border-spacing-2 border-gray-300 mb-2.5 w-full ">
         <thead>
