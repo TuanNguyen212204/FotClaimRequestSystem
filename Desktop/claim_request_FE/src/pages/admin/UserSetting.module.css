@@ -42,11 +42,13 @@
   transition: all 200ms;
   vertical-align: baseline;
   white-space: nowrap;
+  width: 7em;
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
 }
 .button3 {
+  width: 7em;
   background-color: green;
   border-radius: 8px;
   border-width: 0;

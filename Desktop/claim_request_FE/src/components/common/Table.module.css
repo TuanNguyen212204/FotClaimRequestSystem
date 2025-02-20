@@ -1,0 +1,119 @@
+.container {
+  position: absolute;
+  top: 53%;
+  left: 60%;
+  transform: translate(-50%, -50%);
+  font-size: 1em;
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0 0.4rem 0.8rem #0005;
+}
+.table {
+  border-collapse: collapse;
+  text-align: center;
+  background-color: #fff5;
+  width: 100%;
+  table-layout: fixed;
+  width: auto;
+  min-width: 1300px;
+  /* box-shadow: 0 0.4rem 0.8rem #0005; */
+}
+.thead {
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  text-align: center;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+.th {
+  padding: 1rem 2rem;
+  font-size: 1em;
+  font-weight: 900;
+}
+.td {
+  padding: 1rem 2rem;
+}
+
+.status {
+  padding: 0.2rem 1rem;
+  text-align: center;
+}
+
+.status-Processing {
+  background-color: #ffa500;
+  color: white;
+  width: 8rem;
+  height: 2.5rem;
+  font-weight: 900;
+  border-radius: 5px;
+  border: 1px solid whitesmoke;
+}
+
+.status-Approved {
+  background-color: green;
+  color: white;
+  font-weight: 900;
+  width: 8rem;
+  height: 2.5rem;
+  border-radius: 5px;
+  border: 1px solid whitesmoke;
+}
+
+.status-Paid {
+  background-color: crimson;
+  color: white;
+  width: 8rem;
+  height: 2.5rem;
+  border-radius: 5px;
+  font-weight: 900;
+  border: 1px solid whitesmoke;
+}
+
+.status-Rejected {
+  background-color: red;
+  color: white;
+  font-weight: 900;
+  width: 8rem;
+  height: 2.5rem;
+  border-radius: 5px;
+  border: 1px solid whitesmoke;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px 0;
+}
+
+.pagination button {
+  border: none;
+  color: #333;
+  cursor: pointer;
+  padding-top: 5px;
+  font-size: 1em;
+  border-radius: 4px;
+  width: 2.1em;
+  border: 1px solid #d1d5db;
+  height: 2em;
+  text-align: centerSu;
+  transition: background-color 0.3s ease;
+}
+
+.pagination button:hover {
+  background-color: #ddd;
+  text-decoration: none;
+}
+
+.pagination button.active {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+.table_header {
+  padding: 1rem;
+  font-weight: 900;
+  font-size: 2rem;
+}
+.table_body {
+  border-radius: 20px;
+}
