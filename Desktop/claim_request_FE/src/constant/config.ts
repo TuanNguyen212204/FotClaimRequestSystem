@@ -1,17 +1,17 @@
 export const PATH = {
   home: "/",
-  userInfo: "/user-info",
+  userInfo: "/user-info",//tuan
   draft: "/draft",
-  login: "/login",
-  resetPassword: "/reset-password",
-  createRequest: "/create-claim",
-  pending: "/pending",
-  details: "/details/:id",
-  myClaims: "/my-claims",
+  login: "/login", //nguyen
+  resetPassword: "/reset-password",//nguyen
+  createRequest: "/create-claim", //an
+  pending: "/pending",//tri
+  details: "/details/:id",//tri
+  myClaims: "/my-claims",//nam
   userClaimDetails: "/user-claim/:id",
   userSettings: "/user-settings",
   approveDetails: "/approve-details",
-  claimStatus: "/claim-status/:id",
+  claimStatus: "/claim-status",
   paidClaim: "/paid-claim",
   approved: "/approved",
   projectInformation: "/project-information",

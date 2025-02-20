@@ -117,3 +117,10 @@
 .table_body {
   border-radius: 20px;
 }
+.table_body tr:nth-child(even) {
+  background-color: #fafafa;
+}
+.table_body tr:hover {
+  background-color: rgb(232, 232, 232);
+  transition: (0.3s);
+}
