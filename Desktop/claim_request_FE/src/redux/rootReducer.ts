@@ -3,9 +3,11 @@ import { pendingSlice } from "./slice/pendingSlice";
 import { detailsSlice } from "./slice/detailsSlice";
 import { financeSlice } from "./slices/Finance/claimsSlice";
 import claimsReducer from "./slices/claimsSlice";
+import { approverSlice } from "./slices/Approver/claimsSlice";
 export const rootReducer = combineReducers({
   pending: pendingSlice.reducer,
   details: detailsSlice.reducer,
   finance: financeSlice.reducer,
   claims: claimsReducer,
+  approver: approverSlice.reducer,
 });
