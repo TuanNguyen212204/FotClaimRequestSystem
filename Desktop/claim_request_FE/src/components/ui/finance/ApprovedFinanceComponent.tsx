@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllClaims } from "../../../redux/slices/financeSlice";
+import { fetchAllClaims } from "../../../redux/slices/Finance/financeSlice";
 import styles from "./ApprovedFinanceComponent.module.css";
 import { ArrowLeftSquare, ArrowRightSquare, EyeIcon } from "lucide-react";
 import { RootState, AppDispatch } from "../../../redux/index";
