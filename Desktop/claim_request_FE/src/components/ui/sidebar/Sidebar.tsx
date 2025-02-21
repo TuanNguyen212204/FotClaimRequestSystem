@@ -32,7 +32,7 @@ export const Sidebar = () => {
       //   navigate(PATH.pending);
       //   break;
       case "approved":
-        navigate(PATH.financeApproved);
+        navigate(PATH.approvedFinance);
         break;
       case "pending":
         navigate(PATH.pending);

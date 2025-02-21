@@ -50,7 +50,7 @@ const router: RouteObject[] = [
         element: <UserInfoComponent />,
       },
       {
-        path: PATH.financeApproved,
+        path: PATH.approvedFinance,
         element: <ApprovedFinancePage />,
       },
       {

@@ -13,7 +13,7 @@ export const PATH = {
   approveDetails: "/approve-details",
   claimStatus: "/claim-status/:id",
   paidClaim: "/paid-claim",
-  financeApproved: "/finance/approved",
+  approvedFinance: "/finance/approved",
   projectInformation: "/project-information",
   staffInformation: "/staff-information",
 };
