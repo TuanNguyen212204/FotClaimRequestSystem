@@ -72,10 +72,7 @@ export const ApprovedApproverComponent: React.FC = () => {
                 <td>{item.hour} hours</td>
                 <td>{item.approverName}</td>
                 <td>
-                  <EyeIcon
-                    className={styles.icon}
-                    onClick={() => navigate(PATH.approveDetails)}
-                  />
+                  <EyeIcon className={styles.icon} />
                 </td>
               </tr>
             ))}
