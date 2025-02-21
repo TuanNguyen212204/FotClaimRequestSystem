@@ -62,7 +62,7 @@
 .pageNumber:hover {
   background: #007bff;
   color: white;
-  transform: scale(1.1); /* Phóng to nhẹ */
+  transform: scale(1.1);
 }
 
 .pageNumber.active {
@@ -89,13 +89,11 @@
   transition: transform 0.2s ease-in-out, color 0.2s;
 }
 
-/* Khi hover vào icon: đổi màu và phóng to nhẹ */
 .icon:hover {
   color: #007bff;
   transform: scale(1.2);
 }
 
-/* Khi bấm vào icon: thu nhỏ một chút để có hiệu ứng click */
 .icon:active {
   transform: scale(0.9);
 }
