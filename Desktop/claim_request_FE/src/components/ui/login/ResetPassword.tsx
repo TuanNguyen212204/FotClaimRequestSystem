@@ -1,70 +1,93 @@
-import styles from "./LoginForm.module.css"
-import { PATH } from "../../../constant/config";
+import { Link, useNavigate } from "react-router-dom";
+import styles from "@components/ui/login/LoginForm.module.css";
+import fot from "@assets/fot.png";
+import * as Yup from "yup";
+import { useFormik } from "formik";
 
 function ResetPassword() {
+  const navigate = useNavigate();
+
+  const initialValues = {
+    email: "",
+  };
+
+  const resetPasswordSchema = Yup.object().shape({
+    email: Yup.string()
+      .email("Invalid Email")
+      .required("Email is Required")
+      .test(
+        "includes-@fpt",
+        "Email must be included '@fpt'",
+        (value) => (value ? value.includes("@fpt") : false)
+      ),
+  });
+
+  const formik = useFormik({
+    initialValues: initialValues,
+    validationSchema: resetPasswordSchema,
+    onSubmit: () => {
+      navigate("/check-to-mail");
+    },
+  });
+
   return (
-    <div>
-      <div>
-        <div className={styles.loginForm__overlay}></div>
+    <div className={styles.container}>
+      <div className={styles.row}>
+        {/* Welcome Section */}
+        <div className={styles.leftSide}>
+          <div className={styles.mask}></div>
+          <div className={styles.content}>
+            <div className={styles.logo}>
+              <Link to="/">
+                <img src={fot} alt="fot" />
+              </Link>
+            </div>
+            <div className={styles.leftSideText}>
+              <h1>Don't worry,</h1>
 
-        <div className={styles.loginForm__background}></div>
+              <p>We are here help you to recover your password.</p>
+            </div>
+          </div>
+        </div>
 
-        <div className={styles.loginForm__form}>
-          <div className={styles.resetPassword__form__con1}>
-            <div className={styles.resetPassword__form}>
-              <div className={styles.resetPassword__form__con2__title}>
-                <h1>Forgot Password</h1>
-              </div>
-              <div className={styles.resetPassword__form__con2__content}>
-                <h3>
-                  Please enter your email address or  <br />
-                  username and we will email you a link <br />
-                  to reset your password 
-                </h3>
-              </div>
+        {/* Login Section */}
+        <div className={styles.rightSide}>
+          <div className={styles.rightSideContainer}>
+            <h1>Reset Password</h1>
 
+            <p>
+              Please enter your email address or username and we will email you
+              a link to reset your password
+            </p>
+
+            <form onSubmit={formik.handleSubmit}>
               <div className={styles.inputForm}>
+                <div className={styles.inputForm__message}>
+                  <label htmlFor="email">Email</label>
+                  <label htmlFor="email">
+                    {formik.touched.email && formik.errors.email && (
+                      <div className={styles.label__error}>
+                        {formik.errors.email}
+                      </div>
+                    )}
+                  </label>
+                </div>
                 <input
                   type="text"
-                  name="username"
-                  id="username"
-                  placeholder="Enter email or username"
+                  name="email"
+                  id="email"
+                  placeholder="Enter email"
+                  value={formik.values.email}
+                  onChange={formik.handleChange}
                 />
               </div>
 
-              {/* <div className={styles.inputForm}>
-                <input
-                  type="password"
-                  name="old_password"
-                  id="old_password"
-                  placeholder="Enter old password"
-                />
-              </div>
-
-              <div className={styles.inputForm}>
-                <input
-                  type="password"
-                  id="new_password"
-                  name="new_password"
-                  placeholder="Enter new password"
-                />
-              </div>
-
-              <div className={styles.inputForm}>
-                <input
-                  type="password"
-                  id="confirm_password"
-                  name="confirm_password"
-                  placeholder="Enter confirm password"
-                />
-              </div> */}
-
-              <div className={styles.resetPassword__btnSubmit}>
-                <button className={styles.buttonSubmit}>Send Email</button>
-              </div>
-              <div className={styles.resetPassword__backToLogin}>
-                <a href={PATH.login}>Back to Login</a>
-              </div>
+              <button type="submit" className={styles.btnSubmitForm}>
+                Continue
+              </button>
+            </form>
+            <div className={styles.backToLogin}>
+              <Link to="/login">Back to Login</Link>
             </div>
           </div>
         </div>

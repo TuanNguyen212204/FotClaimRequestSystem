@@ -4,6 +4,8 @@ export const PATH = {
   draft: "/draft",
   login: "/login",
   resetPassword: "/reset-password",
+  checkToMail: "/check-to-mail",
+  createNewPassword: "/create-new-password",
   createRequest: "/create-claim",
   pending: "/pending",
   details: "/details/:id",
