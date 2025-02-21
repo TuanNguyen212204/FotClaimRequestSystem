@@ -1,12 +1,22 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllClaims } from "../../../redux/slices/financeSlice";
 import styles from "./ApprovedFinanceComponent.module.css";
 import { ArrowLeftSquare, ArrowRightSquare, EyeIcon } from "lucide-react";
+import { RootState, AppDispatch } from "../../../redux/index";
+import { useNavigate } from "react-router-dom";
+import { PATH } from "../../../constant/config";
 
 export const ApprovedFinanceComponent: React.FC = () => {
-  const dispatch = useDispatch();
-  const listClaims = useSelector((state) => state.finance.listClaims);
+  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+  const listClaims = useSelector(
+    (state: RootState) => state.finance.listClaims
+  );
+
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 7; // Số hàng trên mỗi trang
 
   useEffect(() => {
     dispatch(fetchAllClaims());
@@ -21,51 +31,88 @@ export const ApprovedFinanceComponent: React.FC = () => {
     return new Date(dateString).toLocaleDateString("en-US", options);
   };
 
+  // Tính số trang
+  const totalPages = Math.ceil(listClaims.length / itemsPerPage);
+
+  // Lấy dữ liệu cho trang hiện tại
+  const currentData = listClaims.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  // Xử lý chuyển trang
+  const handlePageChange = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
+
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>Approved Claims</h1>
-      <hr />
-      <table className={styles.claimsTable}>
-        <thead>
-          <th>Claim ID</th>
-          <th>Staff Name</th>
-          <th>Project Name</th>
-          <th>Project Duration</th>
-          <th>Total Hours Working</th>
-          <th>Approver Name</th>
-          <th>Action</th>
-        </thead>
-        <tbody>
-          {listClaims.length > 0 &&
-            listClaims.map((item, index) => {
-              return (
-                <tr key={index}>
-                  <td>{item.claimId}</td>
-                  <td>{item.staffName}</td>
-                  <td>{item.projectName}</td>
-                  <td>
-                    {formatDate(item.startAt)} to {formatDate(item.finishAt)}
-                  </td>
-                  <td>{item.hour} hours</td>
-                  <td>{item.approverName}</td>
-                  <td>
-                    <EyeIcon className={styles.icon} />
-                  </td>
-                </tr>
-              );
-            })}
-        </tbody>
-      </table>
-      <div className={styles.pagination}>
-        <span className={styles.pageIcon}>
-          <ArrowLeftSquare />
-        </span>
-        <span className={styles.pageNumber}>1</span>
-        <span className={styles.pageNumber}>2</span>
-        <span className={styles.pageNumber}>3</span>
-        <span className={styles.pageIcon}>
-          <ArrowRightSquare />
-        </span>
+      <h1 className={styles.table_header}>Approved Claims</h1>
+      <div className={styles.container_table}>
+        <table className={styles.table_body}>
+          <thead>
+            <tr>
+              <th>Claim ID</th>
+              <th>Staff Name</th>
+              <th>Project Name</th>
+              <th>Project Duration</th>
+              <th>Total Hours Working</th>
+              <th>Approver Name</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {currentData.map((item, index) => (
+              <tr key={index}>
+                <td>{item.claimId}</td>
+                <td>{item.staffName}</td>
+                <td>{item.projectName}</td>
+                <td>
+                  {formatDate(item.startAt)} to {formatDate(item.finishAt)}
+                </td>
+                <td>{item.hour} hours</td>
+                <td>{item.approverName}</td>
+                <td>
+                  <EyeIcon
+                    className={styles.icon}
+                    onClick={() => navigate(PATH.approveDetails)}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        {/* Pagination */}
+        <div className={styles.pagination}>
+          <span
+            className={styles.pageIcon}
+            onClick={() => handlePageChange(currentPage - 1)}
+          >
+            <ArrowLeftSquare />
+          </span>
+
+          {[...Array(totalPages)].map((_, index) => (
+            <span
+              key={index}
+              className={`${styles.pageNumber} ${
+                currentPage === index + 1 ? styles.active : ""
+              }`}
+              onClick={() => handlePageChange(index + 1)}
+            >
+              {index + 1}
+            </span>
+          ))}
+
+          <span
+            className={styles.pageIcon}
+            onClick={() => handlePageChange(currentPage + 1)}
+          >
+            <ArrowRightSquare />
+          </span>
+        </div>
       </div>
     </div>
   );
