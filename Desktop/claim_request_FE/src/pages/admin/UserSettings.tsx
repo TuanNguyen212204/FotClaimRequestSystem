@@ -1,139 +1,125 @@
+import TableComponent from "@/components/common/Table";
 import styles from "./UserSetting.module.css";
 import { FilePen, Trash2 } from "lucide-react";
+import { data } from "react-router-dom";
 
-const UserSettings = () => {
+const UserSettings: React.FC = () => {
+  const columns = [
+    { title: "ID", dataIndex: "id", key: "id" },
+    { title: "Username", dataIndex: "username", key: "username" },
+    { title: "FirstName", dataIndex: "firstname", key: "firstname" },
+    { title: "LastName", dataIndex: "lastname", key: "lastname" },
+    { title: "Birthday", dataIndex: "birthday", key: "birthday" },
+    { title: "Role", dataIndex: "status", key: "status" },
+  ];
+  const dataSource = [
+    {
+      id: "01",
+      username: "nguyenvana",
+      firstname: "a",
+      lastname: "nguyen",
+      birthday: "01/01/1996",
+      status: "BM",
+    },
+    {
+      id: "02",
+      username: "nguyenvanb",
+      firstname: "b",
+      lastname: "nguyen",
+      birthday: "01/01/1996",
+      status: "Dev",
+    },
+    {
+      id: "03",
+      username: "nguyenvanc",
+      firstname: "c",
+      lastname: "nguyen",
+      birthday: "01/01/1996",
+      status: "BM",
+    },
+    {
+      id: "04",
+      username: "nguyenvand",
+      firstname: "d",
+      lastname: "nguyen",
+      birthday: "01/01/1996",
+      status: "BA",
+    },
+    {
+      id: "05",
+      username: "nguyenvane",
+      firstname: "e",
+      lastname: "nguyen",
+      birthday: "01/01/1996",
+      status: "BE",
+    },
+    {
+      id: "06",
+      username: "nguyenvana",
+      firstname: "f",
+      lastname: "nguyen",
+      birthday: "01/01/1996",
+      status: "DA",
+    },
+    {
+      id: "06",
+      username: "nguyenvana",
+      firstname: "f",
+      lastname: "nguyen",
+      birthday: "01/01/1996",
+      status: "DA",
+    },
+    {
+      id: "06",
+      username: "nguyenvana",
+      firstname: "f",
+      lastname: "nguyen",
+      birthday: "01/01/1996",
+      status: "DA",
+    },
+    {
+      id: "06",
+      username: "nguyenvana",
+      firstname: "f",
+      lastname: "nguyen",
+      birthday: "01/01/1996",
+      status: "DA",
+    },
+    {
+      id: "06",
+      username: "nguyenvana",
+      firstname: "f",
+      lastname: "nguyen",
+      birthday: "01/01/1996",
+      status: "DA",
+    },
+    {
+      id: "06",
+      username: "nguyenvana",
+      firstname: "f",
+      lastname: "nguyen",
+      birthday: "01/01/1996",
+      status: "DA",
+    },
+    {
+      id: "06",
+      username: "nguyenvana",
+      firstname: "f",
+      lastname: "nguyen",
+      birthday: "01/01/1996",
+      status: "DA",
+    },
+  ];
   return (
     <div>
-      <div>
-        <div className={styles.container}>
-          <div>
-            <h1>User Settings</h1>
-            <hr />
-          </div>
-          <div
-            style={{
-              overflow: "hidden",
-              marginTop: "20px",
-              boxShadow:
-                "rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px",
-            }}
-          >
-            <table className={styles.table}>
-              <tr>
-                <th className={styles.style_th}>ID</th>
-                <th className={styles.style_th}>Email</th>
-                <th className={styles.style_th}>Username</th>
-                <th className={styles.style_th}>Role</th>
-                <th className={styles.style_th}>Status</th>
-                <th className={styles.style_th}>Action</th>
-              </tr>
-              <tr>
-                <td className={styles.style_td}>01</td>
-                <td className={styles.style_td}>nguyenvana@gmail.com</td>
-                <td className={styles.style_td}>nguyenvana</td>
-                <td className={styles.style_td}>dev</td>
-                <td className={styles.style_td}>Online/Offline</td>
-                <td className={styles.style_td}>
-                  <FilePen /> <Trash2 />
-                </td>
-              </tr>
-              <tr>
-                <td className={styles.style_td}>01</td>
-                <td className={styles.style_td}>nguyenvana@gmail.com</td>
-                <td className={styles.style_td}>nguyenvana</td>
-                <td className={styles.style_td}>dev</td>
-                <td className={styles.style_td}>Online/Offline</td>
-                <td className={styles.style_td}>
-                  <FilePen /> <Trash2 />
-                </td>
-              </tr>
-              <tr>
-                <td className={styles.style_td}>01</td>
-                <td className={styles.style_td}>nguyenvana@gmail.com</td>
-                <td className={styles.style_td}>nguyenvana</td>
-                <td className={styles.style_td}>dev</td>
-                <td className={styles.style_td}>Online/Offline</td>
-                <td className={styles.style_td}>
-                  <FilePen />
-                  <Trash2 />
-                </td>
-              </tr>
-              <tr>
-                <td className={styles.style_td}>01</td>
-                <td className={styles.style_td}>nguyenvana@gmail.com</td>
-                <td className={styles.style_td}>nguyenvana</td>
-                <td className={styles.style_td}>dev</td>
-                <td className={styles.style_td}>Online/Offline</td>
-                <td className={styles.style_td}>
-                  {" "}
-                  <FilePen />
-                  <Trash2 />
-                </td>
-              </tr>
-              <tr>
-                <td className={styles.style_td}>01</td>
-                <td className={styles.style_td}>nguyenvana@gmail.com</td>
-                <td className={styles.style_td}>nguyenvana</td>
-                <td className={styles.style_td}>dev</td>
-                <td className={styles.style_td}>Online/Offline</td>
-                <td className={styles.style_td}>
-                  {" "}
-                  <FilePen />
-                  <Trash2 />
-                </td>
-              </tr>
-              <tr>
-                <td className={styles.style_td}>01</td>
-                <td className={styles.style_td}>nguyenvana@gmail.com</td>
-                <td className={styles.style_td}>nguyenvana</td>
-                <td className={styles.style_td}>dev</td>
-                <td className={styles.style_td}>Online/Offline</td>
-                <td className={styles.style_td}>
-                  {" "}
-                  <FilePen />
-                  <Trash2 />
-                </td>
-              </tr>
-              <tr>
-                <td className={styles.style_td}>01</td>
-                <td className={styles.style_td}>nguyenvana@gmail.com</td>
-                <td className={styles.style_td}>nguyenvana</td>
-                <td className={styles.style_td}>dev</td>
-                <td className={styles.style_td}>Online/Offline</td>
-                <td className={styles.style_td}>
-                  {" "}
-                  <FilePen />
-                  <Trash2 />
-                </td>
-              </tr>
-              <tr>
-                <td className={styles.style_td}>01</td>
-                <td className={styles.style_td}>nguyenvana@gmail.com</td>
-                <td className={styles.style_td}>nguyenvana</td>
-                <td className={styles.style_td}>dev</td>
-                <td className={styles.style_td}>Online/Offline</td>
-                <td className={styles.style_td}>
-                  {" "}
-                  <FilePen />
-                  <Trash2 />
-                </td>
-              </tr>
-            </table>
-          </div>
-          <div
-            style={{
-              marginTop: "20px",
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-            <button className={styles.button2}>Previous</button>
-            <button className={styles.button3} style={{ marginLeft: "10px" }}>
-              Next
-            </button>
-          </div>
-        </div>
-      </div>
+      <TableComponent
+        columns={columns}
+        dataSource={dataSource}
+        loading={false}
+        pagination={true}
+        page="Object"
+        name="Role"
+      />
     </div>
   );
 };

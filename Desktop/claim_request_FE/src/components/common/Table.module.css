@@ -90,24 +90,18 @@
   display: flex;
   justify-content: right;
   width: 100%;
-  table-layout: fixed;
-  width: auto;
-  overflow: hidden;
-  gap: 10px;
-  min-height: 2000px;
-  padding-right: 50px;
+  gap: 5px;
 }
 
 .pagination_button {
   font-size: 1rem;
-  border: 2px solid black;
+  border: 1.5px solid black;
   width: 100%;
   width: 2.5rem;
   height: 2.5rem;
   margin-top: 0.5rem;
   border-radius: 10px;
-  margin-right: 3rem;
-  padding-top: 0.5rem;
+  gap: 2px;
 }
 
 .pagination button:hover {
@@ -172,16 +166,29 @@
   border: none;
 }
 
-.table tr:hover {
-  background-color: #fbfbfb;
+.filteredData_table_container tr:hover {
+  background-color: rgb(231, 231, 231);
   transition: 0.05s;
 }
-.table tr:nth-child(even) {
-  background-color: #fafafa;
-}
-.paginationButton :hover {
-  background-color: white;
-}
+/* .table tr:nth-child(even) {
+  background-color: #fbfbfb;
+} */
+
 .activePage {
   border: 2px solid #007bff;
+}
+.thead :hover {
+  background-color: no;
+}
+.pagination_button_icon {
+  border: none;
+  margin-right: 60px;
+}
+
+.pagination_button_number {
+  border-radius: 5px;
+  width: 2.5rem;
+  height: 2.5rem;
+  gap: 10px;
+  margin-right: 10px;
 }

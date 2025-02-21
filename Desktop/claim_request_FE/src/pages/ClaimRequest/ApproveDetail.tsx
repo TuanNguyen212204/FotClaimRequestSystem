@@ -27,8 +27,58 @@ const ApproveDetail: React.FC = () => {
       odu: "From 1/5/2025 To:1/15/2025",
       oda: "1/5/2025",
       totalH: "5 hours",
-      status: "Processing",
+      status: "Approved",
     },
+    {
+      id: "001",
+      odu: "From 1/5/2025 To:1/15/2025",
+      oda: "1/5/2025",
+      totalH: "5 hours",
+      status: "Approved",
+    },
+    {
+      id: "001",
+      odu: "From 1/5/2025 To:1/15/2025",
+      oda: "1/5/2025",
+      totalH: "5 hours",
+      status: "Approved",
+    },
+    {
+      id: "001",
+      odu: "From 1/5/2025 To:1/15/2025",
+      oda: "1/5/2025",
+      totalH: "5 hours",
+      status: "Approved",
+    },
+    {
+      id: "001",
+      odu: "From 1/5/2025 To:1/15/2025",
+      oda: "1/5/2025",
+      totalH: "5 hours",
+      status: "Approved",
+    },
+    {
+      id: "001",
+      odu: "From 1/5/2025 To:1/15/2025",
+      oda: "1/5/2025",
+      totalH: "5 hours",
+      status: "Approved",
+    },
+    {
+      id: "001",
+      odu: "From 1/5/2025 To:1/15/2025",
+      oda: "1/5/2025",
+      totalH: "5 hours",
+      status: "Approved",
+    },
+    {
+      id: "001",
+      odu: "From 1/5/2025 To:1/15/2025",
+      oda: "1/5/2025",
+      totalH: "5 hours",
+      status: "Approved",
+    },
+
     {
       id: "001",
       odu: "From 1/5/2025 To:1/15/2025",
@@ -85,7 +135,113 @@ const ApproveDetail: React.FC = () => {
       totalH: "5 hours",
       status: "Approved",
     },
+    {
+      id: "001",
+      odu: "From 1/5/2025 To:1/15/2025",
+      oda: "1/5/2025",
+      totalH: "5 hours",
+      status: "Approved",
+    },
+    {
+      id: "001",
+      odu: "From 1/5/2025 To:1/15/2025",
+      oda: "1/5/2025",
+      totalH: "5 hours",
+      status: "Approved",
+    },
+    {
+      id: "001",
+      odu: "From 1/5/2025 To:1/15/2025",
+      oda: "1/5/2025",
+      totalH: "5 hours",
+      status: "Approved",
+    },
+    {
+      id: "001",
+      odu: "From 1/5/2025 To:1/15/2025",
+      oda: "1/5/2025",
+      totalH: "5 hours",
+      status: "Approved",
+    },
+    {
+      id: "001",
+      odu: "From 1/5/2025 To:1/15/2025",
+      oda: "1/5/2025",
+      totalH: "5 hours",
+      status: "Approved",
+    },
+    {
+      id: "001",
+      odu: "From 1/5/2025 To:1/15/2025",
+      oda: "1/5/2025",
+      totalH: "5 hours",
+      status: "Approved",
+    },
+    {
+      id: "001",
+      odu: "From 1/5/2025 To:1/15/2025",
+      oda: "1/5/2025",
+      totalH: "5 hours",
+      status: "Approved",
+    },
+    {
+      id: "001",
+      odu: "From 1/5/2025 To:1/15/2025",
+      oda: "1/5/2025",
+      totalH: "5 hours",
+      status: "Approved",
+    },
+    {
+      id: "001",
+      odu: "From 1/5/2025 To:1/15/2025",
+      oda: "1/5/2025",
+      totalH: "5 hours",
+      status: "Approved",
+    },
+    {
+      id: "001",
+      odu: "From 1/5/2025 To:1/15/2025",
+      oda: "1/5/2025",
+      totalH: "5 hours",
+      status: "Approved",
+    },
+    {
+      id: "001",
+      odu: "From 1/5/2025 To:1/15/2025",
+      oda: "1/5/2025",
+      totalH: "5 hours",
+      status: "Approved",
+    },
+    {
+      id: "001",
+      odu: "From 1/5/2025 To:1/15/2025",
+      oda: "1/5/2025",
+      totalH: "5 hours",
+      status: "Approved",
+    },
+    {
+      id: "001",
+      odu: "From 1/5/2025 To:1/15/2025",
+      oda: "1/5/2025",
+      totalH: "5 hours",
+      status: "Approved",
+    },
+    {
+      id: "001",
+      odu: "From 1/5/2025 To:1/15/2025",
+      oda: "1/5/2025",
+      totalH: "5 hours",
+      status: "Approved",
+    },
+    {
+      id: "001",
+      odu: "From 1/5/2025 To:1/15/2025",
+      oda: "1/5/2025",
+      totalH: "5 hours",
+      status: "Approved",
+    },
   ];
+  const a = "Status";
   return (
     <div>
       <TableComponent
@@ -93,7 +249,7 @@ const ApproveDetail: React.FC = () => {
         dataSource={dataSource}
         loading={false}
         pagination={true}
-        page="Object"
+        name={a}
       />
     </div>
   );

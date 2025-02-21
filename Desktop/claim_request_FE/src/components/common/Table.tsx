@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "@components/common/Table.module.css";
 import { ArrowDown, ArrowLeft, ArrowRight } from "lucide-react";
 
@@ -11,43 +11,55 @@ export type Column = {
 export type DataRecord = {
   key?: string;
   id?: string;
-  status: string; // Cột status trong mỗi record
+  status: string;
 };
 
 export type TableComponentProps<T extends DataRecord> = {
   columns: Column[];
-  page?: string;
   dataSource: T[];
   loading?: boolean;
   pagination?: boolean;
+  name: string;
 };
 
 const TableComponent = <T extends DataRecord>({
   columns,
   dataSource,
   loading,
+  name,
   pagination = false,
 }: TableComponentProps<T>) => {
+  console.log("TableComponent Props:", {
+    columns,
+    dataSource,
+    loading,
+    name,
+    pagination,
+  });
+
   const [currentPage, setCurrentPage] = useState(1);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [selectedStatus, setSelectedStatus] = useState<string | null>("All"); // Mặc định là "All"
-  const pageSize = 8;
-  const totalPages = Math.ceil(dataSource.length / pageSize);
-
-  // Lấy tất cả các trạng thái duy nhất từ dataSource
+  const [selectedStatus, setSelectedStatus] = useState<string>("All");
+  const pageSize = 10;
   const uniqueStatuses = [
     "All",
     ...new Set(dataSource.map((item) => item.status)),
   ];
 
-  const paginatedData = pagination
-    ? dataSource.slice((currentPage - 1) * pageSize, currentPage * pageSize)
-    : dataSource;
-
   const filteredData =
-    selectedStatus && selectedStatus !== "All"
-      ? paginatedData.filter((record) => record.status === selectedStatus)
-      : paginatedData;
+    selectedStatus !== "All"
+      ? dataSource.filter((record) => record.status === selectedStatus)
+      : dataSource;
+
+  const totalPages = Math.ceil(filteredData.length / pageSize);
+
+  const paginatedData = pagination
+    ? filteredData.slice((currentPage - 1) * pageSize, currentPage * pageSize)
+    : filteredData;
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedStatus]);
 
   const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= totalPages) {
@@ -55,167 +67,135 @@ const TableComponent = <T extends DataRecord>({
     }
   };
 
-  // Handle dropdown toggle
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  // Handle status selection from dropdown
   const handleStatusSelect = (status: string) => {
     setSelectedStatus(status);
-    setIsDropdownOpen(false); // Đóng dropdown khi chọn trạng thái
+    setIsDropdownOpen(false);
   };
-
-  // Helper function to get className based on status
-  // const getStatusClass = (status: string) => {
-  //   console.log(status); // For debugging
-  //   switch (status) {
-  //     case "Approved":
-  //       return "status_Approved";
-  //     case "Processing":
-  //       return "status_Processing";
-  //     case "Paid":
-  //       return "status_Paid";
-  //     case "Rejected":
-  //       return "status_Rejected";
-  //     default:
-  //       return "";
-  //   }
-  // };
 
   return (
     <div className={styles.container}>
-      <div>
-        <section className={styles.filter_section}>
-          <div className={styles.filterStatusP}>
-            <p>Filter By Status:</p>
-          </div>
-          <div className="relative inline-block text-left  ">
-            <button
-              onClick={toggleDropdown}
-              style={{
-                marginTop: "1.2rem",
-                backgroundColor: "white",
-                marginLeft: "1rem",
-              }}
-              className="flex items-center justify-between px-4 py-2 text-sm font-medium text-gray-700 bg-white border rounded-md shadow-sm hover:bg-gray-100 focus:outline-none"
-            >
-              <span>{selectedStatus}</span>
-              <ArrowDown className="w-4 h-4 ml-2" />
-            </button>
+      {/* Status Filter */}
+      <section className={styles.filter_section}>
+        <div className={styles.filterStatusP}>
+          <p>Filter By {name}:</p>
+        </div>
+        <div
+          className="relative inline-block text-left"
+          style={{ marginTop: "12px", marginLeft: "15px" }}
+        >
+          <button
+            onClick={toggleDropdown}
+            className="flex items-center justify-between px-4 py-2 text-sm font-medium text-gray-700 bg-white border rounded-md shadow-sm hover:bg-gray-100 focus:outline-none"
+          >
+            <span>{selectedStatus}</span>
+            <ArrowDown className="w-4 h-4 ml-2" />
+          </button>
 
-            {isDropdownOpen && (
-              <div className="absolute right-0 z-10 mt-2 origin-top-right bg-white border border-gray-300 rounded-md shadow-lg w-48">
-                <div className="py-1">
-                  {uniqueStatuses.map((status) => (
-                    <button
-                      key={status}
-                      onClick={() => handleStatusSelect(status)}
-                      className="block px-4 py-2 text-sm text-gray-700 w-full text-left hover:bg-gray-100"
-                    >
-                      {status}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        </section>
-      </div>
-      <div className={styles.table_container}>
-        {loading && <div className="loading">Loading...</div>}
-        <section className={styles.table_body}>
-          <table className={styles.table}>
-            <thead className={styles.thead}>
-              <tr>
-                {columns.map((col) => (
-                  <th key={col.key || col.dataIndex} className={styles.th}>
-                    {col.title}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {filteredData.map((record) => (
-                <tr key={record.key || record.id}>
-                  {columns.map((col) => (
-                    <td
-                      key={col.key || col.dataIndex}
-                      style={{
-                        ...(col.dataIndex === "status"
-                          ? record.status === "Approved"
-                            ? {
-                                color: "green",
-                                padding: "1rem 2rem",
-                              }
-                            : record.status === "Processing"
-                            ? {
-                                color: "#ffa500",
-                                padding: "1rem 2rem",
-                              }
-                            : record.status === "Paid"
-                            ? {
-                                color: "crimson",
-                                padding: "1rem 2rem",
-                              }
-                            : record.status === "Rejected"
-                            ? {
-                                color: "red",
-                                padding: "1rem 2rem",
-                              }
-                            : {}
-                          : {}),
-                      }}
-                    >
-                      {record[col.dataIndex as keyof T]}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <div>
-            {pagination && (
-              <div className={styles.pagination}>
-                <button
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  disabled={currentPage === 1}
-                  style={{ marginBottom: "1945px", marginRight: "5px" }}
-                >
-                  <ArrowLeft />
-                </button>
-                {/* Hiển thị các số trang */}
-                {Array.from(
-                  { length: totalPages },
-                  (_, index) => index + 1
-                ).map((pageNumber) => (
+          {isDropdownOpen && (
+            <div className="absolute right-0 z-10 mt-2 origin-top-right bg-white border border-gray-300 rounded-md shadow-lg w-48">
+              <div className="py-1">
+                {uniqueStatuses.map((status) => (
                   <button
-                    key={pageNumber}
-                    onClick={() => handlePageChange(pageNumber)}
-                    className={`${styles.pagination_button} ${
-                      pageNumber === currentPage ? styles.activePage : ""
-                    }`}
-                    style={{ marginRight: "0px" }}
+                    key={status}
+                    onClick={() => handleStatusSelect(status)}
+                    className="block px-4 py-2 text-sm text-gray-700 w-full text-left hover:bg-gray-100"
                   >
-                    <p style={{ marginTop: "0rem", fontSize: "16px" }}>
-                      {pageNumber}
-                    </p>
+                    {status}
                   </button>
                 ))}
-
-                <button
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                  style={{ marginBottom: "1945px", marginRight: "5px" }}
-                >
-                  <ArrowRight />
-                </button>
               </div>
-            )}
-          </div>
-        </section>
+            </div>
+          )}
+        </div>
+      </section>
 
-        {/* Pagination */}
+      <div className={styles.table_container}>
+        {loading && <div className="loading">Loading...</div>}
+        {filteredData.length !== 0 ? (
+          <section className={styles.table_body}>
+            <table className={styles.table}>
+              <thead className={styles.thead}>
+                <tr>
+                  {columns.map((col) => (
+                    <th key={col.key || col.dataIndex} className={styles.th}>
+                      {col.title}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {paginatedData.map((record) => (
+                  <tr key={record.key || record.id}>
+                    {columns.map((col) => (
+                      <td
+                        key={col.key || col.dataIndex}
+                        style={{
+                          ...(col.dataIndex === "status"
+                            ? record.status === "Approved"
+                              ? { color: "green", padding: "1rem 2rem" }
+                              : record.status === "Processing"
+                              ? { color: "#ffa500", padding: "1rem 2rem" }
+                              : record.status === "Paid"
+                              ? { color: "crimson", padding: "1rem 2rem" }
+                              : record.status === "Rejected"
+                              ? { color: "red", padding: "1rem 2rem" }
+                              : { padding: "1rem 2rem" }
+                            : {}),
+                        }}
+                      >
+                        {record[col.dataIndex as keyof T]}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </section>
+        ) : (
+          <h1>No data</h1>
+        )}
+      </div>
+      <div>
+        {pagination && totalPages >= 1 && (
+          <div className={styles.pagination}>
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className={styles.pagination_button_icon}
+              style={{ marginRight: "10px" }}
+            >
+              <ArrowLeft />
+            </button>
+
+            {/* Page numbers */}
+            {Array.from({ length: totalPages }, (_, index) => index + 1).map(
+              (pageNumber) => (
+                <button
+                  key={pageNumber}
+                  onClick={() => handlePageChange(pageNumber)}
+                  className={`${styles.pagination_button} ${
+                    pageNumber === currentPage ? styles.activePage : ""
+                  }`}
+                  style={{ paddingTop: "2px" }}
+                >
+                  {pageNumber}
+                </button>
+              )
+            )}
+
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className={styles.pagination_button_icon}
+            >
+              <ArrowRight />
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
