@@ -27,14 +27,14 @@ const ApproveDetail: React.FC = () => {
       odu: "From 1/5/2025 To:1/15/2025",
       oda: "1/5/2025",
       totalH: "5 hours",
-      status: "Approved",
+      status: "Processing",
     },
     {
       id: "001",
       odu: "From 1/5/2025 To:1/15/2025",
       oda: "1/5/2025",
       totalH: "5 hours",
-      status: "Approved",
+      status: "Rejected",
     },
     {
       id: "001",

@@ -17,6 +17,7 @@ import PaidClaims from "@pages/Finance/PaidClaims";
 import ProjectInformation from "@pages/Admin/ProjectInformation";
 import StaffInformation from "@pages/Admin/StaffInformation";
 import Approved from "@pages/Approved/Approved";
+import DraftCoponent from "@/components/ui/user/DraftCoponent";
 const router: RouteObject[] = [
   {
     element: <LoginForm />,
@@ -29,6 +30,10 @@ const router: RouteObject[] = [
   {
     element: <MainLayout />,
     children: [
+      {
+        path: PATH.draft,
+        element: <DraftCoponent />,
+      },
       {
         path: PATH.home,
         element: <HomePage />,
