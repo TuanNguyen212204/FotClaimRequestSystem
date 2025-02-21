@@ -11,6 +11,7 @@ interface ListClaims {
   finishAt: string;
   hour: number;
   approverName: string;
+  vy: string;
 }
 
 // Define a type for the slice state
