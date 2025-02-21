@@ -16,7 +16,7 @@ import ClaimStatus from "@pages/Finance/ClaimStatus";
 import PaidClaims from "@pages/Finance/PaidClaims";
 import ProjectInformation from "@pages/Admin/ProjectInformation";
 import StaffInformation from "@pages/Admin/StaffInformation";
-import FinanceApproved from "@/pages/Finance/ApprovedFinancePage";
+import ApprovedFinancePage from "@/pages/Finance/ApprovedFinancePage";
 const router: RouteObject[] = [
   {
     element: <LoginForm />,
@@ -51,7 +51,7 @@ const router: RouteObject[] = [
       },
       {
         path: PATH.financeApproved,
-        element: <FinanceApproved />,
+        element: <ApprovedFinancePage />,
       },
       {
         path: PATH.pending,
