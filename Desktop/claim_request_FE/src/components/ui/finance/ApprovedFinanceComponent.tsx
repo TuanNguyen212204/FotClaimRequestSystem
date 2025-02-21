@@ -14,9 +14,8 @@ export const ApprovedFinanceComponent: React.FC = () => {
     (state: RootState) => state.finance.listClaims
   );
 
-  // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 7; // Số hàng trên mỗi trang
+  const itemsPerPage = 7;
 
   useEffect(() => {
     dispatch(fetchAllClaims());
@@ -31,16 +30,13 @@ export const ApprovedFinanceComponent: React.FC = () => {
     return new Date(dateString).toLocaleDateString("en-US", options);
   };
 
-  // Tính số trang
   const totalPages = Math.ceil(listClaims.length / itemsPerPage);
 
-  // Lấy dữ liệu cho trang hiện tại
   const currentData = listClaims.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
-  // Xử lý chuyển trang
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);

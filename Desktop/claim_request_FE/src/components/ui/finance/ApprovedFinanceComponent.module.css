@@ -37,10 +37,9 @@
   background: #ececec;
 }
 
-.table_body tr:hover {
-  background-color: #f0f8ff;
+.table_body tbody tr:hover {
   transition: background 0.3s ease-in-out;
-  transform: scale(1.01);
+  transform: scale(1.015);
 }
 
 .pagination {
