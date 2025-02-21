@@ -84,15 +84,13 @@ const TableComponent = <T extends DataRecord>({
   // };
 
   return (
-    <div>
-      <div className={styles.container}>
-        {loading && <div className="loading">Loading...</div>}
+    <div className={styles.container}>
+      <div>
         <section className={styles.filter_section}>
           <div className={styles.filterStatusP}>
             <p>Filter By Status:</p>
           </div>
           <div className="relative inline-block text-left  ">
-            {/* Dropdown button */}
             <button
               onClick={toggleDropdown}
               style={{
@@ -106,7 +104,6 @@ const TableComponent = <T extends DataRecord>({
               <ArrowDown className="w-4 h-4 ml-2" />
             </button>
 
-            {/* Dropdown menu */}
             {isDropdownOpen && (
               <div className="absolute right-0 z-10 mt-2 origin-top-right bg-white border border-gray-300 rounded-md shadow-lg w-48">
                 <div className="py-1">
@@ -124,10 +121,13 @@ const TableComponent = <T extends DataRecord>({
             )}
           </div>
         </section>
+      </div>
+      <div className={styles.table_container}>
+        {loading && <div className="loading">Loading...</div>}
         <section className={styles.table_body}>
           <table className={styles.table}>
             <thead className={styles.thead}>
-              <tr className={styles.tr}>
+              <tr>
                 {columns.map((col) => (
                   <th key={col.key || col.dataIndex} className={styles.th}>
                     {col.title}
@@ -174,47 +174,48 @@ const TableComponent = <T extends DataRecord>({
               ))}
             </tbody>
           </table>
+          <div>
+            {pagination && (
+              <div className={styles.pagination}>
+                <button
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  style={{ marginBottom: "1945px", marginRight: "5px" }}
+                >
+                  <ArrowLeft />
+                </button>
+                {/* Hiển thị các số trang */}
+                {Array.from(
+                  { length: totalPages },
+                  (_, index) => index + 1
+                ).map((pageNumber) => (
+                  <button
+                    key={pageNumber}
+                    onClick={() => handlePageChange(pageNumber)}
+                    className={`${styles.pagination_button} ${
+                      pageNumber === currentPage ? styles.activePage : ""
+                    }`}
+                    style={{ marginRight: "0px" }}
+                  >
+                    <p style={{ marginTop: "0rem", fontSize: "16px" }}>
+                      {pageNumber}
+                    </p>
+                  </button>
+                ))}
+
+                <button
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  style={{ marginBottom: "1945px", marginRight: "5px" }}
+                >
+                  <ArrowRight />
+                </button>
+              </div>
+            )}
+          </div>
         </section>
 
         {/* Pagination */}
-        {pagination && (
-          <div className={styles.pagination}>
-            <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-              className={styles.paginationButton}
-            >
-              <p style={{ marginTop: "0rem" }}>
-                <ArrowLeft />
-              </p>
-            </button>
-
-            {/* Hiển thị các số trang */}
-            {Array.from({ length: totalPages }, (_, index) => index + 1).map(
-              (pageNumber) => (
-                <button
-                  key={pageNumber}
-                  onClick={() => handlePageChange(pageNumber)}
-                  className={`${styles.paginationButton} ${
-                    pageNumber === currentPage ? styles.activePage : ""
-                  }`}
-                >
-                  <p style={{ marginTop: "0rem" }}>{pageNumber}</p>
-                </button>
-              )
-            )}
-
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-              className={styles.paginationButton}
-            >
-              <p style={{ marginTop: "0rem" }}>
-                <ArrowRight />
-              </p>
-            </button>
-          </div>
-        )}
       </div>
     </div>
   );
