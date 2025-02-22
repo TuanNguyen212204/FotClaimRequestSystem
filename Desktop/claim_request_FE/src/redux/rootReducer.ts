@@ -1,7 +1,7 @@
 import { combineReducers } from "@reduxjs/toolkit";
 import { pendingSlice } from "./slice/pendingSlice";
 import { detailsSlice } from "./slice/detailsSlice";
-import { financeSlice } from "./slices/financeSlice";
+import { financeSlice } from "./slices/Finance/claimsSlice";
 import claimsReducer from "./slices/claimsSlice";
 import projectReducer from "./slices/Project/projectSlice";
 export const rootReducer = combineReducers({

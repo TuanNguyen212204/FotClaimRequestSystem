@@ -1,6 +1,6 @@
 import ApprovedFinanceComponent from "../../components/ui/finance/ApprovedFinanceComponent";
 
-export const Approved: React.FC = () => {
+export const ApprovedFinancePage: React.FC = () => {
   return (
     <div>
       <ApprovedFinanceComponent />
@@ -8,4 +8,4 @@ export const Approved: React.FC = () => {
   );
 };
 
-export default Approved;
+export default ApprovedFinancePage;
