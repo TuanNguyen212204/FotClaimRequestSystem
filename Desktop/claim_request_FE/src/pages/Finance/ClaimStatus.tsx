@@ -33,12 +33,15 @@ const ClaimStatus: React.FC = () => {
     setCurrentPage(page);
   };
 
+  const handlePrint = () => {
+    window.print();
+  };
+
   if (!currentClaim) {
     return (
       <div className={styles.container}>
         <h1 className={styles.claimStatus_h1}>Claim Status</h1>
         <p>Không tìm thấy thông tin claim với ID: {id}</p>
-        <button onClick={() => navigate(-1)}>Quay lại</button>
       </div>
     );
   }
@@ -47,7 +50,6 @@ const ClaimStatus: React.FC = () => {
     <div className={styles.container}>
       <div>
         <h1 className={styles.claimStatus_h1}>Claim Status</h1>
-        <hr style={{ width: "100%" }} />
       </div>
       <div className={styles.box}>
         <div style={{ marginLeft: "50px" }}>
@@ -60,16 +62,10 @@ const ClaimStatus: React.FC = () => {
           <p>Project ID : {currentClaim.projectId}</p>
         </div>
       </div>
-      <div
-        style={{
-          overflow: "hidden",
-          borderRadius: "10px",
-          border: "2px solid black",
-        }}
-      >
+      <div className={styles["table-container"]}>
         <table className={styles.table}>
           <thead>
-            <tr className={styles.style_tr}>
+            <tr>
               <th className={styles.style_th}>No.</th>
               <th className={styles.style_th}>Overtime Duration</th>
               <th className={styles.style_th}>Overtime Date</th>
@@ -123,27 +119,21 @@ const ClaimStatus: React.FC = () => {
         </table>
       </div>
       
-      {/* Thay thế phần pagination cũ bằng component mới */}
-      <Pagination
-        total={tableData.length}
-        defaultPageSize={pageSize}
-        defaultCurrent={1}
-        showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
-        onChange={handlePageChange}
-      />
-      
-      <button 
-        onClick={() => navigate(-1)} 
-        style={{
-          marginTop: '20px',
-          padding: '8px 16px',
-          borderRadius: '4px',
-          border: '1px solid #d9d9d9',
-          cursor: 'pointer'
-        }}
-      >
-        Quay lại
-      </button>
+      <div className={styles.pagination_container}>
+        <Pagination
+          total={tableData.length}
+          defaultPageSize={pageSize}
+          defaultCurrent={1}
+          showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
+          onChange={handlePageChange}
+        />
+        <button 
+          className={styles.print_button}
+          onClick={handlePrint}
+        >
+          Print
+        </button>
+      </div>
     </div>
   );
 };

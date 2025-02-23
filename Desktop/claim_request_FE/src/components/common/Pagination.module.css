@@ -2,12 +2,14 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
+  margin-top: 20px;
 }
 
 .total {
-  color: rgba(0, 0, 0, 0.65);
+  color: rgba(0, 0, 0, 0.85);
   font-size: 14px;
+  font-weight: 500;
 }
 
 .paginationButtons {
@@ -17,46 +19,91 @@
 }
 
 .pageButton {
-  min-width: 32px;
-  height: 32px;
-  padding: 0 6px;
-  font-size: 14px;
-  border: 1px solid #d9d9d9;
-  border-radius: 6px;
-  background: #fff;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 8px;
+  font-size: 15px;
+  font-weight: 600;
+  border: 1.5px solid #000000; /* Đổi sang viền đen */
+  border-radius: 8px;
+  background: #ffffff;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s;
+  transition: all 0.2s;
+  color: #000000; /* Đổi màu chữ sang đen */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .pageButton:hover:not(:disabled):not(.ellipsis) {
-  border-color: #1677ff;
-  color: #1677ff;
+  border-color: #000000; /* Giữ viền đen khi hover */
+  color: #ffffff;
+  background: #000000; /* Nền đen khi hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transform: translateY(-1px);
+  z-index: 1;
 }
 
 .pageButton.active {
-  border-color: #1677ff;
-  color: #1677ff;
-  font-weight: 500;
+  border-color: #000000;
+  background: #000000;
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  z-index: 2;
 }
 
 .pageButton:disabled,
 .pageButton.ellipsis {
   cursor: not-allowed;
   color: rgba(0, 0, 0, 0.25);
+  background-color: #f5f5f5;
+  border-color: #d9d9d9;
+  box-shadow: none;
 }
 
 .prevNext {
-  font-size: 16px;
+  font-size: 18px;
+  padding: 0 12px;
+  background: linear-gradient(to bottom, #ffffff 0%, #f0f0f0 100%);
+  font-weight: bold;
+  border-color: #000000; /* Đổi sang viền đen */
 }
 
 .prevNext:disabled {
-  background-color: #f5f5f5;
+  background: #f5f5f5;
+  border-color: #d9d9d9;
+  color: rgba(0, 0, 0, 0.25);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.prevNext:not(:disabled):hover {
+  background: #000000; /* Nền đen khi hover */
+  border-color: #000000;
+  color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .ellipsis {
-  border: none;
+  border: none !important;
+  background: transparent !important;
   pointer-events: none;
+  color: rgba(0, 0, 0, 0.45) !important;
+  box-shadow: none !important;
+}
+
+.pageButton:active:not(:disabled):not(.ellipsis) {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.pageButton:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.2); /* Đổi màu outline sang đen */
+}
+
+.pageButton {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }

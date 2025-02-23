@@ -67,7 +67,7 @@ const PaidClaims: React.FC = () => {
                     onClick={() => navigate(`${PATH.claimStatus}/${claim.claimId}`)}
                     style={{ background: 'none', border: 'none', cursor: 'pointer' }}
                   >
-                    👁️
+                    👁
                   </button>
                 </td>
               </tr>
