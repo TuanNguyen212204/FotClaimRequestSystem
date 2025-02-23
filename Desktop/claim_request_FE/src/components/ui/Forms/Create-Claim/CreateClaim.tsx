@@ -11,35 +11,67 @@ import {
   selectProject,
 } from "@/redux/slices/Project/projectSlice";
 import { AppDispatch } from "@/redux";
-import { useForm, SubmitHandler } from "react-hook-form";
+import useCreateClaimForm from "@/Hooks/useCreateClaimForm";
+
 export default function CreateClaim() {
   const dispatch = useDispatch<AppDispatch>();
   const projectList = useSelector(selectProject);
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    control,
+    fields,
+    append,
+    remove,
+    errors,
+    watch
+  } = useCreateClaimForm();
 
   useEffect(() => {
     dispatch(fetchProject());
   }, [dispatch]);
-
+  const selectedYet = watch('currentSelectedProject');
+  //console.log(selectedYet)
   return (
     <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        console.log("submitted demo");
-      }}
+      onSubmit={handleSubmit((data) => {
+        console.log(data);
+      })}
     >
       <Header prepareBy="John Doe" status="Draft" title="Create New Claim" />
       <StaffInfo department="Dev" name="John Doe" staffID="#123123" />
-      <ProjectInfo ProjectList={projectList.projectList} />
-      <ClaimTable />
-      <AdditionalInfo />
-      <div className="mt-6 text-left">
-        <button
-          type="submit"
-          className={`px-6 py-3 text-white font-semibold text-center rounded-lg ${styles.submit_button}`}
-        >
-          Send
-        </button>
-      </div>
+      <ProjectInfo
+        control={control}
+        register={register}
+        setValue={setValue}
+        ProjectList={projectList.projectList}
+      />
+      {
+        selectedYet.ProjectName === ''  ? <></> : (
+          <>
+            <ClaimTable
+              append={append}
+              control={control}
+              fields={fields}
+              register={register}
+              remove={remove}
+              errors={errors}
+            />
+            <AdditionalInfo register={register} />
+            <div className="mt-6 text-left">
+              <button
+                type="submit"
+                className={`px-6 py-3 text-white font-semibold text-center rounded-lg ${styles.submit_button}`}
+              >
+                Send
+              </button>
+            </div>
+          </>
+        )
+      }
+     
+      
     </form>
   );
 }
