@@ -1,70 +1,20 @@
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { parse, differenceInHours, isValid } from "date-fns";
-
+import { calculateClaimHours } from "@/utils/claimHelpers";
+import { formSchema } from "@/Schemas/ClaimSchema";
+import { useEffect } from "react";
+import { FormData } from "@/types/claimForm.type";
 export default function useCreateClaimForm() {
-  const ProjectInfoSchema = z.object({
-    ProjectName: z.string().nonempty("Project Name is required"),
-    RoleInTheProject: z.string().nonempty("Role in the Project is required"),
-    ProjectDuration: z.object({
-      from: z.string().nonempty("Start date is required"),
-      to: z.string().nonempty("End date is required"),
-    }),
-  });
-
-  const ClaimSchema = z
-    .object({
-      date: z.string().nonempty("Date is required"),
-      from: z.string().nonempty("Start time is required"),
-      to: z.string().nonempty("End time is required"),
-      hours: z.number().nonnegative("Hours must be a non-negative number"),
-      remarks: z.string().optional(),
-    })
-    .superRefine((data, ctx) => {
-      const { from, to, hours } = data;
-
-      const timeFormat = "HH:mm";
-
-      const fromTime = parse(from, timeFormat, new Date());
-      const toTime = parse(to, timeFormat, new Date());
-
-      if (toTime < fromTime) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "The to time must be greater than the end time",
-          path: ["To"],
-        });
-      }
-      if (!isValid(fromTime) || !isValid(toTime)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Invalid time format. Please use HH:mm.",
-          path: ["from"],
-        });
-        return;
-      }
-
-      const calculatedHours = differenceInHours(toTime, fromTime);
-
-      if (hours !== calculatedHours) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: `Hours should be equal to the difference between 'from' and 'to' times (${calculatedHours} hours).`,
-          path: ["hours"],
-        });
-      }
-    });
-
-  const formSchema = z.object({
-    currentSelectedProject: ProjectInfoSchema,
-    claims: z.array(ClaimSchema).nonempty("At least one claim is required"),
-    totalHours: z.number().min(0, "Total hours must be a non-negative number"),
-    claimRemark: z.string().optional(),
-  });
-
-  const { control, register, handleSubmit } = useForm({
+  const {
+    control,
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm<FormData>({
     resolver: zodResolver(formSchema),
+    mode: "onChange",
     defaultValues: {
       currentSelectedProject: {
         ProjectName: "",
@@ -74,7 +24,7 @@ export default function useCreateClaimForm() {
           to: "",
         },
       },
-      claims: [],
+      claims: [{ date: "", from: "", to: "", hours: 0, remarks: "" }],
       totalHours: 0,
       claimRemark: "",
     },
@@ -85,5 +35,45 @@ export default function useCreateClaimForm() {
     name: "claims",
   });
 
-  return { control, register, handleSubmit, fields, append, remove };
+  useEffect(() => {
+    const subscription = watch((value, { name }) => {
+      //console.log(value);
+      if (name?.includes(".from") || name?.includes(".to")) {
+        const index = parseInt(name.split(".")[1]);
+        if (isNaN(index)) return;
+
+        const currentClaim = value.claims?.[index];
+        console.log(currentClaim);
+        if (!currentClaim) return;
+
+        const { from, to } = currentClaim;
+        if (from && to) {
+          const calculatedHours = calculateClaimHours(from, to);
+          setValue(`claims.${index}.hours`, calculatedHours);
+        } else {
+          return;
+        }
+
+        const total = value.claims?.reduce(
+          (sum, claim) => sum + (claim ? claim.hours || 0 : 0),
+          0
+        );
+        setValue("totalHours", total || 0);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [watch, setValue]);
+  return {
+    control,
+    register,
+    handleSubmit,
+    setValue,
+    watch, //debug
+    fields,
+    append,
+    remove,
+    errors,
+    formSchema,
+  };
 }
