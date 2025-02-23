@@ -1,15 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import { selectClaims } from '../../redux/slices/claimsSlice'; // Import selector
 import styles from "./ClaimStatus.module.css";
+import Pagination from '../../components/common/Pagination'; // Thêm import
 
 const ClaimStatus: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const claims = useSelector(selectClaims); // Get claims from Redux
+  
+  // Thêm state cho pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 5;
 
   const currentClaim = claims.find(claim => claim.claimId === id);
+
+  // Data mẫu cho bảng (thay thế bằng data thật sau)
+  const tableData = [
+    {
+      id: '001',
+      duration: 'From: 1/1/2025 To: 1/15/2025',
+      date: '1/5/2025',
+      hours: '100 hours',
+      paid: '250.000.000 VND',
+      status: 'Paid'
+    },
+    // ... các dữ liệu khác
+  ];
+
+  const handlePageChange = (page: number, pageSize: number) => {
+    setCurrentPage(page);
+  };
 
   if (!currentClaim) {
     return (
@@ -100,13 +122,28 @@ const ClaimStatus: React.FC = () => {
           </tbody>
         </table>
       </div>
-      <div className={styles.pagination}>
-        <button onClick={() => navigate(-1)}>&laquo;</button>
-        <button className={styles.active}>1</button>
-        <button>2</button>
-        <button>3</button>
-        <button>&raquo;</button>
-      </div>
+      
+      {/* Thay thế phần pagination cũ bằng component mới */}
+      <Pagination
+        total={tableData.length}
+        defaultPageSize={pageSize}
+        defaultCurrent={1}
+        showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
+        onChange={handlePageChange}
+      />
+      
+      <button 
+        onClick={() => navigate(-1)} 
+        style={{
+          marginTop: '20px',
+          padding: '8px 16px',
+          borderRadius: '4px',
+          border: '1px solid #d9d9d9',
+          cursor: 'pointer'
+        }}
+      >
+        Quay lại
+      </button>
     </div>
   );
 };
