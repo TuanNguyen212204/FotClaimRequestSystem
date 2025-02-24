@@ -18,7 +18,7 @@ const Header: React.FC = () => {
         <FaUserCircle
           className={styles.icon}
           onClick={() => {
-            navigate(PATH.userinfo);
+            navigate(PATH.userInfo);
           }}
         />
         <span className={styles.username}>Administrator</span>

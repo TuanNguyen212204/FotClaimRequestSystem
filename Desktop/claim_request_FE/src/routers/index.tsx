@@ -16,8 +16,8 @@ import ClaimStatus from "@pages/Finance/ClaimStatus";
 import PaidClaims from "@pages/Finance/PaidClaims";
 import ProjectInformation from "@pages/Admin/ProjectInformation";
 import StaffInformation from "@pages/Admin/StaffInformation";
-import Approved from "@pages/Approved/Approved";
-import TableDraftPage from "@/pages/TableDraftPage.tsx";
+import ApprovedFinancePage from "@/pages/Finance/ApprovedFinancePage";
+import TableDraftPage from "../pages/TableDraftPage";
 const router: RouteObject[] = [
   {
     element: <LoginForm />,
@@ -47,12 +47,12 @@ const router: RouteObject[] = [
         element: <UserClaimDetails />,
       },
       {
-        path: PATH.userinfo,
+        path: PATH.userInfo,
         element: <UserInfoComponent />,
       },
       {
-        path: PATH.approved,
-        element: <Approved />,
+        path: PATH.approvedFinance,
+        element: <ApprovedFinancePage />,
       },
       {
         path: PATH.pending,

@@ -1,81 +1,142 @@
 .container {
-  width: 70%;
+  width: 1087px;
+  height: 487px;
   position: absolute;
-  top: 50%;
-  left: 60%;
-  transform: translate(-50%, -50%);
-  font-weight: 400;
-  font-size: 1em;
-  margin-top: 30px;
+  top: 50px;
+  left: 319px;
+  padding: 30px;
+  background-color: #FFFFFF;
 }
+
 .claimStatus_h1 {
-  text-align: left;
+  font-size: 24px;
+  color: #090909;
+  margin-bottom: 20px;
 }
+
 .style_hr {
   width: 80%;
   margin-left: 11em;
 }
+
 .box {
   display: flex;
   justify-content: space-between;
   font-size: 1.5em;
 }
+
 .table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 2px solid #000;
+  border-radius: 8px;
+  overflow: hidden;
 }
+
+.style_th {
+  padding: 15px;
+  background-color: #a09e9e;
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  font-weight: normal;
+  color: #333;
+}
+
 .style_td {
-  width: 6em;
-  height: 3em;
-  border-bottom: 1px solid black;
-  border-right: 1px solid black;
+  padding: 15px;
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  background-color: #FFFFFF;
+}
+
+/* Loại bỏ border bên phải của cột cuối cùng */
+.style_th:last-child,
+.style_td:last-child {
+  border-right: none;
+}
+
+/* Loại bỏ border dưới của hàng cuối cùng */
+tr:last-child .style_td {
+  border-bottom: none;
+}
+
+/* Chiều rộng cột */
+.col_claim_id { width: 8%; }
+.col_staff_name { width: 12%; }
+.col_project_name { width: 20%; }
+.col_project_duration { width: 25%; }
+.col_total_hours { width: 15%; }
+.col_approver_name { width: 12%; }
+.col_action { width: 8%; }
+
+/* Style cho nút action */
+.action_column {
   text-align: center;
 }
-.style_th {
-  border-bottom: 1px solid black;
-  border-right: 1px solid black;
-  border-radius: 0px;
-  width: 8em;
-  height: 4em;
-  background-color: #dddd;
+
+.action_column button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
 }
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+.items_count {
+  text-align: center;
+  margin-top: 10px;
+  color: #BFC0C0;
+}
+
+/* Thêm hover effect cho hàng */
+.table tr:hover td {
+  background-color: #f8f9fa;
+}
+
+/* Style cho Project Duration */
+.project_duration {
+  color: #BFC0C0;
+  font-size: 0.85em;
+}
+
+/* Style cho Total Hours */
+.total_hours {
+  font-weight: 500;
+  color: #28A745;
+}
+
+/* Style cho Approver Name */
+.approver_name {
+  color: #495057;
+  font-weight: 500;
+}
+
+/* Style cho style_td_Status */
 .style_td_Status {
   width: 6em;
-  height: 13m;
-  border-bottom: 1px solid black;
+  height: 13em;
+  border: 3px solid #000000;
   text-align: center;
   color: green;
   font-style: bold;
   font-weight: 600;
+  background-color: #FFFFFF;
 }
-.pagination {
-  display: flex;
-  justify-content: right;
-  gap: 8px;
-  padding: 10px 0;
-}
-.pagination button {
-  background-color: white;
-  border: none;
-  color: #333;
-  padding: 8px 12px;
-  cursor: pointer;
-  font-size: 1em;
-  border-radius: 4px;
-  transition: background-color 0.3s ease;
-}
-.pagination button:hover {
-  background-color: #ddd;
-}
-.pagination button.active {
-  background-color: #007bff;
-  color: white;
-  border-color: #007bff;
-}
+
+/* Style cho style_th_Status */
 .style_th_Status {
-  border-bottom: 1px solid black;
+  border: 3px solid #000000;
   border-radius: 0px;
   width: 8em;
   height: 4em;
-  background-color: #dddd;
+  background-color: #FFFFFF;
+  text-align: center;
 }

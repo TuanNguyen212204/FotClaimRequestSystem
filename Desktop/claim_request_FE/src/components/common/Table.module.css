@@ -1,12 +1,14 @@
 .container {
-  position: absolute;
-  top: 53%;
-  left: 60%;
-  transform: translate(-50%, -50%);
+  margin-left: 2rem;
+  margin-top: 3.5rem;
+}
+.table_container {
+  display: flex;
+  justify-content: center;
   font-size: 1em;
   overflow: hidden;
-  border-radius: 10px;
-  box-shadow: 0 0.4rem 0.8rem #0005;
+  background-color: transparent;
+  box-shadow: none;
 }
 .table {
   border-collapse: collapse;
@@ -15,12 +17,18 @@
   width: 100%;
   table-layout: fixed;
   width: auto;
-  min-width: 1300px;
+  overflow: hidden;
+  min-width: 1500px;
+  max-height: 400px;
+
   /* box-shadow: 0 0.4rem 0.8rem #0005; */
 }
 .thead {
   padding: 1rem 2rem;
-  font-size: 1rem;
+  font-size: 16px;
+  color: 1.5rem;
+  background-color: #283849;
+  color: white;
   text-align: center;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
@@ -31,6 +39,7 @@
 }
 .td {
   padding: 1rem 2rem;
+  font-size: 1rem;
 }
 
 .status {
@@ -38,40 +47,40 @@
   text-align: center;
 }
 
-.status-Processing {
+.status_Processing {
   background-color: #ffa500;
   color: white;
   width: 8rem;
   height: 2.5rem;
-  font-weight: 900;
+  font-weight: 600;
   border-radius: 5px;
   border: 1px solid whitesmoke;
 }
 
-.status-Approved {
+.status_Approved {
   background-color: green;
   color: white;
-  font-weight: 900;
+  font-weight: 600;
   width: 8rem;
   height: 2.5rem;
-  border-radius: 5px;
+  border-radius: 20px;
   border: 1px solid whitesmoke;
 }
 
-.status-Paid {
+.status_Paid {
   background-color: crimson;
   color: white;
   width: 8rem;
   height: 2.5rem;
   border-radius: 5px;
-  font-weight: 900;
+  font-weight: 600;
   border: 1px solid whitesmoke;
 }
 
-.status-Rejected {
+.status_Rejected {
   background-color: red;
   color: white;
-  font-weight: 900;
+  font-weight: 600;
   width: 8rem;
   height: 2.5rem;
   border-radius: 5px;
@@ -80,27 +89,24 @@
 
 .pagination {
   display: flex;
-  justify-content: center;
-  gap: 10px;
-  padding: 10px 0;
+  justify-content: right;
+  width: 100%;
+  gap: 5px;
+  margin-left: 2rem;
 }
 
-.pagination button {
-  border: none;
-  color: #333;
-  cursor: pointer;
-  padding-top: 5px;
-  font-size: 1em;
-  border-radius: 4px;
-  width: 2.1em;
-  border: 1px solid #d1d5db;
-  height: 2em;
-  text-align: centerSu;
-  transition: background-color 0.3s ease;
+.pagination_button {
+  font-size: 1rem;
+  border: 1.5px solid black;
+  width: 100%;
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-top: 0.5rem;
+  border-radius: 10px;
+  gap: 2px;
 }
 
 .pagination button:hover {
-  background-color: #ddd;
   text-decoration: none;
 }
 
@@ -115,12 +121,77 @@
   font-size: 2rem;
 }
 .table_body {
-  border-radius: 20px;
+  width: 100%;
+  overflow: hidden;
 }
 .table_body tr:nth-child(even) {
   background-color: #fafafa;
 }
 .table_body tr:hover {
-  background-color: rgb(232, 232, 232);
-  transition: (0.3s);
+  background-color: rgb(235, 234, 234);
+  transition: (0.5s);
 }
+.filter_section {
+  font-weight: 500;
+  font-size: 1.5rem;
+  display: flex;
+  color: white;
+}
+.filterStatusP {
+  font-size: 1.5rem;
+  color: black;
+}
+.filter {
+  margin-top: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+.filter button {
+  background-color: #fafafa;
+  border-radius: 30px;
+  margin-left: 2rem;
+  padding-right: 1.5rem;
+}
+.filter p {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-left: 2rem;
+}
+.filter button:hover {
+  text-decoration: none;
+}
+.iconDown {
+  margin-top: 0.7rem;
+  margin-left: 0.8rem;
+}
+.paginationButton {
+  border: none;
+}
+
+.filteredData_table_container tr:hover {
+  background-color: rgb(231, 231, 231);
+  transition: 0.05s;
+}
+/* .table tr:nth-child(even) {
+  background-color: #fbfbfb;
+} */
+
+.activePage {
+  border: 2px solid #007bff;
+}
+.thead :hover {
+  background-color: no;
+}
+.pagination_button_icon {
+  border: none;
+  margin-right: 60px;
+}
+
+.pagination_button_number {
+  border-radius: 5px;
+  width: 2.5rem;
+  height: 2.5rem;
+  gap: 10px;
+  margin-right: 10px;
+}
+

@@ -1,11 +1,15 @@
 import { combineReducers } from "@reduxjs/toolkit";
 import { pendingSlice } from "./Claim/store/pendingSlice";
 import { detailsSlice } from "./Claim/store/detailsSlice";
-import { financeSlice } from "./slices/financeSlice";
-import  claimsReducer  from "./slices/claimsSlice";
+// import { financeSlice } from "./slices/financeSlice";
+// import claimsReducer from "./slices/claimsSlice";
+// import userClaimSlice from "./slice/userClaimSlice";
+import { financeSlice } from "./slices/Finance/claimsSlice";
+import claimsReducer from "./slices/claimsSlice";
 export const rootReducer = combineReducers({
   pending: pendingSlice.reducer,
   details: detailsSlice.reducer,
   finance: financeSlice.reducer,
+  // userClaims: userClaimSlice.reducer,  
   claims: claimsReducer,
 });

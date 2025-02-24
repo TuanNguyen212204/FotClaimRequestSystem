@@ -2,9 +2,20 @@ import React, { useState } from "react";
 import styles from "@components/ui/user/UserInfoComponent.module.css";
 
 import { User } from "@types/User.type";
+import RadioGroup from "../../common/RadioGroup/RadioGroup";
 
 export const UserInfoComponent: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
+    const [selectedValue, setSelectedValue] = useState("option1");
+  
+    const radioOptions = [
+      { label: "Male", value: "option1" },
+      { label: "Female", value: "option2" },
+      { label: "Other", value: "option3" },
+    ];
+  
+ 
+
   const [staffInfo, setStaffInfo] = useState<User | null>({
     gender: "Male",
     name: {
@@ -64,6 +75,7 @@ export const UserInfoComponent: React.FC = () => {
     },
     nat: "VietNam",
   });
+ 
 
   //   const fetchUserInfo = async () => {
   //     try {
@@ -149,6 +161,7 @@ export const UserInfoComponent: React.FC = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    setSelectedValue(e.target.value);
 
     setStaffInfo((prev) => {
       if (!prev) return prev;
@@ -258,6 +271,13 @@ export const UserInfoComponent: React.FC = () => {
               name="city"
               value={staffInfo?.location.city}
               onChange={handleChange}
+            />
+            <RadioGroup
+              options={radioOptions}
+              name="exampleRadioGroup"
+              selectedValue={selectedValue}
+              onChange={handleChange}
+              buttonProps={{ disabled: false }}
             />
             <button
               onClick={handleSave}

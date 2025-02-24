@@ -1,0 +1,50 @@
+.radioGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.radioLabel {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 16px;
+    color: #374151;
+}
+
+.radioInput {
+    display: none;
+}
+
+.radioCustom {
+    width: 16px;
+    height: 16px;
+    border: 2px solid #2563eb;
+    border-radius: 50%;
+    margin-right: 10px;
+    position: relative;
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.radioLabel:hover .radioCustom {
+    border-color: blue;
+}
+
+.radioInput:checked + .radioCustom {
+    transform: scale(1.2);
+}
+
+.radioInput:checked + .radioCustom::after {
+    content: "";
+    width: 8px;
+    height: 8px;
+    background-color: #2563eb;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

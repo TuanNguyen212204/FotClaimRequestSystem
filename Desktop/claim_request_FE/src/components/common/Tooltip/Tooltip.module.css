@@ -7,7 +7,7 @@
   position: absolute;
   bottom: 125%; /* Position above the element */
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%) scale(0.8);
   background-color: #555;
   color: #fff;
   padding: 8px 12px;
@@ -16,7 +16,7 @@
   font-size: 14px;
   z-index: 1;
   opacity: 0;
-  transition: opacity 0.3s;
+  transition: opacity 0.3s ease, transform 0.3s ease;
   visibility: hidden;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 
@@ -37,4 +37,5 @@
   opacity: 1;
   visibility: visible;
   transition: all 0.2s;
+  transform: translateX(-50%) scale(1);
 }

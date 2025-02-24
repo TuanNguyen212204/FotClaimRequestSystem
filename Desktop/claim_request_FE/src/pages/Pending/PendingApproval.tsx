@@ -9,7 +9,7 @@ import { useAppDispatch } from "@redux/index";
 import type { RootState } from "@redux/index";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
-import { Tooltip } from "../../components/tooltip/Tooltip";
+import { Tooltip } from "../../components/common/Tooltip/Tooltip";
 
 export const PendingComponent: React.FC = () => {
   const dispatch = useAppDispatch();
