@@ -147,3 +147,10 @@ input[type="checkbox"] {
   background-color: #0057FC;
   color: #fff;
 }
+
+.noData {
+  text-align: center;
+  padding: 20px;
+  color: #6b7280;
+  font-size: 1.2em;
+}

@@ -1,5 +1,4 @@
 import { EyeIcon, TrashIcon, CheckIcon, Trash2Icon } from "lucide-react";
-import { FaEye } from "react-icons/fa";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import styles from "./PendingApproval.module.css";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +9,7 @@ import { useAppDispatch } from "@redux/index";
 import type { RootState } from "@redux/index";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import { Tooltip } from "../../components/tooltip/Tooltip";
 
 export const PendingComponent: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -20,7 +20,7 @@ export const PendingComponent: React.FC = () => {
   }, [dispatch]);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 5;
   const [selectedClaims, setSelectedClaims] = useState<string[]>([]);
   const [selectAll, setSelectAll] = useState(false);
 
@@ -78,6 +78,16 @@ export const PendingComponent: React.FC = () => {
     toast.success("Claim deleted successfully!");
   };
 
+  const noData = () => {
+    return (
+      <tr>
+        <td colSpan={8} className={styles.noData}>
+          No data available.
+        </td>
+      </tr>
+    );
+  };
+
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Pending Approval Claims</h1>
@@ -118,36 +128,44 @@ export const PendingComponent: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {currentItems.map((claim) => (
-            <tr key={claim.id}>
-              <td>
-                <input
-                  type="checkbox"
-                  checked={selectedClaims.includes(claim.id)}
-                  onChange={() => handleSelectClaim(claim.id)}
-                />
-              </td>
-              <td>{claim.id}</td>
-              <td>{claim.staffName}</td>
-              <td>{claim.projectName}</td>
-              <td>{claim.duration}</td>
-              <td>{claim.hours} hours</td>
-              <td>{claim.approveName}</td>
-              <td className={styles.actions}>
-                <EyeIcon
-                  onClick={() => details(claim.id)}
-                  className={styles.icon}
-                />
-                &nbsp;&nbsp;&nbsp;
-                <TrashIcon
-                  onClick={() => handleDelete(claim.id)}
-                  className={styles.icon}
-                />
-                &nbsp;&nbsp;&nbsp;
-                <CheckIcon className={styles.icon} />
-              </td>
-            </tr>
-          ))}
+          {currentItems.length > 0
+            ? currentItems.map((claim) => (
+                <tr key={claim.id}>
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={selectedClaims.includes(claim.id)}
+                      onChange={() => handleSelectClaim(claim.id)}
+                    />
+                  </td>
+                  <td>{claim.id}</td>
+                  <td>{claim.staffName}</td>
+                  <td>{claim.projectName}</td>
+                  <td>{claim.duration}</td>
+                  <td>{claim.hours} hours</td>
+                  <td>{claim.approveName}</td>
+                  <td className={styles.actions}>
+                    <Tooltip text="View Details">
+                      <EyeIcon
+                        onClick={() => details(claim.id)}
+                        className={styles.icon}
+                      />
+                    </Tooltip>
+                    &nbsp;&nbsp;&nbsp;
+                    <Tooltip text="Delete Claim">
+                      <TrashIcon
+                        onClick={() => handleDelete(claim.id)}
+                        className={styles.icon}
+                      />
+                    </Tooltip>
+                    &nbsp;&nbsp;&nbsp;
+                    <Tooltip text="Approve Claim">
+                      <CheckIcon className={styles.icon} />
+                    </Tooltip>
+                  </td>
+                </tr>
+              ))
+            : noData()}
         </tbody>
       </table>
       <div className={styles.pagination}>
