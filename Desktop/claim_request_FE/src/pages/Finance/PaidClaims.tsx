@@ -1,13 +1,32 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import { selectClaims } from '../../redux/slices/claimsSlice'; // Import selector
 import styles from "./PaidClaims.module.css";
 import { PATH } from "../../constant/config";
+import Pagination from '../../components/common/Pagination';
 
 const PaidClaims: React.FC = () => {
   const navigate = useNavigate();
   const claims = useSelector(selectClaims); // Get claims from Redux
+  
+  // Thêm state cho pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5; // Số items trên mỗi trang
+  
+  // Tính toán các items cho trang hiện tại
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentClaims = claims.slice(indexOfFirstItem, indexOfLastItem);
+  
+  // Tính tổng số trang
+  const totalPages = Math.ceil(claims.length / itemsPerPage);
+
+  // Handle page change
+  const handlePageChange = (page: number, pageSize: number) => {
+    setCurrentPage(page);
+    // Xử lý logic phân trang ở đây
+  };
 
   return (
     <div className={styles.container}>
@@ -35,7 +54,7 @@ const PaidClaims: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {claims.map(claim => (
+            {currentClaims.map(claim => (
               <tr key={claim.claimId}>
                 <td className={styles.style_td}>{claim.claimId}</td>
                 <td className={styles.style_td}>{claim.staffName}</td>
@@ -48,7 +67,7 @@ const PaidClaims: React.FC = () => {
                     onClick={() => navigate(`${PATH.claimStatus}/${claim.claimId}`)}
                     style={{ background: 'none', border: 'none', cursor: 'pointer' }}
                   >
-                    👁️
+                    👁
                   </button>
                 </td>
               </tr>
@@ -56,13 +75,14 @@ const PaidClaims: React.FC = () => {
           </tbody>
         </table>
       </div>
-      <div className={styles.pagination}>
-        <button onClick={() => navigate(-1)}>&laquo;</button>
-        <button className={styles.active}>1</button>
-        <button>2</button>
-        <button>3</button>
-        <button>&raquo;</button>
-      </div>
+      
+      <Pagination
+        total={claims.length}
+        defaultPageSize={5}
+        defaultCurrent={1}
+        showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
+        onChange={handlePageChange}
+      />
     </div>
   );
 };
