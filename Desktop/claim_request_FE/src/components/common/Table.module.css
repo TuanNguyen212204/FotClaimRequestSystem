@@ -1,5 +1,6 @@
 .container {
-  margin-left: 6rem;
+  margin-left: 2rem;
+  margin-top: 3.5rem;
 }
 .table_container {
   display: flex;
@@ -126,8 +127,8 @@
   background-color: #fafafa;
 }
 .table_body tr:hover {
-  background-color: rgb(126, 119, 119);
-  transition: (0.3s);
+  background-color: rgb(235, 234, 234);
+  transition: (0.5s);
 }
 .filter_section {
   font-weight: 500;

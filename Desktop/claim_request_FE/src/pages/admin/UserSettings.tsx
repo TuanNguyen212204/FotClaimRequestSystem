@@ -1,113 +1,72 @@
 import TableComponent from "@/components/common/Table";
-import styles from "./UserSetting.module.css";
 import { FilePen, Trash2 } from "lucide-react";
-import { data } from "react-router-dom";
-
+import { AArrowDown } from "lucide-react";
 const UserSettings: React.FC = () => {
+  const handleEditClick = (id: string) => {
+    console.log(`Edit clicked for user with id: ${id}`);
+  };
+
+  const handleDeleteClick = (id: string) => {
+    console.log(`Delete clicked for user with id: ${id}`);
+  };
+
+  const handleArrowClick = (id: string) => {
+    console.log(`Arrow clicked for user with id: ${id}`);
+  };
   const columns = [
     { title: "ID", dataIndex: "id", key: "id" },
     { title: "Username", dataIndex: "username", key: "username" },
-    { title: "FirstName", dataIndex: "firstname", key: "firstname" },
-    { title: "LastName", dataIndex: "lastname", key: "lastname" },
+    { title: "FirstName", dataIndex: "firstName", key: "firstName" },
+    { title: "LastName", dataIndex: "lastName", key: "lastName" },
     { title: "Birthday", dataIndex: "birthday", key: "birthday" },
     { title: "Role", dataIndex: "status", key: "status" },
+    { title: "Action", dataIndex: "action", key: "action" },
   ];
   const dataSource = [
     {
-      id: "01",
-      username: "nguyenvana",
-      firstname: "a",
-      lastname: "nguyen",
-      birthday: "01/01/1996",
-      status: "BM",
+      id: "1",
+      username: "admin",
+      firstName: "admin",
+      lastName: "admin",
+      birthday: "1999-01-01",
+      status: "admin",
+      action: (
+        <div>
+          <button onClick={() => handleEditClick("1")}>
+            <FilePen />
+          </button>
+          <button onClick={() => handleDeleteClick("1")}>
+            <Trash2 />
+          </button>
+          <button onClick={() => handleArrowClick("1")}>
+            <AArrowDown />
+          </button>
+        </div>
+      ),
     },
     {
-      id: "02",
-      username: "nguyenvanb",
-      firstname: "b",
-      lastname: "nguyen",
-      birthday: "01/01/1996",
-      status: "Dev",
+      id: "2",
+      username: "ba",
+      firstName: "ba",
+      lastName: "ba",
+      birthday: "1999-01-01",
+      status: "admin",
     },
     {
-      id: "03",
-      username: "nguyenvanc",
-      firstname: "c",
-      lastname: "nguyen",
-      birthday: "01/01/1996",
-      status: "BM",
+      id: "3",
+      username: "user",
+      firstName: "user",
+      lastName: "user",
+      birthday: "1999-01-01",
+      status: "user",
     },
     {
-      id: "04",
-      username: "nguyenvand",
-      firstname: "d",
-      lastname: "nguyen",
-      birthday: "01/01/1996",
-      status: "BA",
-    },
-    {
-      id: "05",
-      username: "nguyenvane",
-      firstname: "e",
-      lastname: "nguyen",
-      birthday: "01/01/1996",
-      status: "BE",
-    },
-    {
-      id: "06",
-      username: "nguyenvana",
-      firstname: "f",
-      lastname: "nguyen",
-      birthday: "01/01/1996",
-      status: "DA",
-    },
-    {
-      id: "06",
-      username: "nguyenvana",
-      firstname: "f",
-      lastname: "nguyen",
-      birthday: "01/01/1996",
-      status: "DA",
-    },
-    {
-      id: "06",
-      username: "nguyenvana",
-      firstname: "f",
-      lastname: "nguyen",
-      birthday: "01/01/1996",
-      status: "DA",
-    },
-    {
-      id: "06",
-      username: "nguyenvana",
-      firstname: "f",
-      lastname: "nguyen",
-      birthday: "01/01/1996",
-      status: "DA",
-    },
-    {
-      id: "06",
-      username: "nguyenvana",
-      firstname: "f",
-      lastname: "nguyen",
-      birthday: "01/01/1996",
-      status: "DA",
-    },
-    {
-      id: "06",
-      username: "nguyenvana",
-      firstname: "f",
-      lastname: "nguyen",
-      birthday: "01/01/1996",
-      status: "DA",
-    },
-    {
-      id: "06",
-      username: "nguyenvana",
-      firstname: "f",
-      lastname: "nguyen",
-      birthday: "01/01/1996",
-      status: "DA",
+      id: "4",
+      username: "developer",
+      firstName: "developer",
+      lastName: "developer",
+      birthday: "1999-01-01",
+      status: "dev",
     },
   ];
   return (
@@ -117,7 +76,6 @@ const UserSettings: React.FC = () => {
         dataSource={dataSource}
         loading={false}
         pagination={true}
-        page="Object"
         name="Role"
       />
     </div>
