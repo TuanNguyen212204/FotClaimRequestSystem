@@ -18,6 +18,7 @@ import ProjectInformation from "@pages/Admin/ProjectInformation";
 import StaffInformation from "@pages/Admin/StaffInformation";
 import ApprovedFinancePage from "@/pages/Finance/ApprovedFinancePage";
 import TableDraftPage from "../pages/TableDraftPage";
+import ApprovedApproverPage from "@/pages/Approver/ApprovedApproverPage";
 const router: RouteObject[] = [
   {
     element: <LoginForm />,
@@ -53,6 +54,10 @@ const router: RouteObject[] = [
       {
         path: PATH.approvedFinance,
         element: <ApprovedFinancePage />,
+      },
+      {
+        path: PATH.approvedApprover,
+        element: <ApprovedApproverPage />,
       },
       {
         path: PATH.pending,
