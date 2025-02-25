@@ -3,6 +3,7 @@ export const PATH = {
   userInfo: "/user-info",//tuan
   draft: "/draft",
   login: "/login", //nguyen
+  checkbox: "/checkbox",
   resetPassword: "/reset-password",//nguyen
   createRequest: "/create-claim", //an
   pending: "/pending",//tri
