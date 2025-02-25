@@ -6,6 +6,7 @@ import claimsReducer from "./slices/claimsSlice";
 import userClaimSlice from "./slice/userClaimSlice";
 import { financeSlice } from "./slices/Finance/claimsSlice";
 import claimsReducer from "./slices/claimsSlice";
+import { approverSlice } from "./slices/Approver/claimsSlice";
 import projectReducer from "./slices/Project/projectSlice";
 export const rootReducer = combineReducers({
   pending: pendingSlice.reducer,
@@ -13,5 +14,6 @@ export const rootReducer = combineReducers({
   finance: financeSlice.reducer,
   userClaims: userClaimSlice.reducer,
   claims: claimsReducer,
+  approver: approverSlice.reducer,
   projects: projectReducer,
 });
