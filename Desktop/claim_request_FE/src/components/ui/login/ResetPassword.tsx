@@ -19,7 +19,7 @@ function ResetPassword() {
                 <h3>
                   Please enter your email address or  <br />
                   username and we will email you a link <br />
-                  to reset your password 
+                  to reset your password
                 </h3>
               </div>
 
