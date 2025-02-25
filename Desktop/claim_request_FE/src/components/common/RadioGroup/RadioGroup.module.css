@@ -30,7 +30,7 @@
 }
 
 .radioLabel:hover .radioCustom {
-    border-color: blue;
+    border-color: #2563eb;
 }
 
 .radioInput:checked + .radioCustom {

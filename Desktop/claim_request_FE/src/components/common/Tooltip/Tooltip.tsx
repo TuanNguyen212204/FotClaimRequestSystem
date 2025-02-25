@@ -2,8 +2,22 @@ import React, { useState } from "react";
 import { TooltipProps } from "@/components/common/Tooltip/Tooltip.types.ts";
 import styles from "./Tooltip.module.css";
 
-export const Tooltip: React.FC<TooltipProps> = ({ children, text }) => {
+export const Tooltip: React.FC<TooltipProps> = ({ children, text, position = "top" }) => {
   const [isHovered, setIsHovered] = useState(false);
+
+  const getTooltipClass = () => {
+    switch (position) {
+      case "bottom":
+        return styles.tooltipBottom;
+      case "right":
+        return styles.tooltipRight;
+      case "left":
+        return styles.tooltipLeft;
+      case "top":
+      default:
+        return styles.tooltipTop;
+    }
+  };
 
   return (
     <div
@@ -12,7 +26,7 @@ export const Tooltip: React.FC<TooltipProps> = ({ children, text }) => {
       onMouseLeave={() => setIsHovered(false)}
     >
       {children}
-      {isHovered && <div className={styles.tooltipText}>{text}</div>}
+      {isHovered && <div className={`${styles.tooltipText} ${getTooltipClass()}`}>{text}</div>}
     </div>
   );
 };

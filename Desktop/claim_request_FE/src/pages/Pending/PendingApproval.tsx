@@ -145,7 +145,7 @@ export const PendingComponent: React.FC = () => {
                   <td>{claim.hours} hours</td>
                   <td>{claim.approveName}</td>
                   <td className={styles.actions}>
-                    <Tooltip text="View Details">
+                    <Tooltip text="View Details" position="top">
                       <EyeIcon
                         onClick={() => details(claim.id)}
                         className={styles.icon}
