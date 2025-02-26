@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit";
-import type { RootState } from "../../redux/index";
+
 import axios from "axios";
 
 interface ListClaims {
@@ -42,11 +41,11 @@ export const financeSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchAllClaims.pending, (state, action) => {})
+      .addCase(fetchAllClaims.pending, () => {})
       .addCase(fetchAllClaims.fulfilled, (state, action) => {
         state.listClaims = action.payload;
       })
-      .addCase(fetchAllClaims.rejected, (state, action) => {});
+      .addCase(fetchAllClaims.rejected, () => {});
   },
 });
 

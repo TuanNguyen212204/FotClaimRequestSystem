@@ -1,81 +1,142 @@
 .container {
-  width: 70%;
+  width: 1087px;
+  height: 487px;
   position: absolute;
-  top: 45%;
-  left: 60%;
-  transform: translate(-50%, -50%);
-  font-weight: 400;
-  font-size: 1em;
+  top: 50px;
+  left: 319px;
+  padding: 30px;
+  background-color: #FFFFFF;
 }
+
 .claimStatus_h1 {
-  text-align: left;
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: right;
+  padding-right: 20px;
+  border-bottom: 1px solid #000;
+  padding-bottom: 10px;
 }
-.style_hr {
-  width: 80%;
-  margin-left: 11em;
-}
+
 .box {
   display: flex;
   justify-content: space-between;
   font-size: 1.5em;
+  margin-bottom: 20px;
 }
+
 .table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 2px solid #000;
+  border-radius: 8px;
+  overflow: hidden;
 }
-.style_td {
-  width: 6em;
-  height: 3em;
-  border-bottom: 1px solid black;
-  border-right: 1px solid black;
-  text-align: center;
-}
+
 .style_th {
-  border-bottom: 1px solid black;
-  border-right: 1px solid black;
-  border-radius: 0px;
-  width: 8em;
-  height: 4em;
-  background-color: #dddd;
+  padding: 15px;
+  background-color: #a09e9e;
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  font-weight: normal;
+  color: #333;
 }
+
+.style_td {
+  padding: 15px;
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  background-color: #FFFFFF;
+}
+
+/* Loại bỏ border bên phải của cột cuối cùng */
+.style_th:last-child,
+.style_td:last-child {
+  border-right: none;
+}
+
+/* Loại bỏ border dưới của hàng cuối cùng */
+tr:last-child .style_td {
+  border-bottom: none;
+}
+
+/* Style cho header Status */
+.style_th_Status {
+  padding: 15px;
+  background-color: #a09e9e;
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  font-weight: normal;
+  color: #333;
+}
+
+/* Style cho cell Status */
 .style_td_Status {
-  width: 6em;
-  height: 13m;
-  border-bottom: 1px solid black;
-  text-align: center;
-  color: green;
-  font-style: bold;
+  padding: 15px;
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  background-color: #FFFFFF;
+  color: rgb(188,75,81);
   font-weight: 600;
+  text-align: center;
 }
+
+/* Pagination */
+.pagination_container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  padding: 0 20px;
+}
+
 .pagination {
   display: flex;
-  justify-content: right;
-  gap: 8px;
-  padding: 10px 0;
+  justify-content: center;
+  gap: 10px;
 }
-.pagination button {
-  background-color: white;
+
+.items_count {
+  text-align: center;
+  margin-top: 10px;
+  color: #525353;
+}
+
+/* Thêm hover effect cho hàng */
+.table tr:hover td {
+  background-color: #f8f9fa;
+}
+
+/* Style cho nút Print */
+.print_button {
+  position: absolute;
+  right: 20px;
+  padding: 10px 30px;
+  background-color: #EF8354;
+  color: white;
   border: none;
-  color: #333;
-  padding: 8px 12px;
+  border-radius: 5px;
   cursor: pointer;
-  font-size: 1em;
-  border-radius: 4px;
+  font-size: 16px;
   transition: background-color 0.3s ease;
 }
-.pagination button:hover {
-  background-color: #ddd;
+
+.print_button:hover {
+  background-color: #EF8354;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-.pagination button.active {
-  background-color: #007bff;
-  color: white;
-  border-color: #007bff;
+
+/* Style cho table container */
+.table-container {
+  margin-bottom: 40px;
+  overflow-x: auto;
 }
-.style_th_Status {
-  border-bottom: 1px solid black;
-  border-radius: 0px;
-  width: 8em;
-  height: 4em;
-  background-color: #dddd;
+
+/* Style cho phần thông tin claim */
+.box p {
+  margin: 10px 0;
+  font-size: 16px;
+  color: #333;
 }
-  

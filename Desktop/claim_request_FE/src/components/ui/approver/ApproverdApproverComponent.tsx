@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllClaims } from "../../../redux/slices/Finance/claimsSlice";
-import styles from "./ApprovedFinanceComponent.module.css";
+import { fetchAllClaims } from "../../../redux/slices/Approver/claimsSlice";
+import styles from "./ApproverdApproverComponent.module.css";
 import { ArrowLeftSquare, ArrowRightSquare, EyeIcon } from "lucide-react";
 import { RootState, AppDispatch } from "../../../redux/index";
 import { useNavigate } from "react-router-dom";
 import { PATH } from "../../../constant/config";
 
-export const ApprovedFinanceComponent: React.FC = () => {
+export const ApprovedApproverComponent: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const listClaims = useSelector(
-    (state: RootState) => state.finance.listClaims
+    (state: RootState) => state.approver.listClaims
   );
 
+  // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 7;
+  const itemsPerPage = 7; // Số hàng trên mỗi trang
 
   useEffect(() => {
     dispatch(fetchAllClaims());
@@ -71,17 +72,13 @@ export const ApprovedFinanceComponent: React.FC = () => {
                 <td>{item.hour} hours</td>
                 <td>{item.approverName}</td>
                 <td>
-                  <EyeIcon
-                    className={styles.icon}
-                    onClick={() => navigate(PATH.approveDetails)}
-                  />
+                  <EyeIcon className={styles.icon} />
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
 
-        {/* Pagination */}
         <div className={styles.pagination}>
           <span
             className={styles.pageIcon}
@@ -114,4 +111,4 @@ export const ApprovedFinanceComponent: React.FC = () => {
   );
 };
 
-export default ApprovedFinanceComponent;
+export default ApprovedApproverComponent;

@@ -14,11 +14,18 @@ import UserSettings from "@/pages/Admin/UserSettings";
 import ApproveDetail from "@pages/ClaimRequest/ApproveDetail";
 import ClaimStatus from "@pages/Finance/ClaimStatus";
 import PaidClaims from "@pages/Finance/PaidClaims";
+<<<<<<< HEAD
 import ProjectInformation from "@/pages/Admin/ProjectInformation";
 import StaffInformation from "@/pages/Admin/StaffInformation";
 import Approved from "@pages/Approved/Approved";
 import CheckMail from "@/components/ui/login/CheckMail";
 import CreateNewPassword from "@/components/ui/login/CreateNewPassword";
+=======
+import ProjectInformation from "@pages/Admin/ProjectInformation";
+import StaffInformation from "@pages/Admin/StaffInformation";
+import ApprovedFinancePage from "@/pages/Finance/ApprovedFinancePage";
+import ApprovedApproverPage from "@/pages/Approver/ApprovedApproverPage";
+>>>>>>> develop
 const router: RouteObject[] = [
   {
     element: <LoginForm />,
@@ -61,8 +68,12 @@ const router: RouteObject[] = [
         element: <UserInfoComponent />,
       },
       {
-        path: PATH.approved,
-        element: <Approved />,
+        path: PATH.approvedFinance,
+        element: <ApprovedFinancePage />,
+      },
+      {
+        path: PATH.approvedApprover,
+        element: <ApprovedApproverPage />,
       },
       {
         path: PATH.pending,
