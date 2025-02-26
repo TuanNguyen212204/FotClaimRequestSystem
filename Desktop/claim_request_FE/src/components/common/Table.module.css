@@ -9,6 +9,7 @@
   overflow: hidden;
   background-color: transparent;
   box-shadow: none;
+  min-width: 768px;
 }
 .table {
   border-collapse: collapse;
@@ -29,13 +30,17 @@
   color: 1.5rem;
   background-color: #283849;
   color: white;
-  text-align: center;
+  text-align: right;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
 .th {
   padding: 1rem 2rem;
-  font-size: 1em;
+  font-size: 16px;
   font-weight: 900;
+  text-align: center;
+}
+.thead {
+  text-align: center;
 }
 .td {
   padding: 1rem 2rem;
@@ -179,6 +184,9 @@
 .activePage {
   border: 2px solid #007bff;
 }
+.thead {
+  text-align: center;
+}
 .thead :hover {
   background-color: no;
 }
@@ -194,3 +202,40 @@
   gap: 10px;
   margin-right: 10px;
 }
+/* Base checkbox styling for consistency */
+/* Base checkbox styling */
+/* Base checkbox styling */
+
+/* Base checkbox styling */
+.table_container input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  border-radius: 2px;
+  cursor: pointer;
+  /* Disable native appearance so our background image shows correctly */
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: white;
+  border: 1px solid gray;
+}
+
+/* Checked state: shows a refined check mark logo */
+.table_container input[type="checkbox"]:checked {
+  background-color: white;
+  border: 1px solid gray;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 8l4 4 6-6' fill='none' stroke='%23000' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 10px 10px;
+}
+
+/* Indeterminate state: shows a horizontal dash instead of the check mark */
+.table_container input[type="checkbox"]:indeterminate {
+  background-color: white;
+  border: 1px solid gray;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8h8' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 10px 10px;
+}
+

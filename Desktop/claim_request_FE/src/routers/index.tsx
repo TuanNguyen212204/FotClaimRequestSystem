@@ -60,7 +60,7 @@ const router: RouteObject[] = [
       },
       {
         path: PATH.approvedApprover,
-        element: <ApprovedApproverPage />,
+        element: <ApprovedFinancePage />,
       },
       {
         path: PATH.pending,
