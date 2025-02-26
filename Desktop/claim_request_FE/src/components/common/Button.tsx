@@ -37,7 +37,7 @@ export const Button: React.FC<ButtonProps> = ({
       style={{
         color,
         backgroundColor,
-        ...style, // ✅ Giữ nguyên style từ prop
+        ...style,
       }}
     >
       {loading ? (
