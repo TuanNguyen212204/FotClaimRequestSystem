@@ -1,4 +1,4 @@
-// src/components/common/Notification.tsx
+
 import React, { useState, useEffect } from 'react';
 import styles from './Notification.module.css';
 
@@ -12,7 +12,7 @@ interface NotificationItem {
 interface NotificationProps {
   message: string;
   type: 'success' | 'error' | 'warning' | 'info';
-  duration?: number; // Thời gian tự động ẩn (ms), mặc định là 5000ms
+  duration?: number; 
   onClose?: () => void;
 }
 
@@ -22,8 +22,8 @@ const Notification: React.FC<NotificationProps> = ({ message, type, duration = 1
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
 
   const addNotification = () => {
-    console.log("Adding notification:", { message, type, duration }); // Debug
-    if (!message.trim()) return; // Ngăn thêm thông báo nếu message rỗng hoặc chỉ có khoảng trắng
+    console.log("Adding notification:", { message, type, duration }); 
+    if (!message.trim()) return; 
     const newNotification: NotificationItem = {
       id: notificationId++,
       message,

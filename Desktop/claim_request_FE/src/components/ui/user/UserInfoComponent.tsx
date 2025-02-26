@@ -1,4 +1,4 @@
-import React, { useState } from "react"; // Xóa useEffect không cần thiết
+import React, { useState } from "react"; 
 import styles from "@components/ui/user/UserInfoComponent.module.css";
 import Notification from "@components/common/Notification/Notification"; 
 
