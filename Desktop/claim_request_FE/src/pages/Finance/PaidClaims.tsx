@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { selectClaims } from '../../redux/slices/claimsSlice'; // Import selector
 import styles from "./PaidClaims.module.css";
 import { PATH } from "../../constant/config";
-import Pagination from '../../components/common/Pagination';
+import Pagination from '../../components/common/Pagination/Pagination';
 
 const PaidClaims: React.FC = () => {
   const navigate = useNavigate();

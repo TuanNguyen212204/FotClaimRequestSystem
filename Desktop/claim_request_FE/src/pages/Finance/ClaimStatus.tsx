@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import { selectClaims } from '../../redux/slices/claimsSlice'; // Import selector
 import styles from "./ClaimStatus.module.css";
-import Pagination from '../../components/common/Pagination'; // Thêm import
+import Pagination from '../../components/common/Pagination/Pagination'; // Thêm import
 
 const ClaimStatus: React.FC = () => {
   const navigate = useNavigate();
