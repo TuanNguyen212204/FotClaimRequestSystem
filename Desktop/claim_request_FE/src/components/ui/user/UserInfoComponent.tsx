@@ -1,311 +1,291 @@
-import React, { useState } from "react";
+import React, { useState } from "react"; // Xóa useEffect không cần thiết
 import styles from "@components/ui/user/UserInfoComponent.module.css";
+import Notification from "@components/common/Notification/Notification"; 
 
-import { User } from "@types/User.type";
+type Experience = {
+  title: string;
+  company: string;
+  description: string;
+};
+
+type User = {
+  avatar?: string;
+  bio?: string;
+  projects?: string[];
+  experiences?: Experience[];
+};
 
 export const UserInfoComponent: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
-  const [staffInfo, setStaffInfo] = useState<User | null>({
-    gender: "Male",
-    name: {
-      title: "Mr",
-      first: "Tuan",
-      last: "Nguyen",
-    },
-    location: {
-      street: {
-        number: 17,
-        name: "Nguyen Thai Hoc",
+  const [staffInfo, setStaffInfo] = useState<User>({
+    avatar: "https://static-cse.canva.com/blob/1806764/1600w-_q--r1GW6_E.jpg",
+    bio: "I'm Abigail Scott, a passionate UI developer...",
+    projects: ["Blog", "Chat", "Email", "Empty", "FAQs", "File Manager", "Invoice"],
+    experiences: [
+      {
+        title: "Web Developer",
+        company: "FPT Software",
+        description: "As a Web Developer, you will design, build...",
       },
-      city: "Vung Tau",
-      state: "",
-      country: "",
-      postcode: 78200,
-      coordinates: {
-        latitude: "34.0039",
-        longitude: "-118.4324",
-      },
-      timezone: {
-        offset: "-8:00",
-        description: "Pacific Time (US & Canada)",
-      },
-    },
-    email: "tuan51463@gmail.com",
-    login: {
-      uuid: "user1",
-      username: "tuan",
-      password: "12345",
-      salt: "string",
-      md5: "string",
-      sha1: "string",
-      sha256: "string",
-    },
-    dob: {
-      date: "1990-01-01T00:00:00.000",
-      age: 21,
-    },
-    registered: {
-      date: "2015-05-15T00:00:00.000Z",
-      age: 8,
-    },
-    phone: "0789357788",
-    cell: "string",
-    id: {
-      name: "SE",
-      value: "183262",
-    },
-    picture: {
-      large:
-        "https://i.pinimg.com/736x/63/f0/0d/63f00d6ebe2c93b945be3c39135503c2.jpg",
-      medium:
-        "https://i.pinimg.com/736x/63/f0/0d/63f00d6ebe2c93b945be3c39135503c2.jpg",
-      thumbnail:
-        "https://i.pinimg.com/736x/63/f0/0d/63f00d6ebe2c93b945be3c39135503c2.jpg",
-    },
-    nat: "VietNam",
+    ],
   });
+  const [notification, setNotification] = useState<{ message: string; type: 'success' | 'error' | 'warning' | 'info' } | null>(null);
 
-  //   const fetchUserInfo = async () => {
-  //     try {
-  //       const response = await axios.get("");
-  //       setUser(response.data);
-  //     } catch (error) {
-  //       toast.error(
-  //         error.response?.data?.message || "Failed to fetch user data!"
-  //       );
-  //     }
-  //   };
+  console.log("Notification state:", notification); // Debug: Kiểm tra giá trị notification
 
-  //   useEffect(() => {
-  //     fetchUserInfo();
-  //   }, []);
-
-  // const staffInfo: User = {
-  //   name: "Nguyễn Ngọc Tuấn",
-  //   id: "SE123456",
-  //   email: "obcxyz@rpt.vn",
-  //   department: "Ho Chi Minh City",
-  // };
-
-  // const staffInfo: User = {
-  //   gender: "Male",
-  //   name: {
-  //     title: "Mr",
-  //     first: "Tuan",
-  //     last: "Nguyen",
-  //   },
-  //   location: {
-  //     street: {
-  //       number: 17,
-  //       name: "Nguyen Thai Hoc",
-  //     },
-  //     city: "Vung Tau",
-  //     state: "",
-  //     country: "",
-  //     postcode: 78200,
-  //     coordinates: {
-  //       latitude: "34.0039",
-  //       longitude: "-118.4324",
-  //     },
-  //     timezone: {
-  //       offset: "-8:00",
-  //       description: "Pacific Time (US & Canada)",
-  //     },
-  //   },
-  //   email: "tuan51463@gmail.com",
-  //   login: {
-  //     uuid: "user1",
-  //     username: "tuan",
-  //     password: "12345",
-  //     salt: "string",
-  //     md5: "string",
-  //     sha1: "string",
-  //     sha256: "string",
-  //   },
-  //   dob: {
-  //     date: "1990-01-01T00:00:00.000",
-  //     age: 21,
-  //   },
-  //   registered: {
-  //     date: "2015-05-15T00:00:00.000Z",
-  //     age: 8,
-  //   },
-  //   phone: "0789357788",
-  //   cell: "string",
-  //   id: {
-  //     name: "SE",
-  //     value: "183262",
-  //   },
-  //   picture: {
-  //     large:
-  //       "https://i.pinimg.com/736x/a8/ee/99/a8ee991141c6bc4c81e7eadfb4e2b4b5.jpg",
-  //     medium:
-  //       "https://i.pinimg.com/736x/a8/ee/99/a8ee991141c6bc4c81e7eadfb4e2b4b5.jpg",
-  //     thumbnail:
-  //       "https://i.pinimg.com/736x/a8/ee/99/a8ee991141c6bc4c81e7eadfb4e2b4b5.jpg",
-  //   },
-  //   nat: "VietNam",
-  // };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-
-    setStaffInfo((prev) => {
-      if (!prev) return prev;
-
-      return {
-        ...prev,
-        email: name === "email" ? value : prev.email,
-        name: {
-          ...prev.name,
-          first: name === "firstName" ? value : prev.name?.first ?? "",
-          last: name === "lastName" ? value : prev.name?.last ?? "",
-        },
-        location: {
-          ...prev.location,
-          city: name === "city" ? value : prev.location?.city ?? "",
-        },
-        gender: prev.gender ?? "", // Đảm bảo gender không bị undefined
-      };
+  const showNotification = (message: string, type: 'success' | 'error' | 'warning' | 'info') => {
+    console.log("Showing notification due to:", {
+      message,
+      type,
+      stack: new Error().stack, // Xác định nơi gọi hàm
+      staffInfo: staffInfo, // Kiểm tra state hiện tại
     });
+    setNotification({ message, type });
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSave = () => {
+    setIsEditing(false);
+    showNotification("Profile saved successfully!", "success");
+  };
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setStaffInfo((prev) => ({
-        ...prev!,
-        picture: {
-          ...prev!.picture,
-          large: imageUrl,
-          medium: imageUrl,
-          thumbnail: imageUrl,
-        },
-      }));
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        if (event.target?.result) {
+          setStaffInfo({ ...staffInfo, avatar: event.target.result as string });
+          showNotification("Avatar updated successfully!", "success");
+        }
+      };
+      reader.readAsDataURL(file);
+    } else {
+      showNotification("Failed to upload image. Please try again.", "error");
     }
   };
-  const handleSave = async () => {
-    // TODO: Sau này khi có API, hãy mở comment phần này
-    /*
-      try {
-        const formData = new FormData();
-        formData.append("name", staffInfo.name);
-        formData.append("email", staffInfo.email);
-        formData.append("department", staffInfo.department);
-        formData.append("avatar", file); // Gửi ảnh lên server
 
-        await axios.put("/api/staff/update", formData);
-        toast.success("Profile updated successfully!");
-      } catch (error) {
-        toast.error("Failed to update profile.");
-      }
-      */
-    setIsEditing(false);
-  };
   return (
-    <div className={styles.container}>
-      <div className={styles.card}>
-        <label htmlFor="avatarUpload">
+    <div className={styles.profileContainer}>
+      <div className={styles.profileHeader}>
+        <div className={styles.avatarSection}>
           <img
-            src={
-              staffInfo?.picture?.thumbnail ||
-              "https://static-cse.canva.com/blob/1806764/1600w-_q--r1GW6_E.jpg"
-            }
+            src={staffInfo.avatar || "https://static-cse.canva.com/blob/1806764/1600w-_q--r1GW6_E.jpg"}
             alt="Avatar"
-            className={styles.avatar}
+            className={styles.profileAvatar}
           />
-        </label>
-        {isEditing && (
-          <input
-            type="file"
-            id="avatarUpload"
-            accept="image/*"
-            style={{ display: "none" }}
-            onChange={handleImageChange}
-          ></input>
-        )}
-        {isEditing ? (
-          <div className={styles.editContainer}>
-            <input
-              type="text"
-              name="firstName"
-              value={staffInfo?.name.first}
-              onChange={handleChange}
-            />
-            <input
-              type="text"
-              name="lastName"
-              value={staffInfo?.name.last}
-              onChange={handleChange}
-            />
+          <button onClick={() => { setIsEditing(true); console.log("Editing mode activated:", true); }} className={styles.editButton}>
+            ✏️
+          </button>
+        </div>
 
-            <input
-              type="email"
-              name="email"
-              value={staffInfo?.email}
-              onChange={handleChange}
-              placeholder="Enter Email"
-            />
-            <input
-              type="text"
-              name="streetName"
-              value={staffInfo?.location.street.name}
-              onChange={handleChange}
-            />
-            <input
-              type="text"
-              name="city"
-              value={staffInfo?.location.city}
-              onChange={handleChange}
-            />
-            <button
-              onClick={handleSave}
-              className={`${styles.saveBtn} ${styles.userInfoBtn}`}
-            >
-              💾 Save
-            </button>
-            <button
-              onClick={() => setIsEditing(false)}
-              className={`${styles.cancelBtn} ${styles.userInfoBtn}`}
-            >
-              ❌ Cancel
-            </button>
-          </div>
-        ) : (
-          <>
-            <button
-              className={`${styles.editBtn} ${styles.userInfoBtn}`}
-              onClick={() => setIsEditing(true)}
-            >
-              ✎ Edit Profile
-            </button>
-            <div className={styles.info}>
-              <div className={styles.row}>
-                <p>
-                  <span className={styles.icon}>👤</span>
-                  <strong>Staff Name:</strong>
-                  {`${staffInfo?.name.title} ${staffInfo?.name.first} ${staffInfo?.name.last}`}
-                </p>
-                <p>
-                  <span className={styles.icon}>🆔</span>
-                  <strong>Staff ID:</strong>
-                  {`${staffInfo?.id.name} ${staffInfo?.id.value}`}
-                </p>
-              </div>
-              <p>
-                <span className={styles.icon}>📧</span>
-                <strong>Staff Email:</strong> {staffInfo?.email}
-              </p>
-              <p>
-                <span className={styles.icon}>🏢</span>
-                <strong>Staff Department:</strong>
-                {`${staffInfo?.location.street.number} ${staffInfo?.location.street.name} , ${staffInfo?.location.city}`}
-              </p>
+        <div className={styles.profileInfo}>
+          <h1>Tuan Nguyen</h1>
+          <p className={styles.position}>Chief Executive Officer (C.E.O)</p>
+          <p className={styles.company}>© FPT Software.</p>
+
+          <div className={styles.statsContainer}>
+            <div className={styles.statItem}>
+              <h3>113</h3>
+              <span>Projects</span>
             </div>
-          </>
-        )}
+            <div className={styles.statItem}>
+              <h3>23.86%</h3>
+              <span>Success Rate</span>
+            </div>
+            <div className={styles.statItem}>
+              <h3>512.6K</h3>
+              <span>Earning</span>
+            </div>
+          </div>
+        </div>
       </div>
+
+      <div className={styles.profileContent}>
+        <div className={styles.section}>
+          <h2 className={styles.sectionTitle}>Personal Bio</h2>
+          {isEditing ? (
+            <textarea
+              className={styles.inputField}
+              value={staffInfo.bio}
+              onChange={(e) => setStaffInfo({ ...staffInfo, bio: e.target.value })}
+            />
+          ) : (
+            <p className={styles.bioText}>{staffInfo.bio}</p>
+          )}
+        </div>
+
+        <div className={styles.section}>
+          <h2 className={styles.sectionTitle}>Projects</h2>
+          <div className={styles.projectsGrid}>
+            {staffInfo.projects?.map((project) => (
+              <div key={project} className={styles.projectCard}>
+                {project}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className={styles.section}>
+          <h2 className={styles.sectionTitle}>Experience</h2>
+          {staffInfo.experiences?.map((exp, index) => (
+            <div key={index} className={styles.experienceItem}>
+              <h3>{exp.title}</h3>
+              <p className={styles.companyName}>{exp.company}</p>
+              <p className={styles.experienceDesc}>{exp.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {isEditing && (
+        <div className={styles.editModal}>
+          <div className={styles.modalContent}>
+            <h2>Edit Profile</h2>
+            
+            {/* Phần Avatar */}
+            <div className={styles.avatarUploadSection}>
+              <img
+                src={staffInfo.avatar}
+                alt="Avatar Preview"
+                className={styles.avatarPreview}
+              />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                id="avatarUpload"
+                className={styles.hiddenInput}
+              />
+              <label htmlFor="avatarUpload" className={styles.uploadButton}>
+                Change Avatar
+              </label>
+            </div>
+
+            {/* Phần Bio */}
+            <div className={styles.formSection}>
+              <label>Bio</label>
+              <textarea
+                value={staffInfo.bio}
+                onChange={(e) => setStaffInfo({ ...staffInfo, bio: e.target.value })}
+              />
+            </div>
+
+            {/* Phần Projects */}
+            <div className={styles.formSection}>
+              <label>Projects</label>
+              {staffInfo.projects?.map((project, index) => (
+                <div key={index} className={styles.arrayItem}>
+                  <input
+                    value={project}
+                    onChange={(e) => {
+                      const newProjects = [...staffInfo.projects!];
+                      newProjects[index] = e.target.value;
+                      setStaffInfo({ ...staffInfo, projects: newProjects });
+                    }}
+                  />
+                  <button
+                    onClick={() => {
+                      const newProjects = staffInfo.projects?.filter((_, i) => i !== index);
+                      setStaffInfo({ ...staffInfo, projects: newProjects });
+                    }}
+                    className={styles.removeButton}
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+              <button
+                onClick={() => 
+                  setStaffInfo({ 
+                    ...staffInfo, 
+                    projects: [...(staffInfo.projects || []), ""] 
+                  })
+                }
+                className={styles.addButton}
+              >
+                Add Project
+              </button>
+            </div>
+
+            {/* Phần Experience */}
+            <div className={styles.formSection}>
+              <label>Experiences</label>
+              {staffInfo.experiences?.map((exp, index) => (
+                <div key={index} className={styles.arrayItem}>
+                  <input
+                    placeholder="Title"
+                    value={exp.title}
+                    onChange={(e) => {
+                      const newExperiences = [...staffInfo.experiences!];
+                      newExperiences[index].title = e.target.value;
+                      setStaffInfo({ ...staffInfo, experiences: newExperiences });
+                    }}
+                  />
+                  <input
+                    placeholder="Company"
+                    value={exp.company}
+                    onChange={(e) => {
+                      const newExperiences = [...staffInfo.experiences!];
+                      newExperiences[index].company = e.target.value;
+                      setStaffInfo({ ...staffInfo, experiences: newExperiences });
+                    }}
+                  />
+                  <textarea
+                    placeholder="Description"
+                    value={exp.description}
+                    onChange={(e) => {
+                      const newExperiences = [...staffInfo.experiences!];
+                      newExperiences[index].description = e.target.value;
+                      setStaffInfo({ ...staffInfo, experiences: newExperiences });
+                    }}
+                  />
+                  <button
+                    onClick={() => {
+                      const newExperiences = staffInfo.experiences?.filter((_, i) => i !== index);
+                      setStaffInfo({ ...staffInfo, experiences: newExperiences });
+                    }}
+                    className={styles.removeButton}
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+              <button
+                onClick={() => 
+                  setStaffInfo({
+                    ...staffInfo,
+                    experiences: [
+                      ...(staffInfo.experiences || []), 
+                      { title: "", company: "", description: "" }
+                    ]
+                  })
+                }
+                className={styles.addButton}
+              >
+                Add Experience
+              </button>
+            </div>
+
+            {/* Nút điều khiển */}
+            <div className={styles.buttonGroup}>
+              <button className={styles.saveButton} onClick={handleSave}>
+                Save
+              </button>
+              <button className={styles.cancelButton} onClick={() => setIsEditing(false)}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Hiển thị Notification */}
+      <Notification
+        message={notification?.message || ""}
+        type={notification?.type || "info"}
+        duration={10000}
+        onClose={() => setNotification(null)}
+      />
     </div>
   );
 };
