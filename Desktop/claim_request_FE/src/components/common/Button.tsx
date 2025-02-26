@@ -1,4 +1,5 @@
 import { ButtonProps } from "../../types/button.type";
+import styles from "./Button.module.css";
 
 export const Button: React.FC<ButtonProps> = ({
   border,
@@ -14,6 +15,7 @@ export const Button: React.FC<ButtonProps> = ({
 }) => {
   return (
     <button
+      className={styles.button}
       onClick={onClick}
       style={{
         border,
