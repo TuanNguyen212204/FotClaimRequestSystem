@@ -7,11 +7,11 @@ import {
   AiOutlineLeft,
   AiOutlineRight,
 } from "react-icons/ai";
-import { PATH } from "../../constant/config";
+import { PATH } from "../../../constant/config";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../redux";
-import { fetchUserClaims } from "../../redux/slice/userClaimSlice";
+import { AppDispatch, RootState } from "../../../redux";
+import { fetchUserClaims } from "../../../redux/slice/userClaimSlice";
 
 
 const UserClaims = () => {
