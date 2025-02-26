@@ -13,18 +13,40 @@ function LoginForm() {
   };
 
   const loginSchema = Yup.object().shape({
-    username: Yup.string()
-      .required("Username is Required"),
-    password: Yup.string()
-      //6 đến 10
-      .required("Password is Required")      
+    username: Yup.string().required("Username is Required"),
+    password: Yup.string().required("Password is Required"),
   });
 
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: loginSchema,
-    onSubmit: () => {
-      navigate("/reset-password");
+    onSubmit: async (values) => {
+      try {
+        const response = await fetch(
+          "http://localhost:4000/api/v1/auth/login",
+          // "http://claimsystem.info.vn/api/v1/auth/login", //test VPS
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(values),
+          }
+        );
+        const data = await response.json();
+
+        if (response.ok) {
+          localStorage.setItem("authToken", data.tokens.access.token);
+          localStorage.setItem("user", JSON.stringify(data.user));
+
+          navigate("/");
+        } else {
+          alert(data.message || "Login failed");
+        }
+      } catch (error) {
+        console.error("Login error:", error);
+        alert("An error occurred, please try again later.");
+      }
     },
   });
 
@@ -68,7 +90,7 @@ function LoginForm() {
                   type="text"
                   id="username"
                   name="username"
-                  placeholder="Enter email or username"
+                  placeholder="Enter username"
                   value={formik.values.username}
                   onChange={formik.handleChange}
                 />
@@ -96,10 +118,6 @@ function LoginForm() {
               </div>
 
               <div className={styles.options}>
-                <div className={styles.rememberMe}>
-                  <input type="checkbox" id="remember" />
-                  <label htmlFor="remember">Remember Me</label>
-                </div>
                 <Link to="/reset-password">Forgot password ?</Link>
               </div>
 

@@ -13,7 +13,6 @@ function ResetPassword() {
 
   const resetPasswordSchema = Yup.object().shape({
     email: Yup.string()
-      .email("Invalid Email")
       .required("Email is Required")
       .test(
         "includes-@fpt",

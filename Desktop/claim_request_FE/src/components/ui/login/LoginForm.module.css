@@ -135,8 +135,7 @@
 /* Options (Remember Me & Forgot Password) */
 .options {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: right;
   margin: 15px 0;
 }
 
