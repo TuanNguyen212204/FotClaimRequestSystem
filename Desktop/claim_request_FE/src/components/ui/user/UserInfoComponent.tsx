@@ -1,56 +1,69 @@
-import React, { useState } from "react"; 
+import React, { useState, useEffect } from "react";
 import styles from "@components/ui/user/UserInfoComponent.module.css";
-import Notification from "@components/common/Notification/Notification"; 
-
-type Experience = {
-  title: string;
-  company: string;
-  description: string;
-};
-
-type User = {
-  avatar?: string;
-  bio?: string;
-  projects?: string[];
-  experiences?: Experience[];
-};
+import Notification from "@components/common/Notification/Notification";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "@redux/index";
+import { fetchUserByIdAsync, updateUserAsync } from "@redux/thunk/UserInfo/userInfoThunks";
+import { User, Experience } from "@types/User.type";
 
 export const UserInfoComponent: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const selectedUser = useSelector((state: any) => state.user.selectedUser); 
   const [isEditing, setIsEditing] = useState(false);
-  const [staffInfo, setStaffInfo] = useState<User>({
-    avatar: "https://static-cse.canva.com/blob/1806764/1600w-_q--r1GW6_E.jpg",
-    bio: "I'm Abigail Scott, a passionate UI developer...",
-    projects: ["Blog", "Chat", "Email", "Empty", "FAQs", "File Manager", "Invoice"],
-    experiences: [
-      {
-        title: "Web Developer",
-        company: "FPT Software",
-        description: "As a Web Developer, you will design, build...",
-      },
-    ],
-  });
+  const [staffInfo, setStaffInfo] = useState<User | null>(selectedUser || null);
   const [notification, setNotification] = useState<{ message: string; type: 'success' | 'error' | 'warning' | 'info' } | null>(null);
 
-  console.log("Notification state:", notification); // Debug: Kiểm tra giá trị notification
+
+  useEffect(() => {
+    dispatch(fetchUserByIdAsync("1")); 
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (!isEditing) {
+      setStaffInfo(selectedUser);
+    }
+  }, [selectedUser, isEditing]);
+
+
+  useEffect(() => {
+    if (notification) {
+      const timer = setTimeout(() => {
+        setNotification(null);
+      }, 10000); 
+      return () => clearTimeout(timer);
+    }
+  }, [notification]);
 
   const showNotification = (message: string, type: 'success' | 'error' | 'warning' | 'info') => {
     console.log("Showing notification due to:", {
       message,
       type,
-      stack: new Error().stack, // Xác định nơi gọi hàm
-      staffInfo: staffInfo, // Kiểm tra state hiện tại
+      stack: new Error().stack,
+      staffInfo: staffInfo,
     });
     setNotification({ message, type });
   };
 
   const handleSave = () => {
-    setIsEditing(false);
-    showNotification("Profile saved successfully!", "success");
+    if (staffInfo && staffInfo.userID) { 
+      dispatch(updateUserAsync({ userId: staffInfo.userID, userData: staffInfo }))
+        .unwrap() 
+        .then((updatedUser: User) => {
+          setIsEditing(false);
+          setStaffInfo(updatedUser);
+          showNotification("Profile saved successfully!", "success");
+        })
+        .catch((error: any) => {
+          showNotification("Failed to save profile: " + error.message, "error");
+        });
+    } else {
+      showNotification("User ID not found. Cannot save profile.", "error");
+    }
   };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
+    if (file && staffInfo) {
       const reader = new FileReader();
       reader.onload = (event) => {
         if (event.target?.result) {
@@ -64,28 +77,38 @@ export const UserInfoComponent: React.FC = () => {
     }
   };
 
+  if (!staffInfo) {
+    return <div>Loading...</div>; 
+  }
+
   return (
     <div className={styles.profileContainer}>
       <div className={styles.profileHeader}>
         <div className={styles.avatarSection}>
           <img
-            src={staffInfo.avatar || "https://static-cse.canva.com/blob/1806764/1600w-_q--r1GW6_E.jpg"}
+            src={staffInfo.avatar || "https://i.pinimg.com/736x/63/f0/0d/63f00d6ebe2c93b945be3c39135503c2.jpg"}
             alt="Avatar"
             className={styles.profileAvatar}
           />
-          <button onClick={() => { setIsEditing(true); console.log("Editing mode activated:", true); }} className={styles.editButton}>
+          <button
+            onClick={() => {
+              setIsEditing(true);
+              console.log("Editing mode activated:", true);
+            }}
+            className={styles.editButton}
+          >
             ✏️
           </button>
         </div>
 
         <div className={styles.profileInfo}>
-          <h1>Tuan Nguyen</h1>
-          <p className={styles.position}>Chief Executive Officer (C.E.O)</p>
-          <p className={styles.company}>© FPT Software.</p>
+          <h1>{staffInfo.fullName || "Tuan Nguyen"}</h1>
+          <p className={styles.position}>{staffInfo.jobRank || "Chief Executive Officer (C.E.O)"}</p>
+          <p className={styles.company}>© {staffInfo.department || "FPT Software"}.</p>
 
           <div className={styles.statsContainer}>
             <div className={styles.statItem}>
-              <h3>113</h3>
+              <h3>{staffInfo.projects?.length || 113}</h3>
               <span>Projects</span>
             </div>
             <div className={styles.statItem}>
@@ -93,7 +116,7 @@ export const UserInfoComponent: React.FC = () => {
               <span>Success Rate</span>
             </div>
             <div className={styles.statItem}>
-              <h3>512.6K</h3>
+              <h3>{staffInfo.salary || 512.6}K</h3>
               <span>Earning</span>
             </div>
           </div>
@@ -106,11 +129,11 @@ export const UserInfoComponent: React.FC = () => {
           {isEditing ? (
             <textarea
               className={styles.inputField}
-              value={staffInfo.bio}
+              value={staffInfo.bio || ""}
               onChange={(e) => setStaffInfo({ ...staffInfo, bio: e.target.value })}
             />
           ) : (
-            <p className={styles.bioText}>{staffInfo.bio}</p>
+            <p className={styles.bioText}>{staffInfo.bio || "No bio available"}</p>
           )}
         </div>
 
@@ -121,19 +144,53 @@ export const UserInfoComponent: React.FC = () => {
               <div key={project} className={styles.projectCard}>
                 {project}
               </div>
-            ))}
+            )) || <p>No projects available</p>}
           </div>
         </div>
 
         <div className={styles.section}>
           <h2 className={styles.sectionTitle}>Experience</h2>
-          {staffInfo.experiences?.map((exp, index) => (
-            <div key={index} className={styles.experienceItem}>
-              <h3>{exp.title}</h3>
-              <p className={styles.companyName}>{exp.company}</p>
-              <p className={styles.experienceDesc}>{exp.description}</p>
-            </div>
-          ))}
+          {isEditing ? (
+            staffInfo.experiences?.map((exp, index) => (
+              <div key={index} className={styles.arrayItem}>
+                <input
+                  placeholder="Title"
+                  value={exp.title}
+                  onChange={(e) => {
+                    const newExperiences = [...(staffInfo.experiences || [])];
+                    newExperiences[index] = { ...newExperiences[index], title: e.target.value };
+                    setStaffInfo({ ...staffInfo, experiences: newExperiences });
+                  }}
+                />
+                <input
+                  placeholder="Company"
+                  value={exp.company}
+                  onChange={(e) => {
+                    const newExperiences = [...(staffInfo.experiences || [])];
+                    newExperiences[index] = { ...newExperiences[index], company: e.target.value };
+                    setStaffInfo({ ...staffInfo, experiences: newExperiences });
+                  }}
+                />
+                <textarea
+                  placeholder="Description"
+                  value={exp.description}
+                  onChange={(e) => {
+                    const newExperiences = [...(staffInfo.experiences || [])];
+                    newExperiences[index] = { ...newExperiences[index], description: e.target.value };
+                    setStaffInfo({ ...staffInfo, experiences: newExperiences });
+                  }}
+                />
+              </div>
+            )) || <p>No experiences available</p>
+          ) : (
+            staffInfo.experiences?.map((exp, index) => (
+              <div key={index} className={styles.experienceItem}>
+                <h3>{exp.title}</h3>
+                <p className={styles.companyName}>{exp.company}</p>
+                <p className={styles.experienceDesc}>{exp.description}</p>
+              </div>
+            )) || <p>No experiences available</p>
+          )}
         </div>
       </div>
 
@@ -145,7 +202,7 @@ export const UserInfoComponent: React.FC = () => {
             {/* Phần Avatar */}
             <div className={styles.avatarUploadSection}>
               <img
-                src={staffInfo.avatar}
+                src={staffInfo.avatar || "https://static-cse.canva.com/blob/1806764/1600w-_q--r1GW6_E.jpg"}
                 alt="Avatar Preview"
                 className={styles.avatarPreview}
               />
@@ -165,7 +222,7 @@ export const UserInfoComponent: React.FC = () => {
             <div className={styles.formSection}>
               <label>Bio</label>
               <textarea
-                value={staffInfo.bio}
+                value={staffInfo.bio || ""}
                 onChange={(e) => setStaffInfo({ ...staffInfo, bio: e.target.value })}
               />
             </div>
@@ -178,20 +235,11 @@ export const UserInfoComponent: React.FC = () => {
                   <input
                     value={project}
                     onChange={(e) => {
-                      const newProjects = [...staffInfo.projects!];
+                      const newProjects = [...(staffInfo.projects || [])];
                       newProjects[index] = e.target.value;
                       setStaffInfo({ ...staffInfo, projects: newProjects });
                     }}
                   />
-                  <button
-                    onClick={() => {
-                      const newProjects = staffInfo.projects?.filter((_, i) => i !== index);
-                      setStaffInfo({ ...staffInfo, projects: newProjects });
-                    }}
-                    className={styles.removeButton}
-                  >
-                    ×
-                  </button>
                 </div>
               ))}
               <button
@@ -216,8 +264,8 @@ export const UserInfoComponent: React.FC = () => {
                     placeholder="Title"
                     value={exp.title}
                     onChange={(e) => {
-                      const newExperiences = [...staffInfo.experiences!];
-                      newExperiences[index].title = e.target.value;
+                      const newExperiences = [...(staffInfo.experiences || [])];
+                      newExperiences[index] = { ...newExperiences[index], title: e.target.value };
                       setStaffInfo({ ...staffInfo, experiences: newExperiences });
                     }}
                   />
@@ -225,8 +273,8 @@ export const UserInfoComponent: React.FC = () => {
                     placeholder="Company"
                     value={exp.company}
                     onChange={(e) => {
-                      const newExperiences = [...staffInfo.experiences!];
-                      newExperiences[index].company = e.target.value;
+                      const newExperiences = [...(staffInfo.experiences || [])];
+                      newExperiences[index] = { ...newExperiences[index], company: e.target.value };
                       setStaffInfo({ ...staffInfo, experiences: newExperiences });
                     }}
                   />
@@ -234,20 +282,11 @@ export const UserInfoComponent: React.FC = () => {
                     placeholder="Description"
                     value={exp.description}
                     onChange={(e) => {
-                      const newExperiences = [...staffInfo.experiences!];
-                      newExperiences[index].description = e.target.value;
+                      const newExperiences = [...(staffInfo.experiences || [])];
+                      newExperiences[index] = { ...newExperiences[index], description: e.target.value };
                       setStaffInfo({ ...staffInfo, experiences: newExperiences });
                     }}
                   />
-                  <button
-                    onClick={() => {
-                      const newExperiences = staffInfo.experiences?.filter((_, i) => i !== index);
-                      setStaffInfo({ ...staffInfo, experiences: newExperiences });
-                    }}
-                    className={styles.removeButton}
-                  >
-                    ×
-                  </button>
                 </div>
               ))}
               <button
@@ -278,8 +317,6 @@ export const UserInfoComponent: React.FC = () => {
           </div>
         </div>
       )}
-
-      {/* Hiển thị Notification */}
       <Notification
         message={notification?.message || ""}
         type={notification?.type || "info"}
