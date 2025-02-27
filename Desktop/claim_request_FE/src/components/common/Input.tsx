@@ -1,4 +1,4 @@
-import React from "react";
+import React, { forwardRef } from "react";
 interface InputProps {
   type?: string;
   placeholder?: string;
@@ -9,27 +9,23 @@ interface InputProps {
   ref?: React.Ref<HTMLInputElement>;
   size: "small" | "medium" | "large";
 }
-const Input: React.FC<InputProps> = ({
-  type,
-  placeholder,
-  value,
-  disable,
-  onChange,
-  className,
-  ref,
-  size = "medium",
-}) => {
-  const sizeClass = size ? `input-${size}` : "";
-  return (
-    <input
-      type={type}
-      placeholder={placeholder}
-      value={value}
-      disabled={disable}
-      onChange={onChange}
-      className={`${className} ${sizeClass}`}
-      ref={ref}
-    />
-  );
-};
+const Input = React.forwardRef<HTMLInputElement, InputProps>(
+  (
+    { type, placeholder, value, disable, onChange, className, size = "medium" },
+    ref
+  ) => {
+    const sizeClass = size ? `input-${size}` : "";
+    return (
+      <input
+        type={type}
+        placeholder={placeholder}
+        value={value}
+        disabled={disable}
+        onChange={onChange}
+        className={`input ${sizeClass} ${className}`}
+        ref={ref}
+      />
+    );
+  }
+);
 export default Input;
