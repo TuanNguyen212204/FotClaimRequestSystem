@@ -1,11 +1,9 @@
-import { Router } from "../../routers";
 import styles from "./UserSetting.module.css";
 import { FilePen, Trash2 } from "lucide-react";
 
 const UserSettings = () => {
   return (
     <div>
-      <Router />
       <div>
         <div className={styles.container}>
           <div>

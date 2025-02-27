@@ -1,0 +1,152 @@
+.container {
+    position: relative;
+    width: 280px;
+  }
+  
+  .label {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 5px;
+    display: block;
+  }
+  
+  .selectBox {
+    background: #fff;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .selectBox:hover {
+    border-color: #007bff;
+  }
+  
+  .active {
+    border-color: #007bff;
+  }
+  
+  .selected {
+    color: #333;
+  }
+  
+  .placeholder {
+    color: #aaa;
+  }
+  
+  .arrow {
+    width: 10px;
+    height: 10px;
+    border-right: 2px solid #666;
+    border-bottom: 2px solid #666;
+    transform: rotate(45deg);
+    transition: transform 0.3s ease;
+  }
+  
+  .rotate {
+    transform: rotate(-135deg);
+  }
+  
+  .dropdown {
+    position: absolute;
+    top: 105%;
+    left: 0;
+    width: 100%;
+    background: white;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-10px);
+    animation: fadeIn 0.3s forwards;
+    z-index: 1000;
+  }
+  
+  @keyframes fadeIn {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .searchInput {
+    width: calc(100% - 20px);
+    margin: 10px;
+    height: 40px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    outline: none;
+  }
+  
+  .searchInput:focus {
+    border-color: #007bff;
+  }
+  
+  .optionsList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 180px;
+    overflow-y: auto;
+  }
+  
+  .option {
+    padding: 12px 12px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.2s ease-in-out;
+    text-align: left;
+  }
+  
+  .option:hover {
+    background: #f3f3f3;
+    color: #000;
+  }
+  
+  .selectedOption {
+    font-weight: bold;
+    background: #f0f0f0;
+  }
+  
+  .noOption {
+    padding: 12px;
+    text-align: center;
+    color: #777;
+  }
+  .searchContainer {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background: white;
+    width: calc(100% - 20px);
+    margin: 10px;
+  }
+  
+  .searchIcon {
+    margin-left: 8px;
+    color: #666;
+  }
+  
+  .searchInput {
+    border: none;
+    outline: none;
+    flex: 1;
+    padding-left: 10px;
+    height: 35px;
+    font-size: 14px;
+  }
+  
+  .searchInput:focus {
+    border-color: transparent;
+  }
+  
+  

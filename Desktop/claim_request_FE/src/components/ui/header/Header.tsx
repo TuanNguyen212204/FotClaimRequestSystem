@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { PATH } from "../../../constant/config";
 
 const Header: React.FC = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   return (
     <header className={styles.header}>
@@ -15,9 +15,12 @@ const Header: React.FC = () => {
       <div className={styles.rightSection}>
         <SearchBar />
         <FaBell className={styles.icon} />
-        <FaUserCircle className={styles.icon} onClick={() => {
-          navigate(PATH.userinfo)
-        }} />
+        <FaUserCircle
+          className={styles.icon}
+          onClick={() => {
+            navigate(PATH.userInfo);
+          }}
+        />
         <span className={styles.username}>Administrator</span>
       </div>
     </header>
