@@ -17,4 +17,5 @@ export const PATH = {
   approvedApprover: "/approver/approved",
   projectInformation: "/project-information",
   staffInformation: "/staff-information",
+  modal: "/modal",
 };
