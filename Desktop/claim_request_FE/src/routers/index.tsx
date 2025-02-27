@@ -8,8 +8,6 @@ import ResetPassword from "@ui/login/ResetPassword";
 import CreateClaimPage from "@pages/CreateClaim";
 import { PendingComponent } from "@ui/approve/PendingApproval";
 import { DetailsComponents } from "@ui/approve/DetailsApproval";
-import UserClaims from "@pages/User/UserClaims";
-import { UserClaimDetails } from "@pages/User/UserClaimDetails";
 import UserSettings from "@pages/Admin/UserSettings";
 import ApproveDetail from "@pages/ClaimRequest/ApproveDetail";
 import ClaimStatus from "@pages/Finance/ClaimStatus";
@@ -17,6 +15,8 @@ import PaidClaims from "@pages/Finance/PaidClaims";
 import ProjectInformation from "@pages/Admin/ProjectInformation";
 import StaffInformation from "@pages/Admin/StaffInformation";
 import Approved from "@pages/Approved/Approved";
+import UserClaimsPage from "@/pages/User/UserClaimsPage";
+import UserClaimDetailsPage from "@/pages/User/UserClaimDetailsPage";
 const router: RouteObject[] = [
   {
     element: <LoginForm />,
@@ -39,11 +39,11 @@ const router: RouteObject[] = [
       },
       {
         path: PATH.myClaims,
-        element: <UserClaims />,
+        element: <UserClaimsPage />,
       },
       {
         path: PATH.userClaimDetails,
-        element: <UserClaimDetails />,
+        element: <UserClaimDetailsPage />,
       },
       {
         path: PATH.userInfo,
