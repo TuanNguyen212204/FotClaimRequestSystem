@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@redux/index";
 import { fetchUserByIdAsync, updateUserAsync } from "@redux/thunk/UserInfo/userInfoThunks";
 import { User, Experience } from "@types/User.type";
+import Badge from "@/components/common/Badge/Badge";
 
 export const UserInfoComponent: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -108,15 +109,18 @@ export const UserInfoComponent: React.FC = () => {
 
           <div className={styles.statsContainer}>
             <div className={styles.statItem}>
-              <h3>{staffInfo.projects?.length || 113}</h3>
+              <Badge count={staffInfo.projects?.length || 113} color="blue" />
+              {/* <h3>{staffInfo.projects?.length || 113}</h3> */}
               <span>Projects</span>
             </div>
             <div className={styles.statItem}>
-              <h3>23.86%</h3>
+              <Badge count={24} color="green" />
+              {/* <h3>23.86%</h3> */}
               <span>Success Rate</span>
             </div>
             <div className={styles.statItem}>
-              <h3>{staffInfo.salary || 512.6}K</h3>
+              <Badge count={513} color="purple" />
+              {/* <h3>{staffInfo.salary || 512.6}K</h3> */}
               <span>Earning</span>
             </div>
           </div>
