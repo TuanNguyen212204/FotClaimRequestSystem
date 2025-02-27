@@ -122,9 +122,10 @@
 @keyframes spin {
   to {
     transform: rotate(360deg);
-  }}
+  }
+}
 
-  .icon {
+.icon {
   display: flex;
   align-items: center;
   margin-right: 8px;

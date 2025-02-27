@@ -2,7 +2,7 @@ import styles from "./Sidebar.module.css";
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { PATH } from "../../../constant/config";
-import { Button } from "@/components/common/Button";
+import { Button } from "@/components/ui/button/Button";
 
 export const Sidebar = () => {
   const [selectedClaim, setSelectedClaim] = useState("");
