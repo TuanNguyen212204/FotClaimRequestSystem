@@ -1,32 +1,17 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
-import { selectClaims } from '../../redux/slices/claimsSlice'; // Import selector
+import { selectClaims } from '../../redux/paid/claimsSlice'; 
 import styles from "./PaidClaims.module.css";
 import { PATH } from "../../constant/config";
 import Pagination from '../../components/common/Pagination/Pagination';
+import useTable from '../../Hooks/useTable';
 
 const PaidClaims: React.FC = () => {
   const navigate = useNavigate();
-  const claims = useSelector(selectClaims); // Get claims from Redux
-  
-  // Thêm state cho pagination
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5; // Số items trên mỗi trang
-  
-  // Tính toán các items cho trang hiện tại
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentClaims = claims.slice(indexOfFirstItem, indexOfLastItem);
-  
-  // Tính tổng số trang
-  const totalPages = Math.ceil(claims.length / itemsPerPage);
-
-  // Handle page change
-  const handlePageChange = (page: number, pageSize: number) => {
-    setCurrentPage(page);
-    // Xử lý logic phân trang ở đây
-  };
+  const claims = useSelector(selectClaims); 
+  const pageSize = 5;
+  const { tableData, currentPage, setCurrentPage } = useTable(claims, pageSize);
 
   return (
     <div className={styles.container}>
@@ -54,34 +39,40 @@ const PaidClaims: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {currentClaims.map(claim => (
-              <tr key={claim.claimId}>
-                <td className={styles.style_td}>{claim.claimId}</td>
-                <td className={styles.style_td}>{claim.staffName}</td>
-                <td className={styles.style_td}>{claim.projectName}</td>
-                <td className={styles.style_td}>{claim.duration}</td>
-                <td className={styles.style_td}>100 hours</td>
-                <td className={styles.style_td}>Marco</td>
-                <td className={styles.style_td}>
-                  <button 
-                    onClick={() => navigate(`${PATH.claimStatus}/${claim.claimId}`)}
-                    style={{ background: 'none', border: 'none', cursor: 'pointer' }}
-                  >
-                    👁
-                  </button>
-                </td>
+            {claims.length === 0 ? (
+              <tr>
+                <td colSpan={7}>No claims available.</td>
               </tr>
-            ))}
+            ) : (
+              tableData.map(claim => (
+                <tr key={claim.claimId}>
+                  <td className={styles.style_td}>{claim.claimId ?? 'N/A'}</td>
+                  <td className={styles.style_td}>{claim.staffName ?? 'N/A'}</td>
+                  <td className={styles.style_td}>{claim.projectName ?? 'N/A'}</td>
+                  <td className={styles.style_td}>{claim.duration ?? 'N/A'}</td>
+                  <td className={styles.style_td}>100 hours</td>
+                  <td className={styles.style_td}>Marco</td>
+                  <td className={styles.style_td}>
+                    <button 
+                      onClick={() => navigate(`${PATH.claimStatus}/${claim.claimId}`)}
+                      style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+                    >
+                      👁
+                    </button>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
       
       <Pagination
         total={claims.length}
-        defaultPageSize={5}
-        defaultCurrent={1}
+        defaultPageSize={pageSize}
+        defaultCurrent={currentPage}
         showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
-        onChange={handlePageChange}
+        onChange={setCurrentPage}
       />
     </div>
   );

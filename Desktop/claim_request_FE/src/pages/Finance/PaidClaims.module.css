@@ -50,18 +50,18 @@
   background-color: #FFFFFF;
 }
 
-/* Loại bỏ border bên phải của cột cuối cùng */
+
 .style_th:last-child,
 .style_td:last-child {
   border-right: none;
 }
 
-/* Loại bỏ border dưới của hàng cuối cùng */
+
 tr:last-child .style_td {
   border-bottom: none;
 }
 
-/* Chiều rộng cột */
+
 .col_claim_id { width: 8%; }
 .col_staff_name { width: 12%; }
 .col_project_name { width: 20%; }

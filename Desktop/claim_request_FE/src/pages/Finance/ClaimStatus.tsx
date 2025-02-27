@@ -1,33 +1,21 @@
+// src/pages/Finance/ClaimStatus.tsx
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useSelector } from 'react-redux';
-import { selectClaims } from '../../redux/slices/claimsSlice'; // Import selector
+import { useSelector, useDispatch } from 'react-redux';
+import { selectClaimStatuses, saveClaim } from '../../redux/paid/claimStatusSlice'; // Import selector và action
 import styles from "./ClaimStatus.module.css";
-import Pagination from '../../components/common/Pagination/Pagination'; // Thêm import
+import Pagination from '../../components/common/Pagination/Pagination';
 
 const ClaimStatus: React.FC = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch(); 
   const { id } = useParams<{ id: string }>();
-  const claims = useSelector(selectClaims); // Get claims from Redux
+  const claimStatuses = useSelector(selectClaimStatuses); 
   
-  // Thêm state cho pagination
+  
   const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 5;
-
-  const currentClaim = claims.find(claim => claim.claimId === id);
-
-  // Data mẫu cho bảng (thay thế bằng data thật sau)
-  const tableData = [
-    {
-      id: '001',
-      duration: 'From: 1/1/2025 To: 1/15/2025',
-      date: '1/5/2025',
-      hours: '100 hours',
-      paid: '250.000.000 VND',
-      status: 'Paid'
-    },
-    // ... các dữ liệu khác
-  ];
+  const itemsPerPage = 5; 
+  const currentClaimStatus = claimStatuses.find(claim => claim.claimId === id);
 
   const handlePageChange = (page: number, pageSize: number) => {
     setCurrentPage(page);
@@ -37,7 +25,13 @@ const ClaimStatus: React.FC = () => {
     window.print();
   };
 
-  if (!currentClaim) {
+  const handleSaveClaim = () => {
+    if (currentClaimStatus) {
+      dispatch(saveClaim(currentClaimStatus)); 
+    }
+  };
+
+  if (!currentClaimStatus) {
     return (
       <div className={styles.container}>
         <h1 className={styles.claimStatus_h1}>Claim Status</h1>
@@ -53,13 +47,13 @@ const ClaimStatus: React.FC = () => {
       </div>
       <div className={styles.box}>
         <div style={{ marginLeft: "50px" }}>
-          <p>Claim ID : {currentClaim.claimId}</p>
-          <p>Project Name : {currentClaim.projectName}</p>
-          <p>Project Duration : {currentClaim.duration}</p>
+          <p>Claim ID : {currentClaimStatus.claimId}</p>
+          <p>Project Name : {currentClaimStatus.projectName}</p>
+          <p>Project Duration : {currentClaimStatus.duration}</p>
         </div>
         <div>
-          <p>Staff Name : {currentClaim.staffName}</p>
-          <p>Project ID : {currentClaim.projectId}</p>
+          <p>Staff Name : {currentClaimStatus.staffName}</p>
+          <p>Project ID : {currentClaimStatus.projectId}</p>
         </div>
       </div>
       <div className={styles["table-container"]}>
@@ -75,6 +69,7 @@ const ClaimStatus: React.FC = () => {
             </tr>
           </thead>
           <tbody>
+            {}
             <tr>
               <td className={styles.style_td}>001</td>
               <td className={styles.style_td}>From: 1/1/2025 To: 1/15/2025</td>
@@ -83,46 +78,15 @@ const ClaimStatus: React.FC = () => {
               <td className={styles.style_td}>250.000.000 VND</td>
               <td className={styles.style_td_Status}>Paid</td>
             </tr>
-            <tr>
-              <td className={styles.style_td}>002</td>
-              <td className={styles.style_td}>From: 1/1/2025 To: 1/15/2025</td>
-              <td className={styles.style_td}>1/6/2025</td>
-              <td className={styles.style_td}>100 hours</td>
-              <td className={styles.style_td}>250.000.000 VND</td>
-              <td className={styles.style_td_Status}>Paid</td>
-            </tr>
-            <tr>
-              <td className={styles.style_td}>003</td>
-              <td className={styles.style_td}>From: 2/1/2025 To: 2/28/2025</td>
-              <td className={styles.style_td}>2/15/2025</td>
-              <td className={styles.style_td}>160 hours</td>
-              <td className={styles.style_td}>400.000.000 VND</td>
-              <td className={styles.style_td_Status}>Paid</td>
-            </tr>
-            <tr>
-              <td className={styles.style_td}>004</td>
-              <td className={styles.style_td}>From: 3/1/2025 To: 3/15/2025</td>
-              <td className={styles.style_td}>3/7/2025</td>
-              <td className={styles.style_td}>80 hours</td>
-              <td className={styles.style_td}>200.000.000 VND</td>
-              <td className={styles.style_td_Status}>Paid</td>
-            </tr>
-            <tr>
-              <td className={styles.style_td}>005</td>
-              <td className={styles.style_td}>From: 4/1/2025 To: 4/30/2025</td>
-              <td className={styles.style_td}>4/15/2025</td>
-              <td className={styles.style_td}>200 hours</td>
-              <td className={styles.style_td}>500.000.000 VND</td>
-              <td className={styles.style_td_Status}>Paid</td>
-            </tr>
+            {/* Thêm các hàng khác nếu cần */}
           </tbody>
         </table>
       </div>
       
       <div className={styles.pagination_container}>
         <Pagination
-          total={tableData.length}
-          defaultPageSize={pageSize}
+          total={claimStatuses.length} 
+          defaultPageSize={itemsPerPage}
           defaultCurrent={1}
           showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
           onChange={handlePageChange}
@@ -133,10 +97,10 @@ const ClaimStatus: React.FC = () => {
         >
           Print
         </button>
+        
       </div>
     </div>
   );
 };
 
 export default ClaimStatus;
-
