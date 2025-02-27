@@ -17,7 +17,12 @@ import PaidClaims from "@pages/Finance/PaidClaims";
 import ProjectInformation from "@pages/admin/ProjectInformation";
 import StaffInformation from "@pages/admin/StaffInformation";
 import ApprovedFinancePage from "@/pages/Finance/ApprovedFinancePage";
+import CheckBoxTest  from "@components/common/Checkbox/Checkboxtest";
 const router: RouteObject[] = [
+  {
+    element: <CheckBoxTest />,
+    path: PATH.checkbox,
+  },
   {
     element: <LoginForm />,
     path: PATH.login,
