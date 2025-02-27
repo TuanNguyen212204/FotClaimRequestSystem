@@ -99,15 +99,17 @@ export const PendingComponent: React.FC = () => {
       {/* <Link to="" style={{ textDecoration: "none", color: "#212121" }}>
         My Claims
       </Link> */}
-      <button
-        className={styles.deleteButton}
-        onClick={handleDeleteSelected}
-        disabled={selectedClaims.length === 0}
-        style={{ textDecoration: "none" }}
-      >
-        <Trash2Icon />
-        &nbsp; Delete Selected
-      </button>
+      <Tooltip text="Delete Selected" position="top">
+        <button
+          className={styles.deleteButton}
+          onClick={handleDeleteSelected}
+          disabled={selectedClaims.length === 0}
+          style={{ textDecoration: "none" }}
+        >
+          <Trash2Icon />
+          &nbsp; Delete Selected
+        </button>
+      </Tooltip>
       <table className={styles.claimsTable}>
         <thead>
           <tr>
@@ -152,7 +154,7 @@ export const PendingComponent: React.FC = () => {
                       />
                     </Tooltip>
                     &nbsp;&nbsp;&nbsp;
-                    <Tooltip text="Delete Claim">
+                    <Tooltip text="Delete Claim" position="bottom">
                       <TrashIcon
                         onClick={() => handleDelete(claim.id)}
                         className={styles.icon}

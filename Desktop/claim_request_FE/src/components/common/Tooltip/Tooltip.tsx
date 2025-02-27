@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import { TooltipProps } from "@/components/common/Tooltip/Tooltip.types.ts";
 import styles from "./Tooltip.module.css";
 
-export const Tooltip: React.FC<TooltipProps> = ({ children, text, position = "top" }) => {
+export const Tooltip: React.FC<TooltipProps> = ({
+  children,
+  text,
+  position = "top",
+}) => {
   const [isHovered, setIsHovered] = useState(false);
 
   const getTooltipClass = () => {
@@ -26,7 +30,12 @@ export const Tooltip: React.FC<TooltipProps> = ({ children, text, position = "to
       onMouseLeave={() => setIsHovered(false)}
     >
       {children}
-      {isHovered && <div className={`${styles.tooltipText} ${getTooltipClass()}`}>{text}</div>}
+      {isHovered && (
+        <div className={`${styles.tooltipText} ${getTooltipClass()}`}>
+          {text}
+          <span className={styles.arrow} />
+        </div>
+      )}
     </div>
   );
 };
