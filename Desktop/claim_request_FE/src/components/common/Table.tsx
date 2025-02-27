@@ -166,8 +166,6 @@ const TableComponent = forwardRef(
       if (checkboxRef.current) {
         const someChecked = checkedItems.size > 0;
         const allChecked = checkedItems.size === dataSource.length;
-
-        // Set indeterminate when some but not all items are checked
         checkboxRef.current.indeterminate = someChecked && !allChecked;
       }
     }, [checkedItems, dataSource.length]);
@@ -189,7 +187,6 @@ const TableComponent = forwardRef(
 
     return (
       <div className={styles.container}>
-        {/* Status Filter */}
         <section className={styles.filter_section}>
           <div className={styles.filterStatusP}>
             <p>Filter By {name}:</p>
