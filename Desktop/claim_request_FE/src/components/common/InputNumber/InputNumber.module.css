@@ -1,0 +1,39 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.inputNumber {
+  width: 250px;
+  height: 66px;
+  padding: 8px 6px 0 6px;
+  border: 1px solid #d9d9d9;
+  border-radius: 10px;
+  font-size: 18px;
+  color: #333;
+  transition: all 0.3s;
+  outline: none;
+  background-color: transparent;
+  margin: 15px 0 0 0;
+}
+
+.inputNumber:hover {
+  border-color: #40a9ff;
+}
+
+.inputLabel {
+  position: absolute;
+  left: 6px;
+  top: 18px;
+  font-size: 14px;
+  color: #999;
+  background-color: transparent;
+  padding: 4px 4px;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.inputNumber:focus + .inputLabel {
+  color: #1890ff;
+}

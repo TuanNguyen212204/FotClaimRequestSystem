@@ -6,6 +6,8 @@ import { ArrowLeftSquare, ArrowRightSquare, EyeIcon } from "lucide-react";
 import { RootState, AppDispatch } from "../../../redux/index";
 import { useNavigate } from "react-router-dom";
 import { PATH } from "../../../constant/config";
+import InputNumber from "@/components/common/InputNumber/InputNumber";
+import FileUpload from "@/components/common/FileInput/FileInput";
 
 export const ApprovedFinanceComponent: React.FC = () => {
   const navigate = useNavigate();
@@ -41,6 +43,11 @@ export const ApprovedFinanceComponent: React.FC = () => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
     }
+  };
+
+  const handleUpload = (files: FileList) => {
+    console.log("Files uploaded:", files);
+    // Gửi file lên server hoặc xử lý khác
   };
 
   return (
@@ -110,6 +117,16 @@ export const ApprovedFinanceComponent: React.FC = () => {
           </span>
         </div>
       </div>
+      <>
+        <FileUpload
+          onUpload={handleUpload}
+          accept="image/*,application/pdf"
+          multiple
+        />
+      </>
+      <>
+        <InputNumber label="đây nè" />
+      </>
     </div>
   );
 };
