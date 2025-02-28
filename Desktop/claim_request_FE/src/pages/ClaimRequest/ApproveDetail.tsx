@@ -1,3 +1,4 @@
+import Input from "@/components/common/Input";
 import TableComponent from "@/components/common/Table";
 const ApproveDetail: React.FC = () => {
   const columns = [
@@ -87,14 +88,16 @@ const ApproveDetail: React.FC = () => {
     },
   ];
   return (
-    <div>
-      <TableComponent
+    <div style={{ height: "86%" }}>
+      {/* <TableComponent
         columns={columns}
         dataSource={dataSource}
         loading={false}
         pagination={true}
         page="Object"
-      />
+      /> */}
+
+      <Input size="medium" placeholder="U Dan" disable={false} />
     </div>
   );
 };
