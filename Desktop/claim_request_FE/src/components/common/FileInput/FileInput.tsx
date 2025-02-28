@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useState } from "react";
-import styles from "./FileUpload.module.css";
+import styles from "./FileInput.module.css";
 
 interface FileUploadProps {
   onUpload: (files: FileList) => void;
