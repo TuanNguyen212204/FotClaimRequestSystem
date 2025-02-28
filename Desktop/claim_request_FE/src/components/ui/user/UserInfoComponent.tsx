@@ -6,14 +6,14 @@ import { AppDispatch } from "@redux/index";
 import { fetchUserByIdAsync, updateUserAsync } from "@redux/thunk/UserInfo/userInfoThunks";
 import { User, Experience } from "@types/User.type";
 import Badge from "@/components/common/Badge/Badge";
+import { useNotification } from "@/components/common/Notification/NotificationContext";
 
 export const UserInfoComponent: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const selectedUser = useSelector((state: any) => state.user.selectedUser); 
   const [isEditing, setIsEditing] = useState(false);
   const [staffInfo, setStaffInfo] = useState<User | null>(selectedUser || null);
-  const [notification, setNotification] = useState<{ message: string; type: 'success' | 'error' | 'warning' | 'info' } | null>(null);
-
+  const notification = useNotification()
 
   useEffect(() => {
     dispatch(fetchUserByIdAsync("1")); 
@@ -25,26 +25,6 @@ export const UserInfoComponent: React.FC = () => {
     }
   }, [selectedUser, isEditing]);
 
-
-  useEffect(() => {
-    if (notification) {
-      const timer = setTimeout(() => {
-        setNotification(null);
-      }, 10000); 
-      return () => clearTimeout(timer);
-    }
-  }, [notification]);
-
-  const showNotification = (message: string, type: 'success' | 'error' | 'warning' | 'info') => {
-    console.log("Showing notification due to:", {
-      message,
-      type,
-      stack: new Error().stack,
-      staffInfo: staffInfo,
-    });
-    setNotification({ message, type });
-  };
-
   const handleSave = () => {
     if (staffInfo && staffInfo.userID) { 
       dispatch(updateUserAsync({ userId: staffInfo.userID, userData: staffInfo }))
@@ -52,13 +32,13 @@ export const UserInfoComponent: React.FC = () => {
         .then((updatedUser: User) => {
           setIsEditing(false);
           setStaffInfo(updatedUser);
-          showNotification("Profile saved successfully!", "success");
+          notification.show({ message: "Profile saved successfully!", type: "success" });
         })
         .catch((error: any) => {
-          showNotification("Failed to save profile: " + error.message, "error");
+          notification.show({ message: "Failed to save profile: " + error.message, type: "error" })
         });
     } else {
-      showNotification("User ID not found. Cannot save profile.", "error");
+     notification.show({ message: "User ID not found. Cannot save profile.", type: "error" });
     }
   };
 
@@ -69,12 +49,12 @@ export const UserInfoComponent: React.FC = () => {
       reader.onload = (event) => {
         if (event.target?.result) {
           setStaffInfo({ ...staffInfo, avatar: event.target.result as string });
-          showNotification("Avatar updated successfully!", "success");
+          notification.show({ message:"Avatar updated successfully!", type: "success"})
         }
       };
       reader.readAsDataURL(file);
     } else {
-      showNotification("Failed to upload image. Please try again.", "error");
+      notification.show({message:"Failed to upload image. Please try again.", type: "error"})
     }
   };
 
@@ -321,12 +301,6 @@ export const UserInfoComponent: React.FC = () => {
           </div>
         </div>
       )}
-      <Notification
-        message={notification?.message || ""}
-        type={notification?.type || "info"}
-        duration={10000}
-        onClose={() => setNotification(null)}
-      />
     </div>
   );
 };

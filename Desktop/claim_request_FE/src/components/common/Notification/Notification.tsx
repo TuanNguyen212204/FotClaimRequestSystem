@@ -1,67 +1,32 @@
-
-import React, { useState, useEffect } from 'react';
-import styles from './Notification.module.css';
-
-interface NotificationItem {
-  id: number;
-  message: string;
-  type: 'success' | 'error' | 'warning' | 'info';
-  duration?: number;
-}
+import React, { useEffect } from 'react';
+import styles from '@components/common/Notification/Notification.module.css';
 
 interface NotificationProps {
   message: string;
   type: 'success' | 'error' | 'warning' | 'info';
-  duration?: number; 
+  duration?: number;
   onClose?: () => void;
 }
 
-let notificationId = 0;
-
-const Notification: React.FC<NotificationProps> = ({ message, type, duration = 10000, onClose }) => {
-  const [notifications, setNotifications] = useState<NotificationItem[]>([]);
-
-  const addNotification = () => {
-    console.log("Adding notification:", { message, type, duration }); 
-    if (!message.trim()) return; 
-    const newNotification: NotificationItem = {
-      id: notificationId++,
-      message,
-      type,
-      duration,
-    };
-    setNotifications(prev => [...prev, newNotification]);
-    if (onClose) {
-      onClose();
-    }
-  };
-
+const Notification : React.FC<NotificationProps> = ({message, type, duration = 5000, onClose}) => {
   useEffect(() => {
-    addNotification();
-  }, [message, type, duration, onClose]);
-
-  const removeNotification = (id: number) => {
-    setNotifications(prev => prev.filter(notif => notif.id !== id));
-  };
-
-  return (
+    const timer = setTimeout(()=>{
+      onClose?.();
+    },duration);
+    return () => clearTimeout(timer);
+  }, [duration, onClose]);
+    return (
     <div className={styles.notificationContainer}>
-      {notifications.map((notif) => (
-        <div
-          key={notif.id}
-          className={`${styles.notification} ${styles[`notification-${notif.type}`]} ${notif.duration ? styles.fadeOut : ''}`}
-          onAnimationEnd={() => notif.duration && removeNotification(notif.id)}
-        >
-          <p>{notif.message}</p>
-          <button
-            onClick={() => removeNotification(notif.id)}
-            className={styles.closeButton}
-          >
-            Close
-          </button>
-        </div>
-      ))}
+    <div className={`${styles.notification} ${styles[`notification-${type}`]} ${styles.fadeOut}`}
+    onAnimationEnd = {onClose}>
+    <p>{message}</p>
+    <button
+    onClick={onClose}
+    className={styles.closeButton}>
+    Close
+    </button>
     </div>
+      </div>
   );
 };
 
