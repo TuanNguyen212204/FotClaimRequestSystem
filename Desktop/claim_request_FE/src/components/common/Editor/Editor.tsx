@@ -8,7 +8,6 @@ import { AlignCenter, AlignLeft, AlignRight, Bold, Italic, Link, List, ListOrder
 interface EditorProps {
   initialValue?: string
   placeholder?: string
-
 }
 
 const Editor: React.FC<EditorProps> = ({ initialValue = "", placeholder = "Start typing..." }) => {
@@ -56,20 +55,45 @@ const Editor: React.FC<EditorProps> = ({ initialValue = "", placeholder = "Start
   }, []);
 
   const formatText = (command: string, value = ""): void => {
-    if (editorRef.current) {
-      editorRef.current.focus();
-    }
-    document.execCommand(command, false, value);
-    setTimeout(() => {
+    try {
+      if (editorRef.current) {
+        editorRef.current.focus();
+      }
+
+      if (command === "italic") {
+        const selection = window.getSelection();
+        if (!selection || selection.toString().length === 0) return;
+
+        const range = selection.getRangeAt(0);
+        const selectedText = range.toString();
+        const span = document.createElement('span');
+
+        if (!isItalic) {
+          span.style.fontStyle = 'italic';
+        } else {
+          span.style.fontStyle = 'normal';
+        }
+
+        span.textContent = selectedText;
+        range.deleteContents();
+        range.insertNode(span);
+
+        setIsItalic(!isItalic);
+        return;
+      }
+
+      document.execCommand(command, false, value);
+
       setIsBold(document.queryCommandState('bold'));
-      setIsItalic(document.queryCommandState('italic'));
       setIsUnderline(document.queryCommandState('underline'));
       setIsList(document.queryCommandState('insertUnorderedList'));
       setIsListOrdered(document.queryCommandState('insertOrderedList'));
       setIsAlignLeft(document.queryCommandState('justifyLeft'));
       setIsAlignCenter(document.queryCommandState('justifyCenter'));
       setIsAlignRight(document.queryCommandState('justifyRight'));
-    }, 0);
+    } catch (error) {
+      console.error('Error in formatText:', error);
+    }
   }
 
   const handleList = (): void => {
