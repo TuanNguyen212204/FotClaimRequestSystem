@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { FaSpinner } from "react-icons/fa";
+import React, { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
+import styles from "./Loading.module.css"; 
+import { ImSpinner3 } from "react-icons/im";
 const Loading: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
@@ -10,14 +12,32 @@ const Loading: React.FC = () => {
   }, []);
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-100">
+    <AnimatePresence mode="wait">
       {loading && (
-        <div className="flex flex-col items-center">
-          <FaSpinner className="text-5xl text-blue-600 animate-spin" />
-          <p className="mt-3 text-lg text-gray-700">Loading...</p>
-        </div>
+        <motion.div
+          className={styles.overlay}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0, transition: { duration: 0.5 } }}
+        >
+          <motion.div
+            className={styles.loader}
+            initial={{ scale: 0 }}
+            animate={{ scale: 1, transition: { duration: 0.4 } }}
+            exit={{ scale: 0, transition: { duration: 0.3 } }}
+          >
+            <motion.div
+              className={styles.spinner}
+              animate={{ rotate: 360 }}
+              transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+            >
+              <ImSpinner3 />
+            </motion.div>
+            
+          </motion.div>
+        </motion.div>
       )}
-    </div>
+    </AnimatePresence>
   );
 };
 

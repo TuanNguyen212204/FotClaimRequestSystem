@@ -1,3 +1,4 @@
+import { Edit } from "lucide-react";
 import Header from "../components/ui/header/Header";
 import { Sidebar } from "../components/ui/sidebar/Sidebar";
 
@@ -6,6 +7,7 @@ export const HomePage = () => {
     <div>
        {/* <Header />
        <Sidebar /> */}
+    
     </div>
   );
 };

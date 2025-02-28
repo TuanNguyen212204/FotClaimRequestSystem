@@ -1,3 +1,5 @@
+import Loading from "@/components/common/Loading";
+
 export const PATH = {
   home: "/",
   userInfo: "/user-info",//tuan
@@ -16,4 +18,5 @@ export const PATH = {
   approvedFinance: "/finance/approved",
   projectInformation: "/project-information",
   staffInformation: "/staff-information",
+  Loading:"/loading",
 };
