@@ -8,7 +8,6 @@ import {
 } from "react";
 import styles from "@components/common/Table.module.css";
 import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp } from "lucide-react";
-import { set } from "react-hook-form";
 
 export type Column = {
   key?: string;
@@ -21,7 +20,7 @@ export type DataRecord = {
   key?: string;
   id?: string;
   status: string;
-  checked?: boolean; // Add checked property
+  checked?: boolean;
 };
 
 export type SortConfig = {
@@ -35,7 +34,8 @@ export type TableComponentProps<T extends DataRecord> = {
   loading?: boolean;
   pagination?: boolean;
   name: string;
-  sortConfig?: SortConfig; // Add sortConfig property
+  sortConfig?: SortConfig;
+  pageLength?: number;
 };
 
 const Cell = ({ children }: { children: ReactNode }) => {
@@ -60,6 +60,7 @@ const TableComponent = forwardRef(
       name,
       pagination = false,
       sortConfig,
+      pageLength = 10,
     }: TableComponentProps<T>,
     ref: React.Ref<{
       getSelectedData: () => T[];
@@ -86,7 +87,7 @@ const TableComponent = forwardRef(
     const [sortColumn, setSortColumn] = useState<string | null>(
       sortConfig?.columnKey || null
     );
-    const pageSize = 10;
+
     const uniqueStatuses = [
       "All",
       ...new Set(dataSource.map((item) => item.status)),
@@ -107,10 +108,13 @@ const TableComponent = forwardRef(
         })
       : filteredData;
 
-    const totalPages = Math.ceil(sortedData.length / pageSize);
+    const totalPages = Math.ceil(sortedData.length / pageLength);
 
     const paginatedData = pagination
-      ? sortedData.slice((currentPage - 1) * pageSize, currentPage * pageSize)
+      ? sortedData.slice(
+          (currentPage - 1) * pageLength,
+          currentPage * pageLength
+        )
       : sortedData;
 
     useEffect(() => {
@@ -143,7 +147,6 @@ const TableComponent = forwardRef(
         return newCheckedItems;
       });
     };
-
     const handleSort = (columnKey: string) => {
       setSortColumn(columnKey);
       setSortOrder((prev) => {
@@ -313,7 +316,6 @@ const TableComponent = forwardRef(
                 <ArrowLeft />
               </button>
 
-              {/* Page numbers */}
               {Array.from({ length: totalPages }, (_, index) => index + 1).map(
                 (pageNumber) => (
                   <button

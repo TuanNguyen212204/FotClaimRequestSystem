@@ -13,18 +13,18 @@ const ApproveDetail: React.FC = () => {
       console.log("Selected Data:", selectedData);
     }
   };
-  const handleGetCheckedData = () => {
-    if (tableRef.current) {
-      const checkedData = tableRef.current.getCheckedData();
-      console.log("Checked Data:", checkedData);
-    }
-  };
-  const handleGetSortedData = () => {
-    if (tableRef.current) {
-      const sortedData = tableRef.current.getSortedData();
-      console.log("Sorted Data:", sortedData);
-    }
-  };
+  // const handleGetCheckedData = () => {
+  //   if (tableRef.current) {
+  //     const checkedData = tableRef.current.getCheckedData();
+  //     console.log("Checked Data:", checkedData);
+  //   }
+  // };
+  // const handleGetSortedData = () => {
+  //   if (tableRef.current) {
+  //     const sortedData = tableRef.current.getSortedData();
+  //     console.log("Sorted Data:", sortedData);
+  //   }
+  // };
   const sortConfig: SortConfig = {
     columnKey: "id",
     order: "asc",
@@ -43,7 +43,7 @@ const ApproveDetail: React.FC = () => {
       key: "status",
       cell: ({ value }: { value: unknown }) => {
         const stringValue = value as string;
-        const style = stringValue === "Approved" ? { color: "green" } : {};
+        const style = value === "Approved" ? { color: "green" } : {};
         return <div style={style}>{stringValue}</div>;
       },
     },
@@ -98,7 +98,9 @@ const ApproveDetail: React.FC = () => {
         pagination={true}
         name={"ApproveDetail"}
         sortConfig={sortConfig}
+      pageLength={2}
       />
+      <button onClick={handleGetSelectedData}>Selected Data</button>
     </div>
   );
 };
