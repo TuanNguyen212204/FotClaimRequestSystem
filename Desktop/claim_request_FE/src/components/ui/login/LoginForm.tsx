@@ -3,6 +3,7 @@ import styles from "@components/ui/login/LoginForm.module.css";
 import fot from "@assets/fot.png";
 import * as Yup from "yup";
 import { useFormik } from "formik";
+import { Typewriter } from "react-simple-typewriter";
 
 function LoginForm() {
   const navigate = useNavigate();
@@ -64,7 +65,22 @@ function LoginForm() {
             </div>
             <div className={styles.leftSideText}>
               <h1>Welcome</h1>
-              <p>We are glad to see you again! Get access to your Request</p>
+              <h3 className={styles.typewriterText}>
+                <Typewriter
+                  loop
+                  cursor
+                  cursorStyle="_"
+                  typeSpeed={70}
+                  deleteSpeed={50}
+                  delaySpeed={1000}
+                  words={[
+                    "We are glad to see you again! Get access to your Request",
+                    "You're in. Let\u2019s go!",
+                    "Ready? Let\u2019s get started!",
+                    "All set. Continue now!",
+                  ]}
+                />
+              </h3>
             </div>
           </div>
         </div>
@@ -73,7 +89,6 @@ function LoginForm() {
         <div className={styles.rightSide}>
           <div className={styles.rightSideContainer}>
             <h1>Member Login</h1>
-
             <form onSubmit={formik.handleSubmit}>
               <div className={styles.inputForm}>
                 <div className={styles.inputForm__message}>

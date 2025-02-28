@@ -67,6 +67,7 @@
 .leftSideText h1 {
   font-size: 2.5rem;
   margin-bottom: 10px;
+  color: rgb(17, 162, 162);
 }
 
 .leftSideText p {
@@ -87,7 +88,7 @@
 
 .rightSideContainer {
   width: 100%;
-  max-width: 650px;
+  max-width: 450px;
   background-color: white;
   padding: 40px;
   /* box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); */
@@ -203,4 +204,14 @@
 
 .label__error {
   color: red;
+}
+
+.typewriterText {
+  font-family: "Poppins", sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #ffffff;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+  letter-spacing: 2px;
+  margin: 0;
 }

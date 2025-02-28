@@ -33,10 +33,8 @@ function CheckMail() {
               link to reset your password.
             </p>
 
-            <Link to="/create-new-password">
-              <button type="submit" className={styles.btnSubmitForm}>
-                Open email app
-              </button>
+            <Link to="https://mail.google.com/" target="_blank">
+              <button className={styles.btnSubmitForm}>Open email app</button>
             </Link>
             <div className={styles.backToLogin}>
               <Link to="/login">Back to Login</Link>
