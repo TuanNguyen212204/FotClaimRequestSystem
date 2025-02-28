@@ -10,12 +10,14 @@ import { PendingComponent } from "@/pages/Pending/PendingApproval";
 import { DetailsComponents } from "@/pages/Pending/DetailsApproval";
 import UserClaims from "@pages/User/UserClaims";
 import { UserClaimDetails } from "@pages/User/UserClaimDetails";
-import UserSettings from "@pages/Admin/UserSettings";
+import UserSettings from "@/pages/Admin/UserSettings";
 import ApproveDetail from "@pages/ClaimRequest/ApproveDetail";
 import ClaimStatus from "@pages/Finance/ClaimStatus";
 import PaidClaims from "@pages/Finance/PaidClaims";
-import ProjectInformation from "@pages/Admin/ProjectInformation";
-import StaffInformation from "@pages/Admin/StaffInformation";
+import ProjectInformation from "@/pages/Admin/ProjectInformation";
+import StaffInformation from "@/pages/Admin/StaffInformation";
+import CheckMail from "@/components/ui/login/CheckMail";
+import CreateNewPassword from "@/components/ui/login/CreateNewPassword";
 import ApprovedFinancePage from "@/pages/Finance/ApprovedFinancePage";
 import TableDraftPage from "../pages/TableDraftPage";
 import ApprovedApproverPage from "@/pages/Approver/ApprovedApproverPage";
@@ -28,6 +30,15 @@ const router: RouteObject[] = [
     element: <ResetPassword />,
     path: PATH.resetPassword,
   },
+  {
+    element: <CheckMail />,
+    path: PATH.checkToMail,
+  },
+  {
+    element: <CreateNewPassword />,
+    path: PATH.createNewPassword,
+  },
+
   {
     element: <MainLayout />,
     children: [

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styles from "@components/ui/user/UserInfoComponent.module.css";
 
 import { User } from "@types/User.type";
-import RadioGroup from "../../common/RadioGroup/RadioGroup";
+import RadioGroup from "@components/common/RadioGroup/RadioGroup";
 
 export const UserInfoComponent: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -11,8 +11,9 @@ export const UserInfoComponent: React.FC = () => {
     const radioOptions = [
       { label: "Male", value: "option1" },
       { label: "Female", value: "option2" },
-      { label: "Other", value: "option3" },
+      { label: "Other", value: "option3", disabled: true},
     ];
+
   
  
 
@@ -277,7 +278,6 @@ export const UserInfoComponent: React.FC = () => {
               name="exampleRadioGroup"
               selectedValue={selectedValue}
               onChange={handleChange}
-              buttonProps={{ disabled: false }}
             />
             <button
               onClick={handleSave}
