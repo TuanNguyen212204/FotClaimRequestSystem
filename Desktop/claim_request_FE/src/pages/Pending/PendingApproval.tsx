@@ -9,7 +9,8 @@ import { useAppDispatch } from "@redux/index";
 import type { RootState } from "@redux/index";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
-import { Tooltip } from "../../components/common/Tooltip/Tooltip";
+import { Tooltip } from "@components/common/Tooltip/Tooltip";
+import Tab from "@components/common/Tab/Tab";
 
 export const PendingComponent: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -23,6 +24,13 @@ export const PendingComponent: React.FC = () => {
   const itemsPerPage = 5;
   const [selectedClaims, setSelectedClaims] = useState<string[]>([]);
   const [selectAll, setSelectAll] = useState(false);
+  const [activeTab, setActiveTab] = useState(0);
+  const tabs = ["Pending Approval", "Approved", "Rejected"];
+
+  const handleTabClick = (index: number) => {
+    setActiveTab(index);
+    // Add logic to handle tab switching if needed
+  };
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -91,14 +99,11 @@ export const PendingComponent: React.FC = () => {
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Pending Approval Claims</h1>
-      {/* <hr /> */}
       <nav className={styles.breadcrumb}>
         <Link to="/">My Claims</Link> &gt;{" "}
         <Link to="/pending">Pending Approval</Link>
       </nav>
-      {/* <Link to="" style={{ textDecoration: "none", color: "#212121" }}>
-        My Claims
-      </Link> */}
+      <Tab tabs={tabs} activeTab={activeTab} onTabClick={handleTabClick} />
       <Tooltip text="Delete Selected" position="top">
         <button
           className={styles.deleteButton}

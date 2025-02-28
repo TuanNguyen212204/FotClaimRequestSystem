@@ -1,0 +1,19 @@
+.tab {
+  display: flex;
+  border-bottom: 2px solid #ccc;
+}
+
+.tabItem {
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.tabItem:hover {
+  background-color: #f0f0f0;
+}
+
+.activeTab {
+  border-bottom: 2px solid #007bff;
+  font-weight: bold;
+}

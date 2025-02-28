@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./RadioGroup.module.css";
-import { RadioGroupProps } from "./RadioGroup.type";
+import { RadioGroupProps } from "@/types/RadioGroup.types.ts";
 
 const RadioGroup: React.FC<RadioGroupProps> = ({
   options,
