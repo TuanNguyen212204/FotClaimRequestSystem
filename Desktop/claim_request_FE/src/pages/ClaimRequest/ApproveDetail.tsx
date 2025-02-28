@@ -96,6 +96,7 @@ const ApproveDetail: React.FC = () => {
         label="Select item"
         options={["Option 1", "Option 2", "Option 3"]}
         onSelect={handleSelect}
+        disabled={true}
       />
       {/* <TableComponent
         columns={columns}
