@@ -250,7 +250,11 @@ const TableComponent = forwardRef(
                       <th
                         key={col.key || col.dataIndex}
                         style={{ textAlign: "center", paddingRight: "0.5rem" }}
-                        onClick={() => handleSort(col.dataIndex)}
+                        onClick={
+                          sortConfig?.columnKey === col.dataIndex
+                            ? () => handleSort(col.dataIndex)
+                            : undefined
+                        }
                       >
                         {col.title}
                         {sortColumn === col.dataIndex && (
