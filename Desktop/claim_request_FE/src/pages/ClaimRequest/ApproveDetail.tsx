@@ -1,5 +1,6 @@
-import Input from "@/components/common/Input";
+import { Email } from "@/components/common/Input";
 import TableComponent from "@/components/common/Table";
+import { Input } from "@/components/common/Input";
 const ApproveDetail: React.FC = () => {
   const columns = [
     { title: "ID", dataIndex: "id", key: "id" },
@@ -87,6 +88,7 @@ const ApproveDetail: React.FC = () => {
       status: "Approved",
     },
   ];
+
   return (
     <div style={{ height: "86%" }}>
       {/* <TableComponent
@@ -97,7 +99,7 @@ const ApproveDetail: React.FC = () => {
         page="Object"
       /> */}
 
-      <Input size="medium" placeholder="U Dan" disable={false} />
+      <Input.Password placeholder="Password" size="medium" />
     </div>
   );
 };
