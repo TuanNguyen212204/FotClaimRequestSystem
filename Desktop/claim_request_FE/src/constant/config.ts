@@ -16,4 +16,5 @@ export const PATH = {
   approvedFinance: "/finance/approved",
   projectInformation: "/project-information",
   staffInformation: "/staff-information",
+  testPage: "/test-page",
 };
