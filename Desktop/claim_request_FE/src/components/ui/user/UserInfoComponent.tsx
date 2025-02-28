@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styles from "@components/ui/user/UserInfoComponent.module.css";
 
 import { User } from "@types/User.type";
+import Avatar from "@/components/common/Avatar/Avatar";
 
 export const UserInfoComponent: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -56,11 +57,11 @@ export const UserInfoComponent: React.FC = () => {
     },
     picture: {
       large:
-        "https://i.pinimg.com/736x/63/f0/0d/63f00d6ebe2c93b945be3c39135503c2.jpg",
+        "https://static-cse.canva.com/blob/1806764/1600w-_q--r1GW6_E.jpg",
       medium:
-        "https://i.pinimg.com/736x/63/f0/0d/63f00d6ebe2c93b945be3c39135503c2.jpg",
+        "https://static-cse.canva.com/blob/1806764/1600w-_q--r1GW6_E.jpg",
       thumbnail:
-        "https://i.pinimg.com/736x/63/f0/0d/63f00d6ebe2c93b945be3c39135503c2.jpg",
+        "https://static-cse.canva.com/blob/1806764/1600w-_q--r1GW6_E.jpg",
     },
     nat: "VietNam",
   });
@@ -207,14 +208,17 @@ export const UserInfoComponent: React.FC = () => {
     <div className={styles.container}>
       <div className={styles.card}>
         <label htmlFor="avatarUpload">
-          <img
+          <div className={styles.avatar}>
+            <Avatar
             src={
               staffInfo?.picture?.thumbnail ||
               "https://static-cse.canva.com/blob/1806764/1600w-_q--r1GW6_E.jpg"
             }
             alt="Avatar"
-            className={styles.avatar}
+            size="profile"
           />
+          </div>
+          
         </label>
         {isEditing && (
           <input

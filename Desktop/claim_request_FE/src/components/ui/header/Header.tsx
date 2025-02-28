@@ -1,9 +1,11 @@
 import React from "react";
 import styles from "./Header.module.css";
 import SearchBar from "../searchbar/SearchBar";
-import { FaBell, FaUserCircle } from "react-icons/fa";
+import { FaBell } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { PATH } from "../../../constant/config";
+import Avatar from "@/components/common/Avatar/Avatar";
+import { CircleUserRound } from "lucide-react";
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
@@ -15,12 +17,15 @@ const Header: React.FC = () => {
       <div className={styles.rightSection}>
         <SearchBar />
         <FaBell className={styles.icon} />
-        <FaUserCircle
+
+        <div
           className={styles.icon}
           onClick={() => {
             navigate(PATH.userInfo);
           }}
-        />
+        >
+          <Avatar src={<CircleUserRound />} shape="circle" size={40} />
+        </div>
         <span className={styles.username}>Administrator</span>
       </div>
     </header>

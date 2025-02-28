@@ -6,7 +6,7 @@ interface AvatarProps {
   gap?: number;
   icon?: React.ReactNode;
   shape?: "circle" | "square";
-  size?: number | "large" | "small" | "default" | { xs: number; sm: number };
+  size?: number | "profile" | "large" | "small" | "default";
   src?: string | React.ReactNode;
 }
 
@@ -20,9 +20,9 @@ const Avatar: React.FC<AvatarProps> = ({
 }) => {
   const sizeClass =
     typeof size === "string"
-      ? styles[size] 
+      ? styles[size]
       : typeof size === "number"
-      ? undefined 
+      ? undefined
       : "";
 
   return (
