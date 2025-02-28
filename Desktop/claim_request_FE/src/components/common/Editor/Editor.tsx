@@ -3,14 +3,21 @@
 import type React from "react"
 import { useRef, useState, useEffect } from "react"
 import styles from "./Editor.module.css"
-import { AlignCenter, AlignLeft, AlignRight, Bold, Italic, Link, List, ListOrdered, Underline } from "lucide-react"
+import { AlignCenter, AlignLeft, AlignRight, Bold, Italic, Link, List, ListOrdered, Send, Underline } from "lucide-react"
 
 interface EditorProps {
   initialValue?: string
   placeholder?: string
+  bottomLeftIcons?: React.ReactNode[]
+  fontSize?: number
+  width?: number
+  onSend?: () => void
 }
 
-const Editor: React.FC<EditorProps> = ({ initialValue = "", placeholder = "Start typing..." }) => {
+const Editor: React.FC<EditorProps> = ({ initialValue = "", placeholder = "Start typing...", bottomLeftIcons = [], fontSize = 16, width = 300, onSend }) => {
+  const MIN_WIDTH = 200
+  const finalWidth = Math.max(width, MIN_WIDTH)
+
   const editorRef = useRef<HTMLDivElement>(null)
   const [linkUrl, setLinkUrl] = useState<string>("")
   const [showLinkInput, setShowLinkInput] = useState<boolean>(false)
@@ -143,7 +150,10 @@ const Editor: React.FC<EditorProps> = ({ initialValue = "", placeholder = "Start
   }
 
   return (
-    <div className={styles.editorContainer}>
+    <div 
+      className={styles.editorContainer}
+      style={{ width: `${finalWidth}px` }}
+    >
       <div className={styles.toolbar}>
         <button className={`${styles.toolbarButton} ${isBold ? styles.active : ""}`} onClick={handleBold} title="Bold" type="button">
           <Bold size={18} />
@@ -233,7 +243,26 @@ const Editor: React.FC<EditorProps> = ({ initialValue = "", placeholder = "Start
         suppressContentEditableWarning
         dangerouslySetInnerHTML={{ __html: initialValue }}
         data-placeholder={placeholder}
+        style={{ fontSize: `${fontSize}px` }}
       ></div>
+      <div className={styles.bottomToolbar}>
+        <div className={styles.bottomToolbarLeft}>
+          {bottomLeftIcons.map((icon, index) => (
+            <span key={index} className={styles.bottomIcon}>
+              {icon}
+            </span>
+          ))}
+        </div>
+        <div className={styles.bottomToolbarRight}>
+          <span 
+            className={styles.bottomIcon} 
+            onClick={onSend}
+            style={{ cursor: 'pointer' }}
+          >
+            <Send />
+          </span>
+        </div>
+      </div>
     </div>
   )
 }
