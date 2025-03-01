@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import ReactDOM from "react-dom";
 import styles from "./Modal.module.css";
+import { createRoot } from "react-dom/client";
 
 interface Position {
   top?: number;
@@ -19,15 +20,13 @@ export interface ModalProps {
   open: boolean;
   title?: string;
   onCancel: (e?: MouseEvent | KeyboardEvent) => void;
-  onOk?: (e?: MouseEvent) => void;
+  onOk?: (e?: MouseEvent) => void | Promise<unknown>;
   footer?: React.ReactNode;
   width?: number;
   height?: number;
   maskClosable?: boolean;
-  bodyStyle?: CSSProperties;
   closeIcon?: React.ReactNode;
   children?: React.ReactNode;
-  confirmLoading?: boolean;
   modalText?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p";
   centered?: boolean;
   autoCloseSeconds?: number;
@@ -53,7 +52,11 @@ export interface ModalProps {
   buttonCancel?: string;
 }
 
-const Modal: React.FC<ModalProps> = ({
+export interface ModalComponent extends React.FC<ModalProps> {
+  confirm: (options: Omit<ModalProps, "open">) => Promise<boolean>;
+}
+
+const Modal_: React.FC<ModalProps> = ({
   open,
   title = "Modal Title",
   onCancel,
@@ -62,10 +65,8 @@ const Modal: React.FC<ModalProps> = ({
   width = 420,
   height,
   maskClosable = true,
-  bodyStyle,
   closeIcon,
   children = "Modal Content",
-  confirmLoading = false,
   modalText = "p",
   centered = true,
   autoCloseSeconds,
@@ -85,7 +86,6 @@ const Modal: React.FC<ModalProps> = ({
   buttonCancel,
 }) => {
   const [visible, setVisible] = useState(open);
-
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -96,7 +96,7 @@ const Modal: React.FC<ModalProps> = ({
     if (open && autoCloseSeconds && autoCloseSeconds > 0) {
       const timer = setTimeout(() => {
         onCancel();
-      }, autoCloseSeconds * 3000);
+      }, autoCloseSeconds * 1000);
       return () => clearTimeout(timer);
     }
   }, [open, autoCloseSeconds, onCancel]);
@@ -178,7 +178,6 @@ const Modal: React.FC<ModalProps> = ({
       <div
         style={{
           padding: "0px 16px",
-          ...bodyStyle,
           flex: 1,
           overflowY: "auto",
         }}
@@ -258,7 +257,6 @@ const Modal: React.FC<ModalProps> = ({
       <button
         {...(okButtonProps || {})}
         onClick={onOk}
-        disabled={confirmLoading}
         className={styles.buttonOk}
       >
         {buttonOk ? buttonOk : "OK"}
@@ -280,7 +278,6 @@ const Modal: React.FC<ModalProps> = ({
       <button
         {...(okButtonProps || {})}
         onClick={onOk}
-        disabled={confirmLoading}
         className={styles.buttonOkFilled}
       >
         {buttonOk ? buttonOk : "OK"}
@@ -343,4 +340,54 @@ const Modal: React.FC<ModalProps> = ({
   return ReactDOM.createPortal(modalNode, document.body);
 };
 
+export const confirmModal = (
+  options: Omit<ModalProps, "open">
+): Promise<boolean> => {
+  return new Promise((resolve, reject) => {
+    const modal = document.createElement("div");
+    document.body.appendChild(modal);
+
+    const root = createRoot(modal);
+    const cleanup = () => {
+      root.unmount();
+      modal.remove();
+    }
+
+    const handleOk = async (e?: MouseEvent<HTMLButtonElement>) => {
+      if (options.onOk) {
+        const res = options.onOk(e as MouseEvent);
+        if (
+          res !== undefined &&
+          typeof (res as Promise<unknown>).then === "function"
+        ) {
+          try {
+            await res;
+          } catch (error) {
+            console.error("Lỗi confirm onOk nè", error);
+          }
+        }
+      }
+      cleanup();
+      resolve(true);
+    };
+
+    const handleCancel = (e?: MouseEvent | KeyboardEvent) => {
+      if (options.onCancel) options.onCancel(e);
+      cleanup();
+      resolve(false);
+    };
+
+    root.render(
+      <Modal {...options} open={true} onOk={handleOk} onCancel={handleCancel} />
+    );
+  });
+};
+
+export interface ModalComponent extends React.FC<ModalProps> {
+  confirm: (options: Omit<ModalProps, "open">) => Promise<boolean>;
+}
+
+const Modal = Modal_ as ModalComponent;
+
+(Modal as ModalComponent).confirm = confirmModal;
 export default Modal;
