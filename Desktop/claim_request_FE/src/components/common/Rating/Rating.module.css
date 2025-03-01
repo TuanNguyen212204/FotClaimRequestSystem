@@ -1,0 +1,129 @@
+.ratingContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  max-width: 500px;
+  border-radius: 0.5rem;
+  background-color: white;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.ratingSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.ratingTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+  color: #333;
+}
+
+.starsContainer,
+.heartsContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.ratingButton {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s;
+}
+
+.ratingButton:hover {
+  transform: scale(1.1);
+}
+
+.starIcon,
+.heartIcon {
+  transition: all 0.2s ease;
+}
+
+.ratingValue {
+  margin-left: 0.75rem;
+  font-weight: 600;
+  min-width: 1.5rem;
+}
+
+.emojiContainer {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.emojiButton {
+  background-color: transparent;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.emojiButton:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  transform: scale(1.05);
+  text-decoration: none;
+}
+
+.emoji {
+  font-size: 1.5rem;
+  display: block;
+}
+
+.selectedEmoji {
+  background-color: rgba(0, 0, 0, 0.1);
+  transform: scale(1.1);
+  border-color: transparent;
+}
+
+.thumbContainer {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.thumbButton {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  transition: all 0.2s ease;
+}
+
+.thumbButton:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.selectedThumb {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.thumbIcon {
+  transition: all 0.2s ease;
+}
+
+.ratingButton:hover .heartIcon {
+  transform: scale(1.1);
+}
+
+@media (max-width: 640px) {
+  .ratingContainer {
+    padding: 1rem;
+  }
+
+  .emoji {
+    font-size: 1.25rem;
+  }
+}
+
