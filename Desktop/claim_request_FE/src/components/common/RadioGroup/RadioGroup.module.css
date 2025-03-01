@@ -64,3 +64,67 @@
     border-color: #9ca3af;
     pointer-events: none;
 }
+
+.radioGroupButton {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 20px;
+}
+
+.radioButtonLabel {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 16px;
+    color: #374151;
+    padding: 10px 20px;
+    border: 2px solid #2C3E50;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+    margin-left: -2px; /* Remove gap between buttons */
+}
+
+.radioButtonLabel:first-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    margin-left: 0; /* Reset margin for the first button */
+}
+
+.radioButtonLabel:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.radioButtonLabel.active {
+    background-color: #2563eb;
+    color: #ffffff;
+    border-color: #2563eb;
+}
+
+.radioButtonInput {
+    display: none;
+}
+
+.radioButtonCustom {
+    display: inline-block;
+}
+
+.radioButtonLabel:hover {
+    border-color: #2563eb;
+}
+
+.radioButtonInput:checked + .radioButtonCustom {
+    background-color: #2563eb;
+    color: #ffffff;
+}
+
+.disabled {
+    cursor: not-allowed;
+    color: #9ca3af;
+    border-color: #9ca3af;
+}
+
+.radioButtonInput:disabled + .radioButtonCustom {
+    background-color: #e5e7eb;
+    border-color: #9ca3af;
+    pointer-events: none;
+}

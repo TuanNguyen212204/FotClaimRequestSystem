@@ -10,7 +10,8 @@ import type { RootState } from "@redux/index";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { Tooltip } from "@components/common/Tooltip/Tooltip";
-import RadioGroup from "@components/common/RadioGroup/RadioGroup";
+import { RadioGroup } from "@components/common/RadioGroup/RadioGroup";
+import { RadioGroupButton } from "@components/common/RadioGroup/RadioGroup";
 
 export const PendingComponent: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -91,7 +92,7 @@ export const PendingComponent: React.FC = () => {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+    // const { name, value } = e.target;
     setSelectedValue(e.target.value);
   };
 
@@ -99,7 +100,7 @@ export const PendingComponent: React.FC = () => {
     { label: "All", value: "all" },
     { label: "Pending", value: "pending" },
     { label: "Approved", value: "approved" },
-    { label: "Rejected", value: "rejected" },
+    { label: "Rejected", value: "rejected", disabled: true },
   ];
 
   return (
@@ -110,6 +111,12 @@ export const PendingComponent: React.FC = () => {
         <Link to="/pending">Pending Approval</Link>
       </nav>
       <RadioGroup
+        options={radioOptions}
+        name="filter"
+        selectedValue={selectedValue}
+        onChange={handleChange}
+      />
+      <RadioGroupButton
         options={radioOptions}
         name="filter"
         selectedValue={selectedValue}
