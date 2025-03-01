@@ -10,18 +10,23 @@ import { PendingComponent } from "@/pages/Pending/PendingApproval";
 import { DetailsComponents } from "@/pages/Pending/DetailsApproval";
 import UserClaims from "@pages/User/UserClaims";
 import { UserClaimDetails } from "@pages/User/UserClaimDetails";
-import UserSettings from "@/pages/Admin/UserSettings";
+import UserSettings from "@pages/admin/UserSettings";
 import ApproveDetail from "@pages/ClaimRequest/ApproveDetail";
 import ClaimStatus from "@pages/Finance/ClaimStatus";
 import PaidClaims from "@pages/Finance/PaidClaims";
-import ProjectInformation from "@/pages/Admin/ProjectInformation";
-import StaffInformation from "@/pages/Admin/StaffInformation";
+import ProjectInformation from "@pages/admin/ProjectInformation";
+import StaffInformation from "@pages/admin/StaffInformation";
+import ApprovedFinancePage from "@/pages/Finance/ApprovedFinancePage";
+import CheckBoxTest from "@/components/common/Checkbox/Checkboxtest";
+import ApprovedApproverPage from "@/pages/Approver/ApprovedApproverPage";
 import CheckMail from "@/components/ui/login/CheckMail";
 import CreateNewPassword from "@/components/ui/login/CreateNewPassword";
-import ApprovedFinancePage from "@/pages/Finance/ApprovedFinancePage";
-import TableDraftPage from "../pages/TableDraftPage";
-import ApprovedApproverPage from "@/pages/Approver/ApprovedApproverPage";
+import TableDraftPage from "@/pages/TableDraftPage";
 const router: RouteObject[] = [
+  {
+    element: <CheckBoxTest />,
+    path: PATH.checkbox,
+  },
   {
     element: <LoginForm />,
     path: PATH.login,

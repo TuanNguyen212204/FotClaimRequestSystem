@@ -5,7 +5,8 @@ export const PATH = {
   checkToMail: "/check-to-mail",
   createNewPassword: "/create-new-password",
   login: "/login", //nguyen
-  resetPassword: "/reset-password", //nguyen
+  checkbox: "/checkbox",
+  resetPassword: "/reset-password",//nguyen
   createRequest: "/create-claim", //an
   pending: "/pending", //tri
   details: "/details/:id", //tri

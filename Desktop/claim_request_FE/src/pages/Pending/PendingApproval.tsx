@@ -10,11 +10,12 @@ import type { RootState } from "@redux/index";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { Tooltip } from "@components/common/Tooltip/Tooltip";
-
+import RadioGroup from "@components/common/RadioGroup/RadioGroup";
 
 export const PendingComponent: React.FC = () => {
   const dispatch = useAppDispatch();
   const claims = useSelector((state: RootState) => state.pending.listClaims);
+  const [selectedValue, setSelectedValue] = useState("option1");
 
   useEffect(() => {
     dispatch(fetchAllClaims());
@@ -24,8 +25,6 @@ export const PendingComponent: React.FC = () => {
   const itemsPerPage = 5;
   const [selectedClaims, setSelectedClaims] = useState<string[]>([]);
   const [selectAll, setSelectAll] = useState(false);
-
-
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -91,6 +90,18 @@ export const PendingComponent: React.FC = () => {
     );
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setSelectedValue(e.target.value);
+  };
+
+  const radioOptions = [
+    { label: "All", value: "all" },
+    { label: "Pending", value: "pending" },
+    { label: "Approved", value: "approved" },
+    { label: "Rejected", value: "rejected" },
+  ];
+
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Pending Approval Claims</h1>
@@ -98,6 +109,12 @@ export const PendingComponent: React.FC = () => {
         <Link to="/">My Claims</Link> &gt;{" "}
         <Link to="/pending">Pending Approval</Link>
       </nav>
+      <RadioGroup
+        options={radioOptions}
+        name="filter"
+        selectedValue={selectedValue}
+        onChange={handleChange}
+      />
       <Tooltip text="Delete Selected" position="top">
         <button
           className={styles.deleteButton}
@@ -186,7 +203,7 @@ export const PendingComponent: React.FC = () => {
         ))}
         <span className={styles.pageIcon} onClick={handleNextPage}>
           <ArrowRight />
-        </span> 
+        </span>
       </div>
     </div>
   );

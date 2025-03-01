@@ -6,7 +6,7 @@
   "proxy": "https://claimsystem.info.vn/api/v1/auth/login",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -14,7 +14,7 @@
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@hookform/resolvers": "^4.0.0",
     "@reduxjs/toolkit": "^2.5.1",
-    "@tailwindcss/vite": "^4.0.6",
+    "@tailwindcss/vite": "^4.0.8",
     "@tanstack/react-query": "^5.66.0",
     "axios": "^1.7.9",
     "formik": "^2.4.6",
@@ -27,9 +27,7 @@
     "react-router-dom": "^7.1.5",
     "react-simple-typewriter": "^5.0.1",
     "react-toastify": "^11.0.3",
-    "tailwindcss": "^4.0.6",
-    "typewriter-effect": "^2.21.0",
-    "yup": "^1.6.1",
+    "tailwindcss": "^4.0.8",
     "zod": "^3.24.2"
   },
   "devDependencies": {
