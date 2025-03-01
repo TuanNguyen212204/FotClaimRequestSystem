@@ -1,4 +1,4 @@
-import { useState, ChangeEvent } from 'react';
+import { useState, ChangeEvent, useEffect } from 'react';
 import './Checkbox.css';
 
 interface CheckboxProps {
@@ -7,8 +7,16 @@ interface CheckboxProps {
   onChange?: (checked: boolean) => void;
 }
 
-export const BasicCheckbox = ({ label, checked = false, onChange }: CheckboxProps) => {
-  const [isChecked, setIsChecked] = useState(checked);
+export const BasicCheckbox = ({ label, checked : checkChange, onChange }: CheckboxProps) => {
+  const storageChange = `checkbox_${label}`; 
+  const [isChecked, setIsChecked] = useState(() =>{
+  const storageValue = localStorage.getItem(storageChange);
+  return storageValue ? JSON.parse(storageValue) : checkChange ?? true;
+  });
+
+  useEffect(() => {
+    localStorage.setItem(storageChange, JSON.stringify(isChecked));
+  },[isChecked, storageChange]);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const newChecked = event.target.checked;
@@ -29,8 +37,16 @@ export const BasicCheckbox = ({ label, checked = false, onChange }: CheckboxProp
   );
 };
 
-export const CustomCheckbox = ({ label, checked = false, onChange }: CheckboxProps) => {
-  const [isChecked, setIsChecked] = useState(checked);
+export const CustomCheckbox = ({ label, checked : checkChange, onChange }: CheckboxProps) => {
+  const storageChange = `checkbox_${label}`;
+  const [isChecked, setIsChecked] = useState(() => {
+  const storageValue = localStorage.getItem(storageChange);
+  return storageValue ? JSON.parse(storageValue) : checkChange ?? true;
+  });
+
+  useEffect(() => {
+    localStorage.setItem(storageChange, JSON.stringify(isChecked));
+  },[isChecked, storageChange]);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const newChecked = event.target.checked;
@@ -54,8 +70,16 @@ export const CustomCheckbox = ({ label, checked = false, onChange }: CheckboxPro
   );
 };
 
-export const ToggleCheckbox = ({ label, checked = false, onChange }: CheckboxProps) => {
-  const [isChecked, setIsChecked] = useState(checked);
+export const ToggleCheckbox = ({ label, checked : checkChange, onChange }: CheckboxProps) => {
+  const storageChange = `checkbox_${label}`;
+  const [isChecked, setIsChecked] = useState(() => {
+  const storageValue = localStorage.getItem(storageChange);
+  return storageValue ? JSON.parse(storageValue) : checkChange ?? true;
+  });
+
+  useEffect(() => {
+    localStorage.setItem(storageChange, JSON.stringify(isChecked));
+  },[isChecked, storageChange]);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const newChecked = event.target.checked;
@@ -79,8 +103,16 @@ export const ToggleCheckbox = ({ label, checked = false, onChange }: CheckboxPro
   );
 };
 
-export const CircularCheckbox = ({ label, checked = false, onChange }: CheckboxProps) => {
-  const [isChecked, setIsChecked] = useState(checked);
+export const CircularCheckbox = ({ label, checked : checkChange, onChange }: CheckboxProps) => {
+  const storageChange = `checkbox_${label}`;
+  const [isChecked, setIsChecked] = useState(() => {
+  const storageValue = localStorage.getItem(storageChange);
+  return storageValue ? JSON.parse(storageValue) : checkChange ?? true;
+  });
+
+  useEffect(() => {
+    localStorage.setItem(storageChange, JSON.stringify(isChecked));
+  },[isChecked, storageChange]);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const newChecked = event.target.checked;
@@ -104,8 +136,16 @@ export const CircularCheckbox = ({ label, checked = false, onChange }: CheckboxP
   );
 };
 
-export const AnimatedCheckbox = ({ label, checked = false, onChange }: CheckboxProps) => {
-  const [isChecked, setIsChecked] = useState(checked);
+export const AnimatedCheckbox = ({ label, checked : checkChange, onChange }: CheckboxProps) => {
+  const storageChange = `checkbox_${label}`;
+  const [isChecked, setIsChecked] = useState(() => {
+  const storageValue = localStorage.getItem(storageChange);
+  return storageValue ? JSON.parse(storageValue) : checkChange ?? true;
+  });
+
+  useEffect(() => {
+    localStorage.setItem(storageChange, JSON.stringify(isChecked));
+  },[isChecked, storageChange]);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const newChecked = event.target.checked;
@@ -129,8 +169,16 @@ export const AnimatedCheckbox = ({ label, checked = false, onChange }: CheckboxP
   );
 };
 
-export const MinimalCheckbox = ({ label, checked = false, onChange }: CheckboxProps) => {
-  const [isChecked, setIsChecked] = useState(checked);
+export const MinimalCheckbox = ({ label, checked : checkChange, onChange }: CheckboxProps) => {
+  const storageChange = `checkbox_${label}`;
+  const [isChecked, setIsChecked] = useState(() => {
+  const storageValue = localStorage.getItem(storageChange);
+  return storageValue ? JSON.parse(storageValue) : checkChange ?? true;
+  });
+
+  useEffect(() => {
+    localStorage.setItem(storageChange, JSON.stringify(isChecked));
+  },[isChecked, storageChange]);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const newChecked = event.target.checked;

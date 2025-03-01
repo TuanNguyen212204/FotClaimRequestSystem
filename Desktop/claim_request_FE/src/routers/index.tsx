@@ -17,7 +17,8 @@ import PaidClaims from "@pages/Finance/PaidClaims";
 import ProjectInformation from "@pages/admin/ProjectInformation";
 import StaffInformation from "@pages/admin/StaffInformation";
 import ApprovedFinancePage from "@/pages/Finance/ApprovedFinancePage";
-import CheckBoxTest  from "@components/common/Checkbox/Checkboxtest";
+import CheckBoxTest from "@/components/common/Checkbox/Checkboxtest";
+import ApprovedApproverPage from "@/pages/Approver/ApprovedApproverPage";
 const router: RouteObject[] = [
   {
     element: <CheckBoxTest />,
@@ -57,6 +58,10 @@ const router: RouteObject[] = [
       {
         path: PATH.approvedFinance,
         element: <ApprovedFinancePage />,
+      },
+      {
+        path: PATH.approvedApprover,
+        element: <ApprovedApproverPage />,
       },
       {
         path: PATH.pending,

@@ -9,9 +9,9 @@ function CheckBoxTest() {
     return (
         <div style={{padding: '40px'}}>
           <h1>CheckBox Test List</h1>
-          <CustomCheckbox label="Custom" />
-
           <BasicCheckbox label="Basic" />
+
+          <CustomCheckbox label="Custom" />
 
           <ToggleCheckbox label="Toggle"/>
 
