@@ -10,6 +10,8 @@ interface AvatarProps {
   src?: string | React.ReactNode;
 }
 
+const validSizes = ["profile", "large", "small", "default"];
+
 const Avatar: React.FC<AvatarProps> = ({
   alt = "",
   gap = 4,
@@ -19,7 +21,7 @@ const Avatar: React.FC<AvatarProps> = ({
   src,
 }) => {
   const sizeClass =
-    typeof size === "string"
+    typeof size === "string" && validSizes.includes(size)
       ? styles[size]
       : typeof size === "number"
       ? undefined
@@ -35,8 +37,12 @@ const Avatar: React.FC<AvatarProps> = ({
       }}
     >
       {src ? (
-        typeof src === "string" ? (
-          <img src={src} alt={alt} style={{ width: "100%", height: "100%" }} />
+        typeof src === "string" && src.trim() !== " " ? (
+          <img
+            src={src}
+            alt={alt || "Avatar"}
+            style={{ width: "100%", height: "100%" }}
+          />
         ) : (
           src
         )

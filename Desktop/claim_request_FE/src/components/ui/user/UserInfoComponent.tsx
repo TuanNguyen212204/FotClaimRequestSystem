@@ -56,10 +56,8 @@ export const UserInfoComponent: React.FC = () => {
       value: "183262",
     },
     picture: {
-      large:
-        "https://static-cse.canva.com/blob/1806764/1600w-_q--r1GW6_E.jpg",
-      medium:
-        "https://static-cse.canva.com/blob/1806764/1600w-_q--r1GW6_E.jpg",
+      large: "https://static-cse.canva.com/blob/1806764/1600w-_q--r1GW6_E.jpg",
+      medium: "https://static-cse.canva.com/blob/1806764/1600w-_q--r1GW6_E.jpg",
       thumbnail:
         "https://static-cse.canva.com/blob/1806764/1600w-_q--r1GW6_E.jpg",
     },
@@ -210,15 +208,14 @@ export const UserInfoComponent: React.FC = () => {
         <label htmlFor="avatarUpload">
           <div className={styles.avatar}>
             <Avatar
-            src={
-              staffInfo?.picture?.thumbnail ||
-              "https://static-cse.canva.com/blob/1806764/1600w-_q--r1GW6_E.jpg"
-            }
-            alt="Avatar"
-            size="profile"
-          />
+              src={
+                staffInfo?.picture?.thumbnail ||
+                "https://static-cse.canva.com/blob/1806764/1600w-_q--r1GW6_E.jpg"
+              }
+              alt="Avatar"
+              size="profile"
+            />
           </div>
-          
         </label>
         {isEditing && (
           <input
