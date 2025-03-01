@@ -7,6 +7,7 @@ import { detailsSlice } from "./Claim/store/detailsSlice";
 import { financeSlice } from "./slices/Finance/claimsSlice";
 import claimsReducer from "./slices/claimsSlice";
 import { approverSlice } from "./slices/Approver/claimsSlice";
+import userReducer from "@redux/slices/UserInfo/UserInfoSlice"
 export const rootReducer = combineReducers({
   pending: pendingSlice.reducer,
   details: detailsSlice.reducer,
@@ -14,4 +15,8 @@ export const rootReducer = combineReducers({
   // userClaims: userClaimSlice.reducer,  
   claims: claimsReducer,
   approver: approverSlice.reducer,
+  user: userReducer,
 });
+
+
+export type RootState = ReturnType<typeof rootReducer>;

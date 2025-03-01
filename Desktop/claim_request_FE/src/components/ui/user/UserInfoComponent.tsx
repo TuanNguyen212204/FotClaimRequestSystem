@@ -1,331 +1,306 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "@components/ui/user/UserInfoComponent.module.css";
-
-import { User } from "@types/User.type";
-import RadioGroup from "@components/common/RadioGroup/RadioGroup";
+import Notification from "@components/common/Notification/Notification";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "@redux/index";
+import { fetchUserByIdAsync, updateUserAsync } from "@redux/thunk/UserInfo/userInfoThunks";
+import { User, Experience } from "@types/User.type";
+import Badge from "@/components/common/Badge/Badge";
+import { useNotification } from "@/components/common/Notification/NotificationContext";
 
 export const UserInfoComponent: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const selectedUser = useSelector((state: any) => state.user.selectedUser); 
   const [isEditing, setIsEditing] = useState(false);
-    const [selectedValue, setSelectedValue] = useState("option1");
-  
-    const radioOptions = [
-      { label: "Male", value: "option1" },
-      { label: "Female", value: "option2" },
-      { label: "Other", value: "option3", disabled: true},
-    ];
+  const [staffInfo, setStaffInfo] = useState<User | null>(selectedUser || null);
+  const notification = useNotification()
 
-  
- 
+  useEffect(() => {
+    dispatch(fetchUserByIdAsync("1")); 
+  }, [dispatch]);
 
-  const [staffInfo, setStaffInfo] = useState<User | null>({
-    gender: "Male",
-    name: {
-      title: "Mr",
-      first: "Tuan",
-      last: "Nguyen",
-    },
-    location: {
-      street: {
-        number: 17,
-        name: "Nguyen Thai Hoc",
-      },
-      city: "Vung Tau",
-      state: "",
-      country: "",
-      postcode: 78200,
-      coordinates: {
-        latitude: "34.0039",
-        longitude: "-118.4324",
-      },
-      timezone: {
-        offset: "-8:00",
-        description: "Pacific Time (US & Canada)",
-      },
-    },
-    email: "tuan51463@gmail.com",
-    login: {
-      uuid: "user1",
-      username: "tuan",
-      password: "12345",
-      salt: "string",
-      md5: "string",
-      sha1: "string",
-      sha256: "string",
-    },
-    dob: {
-      date: "1990-01-01T00:00:00.000",
-      age: 21,
-    },
-    registered: {
-      date: "2015-05-15T00:00:00.000Z",
-      age: 8,
-    },
-    phone: "0789357788",
-    cell: "string",
-    id: {
-      name: "SE",
-      value: "183262",
-    },
-    picture: {
-      large:
-        "https://i.pinimg.com/736x/63/f0/0d/63f00d6ebe2c93b945be3c39135503c2.jpg",
-      medium:
-        "https://i.pinimg.com/736x/63/f0/0d/63f00d6ebe2c93b945be3c39135503c2.jpg",
-      thumbnail:
-        "https://i.pinimg.com/736x/63/f0/0d/63f00d6ebe2c93b945be3c39135503c2.jpg",
-    },
-    nat: "VietNam",
-  });
- 
+  useEffect(() => {
+    if (!isEditing) {
+      setStaffInfo(selectedUser);
+    }
+  }, [selectedUser, isEditing]);
 
-  //   const fetchUserInfo = async () => {
-  //     try {
-  //       const response = await axios.get("");
-  //       setUser(response.data);
-  //     } catch (error) {
-  //       toast.error(
-  //         error.response?.data?.message || "Failed to fetch user data!"
-  //       );
-  //     }
-  //   };
-
-  //   useEffect(() => {
-  //     fetchUserInfo();
-  //   }, []);
-
-  // const staffInfo: User = {
-  //   name: "Nguyễn Ngọc Tuấn",
-  //   id: "SE123456",
-  //   email: "obcxyz@rpt.vn",
-  //   department: "Ho Chi Minh City",
-  // };
-
-  // const staffInfo: User = {
-  //   gender: "Male",
-  //   name: {
-  //     title: "Mr",
-  //     first: "Tuan",
-  //     last: "Nguyen",
-  //   },
-  //   location: {
-  //     street: {
-  //       number: 17,
-  //       name: "Nguyen Thai Hoc",
-  //     },
-  //     city: "Vung Tau",
-  //     state: "",
-  //     country: "",
-  //     postcode: 78200,
-  //     coordinates: {
-  //       latitude: "34.0039",
-  //       longitude: "-118.4324",
-  //     },
-  //     timezone: {
-  //       offset: "-8:00",
-  //       description: "Pacific Time (US & Canada)",
-  //     },
-  //   },
-  //   email: "tuan51463@gmail.com",
-  //   login: {
-  //     uuid: "user1",
-  //     username: "tuan",
-  //     password: "12345",
-  //     salt: "string",
-  //     md5: "string",
-  //     sha1: "string",
-  //     sha256: "string",
-  //   },
-  //   dob: {
-  //     date: "1990-01-01T00:00:00.000",
-  //     age: 21,
-  //   },
-  //   registered: {
-  //     date: "2015-05-15T00:00:00.000Z",
-  //     age: 8,
-  //   },
-  //   phone: "0789357788",
-  //   cell: "string",
-  //   id: {
-  //     name: "SE",
-  //     value: "183262",
-  //   },
-  //   picture: {
-  //     large:
-  //       "https://i.pinimg.com/736x/a8/ee/99/a8ee991141c6bc4c81e7eadfb4e2b4b5.jpg",
-  //     medium:
-  //       "https://i.pinimg.com/736x/a8/ee/99/a8ee991141c6bc4c81e7eadfb4e2b4b5.jpg",
-  //     thumbnail:
-  //       "https://i.pinimg.com/736x/a8/ee/99/a8ee991141c6bc4c81e7eadfb4e2b4b5.jpg",
-  //   },
-  //   nat: "VietNam",
-  // };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setSelectedValue(e.target.value);
-
-    setStaffInfo((prev) => {
-      if (!prev) return prev;
-
-      return {
-        ...prev,
-        email: name === "email" ? value : prev.email,
-        name: {
-          ...prev.name,
-          first: name === "firstName" ? value : prev.name?.first ?? "",
-          last: name === "lastName" ? value : prev.name?.last ?? "",
-        },
-        location: {
-          ...prev.location,
-          city: name === "city" ? value : prev.location?.city ?? "",
-        },
-        gender: prev.gender ?? "", // Đảm bảo gender không bị undefined
-      };
-    });
-  };
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setStaffInfo((prev) => ({
-        ...prev!,
-        picture: {
-          ...prev!.picture,
-          large: imageUrl,
-          medium: imageUrl,
-          thumbnail: imageUrl,
-        },
-      }));
+  const handleSave = () => {
+    if (staffInfo && staffInfo.userID) { 
+      dispatch(updateUserAsync({ userId: staffInfo.userID, userData: staffInfo }))
+        .unwrap() 
+        .then((updatedUser: User) => {
+          setIsEditing(false);
+          setStaffInfo(updatedUser);
+          notification.show({ message: "Profile saved successfully!", type: "success" });
+        })
+        .catch((error: any) => {
+          notification.show({ message: "Failed to save profile: " + error.message, type: "error" })
+        });
+    } else {
+     notification.show({ message: "User ID not found. Cannot save profile.", type: "error" });
     }
   };
-  const handleSave = async () => {
-    // TODO: Sau này khi có API, hãy mở comment phần này
-    /*
-      try {
-        const formData = new FormData();
-        formData.append("name", staffInfo.name);
-        formData.append("email", staffInfo.email);
-        formData.append("department", staffInfo.department);
-        formData.append("avatar", file); // Gửi ảnh lên server
 
-        await axios.put("/api/staff/update", formData);
-        toast.success("Profile updated successfully!");
-      } catch (error) {
-        toast.error("Failed to update profile.");
-      }
-      */
-    setIsEditing(false);
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file && staffInfo) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        if (event.target?.result) {
+          setStaffInfo({ ...staffInfo, avatar: event.target.result as string });
+          notification.show({ message:"Avatar updated successfully!", type: "success"})
+        }
+      };
+      reader.readAsDataURL(file);
+    } else {
+      notification.show({message:"Failed to upload image. Please try again.", type: "error"})
+    }
   };
-  return (
-    <div className={styles.container}>
-      <div className={styles.card}>
-        <label htmlFor="avatarUpload">
-          <img
-            src={
-              staffInfo?.picture?.thumbnail ||
-              "https://static-cse.canva.com/blob/1806764/1600w-_q--r1GW6_E.jpg"
-            }
-            alt="Avatar"
-            className={styles.avatar}
-          />
-        </label>
-        {isEditing && (
-          <input
-            type="file"
-            id="avatarUpload"
-            accept="image/*"
-            style={{ display: "none" }}
-            onChange={handleImageChange}
-          ></input>
-        )}
-        {isEditing ? (
-          <div className={styles.editContainer}>
-            <input
-              type="text"
-              name="firstName"
-              value={staffInfo?.name.first}
-              onChange={handleChange}
-            />
-            <input
-              type="text"
-              name="lastName"
-              value={staffInfo?.name.last}
-              onChange={handleChange}
-            />
 
-            <input
-              type="email"
-              name="email"
-              value={staffInfo?.email}
-              onChange={handleChange}
-              placeholder="Enter Email"
-            />
-            <input
-              type="text"
-              name="streetName"
-              value={staffInfo?.location.street.name}
-              onChange={handleChange}
-            />
-            <input
-              type="text"
-              name="city"
-              value={staffInfo?.location.city}
-              onChange={handleChange}
-            />
-            <RadioGroup
-              options={radioOptions}
-              name="exampleRadioGroup"
-              selectedValue={selectedValue}
-              onChange={handleChange}
-            />
-            <button
-              onClick={handleSave}
-              className={`${styles.saveBtn} ${styles.userInfoBtn}`}
-            >
-              💾 Save
-            </button>
-            <button
-              onClick={() => setIsEditing(false)}
-              className={`${styles.cancelBtn} ${styles.userInfoBtn}`}
-            >
-              ❌ Cancel
-            </button>
-          </div>
-        ) : (
-          <>
-            <button
-              className={`${styles.editBtn} ${styles.userInfoBtn}`}
-              onClick={() => setIsEditing(true)}
-            >
-              ✎ Edit Profile
-            </button>
-            <div className={styles.info}>
-              <div className={styles.row}>
-                <p>
-                  <span className={styles.icon}>👤</span>
-                  <strong>Staff Name:</strong>
-                  {`${staffInfo?.name.title} ${staffInfo?.name.first} ${staffInfo?.name.last}`}
-                </p>
-                <p>
-                  <span className={styles.icon}>🆔</span>
-                  <strong>Staff ID:</strong>
-                  {`${staffInfo?.id.name} ${staffInfo?.id.value}`}
-                </p>
-              </div>
-              <p>
-                <span className={styles.icon}>📧</span>
-                <strong>Staff Email:</strong> {staffInfo?.email}
-              </p>
-              <p>
-                <span className={styles.icon}>🏢</span>
-                <strong>Staff Department:</strong>
-                {`${staffInfo?.location.street.number} ${staffInfo?.location.street.name} , ${staffInfo?.location.city}`}
-              </p>
+  if (!staffInfo) {
+    return <div>Loading...</div>; 
+  }
+
+  return (
+    <div className={styles.profileContainer}>
+      <div className={styles.profileHeader}>
+        <div className={styles.avatarSection}>
+          <img
+            src={staffInfo.avatar || "https://i.pinimg.com/736x/63/f0/0d/63f00d6ebe2c93b945be3c39135503c2.jpg"}
+            alt="Avatar"
+            className={styles.profileAvatar}
+          />
+          <button
+            onClick={() => {
+              setIsEditing(true);
+              console.log("Editing mode activated:", true);
+            }}
+            className={styles.editButton}
+          >
+            ✏️
+          </button>
+        </div>
+
+        <div className={styles.profileInfo}>
+          <h1>{staffInfo.fullName || "Tuan Nguyen"}</h1>
+          <p className={styles.position}>{staffInfo.jobRank || "Chief Executive Officer (C.E.O)"}</p>
+          <p className={styles.company}>© {staffInfo.department || "FPT Software"}.</p>
+
+          <div className={styles.statsContainer}>
+            <div className={styles.statItem}>
+              <Badge count={staffInfo.projects?.length || 113} color="blue" />
+              {/* <h3>{staffInfo.projects?.length || 113}</h3> */}
+              <span>Projects</span>
             </div>
-          </>
-        )}
+            <div className={styles.statItem}>
+              <Badge count={24} color="green" />
+              {/* <h3>23.86%</h3> */}
+              <span>Success Rate</span>
+            </div>
+            <div className={styles.statItem}>
+              <Badge count={513} color="purple" />
+              {/* <h3>{staffInfo.salary || 512.6}K</h3> */}
+              <span>Earning</span>
+            </div>
+          </div>
+        </div>
       </div>
+
+      <div className={styles.profileContent}>
+        <div className={styles.section}>
+          <h2 className={styles.sectionTitle}>Personal Bio</h2>
+          {isEditing ? (
+            <textarea
+              className={styles.inputField}
+              value={staffInfo.bio || ""}
+              onChange={(e) => setStaffInfo({ ...staffInfo, bio: e.target.value })}
+            />
+          ) : (
+            <p className={styles.bioText}>{staffInfo.bio || "No bio available"}</p>
+          )}
+        </div>
+
+        <div className={styles.section}>
+          <h2 className={styles.sectionTitle}>Projects</h2>
+          <div className={styles.projectsGrid}>
+            {staffInfo.projects?.map((project) => (
+              <div key={project} className={styles.projectCard}>
+                {project}
+              </div>
+            )) || <p>No projects available</p>}
+          </div>
+        </div>
+
+        <div className={styles.section}>
+          <h2 className={styles.sectionTitle}>Experience</h2>
+          {isEditing ? (
+            staffInfo.experiences?.map((exp, index) => (
+              <div key={index} className={styles.arrayItem}>
+                <input
+                  placeholder="Title"
+                  value={exp.title}
+                  onChange={(e) => {
+                    const newExperiences = [...(staffInfo.experiences || [])];
+                    newExperiences[index] = { ...newExperiences[index], title: e.target.value };
+                    setStaffInfo({ ...staffInfo, experiences: newExperiences });
+                  }}
+                />
+                <input
+                  placeholder="Company"
+                  value={exp.company}
+                  onChange={(e) => {
+                    const newExperiences = [...(staffInfo.experiences || [])];
+                    newExperiences[index] = { ...newExperiences[index], company: e.target.value };
+                    setStaffInfo({ ...staffInfo, experiences: newExperiences });
+                  }}
+                />
+                <textarea
+                  placeholder="Description"
+                  value={exp.description}
+                  onChange={(e) => {
+                    const newExperiences = [...(staffInfo.experiences || [])];
+                    newExperiences[index] = { ...newExperiences[index], description: e.target.value };
+                    setStaffInfo({ ...staffInfo, experiences: newExperiences });
+                  }}
+                />
+              </div>
+            )) || <p>No experiences available</p>
+          ) : (
+            staffInfo.experiences?.map((exp, index) => (
+              <div key={index} className={styles.experienceItem}>
+                <h3>{exp.title}</h3>
+                <p className={styles.companyName}>{exp.company}</p>
+                <p className={styles.experienceDesc}>{exp.description}</p>
+              </div>
+            )) || <p>No experiences available</p>
+          )}
+        </div>
+      </div>
+
+      {isEditing && (
+        <div className={styles.editModal}>
+          <div className={styles.modalContent}>
+            <h2>Edit Profile</h2>
+            
+            {/* Phần Avatar */}
+            <div className={styles.avatarUploadSection}>
+              <img
+                src={staffInfo.avatar || "https://static-cse.canva.com/blob/1806764/1600w-_q--r1GW6_E.jpg"}
+                alt="Avatar Preview"
+                className={styles.avatarPreview}
+              />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                id="avatarUpload"
+                className={styles.hiddenInput}
+              />
+              <label htmlFor="avatarUpload" className={styles.uploadButton}>
+                Change Avatar
+              </label>
+            </div>
+
+            {/* Phần Bio */}
+            <div className={styles.formSection}>
+              <label>Bio</label>
+              <textarea
+                value={staffInfo.bio || ""}
+                onChange={(e) => setStaffInfo({ ...staffInfo, bio: e.target.value })}
+              />
+            </div>
+
+            {/* Phần Projects */}
+            <div className={styles.formSection}>
+              <label>Projects</label>
+              {staffInfo.projects?.map((project, index) => (
+                <div key={index} className={styles.arrayItem}>
+                  <input
+                    value={project}
+                    onChange={(e) => {
+                      const newProjects = [...(staffInfo.projects || [])];
+                      newProjects[index] = e.target.value;
+                      setStaffInfo({ ...staffInfo, projects: newProjects });
+                    }}
+                  />
+                </div>
+              ))}
+              <button
+                onClick={() => 
+                  setStaffInfo({ 
+                    ...staffInfo, 
+                    projects: [...(staffInfo.projects || []), ""] 
+                  })
+                }
+                className={styles.addButton}
+              >
+                Add Project
+              </button>
+            </div>
+
+            {/* Phần Experience */}
+            <div className={styles.formSection}>
+              <label>Experiences</label>
+              {staffInfo.experiences?.map((exp, index) => (
+                <div key={index} className={styles.arrayItem}>
+                  <input
+                    placeholder="Title"
+                    value={exp.title}
+                    onChange={(e) => {
+                      const newExperiences = [...(staffInfo.experiences || [])];
+                      newExperiences[index] = { ...newExperiences[index], title: e.target.value };
+                      setStaffInfo({ ...staffInfo, experiences: newExperiences });
+                    }}
+                  />
+                  <input
+                    placeholder="Company"
+                    value={exp.company}
+                    onChange={(e) => {
+                      const newExperiences = [...(staffInfo.experiences || [])];
+                      newExperiences[index] = { ...newExperiences[index], company: e.target.value };
+                      setStaffInfo({ ...staffInfo, experiences: newExperiences });
+                    }}
+                  />
+                  <textarea
+                    placeholder="Description"
+                    value={exp.description}
+                    onChange={(e) => {
+                      const newExperiences = [...(staffInfo.experiences || [])];
+                      newExperiences[index] = { ...newExperiences[index], description: e.target.value };
+                      setStaffInfo({ ...staffInfo, experiences: newExperiences });
+                    }}
+                  />
+                </div>
+              ))}
+              <button
+                onClick={() => 
+                  setStaffInfo({
+                    ...staffInfo,
+                    experiences: [
+                      ...(staffInfo.experiences || []), 
+                      { title: "", company: "", description: "" }
+                    ]
+                  })
+                }
+                className={styles.addButton}
+              >
+                Add Experience
+              </button>
+            </div>
+
+            {/* Nút điều khiển */}
+            <div className={styles.buttonGroup}>
+              <button className={styles.saveButton} onClick={handleSave}>
+                Save
+              </button>
+              <button className={styles.cancelButton} onClick={() => setIsEditing(false)}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
