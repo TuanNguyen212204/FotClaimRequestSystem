@@ -23,11 +23,13 @@ export const fetchAllClaims = createAsyncThunk("pending/fetchAllClaims", async (
     return res.data;
 });
 
-export const deleteClaim = createAsyncThunk("pending/deleteClaim", async (id: string) => {
-    if(window.confirm("Are you sure you want to delete this claim?")){
+export const deleteClaim = createAsyncThunk("pending/deleteClaim", async (id: string, { rejectWithValue }) => {
+    if (window.confirm("Are you sure you want to delete this claim?")) {
         const res = await axios.delete(`https://67263146302d03037e6cb422.mockapi.io/pending/${id}`);
         console.log("Data", res.data);
         return id;
+    } else {
+        return rejectWithValue("User cancelled the deletion");
     }
 });
 

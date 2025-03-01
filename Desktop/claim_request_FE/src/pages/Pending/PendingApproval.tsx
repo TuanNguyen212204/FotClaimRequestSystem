@@ -74,11 +74,17 @@ export const PendingComponent: React.FC = () => {
     });
     setSelectedClaims([]);
     toast.success("Selected claims deleted successfully!");
+    toast.error("Error deleting claims!");
   };
 
   const handleDelete = (id: string) => {
-    dispatch(deleteClaim(id));
-    toast.success("Claim deleted successfully!");
+    dispatch(deleteClaim(id))
+      .then(() => {
+        toast.success("Claim deleted successfully!");
+      })
+      .catch(() => {
+        toast.error("Error deleting claim!");
+      });
   };
 
   const noData = () => {

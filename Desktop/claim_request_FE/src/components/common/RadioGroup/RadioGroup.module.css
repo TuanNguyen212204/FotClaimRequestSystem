@@ -1,6 +1,6 @@
 .radioGroup {
     display: flex;
-    flex-direction: row; /* Change to row for horizontal layout */
+    flex-direction: column; 
     gap: 10px;
     margin-bottom: 20px;
 }
