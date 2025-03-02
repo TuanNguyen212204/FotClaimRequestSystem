@@ -7,22 +7,21 @@ export interface DropdownProps {
   options: Option[];
   onSelect: (option: string) => void;
   disabled?: boolean;
+  configDefault?: ConfigDefault;
 }
-
+export interface ConfigDefault {
+  value: keyof Option;
+  label: keyof Option;
+}
 export interface Option {
   value: string;
   label: string;
 }
-const DEFAULT_OPTION: Option = { value: "", label: "" };
-//kiem tra coi option truyen vao co hop le khong
-const isValidOption = (option: Option) =>
-  option &&
-  typeof option.value === "string" &&
-  typeof option.label === "string";
-//kiem tra coi options truyen vao phai array hay khong va moi option trong array co hop le khong
-const isValidOptions = (options: Option[]) =>
-  Array.isArray(options) && options.every(isValidOption);
+
+const DEFAULT_OPTION: ConfigDefault = { value: "value", label: "label" };
+
 const Dropdown: React.FC<DropdownProps> = ({
+  configDefault = DEFAULT_OPTION,
   label = "Select an option",
   options,
   onSelect,
@@ -30,7 +29,8 @@ const Dropdown: React.FC<DropdownProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [selectedOption, setSelectedOption] = useState<string | null>(); // Use configDefault
+
   const handleMouseEnter = () => !disabled && setIsOpen(true);
   const handleMouseLeave = () => !disabled && setIsOpen(false);
   const handleOptionClick = (option: string) => {
@@ -38,10 +38,10 @@ const Dropdown: React.FC<DropdownProps> = ({
     onSelect(option);
     setIsOpen(false);
   };
-  //cho nay de minh check coi options co hop le khong, neu khong thi gan mac dinh no la DEFAULT_OPTION de tranh loi hien thi tren giao dien
-  const isOptionsValid: Option[] = isValidOptions(options)
-    ? options
-    : [DEFAULT_OPTION];
+  const newOptions = options.map((option) => ({
+    label: option[configDefault.label] || "",
+    value: option[configDefault.value] || "",
+  }));
   return (
     <div
       className={styles.dropdown_container}
@@ -58,12 +58,12 @@ const Dropdown: React.FC<DropdownProps> = ({
       </button>
       {isOpen && (
         <div className={styles.dropdown_menu}>
-          {isOptionsValid.map(({ value, label }) => (
+          {newOptions.map(({ value, label }) => (
             <button
               key={value}
               onClick={(e) => {
                 e.stopPropagation();
-                handleOptionClick(value);
+                handleOptionClick(label);
               }}
               className={styles.dropdown_item}
             >

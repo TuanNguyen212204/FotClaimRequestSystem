@@ -91,7 +91,7 @@ const ApproveDetail: React.FC = () => {
     console.log("Selected:", value);
   };
 
-  const options = [{ value: "js", label: "JavaScript" }];
+  const options = [{ value: "js", label: "javascript" }];
 
   return (
     <div>
