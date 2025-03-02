@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import styles from "./Dropdown.module.css";
 
@@ -28,14 +28,14 @@ const Dropdown: React.FC<DropdownProps> = ({
   disabled,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const [selectedOption, setSelectedOption] = useState<string | null>(); // Use configDefault
-
+  const [selectedOption, setSelectedOption] = useState<string | null>();
+  const [selectedLabel, setSelectedLabel] = useState<string | null>(label);
   const handleMouseEnter = () => !disabled && setIsOpen(true);
   const handleMouseLeave = () => !disabled && setIsOpen(false);
-  const handleOptionClick = (option: string) => {
-    setSelectedOption(option);
-    onSelect(option);
+  const handleOptionClick = (value: string, label: string) => {
+    setSelectedOption(value);
+    setSelectedLabel(label);
+    onSelect(value);
     setIsOpen(false);
   };
   const newOptions = options.map((option) => ({
@@ -45,7 +45,6 @@ const Dropdown: React.FC<DropdownProps> = ({
   return (
     <div
       className={styles.dropdown_container}
-      ref={dropdownRef}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
@@ -54,7 +53,7 @@ const Dropdown: React.FC<DropdownProps> = ({
         disabled={disabled}
         aria-label="Dropdown menu"
       >
-        {selectedOption || label} <ChevronDown />
+        {selectedLabel} <ChevronDown />
       </button>
       {isOpen && (
         <div className={styles.dropdown_menu}>
@@ -63,7 +62,7 @@ const Dropdown: React.FC<DropdownProps> = ({
               key={value}
               onClick={(e) => {
                 e.stopPropagation();
-                handleOptionClick(label);
+                handleOptionClick(value, label);
               }}
               className={styles.dropdown_item}
             >
