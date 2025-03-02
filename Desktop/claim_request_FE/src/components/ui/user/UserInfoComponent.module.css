@@ -202,17 +202,18 @@
 }
 
 .removeButton {
-  position: absolute;
-  top: 4px;
-  right: 4px;
-  background: #ff6b6b;
+margin-left: 10px;
+  padding: 5px 10px;
+  background-color: #ff4d4f;
   color: white;
   border: none;
-  border-radius: 50%;
-  width: 24px;
-  height: 24px;
+  border-radius: 4px;
   cursor: pointer;
-  line-height: 1;
+  transition: background-color 0.3s ease;
+}
+
+.removeButton:hover{
+  background-color: #ff1a1a;
 }
 
 .addButton {

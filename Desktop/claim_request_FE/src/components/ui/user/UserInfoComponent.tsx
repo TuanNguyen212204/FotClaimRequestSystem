@@ -25,7 +25,48 @@ export const UserInfoComponent: React.FC = () => {
     }
   }, [selectedUser, isEditing]);
 
+  const validateFields = (): string | null =>{
+    if (!staffInfo) return "User data is invalid";
+
+    if (!staffInfo.bio || staffInfo.bio.trim().length === 0){
+      return "Bio cannot be empty";
+    }
+
+    if (staffInfo.bio.length > 500){
+      return "Bio must not exceed 500 characters";
+    }
+
+    if (staffInfo.projects){
+      const emptyProjects = staffInfo.projects.filter((project)=> !project || project.trim().length === 0);
+      if (emptyProjects.length > 0){
+        return "All projects must hae a name";
+      }
+    }
+
+    if (staffInfo.experiences){
+      for(const exp of staffInfo.experiences){
+        if (!exp.title || exp.title.trim().length === 0){
+          return "Experience title cannot be empty";
+        }
+        if (!exp.company || exp.company.trim().length === 0){
+          return "Experience company cannot be empty";
+        }
+        if (!exp.description || exp.description.trim().length === 0){
+          return "Experience description cannot be empty";
+        }
+      }
+    }
+
+    return null;
+  }
+
   const handleSave = () => {
+    const validationError = validateFields();
+    if(validationError){
+      notification.show({message: validationError, type: "error"}); 
+      return ;
+    }
+
     if (staffInfo && staffInfo.userID) { 
       dispatch(updateUserAsync({ userId: staffInfo.userID, userData: staffInfo }))
         .unwrap() 
@@ -50,16 +91,35 @@ export const UserInfoComponent: React.FC = () => {
         if (event.target?.result) {
           setStaffInfo({ ...staffInfo, avatar: event.target.result as string });
           notification.show({ message:"Avatar updated successfully!", type: "success"})
+        }else{
+          notification.show({message:"Failed to upload image. Please try again.", type: "error"});
         }
       };
+      reader.onerror = () => {
+        notification.show({message:"Failed to upload image. Please try again.", type: "error"});
+      }
       reader.readAsDataURL(file);
     } else {
       notification.show({message:"Failed to upload image. Please try again.", type: "error"})
     }
   };
 
+  const handleRemoveProject = (index: number)=>{
+    if(staffInfo && staffInfo.projects){
+      const newProjects = staffInfo.projects.filter((_, i)=> i !== index);
+      setStaffInfo({...staffInfo, projects: newProjects});
+    }
+  }
+
+  const handleRemoveExperience = (index: number)=>{
+    if(staffInfo && staffInfo.experiences){
+      const newExperiences = staffInfo.experiences.filter((_, i)=> i !== index);
+      setStaffInfo({...staffInfo, experiences: newExperiences});
+    }
+  }
+
   if (!staffInfo) {
-    return <div>Loading...</div>; 
+    return <div>User Loading...</div>; 
   }
 
   return (
@@ -83,9 +143,9 @@ export const UserInfoComponent: React.FC = () => {
         </div>
 
         <div className={styles.profileInfo}>
-          <h1>{staffInfo.fullName || "Tuan Nguyen"}</h1>
-          <p className={styles.position}>{staffInfo.jobRank || "Chief Executive Officer (C.E.O)"}</p>
-          <p className={styles.company}>© {staffInfo.department || "FPT Software"}.</p>
+          <h1>{staffInfo.fullName || "Username not found"}</h1>
+          <p className={styles.position}>{staffInfo.jobRank || "No position available"}</p>
+          <p className={styles.company}>© {staffInfo.department || "No company available"}.</p>
 
           <div className={styles.statsContainer}>
             <div className={styles.statItem}>
@@ -123,18 +183,52 @@ export const UserInfoComponent: React.FC = () => {
 
         <div className={styles.section}>
           <h2 className={styles.sectionTitle}>Projects</h2>
-          <div className={styles.projectsGrid}>
-            {staffInfo.projects?.map((project) => (
-              <div key={project} className={styles.projectCard}>
-                {project}
-              </div>
-            )) || <p>No projects available</p>}
+           <div className={styles.projectsGrid}>
+            {isEditing ? (
+              staffInfo.projects?.map((project, index) => (
+                <div key={index} className={styles.arrayItem}>
+                  <input
+                    value={project}
+                    onChange={(e) => {
+                      const newProjects = [...(staffInfo.projects || [])];
+                      newProjects[index] = e.target.value;
+                      setStaffInfo({ ...staffInfo, projects: newProjects });
+                    }}
+                  />
+                  <button
+                    className={styles.removeButton}
+                    onClick={() => handleRemoveProject(index)}
+                  >
+                    Remove
+                  </button>
+                </div>
+              )) || <p>No projects available</p>
+            ) : (
+              staffInfo.projects?.map((project) => (
+                <div key={project} className={styles.projectCard}>
+                  {project}
+                </div>
+              )) || <p>No projects available</p>
+            )}
+            {isEditing && (
+              <button
+                onClick={() => 
+                  setStaffInfo({ 
+                    ...staffInfo, 
+                    projects: [...(staffInfo.projects || []), ""] 
+                  })
+                }
+                className={styles.addButton}
+              >
+                Add Project
+              </button>
+            )}
           </div>
         </div>
 
         <div className={styles.section}>
           <h2 className={styles.sectionTitle}>Experience</h2>
-          {isEditing ? (
+{isEditing ? (
             staffInfo.experiences?.map((exp, index) => (
               <div key={index} className={styles.arrayItem}>
                 <input
@@ -164,6 +258,12 @@ export const UserInfoComponent: React.FC = () => {
                     setStaffInfo({ ...staffInfo, experiences: newExperiences });
                   }}
                 />
+                <button
+                  className={styles.removeButton}
+                  onClick={() => handleRemoveExperience(index)}
+                >
+                  Remove
+                </button>
               </div>
             )) || <p>No experiences available</p>
           ) : (
@@ -175,15 +275,29 @@ export const UserInfoComponent: React.FC = () => {
               </div>
             )) || <p>No experiences available</p>
           )}
+          {isEditing && (
+            <button
+              onClick={() => 
+                setStaffInfo({
+                  ...staffInfo,
+                  experiences: [
+                    ...(staffInfo.experiences || []), 
+                    { title: "", company: "", description: "" }
+                  ]
+                })
+              }
+              className={styles.addButton}
+            >
+              Add Experience
+            </button>
+          )}
         </div>
       </div>
 
-      {isEditing && (
+{isEditing && (
         <div className={styles.editModal}>
           <div className={styles.modalContent}>
             <h2>Edit Profile</h2>
-            
-            {/* Phần Avatar */}
             <div className={styles.avatarUploadSection}>
               <img
                 src={staffInfo.avatar || "https://static-cse.canva.com/blob/1806764/1600w-_q--r1GW6_E.jpg"}
@@ -201,8 +315,6 @@ export const UserInfoComponent: React.FC = () => {
                 Change Avatar
               </label>
             </div>
-
-            {/* Phần Bio */}
             <div className={styles.formSection}>
               <label>Bio</label>
               <textarea
@@ -210,8 +322,6 @@ export const UserInfoComponent: React.FC = () => {
                 onChange={(e) => setStaffInfo({ ...staffInfo, bio: e.target.value })}
               />
             </div>
-
-            {/* Phần Projects */}
             <div className={styles.formSection}>
               <label>Projects</label>
               {staffInfo.projects?.map((project, index) => (
@@ -224,6 +334,12 @@ export const UserInfoComponent: React.FC = () => {
                       setStaffInfo({ ...staffInfo, projects: newProjects });
                     }}
                   />
+                  <button
+                    className={styles.removeButton}
+                    onClick={() => handleRemoveProject(index)}
+                  >
+                    Remove
+                  </button>
                 </div>
               ))}
               <button
@@ -238,8 +354,6 @@ export const UserInfoComponent: React.FC = () => {
                 Add Project
               </button>
             </div>
-
-            {/* Phần Experience */}
             <div className={styles.formSection}>
               <label>Experiences</label>
               {staffInfo.experiences?.map((exp, index) => (
@@ -271,6 +385,12 @@ export const UserInfoComponent: React.FC = () => {
                       setStaffInfo({ ...staffInfo, experiences: newExperiences });
                     }}
                   />
+                  <button
+                    className={styles.removeButton}
+                    onClick={() => handleRemoveExperience(index)}
+                  >
+                    Remove
+                  </button>
                 </div>
               ))}
               <button
@@ -288,8 +408,6 @@ export const UserInfoComponent: React.FC = () => {
                 Add Experience
               </button>
             </div>
-
-            {/* Nút điều khiển */}
             <div className={styles.buttonGroup}>
               <button className={styles.saveButton} onClick={handleSave}>
                 Save

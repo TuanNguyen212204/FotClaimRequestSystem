@@ -23,7 +23,7 @@ const Notification : React.FC<NotificationProps> = ({message, type, duration = 5
     <button
     onClick={onClose}
     className={styles.closeButton}>
-    Close
+    X
     </button>
     </div>
       </div>
