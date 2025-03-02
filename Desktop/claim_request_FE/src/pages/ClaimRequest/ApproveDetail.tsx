@@ -86,14 +86,12 @@ const ApproveDetail: React.FC = () => {
       status: "Approved",
     },
   ];
+
   const handleSelect = (value: string) => {
     console.log("Selected:", value);
   };
-  const options = [
-    { value: "js", label: "JavaScript" },
-    { value: "ts", label: "TypeScript" },
-    { value: "py", label: "Python" },
-  ];
+
+  const options = [{ value: "js", label: "JavaScript" }];
 
   return (
     <div>
