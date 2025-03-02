@@ -1,5 +1,5 @@
-import TableComponent from "@/components/common/Table";
-import Dropdown from "@/components/common/Dropdown/Dropdown";
+
+import Dropdown from "@/components/ui/Dropdown/Dropdown";
 const ApproveDetail: React.FC = () => {
   const columns = [
     { title: "ID", dataIndex: "id", key: "id" },
