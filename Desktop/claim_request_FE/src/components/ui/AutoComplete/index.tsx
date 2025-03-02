@@ -1,20 +1,32 @@
 import React from "react";
-import { useAutoComplete, Option } from "@Hooks/useAutoComplete";
-
-interface AutoCompleteProps {
-  options: Option[];
-  onSelect?: (value: string, option: Option) => void;
-  value?: string;
-  onChange?: (value: string) => void;
-  placeholder?: string;
-}
+import useAutoComplete from "@/Hooks/useAutoComplete";
+import { AutoCompleteProps } from "./AutoComplete.types";
+import ClearIcon from "./ClearIcon";
+import DropdownList from "./DropDownlist";
+import { Option } from "@/Hooks/useAutoComplete";
+const variantStyles = {
+  outline:
+    "border bg-white  border-gray-400 hover:border-blue-500 focus:border-blue-500 focus:outline-2 focus:outline-blue-100",
+  filled:
+    "bg-gray-100 hover:bg-gray-200 border border-transparent outline-none focus:border-blue-500",
+  borderless: "border-none shadow-none outline-none bg-white",
+  default:
+    "border border-[#d9d9d9] bg-white  focus:border-blue-500  hover:border-blue-500 focus:outline-2 focus:outline-blue-100 ",
+};
 
 const AutoComplete: React.FC<AutoCompleteProps> = ({
   options,
   onSelect,
   value,
   onChange,
+  allowClear,
+  onSearch,
   placeholder = "Type to search...",
+  disabled = false,
+  autoFocus = false,
+  varient = "default",
+  notFoundContent,
+  inputRef,
 }) => {
   const {
     value: inputValue,
@@ -23,11 +35,23 @@ const AutoComplete: React.FC<AutoCompleteProps> = ({
     containerRef,
     handleInputChange,
     handleSelect,
+    handleClear,
+    activeIndex,
+    handelKeyDown,
   } = useAutoComplete({
     options,
     value,
     onChange,
+    onSearch,
+    onSelect,
   });
+
+  const getVariantStyle = () => {
+    return (
+      variantStyles[varient as keyof typeof variantStyles] ||
+      variantStyles.default
+    );
+  };
 
   const insiderHandleSelect = (option: Option) => {
     const selected = handleSelect(option);
@@ -35,34 +59,44 @@ const AutoComplete: React.FC<AutoCompleteProps> = ({
       onSelect(selected.value, selected);
     }
   };
+
   return (
-    <div ref={containerRef} className="box-border relative max-w-[309px]">
+    <div
+      ref={containerRef}
+      className="relative max-w-[301px]  w-full box-border"
+    >
       <input
-        value={inputValue}
+        type="text"
+        value={
+          activeIndex >= 0 ? filteredOptions[activeIndex].value : inputValue
+        }
+        ref={inputRef}
         onChange={handleInputChange}
         placeholder={placeholder}
-        className="w-full p-2 border border-[#d9d9d9] text-black bg-white rounded"
+        onKeyDown={handelKeyDown}
+        disabled={disabled}
+        autoFocus={autoFocus}
+        className={`w-full p-2 text-black rounded box-border ${getVariantStyle()}`}
       />
-      {open && filteredOptions.length > 0 ? (
-        <>
-          {" "}
-          <ul
-            className={`absolute top-[130%]  w-full box-border border border-[#d9d9d9] rounded bg-white m-0 p-0 list-none max-h-[150px] z-10 overflow-y-auto`}
-          >
-            {filteredOptions.map((option) => (
-              <li
-                key={option.value}
-                onClick={() => insiderHandleSelect(option)}
-                className="p-2 cursor-pointer text-black hover:bg-gray-100"
-              >
-                {option.label || option.value}
-              </li>
-            ))}
-          </ul>
-        </>
-      ) : (
-        <></>
+      {allowClear && inputValue && (
+        <ClearIcon onClick={handleClear} Icon={allowClear} />
       )}
+
+      <DropdownList
+        isOpen={open && filteredOptions.length > 0}
+        options={filteredOptions}
+        onSelect={insiderHandleSelect}
+        activeIndex={activeIndex}
+      />
+      {notFoundContent ? (
+        <DropdownList
+          isOpen={filteredOptions.length === 0}
+          options={filteredOptions}
+          onSelect={insiderHandleSelect}
+          activeIndex={activeIndex}
+          notFoundContent={notFoundContent}
+        />
+      ) : null}
     </div>
   );
 };
