@@ -47,7 +47,7 @@ const AutoComplete: React.FC<AutoCompleteProps> = ({
         <>
           {" "}
           <ul
-            className={`absolute top-[130%]  w-full border border-[#d9d9d9] rounded bg-white m-0 p-0 list-none max-h-[150px] z-10 overflow-y-auto`}
+            className={`absolute top-[130%]  w-full box-border border border-[#d9d9d9] rounded bg-white m-0 p-0 list-none max-h-[150px] z-10 overflow-y-auto`}
           >
             {filteredOptions.map((option) => (
               <li
