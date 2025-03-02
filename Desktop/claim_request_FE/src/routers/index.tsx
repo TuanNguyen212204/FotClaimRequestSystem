@@ -18,6 +18,7 @@ import ProjectInformation from "@pages/Admin/ProjectInformation";
 import StaffInformation from "@pages/Admin/StaffInformation";
 import ApprovedFinancePage from "@/pages/Finance/ApprovedFinancePage";
 import ApprovedApproverPage from "@/pages/Approver/ApprovedApproverPage";
+import Test from "@/pages/test";
 const router: RouteObject[] = [
   {
     element: <LoginForm />,
@@ -89,6 +90,10 @@ const router: RouteObject[] = [
       {
         path: PATH.staffInformation,
         element: <StaffInformation />,
+      },
+      {
+        path: PATH.test,
+        element: <Test />,
       },
     ],
   },

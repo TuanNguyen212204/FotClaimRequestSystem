@@ -117,16 +117,6 @@ export const ApprovedFinanceComponent: React.FC = () => {
           </span>
         </div>
       </div>
-      <>
-        <FileUpload
-          onUpload={handleUpload}
-          accept="image/*,application/pdf"
-          multiple
-        />
-      </>
-      <>
-        <InputNumber label="đây nè" />
-      </>
     </div>
   );
 };
