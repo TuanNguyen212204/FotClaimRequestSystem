@@ -2,12 +2,11 @@ import { useState, ChangeEvent, useEffect } from 'react';
 import './csscheckbox2.css';
 
 interface CheckboxProps {
-    label?: string;
     checked?: boolean;
     onChange?: (checked: boolean) => void;
 }
 
-export const DisabledCheckbox = ({ label, checked = false }: CheckboxProps) => {
+export const DisabledCheckbox = ({ checked = false }: CheckboxProps) => {
     return (
         <div className="checkbox-container">
             <label className="disabled-checkbox-wrapper">
@@ -18,31 +17,29 @@ export const DisabledCheckbox = ({ label, checked = false }: CheckboxProps) => {
                     className="disabled-checkbox-input"
                 />
                 <span className="disabled-checkbox" />
-                {label && <span className="checkbox-label">{label}</span>}
             </label>
         </div>
     );
 };
 
-export const CheckedDisabledCheckbox = ({ label }: CheckboxProps) => {
+export const CheckedDisabledCheckbox = ({ checked = true }: CheckboxProps) => {
     return (
         <div className="checkbox-container">
             <label className="checked-disabled-checkbox-wrapper">
                 <input
                     type="checkbox"
-                    checked={true}
+                    checked={checked}
                     disabled
                     className="checked-disabled-checkbox-input"
                 />
                 <span className="checked-disabled-checkbox" />
-                {label && <span className="checkbox-label">{label}</span>}
             </label>
         </div>
     );
 };
 
-export const SuccessCheckbox = ({ label, checked: checkChange, onChange }: CheckboxProps) => {
-    const storageChange = `checkbox_${label}`;
+export const SuccessCheckbox = ({ checked: checkChange, onChange }: CheckboxProps) => {
+    const storageChange = `checkbox_success`;
     const [isChecked, setIsChecked] = useState(() => {
         const storageValue = localStorage.getItem(storageChange);
         return storageValue ? JSON.parse(storageValue) : checkChange ?? false;
@@ -70,20 +67,13 @@ export const SuccessCheckbox = ({ label, checked: checkChange, onChange }: Check
                 <span
                     className="success-checkbox"
                 />
-                {label && (
-                    <span
-                        className="checkbox-label"
-                    >
-                        {label}
-                    </span>
-                )}
             </label>
         </div>
     );
 };
 
-export const InvalidCheckbox = ({ label, checked: checkChange, onChange }: CheckboxProps) => {
-    const storageChange = `checkbox_${label}`;
+export const InvalidCheckbox = ({ checked: checkChange, onChange }: CheckboxProps) => {
+    const storageChange = `checkbox_invalid`;
     const [isChecked, setIsChecked] = useState(() => {
         const storageValue = localStorage.getItem(storageChange);
         return storageValue ? JSON.parse(storageValue) : checkChange ?? false;
@@ -111,13 +101,6 @@ export const InvalidCheckbox = ({ label, checked: checkChange, onChange }: Check
                 <span
                     className="invalid-checkbox"
                 />
-                {label && (
-                    <span
-                        className="checkbox-label"
-                    >
-                        {label}
-                    </span>
-                )}
             </label>
         </div>
     );

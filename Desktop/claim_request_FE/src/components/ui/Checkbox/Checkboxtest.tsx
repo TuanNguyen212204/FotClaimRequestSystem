@@ -1,5 +1,4 @@
 import { BasicCheckbox } from './Checkbox';
-import { CustomCheckbox } from './Checkbox';
 import { ToggleCheckbox } from './Checkbox';
 import { CircularCheckbox } from './Checkbox';
 import { AnimatedCheckbox } from './Checkbox';
@@ -12,27 +11,25 @@ function CheckBoxTest() {
     return (
         <div style={{padding: '40px'}}>
           <h1>CheckBox Test List</h1>
-          <BasicCheckbox label="Basic" />
+          <BasicCheckbox  />
 
-          <CustomCheckbox label="Custom" />
+          <ToggleCheckbox />
 
-          <ToggleCheckbox label="Toggle"/>
+          <CircularCheckbox  />
 
-          <CircularCheckbox label="Circle" />
+          <AnimatedCheckbox  />
 
-          <AnimatedCheckbox label="Animated" />
-
-          <MinimalCheckbox label="Minimal" />
+          <MinimalCheckbox  />
 
           <h2>CheckBox Test List 2</h2>
 
-          <DisabledCheckbox label="Disabled" />
+          <DisabledCheckbox  />
 
-          <CheckedDisabledCheckbox label="Checked-Disabled" />
+          <CheckedDisabledCheckbox  />
 
-          <SuccessCheckbox label="Success" />
+          <SuccessCheckbox  />
 
-          <InvalidCheckbox label="Invalid" />
+          <InvalidCheckbox  />
         </div>
         
       );
