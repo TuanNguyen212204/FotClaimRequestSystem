@@ -1,8 +1,8 @@
 import  { useState } from "react";
 import { Bell } from "lucide-react";
 import { Users } from "lucide-react";
-import Modal from "@components/common/modal/Modal";
-import styles from "@components/common/modal/Modal.module.css";
+import Modal from "@components/ui/modal/Modal";
+import styles from "@components/ui/modal/Modal.module.css";
 
 const SwitchesModal = () => {
   const [open, setOpen] = useState(false);

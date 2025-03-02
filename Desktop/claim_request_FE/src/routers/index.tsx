@@ -18,7 +18,7 @@ import ProjectInformation from "@pages/Admin/ProjectInformation";
 import StaffInformation from "@pages/Admin/StaffInformation";
 import ApprovedFinancePage from "@/pages/Finance/ApprovedFinancePage";
 import ApprovedApproverPage from "@/pages/Approver/ApprovedApproverPage";
-import ModalTest from "@/components/common/modal/ModalTest";
+import ModalTest from "@/components/ui/modal/ModalTest";
 const router: RouteObject[] = [
   {
     element: <LoginForm />,

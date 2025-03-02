@@ -1,7 +1,7 @@
 import { useState } from "react";
-import image2 from "@components/common/modal/anh_cua_anh_dung_gui_modal_mau.png";
-import Modal from "@components/common/modal/Modal";
-import styles from "@components/common/modal/Modal.module.css";
+import image2 from "@components/ui/modal/anh_cua_anh_dung_gui_modal_mau.png";
+import Modal from "@components/ui/modal/Modal";
+import styles from "@components/ui/modal/Modal.module.css";
 
 const ImageModal = () => {
   const [open, setOpen] = useState(false);

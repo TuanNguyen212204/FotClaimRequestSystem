@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { TriangleAlert } from "lucide-react";
-import Modal from "@components/common/modal/Modal";
-import styles from "@components/common/modal/Modal.module.css";
+import Modal from "@components/ui/modal/Modal";
+import styles from "@components/ui/modal/Modal.module.css";
 
 const ConfirmModal = () => {
   const [open, setOpen] = useState(false);
