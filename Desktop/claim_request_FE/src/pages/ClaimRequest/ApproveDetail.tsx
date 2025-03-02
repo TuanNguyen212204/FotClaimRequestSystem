@@ -1,4 +1,4 @@
-import TableComponent from "@/components/common/Table";
+import Dropdown from "@/components/ui/Dropdown/Dropdown";
 const ApproveDetail: React.FC = () => {
   const columns = [
     { title: "ID", dataIndex: "id", key: "id" },
@@ -86,15 +86,28 @@ const ApproveDetail: React.FC = () => {
       status: "Approved",
     },
   ];
+
+  const handleSelect = (value: string) => {
+    console.log("Selected:", value);
+  };
+
+  const options = [{ value: "js", label: "javascript" }];
+
   return (
     <div>
-      <TableComponent
+      <Dropdown
+        label="Select item"
+        options={options}
+        onSelect={handleSelect}
+        disabled={false}
+      />
+      {/* <TableComponent
         columns={columns}
         dataSource={dataSource}
         loading={false}
         pagination={true}
         page="Object"
-      />
+      /> */}
     </div>
   );
 };
