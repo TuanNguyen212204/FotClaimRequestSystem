@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from "@components/common/Badge/Badge.module.css"
+import styles from "@components/ui/Badge/Badge.module.css"
 interface BadgeProps {
     count: number;
     color?: string;

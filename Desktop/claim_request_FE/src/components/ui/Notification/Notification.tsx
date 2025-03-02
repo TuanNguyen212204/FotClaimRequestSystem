@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import styles from '@components/common/Notification/Notification.module.css';
+import styles from '@components/ui/Notification/Notification.module.css';
 
 interface NotificationProps {
   message: string;

@@ -4,7 +4,7 @@ import SearchBar from "../searchbar/SearchBar";
 import { FaBell, FaUserCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { PATH } from "../../../constant/config";
-import { Tooltip } from "../../common/Tooltip/Tooltip.tsx";
+import { Tooltip } from "@ui/Tooltip/Tooltip.tsx";
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
