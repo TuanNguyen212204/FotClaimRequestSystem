@@ -35,16 +35,18 @@
   padding: 6px 0;
   z-index: 1000;
   opacity: 0;
+  width: 100%;
   transform: translateY(10px);
   animation: dropdownFade 0.2s ease forwards;
 }
 
-/* Dropdown Items */
+
 .dropdown_item {
   padding: 8px 12px;
   font-size: 14px;
   color: #333;
   cursor: pointer;
+  text-align: center;
   transition: background 0.3s ease;
 }
 

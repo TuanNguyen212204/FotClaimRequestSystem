@@ -1,4 +1,3 @@
-
 import Dropdown from "@/components/ui/Dropdown/Dropdown";
 const ApproveDetail: React.FC = () => {
   const columns = [
@@ -90,13 +89,19 @@ const ApproveDetail: React.FC = () => {
   const handleSelect = (value: string) => {
     console.log("Selected:", value);
   };
+  const options = [
+    { value: "js", label: "JavaScript" },
+    { value: "ts", label: "TypeScript" },
+    { value: "py", label: "Python" },
+  ];
+
   return (
     <div>
       <Dropdown
         label="Select item"
-        options={["Option 1", "Option 2", "Option 3"]}
+        options={options}
         onSelect={handleSelect}
-        disabled={true}
+        disabled={false}
       />
       {/* <TableComponent
         columns={columns}
