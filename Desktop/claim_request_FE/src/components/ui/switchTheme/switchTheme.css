@@ -39,7 +39,7 @@
   .theme-switch.dark .switch-knob {
     transform: translateX(20px);
   }
-  
+
   body.light-theme {
     background: white; 
     color: #333333; 
