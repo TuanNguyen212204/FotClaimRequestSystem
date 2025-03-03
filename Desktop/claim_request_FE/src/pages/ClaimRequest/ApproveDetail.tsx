@@ -1,6 +1,4 @@
-import { Email } from "@/components/ui/Input/Input";
 import TableComponent from "@/components/common/Table";
-import { InputWithSubComponents } from "@/components/ui/Input/Input";
 const ApproveDetail: React.FC = () => {
   const columns = [
     { title: "ID", dataIndex: "id", key: "id" },
@@ -88,18 +86,15 @@ const ApproveDetail: React.FC = () => {
       status: "Approved",
     },
   ];
-
   return (
-    <div style={{ height: "86%" }}>
-      {/* <TableComponent
+    <div>
+      <TableComponent
         columns={columns}
         dataSource={dataSource}
         loading={false}
         pagination={true}
         page="Object"
-      /> */}
-
-      <InputWithSubComponents.Password placeholder="Password" size="medium" />
+      />
     </div>
   );
 };
