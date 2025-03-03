@@ -6,14 +6,14 @@ import {
   forwardRef,
   useRef,
 } from "react";
-import styles from "@components/common/Table.module.css";
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp } from "lucide-react";
-
+import styles from "./Table.module.css";
+import { ArrowDown, ArrowUp } from "lucide-react";
+import PaginationForTable from "./PaginationForTable";
 export type Column = {
   key?: string;
   dataIndex: string;
   title: string;
-  cell?: ({ value }: { value: unknown }) => ReactNode;
+  cell?: ({ value, record }: { value: unknown; record: unknown }) => ReactNode;
 };
 
 export type DataRecord = {
@@ -252,7 +252,7 @@ const TableComponent = forwardRef(
                     {columns.map((col) => (
                       <th
                         key={col.key || col.dataIndex}
-                        style={{ textAlign: "center", paddingRight: "0.5rem" }}
+                        className="thead_style"
                         onClick={
                           sortConfig?.columnKey === col.dataIndex
                             ? () => handleSort(col.dataIndex)
@@ -290,6 +290,7 @@ const TableComponent = forwardRef(
                             {col.cell
                               ? col.cell({
                                   value: record[col.dataIndex as keyof T],
+                                  record: record[col.dataIndex as keyof T],
                                 })
                               : String(record[col.dataIndex as keyof T])}
                           </Cell>
@@ -304,43 +305,13 @@ const TableComponent = forwardRef(
             <h1>No data</h1>
           )}
         </div>
-        <div>
-          {pagination && totalPages >= 1 && (
-            <div className={styles.pagination}>
-              <button
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-                className={styles.pagination_button_icon}
-                style={{ marginRight: "10px" }}
-              >
-                <ArrowLeft />
-              </button>
-
-              {Array.from({ length: totalPages }, (_, index) => index + 1).map(
-                (pageNumber) => (
-                  <button
-                    key={pageNumber}
-                    onClick={() => handlePageChange(pageNumber)}
-                    className={`${styles.pagination_button} ${
-                      pageNumber === currentPage ? styles.activePage : ""
-                    }`}
-                    style={{ paddingTop: "2px" }}
-                  >
-                    {pageNumber}
-                  </button>
-                )
-              )}
-
-              <button
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                className={styles.pagination_button_icon}
-              >
-                <ArrowRight />
-              </button>
-            </div>
-          )}
-        </div>
+        {pagination && totalPages >= 1 && (
+          <PaginationForTable
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        )}
       </div>
     );
   }

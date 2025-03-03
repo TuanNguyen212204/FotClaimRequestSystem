@@ -1,4 +1,4 @@
-import TableComponent from "@/components/common/Table";
+import TableComponent from "@/components/ui/Table/Table";
 import { FilePen, Trash2 } from "lucide-react";
 import { AArrowDown } from "lucide-react";
 const UserSettings: React.FC = () => {

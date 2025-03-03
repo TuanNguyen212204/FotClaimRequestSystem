@@ -1,6 +1,6 @@
-import TableComponent from "@/components/common/Table";
+import TableComponent from "@/components/ui/Table/Table";
 import { useRef } from "react";
-import { DataRecord, SortConfig } from "@/components/common/Table";
+import { DataRecord, SortConfig } from "@/components/ui/Table/Table";
 const ApproveDetail: React.FC = () => {
   const tableRef = useRef<{
     getSelectedData: () => DataRecord[];
@@ -98,7 +98,7 @@ const ApproveDetail: React.FC = () => {
         pagination={true}
         name={"ApproveDetail"}
         sortConfig={sortConfig}
-      pageLength={2}
+        pageLength={2}
       />
       <button onClick={handleGetSelectedData}>Selected Data</button>
     </div>
