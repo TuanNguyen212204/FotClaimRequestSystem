@@ -116,7 +116,6 @@
   }
   
   .invalid-checkbox-input:checked + .invalid-checkbox::after {
-    content: '-';
     position: absolute;
     top: 50%;
     left: 50%;
