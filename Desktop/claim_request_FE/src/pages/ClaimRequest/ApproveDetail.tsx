@@ -1,6 +1,4 @@
-import TableComponent from "@/components/ui/Table/Table";
-import { useRef } from "react";
-import { DataRecord, SortConfig } from "@/components/ui/Table/Table";
+import TableComponent from "@/components/common/Table";
 const ApproveDetail: React.FC = () => {
   const tableRef = useRef<{
     getSelectedData: () => DataRecord[];
@@ -88,19 +86,22 @@ const ApproveDetail: React.FC = () => {
       action: "",
     },
   ];
+
+  const handleSelect = (value: string) => {
+    console.log("Selected:", value);
+  };
+
+  const options = [{ value: "js", label: "javascript" }];
+
   return (
     <div>
       <TableComponent
-        ref={tableRef}
         columns={columns}
         dataSource={dataSource}
         loading={false}
         pagination={true}
-        name={"ApproveDetail"}
-        sortConfig={sortConfig}
-        pageLength={2}
+        page="Object"
       />
-      <button onClick={handleGetSelectedData}>Selected Data</button>
     </div>
   );
 };

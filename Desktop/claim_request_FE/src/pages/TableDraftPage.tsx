@@ -1,4 +1,4 @@
-import TableComponent from "@/components/ui/Table/Table";
+import TableComponent from "@/components/common/Table";
 import { Router } from "@/routers";
 import { title } from "process";
 const TableDraftPage = () => {
