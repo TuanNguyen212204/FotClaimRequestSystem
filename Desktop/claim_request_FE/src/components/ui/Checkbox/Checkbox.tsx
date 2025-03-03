@@ -6,11 +6,11 @@ interface CheckboxProps {
   onChange?: (checked: boolean) => void;
 }
 
-export const BasicCheckbox = ({ checked: checkChange, onChange }: CheckboxProps) => {
+export const BasicCheckbox = ({ checked = true, onChange }: CheckboxProps) => {
   const storageChange = `checkbox_basic`;
   const [isChecked, setIsChecked] = useState(() => {
     const storageValue = localStorage.getItem(storageChange);
-    return storageValue ? JSON.parse(storageValue) : checkChange ?? false;
+    return storageValue ? JSON.parse(storageValue) : checked ?? true;
   });
 
   useEffect(() => {
@@ -38,11 +38,11 @@ export const BasicCheckbox = ({ checked: checkChange, onChange }: CheckboxProps)
   );
 };
 
-export const AnimatedCheckbox = ({ checked: checkChange, onChange }: CheckboxProps) => {
+export const AnimatedCheckbox = ({ checked = true, onChange }: CheckboxProps) => {
   const storageChange = `checkbox_animated`;
   const [isChecked, setIsChecked] = useState(() => {
     const storageValue = localStorage.getItem(storageChange);
-    return storageValue ? JSON.parse(storageValue) : checkChange ?? false;
+    return storageValue ? JSON.parse(storageValue) : checked ?? true;
   });
 
   useEffect(() => {
@@ -70,11 +70,11 @@ export const AnimatedCheckbox = ({ checked: checkChange, onChange }: CheckboxPro
   );
 };
 
-export const MinimalCheckbox = ({ checked: checkChange, onChange }: CheckboxProps) => {
+export const MinimalCheckbox = ({ checked = true, onChange }: CheckboxProps) => {
   const storageChange = `checkbox_minimal`;
   const [isChecked, setIsChecked] = useState(() => {
     const storageValue = localStorage.getItem(storageChange);
-    return storageValue ? JSON.parse(storageValue) : checkChange ?? false;
+    return storageValue ? JSON.parse(storageValue) : checked ?? true;
   });
 
   useEffect(() => {

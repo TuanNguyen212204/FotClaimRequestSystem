@@ -1,21 +1,20 @@
 import { useState, useEffect } from 'react';
 import './switchTheme.css';
 
-export const SwitchTheme = () => {
+interface SwitchThemeProps {
+    defaultTheme?: boolean;
+}
+
+export const SwitchTheme = ({ defaultTheme = false }: SwitchThemeProps) => {
     const storageChange = `switch_theme`;
     const [isDarkTheme, setIsDarkTheme] = useState(() => {
         const storageValue = localStorage.getItem(storageChange);
-        return storageValue ? JSON.parse(storageValue) : false;
+        return storageValue ? JSON.parse(storageValue) : defaultTheme ?? false;
     });
 
     useEffect(() => {
-        if (isDarkTheme) {
-            document.body.classList.add('dark-theme');
-            document.body.classList.remove('light-theme');
-        } else {
-            document.body.classList.add('light-theme');
-            document.body.classList.remove('dark-theme');
-        }
+        document.body.classList.toggle('dark-theme', isDarkTheme);
+        document.body.classList.toggle('light-theme', !isDarkTheme);
         localStorage.setItem(storageChange, JSON.stringify(isDarkTheme));
     }, [isDarkTheme]);
 
@@ -26,11 +25,12 @@ export const SwitchTheme = () => {
     return (
         <div className='switch-container'>
             <button
-                className={`theme-switch ${isDarkTheme ? 'dark' : 'light'}`}
+                className={`theme-button ${isDarkTheme ? 'dark' : 'light'}`}
                 onClick={handleChange}
             >
-                <span className='switch-knob' />
+                {isDarkTheme ? '🌙' : '🌞'}
             </button>
+            <span className="theme-label">{isDarkTheme ? 'Dark Mode' : 'Light Mode'}</span>
         </div>
     );
 };
