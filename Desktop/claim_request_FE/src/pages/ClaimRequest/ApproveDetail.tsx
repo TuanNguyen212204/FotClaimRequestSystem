@@ -1,6 +1,6 @@
-import { Email } from "@/components/common/Input";
+import { Email } from "@/components/ui/Input/Input";
 import TableComponent from "@/components/common/Table";
-import { InputWithSubComponents } from "@/components/common/Input";
+import { InputWithSubComponents } from "@/components/ui/Input/Input";
 const ApproveDetail: React.FC = () => {
   const columns = [
     { title: "ID", dataIndex: "id", key: "id" },
