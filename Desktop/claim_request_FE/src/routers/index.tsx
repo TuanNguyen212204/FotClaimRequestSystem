@@ -10,14 +10,20 @@ import { PendingComponent } from "@ui/approve/PendingApproval";
 import { DetailsComponents } from "@ui/approve/DetailsApproval";
 import UserClaims from "@pages/User/UserClaims";
 import { UserClaimDetails } from "@pages/User/UserClaimDetails";
-import UserSettings from "@pages/Admin/UserSettings";
+import UserSettings from "@pages/admin/UserSettings";
 import ApproveDetail from "@pages/ClaimRequest/ApproveDetail";
 import ClaimStatus from "@pages/Finance/ClaimStatus";
 import PaidClaims from "@pages/Finance/PaidClaims";
-import ProjectInformation from "@pages/Admin/ProjectInformation";
-import StaffInformation from "@pages/Admin/StaffInformation";
+import ProjectInformation from "@pages/admin/ProjectInformation";
+import StaffInformation from "@pages/admin/StaffInformation";
 import ApprovedFinancePage from "@/pages/Finance/ApprovedFinancePage";
+import CheckBoxTest from "@/components/ui/Checkbox/Checkboxtest";
+import ApprovedApproverPage from "@/pages/Approver/ApprovedApproverPage";
 const router: RouteObject[] = [
+  {
+    element: <CheckBoxTest />,
+    path: PATH.checkbox,
+  },
   {
     element: <LoginForm />,
     path: PATH.login,
@@ -52,6 +58,10 @@ const router: RouteObject[] = [
       {
         path: PATH.approvedFinance,
         element: <ApprovedFinancePage />,
+      },
+      {
+        path: PATH.approvedApprover,
+        element: <ApprovedApproverPage />,
       },
       {
         path: PATH.pending,
