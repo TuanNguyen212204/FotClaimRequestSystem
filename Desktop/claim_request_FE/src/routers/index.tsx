@@ -16,8 +16,9 @@ import ClaimStatus from "@pages/Finance/ClaimStatus";
 import PaidClaims from "@pages/Finance/PaidClaims";
 import ProjectInformation from "@pages/admin/ProjectInformation";
 import StaffInformation from "@pages/admin/StaffInformation";
+import DraftCoponent from "@/components/ui/user/DraftCoponent";
 import ApprovedFinancePage from "@/pages/Finance/ApprovedFinancePage";
-import ApprovedApproverPage from "@/pages/Approver/ApprovedApproverPage";
+import CheckBoxTest from "@/components/ui/Checkbox/Checkboxtest";
 const router: RouteObject[] = [
   {
     element: <CheckBoxTest />,
