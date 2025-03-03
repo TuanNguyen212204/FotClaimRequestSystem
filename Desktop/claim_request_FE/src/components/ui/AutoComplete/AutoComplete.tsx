@@ -9,7 +9,7 @@ const variantStyles = {
     "border bg-white  border-gray-400 hover:border-blue-500 focus:border-blue-500 focus:outline-2 focus:outline-blue-100",
   filled:
     "bg-gray-100 hover:bg-gray-200 border border-transparent outline-none focus:border-blue-500",
-  borderless: "border-none shadow-none outline-none bg-white",
+  borderless: "!border-none !shadow-none outline-none bg-white",
   default:
     "border border-[#d9d9d9] bg-white  focus:border-blue-500  hover:border-blue-500 focus:outline-2 focus:outline-blue-100 ",
 };
