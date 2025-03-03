@@ -65,3 +65,37 @@ export const RadioGroupButton: React.FC<RadioGroupProps> = ({
   );
 };
 
+export const RadioGroupButtonOutline: React.FC<RadioGroupProps> = ({
+  options,
+  name,
+  selectedValue,
+  onChange,
+  buttonProps,
+}) => {
+  return (
+    <div className={styles.radioGroupButtonOutline}>
+      {options.map((option) => (
+        <label
+          key={option.value}
+          className={`${styles.radioButtonLabelOutline} ${
+            option.disabled ? styles.disabled : ""
+          } ${selectedValue === option.value ? styles.active : ""}`}
+        >
+          <input
+            type="radio"
+            name={name}
+            value={option.value}
+            checked={selectedValue === option.value}
+            onChange={onChange}
+            className={styles.radioButtonInputOutline}
+            disabled={option.disabled}
+            {...buttonProps}
+          />
+          <span className={styles.radioButtonCustomOutline}>
+            {option.label}
+          </span>
+        </label>
+      ))}
+    </div>
+  );
+};
