@@ -24,7 +24,7 @@
   padding: 0 8px;
   font-size: 15px;
   font-weight: 600;
-  border: 1.5px solid #000000; /* Đổi sang viền đen */
+  border: 1.5px solid #000000; 
   border-radius: 8px;
   background: #ffffff;
   cursor: pointer;
@@ -37,9 +37,9 @@
 }
 
 .pageButton:hover:not(:disabled):not(.ellipsis) {
-  border-color: #000000; /* Giữ viền đen khi hover */
+  border-color: #000000; 
   color: #ffffff;
-  background: #000000; /* Nền đen khi hover */
+  background: #000000;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   transform: translateY(-1px);
   z-index: 1;

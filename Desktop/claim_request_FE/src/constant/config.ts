@@ -1,4 +1,4 @@
-import Loading from "@/components/common/Loading";
+import Loading from "@/components/common/LoadingOverlay";
 
 export const PATH = {
   home: "/",
