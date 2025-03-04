@@ -88,12 +88,12 @@ const ApproveDetail: React.FC = () => {
   ];
   return (
     <div>
-      <Dropdown
+      {/* <Dropdown
         label="Select item"
         options={options}
         onSelect={handleSelect}
         disabled={false}
-      />
+      /> */}
       {/* <TableComponent
         columns={columns}
         dataSource={dataSource}
