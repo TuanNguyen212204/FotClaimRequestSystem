@@ -33,6 +33,7 @@ export const BasicCheckbox = ({ checked = true, onChange }: CheckboxProps) => {
           className="basic-checkbox-input"
         />
         <span className="basic-checkbox" />
+        Basic Checkbox
       </label>
     </div>
   );
@@ -65,6 +66,7 @@ export const AnimatedCheckbox = ({ checked = true, onChange }: CheckboxProps) =>
           className="animated-checkbox-input"
         />
         <span className="animated-checkbox" />
+        Animated Checkbox
       </label>
     </div>
   );
@@ -97,6 +99,7 @@ export const MinimalCheckbox = ({ checked = true, onChange }: CheckboxProps) => 
           className="minimal-checkbox-input"
         />
         <span className="minimal-checkbox" />
+        Minimal Checkbox 
       </label>
     </div>
   );

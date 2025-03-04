@@ -24,13 +24,15 @@ export const SwitchTheme = ({ defaultTheme = false }: SwitchThemeProps) => {
 
     return (
         <div className='switch-container'>
-            <button
-                className={`theme-button ${isDarkTheme ? 'dark' : 'light'}`}
-                onClick={handleChange}
-            >
-                {isDarkTheme ? '🌙' : '🌞'}
-            </button>
-            <span className="theme-label">{isDarkTheme ? 'Dark Mode' : 'Light Mode'}</span>
+            <label className='switch-label'>
+                <button
+                    className={`theme-button ${isDarkTheme ? 'dark' : 'light'}`}
+                    onClick={handleChange}
+                >
+                    {isDarkTheme ? '🌙' : '🌞'}
+                </button>
+                <span className="theme-label">{isDarkTheme ? 'Dark Mode' : 'Light Mode'}</span>
+            </label>
         </div>
     );
 };

@@ -26,7 +26,7 @@
 }
 
 .basic-checkbox-input:checked + .basic-checkbox::after {
-  content: 'X';
+  content: '✔';
   position: absolute;
   top: 50%;
   left: 50%;
@@ -61,7 +61,7 @@
 }
 
 .animated-checkbox-input:checked + .animated-checkbox::after {
-  content: 'X';
+  content: '✔';
   position: absolute;
   top: 50%;
   left: 50%;
@@ -96,7 +96,7 @@
 }
 
 .minimal-checkbox-input:checked + .minimal-checkbox::after {
-  content: 'X';
+  content: '✔';
   position: absolute;
   top: -2px;
   left: 2px;
