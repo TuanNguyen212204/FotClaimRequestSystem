@@ -1,89 +1,89 @@
-import Dropdown from "@/components/ui/Dropdown/Dropdown";
+import TableComponent from "@/components/common/Table";
 const ApproveDetail: React.FC = () => {
+  const tableRef = useRef<{
+    getSelectedData: () => DataRecord[];
+    getCheckedData: () => DataRecord[];
+    getSortedData: () => DataRecord[];
+  }>(null);
+  const handleGetSelectedData = () => {
+    if (tableRef.current) {
+      const selectedData = tableRef.current.getSelectedData();
+      console.log("Selected Data:", selectedData);
+    }
+  };
+  // const handleGetCheckedData = () => {
+  //   if (tableRef.current) {
+  //     const checkedData = tableRef.current.getCheckedData();
+  //     console.log("Checked Data:", checkedData);
+  //   }
+  // };
+  // const handleGetSortedData = () => {
+  //   if (tableRef.current) {
+  //     const sortedData = tableRef.current.getSortedData();
+  //     console.log("Sorted Data:", sortedData);
+  //   }
+  // };
+  const sortConfig: SortConfig = {
+    columnKey: "id",
+    order: "asc",
+  };
   const columns = [
     { title: "ID", dataIndex: "id", key: "id" },
-    { title: "Overtime Duration", dataIndex: "odu", key: "odu" },
-    { title: "Overtime Date", dataIndex: "oda", key: "oda" },
     { title: "Total Hours", dataIndex: "totalH", key: "totalH" },
-    { title: "Status", dataIndex: "status", key: "status" },
+    {
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+      cell: ({ value }: { value: unknown }) => {
+        const stringValue = value as string;
+        const style = value === "Approved" ? { color: "green" } : {};
+        return <div style={style}>{stringValue}</div>;
+      },
+    },
+
+    { title: "Action", dataIndex: "action", key: "action" },
   ];
+
   const dataSource = [
     {
-      id: "001",
-      odu: "From 1/5/2025 To:1/15/2025",
-      oda: "1/5/2025",
-      totalH: "5 hours",
+      id: "1",
+      name: "Nguyen Tuan An",
+      totalH: "8",
       status: "Approved",
+      action: "",
     },
     {
-      id: "001",
-      odu: "From 1/5/2025 To:1/15/2025",
-      oda: "1/5/2025",
-      totalH: "5 hours",
+      id: "2",
+      name: "Nguyen Tuan B",
+      totalH: "8",
       status: "Approved",
+      action: "",
     },
     {
-      id: "001",
-      odu: "From 1/5/2025 To:1/15/2025",
-      oda: "1/5/2025",
-      totalH: "5 hours",
+      id: "3",
+      name: "Nguyen Tuan B",
+      totalH: "8",
       status: "Approved",
+      action: "",
     },
     {
-      id: "001",
-      odu: "From 1/5/2025 To:1/15/2025",
-      oda: "1/5/2025",
-      totalH: "5 hours",
+      id: "4",
+      name: "Nguyen Tuan B",
+      totalH: "8",
       status: "Approved",
+      action: "",
     },
     {
-      id: "001",
-      odu: "From 1/5/2025 To:1/15/2025",
-      oda: "1/5/2025",
-      totalH: "5 hours",
+      id: "5",
+      name: "Nguyen Tuan B",
+      totalH: "8",
       status: "Approved",
-    },
-    {
-      id: "001",
-      odu: "From 1/5/2025 To:1/15/2025",
-      oda: "1/5/2025",
-      totalH: "5 hours",
-      status: "Approved",
-    },
-    {
-      id: "001",
-      odu: "From 1/5/2025 To:1/15/2025",
-      oda: "1/5/2025",
-      totalH: "5 hours",
-      status: "Approved",
-    },
-    {
-      id: "001",
-      odu: "From 1/5/2025 To:1/15/2025",
-      oda: "1/5/2025",
-      totalH: "5 hours",
-      status: "Approved",
-    },
-    {
-      id: "001",
-      odu: "From 1/5/2025 To:1/15/2025",
-      oda: "1/5/2025",
-      totalH: "5 hours",
-      status: "Approved",
-    },
-    {
-      id: "001",
-      odu: "From 1/5/2025 To:1/15/2025",
-      oda: "1/5/2025",
-      totalH: "5 hours",
-      status: "Approved",
-    },
-    {
-      id: "001",
-      odu: "From 1/5/2025 To:1/15/2025",
-      oda: "1/5/2025",
-      totalH: "5 hours",
-      status: "Approved",
+      action: "",
     },
   ];
 
@@ -95,19 +95,13 @@ const ApproveDetail: React.FC = () => {
 
   return (
     <div>
-      <Dropdown
-        label="Select item"
-        options={options}
-        onSelect={handleSelect}
-        disabled={false}
-      />
-      {/* <TableComponent
+      <TableComponent
         columns={columns}
         dataSource={dataSource}
         loading={false}
         pagination={true}
         page="Object"
-      /> */}
+      />
     </div>
   );
 };
