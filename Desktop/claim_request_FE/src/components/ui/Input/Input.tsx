@@ -13,7 +13,7 @@ interface InputProps {
   size: "small" | "medium" | "large";
 }
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ size, className, ...InputProps }, ref) => {
+  ({ size = "medium", className, ...InputProps }, ref) => {
     const sizeClass = size ? styles[`${size}`] : "";
     return (
       <input
@@ -27,13 +27,18 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 export const PasswordInput = React.forwardRef<
   HTMLInputElement,
   Omit<InputProps, "type">
->((props, ref) => {
+>(({ size = "medium", ...props }, ref) => {
   const [visible, setVisible] = useState(false);
   const toggleVisibility = () => setVisible(!visible);
 
   return (
     <div className={styles.passwordInputWrapper}>
-      <Input {...props} type={visible ? "text" : "password"} ref={ref} />
+      <Input
+        {...props}
+        type={visible ? "text" : "password"}
+        ref={ref}
+        size={size}
+      />
       <button
         type="button"
         onClick={toggleVisibility}

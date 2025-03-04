@@ -1,4 +1,5 @@
 import Dropdown from "@/components/ui/Dropdown/Dropdown";
+import { PasswordInput } from "@/components/ui/Input/Input";
 const ApproveDetail: React.FC = () => {
   const tableRef = useRef<{
     getSelectedData: () => DataRecord[];
@@ -101,6 +102,7 @@ const ApproveDetail: React.FC = () => {
         pagination={true}
         page="Object"
       /> */}
+      <PasswordInput placeholder="Enter the password" size="medium" />
     </div>
   );
 };
