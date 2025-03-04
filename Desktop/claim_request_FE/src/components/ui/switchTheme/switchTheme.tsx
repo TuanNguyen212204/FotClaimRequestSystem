@@ -19,7 +19,7 @@ export const SwitchTheme = ({ defaultTheme = false }: SwitchThemeProps) => {
     }, [isDarkTheme]);
 
     const handleChange = () => {
-        setIsDarkTheme((prev: any) => !prev);
+        setIsDarkTheme((prev: boolean) => !prev);
     };
 
     return (

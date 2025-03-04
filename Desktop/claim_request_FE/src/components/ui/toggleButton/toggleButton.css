@@ -1,0 +1,52 @@
+.toggle-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
+  }
+  
+  .toggle-label {
+    cursor: pointer;
+    user-select: none;
+  }
+  
+  .toggle-button {
+    width: 80px;
+    height: 24px;
+    background-color: #ccc;
+    border-radius: 12px;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; 
+    padding: 0 5px; 
+  }
+  
+  .toggle-button.checked {
+    background-color: #4CAF50;
+  }
+  
+  .toggle-text {
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    user-select: none;
+    transition: opacity 0.3s;
+  }
+  
+  .toggle-circle {
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    transition: transform 0.3s;
+  }
+  
+  .toggle-button.checked .toggle-circle {
+    transform: translateX(56px); 
+  }

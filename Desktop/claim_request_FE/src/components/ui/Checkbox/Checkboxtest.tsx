@@ -6,6 +6,7 @@ import { CheckedDisabledCheckbox } from './checkbox2';
 import { SuccessCheckbox } from './checkbox2';
 import { InvalidCheckbox } from './checkbox2';
 import { SwitchTheme } from '../switchTheme/switchTheme';
+import { ToggleButton } from '../toggleButton/toggleButton';
 function CheckBoxTest() {
     return (
         <div style={{padding: '40px'}}>
@@ -29,6 +30,10 @@ function CheckBoxTest() {
           <h3>Switch-Theme test</h3>
 
           <SwitchTheme />
+
+          <h4>ToggleButton Check</h4>
+
+          <ToggleButton/>
 
         </div>
         
