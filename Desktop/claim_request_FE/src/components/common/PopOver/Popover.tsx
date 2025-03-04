@@ -1,63 +1,46 @@
-import React, { useState, ReactNode } from "react";
-import styles from "./Popover.module.css";
-
-interface PopOverProps {
-  placement: "top" | "right" | "left" | "bottom";
-  z_index: string;
-  title: string;
-  content: ReactNode | string;
-  bgColour?: React.CSSProperties["backgroundColor"];
-  trigger: "hover" | "click" | "focus";
-  children: ReactNode;
-  style?: React.CSSProperties;
-}
-
-export default function PopOver({
+import { PopOverProps } from "./PopOver.types";
+import styles from "./Placement.module.css";
+import { usePopOver } from "@Hooks/usePopper";
+const PopOverComponent: React.FC<PopOverProps> = ({
   placement,
-  z_index,
-  title,
-  content,
   trigger,
+  open,
+  onOpenChange,
   children,
+  content,
+  title,
   bgColour,
+  z_index = "111",
   style,
-}: PopOverProps) {
-  const [visible, setVisible] = useState(false);
-
-  const eventHandlers =
-    trigger === "hover"
-      ? {
-          onMouseEnter: () => setVisible(true),
-          onMouseLeave: () => setVisible(false),
-        }
-      : trigger === "click"
-      ? {
-          onClick: () => setVisible((prev) => !prev),
-        }
-      : trigger === "focus"
-      ? {
-          onFocus: () => setVisible(true),
-          onBlur: () => setVisible(false),
-        }
-      : {};
-
+}) => {
+  const { containerRef, popperRef, isOpen, eventHandlers, placementClass } =
+    usePopOver({
+      placement,
+      trigger,
+      open,
+      onOpenChange,
+    });
+  //TODO:Them mot offset props
   return (
-    <div className={styles.popover_container}>
+    <div ref={containerRef} className="relative">
       <div {...eventHandlers}>{children}</div>
-      {visible && (
+      {isOpen && (
         <div
-          className={`${styles.popover_position} ${styles[`popover_${placement}`]}`}
-          style={{ zIndex: z_index }}
+          ref={popperRef}
+          className={`min-w-44 box-border ${placementClass}`}
+          style={{ zIndex: Number(z_index) }}
         >
           <div
-            className={`${styles.popover_content} ${styles.animate_popIn}`}
-            style={{ backgroundColor: bgColour, ...style }}
+            className={`text-left p-3 flex flex-col rounded-md shadow-sm shadow-gray-300 text-xs font-normal text-gray-800 ${styles.animate_popIn}`} // hmm inline css co bi gi ko ta
+            style={{ backgroundColor: bgColour || "#fff", ...style }}
           >
-            {title && <div className={styles.popover_title}>{title}</div>}
-            <div>{content}</div>
+            {title && <div className="mb-2">{title}</div>}
+            {content}
           </div>
         </div>
       )}
     </div>
   );
-}
+};
+
+export default PopOverComponent;
