@@ -1,0 +1,21 @@
+.pieChart {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
+.pieText {
+  fill: white;
+  font-size: 2px;
+  font-weight: bold;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+.pieSlice {
+  stroke: white;
+  transition: all 0.3s ease-in-out;
+}
+
+.pieSlice:hover {
+  stroke-width: 0.8;
+}

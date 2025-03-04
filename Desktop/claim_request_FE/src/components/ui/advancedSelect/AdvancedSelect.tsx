@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import styles from "./AdvandedSelect.module.css";
+import styles from "@components/ui/advancedSelect/AdvancedSelect.module.css";
 
 interface Option {
   value: string;
