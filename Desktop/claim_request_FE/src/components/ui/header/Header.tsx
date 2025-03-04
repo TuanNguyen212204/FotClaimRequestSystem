@@ -24,7 +24,11 @@ const Header: React.FC = () => {
             navigate(PATH.userInfo);
           }}
         >
-          <Avatar src={<CircleUserRound />} shape="circle" size={40} />
+          <Avatar
+            src="https://static-cse.canva.com/blob/1806764/1600w-_q--r1GW6_E.jpg"
+            shape="circle"
+            size={40}
+          />
         </div>
         <span className={styles.username}>Administrator</span>
       </div>
