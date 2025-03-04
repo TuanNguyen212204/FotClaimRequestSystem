@@ -1,7 +1,7 @@
 import { PopOverProps } from "./PopOver.types";
 import styles from "./Placement.module.css";
 import { usePopOver } from "@Hooks/usePopper";
-const PopOverComponent: React.FC<PopOverProps> = ({
+const PopOver: React.FC<PopOverProps> = ({
   placement,
   trigger,
   open,
@@ -22,7 +22,7 @@ const PopOverComponent: React.FC<PopOverProps> = ({
     });
   //TODO:Them mot offset props
   return (
-    <div ref={containerRef} className="relative">
+    <div ref={containerRef} className="relative inline-block box-border">
       <div {...eventHandlers}>{children}</div>
       {isOpen && (
         <div
@@ -43,4 +43,4 @@ const PopOverComponent: React.FC<PopOverProps> = ({
   );
 };
 
-export default PopOverComponent;
+export default PopOver;

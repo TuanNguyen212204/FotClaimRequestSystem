@@ -11,7 +11,6 @@ import { DetailsComponents } from "@ui/approve/DetailsApproval";
 import UserClaims from "@pages/User/UserClaims";
 import { UserClaimDetails } from "@pages/User/UserClaimDetails";
 import UserSettings from "@pages/admin/UserSettings";
-import ApproveDetail from "@pages/ClaimRequest/ApproveDetail";
 import ClaimStatus from "@pages/Finance/ClaimStatus";
 import PaidClaims from "@pages/Finance/PaidClaims";
 import ProjectInformation from "@pages/admin/ProjectInformation";
@@ -81,7 +80,6 @@ const router: RouteObject[] = [
       },
       {
         path: PATH.approveDetails,
-        element: <ApproveDetail />,
       },
       {
         path: `${PATH.claimStatus}/:id`,
