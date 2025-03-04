@@ -22,7 +22,7 @@ const PopOverComponent: React.FC<PopOverProps> = ({
     });
   //TODO:Them mot offset props
   return (
-    <div ref={containerRef} className="relative">
+    <div ref={containerRef} className="relative inline-block">
       <div {...eventHandlers}>{children}</div>
       {isOpen && (
         <div
