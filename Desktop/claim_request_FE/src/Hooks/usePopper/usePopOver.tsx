@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { UsePopOverProps, UsePopOverReturn } from "./usePopperProps";
-import styles from "../../Components/NewPoper/Placement.module.css";
-import { placement } from "@/components/common/PopOver/PopOver.types";
+import styles from "@components/ui/PopOver/Placement.module.css";
+import { placement } from "@/components/ui/PopOver/PopOver.types";
 const getPlacementClass = (placement: placement) => {
   const className = `placement-${placement.replace("-", "_")}`;
   return styles[className]; //tra ve cai class tuong ung voi placement code cubg

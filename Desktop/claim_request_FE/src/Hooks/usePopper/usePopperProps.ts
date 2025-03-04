@@ -1,4 +1,4 @@
-import { placement, trigger } from "@/components/common/PopOver/PopOver.types";
+import { placement, trigger } from "@/components/ui/PopOver/PopOver.types";
 type EventHandlers =
   | { onMouseEnter: () => void; onMouseLeave: () => void }
   | { onClick: () => void }
