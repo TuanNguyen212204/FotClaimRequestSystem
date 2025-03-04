@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import styles from "@components/ui/user/UserInfoComponent.module.css";
-import Notification from "@components/common/Notification/Notification";
+import Notification from "@/components/ui/Notification/Notification";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@redux/index";
 import { fetchUserByIdAsync, updateUserAsync } from "@redux/thunk/UserInfo/userInfoThunks";
 import { User, Experience } from "@types/User.type";
-import Badge from "@/components/common/Badge/Badge";
-import { useNotification } from "@/components/common/Notification/NotificationContext";
+import Badge from "@/components/ui/Badge/Badge";
+import { useNotification } from "@/components/ui/Notification/NotificationContext";
 
 export const UserInfoComponent: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
