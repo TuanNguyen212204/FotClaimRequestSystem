@@ -16,9 +16,9 @@ import ClaimStatus from "@pages/Finance/ClaimStatus";
 import PaidClaims from "@pages/Finance/PaidClaims";
 import ProjectInformation from "@pages/admin/ProjectInformation";
 import StaffInformation from "@pages/admin/StaffInformation";
+import DraftCoponent from "@/components/ui/user/DraftCoponent";
 import ApprovedFinancePage from "@/pages/Finance/ApprovedFinancePage";
 import CheckBoxTest from "@/components/ui/Checkbox/Checkboxtest";
-import ApprovedApproverPage from "@/pages/Approver/ApprovedApproverPage";
 const router: RouteObject[] = [
   {
     element: <CheckBoxTest />,
@@ -35,6 +35,10 @@ const router: RouteObject[] = [
   {
     element: <MainLayout />,
     children: [
+      {
+        path: PATH.draft,
+        element: <DraftCoponent />,
+      },
       {
         path: PATH.home,
         element: <HomePage />,
@@ -61,7 +65,7 @@ const router: RouteObject[] = [
       },
       {
         path: PATH.approvedApprover,
-        element: <ApprovedApproverPage />,
+        element: <ApprovedFinancePage />,
       },
       {
         path: PATH.pending,
