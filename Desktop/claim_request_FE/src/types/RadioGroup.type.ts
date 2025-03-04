@@ -3,5 +3,5 @@ export interface RadioGroupProps {
   name: string;
   selectedValue: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  buttonProps?: React.ButtonHTMLAttributes<HTMLButtonElement>;
+  buttonProps?: React.InputHTMLAttributes<HTMLInputElement>;
 }

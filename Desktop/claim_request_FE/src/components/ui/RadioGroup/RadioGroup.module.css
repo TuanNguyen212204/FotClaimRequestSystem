@@ -54,6 +54,13 @@
     transform: translate(-50%, -50%);
 }
 
+.radioInput:checked + .radioCustom + span {
+    background-color: #2563eb;
+    color: #ffffff;
+    padding: 2px 4px;
+    border-radius: 3px;
+}
+
 .disabled {
     cursor: not-allowed;
     color: #9ca3af;
@@ -119,97 +126,18 @@
 .radioButtonInput:checked + .radioButtonCustom {
     background-color: #2563eb;
     color: #ffffff;
+    padding: 2px 4px;
+    border-radius: 3px;
 }
 
 .radioButtonOutlined {
     border: 2px solid #2563eb;
     background-color: transparent;
     color: #2563eb;
-}
-
-.radioButtonOutlined.active {
-    background-color: #2563eb;
-    color: #ffffff;
 }
 
 .disabled {
     cursor: not-allowed;
     color: #9ca3af;
     border-color: #9ca3af;
-}
-
-.radioButtonInput:disabled + .radioButtonCustom {
-    background-color: #e5e7eb;
-    border-color: #9ca3af;
-    pointer-events: none;
-}
-
-.radioGroupButtonOutline {
-    display: flex;
-    flex-direction: row;
-    margin-bottom: 20px;
-}
-
-.radioButtonLabelOutline {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    font-size: 16px;
-    /* color: #2563eb; */
-    padding: 10px 20px;
-    border: 2px solid #2C3E50;
-    transition: background-color 0.2s ease, border-color 0.2s ease;
-    margin-left: -2px;
-}
-
-.radioButtonLabelOutline:first-child {
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
-    margin-left: 0;
-}
-
-.radioButtonLabelOutline:last-child {
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-}
-
-.radioButtonLabelOutline.active {
-    /* background-color: #2563eb; */
-    /* color: #ffffff; */
-    color: #2563eb;
-    border-color: #2563eb;
-}
-
-.radioButtonInputOutline {
-    display: none;
-}
-
-.radioButtonCustomOutline {
-    display: inline-block;
-}
-
-.radioButtonLabelOutline:hover {
-    border-color: #2563eb;
-}
-
-.radioButtonInputOutline:checked + .radioButtonCustomOutline {
-    background-color: #2563eb;
-    color: #ffffff;
-}
-
-.radioButtonOutlined {
-    border: 2px solid #2563eb;
-    background-color: transparent;
-    color: #2563eb;
-}
-
-.radioButtonOutlined.active {
-    background-color: #2563eb;
-    color: #ffffff;
-}
-
-.radioButtonInputOutline:disabled + .radioButtonCustomOutline {
-    background-color: #e5e7eb;
-    border-color: #9ca3af;
-    pointer-events: none;
 }
