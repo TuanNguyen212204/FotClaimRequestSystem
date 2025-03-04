@@ -1,5 +1,7 @@
 import React from "react";
-
+import { useState } from "react";
+import styles from "./Input.module.css";
+import { Eye, EyeOff } from "lucide-react";
 interface InputProps {
   type?: string;
   placeholder?: string;
@@ -10,56 +12,68 @@ interface InputProps {
   ref?: React.Ref<HTMLInputElement>;
   size: "small" | "medium" | "large";
 }
-
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  (
-    { type, placeholder, value, disable, onChange, className, size = "medium" },
-    ref
-  ) => {
-    const sizeClass = size ? `input-${size}` : "";
+  ({ size, className, ...InputProps }, ref) => {
+    const sizeClass = size ? styles[`${size}`] : "";
     return (
       <input
-        type={type}
-        placeholder={placeholder}
-        value={value}
-        disabled={disable}
-        onChange={onChange}
+        {...InputProps}
         className={`input ${sizeClass} ${className}`}
         ref={ref}
       />
     );
   }
 );
+export const PasswordInput = React.forwardRef<
+  HTMLInputElement,
+  Omit<InputProps, "type">
+>((props, ref) => {
+  const [visible, setVisible] = useState(false);
+  const toggleVisibility = () => setVisible(!visible);
 
-const Password = React.forwardRef<HTMLInputElement, Omit<InputProps, "type">>(
-  (props, ref) => <Input {...props} type="password" ref={ref} />
-);
-const Email = React.forwardRef<HTMLInputElement, Omit<InputProps, "type">>(
-  (props, ref) => <Input {...props} type="email" ref={ref} />
-);
-const Number = React.forwardRef<HTMLInputElement, Omit<InputProps, "type">>(
-  (props, ref) => <Input {...props} type="number" ref={ref} />
-);
-const Text = React.forwardRef<HTMLInputElement, Omit<InputProps, "type">>(
-  (props, ref) => <Input {...props} type="text" ref={ref} />
-);
-const File = React.forwardRef<HTMLInputElement, Omit<InputProps, "type">>(
-  (props, ref) => <Input {...props} type="file" ref={ref} />
-);
+  return (
+    <div className={styles.passwordInputWrapper}>
+      <Input {...props} type={visible ? "text" : "password"} ref={ref} />
+      <button
+        type="button"
+        onClick={toggleVisibility}
+        className={styles.toggleVisibility}
+      >
+        {visible ? <EyeOff /> : <Eye />}
+      </button>
+    </div>
+  );
+});
 
-interface InputComponent extends React.ForwardRefExoticComponent<InputProps> {
-  Number: typeof Number;
-  Text: typeof Text;
-  File: typeof File;
-  Password: typeof Password;
-  Email: typeof Email;
-}
-//
-export const InputWithSubComponents = Input as InputComponent;
-InputWithSubComponents.Password = Password;
-InputWithSubComponents.File = File;
-InputWithSubComponents.Number = Number;
-InputWithSubComponents.Text = Text;
-InputWithSubComponents.Email = Email;
+// const Password = React.forwardRef<HTMLInputElement, Omit<InputProps, "type">>(
+//   (props, ref) => <Input {...props} type="password" ref={ref} />
+// );
+// const Email = React.forwardRef<HTMLInputElement, Omit<InputProps, "type">>(
+//   (props, ref) => <Input {...props} type="email" ref={ref} />
+// );
+// const Number = React.forwardRef<HTMLInputElement, Omit<InputProps, "type">>(
+//   (props, ref) => <Input {...props} type="number" ref={ref} />
+// );
+// const Text = React.forwardRef<HTMLInputElement, Omit<InputProps, "type">>(
+//   (props, ref) => <Input {...props} type="text" ref={ref} />
+// );
+// const File = React.forwardRef<HTMLInputElement, Omit<InputProps, "type">>(
+//   (props, ref) => <Input {...props} type="file" ref={ref} />
+// );
+
+// interface InputComponent extends React.ForwardRefExoticComponent<InputProps> {
+//   Number: typeof Number;
+//   Text: typeof Text;
+//   File: typeof File;
+//   Password: typeof Password;
+//   Email: typeof Email;
+// }
+// //
+// export const InputWithSubComponents = Input as InputComponent;
+// InputWithSubComponents.Password = Password;
+// InputWithSubComponents.File = File;
+// InputWithSubComponents.Number = Number;
+// InputWithSubComponents.Text = Text;
+// InputWithSubComponents.Email = Email;
 
 export default Input;

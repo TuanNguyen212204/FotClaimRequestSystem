@@ -1,4 +1,5 @@
 import TableComponent from "@/components/common/Table";
+import { PasswordInput } from "@/components/ui/Input/Input";
 const ApproveDetail: React.FC = () => {
   const columns = [
     { title: "ID", dataIndex: "id", key: "id" },
@@ -88,12 +89,17 @@ const ApproveDetail: React.FC = () => {
   ];
   return (
     <div>
-      <TableComponent
+      {/* <TableComponent
         columns={columns}
         dataSource={dataSource}
         loading={false}
         pagination={true}
         page="Object"
+      /> */}
+      <PasswordInput
+        placeholder="Enter the password"
+        disable={false}
+        size="small"
       />
     </div>
   );
