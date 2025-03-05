@@ -18,4 +18,5 @@ export const PATH = {
   projectInformation: "/project-information",
   staffInformation: "/staff-information",
   modal: "/modal",
+  card: "/card",
 };

@@ -19,6 +19,7 @@ import StaffInformation from "@pages/Admin/StaffInformation";
 import ApprovedFinancePage from "@/pages/Finance/ApprovedFinancePage";
 import ApprovedApproverPage from "@/pages/Approver/ApprovedApproverPage";
 import ModalTest from "@/components/ui/modal/ModalTest";
+import CardTest from "@/components/ui/card/CardTest";
 const router: RouteObject[] = [
   {
     element: <LoginForm />,
@@ -31,6 +32,10 @@ const router: RouteObject[] = [
   {
     element: <ModalTest />,
     path: PATH.modal,
+  },
+  {
+    element: <CardTest />,
+    path: PATH.card,
   },
   {
     element: <MainLayout />,
