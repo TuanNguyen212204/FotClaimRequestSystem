@@ -5,6 +5,9 @@ interface UseTableProps<T extends DataRecord> {
   dataSource: T[];
   pageLength?: number;
   sortConfig?: SortConfig;
+  loading?: boolean;
+  pagination?: boolean;
+  name?: string;
 }
 
 interface UseTableReturn<T extends DataRecord> {
@@ -26,25 +29,36 @@ interface UseTableReturn<T extends DataRecord> {
   totalPages: number;
   handlePageChange: (newPage: number) => void;
   uniqueStatuses: string[];
+  getSelectedData: () => T[];
+  getSortedData: () => T[];
 }
 
 export function useTable<T extends DataRecord>({
   dataSource,
   pageLength = 10,
   sortConfig,
+  pagination = false
 }: UseTableProps<T>): UseTableReturn<T> {
   const [currentPage, setCurrentPage] = useState(1);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState<string>("All");
   const [checkedItems, setCheckedItems] = useState<Set<string>>(new Set());
-  const [sortOrder, setSortOrder] = useState<string | null>(sortConfig?.order || null);
-  const [sortColumn, setSortColumn] = useState<string | null>(sortConfig?.columnKey || null);
+  const [sortOrder, setSortOrder] = useState<string | null>(
+    sortConfig?.order || null
+  );
+  const [sortColumn, setSortColumn] = useState<string | null>(
+    sortConfig?.columnKey || null
+  );
 
-  const uniqueStatuses = ["All", ...new Set(dataSource.map((item) => item.status))];
+  const uniqueStatuses = [
+    "All",
+    ...new Set(dataSource.map((item) => item.status)),
+  ];
 
-  const filteredData = selectedStatus !== "All"
-    ? dataSource.filter((record) => record.status === selectedStatus)
-    : dataSource;
+  const filteredData =
+    selectedStatus !== "All"
+      ? dataSource.filter((record) => record.status === selectedStatus)
+      : dataSource;
 
   const sortedData = sortOrder
     ? [...filteredData].sort((a, b) => {
@@ -57,7 +71,9 @@ export function useTable<T extends DataRecord>({
     : filteredData;
 
   const totalPages = Math.ceil(sortedData.length / pageLength);
-  const paginatedData = sortedData.slice((currentPage - 1) * pageLength, currentPage * pageLength);
+  const paginatedData = pagination
+    ? sortedData.slice((currentPage - 1) * pageLength, currentPage * pageLength)
+    : sortedData;
 
   useEffect(() => {
     setCurrentPage(1);
@@ -109,6 +125,21 @@ export function useTable<T extends DataRecord>({
     }
   };
 
+  const getSelectedData = () => {
+    return dataSource.filter((record) => checkedItems.has(record.id || ""));
+  };
+
+  const getSortedData = () => {
+    if (!sortOrder) return dataSource;
+    return [...dataSource].sort((a, b) => {
+      if (a[sortColumn as keyof T] < b[sortColumn as keyof T])
+        return sortOrder === "asc" ? -1 : 1;
+      if (a[sortColumn as keyof T] > b[sortColumn as keyof T])
+        return sortOrder === "asc" ? 1 : -1;
+      return 0;
+    });
+  };
+
   return {
     currentPage,
     setCurrentPage,
@@ -128,5 +159,7 @@ export function useTable<T extends DataRecord>({
     totalPages,
     handlePageChange,
     uniqueStatuses,
+    getSelectedData,
+    getSortedData,
   };
 }
