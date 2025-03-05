@@ -25,7 +25,7 @@ function LoginForm() {
       try {
         const response = await fetch(
           "http://localhost:4000/api/v1/auth/login",
-          // "http://claimsystem.info.vn/api/v1/auth/login", //test VPS
+          // "https://claimsystem.info.vn/api/v1/auth/login", //test VPS
           {
             method: "POST",
             headers: {
@@ -37,10 +37,10 @@ function LoginForm() {
         const data = await response.json();
 
         if (response.ok) {
-          localStorage.setItem("authToken", data.tokens.access.token);
+          localStorage.setItem("access_token", data.tokens.access.token);
           localStorage.setItem("user", JSON.stringify(data.user));
 
-          navigate("/");
+          navigate("/approve-details");
         } else {
           alert(data.message || "Login failed");
         }

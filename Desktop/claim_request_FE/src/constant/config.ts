@@ -19,4 +19,6 @@ export const PATH = {
   approvedApprover: "/approver/approved",
   projectInformation: "/project-information",
   staffInformation: "/staff-information",
+  unauthorized: "/unauthorized",
+  unauthenticated: "/unauthenticated",
 };
