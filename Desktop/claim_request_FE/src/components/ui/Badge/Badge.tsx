@@ -1,24 +1,34 @@
-import React from "react";
+import React, { Children } from "react";
 import styles from "@components/ui/Badge/Badge.module.css";
 interface BadgeProps {
   count: number;
   color?: string;
   className?: string;
+  children?: React.ReactNode;
 }
 
-const Badge: React.FC<BadgeProps> = ({ count, color = "red", className }) => {
+const Badge: React.FC<BadgeProps> = ({
+  count,
+  color = "red",
+  className,
+  children,
+}) => {
+  const shouldShowBadge = count > 0;
+  const displayCount = count > 99 ? "99+" : count;
   return (
-    <span
-      className={`${styles.badge} ${className || ""}`}
-      style={{
-        backgroundColor: color,
-        padding: "4px 8px",
-        borderRadius: "12px",
-        color: "#fff",
-      }}
-    >
-      {count}
-    </span>
+    <div className={styles.badgeContainer}>
+      {children}
+      {shouldShowBadge && (
+        <span
+          className={`${styles.badge}`}
+          style={{
+            backgroundColor: color,
+          }}
+        >
+          {displayCount}
+        </span>
+      )}
+    </div>
   );
 };
 

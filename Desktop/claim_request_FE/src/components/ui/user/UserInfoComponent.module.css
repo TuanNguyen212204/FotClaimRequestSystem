@@ -130,7 +130,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-    z-index: 1000;
+  z-index: 1000;
 }
 
 .modalContent {
@@ -144,6 +144,7 @@
 .avatarUploadSection {
   text-align: center;
   margin-bottom: 2rem;
+  position: relative;
 }
 
 .avatarPreview {
@@ -153,6 +154,11 @@
   object-fit: cover;
   margin-bottom: 1rem;
   border: 3px solid #eee;
+  transition: transform 0.3s ease;
+}
+
+.avatarPreview:hover {
+  transform: scale(1.05);
 }
 
 .hiddenInput {
@@ -162,47 +168,65 @@
 .uploadButton {
   background: #2d3142;
   color: white;
-  padding: 8px 16px;
-  border-radius: 4px;
+  padding: 10px 20px;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: background 0.3s, transform 0.3s;
+  display: inline-block;
+  margin-top: 1rem;
 }
-
 
 .uploadButton:hover {
   background: #404761;
+  transform: translateY(-2px);
 }
 
 .formSection {
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
 }
 
 .formSection label {
   display: block;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
   font-weight: 600;
   color: #2d3142;
+  font-size: 1.1rem;
 }
 
 .formSection textarea,
 .formSection input {
   width: 100%;
-  padding: 8px;
-  margin-bottom: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.formSection textarea:focus,
+.formSection input:focus {
+  border-color: #2d3142;
+  outline: none;
+  box-shadow: 0 0 5px rgba(45, 49, 66, 0.2);
 }
 
 .arrayItem {
   position: relative;
-  margin-bottom: 1rem;
-  padding: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 1.5rem;
   border: 1px solid #eee;
-  border-radius: 6px;
+  border-radius: 8px;
+  background: #f9f9f9;
+  transition: box-shadow 0.3s ease;
+}
+
+.arrayItem:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .removeButton {
-margin-left: 10px;
+  margin-left: 10px;
   padding: 5px 10px;
   background-color: #ff4d4f;
   color: white;
@@ -212,12 +236,12 @@ margin-left: 10px;
   transition: background-color 0.3s ease;
 }
 
-.removeButton:hover{
+.removeButton:hover {
   background-color: #ff1a1a;
 }
 
 .addButton {
-  background: #4CAF50;
+  background: #4caf50;
   color: white;
   padding: 8px 16px;
   border: none;
@@ -227,9 +251,9 @@ margin-left: 10px;
 }
 
 .buttonGroup {
-  margin-top: 2rem;
+  margin-top: 2.5rem;
   display: flex;
-  gap: 1rem;
+  gap: 1.5rem;
   justify-content: flex-end;
 }
 
@@ -295,27 +319,42 @@ margin-left: 10px;
     flex-direction: column;
     text-align: center;
   }
-  
+
   .profileContent {
     grid-template-columns: 1fr;
   }
-  
+
   .statsContainer {
     flex-direction: column;
     gap: 1.5rem;
   }
-
-  
 }
 
 @media (max-width: 768px) {
   .modalContent {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 15px;
     width: 90%;
-    padding: 1rem;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    animation: slideIn 0.3s ease-out;
   }
-  
+
   .avatarPreview {
     width: 100px;
     height: 100px;
+  }
+
+  @keyframes slideIn {
+    from {
+      transform: translateY(-20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
   }
 }
