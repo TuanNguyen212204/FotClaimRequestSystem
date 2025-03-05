@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+
 interface ListClaims {
     id: string,
     staffName: string,
@@ -17,16 +18,14 @@ const initialState: PendingState = {
     listClaims: [],
 }
 
-export const fetchAllClaims = createAsyncThunk("pending/fetchAllClaims", async () => {
-    const res = await axios.get(`https://67263146302d03037e6cb422.mockapi.io/pending`);
-    console.log("Data", res.data);
+export const fetchAllClaims = createAsyncThunk("finance/fetchAllClaims", async () => {
+    const res = await axios.get(`${process.env.REACT_APP_API_URL}/finance/claims`);
     return res.data;
 });
 
 export const deleteClaim = createAsyncThunk("pending/deleteClaim", async (id: string, { rejectWithValue }) => {
     if (window.confirm("Are you sure you want to delete this claim?")) {
-        const res = await axios.delete(`https://67263146302d03037e6cb422.mockapi.io/pending/${id}`);
-        console.log("Data", res.data);
+        const res = await axios.delete(`${process.env.REACT_APP_API_URL}/finance/claims/${id}`);
         return id;
     } else {
         return rejectWithValue("User cancelled the deletion");
@@ -45,6 +44,8 @@ export const pendingSlice = createSlice({
             state.listClaims = state.listClaims.filter(claim => claim.id !== action.payload);
         });
     }
-})
+});
+
+export default pendingSlice.reducer;
 
 

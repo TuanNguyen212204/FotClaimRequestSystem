@@ -10,16 +10,12 @@ import type { RootState } from "@redux/index";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { Tooltip } from "@components/ui/Tooltip/Tooltip";
-import {
-  RadioGroup,
-  // RadioGroupButtonOutline,
-} from "@components/ui/RadioGroup/RadioGroup";
-import { RadioGroupButton } from "@components/ui/RadioGroup/RadioGroup";
+import { RadioGroup } from "@components/ui/RadioGroup/RadioGroup";
 
 export const PendingComponent: React.FC = () => {
   const dispatch = useAppDispatch();
   const claims = useSelector((state: RootState) => state.pending.listClaims);
-  const [selectedValue, setSelectedValue] = useState("");
+  const [selectedValue, setSelectedValue] = useState("all");
 
   useEffect(() => {
     dispatch(fetchAllClaims());
@@ -77,7 +73,6 @@ export const PendingComponent: React.FC = () => {
     });
     setSelectedClaims([]);
     toast.success("Selected claims deleted successfully!");
-    toast.error("Error deleting claims!");
   };
 
   const handleDelete = (id: string) => {
@@ -102,11 +97,7 @@ export const PendingComponent: React.FC = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    if (value === "all") {
-      setSelectedValue(value);
-      return;
-    }
-    setSelectedValue(e.target.value);
+    setSelectedValue(value);
   };
 
   const radioOptions = [
@@ -129,12 +120,6 @@ export const PendingComponent: React.FC = () => {
         selectedValue={selectedValue}
         onChange={handleChange}
       />
-      {/* <RadioGroupButton
-        options={radioOptions}
-        name="filter"
-        selectedValue={selectedValue}
-        onChange={handleChange}
-      /> */}
       <Tooltip text="Delete Selected" position="top">
         <button
           className={styles.deleteButton}
