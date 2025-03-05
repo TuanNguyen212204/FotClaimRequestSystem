@@ -17,7 +17,6 @@ import PaidClaims from "@pages/Finance/PaidClaims";
 import ProjectInformation from "@pages/Admin/ProjectInformation";
 import StaffInformation from "@pages/Admin/StaffInformation";
 import ApprovedFinancePage from "@/pages/Finance/ApprovedFinancePage";
-import Loading from "@/components/common/LoadingOverlay";
 const router: RouteObject[] = [
   {
     element: <LoginForm />,
@@ -85,11 +84,7 @@ const router: RouteObject[] = [
       {
         path: PATH.staffInformation,
         element: <StaffInformation />,
-      },
-      {
-        path: PATH.Loading,
-        element: <Loading/>,
-      },
+      },  
     ],
   },
 ];

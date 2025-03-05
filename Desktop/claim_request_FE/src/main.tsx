@@ -14,7 +14,7 @@ createRoot(document.getElementById("root")!).render(
     <BrowserRouter>
       <Provider store={store}>
         <ReactQueryProvider>
-        <LoadingProvider> {/* 👇 Đặt trong LoadingProvider */}
+        <LoadingProvider> 
           <LoadingOverlay />
           <App />
         </LoadingProvider>
