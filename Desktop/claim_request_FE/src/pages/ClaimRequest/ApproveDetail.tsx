@@ -1,5 +1,6 @@
-import Dropdown from "@/components/ui/Dropdown/Dropdown";
+import TableComponent from "@/components/ui/Table/Table";
 import { useRef } from "react";
+import { DataRecord } from "@/components/ui/Table/Table";
 import { PasswordInput } from "@/components/ui/Input/Input";
 const ApproveDetail: React.FC = () => {
   const tableRef = useRef<{
