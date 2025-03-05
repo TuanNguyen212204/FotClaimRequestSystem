@@ -4,19 +4,15 @@ import { fetchAllClaims } from "../../../redux/slices/Approver/claimsSlice";
 import styles from "./ApproverdApproverComponent.module.css";
 import { ArrowLeftSquare, ArrowRightSquare, EyeIcon } from "lucide-react";
 import { RootState, AppDispatch } from "../../../redux/index";
-import { useNavigate } from "react-router-dom";
-import { PATH } from "../../../constant/config";
 
 export const ApprovedApproverComponent: React.FC = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const listClaims = useSelector(
     (state: RootState) => state.approver.listClaims
   );
 
-  // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 7; // Số hàng trên mỗi trang
+  const itemsPerPage = 7;
 
   useEffect(() => {
     dispatch(fetchAllClaims());

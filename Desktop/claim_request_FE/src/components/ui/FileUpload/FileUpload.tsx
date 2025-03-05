@@ -4,10 +4,15 @@ import { useRef, useState, ChangeEvent, DragEvent } from "react";
 
 type FileUploadProps = {
   onUpload: (files: File[]) => void;
-  allowMultiple?: boolean; // ✅ Thêm prop mới
+  allowMultiple?: boolean;
+  accept?: string;
 };
 
-function FileUpload({ onUpload, allowMultiple = true }: FileUploadProps) {
+function FileUpload({
+  onUpload,
+  allowMultiple = true,
+  accept = "",
+}: FileUploadProps) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [fileList, setFileList] = useState<File[]>([]);
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
@@ -26,24 +31,36 @@ function FileUpload({ onUpload, allowMultiple = true }: FileUploadProps) {
     e.preventDefault();
     wrapperRef.current?.classList.remove(styles.dragover);
     if (e.dataTransfer.files.length > 0) {
-      const files = allowMultiple
-        ? Array.from(e.dataTransfer.files) // ✅ Cho phép chọn nhiều file
-        : [e.dataTransfer.files[0]]; // ✅ Chỉ lấy file đầu tiên nếu allowMultiple = false
+      let files = Array.from(e.dataTransfer.files);
+      files = filterFilesByAccept(files);
+      if (!allowMultiple) files = files.slice(0, 1);
       handleFiles(files);
     }
   };
 
   const onFileDrop = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      const files = allowMultiple
-        ? Array.from(e.target.files)
-        : [e.target.files[0]];
+      let files = Array.from(e.target.files);
+      files = filterFilesByAccept(files);
+      if (!allowMultiple) files = files.slice(0, 1);
       handleFiles(files);
     }
   };
 
+  const filterFilesByAccept = (files: File[]) => {
+    if (!accept) return files;
+    const acceptedTypes = accept.split(",").map((type) => type.trim());
+    return files.filter((file) =>
+      acceptedTypes.some((type) =>
+        type.includes("/")
+          ? file.type.startsWith(type.split("/")[0]) || file.type === type
+          : file.name.endsWith(type)
+      )
+    );
+  };
+
   const handleFiles = (files: File[]) => {
-    const updatedList = allowMultiple ? [...fileList, ...files] : files; // ✅ Nếu không cho phép multiple, chỉ lưu danh sách mới
+    const updatedList = allowMultiple ? [...fileList, ...files] : files;
     setFileList(updatedList);
     setPreviewUrls(updatedList.map((file) => URL.createObjectURL(file)));
     onUpload(updatedList);
@@ -70,7 +87,12 @@ function FileUpload({ onUpload, allowMultiple = true }: FileUploadProps) {
           <div>
             <img src={uploadIcon} alt="Upload" className={styles.upload_icon} />
           </div>
-          <input type="file" multiple={allowMultiple} onChange={onFileDrop} />
+          <input
+            type="file"
+            multiple={allowMultiple}
+            accept={accept}
+            onChange={onFileDrop}
+          />
           <p className={styles.drop_file_label}>Drag & drop your files here</p>
         </div>
         {fileList.length > 0 && (

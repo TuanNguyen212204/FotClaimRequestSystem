@@ -6,8 +6,6 @@ import { ArrowLeftSquare, ArrowRightSquare, EyeIcon } from "lucide-react";
 import { RootState, AppDispatch } from "../../../redux/index";
 import { useNavigate } from "react-router-dom";
 import { PATH } from "../../../constant/config";
-import InputNumber from "@/components/common/InputNumber/InputNumber";
-import FileUpload from "@/components/common/FileInput/FileInput";
 
 export const ApprovedFinanceComponent: React.FC = () => {
   const navigate = useNavigate();

@@ -76,4 +76,6 @@
 
 .controls button:hover {
   background: #f0f0f0;
+  height: 100%;
+  width: 100%;
 }
