@@ -14,6 +14,7 @@
 .avatarSection {
   position: relative;
   flex-shrink: 0;
+  text-align: center;
 }
 
 .profileAvatar {
@@ -22,6 +23,8 @@
   border-radius: 50%;
   border: 4px solid #fff;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  display: block;
+  margin: 0 auto;
 }
 
 .editButton {
@@ -135,16 +138,23 @@
 
 .modalContent {
   background: white;
-  padding: 2rem;
-  border-radius: 12px;
+  padding: 2.5rem;
+  border-radius: 15px;
   width: 800px;
   max-height: 90vh;
   overflow-y: auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  animation: slideIn 0.3s ease-out;
+  background: linear-gradient(135deg, #f9f9f9, #ffffff);
 }
 .avatarUploadSection {
   text-align: center;
   margin-bottom: 2rem;
   position: relative;
+  padding: 1rem;
+  background: #f8fafc;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .avatarPreview {
@@ -168,12 +178,14 @@
 .uploadButton {
   background: #2d3142;
   color: white;
-  padding: 10px 20px;
-  border-radius: 6px;
+  padding: 8px 16px;
+  border-radius: 8px;
   cursor: pointer;
   transition: background 0.3s, transform 0.3s;
-  display: inline-block;
-  margin-top: 1rem;
+  display: block;
+  margin: 1rem auto 0;
+  font-weight: 500;
+  max-width: 150px;
 }
 
 .uploadButton:hover {
@@ -196,10 +208,10 @@
 .formSection textarea,
 .formSection input {
   width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
+  padding: 12px;
+  margin-bottom: 12px;
   border: 1px solid #ddd;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 1rem;
   transition: border-color 0.3s ease;
 }
@@ -208,7 +220,7 @@
 .formSection input:focus {
   border-color: #2d3142;
   outline: none;
-  box-shadow: 0 0 5px rgba(45, 49, 66, 0.2);
+  box-shadow: 0 0 8px rgba(45, 49, 66, 0.2);
 }
 
 .arrayItem {
@@ -216,7 +228,7 @@
   margin-bottom: 1.5rem;
   padding: 1.5rem;
   border: 1px solid #eee;
-  border-radius: 8px;
+  border-radius: 10px;
   background: #f9f9f9;
   transition: box-shadow 0.3s ease;
 }

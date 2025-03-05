@@ -220,127 +220,25 @@ export const UserInfoComponent: React.FC = () => {
         <div className={styles.section}>
           <h2 className={styles.sectionTitle}>Projects</h2>
           <div className={styles.projectsGrid}>
-            {isEditing
-              ? staffInfo.projects?.map((project, index) => (
-                  <div key={index} className={styles.arrayItem}>
-                    <input
-                      value={project}
-                      onChange={(e) => {
-                        const newProjects = [...(staffInfo.projects || [])];
-                        newProjects[index] = e.target.value;
-                        setStaffInfo({ ...staffInfo, projects: newProjects });
-                      }}
-                    />
-                    <button
-                      className={styles.removeButton}
-                      onClick={() => handleRemoveProject(index)}
-                    >
-                      Remove
-                    </button>
-                  </div>
-                )) || <p>No projects available</p>
-              : staffInfo.projects?.map((project) => (
-                  <div key={project} className={styles.projectCard}>
-                    {project}
-                  </div>
-                )) || <p>No projects available</p>}
-            {isEditing && (
-              <button
-                onClick={() =>
-                  setStaffInfo({
-                    ...staffInfo,
-                    projects: [...(staffInfo.projects || []), ""],
-                  })
-                }
-                className={styles.addButton}
-              >
-                Add Project
-              </button>
-            )}
+            {(!isEditing &&
+              staffInfo.projects?.map((project) => (
+                <div key={project} className={styles.projectCard}>
+                  {project}
+                </div>
+              ))) || <p>No projects available</p>}
           </div>
         </div>
 
         <div className={styles.section}>
           <h2 className={styles.sectionTitle}>Experience</h2>
-          {isEditing
-            ? staffInfo.experiences?.map((exp, index) => (
-                <div key={index} className={styles.arrayItem}>
-                  <input
-                    placeholder="Title"
-                    value={exp.title}
-                    onChange={(e) => {
-                      const newExperiences = [...(staffInfo.experiences || [])];
-                      newExperiences[index] = {
-                        ...newExperiences[index],
-                        title: e.target.value,
-                      };
-                      setStaffInfo({
-                        ...staffInfo,
-                        experiences: newExperiences,
-                      });
-                    }}
-                  />
-                  <input
-                    placeholder="Company"
-                    value={exp.company}
-                    onChange={(e) => {
-                      const newExperiences = [...(staffInfo.experiences || [])];
-                      newExperiences[index] = {
-                        ...newExperiences[index],
-                        company: e.target.value,
-                      };
-                      setStaffInfo({
-                        ...staffInfo,
-                        experiences: newExperiences,
-                      });
-                    }}
-                  />
-                  <textarea
-                    placeholder="Description"
-                    value={exp.description}
-                    onChange={(e) => {
-                      const newExperiences = [...(staffInfo.experiences || [])];
-                      newExperiences[index] = {
-                        ...newExperiences[index],
-                        description: e.target.value,
-                      };
-                      setStaffInfo({
-                        ...staffInfo,
-                        experiences: newExperiences,
-                      });
-                    }}
-                  />
-                  <button
-                    className={styles.removeButton}
-                    onClick={() => handleRemoveExperience(index)}
-                  >
-                    Remove
-                  </button>
-                </div>
-              )) || <p>No experiences available</p>
-            : staffInfo.experiences?.map((exp, index) => (
-                <div key={index} className={styles.experienceItem}>
-                  <h3>{exp.title}</h3>
-                  <p className={styles.companyName}>{exp.company}</p>
-                  <p className={styles.experienceDesc}>{exp.description}</p>
-                </div>
-              )) || <p>No experiences available</p>}
-          {isEditing && (
-            <button
-              onClick={() =>
-                setStaffInfo({
-                  ...staffInfo,
-                  experiences: [
-                    ...(staffInfo.experiences || []),
-                    { title: "", company: "", description: "" },
-                  ],
-                })
-              }
-              className={styles.addButton}
-            >
-              Add Experience
-            </button>
-          )}
+          {(!isEditing &&
+            staffInfo.experiences?.map((exp, index) => (
+              <div key={index} className={styles.experienceItem}>
+                <h3>{exp.title}</h3>
+                <p className={styles.companyName}>{exp.company}</p>
+                <p className={styles.experienceDesc}>{exp.description}</p>
+              </div>
+            ))) || <p>No experiences available</p>}
         </div>
       </div>
 
