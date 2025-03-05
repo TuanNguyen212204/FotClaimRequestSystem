@@ -54,6 +54,10 @@ const router: RouteObject[] = [
         element: <ApprovedFinancePage />,
       },
       {
+        path: PATH.approvedApprover,
+        element: <ApprovedApproverPage />,
+      },
+      {
         path: PATH.pending,
         element: <PendingComponent />,
       },
