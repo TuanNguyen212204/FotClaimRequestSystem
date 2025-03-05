@@ -1,4 +1,5 @@
-import TableComponent from "@/components/common/Table";
+import Dropdown from "@/components/ui/Dropdown/Dropdown";
+import { PasswordInput } from "@/components/ui/Input/Input";
 const ApproveDetail: React.FC = () => {
   const tableRef = useRef<{
     getSelectedData: () => DataRecord[];
@@ -86,22 +87,22 @@ const ApproveDetail: React.FC = () => {
       action: "",
     },
   ];
-
-  const handleSelect = (value: string) => {
-    console.log("Selected:", value);
-  };
-
-  const options = [{ value: "js", label: "javascript" }];
-
   return (
     <div>
-      <TableComponent
+      {/* <Dropdown
+        label="Select item"
+        options={options}
+        onSelect={handleSelect}
+        disabled={false}
+      /> */}
+      {/* <TableComponent
         columns={columns}
         dataSource={dataSource}
         loading={false}
         pagination={true}
         page="Object"
-      />
+      /> */}
+      <PasswordInput placeholder="Enter the password" size="medium" />
     </div>
   );
 };
