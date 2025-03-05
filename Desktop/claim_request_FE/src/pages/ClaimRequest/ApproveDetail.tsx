@@ -1,4 +1,6 @@
-import TableComponent from "@/components/common/Table";
+import TableComponent from "@/components/ui/Table/Table";
+import { useRef } from "react";
+import { DataRecord } from "@/components/ui/Table/Table";
 const ApproveDetail: React.FC = () => {
   const tableRef = useRef<{
     getSelectedData: () => DataRecord[];
