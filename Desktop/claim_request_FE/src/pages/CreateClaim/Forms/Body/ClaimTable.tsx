@@ -5,7 +5,9 @@ import {
   UseFormRegister,
   FieldErrors,
 } from "react-hook-form";
-import styles from "@ui/Forms/Create-Claim/Claim.module.css";
+
+import styles from "@pages/CreateClaim/Forms/Create-Claim/Claim.module.css";
+
 import { FormData } from "@/types/claimForm.type";
 import { useWatch } from "react-hook-form";
 import { Trash2 } from "lucide-react";
@@ -30,7 +32,7 @@ export default function ClaimTable({
   const currentProject = useWatch({ control, name: "currentSelectedProject" });
 
   const claims = useWatch({ control, name: "claims" });
-  console.log(claims[0].from)
+  console.log(claims[0].from);
   function getTime(time: string): string {
     return time ? time.split("T")[0] : "";
   }
@@ -43,7 +45,7 @@ export default function ClaimTable({
       <h2 className="text-lg pb-1.5 mb-4 border-b border-gray-400">
         Claim Table
       </h2>
-      
+
       <div className="overflow-x-auto">
         <table className="table-cell  border box-border border-spacing-1 border-gray-300 mb-2.5 w-full">
           <thead>
@@ -58,7 +60,6 @@ export default function ClaimTable({
           </thead>
           <tbody>
             {fields.map((field, index) => (
-              
               <tr key={field.id} className="h-24">
                 <TdWithError
                   className="w-6/24"
@@ -120,7 +121,10 @@ export default function ClaimTable({
                       className="cursor-pointer self-center  text-red-500"
                     />
                   ) : (
-                    <Trash2 className="cursor-not-allowed text-gray-600 self-center" size={32} />
+                    <Trash2
+                      className="cursor-not-allowed text-gray-600 self-center"
+                      size={32}
+                    />
                   )}
                 </TdWithError>
               </tr>
