@@ -1,24 +1,24 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from 'react-redux';
-import { selectClaims } from '../../redux/slices/claimsSlice'; // Import selector
+import { useSelector } from "react-redux";
+import { selectClaims } from "../../redux/slice/claimsSlice"; // Import selector
 import styles from "./PaidClaims.module.css";
 import { PATH } from "../../constant/config";
-import Pagination from '../../components/common/Pagination';
+import Pagination from "../../components/common/Pagination";
 
 const PaidClaims: React.FC = () => {
   const navigate = useNavigate();
   const claims = useSelector(selectClaims); // Get claims from Redux
-  
+
   // Thêm state cho pagination
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5; // Số items trên mỗi trang
-  
+
   // Tính toán các items cho trang hiện tại
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentClaims = claims.slice(indexOfFirstItem, indexOfLastItem);
-  
+
   // Tính tổng số trang
   const totalPages = Math.ceil(claims.length / itemsPerPage);
 
@@ -54,7 +54,7 @@ const PaidClaims: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {currentClaims.map(claim => (
+            {currentClaims.map((claim) => (
               <tr key={claim.claimId}>
                 <td className={styles.style_td}>{claim.claimId}</td>
                 <td className={styles.style_td}>{claim.staffName}</td>
@@ -63,9 +63,15 @@ const PaidClaims: React.FC = () => {
                 <td className={styles.style_td}>100 hours</td>
                 <td className={styles.style_td}>Marco</td>
                 <td className={styles.style_td}>
-                  <button 
-                    onClick={() => navigate(`${PATH.claimStatus}/${claim.claimId}`)}
-                    style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+                  <button
+                    onClick={() =>
+                      navigate(`${PATH.claimStatus}/${claim.claimId}`)
+                    }
+                    style={{
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                    }}
                   >
                     👁
                   </button>
@@ -75,12 +81,14 @@ const PaidClaims: React.FC = () => {
           </tbody>
         </table>
       </div>
-      
+
       <Pagination
         total={claims.length}
         defaultPageSize={5}
         defaultCurrent={1}
-        showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
+        showTotal={(total, range) =>
+          `${range[0]}-${range[1]} of ${total} items`
+        }
         onChange={handlePageChange}
       />
     </div>
