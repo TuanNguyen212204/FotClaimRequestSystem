@@ -1,30 +1,30 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useSelector } from 'react-redux';
-import { selectClaims } from '../../redux/slices/claimsSlice'; // Import selector
+import { useSelector } from "react-redux";
+import { selectClaims } from "../../redux/slice/claimsSlice"; // Import selector
 import styles from "./ClaimStatus.module.css";
-import Pagination from '../../components/common/Pagination'; // Thêm import
+import Pagination from "../../components/common/Pagination"; // Thêm import
 
 const ClaimStatus: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const claims = useSelector(selectClaims); // Get claims from Redux
-  
+
   // Thêm state cho pagination
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 5;
 
-  const currentClaim = claims.find(claim => claim.claimId === id);
+  const currentClaim = claims.find((claim) => claim.claimId === id);
 
   // Data mẫu cho bảng (thay thế bằng data thật sau)
   const tableData = [
     {
-      id: '001',
-      duration: 'From: 1/1/2025 To: 1/15/2025',
-      date: '1/5/2025',
-      hours: '100 hours',
-      paid: '250.000.000 VND',
-      status: 'Paid'
+      id: "001",
+      duration: "From: 1/1/2025 To: 1/15/2025",
+      date: "1/5/2025",
+      hours: "100 hours",
+      paid: "250.000.000 VND",
+      status: "Paid",
     },
     // ... các dữ liệu khác
   ];
@@ -118,19 +118,18 @@ const ClaimStatus: React.FC = () => {
           </tbody>
         </table>
       </div>
-      
+
       <div className={styles.pagination_container}>
         <Pagination
           total={tableData.length}
           defaultPageSize={pageSize}
           defaultCurrent={1}
-          showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
+          showTotal={(total, range) =>
+            `${range[0]}-${range[1]} of ${total} items`
+          }
           onChange={handlePageChange}
         />
-        <button 
-          className={styles.print_button}
-          onClick={handlePrint}
-        >
+        <button className={styles.print_button} onClick={handlePrint}>
           Print
         </button>
       </div>
@@ -139,4 +138,3 @@ const ClaimStatus: React.FC = () => {
 };
 
 export default ClaimStatus;
-

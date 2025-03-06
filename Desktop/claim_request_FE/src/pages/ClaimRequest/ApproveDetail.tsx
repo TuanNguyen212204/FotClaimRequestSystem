@@ -1,19 +1,28 @@
 import TableComponent from "@/components/ui/Table/Table";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { DataRecord } from "@/components/ui/Table/Table";
 import { PasswordInput } from "@/components/ui/Input/Input";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "@/redux";
+import { fetchAllUserAsync } from "@/redux/thunk/User/userThunk";
+import { selectAllUser } from "@/redux/selector/userSelector";
+import { selectAllClaim } from "@/redux/selector/claimSelector";
+import { fetchAllClaimAsync } from "@/redux/thunk/Claim/claimThunk";
 const ApproveDetail: React.FC = () => {
-  const tableRef = useRef<{
-    getSelectedData: () => DataRecord[];
-    getCheckedData: () => DataRecord[];
-    getSortedData: () => DataRecord[];
-  }>(null);
-  const handleGetSelectedData = () => {
-    if (tableRef.current) {
-      const selectedData = tableRef.current.getSelectedData();
-      console.log("Selected Data:", selectedData);
-    }
-  };
+  const dispatch = useDispatch<AppDispatch>();
+  const users = useSelector(selectAllUser);
+  const claims = useSelector(selectAllClaim);
+  // const tableRef = useRef<{
+  //   getSelectedData: () => DataRecord[];
+  //   getCheckedData: () => DataRecord[];
+  //   getSortedData: () => DataRecord[];
+  // }>(null);
+  // const handleGetSelectedData = () => {
+  //   if (tableRef.current) {
+  //     const selectedData = tableRef.current.getSelectedData();
+  //     console.log("Selected Data:", selectedData);
+  //   }
+  // };
   // const handleGetCheckedData = () => {
   //   if (tableRef.current) {
   //     const checkedData = tableRef.current.getCheckedData();
@@ -26,69 +35,19 @@ const ApproveDetail: React.FC = () => {
   //     console.log("Sorted Data:", sortedData);
   //   }
   // };
-  const sortConfig: SortConfig = {
-    columnKey: "id",
-    order: "asc",
-  };
-  const columns = [
-    { title: "ID", dataIndex: "id", key: "id" },
-    { title: "Total Hours", dataIndex: "totalH", key: "totalH" },
-    {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
-    },
-    {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
-      cell: ({ value }: { value: unknown }) => {
-        const stringValue = value as string;
-        const style = value === "Approved" ? { color: "green" } : {};
-        return <div style={style}>{stringValue}</div>;
-      },
-    },
 
-    { title: "Action", dataIndex: "action", key: "action" },
-  ];
+  useEffect(() => {
+    dispatch(fetchAllUserAsync());
+    dispatch(fetchAllClaimAsync());
+    console.log("test");
+  }, []);
 
-  const dataSource = [
-    {
-      id: "1",
-      name: "Nguyen Tuan An",
-      totalH: "8",
-      status: "Approved",
-      action: "",
-    },
-    {
-      id: "2",
-      name: "Nguyen Tuan B",
-      totalH: "8",
-      status: "Approved",
-      action: "",
-    },
-    {
-      id: "3",
-      name: "Nguyen Tuan B",
-      totalH: "8",
-      status: "Approved",
-      action: "",
-    },
-    {
-      id: "4",
-      name: "Nguyen Tuan B",
-      totalH: "8",
-      status: "Approved",
-      action: "",
-    },
-    {
-      id: "5",
-      name: "Nguyen Tuan B",
-      totalH: "8",
-      status: "Approved",
-      action: "",
-    },
-  ];
+  useEffect(() => {
+    console.log("users", users);
+  }, [users]);
+  useEffect(() => {
+    console.log("claims", claims);
+  }, [claims]);
   return (
     <div>
       {/* <Dropdown
@@ -104,7 +63,7 @@ const ApproveDetail: React.FC = () => {
         pagination={true}
         page="Object"
       /> */}
-      <PasswordInput placeholder="Enter the password" size="large" />
+      {/* <PasswordInput placeholder="Enter the password" size="large" /> */}
     </div>
   );
 };

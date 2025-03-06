@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllClaims } from "../../../redux/slices/Approver/claimsSlice";
+import { fetchAllClaims } from "../../../redux/Approver/claimsSlice";
 import styles from "./ApproverdApproverComponent.module.css";
 import { ArrowLeftSquare, ArrowRightSquare, EyeIcon } from "lucide-react";
 import { RootState, AppDispatch } from "../../../redux/index";
