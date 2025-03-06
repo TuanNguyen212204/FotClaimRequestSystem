@@ -9,6 +9,7 @@ import claimsReducer from "./slice/claimsSlice";
 import { approverSlice } from "./Approver/claimsSlice";
 import { userSlice } from "./slices/User/userSlice";
 import { claimSlice } from "./slices/Claim/claimSlice";
+import { projectSlice } from "./slices/Project/projectSlice";
 export const rootReducer = combineReducers({
   // pending: pendingSlice.reducer,
   // details: detailsSlice.reducer,
@@ -16,6 +17,7 @@ export const rootReducer = combineReducers({
   //
   user: userSlice.reducer,
   claim: claimSlice.reducer,
+  project: projectSlice.reducer,
   //
   // userClaims: userClaimSlice.reducer,
   // claims: claimsReducer,
