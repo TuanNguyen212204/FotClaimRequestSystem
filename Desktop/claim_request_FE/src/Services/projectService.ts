@@ -19,7 +19,7 @@ interface ProjectsResponse {
 
 const config: HttpClientConfig = {
   baseURL: "https://claimsystem.info.vn/api/v1/",
-  timeout: 10000,
+  timeout: 10000, //simple add token later don gian
 };
 
 const httpClient = new HttpClient(config);
