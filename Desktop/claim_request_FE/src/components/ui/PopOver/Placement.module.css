@@ -1,0 +1,93 @@
+.placement-top,
+.placement-bottom,
+.placement-left,
+.placement-right,
+.placement-top_left,
+.placement-top_right,
+.placement-bottom_left,
+.placement-bottom_right,
+.placement-left_top,
+.placement-left_bottom,
+.placement-right_top,
+.placement-right_bottom {
+  position: absolute;
+}
+
+.placement-top {
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%); /* nhu ben duoi center hack */
+}
+
+.placement-bottom {
+  top: 120%;
+  left: 50%; /* di qua 50%*/
+  transform: translateX(-50%); /* lui lai 50% width cua ban than no*/
+}
+
+.placement-left {
+  right: 120%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.placement-right {
+  left: 120%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.placement-top_left {
+  bottom: 120%;
+  left: 0;
+}
+
+.placement-top_right {
+  bottom: 120%;
+  right: 0;
+}
+
+.placement-bottom_left {
+  top: 120%;
+  left: 0;
+}
+
+.placement-bottom_right {
+  top: 120%;
+  right: 0;
+}
+
+.placement-left_top {
+  right: 120%;
+  top: 0;
+}
+
+.placement-left_bottom {
+  right: 120%;
+  bottom: 0;
+}
+
+.placement-right_top {
+  left: 120%;
+  top: 0;
+}
+
+.placement-right_bottom {
+  left: 120%;
+  bottom: 0;
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate_popIn {
+  animation: popIn 0.3s ease-out;
+}

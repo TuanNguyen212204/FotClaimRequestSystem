@@ -1,4 +1,6 @@
 import TableComponent from "@/components/common/Table";
+import { Router } from "@/routers";
+import { title } from "process";
 const TableDraftPage = () => {
   const columns = [
     { title: "ID", dataIndex: "id", key: "id" },
@@ -7,7 +9,7 @@ const TableDraftPage = () => {
     { title: "Country", dataIndex: "country", key: "country" },
     { title: "Email", dataIndex: "email", key: "email" },
     { title: "Status", dataIndex: "status", key: "status" },
-     { title: "hello", dataIndex: "hello", key: "hello" },
+    { title: "hello", dataIndex: "hello", key: "hello" },
   ];
 
   const dataSource = [

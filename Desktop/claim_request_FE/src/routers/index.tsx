@@ -16,15 +16,12 @@ import ClaimStatus from "@pages/Finance/ClaimStatus";
 import PaidClaims from "@pages/Finance/PaidClaims";
 import ProjectInformation from "@pages/admin/ProjectInformation";
 import StaffInformation from "@pages/admin/StaffInformation";
+import DraftCoponent from "@/components/ui/user/DraftCoponent";
 import ApprovedFinancePage from "@/pages/Finance/ApprovedFinancePage";
 import CheckBoxTest from "@/components/ui/Checkbox/Checkboxtest";
-import ApprovedApproverPage from "@/pages/Approver/ApprovedApproverPage";
 import CheckMail from "@/components/ui/login/CheckMail";
 import CreateNewPassword from "@/components/ui/login/CreateNewPassword";
-import UnauthorizedPage from "@/auth/Unauthorized.tsx";
-import Authentication from "@/auth/Authentication.tsx";
-import Authorization from "@/auth/Authorization";
-import Unauthenticated from "@/auth/Unauthenticated";
+import { Authorization } from "@/auth/Authorization";
 import { ROLE } from "@/constant/role";
 const router: RouteObject[] = [
   {
@@ -60,6 +57,10 @@ const router: RouteObject[] = [
     element: <MainLayout />,
     children: [
       {
+        path: PATH.draft,
+        element: <DraftCoponent />,
+      },
+      {
         path: PATH.home,
         element: <HomePage />,
       },
@@ -85,7 +86,7 @@ const router: RouteObject[] = [
       },
       {
         path: PATH.approvedApprover,
-        element: <ApprovedApproverPage />,
+        element: <ApprovedFinancePage />,
       },
       {
         path: PATH.pending,
