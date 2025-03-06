@@ -67,7 +67,7 @@ export default function ProjectInfo({
             defaultValue={""}
             onChange={(e) => {
               const selectedProject = ProjectList.find(
-                (p) => p.ProjectName === e.target.value
+                (p) => p.ProjectName === e.target.value,
               );
               if (selectedProject) {
                 setValue("currentSelectedProject", selectedProject, {
@@ -114,7 +114,7 @@ export default function ProjectInfo({
               currentProject?.ProjectDuration?.to
                 ? formatDateRange(
                     currentProject.ProjectDuration.from,
-                    currentProject.ProjectDuration.to
+                    currentProject.ProjectDuration.to,
                   )
                 : ""
             }

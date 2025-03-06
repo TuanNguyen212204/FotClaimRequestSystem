@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ProjectInfo from "../Body/ProjectInfo";
-import Header from "@/pages/CreateClaim/Forms/Header";
-import StaffInfo from "@/pages/CreateClaim/Forms/Body/StaffInfo";
+import Header from "../Header/index";
+import StaffInfo from "../Body/StaffInfo";
 import ClaimTable from "../Body/ClaimTable";
-import AdditionalInfo from "@/pages/CreateClaim/Forms/Body/AdditionalInfo";
-import styles from "@pages/CreateClaim/Forms/Create-Claim/Claim.module.css";
+import AdditionalInfo from "../Body/AdditionalInfo";
+import styles from "./Claim.module.css";
 import {
   fetchProject,
   selectProject,
