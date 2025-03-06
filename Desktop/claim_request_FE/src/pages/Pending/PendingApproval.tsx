@@ -4,7 +4,7 @@ import styles from "./PendingApproval.module.css";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { fetchAllClaims, deleteClaim } from "@/redux/Claim/store/pendingSlice";
+import { fetchAllClaims, deleteClaim } from "@/redux/Claim/store/pendingThunk";
 import { useAppDispatch } from "@redux/index";
 import type { RootState } from "@redux/index";
 import { toast } from "react-toastify";

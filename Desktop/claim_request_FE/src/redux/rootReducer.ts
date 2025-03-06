@@ -1,6 +1,6 @@
 import { combineReducers } from "@reduxjs/toolkit";
-import { pendingSlice } from "./Claim/store/pendingSlice";
-import { detailsSlice } from "./Claim/store/detailsSlice";
+import { pendingSlice } from "./Claim/store/pendingThunk";
+import { detailsSlice } from "./Claim/store/detailsThunk";
 // import { financeSlice } from "./slices/financeSlice";
 // import claimsReducer from "./slices/claimsSlice";
 // import userClaimSlice from "./slice/userClaimSlice";

@@ -2,9 +2,9 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import styles from "./DetailsApproval.module.css";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllDetails } from "@/redux/Claim/store/detailsSlice";
+import { fetchAllDetails } from "@/redux/Claim/store/detailsThunk";
 import { RootState, AppDispatch } from "@redux/index";
-import { fetchAllClaims } from "@/redux/Claim/store/pendingSlice";
+import { fetchAllClaims } from "@/redux/Claim/store/pendingThunk";
 import { useParams } from "react-router-dom";
 
 export const DetailsComponents: React.FC = () => {

@@ -21,7 +21,7 @@ import ApprovedFinancePage from "@/pages/Finance/ApprovedFinancePage";
 import CheckBoxTest from "@/components/ui/Checkbox/Checkboxtest";
 import CheckMail from "@/components/ui/login/CheckMail";
 import CreateNewPassword from "@/components/ui/login/CreateNewPassword";
-import { Authorization } from "@/auth/Authorization";
+import  Authorization  from "@/auth/Authorization";
 import { ROLE } from "@/constant/role";
 const router: RouteObject[] = [
   {
