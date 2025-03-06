@@ -123,10 +123,6 @@ const router: RouteObject[] = [
         path: PATH.staffInformation,
         element: <StaffInformation />,
       },
-      // {
-      //   path: PATH.table,
-      //   element: <TableDraftPage />,
-      // }
     ],
   },
 ];
