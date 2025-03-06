@@ -20,5 +20,6 @@ export const PATH = {
   approvedApprover: "/approver/approved",
   projectInformation: "/project-information",
   staffInformation: "/staff-information",
-  table: "/table",
+  unauthorized: "/unauthorized",
+  unauthenticated: "/unauthenticated",
 };

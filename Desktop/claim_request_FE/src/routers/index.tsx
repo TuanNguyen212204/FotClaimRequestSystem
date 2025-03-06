@@ -21,7 +21,11 @@ import CheckBoxTest from "@/components/ui/Checkbox/Checkboxtest";
 import ApprovedApproverPage from "@/pages/Approver/ApprovedApproverPage";
 import CheckMail from "@/components/ui/login/CheckMail";
 import CreateNewPassword from "@/components/ui/login/CreateNewPassword";
-import TableDraftPage from "@/pages/TableDraftPage";
+import UnauthorizedPage from "@/auth/Unauthorized.tsx";
+import Authentication from "@/auth/Authentication.tsx";
+import Authorization from "@/auth/Authorization";
+import Unauthenticated from "@/auth/Unauthenticated";
+import { ROLE } from "@/constant/role";
 const router: RouteObject[] = [
   {
     element: <CheckBoxTest />,
@@ -43,6 +47,14 @@ const router: RouteObject[] = [
     element: <CreateNewPassword />,
     path: PATH.createNewPassword,
   },
+  // {
+  //   path: "/unauthorized",
+  //   element: <UnauthorizedPage />, //không đủ quyền
+  // },
+  // {
+  //   path: "/unauthenticated",
+  //   element: <Unauthenticated />, //chưa đăng nhập
+  // },
 
   {
     element: <MainLayout />,
@@ -89,7 +101,11 @@ const router: RouteObject[] = [
       },
       {
         path: PATH.approveDetails,
-        element: <ApproveDetail />,
+        element: (
+          <Authorization roleID={[ROLE.APPROVER]}>
+            <ApproveDetail />
+          </Authorization>
+        ),
       },
       {
         path: `${PATH.claimStatus}/:id`,
@@ -107,10 +123,10 @@ const router: RouteObject[] = [
         path: PATH.staffInformation,
         element: <StaffInformation />,
       },
-      {
-        path: PATH.table,
-        element: <TableDraftPage />,
-      }
+      // {
+      //   path: PATH.table,
+      //   element: <TableDraftPage />,
+      // }
     ],
   },
 ];
