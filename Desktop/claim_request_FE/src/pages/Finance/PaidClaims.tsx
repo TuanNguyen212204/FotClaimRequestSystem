@@ -1,32 +1,70 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
-import { selectClaims } from '../../redux/slices/claimsSlice'; // Import selector
+import { selectClaims } from '../../redux/slices/Claim/claimsSlice';
 import styles from "./PaidClaims.module.css";
 import { PATH } from "../../constant/config";
-import Pagination from '../../components/common/Pagination';
+import { useTable } from "../../Hooks/useTable";
+import { Column } from "../../components/ui/Table/Table";
 
 const PaidClaims: React.FC = () => {
   const navigate = useNavigate();
-  const claims = useSelector(selectClaims); // Get claims from Redux
-  
-  // Thêm state cho pagination
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5; // Số items trên mỗi trang
-  
-  // Tính toán các items cho trang hiện tại
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentClaims = claims.slice(indexOfFirstItem, indexOfLastItem);
-  
-  // Tính tổng số trang
-  const totalPages = Math.ceil(claims.length / itemsPerPage);
+  const claims = useSelector(selectClaims);
 
-  // Handle page change
-  const handlePageChange = (page: number, pageSize: number) => {
-    setCurrentPage(page);
-    // Xử lý logic phân trang ở đây
-  };
+  const columns: Column[] = [
+    { key: 'claimId', dataIndex: 'claimId', title: 'Claim ID' },
+    { key: 'staffName', dataIndex: 'staffName', title: 'Staff Name' },
+    { key: 'projectName', dataIndex: 'projectName', title: 'Project Name' },
+    { key: 'duration', dataIndex: 'duration', title: 'Project Duration' },
+    { 
+      key: 'totalHours', 
+      dataIndex: 'totalHours', 
+      title: 'Total Hours Working',
+      cell: () => <span>100 hours</span>
+    },
+    { 
+      key: 'approverName', 
+      dataIndex: 'approverName', 
+      title: 'Approver Name',
+      cell: () => <span>Marco</span>
+    },
+    {
+      key: 'action',
+      dataIndex: 'claimId',
+      title: 'Action',
+      cell: ({ value }) => (
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <button 
+            onClick={() => navigate(`${PATH.claimStatus}/${value}`)}
+            style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+          >
+            👁
+          </button>
+        </div>
+      )
+    }
+  ];
+
+  const {
+    paginatedData,
+    totalPages,
+    currentPage,
+    handlePageChange,
+    sortOrder,
+    sortColumn,
+    handleSort
+  } = useTable({
+    dataSource: claims.map(claim => ({
+      ...claim,
+      status: 'paid' // Add required status property
+    })),
+    pageLength: 5,
+    pagination: true,
+    sortConfig: {
+      columnKey: 'claimId',
+      order: 'asc'
+    }
+  });
 
   return (
     <div className={styles.container}>
@@ -39,50 +77,75 @@ const PaidClaims: React.FC = () => {
           overflow: "hidden",
           borderRadius: "10px",
           border: "2px solid black",
+          marginBottom: "20px"
         }}
       >
         <table className={styles.table}>
           <thead>
             <tr className={styles.style_tr}>
-              <th className={styles.style_th}>Claim ID</th>
-              <th className={styles.style_th}>Staff Name</th>
-              <th className={styles.style_th}>Project Name</th>
-              <th className={styles.style_th}>Project Duration</th>
-              <th className={styles.style_th}>Total Hours Working</th>
-              <th className={styles.style_th}>Approver Name</th>
-              <th className={styles.style_th}>Action</th>
+              {columns.map((column) => (
+                <th 
+                  key={column.key} 
+                  className={styles.style_th}
+                  onClick={() => column.key !== 'action' && handleSort(column.dataIndex)}
+                  style={{ cursor: column.key !== 'action' ? 'pointer' : 'default' }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}>
+                    {column.title}
+                    {sortColumn === column.dataIndex && (
+                      <span>{sortOrder === 'asc' ? '▲' : '▼'}</span>
+                    )}
+                  </div>
+                </th>
+              ))}
             </tr>
           </thead>
           <tbody>
-            {currentClaims.map(claim => (
+            {paginatedData.map((claim) => (
               <tr key={claim.claimId}>
-                <td className={styles.style_td}>{claim.claimId}</td>
-                <td className={styles.style_td}>{claim.staffName}</td>
-                <td className={styles.style_td}>{claim.projectName}</td>
-                <td className={styles.style_td}>{claim.duration}</td>
-                <td className={styles.style_td}>100 hours</td>
-                <td className={styles.style_td}>Marco</td>
-                <td className={styles.style_td}>
-                  <button 
-                    onClick={() => navigate(`${PATH.claimStatus}/${claim.claimId}`)}
-                    style={{ background: 'none', border: 'none', cursor: 'pointer' }}
-                  >
-                    👁
-                  </button>
-                </td>
+                {columns.map((column) => (
+                  <td key={`${claim.claimId}-${column.key}`} className={styles.style_td}>
+                    {column.cell ? 
+                      column.cell({ 
+                        value: claim[column.dataIndex as keyof typeof claim], 
+                        record: claim 
+                      }) 
+                      : claim[column.dataIndex as keyof typeof claim]}
+                  </td>
+                ))}
               </tr>
             ))}
           </tbody>
         </table>
       </div>
       
-      <Pagination
-        total={claims.length}
-        defaultPageSize={5}
-        defaultCurrent={1}
-        showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
-        onChange={handlePageChange}
-      />
+      <div className={styles.pagination}>
+        <button 
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          className={styles.pageButton}
+        >
+          Previous
+        </button>
+        <div className={styles.pageNumbers}>
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+            <button
+              key={page}
+              onClick={() => handlePageChange(page)}
+              className={`${styles.pageNumber} ${currentPage === page ? styles.activePage : ''}`}
+            >
+              {page}
+            </button>
+          ))}
+        </div>
+        <button 
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className={styles.pageButton}
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 };

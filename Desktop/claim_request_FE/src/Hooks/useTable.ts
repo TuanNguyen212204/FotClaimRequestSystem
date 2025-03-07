@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Column, DataRecord, SortConfig } from "../components/ui/Table/Table";
 
 interface UseTableProps<T extends DataRecord> {
@@ -31,6 +31,7 @@ interface UseTableReturn<T extends DataRecord> {
   uniqueStatuses: string[];
   getSelectedData: () => T[];
   getSortedData: () => T[];
+  checkboxRef: React.RefObject<HTMLInputElement>;
 }
 
 export function useTable<T extends DataRecord>({
@@ -49,6 +50,7 @@ export function useTable<T extends DataRecord>({
   const [sortColumn, setSortColumn] = useState<string | null>(
     sortConfig?.columnKey || null
   );
+  const checkboxRef = useRef<HTMLInputElement>(null);
 
   const uniqueStatuses = [
     "All",
@@ -78,6 +80,14 @@ export function useTable<T extends DataRecord>({
   useEffect(() => {
     setCurrentPage(1);
   }, [selectedStatus]);
+
+  useEffect(() => {
+    if (checkboxRef.current) {
+      const someChecked = checkedItems.size > 0;
+      const allChecked = checkedItems.size === dataSource.length;
+      checkboxRef.current.indeterminate = someChecked && !allChecked;
+    }
+  }, [checkedItems, dataSource.length]);
 
   const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= totalPages) {
@@ -161,5 +171,6 @@ export function useTable<T extends DataRecord>({
     uniqueStatuses,
     getSelectedData,
     getSortedData,
+    checkboxRef: checkboxRef as React.RefObject<HTMLInputElement>    // Removed trailing comma
   };
 }
