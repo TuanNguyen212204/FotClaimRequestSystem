@@ -7,14 +7,7 @@ import {
 } from "react-hook-form";
 import { JSX, useState } from "react";
 import { FormData } from "@/types/claimForm.type";
-export type TProjectInfo = {
-  ProjectName: string;
-  RoleInTheProject: string;
-  ProjectDuration: {
-    from: string;
-    to: string;
-  };
-};
+import { TProjectInfo } from "@/redux/slices/Project/projectSlice";
 
 export interface IProjectInfoProps {
   ProjectList: TProjectInfo[];
@@ -41,7 +34,7 @@ export default function ProjectInfo({
     const toYear = toDate.getFullYear();
     return `${fromMonth} ${fromYear} - ${toMonth} ${toYear}`;
   }
-
+  console.log(ProjectList);
   const [isCollapsed, setIsCollapsed] = useState<boolean>(true);
   return (
     <div className="mb-5 box-border">
@@ -67,7 +60,7 @@ export default function ProjectInfo({
             defaultValue={""}
             onChange={(e) => {
               const selectedProject = ProjectList.find(
-                (p) => p.ProjectName === e.target.value,
+                (p) => p.projectName === e.target.value
               );
               if (selectedProject) {
                 setValue("currentSelectedProject", selectedProject, {
@@ -80,13 +73,13 @@ export default function ProjectInfo({
               Select a Project
             </option>
             {ProjectList.map((project) => (
-              <option key={project.ProjectName} value={project.ProjectName}>
-                {project.ProjectName}
+              <option key={project.projectName} value={project.projectName}>
+                {project.projectName}
               </option>
             ))}
           </select>
         </div>
-        {errors.currentSelectedProject?.ProjectName && (
+        {errors.currentSelectedProject?.projectName && (
           <p className="text-black text-sm w-full bg-red-200 border-2 border-red-300 p-1">
             {
               "Select a Project" /**
@@ -114,7 +107,7 @@ export default function ProjectInfo({
               currentProject?.ProjectDuration?.to
                 ? formatDateRange(
                     currentProject.ProjectDuration.from,
-                    currentProject.ProjectDuration.to,
+                    currentProject.ProjectDuration.to
                   )
                 : ""
             }

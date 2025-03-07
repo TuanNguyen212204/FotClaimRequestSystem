@@ -3,7 +3,7 @@ import { RootState } from "@/redux";
 import projectService from "@/Services/projectService";
 export type TProjectInfo = {
   ProjectID: string;
-  ProjectName: string;
+  projectName: string;
   RoleInTheProject: string;
   ProjectDuration: {
     from: string;
@@ -34,20 +34,20 @@ export const fetchProject = createAsyncThunk(
     try {
       const projects = await projectService.getProjects();
       const mappedProjects: TProjectInfo[] = projects.map((project) => ({
-        ProjectID: project.projectID,
-        ProjectName: project.projectName,
+        ProjectID: project.project_id,
+        projectName: project.project_name,
         RoleInTheProject: project.role || "", // TODO : THONG BAO BE HIEN TAI API KHONG TRA VE ROLE TUNG NGUOW PHAI CO MOT ROLE RIENG TORNG TUNG PROENCT
         ProjectDuration: {
-          from: project.startDate,
-          to: project.endDate,
+          from: project.start_date,
+          to: project.end_date,
         },
-        ProjectStatus: project.projectStatus,
+        ProjectStatus: project.project_status,
       }));
       return { ProjectList: mappedProjects };
     } catch (error) {
       return rejectWithValue(error);
     }
-  },
+  }
 );
 
 const projectSlice = createSlice({
@@ -66,11 +66,12 @@ const projectSlice = createSlice({
       .addCase(
         fetchProject.fulfilled,
         (state, action: PayloadAction<ProjectListResponse>) => {
+          console.log(action.payload.ProjectList);
           state.projectList = action.payload.ProjectList.sort((a, b) =>
-            a.ProjectName.localeCompare(b.ProjectName),
+            a.projectName.localeCompare(b.projectName)
           );
           state.loading = "succeeded";
-        },
+        }
       )
       .addCase(fetchProject.rejected, (state) => {
         state.loading = "failed";

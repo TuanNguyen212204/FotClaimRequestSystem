@@ -1,4 +1,4 @@
-import { InternalAxiosRequestConfig } from "axios";
+import { AxiosRequestConfig, InternalAxiosRequestConfig } from "axios";
 /**
  * @interface ExtendedAxiosRequestConfig
  *@extends AxiosRequestConfig
@@ -39,11 +39,12 @@ export interface ApiResponse<T> {
  *  @property {boolean} [skipAuth] - bo qua qua trinh xac thuc VD: Beaber token
  */
 export interface RequestOptions
-  extends Omit<InternalAxiosRequestConfig, "baseURL" | "url" | "method"> {
+  extends Omit<AxiosRequestConfig, "baseURL" | "url" | "method"> {
   retry?: {
     maxRetries: number;
     delayMs: number;
   };
+
   skipAuth?: boolean;
 }
 /**
@@ -95,20 +96,20 @@ export interface HttpClientService {
   post<T = any, D = any>(
     url: string,
     data?: D,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Promise<ApiResponse<T>>;
   put<T = any, D = any>(
     url: string,
     data?: D,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Promise<ApiResponse<T>>;
   patch<T = any, D = any>(
     url: string,
     data?: D,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Promise<ApiResponse<T>>;
   delete<T = any>(
     url: string,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Promise<ApiResponse<T>>;
 }

@@ -16,6 +16,7 @@ import useCreateClaimForm from "@/Hooks/useCreateClaimForm";
 export default function CreateClaim() {
   const dispatch = useDispatch<AppDispatch>();
   const projectList = useSelector(selectProject);
+  console.log(projectList);
   const {
     register,
     handleSubmit,

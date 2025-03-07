@@ -5,11 +5,11 @@ import {
   ApiResponse,
 } from "../api/index";
 interface Project {
-  projectID: string;
-  projectName: string;
-  startDate: string;
-  endDate: string;
-  projectStatus: number;
+  project_id: string;
+  project_name: string;
+  start_date: string;
+  end_date: string;
+  project_status: number;
   role?: string;
 }
 
@@ -34,7 +34,13 @@ class ProjectService {
   async getProjects(): Promise<Project[]> {
     try {
       const response: ApiResponse<ProjectsResponse> =
-        await this.httpClient.get<ProjectsResponse>("projects");
+        await this.httpClient.get<ProjectsResponse>("projects", {
+          retry: {
+            maxRetries: 4,
+            delayMs: 1000,
+          },
+        });
+
       return response.data.projects;
     } catch (error) {
       console.error("Failed to fetch projects:", error);

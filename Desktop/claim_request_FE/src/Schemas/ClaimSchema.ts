@@ -1,8 +1,8 @@
 import { z } from "zod";
-import { parse, differenceInHours} from "date-fns";
+import { parse, differenceInHours } from "date-fns";
 
 export const ProjectInfoSchema = z.object({
-  ProjectName: z.string().nonempty("Project Name is required"),
+  projectName: z.string().nonempty("Project Name is required"),
   RoleInTheProject: z.string().nonempty("Role in the Project is required"),
   ProjectDuration: z.object({
     from: z.string().nonempty("Start date is required"),
@@ -15,7 +15,10 @@ export const ClaimSchema = z
     date: z.string().nonempty("Date is required"),
     from: z.string().nonempty("Start time is required"),
     to: z.string().nonempty("End time is required"),
-    hours: z.number().nonnegative("Hours must be a non-negative number").optional(),
+    hours: z
+      .number()
+      .nonnegative("Hours must be a non-negative number")
+      .optional(),
     remarks: z.string().optional(),
   })
   .superRefine((data, ctx) => {
@@ -31,8 +34,6 @@ export const ClaimSchema = z
         path: ["to"],
       });
     }
-
-    
 
     const calculatedHours = differenceInHours(toTime, fromTime);
     if (hours !== calculatedHours) {
