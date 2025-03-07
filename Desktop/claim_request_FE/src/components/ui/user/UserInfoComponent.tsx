@@ -263,7 +263,7 @@ export const UserInfoComponent: React.FC = () => {
                 className={styles.hiddenInput}
               />
               <label htmlFor="avatarUpload" className={styles.uploadButton}>
-                Change Avatar
+                Avatar
               </label>
             </div>
             <div className={styles.formSection}>
