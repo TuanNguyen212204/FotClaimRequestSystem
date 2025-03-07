@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
+<<<<<<< HEAD
 import { selectClaims } from '../../redux/slices/Claim/claimsSlice';
 import styles from "./PaidClaims.module.css";
 import { PATH } from "../../constant/config";
@@ -65,6 +66,19 @@ const PaidClaims: React.FC = () => {
       order: 'asc'
     }
   });
+=======
+import { selectClaims } from '../../redux/paid/claimsSlice'; 
+import styles from "./PaidClaims.module.css";
+import { PATH } from "../../constant/config";
+import Pagination from '../../components/common/Pagination/Pagination';
+import useTable from '../../Hooks/useTable';
+
+const PaidClaims: React.FC = () => {
+  const navigate = useNavigate();
+  const claims = useSelector(selectClaims); 
+  const pageSize = 5;
+  const { tableData, currentPage, setCurrentPage } = useTable(claims, pageSize);
+>>>>>>> feature/common-components-Duyanh
 
   return (
     <div className={styles.container}>
@@ -101,6 +115,7 @@ const PaidClaims: React.FC = () => {
             </tr>
           </thead>
           <tbody>
+<<<<<<< HEAD
             {paginatedData.map((claim) => (
               <tr key={claim.claimId}>
                 {columns.map((column) => (
@@ -113,12 +128,37 @@ const PaidClaims: React.FC = () => {
                       : claim[column.dataIndex as keyof typeof claim]}
                   </td>
                 ))}
+=======
+            {claims.length === 0 ? (
+              <tr>
+                <td colSpan={7}>No claims available.</td>
+>>>>>>> feature/common-components-Duyanh
               </tr>
-            ))}
+            ) : (
+              tableData.map(claim => (
+                <tr key={claim.claimId}>
+                  <td className={styles.style_td}>{claim.claimId ?? 'N/A'}</td>
+                  <td className={styles.style_td}>{claim.staffName ?? 'N/A'}</td>
+                  <td className={styles.style_td}>{claim.projectName ?? 'N/A'}</td>
+                  <td className={styles.style_td}>{claim.duration ?? 'N/A'}</td>
+                  <td className={styles.style_td}>100 hours</td>
+                  <td className={styles.style_td}>Marco</td>
+                  <td className={styles.style_td}>
+                    <button 
+                      onClick={() => navigate(`${PATH.claimStatus}/${claim.claimId}`)}
+                      style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+                    >
+                      👁
+                    </button>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
       
+<<<<<<< HEAD
       <div className={styles.pagination}>
         <button 
           onClick={() => handlePageChange(currentPage - 1)}
@@ -146,6 +186,15 @@ const PaidClaims: React.FC = () => {
           Next
         </button>
       </div>
+=======
+      <Pagination
+        total={claims.length}
+        defaultPageSize={pageSize}
+        defaultCurrent={currentPage}
+        showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
+        onChange={setCurrentPage}
+      />
+>>>>>>> feature/common-components-Duyanh
     </div>
   );
 };

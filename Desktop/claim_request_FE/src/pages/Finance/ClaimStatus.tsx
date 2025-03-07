@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from 'react-redux';
@@ -5,10 +6,21 @@ import { selectClaims } from '../../redux/slices/Claim/claimsSlice';
 import styles from "./ClaimStatus.module.css";
 import { useTable } from "../../Hooks/useTable";
 import { Column } from "../../components/ui/Table/Table";
+=======
+// src/pages/Finance/ClaimStatus.tsx
+import React, { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux';
+import { selectClaimStatuses, saveClaim } from '../../redux/paid/claimStatusSlice'; // Import selector và action
+import styles from "./ClaimStatus.module.css";
+import Pagination from '../../components/common/Pagination/Pagination';
+>>>>>>> feature/common-components-Duyanh
 
 const ClaimStatus: React.FC = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch(); 
   const { id } = useParams<{ id: string }>();
+<<<<<<< HEAD
   const claims = useSelector(selectClaims);
   const currentClaim = claims.find(claim => claim.claimId === id);
 
@@ -68,6 +80,14 @@ const ClaimStatus: React.FC = () => {
       status: 'Paid'
     }
   ];
+=======
+  const claimStatuses = useSelector(selectClaimStatuses); 
+  
+  
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5; 
+  const currentClaimStatus = claimStatuses.find(claim => claim.claimId === id);
+>>>>>>> feature/common-components-Duyanh
 
   const {
     paginatedData,
@@ -91,7 +111,13 @@ const ClaimStatus: React.FC = () => {
     window.print();
   };
 
-  if (!currentClaim) {
+  const handleSaveClaim = () => {
+    if (currentClaimStatus) {
+      dispatch(saveClaim(currentClaimStatus)); 
+    }
+  };
+
+  if (!currentClaimStatus) {
     return (
       <div className={styles.container}>
         <h1 className={styles.claimStatus_h1}>Claim Status</h1>
@@ -107,13 +133,13 @@ const ClaimStatus: React.FC = () => {
       </div>
       <div className={styles.box}>
         <div style={{ marginLeft: "50px" }}>
-          <p>Claim ID : {currentClaim.claimId}</p>
-          <p>Project Name : {currentClaim.projectName}</p>
-          <p>Project Duration : {currentClaim.duration}</p>
+          <p>Claim ID : {currentClaimStatus.claimId}</p>
+          <p>Project Name : {currentClaimStatus.projectName}</p>
+          <p>Project Duration : {currentClaimStatus.duration}</p>
         </div>
         <div>
-          <p>Staff Name : {currentClaim.staffName}</p>
-          <p>Project ID : {currentClaim.projectId}</p>
+          <p>Staff Name : {currentClaimStatus.staffName}</p>
+          <p>Project ID : {currentClaimStatus.projectId}</p>
         </div>
       </div>
       <div className={styles["table-container"]}>
@@ -138,6 +164,7 @@ const ClaimStatus: React.FC = () => {
             </tr>
           </thead>
           <tbody>
+<<<<<<< HEAD
             {paginatedData.map((record) => (
               <tr key={record.id}>
                 {columns.map((column) => (
@@ -155,11 +182,24 @@ const ClaimStatus: React.FC = () => {
                 ))}
               </tr>
             ))}
+=======
+            {}
+            <tr>
+              <td className={styles.style_td}>001</td>
+              <td className={styles.style_td}>From: 1/1/2025 To: 1/15/2025</td>
+              <td className={styles.style_td}>1/5/2025</td>
+              <td className={styles.style_td}>100 hours</td>
+              <td className={styles.style_td}>250.000.000 VND</td>
+              <td className={styles.style_td_Status}>Paid</td>
+            </tr>
+            {/* Thêm các hàng khác nếu cần */}
+>>>>>>> feature/common-components-Duyanh
           </tbody>
         </table>
       </div>
       
       <div className={styles.pagination_container}>
+<<<<<<< HEAD
         <div className={styles.pagination}>
           <button 
             onClick={() => handlePageChange(currentPage - 1)}
@@ -187,16 +227,25 @@ const ClaimStatus: React.FC = () => {
             Next
           </button>
         </div>
+=======
+        <Pagination
+          total={claimStatuses.length} 
+          defaultPageSize={itemsPerPage}
+          defaultCurrent={1}
+          showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
+          onChange={handlePageChange}
+        />
+>>>>>>> feature/common-components-Duyanh
         <button 
           className={styles.print_button}
           onClick={handlePrint}
         >
           Print
         </button>
+        
       </div>
     </div>
   );
 };
 
 export default ClaimStatus;
-
