@@ -1,27 +1,64 @@
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, useState } from "react";
 import styles from "./RadioGroup.module.css";
-import { RadioGroupProps } from "@/types/RadioGroup.type.ts";
+
+export interface RadioGroupProps {
+  options: Option[];
+  name: string;
+  selectedValue: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  buttonProps?: React.InputHTMLAttributes<HTMLInputElement>;
+  configDefault?: ConfigDefault;
+}
+
+export interface ConfigDefault {
+  value: keyof Option;
+  label: keyof Option;
+}
+
+export interface Option {
+  value: string;
+  label: string;
+  disabled?: boolean; 
+}
+
+const DEFAULT_OPTION: ConfigDefault = { value: "value", label: "label" };
 
 export const RadioGroup: React.FC<RadioGroupProps> = ({
+  configDefault = DEFAULT_OPTION,
   options,
-  name,
   selectedValue,
   onChange,
   buttonProps,
+  name,
 }) => {
+  const [selected, setSelected] = useState(selectedValue);
+
+  const setSelectedValue = (value: string) => {
+    setSelected(value);
+    onChange({ target: { value } } as ChangeEvent<HTMLInputElement>);
+  };
+
+  const newOptions = options.map((option) => ({
+    label: option[configDefault.label] || "",
+    value: option[configDefault.value] || "",
+    disabled: option.disabled || false, 
+  }));
+
   return (
     <div className={styles.radioGroup}>
-      {options.map((option) => (
+      {newOptions.map((option) => (
         <label
           key={option.value}
-          className={`${styles.radioLabel} ${option.disabled ? styles.disabled : ""}`}
+          className={`${styles.radioLabel} ${
+            option.disabled ? styles.disabled : ""
+          }`}
         >
           <input
             type="radio"
             name={name}
             value={option.value}
-            checked={selectedValue === option.value}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => onChange(e)}
+            checked={selected === option.value}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setSelectedValue(option.value)}
             className={styles.radioInput}
             disabled={option.disabled}
             {...buttonProps}
@@ -35,25 +72,41 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
 };
 
 export const RadioGroupButton: React.FC<RadioGroupProps> = ({
+  configDefault = DEFAULT_OPTION,
   options,
-  name,
   selectedValue,
   onChange,
   buttonProps,
+  name,
 }) => {
+  const [selected, setSelected] = useState(selectedValue);
+
+  const setSelectedValue = (value: string) => {
+    setSelected(value);
+    onChange({ target: { value } } as ChangeEvent<HTMLInputElement>);
+  };
+
+  const newOptions = options.map((option) => ({
+    label: option[configDefault.label] || "",
+    value: option[configDefault.value] || "",
+    disabled: option.disabled || false, 
+  }));
+
   return (
     <div className={styles.radioGroupButton}>
-      {options.map((option) => (
+      {newOptions.map((option) => (
         <label
           key={option.value}
-          className={`${styles.radioButtonLabel} ${option.disabled ? styles.disabled : ""} ${selectedValue === option.value ? styles.active : ""}`}
+          className={`${styles.radioButtonLabel} ${
+            option.disabled ? styles.disabled : ""
+          } ${selectedValue === option.value ? styles.active : ""}`}
         >
           <input
             type="radio"
             name={name}
             value={option.value}
-            checked={selectedValue === option.value}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => onChange(e)}
+            checked={selected === option.value}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setSelectedValue(option.value)}
             className={styles.radioButtonInput}
             disabled={option.disabled}
             {...buttonProps}
@@ -64,38 +117,3 @@ export const RadioGroupButton: React.FC<RadioGroupProps> = ({
     </div>
   );
 };
-
-// export const RadioGroupButtonOutline: React.FC<RadioGroupProps> = ({
-//   options,
-//   name,
-//   selectedValue,
-//   onChange,
-//   buttonProps,
-// }) => {
-//   return (
-//     <div className={styles.radioGroupButtonOutline}>
-//       {options.map((option) => (
-//         <label
-//           key={option.value}
-//           className={`${styles.radioButtonLabelOutline} ${
-//             option.disabled ? styles.disabled : ""
-//           } ${selectedValue === option.value ? styles.active : ""}`}
-//         >
-//           <input
-//             type="radio"
-//             name={name}
-//             value={option.value}
-//             checked={selectedValue === option.value}
-//             onChange={onChange}
-//             className={styles.radioButtonInputOutline}
-//             disabled={option.disabled}
-//             {...buttonProps}
-//           />
-//           <span className={styles.radioButtonCustomOutline}>
-//             {option.label}
-//           </span>
-//         </label>
-//       ))}
-//     </div>
-//   );
-// };
