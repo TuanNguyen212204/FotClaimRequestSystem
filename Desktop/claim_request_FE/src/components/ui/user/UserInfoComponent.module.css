@@ -205,12 +205,26 @@
   font-size: 1.1rem;
 }
 
-.formSection textarea,
-.formSection input {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 12px;
-  border: 1px solid #ddd;
+.cancelBtn {
+  background: linear-gradient(135deg, #bc4b51 0%, #bc4b51 100%);
+  color: white;
+  box-shadow: 0 4px 6px rgba(220, 53, 69, 0.2);
+}
+
+.cancelBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(220, 53, 69, 0.3);
+}
+
+.editContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* input {
+  padding: 14px;
+  border: 2px solid #e2e8f0;
   border-radius: 8px;
   font-size: 1rem;
   transition: border-color 0.3s ease;
@@ -220,8 +234,9 @@
 .formSection input:focus {
   border-color: #2d3142;
   outline: none;
-  box-shadow: 0 0 8px rgba(45, 49, 66, 0.2);
-}
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+} */
 
 .arrayItem {
   position: relative;
