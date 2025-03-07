@@ -10,17 +10,24 @@ import { PendingComponent } from "@ui/approve/PendingApproval";
 import { DetailsComponents } from "@ui/approve/DetailsApproval";
 import UserClaims from "@pages/User/UserClaims";
 import { UserClaimDetails } from "@pages/User/UserClaimDetails";
-import UserSettings from "@pages/Admin/UserSettings";
+import UserSettings from "@pages/admin/UserSettings";
 import ApproveDetail from "@pages/ClaimRequest/ApproveDetail";
 import ClaimStatus from "@pages/Finance/ClaimStatus";
 import PaidClaims from "@pages/Finance/PaidClaims";
-import ProjectInformation from "@pages/Admin/ProjectInformation";
-import StaffInformation from "@pages/Admin/StaffInformation";
+import ProjectInformation from "@pages/admin/ProjectInformation";
+import StaffInformation from "@pages/admin/StaffInformation";
+import DraftCoponent from "@/components/ui/user/DraftCoponent";
 import ApprovedFinancePage from "@/pages/Finance/ApprovedFinancePage";
 import ApprovedApproverPage from "@/pages/Approver/ApprovedApproverPage";
+import Test from "@/pages/Test";
+import CheckBoxTest from "@/components/ui/Checkbox/Checkboxtest";
 import ModalTest from "@/components/ui/modal/ModalTest";
 import CardTest from "@/components/ui/card/CardTest";
 const router: RouteObject[] = [
+  {
+    element: <CheckBoxTest />,
+    path: PATH.checkbox,
+  },
   {
     element: <LoginForm />,
     path: PATH.login,
@@ -40,6 +47,10 @@ const router: RouteObject[] = [
   {
     element: <MainLayout />,
     children: [
+      {
+        path: PATH.draft,
+        element: <DraftCoponent />,
+      },
       {
         path: PATH.home,
         element: <HomePage />,
@@ -99,6 +110,10 @@ const router: RouteObject[] = [
       {
         path: PATH.staffInformation,
         element: <StaffInformation />,
+      },
+      {
+        path: PATH.test,
+        element: <Test />,
       },
     ],
   },

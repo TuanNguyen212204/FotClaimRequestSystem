@@ -118,7 +118,7 @@
   gap: 15px;
 }
 
-input {
+/* input {
   padding: 14px;
   border: 2px solid #e2e8f0;
   border-radius: 8px;
@@ -132,7 +132,7 @@ input:focus {
   outline: none;
   border-color: #4a90e2;
   box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
-}
+} */
 
 @media (max-width: 768px) {
   .container {

@@ -1,139 +1,83 @@
-import styles from "./UserSetting.module.css";
+import TableComponent from "@/components/ui/Table/Table";
 import { FilePen, Trash2 } from "lucide-react";
+import { AArrowDown } from "lucide-react";
+const UserSettings: React.FC = () => {
+  const handleEditClick = (id: string) => {
+    console.log(`Edit clicked for user with id: ${id}`);
+  };
 
-const UserSettings = () => {
+  const handleDeleteClick = (id: string) => {
+    console.log(`Delete clicked for user with id: ${id}`);
+  };
+
+  const handleArrowClick = (id: string) => {
+    console.log(`Arrow clicked for user with id: ${id}`);
+  };
+  const columns = [
+    { title: "ID", dataIndex: "id", key: "id" },
+    { title: "Username", dataIndex: "username", key: "username" },
+    { title: "FirstName", dataIndex: "firstName", key: "firstName" },
+    { title: "LastName", dataIndex: "lastName", key: "lastName" },
+    { title: "Birthday", dataIndex: "birthday", key: "birthday" },
+    { title: "Role", dataIndex: "status", key: "status" },
+    { title: "Action", dataIndex: "action", key: "action" },
+  ];
+  const dataSource = [
+    {
+      id: "1",
+      username: "admin",
+      firstName: "admin",
+      lastName: "admin",
+      birthday: "1999-01-01",
+      status: "admin",
+      action: (
+        <div>
+          <button onClick={() => handleEditClick("1")}>
+            <FilePen />
+          </button>
+          <button onClick={() => handleDeleteClick("1")}>
+            <Trash2 />
+          </button>
+          <button onClick={() => handleArrowClick("1")}>
+            <AArrowDown />
+          </button>
+        </div>
+      ),
+    },
+    {
+      id: "2",
+      username: "ba",
+      firstName: "ba",
+      lastName: "ba",
+      birthday: "1999-01-01",
+      status: "admin",
+    },
+    {
+      id: "3",
+      username: "user",
+      firstName: "user",
+      lastName: "user",
+      birthday: "1999-01-01",
+      status: "user",
+    },
+    {
+      id: "4",
+      username: "developer",
+      firstName: "developer",
+      lastName: "developer",
+      birthday: "1999-01-01",
+      status: "dev",
+    },
+  ];
   return (
     <div>
-      <div>
-        <div className={styles.container}>
-          <div>
-            <h1>User Settings</h1>
-            <hr />
-          </div>
-          <div
-            style={{
-              overflow: "hidden",
-              marginTop: "20px",
-              boxShadow:
-                "rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px",
-            }}
-          >
-            <table className={styles.table}>
-              <tr>
-                <th className={styles.style_th}>ID</th>
-                <th className={styles.style_th}>Email</th>
-                <th className={styles.style_th}>Username</th>
-                <th className={styles.style_th}>Role</th>
-                <th className={styles.style_th}>Status</th>
-                <th className={styles.style_th}>Action</th>
-              </tr>
-              <tr>
-                <td className={styles.style_td}>01</td>
-                <td className={styles.style_td}>nguyenvana@gmail.com</td>
-                <td className={styles.style_td}>nguyenvana</td>
-                <td className={styles.style_td}>dev</td>
-                <td className={styles.style_td}>Online/Offline</td>
-                <td className={styles.style_td}>
-                  <FilePen /> <Trash2 />
-                </td>
-              </tr>
-              <tr>
-                <td className={styles.style_td}>01</td>
-                <td className={styles.style_td}>nguyenvana@gmail.com</td>
-                <td className={styles.style_td}>nguyenvana</td>
-                <td className={styles.style_td}>dev</td>
-                <td className={styles.style_td}>Online/Offline</td>
-                <td className={styles.style_td}>
-                  <FilePen /> <Trash2 />
-                </td>
-              </tr>
-              <tr>
-                <td className={styles.style_td}>01</td>
-                <td className={styles.style_td}>nguyenvana@gmail.com</td>
-                <td className={styles.style_td}>nguyenvana</td>
-                <td className={styles.style_td}>dev</td>
-                <td className={styles.style_td}>Online/Offline</td>
-                <td className={styles.style_td}>
-                  <FilePen />
-                  <Trash2 />
-                </td>
-              </tr>
-              <tr>
-                <td className={styles.style_td}>01</td>
-                <td className={styles.style_td}>nguyenvana@gmail.com</td>
-                <td className={styles.style_td}>nguyenvana</td>
-                <td className={styles.style_td}>dev</td>
-                <td className={styles.style_td}>Online/Offline</td>
-                <td className={styles.style_td}>
-                  {" "}
-                  <FilePen />
-                  <Trash2 />
-                </td>
-              </tr>
-              <tr>
-                <td className={styles.style_td}>01</td>
-                <td className={styles.style_td}>nguyenvana@gmail.com</td>
-                <td className={styles.style_td}>nguyenvana</td>
-                <td className={styles.style_td}>dev</td>
-                <td className={styles.style_td}>Online/Offline</td>
-                <td className={styles.style_td}>
-                  {" "}
-                  <FilePen />
-                  <Trash2 />
-                </td>
-              </tr>
-              <tr>
-                <td className={styles.style_td}>01</td>
-                <td className={styles.style_td}>nguyenvana@gmail.com</td>
-                <td className={styles.style_td}>nguyenvana</td>
-                <td className={styles.style_td}>dev</td>
-                <td className={styles.style_td}>Online/Offline</td>
-                <td className={styles.style_td}>
-                  {" "}
-                  <FilePen />
-                  <Trash2 />
-                </td>
-              </tr>
-              <tr>
-                <td className={styles.style_td}>01</td>
-                <td className={styles.style_td}>nguyenvana@gmail.com</td>
-                <td className={styles.style_td}>nguyenvana</td>
-                <td className={styles.style_td}>dev</td>
-                <td className={styles.style_td}>Online/Offline</td>
-                <td className={styles.style_td}>
-                  {" "}
-                  <FilePen />
-                  <Trash2 />
-                </td>
-              </tr>
-              <tr>
-                <td className={styles.style_td}>01</td>
-                <td className={styles.style_td}>nguyenvana@gmail.com</td>
-                <td className={styles.style_td}>nguyenvana</td>
-                <td className={styles.style_td}>dev</td>
-                <td className={styles.style_td}>Online/Offline</td>
-                <td className={styles.style_td}>
-                  {" "}
-                  <FilePen />
-                  <Trash2 />
-                </td>
-              </tr>
-            </table>
-          </div>
-          <div
-            style={{
-              marginTop: "20px",
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-            <button className={styles.button2}>Previous</button>
-            <button className={styles.button3} style={{ marginLeft: "10px" }}>
-              Next
-            </button>
-          </div>
-        </div>
-      </div>
+      <TableComponent
+        columns={columns}
+        dataSource={dataSource}
+        loading={false}
+        pagination={true}
+        name="Role"
+      />
     </div>
   );
 };
