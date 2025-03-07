@@ -17,7 +17,7 @@ import PaidClaims from "@pages/Finance/PaidClaims";
 import ProjectInformation from "@pages/Admin/ProjectInformation";
 import StaffInformation from "@pages/Admin/StaffInformation";
 import ApprovedFinancePage from "@/pages/Finance/ApprovedFinancePage";
-import ApprovedApproverPage from "@/pages/Approver/ApprovedApproverPage";
+import DraftCoponent from "@/components/ui/user/DraftCoponent";
 const router: RouteObject[] = [
   {
     element: <LoginForm />,
@@ -30,6 +30,10 @@ const router: RouteObject[] = [
   {
     element: <MainLayout />,
     children: [
+      {
+        path: PATH.draft,
+        element: <DraftCoponent />,
+      },
       {
         path: PATH.home,
         element: <HomePage />,
@@ -56,7 +60,7 @@ const router: RouteObject[] = [
       },
       {
         path: PATH.approvedApprover,
-        element: <ApprovedApproverPage />,
+        element: <ApprovedFinancePage />,
       },
       {
         path: PATH.pending,
