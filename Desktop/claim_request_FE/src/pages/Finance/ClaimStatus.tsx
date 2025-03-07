@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { selectClaims } from "../../redux/slice/claimsSlice"; // Import selector
+import { selectClaims } from "../../redux/Claim/store/claimsSlice"; // Import selector
 import styles from "./ClaimStatus.module.css";
 import Pagination from "../../components/common/Pagination"; // Thêm import
 

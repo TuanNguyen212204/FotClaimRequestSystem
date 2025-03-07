@@ -14,7 +14,7 @@ import { RadioGroup } from "@components/ui/RadioGroup/RadioGroup";
 
 export const PendingComponent: React.FC = () => {
   const dispatch = useAppDispatch();
-  const claims = useSelector((state: RootState) => state.pending.listClaims);
+  const claims = useSelector((state: RootState) => state.claim.data);
   const [selectedValue, setSelectedValue] = useState("all");
 
   useEffect(() => {

@@ -18,6 +18,8 @@ import ProjectInformation from "@pages/admin/ProjectInformation";
 import StaffInformation from "@pages/admin/StaffInformation";
 import DraftCoponent from "@/components/ui/user/DraftCoponent";
 import ApprovedFinancePage from "@/pages/Finance/ApprovedFinancePage";
+import ApprovedApproverPage from "@/pages/Approver/ApprovedApproverPage";
+import Test from "@/pages/Test";
 import CheckBoxTest from "@/components/ui/Checkbox/Checkboxtest";
 import CheckMail from "@/components/ui/login/CheckMail";
 import CreateNewPassword from "@/components/ui/login/CreateNewPassword";
@@ -86,7 +88,7 @@ const router: RouteObject[] = [
       },
       {
         path: PATH.approvedApprover,
-        element: <ApprovedFinancePage />,
+        element: <ApprovedApproverPage />,
       },
       {
         path: PATH.pending,
@@ -123,6 +125,10 @@ const router: RouteObject[] = [
       {
         path: PATH.staffInformation,
         element: <StaffInformation />,
+      },
+      {
+        path: PATH.test,
+        element: <Test />,
       },
     ],
   },

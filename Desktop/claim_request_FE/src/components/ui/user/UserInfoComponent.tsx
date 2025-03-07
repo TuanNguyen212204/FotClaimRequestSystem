@@ -4,7 +4,7 @@ import Notification from "@components/ui/Notification/Notification";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@redux/index";
 import { fetchUserByIdAsync, updateUserAsync } from "@redux/thunk/UserInfo/userInfoThunks";
-import { User, Experience } from "@types/User.type";
+import { User, Experience } from "@types/User.type.ts";
 import Badge from "@/components/ui/Badge/Badge";
 import { useNotification } from "@/components/ui/Notification/NotificationContext";
 
