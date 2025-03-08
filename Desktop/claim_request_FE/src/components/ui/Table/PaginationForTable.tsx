@@ -42,7 +42,6 @@ const PaginationForTable: React.FC<PaginationForTableProps> = ({
       <button
         onClick={() => handlePageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className={styles.pagination_button_icon}
         style={{ paddingRight: "20px" }}
         className={styles.pagination_button_icon_right}
       >
