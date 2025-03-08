@@ -1,15 +1,48 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from 'react-redux';
-import { selectClaims } from '../../redux/slices/Claim/claimsSlice';
 import styles from "./PaidClaims.module.css";
 import { PATH } from "../../constant/config";
 import { useTable } from "../../Hooks/useTable";
 import { Column } from "../../components/ui/Table/Table";
+import httpClient from "../../constant/apiInstance";
+
+interface ClaimData {
+  id: string;
+  claimId: string;
+  staffName: string;
+  projectName: string;
+  duration: string;
+  totalHours: number;
+  approverName: string;
+  status: string;
+}
 
 const PaidClaims: React.FC = () => {
   const navigate = useNavigate();
-  const claims = useSelector(selectClaims);
+
+  const fetchPaidClaims = async () => {
+    try {
+      const response = await httpClient.get<ClaimData[]>('/paidclaims');
+      return response.data;
+    } catch (error) {
+      console.error('Failed to fetch paid claims:', error);
+      return [];
+    }
+  };
+
+  const {
+    data: claims,
+    loading,
+    pagination,
+    setPage,
+    fetchData
+  } = useTable<ClaimData>({
+    initialPageSize: 5
+  });
+
+  useEffect(() => {
+    void fetchData('/paidclaims');
+  }, []);
 
   const columns: Column[] = [
     { key: 'claimId', dataIndex: 'claimId', title: 'Claim ID' },
@@ -45,33 +78,13 @@ const PaidClaims: React.FC = () => {
     }
   ];
 
-  const {
-    paginatedData,
-    totalPages,
-    currentPage,
-    handlePageChange,
-    sortOrder,
-    sortColumn,
-    handleSort
-  } = useTable({
-    dataSource: claims.map(claim => ({
-      ...claim,
-      status: 'paid' // Add required status property
-    })),
-    pageLength: 5,
-    pagination: true,
-    sortConfig: {
-      columnKey: 'claimId',
-      order: 'asc'
-    }
-  });
-
   return (
     <div className={styles.container}>
       <div>
         <h1 className={styles.claimStatus_h1}>Paid Claims</h1>
         <hr style={{ width: "100%" }} />
       </div>
+      
       <div
         style={{
           overflow: "hidden",
@@ -87,50 +100,38 @@ const PaidClaims: React.FC = () => {
                 <th 
                   key={column.key} 
                   className={styles.style_th}
-                  onClick={() => column.key !== 'action' && handleSort(column.dataIndex)}
-                  style={{ cursor: column.key !== 'action' ? 'pointer' : 'default' }}
                 >
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}>
-                    {column.title}
-                    {sortColumn === column.dataIndex && (
-                      <span>{sortOrder === 'asc' ? '▲' : '▼'}</span>
-                    )}
-                  </div>
+                  {column.title}
                 </th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {paginatedData.map((claim) => (
-              <tr key={claim.claimId}>
-                {columns.map((column) => (
-                  <td key={`${claim.claimId}-${column.key}`} className={styles.style_td}>
-                    {column.cell ? 
-                      column.cell({ 
-                        value: claim[column.dataIndex as keyof typeof claim], 
-                        record: claim 
-                      }) 
-                      : claim[column.dataIndex as keyof typeof claim]}
-                  </td>
-                ))}
+            {loading ? (
+              <tr>
+                <td colSpan={columns.length} className={styles.style_td}>
+                  Loading...
+                </td>
+              </tr>
+            ) : claims.length === 0 ? (
+              <tr>
+                <td colSpan={columns.length} className={styles.style_td}>
+                  No data available
+                </td>
               </tr>
             ) : (
-              tableData.map(claim => (
+              claims.map((claim) => (
                 <tr key={claim.claimId}>
-                  <td className={styles.style_td}>{claim.claimId ?? 'N/A'}</td>
-                  <td className={styles.style_td}>{claim.staffName ?? 'N/A'}</td>
-                  <td className={styles.style_td}>{claim.projectName ?? 'N/A'}</td>
-                  <td className={styles.style_td}>{claim.duration ?? 'N/A'}</td>
-                  <td className={styles.style_td}>100 hours</td>
-                  <td className={styles.style_td}>Marco</td>
-                  <td className={styles.style_td}>
-                    <button 
-                      onClick={() => navigate(`${PATH.claimStatus}/${claim.claimId}`)}
-                      style={{ background: 'none', border: 'none', cursor: 'pointer' }}
-                    >
-                      👁
-                    </button>
-                  </td>
+                  {columns.map((column) => (
+                    <td key={`${claim.claimId}-${column.key}`} className={styles.style_td}>
+                      {column.cell ? 
+                        column.cell({ 
+                          value: claim[column.dataIndex as keyof typeof claim], 
+                          record: claim 
+                        }) 
+                        : claim[column.dataIndex as keyof typeof claim]}
+                    </td>
+                  ))}
                 </tr>
               ))
             )}
@@ -140,26 +141,26 @@ const PaidClaims: React.FC = () => {
       
       <div className={styles.pagination}>
         <button 
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
+          onClick={() => setPage(pagination.currentPage - 1)}
+          disabled={pagination.currentPage === 1}
           className={styles.pageButton}
         >
           Previous
         </button>
         <div className={styles.pageNumbers}>
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+          {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map((page) => (
             <button
               key={page}
-              onClick={() => handlePageChange(page)}
-              className={`${styles.pageNumber} ${currentPage === page ? styles.activePage : ''}`}
+              onClick={() => setPage(page)}
+              className={`${styles.pageNumber} ${pagination.currentPage === page ? styles.activePage : ''}`}
             >
               {page}
             </button>
           ))}
         </div>
         <button 
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
+          onClick={() => setPage(pagination.currentPage + 1)}
+          disabled={pagination.currentPage === pagination.totalPages}
           className={styles.pageButton}
         >
           Next

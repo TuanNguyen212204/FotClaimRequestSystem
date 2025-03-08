@@ -50,27 +50,15 @@
   background-color: #FFFFFF;
 }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> feature/common-components-Duyanh
 .style_th:last-child,
 .style_td:last-child {
   border-right: none;
 }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> feature/common-components-Duyanh
 tr:last-child .style_td {
   border-bottom: none;
 }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> feature/common-components-Duyanh
 .col_claim_id { width: 8%; }
 .col_staff_name { width: 12%; }
 .col_project_name { width: 20%; }
