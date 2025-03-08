@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import type { User } from "@/types/User.type";
-import axiosInstance from "@/constant/apiInstance";
-import { ApiResponse } from "@/types/ApiResponse.type";
+import type { User } from "@/types/User";
+import axiosInstance from "@constant/apiInstance";
+import { ApiResponse } from "@/types/ApiResponse";
 //Hàm này dùng để fetchAllUser
 export const fetchAllUserAsync = createAsyncThunk<User[]>(
   "user/fetchAllUser",

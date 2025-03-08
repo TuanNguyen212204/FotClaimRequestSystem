@@ -1,5 +1,6 @@
 import httpClient from "@/constant/apiInstance";
-import { Claim } from "@/types/Claim.type";
+import { ApiResponse } from "@/types/ApiResponse";
+import { Claim } from "@/types/Claim";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const fetchAllClaimAsync = createAsyncThunk<Claim[]>(
@@ -7,9 +8,11 @@ export const fetchAllClaimAsync = createAsyncThunk<Claim[]>(
   async (): Promise<Claim[]> => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      const response = await httpClient.get("/approvers/claims/pending");
+      const response = await httpClient.get<ApiResponse<Claim[]>>(
+        "/approvers/approved-claim"
+      );
 
-      return response.data as Claim[];
+      return response.data.data;
     } catch (error) {
       console.error("Fetch Claims error " + error);
       throw error;

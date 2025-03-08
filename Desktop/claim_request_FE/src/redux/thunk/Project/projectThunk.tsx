@@ -1,7 +1,7 @@
-import { ApiResponse } from "@/types/ApiResponse.type";
+import { ApiResponse } from "@/types/ApiResponse";
 import axiosInstance from "@/constant/apiInstance";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { Project } from "@/types/Project.type";
+import { Project } from "@/types/Project";
 export const fetchAllProjectAsync = createAsyncThunk<Project[]>(
   "project/fetchAllProject",
   async (): Promise<Project[]> => {

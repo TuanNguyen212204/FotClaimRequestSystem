@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import type { Project } from "@/types/Project.type";
+import type { Project } from "@/types/Project";
 import { fetchAllProjectAsync } from "@/redux/thunk/Project/projectThunk";
 
 const initialState: {

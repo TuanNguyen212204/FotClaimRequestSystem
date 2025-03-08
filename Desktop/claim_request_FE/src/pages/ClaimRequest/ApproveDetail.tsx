@@ -12,8 +12,6 @@ import { fetchAllClaimAsync } from "@/redux/thunk/Claim/claimThunk";
 import { selectAllProject } from "@/redux/selector/projectSelector";
 const ApproveDetail: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const projects = useSelector(selectAllProject);
-  const users = useSelector(selectAllUser);
   const claims = useSelector(selectAllClaim);
   // dispatch(fetchAllUserAsync());
   // dispatch(fetchAllClaimAsync());
@@ -48,30 +46,29 @@ const ApproveDetail: React.FC = () => {
   // };
 
   useEffect(() => {
-    console.log("users", users);
-  }, [users]);
-  useEffect(() => {
     console.log("claims", claims);
   }, [claims]);
-  useEffect(() => {
-    console.log("projects", projects);
-  }, [projects]);
+
+  if (!claims || claims.length === 0) return <p>No data available</p>;
+  const columns = Object.keys(claims[0]).map((key) => ({
+    title: key.replace(/_/g, " ").toUpperCase(), // Đổi snake_case thành chữ in hoa
+    dataIndex: key,
+    key: key,
+  }));
+  const dataSource = claims.map((claims, index) => ({
+    ...claims,
+    key: index, // Thêm key để React nhận diện
+  }));
+
   return (
     <div>
-      {/* <Dropdown
-        label="Select item"
-        options={options}
-        onSelect={handleSelect}
-        disabled={false}
-      /> */}
-      {/* <TableComponent
+      <TableComponent
         columns={columns}
         dataSource={dataSource}
         loading={false}
         pagination={true}
-        page="Object"
-      /> */}
-      {/* <PasswordInput placeholder="Enter the password" size="large" /> */}
+        pageLength={10}
+      />
     </div>
   );
 };
