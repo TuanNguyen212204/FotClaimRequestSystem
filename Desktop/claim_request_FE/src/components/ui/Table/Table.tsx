@@ -9,7 +9,6 @@ import {
 import styles from "./Table.module.css";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import PaginationForTable from "./PaginationForTable";
-import { useTable } from "../../../Hooks/useTable";
 export type Column = {
   key?: string;
   dataIndex: string;
