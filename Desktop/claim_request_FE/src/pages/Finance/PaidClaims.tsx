@@ -1,7 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
-<<<<<<< HEAD
 import { selectClaims } from '../../redux/slices/Claim/claimsSlice';
 import styles from "./PaidClaims.module.css";
 import { PATH } from "../../constant/config";
@@ -66,19 +65,6 @@ const PaidClaims: React.FC = () => {
       order: 'asc'
     }
   });
-=======
-import { selectClaims } from '../../redux/paid/claimsSlice'; 
-import styles from "./PaidClaims.module.css";
-import { PATH } from "../../constant/config";
-import Pagination from '../../components/common/Pagination/Pagination';
-import useTable from '../../Hooks/useTable';
-
-const PaidClaims: React.FC = () => {
-  const navigate = useNavigate();
-  const claims = useSelector(selectClaims); 
-  const pageSize = 5;
-  const { tableData, currentPage, setCurrentPage } = useTable(claims, pageSize);
->>>>>>> feature/common-components-Duyanh
 
   return (
     <div className={styles.container}>

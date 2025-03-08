@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import { useState, useEffect, useRef } from "react";
-=======
-import { useState, useEffect } from "react";
->>>>>>> feature/common-components-Duyanh
 import { Column, DataRecord, SortConfig } from "../components/ui/Table/Table";
 
 interface UseTableProps<T extends DataRecord> {
@@ -35,10 +31,7 @@ interface UseTableReturn<T extends DataRecord> {
   uniqueStatuses: string[];
   getSelectedData: () => T[];
   getSortedData: () => T[];
-<<<<<<< HEAD
   checkboxRef: React.RefObject<HTMLInputElement>;
-=======
->>>>>>> feature/common-components-Duyanh
 }
 
 export function useTable<T extends DataRecord>({
@@ -57,10 +50,7 @@ export function useTable<T extends DataRecord>({
   const [sortColumn, setSortColumn] = useState<string | null>(
     sortConfig?.columnKey || null
   );
-<<<<<<< HEAD
   const checkboxRef = useRef<HTMLInputElement>(null);
-=======
->>>>>>> feature/common-components-Duyanh
 
   const uniqueStatuses = [
     "All",
@@ -83,10 +73,7 @@ export function useTable<T extends DataRecord>({
     : filteredData;
 
   const totalPages = Math.ceil(sortedData.length / pageLength);
-<<<<<<< HEAD
-=======
 
->>>>>>> feature/common-components-Duyanh
   const paginatedData = pagination
     ? sortedData.slice((currentPage - 1) * pageLength, currentPage * pageLength)
     : sortedData;
@@ -95,7 +82,6 @@ export function useTable<T extends DataRecord>({
     setCurrentPage(1);
   }, [selectedStatus]);
 
-<<<<<<< HEAD
   useEffect(() => {
     if (checkboxRef.current) {
       const someChecked = checkedItems.size > 0;
@@ -104,8 +90,6 @@ export function useTable<T extends DataRecord>({
     }
   }, [checkedItems, dataSource.length]);
 
-=======
->>>>>>> feature/common-components-Duyanh
   const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= totalPages) {
       setCurrentPage(newPage);
@@ -188,9 +172,6 @@ export function useTable<T extends DataRecord>({
     uniqueStatuses,
     getSelectedData,
     getSortedData,
-<<<<<<< HEAD
     checkboxRef: checkboxRef as React.RefObject<HTMLInputElement>    // Removed trailing comma
-=======
->>>>>>> feature/common-components-Duyanh
   };
 }
