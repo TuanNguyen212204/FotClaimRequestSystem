@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styles from "@components/ui/user/UserInfoComponent.module.css";
 
-import { User } from "@types/User.type";
+import { User } from "@/types/User";
 
 export const UserInfoComponent: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
