@@ -1,23 +1,26 @@
-import { ArrowLeftSquare, ArrowRightSquare } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import styles from "./DetailsApproval.module.css";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllDetails } from "../../../redux/slice/detailsSlice";
-import { RootState, AppDispatch } from "../../../redux/index";
-import { fetchAllClaims } from "../../../redux/slice/pendingSlice.ts";
+import { RootState, AppDispatch } from "@redux/index";
+import { useParams } from "react-router-dom";
 
 export const DetailsComponents: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
   const dispatch = useDispatch<AppDispatch>();
-  const claims = useSelector((state: RootState) => state.details.listClaims);
-  const pendingClaims = useSelector((state: RootState) => state.pending.listClaims);
+  const claims = useSelector((state: RootState) => state.claim.data);
+  const pendingClaims = useSelector(
+    (state: RootState) => state.claim.data
+  );
 
   useEffect(() => {
-    dispatch(fetchAllDetails());
-  }, [dispatch]);
+    if (id) {
+      dispatch(fetchAllDetails());
+      dispatch(fetchAllClaims());
+    }
+  }, [dispatch, id]);
 
-  useEffect(() => {
-    dispatch(fetchAllClaims());
-  }, [dispatch]);
+  const selectedClaim = pendingClaims.find((claim) => claim.id === id);
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5; // Adjust this number to change the number of items per page
@@ -46,19 +49,19 @@ export const DetailsComponents: React.FC = () => {
       <hr />
       <div className={styles.detailsContainer}>
         <div className={styles.detailsLeft}>
-          {pendingClaims.length > 0 && (
+          {selectedClaim && (
             <>
-              <h3>Claim ID: {pendingClaims[0].id}</h3>
-              <h3>Project Name: {pendingClaims[0].projectName}</h3>
-              <h3>Project Duration: {pendingClaims[0].duration}</h3>
+              <h3>Claim ID: {selectedClaim.id}</h3>
+              <h3>Project Name: {selectedClaim.projectName}</h3>
+              <h3>Project Duration: {selectedClaim.duration}</h3>
             </>
           )}
         </div>
         <div className={styles.detailsRight}>
-          {pendingClaims.length > 0 && (
+          {selectedClaim && (
             <>
-              <h3>Staff Name: {pendingClaims[0].staffName}</h3>
-              <h3>Project ID: {pendingClaims[0].id}</h3>
+              <h3>Staff Name: {selectedClaim.staffName}</h3>
+              <h3>Project ID: {selectedClaim.id}</h3>
             </>
           )}
         </div>
@@ -80,8 +83,17 @@ export const DetailsComponents: React.FC = () => {
               <td>{claim.id}</td>
               <td>{claim.otDuration}</td>
               <td>{claim.otDate}</td>
-              <td>{claim.hours}{" "}hours</td>
-              <td style={{ color: claim.status === "Done" ? "green" : claim.status === "Rejected" ? "red" : "#B8D576" }}>
+              <td>{claim.hours} hours</td>
+              <td
+                style={{
+                  color:
+                    claim.status === "Done"
+                      ? "green"
+                      : claim.status === "Rejected"
+                      ? "red"
+                      : "#B8D576",
+                }}
+              >
                 {claim.status}
               </td>
             </tr>
@@ -90,26 +102,27 @@ export const DetailsComponents: React.FC = () => {
       </table>
       <div className={styles.pagination}>
         <span className={styles.pageIcon} onClick={handlePreviousPage}>
-          <ArrowLeftSquare />
+          <ArrowLeft />
         </span>
         {[...Array(totalPages)].map((_, index) => (
           <span
             key={index}
-            className={`${styles.pageNumber} ${currentPage === index + 1 ? styles.activePage : ""
-              }`}
+            className={`${styles.pageNumber} ${
+              currentPage === index + 1 ? styles.activePage : ""
+            }`}
             onClick={() => setCurrentPage(index + 1)}
           >
             {index + 1}
           </span>
         ))}
         <span className={styles.pageIcon} onClick={handleNextPage}>
-          <ArrowRightSquare />
+          <ArrowRight />
         </span>
       </div>
       <div className={styles.buttonContainer}>
         <div className={styles.buttonStyle}>
-          <button className={styles.rejectedButton}>Rejected</button>
-          <button className={styles.approvedButton}>Approved</button>
+          {/* <button className={styles.rejectedButton}>Confirm</button> */}
+          {/* <button className={styles.approvedButton}>Confirm</button> */}
         </div>
       </div>
     </div>
