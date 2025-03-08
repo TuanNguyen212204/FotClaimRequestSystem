@@ -134,7 +134,7 @@ export class HttpClient {
     });
   }
   //axios.post(url[, data[, config]])
-  post<T>(
+  async post<T>(
     url: string,
     data: unknown,
     config?: AxiosRequestConfig<unknown> | undefined
@@ -142,7 +142,7 @@ export class HttpClient {
     return this.createAxios.post(url, data, config);
   }
   //axios.put(url[, data[, config]])
-  put<T>(
+  async put<T>(
     url: string,
     data: unknown,
     config?: AxiosRequestConfig<unknown> | undefined
@@ -150,7 +150,7 @@ export class HttpClient {
     return this.createAxios.put(url, data, config);
   }
   //axios.patch(url[, data[, config]])
-  patch<T>(
+  async patch<T>(
     url: string,
     data: unknown,
     config?: AxiosRequestConfig<unknown> | undefined
@@ -158,7 +158,7 @@ export class HttpClient {
     return this.createAxios.patch(url, data, config);
   }
   //axios.delete(url[, config])
-  delete<T>(url: string, params?: unknown): Promise<AxiosResponse<T>> {
+  async delete<T>(url: string, params?: unknown): Promise<AxiosResponse<T>> {
     return this.createAxios.delete(url, {
       params,
     });
