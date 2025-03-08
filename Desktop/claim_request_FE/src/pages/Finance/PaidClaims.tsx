@@ -101,7 +101,6 @@ const PaidClaims: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-<<<<<<< HEAD
             {paginatedData.map((claim) => (
               <tr key={claim.claimId}>
                 {columns.map((column) => (
@@ -114,11 +113,6 @@ const PaidClaims: React.FC = () => {
                       : claim[column.dataIndex as keyof typeof claim]}
                   </td>
                 ))}
-=======
-            {claims.length === 0 ? (
-              <tr>
-                <td colSpan={7}>No claims available.</td>
->>>>>>> feature/common-components-Duyanh
               </tr>
             ) : (
               tableData.map(claim => (
@@ -144,7 +138,6 @@ const PaidClaims: React.FC = () => {
         </table>
       </div>
       
-<<<<<<< HEAD
       <div className={styles.pagination}>
         <button 
           onClick={() => handlePageChange(currentPage - 1)}
@@ -172,15 +165,6 @@ const PaidClaims: React.FC = () => {
           Next
         </button>
       </div>
-=======
-      <Pagination
-        total={claims.length}
-        defaultPageSize={pageSize}
-        defaultCurrent={currentPage}
-        showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
-        onChange={setCurrentPage}
-      />
->>>>>>> feature/common-components-Duyanh
     </div>
   );
 };
