@@ -1,0 +1,203 @@
+.head {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.filterContainer {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+.filterButton {
+  background-color: #ef8354;
+  border: 1px solid #ef8354;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 16px;
+  cursor: pointer;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.filterButton:hover {
+  background-color: #fff;
+  color: #ef8354;
+  transition: ease-in-out 0.4s;
+}
+
+.dropdown {
+  position: absolute;
+  top: 45px;
+  left: 0;
+  background: white;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  width: 150px;
+  z-index: 100;
+  overflow: hidden;
+  border: 1px solid #ccc;
+
+  opacity: 0;
+  transform: translateY(-10px);
+  visibility: hidden;
+  transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
+}
+
+.filterContainer:hover .dropdown {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+}
+
+.filterItem {
+  padding: 10px;
+  text-align: center;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+  color: white;
+}
+
+/* Processing */
+.filterItem:nth-child(1):hover {
+  background: #ffa500;
+}
+
+/* Approved */
+.filterItem:nth-child(2):hover {
+  background: #28a745;
+}
+
+/* Paid */
+.filterItem:nth-child(3):hover {
+  background: #bc4b51;
+}
+
+/* Rejected */
+.filterItem:nth-child(4):hover {
+  background: #8f0000;
+}
+
+/* Hiệu ứng hover */
+.filterItem:hover {
+  filter: brightness(85%);
+}
+
+.table_Style {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  background: white;
+}
+
+.th_Style {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+.td_Style {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+.th_Style {
+  background: #f4f4f4;
+}
+
+/* Icon action */
+.actionColumn {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.editIcon {
+  color: #ffa500;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.deleteIcon {
+  color: #bc4b51;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.viewIcon {
+  color: #000;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.editIcon:hover,
+.deleteIcon:hover,
+.viewIcon:hover {
+  opacity: 0.7;
+}
+
+/* Nút phân trang */
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin: 5px;
+  font-size: 16px;
+}
+
+button:hover {
+  text-decoration: underline;
+}
+
+button:disabled {
+  color: #bbb;
+  cursor: not-allowed;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.pageButton {
+  width: auto;
+  background: white;
+  border: 1px solid #ccc;
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.pageButton:hover {
+  background: #eee;
+}
+
+.pageNumber {
+  width: auto;
+  background: white;
+  border: 1px solid #bbb;
+  padding: 6px 10px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.pageNumber:hover {
+  background: #f0f0f0;
+}
+
+.activePage {
+  background: white;
+  font-weight: bold;
+  color: black;
+}
