@@ -17,9 +17,9 @@ export type Column = {
 };
 
 export type DataRecord = {
-  key?: string;
+  key?: string | number;
   id?: string;
-  status: string;
+  status?: string;
   checked?: boolean;
 };
 
@@ -33,7 +33,7 @@ export type TableComponentProps<T extends DataRecord> = {
   dataSource: T[];
   loading?: boolean;
   pagination?: boolean;
-  name: string;
+  name?: string;
   sortConfig?: SortConfig;
   pageLength?: number;
 };
@@ -224,7 +224,7 @@ const TableComponent = forwardRef(
           </div>
         </section>
 
-        <div className={styles.table_container}>
+        <div>
           {loading && <div className="loading">Loading...</div>}
           {filteredData.length.toString() !== "0" ? (
             <section className={styles.table_body}>
@@ -304,14 +304,16 @@ const TableComponent = forwardRef(
           ) : (
             <h1>No data</h1>
           )}
+          <div>
+            {pagination && totalPages >= 1 && (
+              <PaginationForTable
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
+            )}
+          </div>
         </div>
-        {pagination && totalPages >= 1 && (
-          <PaginationForTable
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-          />
-        )}
       </div>
     );
   }

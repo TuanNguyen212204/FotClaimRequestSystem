@@ -12,7 +12,7 @@ export const PATH = {
   userClaimDetails: "/user-claim/:id",
   userSettings: "/user-settings",
   approveDetails: "/approve-details",
-  claimStatus: "/claim-status",
+  claimStatus: "/claim-status/:id",
   paidClaim: "/paid-claim",
   approvedFinance: "/finance/approved",
   approvedApprover: "/approver/approved",

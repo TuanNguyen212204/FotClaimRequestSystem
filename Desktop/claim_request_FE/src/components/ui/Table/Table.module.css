@@ -1,14 +1,5 @@
-.table_container {
-  display: flex;
-  justify-content: center;
-  font-size: 1em;
-  overflow: hidden;
-  background-color: transparent;
-  box-shadow: none;
-  min-width: 768px;
-}
 .container {
-  margin-left: 2rem;
+  margin-left: 1rem;
 }
 .table {
   border-collapse: collapse;
@@ -18,8 +9,8 @@
   table-layout: fixed;
   width: auto;
   overflow: hidden;
-  min-width: 1300px;
-  max-height: 400px;
+  min-width: 1480px;
+  max-height: 500px;
 }
 .thead {
   padding: 1rem 2rem;
@@ -94,7 +85,7 @@
   justify-content: right;
   width: 100%;
   gap: 5px;
-  min-width: 1300px;
+  max-width: 1540px;
 }
 
 .pagination_button {
@@ -107,6 +98,7 @@
   border-radius: 10px;
   gap: 2px;
   padding-top: 2px;
+  overflow-x: auto;
 }
 
 .pagination button:hover {
@@ -242,14 +234,11 @@
 }
 
 @media (min-width: 1900px) {
-  .table_container {
-    min-width: 2000px;
-  }
   .table {
     min-width: 1500px;
   }
   .pagination {
-    min-width: 800px;
+    min-width: 1500px;
   }
 }
 /* @media (min-width: 902px) {
