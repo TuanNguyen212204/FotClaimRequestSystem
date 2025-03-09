@@ -1,9 +1,15 @@
+import { JSX } from "react";
 export interface IHeadProps {
   title: string;
   status: string;
   prepareBy: string;
 }
-export default function Header({ title, status, prepareBy }: IHeadProps): JSX.Element {
+
+export default function Header({
+  title,
+  status,
+  prepareBy,
+}: IHeadProps): JSX.Element {
   return (
     <div className="relative pb-5 border-b-1 border-gray-400 mb-5 box-border">
       <h1 className="text-2xl p-0 m-0">{title}</h1>

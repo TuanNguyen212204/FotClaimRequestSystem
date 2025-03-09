@@ -6,8 +6,7 @@ import {
   FieldErrors,
 } from "react-hook-form";
 
-import styles from "@pages/CreateClaim/Forms/Create-Claim/Claim.module.css";
-
+import styles from "@pages/CreateClaim/Claim.module.css";
 import { FormData } from "@/types/claimForm.type";
 import { useWatch } from "react-hook-form";
 import { Trash2 } from "lucide-react";
@@ -17,6 +16,7 @@ interface ClaimTableProps {
   register: UseFormRegister<FormData>;
   fields: Record<"id", string>[];
   append: UseFieldArrayAppend<FormData>;
+
   remove: UseFieldArrayRemove;
   errors: FieldErrors<FormData>;
 }

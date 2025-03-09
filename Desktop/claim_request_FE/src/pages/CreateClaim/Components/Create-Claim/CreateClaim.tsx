@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ProjectInfo from "../Body/ProjectInfo";
-import Header from "@ui/Forms/Header";
-import StaffInfo from "@ui/Forms/Body/StaffInfo";
+import Header from "../Header/index";
+import StaffInfo from "../Body/StaffInfo";
 import ClaimTable from "../Body/ClaimTable";
-import AdditionalInfo from "@ui/Forms/Body/AdditionalInfo";
-import styles from "@components/ui/Forms/Create-Claim/Claim.module.css";
+import AdditionalInfo from "../Body/AdditionalInfo";
+import styles from "../../Claim.module.css";
 import {
   fetchProject,
   selectProject,
@@ -16,6 +16,7 @@ import useCreateClaimForm from "@/Hooks/useCreateClaimForm";
 export default function CreateClaim() {
   const dispatch = useDispatch<AppDispatch>();
   const projectList = useSelector(selectProject);
+  console.log(projectList);
   const {
     register,
     handleSubmit,
@@ -25,13 +26,13 @@ export default function CreateClaim() {
     append,
     remove,
     errors,
-    watch
+    watch,
   } = useCreateClaimForm();
 
   useEffect(() => {
     dispatch(fetchProject());
   }, [dispatch]);
-  const selectedYet = watch('currentSelectedProject');
+  const selectedYet = watch("currentSelectedProject");
   //console.log(selectedYet)
   return (
     <form
@@ -47,31 +48,29 @@ export default function CreateClaim() {
         setValue={setValue}
         ProjectList={projectList.projectList}
       />
-      {
-        selectedYet.ProjectName === ''  ? <></> : (
-          <>
-            <ClaimTable
-              append={append}
-              control={control}
-              fields={fields}
-              register={register}
-              remove={remove}
-              errors={errors}
-            />
-            <AdditionalInfo register={register} />
-            <div className="mt-6 text-left">
-              <button
-                type="submit"
-                className={`px-6 py-3 text-white font-semibold text-center rounded-lg ${styles.submit_button}`}
-              >
-                Send
-              </button>
-            </div>
-          </>
-        )
-      }
-     
-      
+      {selectedYet.ProjectName === "" ? (
+        <></>
+      ) : (
+        <>
+          <ClaimTable
+            append={append}
+            control={control}
+            fields={fields}
+            register={register}
+            remove={remove}
+            errors={errors}
+          />
+          <AdditionalInfo register={register} />
+          <div className="mt-6 text-left">
+            <button
+              type="submit"
+              className={`px-6 py-3 text-white font-semibold text-center rounded-lg ${styles.submit_button}`}
+            >
+              Send
+            </button>
+          </div>
+        </>
+      )}
     </form>
   );
 }
