@@ -2,7 +2,7 @@ import { RouteObject, useRoutes } from "react-router-dom";
 import { MainLayout } from "@components/layouts/MainLayout";
 import { HomePage } from "@pages/HomePage";
 import { PATH } from "@constant/config";
-import { UserInfoComponent } from "@ui/user/UserInfoComponent";
+import { UserInfoComponent } from "@/pages/User/Components/UserInfoComponent";
 import LoginForm from "@ui/login/LoginForm";
 import ResetPassword from "@ui/login/ResetPassword";
 import CreateClaimPage from "@pages/CreateClaim";
@@ -16,7 +16,7 @@ import ClaimStatus from "@pages/Finance/ClaimStatus";
 import PaidClaims from "@pages/Finance/PaidClaims";
 import ProjectInformation from "@pages/admin/ProjectInformation";
 import StaffInformation from "@pages/admin/StaffInformation";
-import DraftCoponent from "@/components/ui/user/DraftCoponent";
+import DraftCoponent from "@/pages/User/Components/DraftCoponent";
 import ApprovedFinancePage from "@/pages/Finance/ApprovedFinancePage";
 import CheckBoxTest from "@/components/ui/Checkbox/Checkboxtest";
 const router: RouteObject[] = [

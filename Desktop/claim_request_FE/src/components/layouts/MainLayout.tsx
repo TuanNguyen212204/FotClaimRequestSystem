@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import Header from "../ui/header/Header";
+import Header from "./header/Header";
 import { Sidebar } from "../ui/sidebar/Sidebar";
 import styles from "./MainLayout.module.css"; // Dùng CSS Module để quản lý styles
 

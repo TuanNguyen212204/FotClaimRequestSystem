@@ -1,4 +1,4 @@
-import { UserInfoComponent } from "@components/ui/user/UserInfoComponent";
+import { UserInfoComponent } from "@/pages/User/Components/UserInfoComponent";
 
 export const UserInfo = () => {
   return (
