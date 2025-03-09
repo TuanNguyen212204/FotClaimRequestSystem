@@ -10,7 +10,7 @@ import type { RootState } from "@redux/index";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { Tooltip } from "@components/ui/Tooltip/Tooltip";
-import { RadioGroup } from "@components/ui/RadioGroup/RadioGroup";
+import { RadioGroup } from "@/components/ui/Radio/Radio";
 
 export const PendingComponent: React.FC = () => {
   const dispatch = useAppDispatch();

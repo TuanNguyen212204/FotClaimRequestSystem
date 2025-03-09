@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useState } from "react";
-import styles from "./RadioGroup.module.css";
+import styles from "./Radio.module.css";
 
 export interface RadioGroupProps {
   options: Option[];

@@ -1,5 +1,5 @@
 // import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
-import { RadioGroup, RadioGroupButton } from "@/components/ui/RadioGroup/RadioGroup";
+import { RadioGroup, RadioGroupButton } from "@/components/ui/Radio/Radio";
 import React, { useState } from "react";
 // import { Dropdown } from "@/components/ui/Dropdown/Dropdown";
 function TestRadio() {
