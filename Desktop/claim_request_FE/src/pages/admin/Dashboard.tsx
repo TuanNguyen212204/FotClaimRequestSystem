@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import SummaryCard from "@/components/ui/card/SummaryCard";
-import RecentClaims from "@/components/ui/card/RecentClaims";
-import Ratings from "@/components/ui/card/Ratings";
-import Progress from "@/components/ui/card/Progress";
+import SummaryCard from "@/components/card/SummaryCard";
+import RecentClaims from "@/components/card/RecentClaims";
+import Ratings from "@/components/card/Ratings";
+import Progress from "@/components/card/Progress";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { TrendingUp, CheckCircle, XCircle, Wallet } from "lucide-react";
 import styles from "./Dashboard.module.css"; 
@@ -53,10 +53,10 @@ const Dashboard = () => {
     <div className={styles.container}>
       
       <div className="grid grid-cols-4 gap-4 mb-6">
-        <SummaryCard title="Pending Claims" value={30} icon={<TrendingUp />} bgColor="bg-yellow-100 hover:bg-yellow-200" textColor="text-yellow-500" />
-        <SummaryCard title="Approved Claims" value={50} icon={<CheckCircle />} bgColor="bg-green-100 hover:bg-green-200" textColor="text-green-500" />
-        <SummaryCard title="Rejected Claims" value={10} icon={<XCircle />} bgColor="bg-red-100 hover:bg-red-200" textColor="text-red-500" />
-        <SummaryCard title="     Paid      " value={15} icon={<Wallet />} bgColor="bg-blue-100 hover:bg-blue-200" textColor="text-blue-500" />
+        <SummaryCard title="Pending Claims" value={30} icon={<TrendingUp />} type="warning" />
+        <SummaryCard title="Approved Claims" value={50} icon={<CheckCircle />} type="success" />
+        <SummaryCard title="Rejected Claims" value={10} icon={<XCircle />} type="error" />
+        <SummaryCard title="Paid" value={15} icon={<Wallet />} type="primary" />
       </div>
 
       <div className="mb-6">
