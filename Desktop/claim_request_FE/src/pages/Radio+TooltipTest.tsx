@@ -1,6 +1,7 @@
 // import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
 import { RadioGroup, RadioGroupButton } from "@/components/ui/Radio/Radio";
 import { useState } from "react";
+import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
 // import { Dropdown } from "@/components/ui/Dropdown/Dropdown";
 function TestRadio() {
   const [selectedValue, setSelectedValue] = useState<string | null>(null);
@@ -31,7 +32,16 @@ function TestRadio() {
         }}
         name="myRadio"
       />
-     
+      <div style={{display: "flex", marginTop: "20px"}}>
+        <Tooltip text="Hover this" position="top">
+          <button>Click me</button>
+        </Tooltip>
+      </div>
+      <div style={{display: "flex", marginTop: "20px"}}>
+        <Tooltip text="Hover this" position="bottom">
+          <button>Click me</button>
+        </Tooltip>
+      </div>
     </div>
   );
 }
