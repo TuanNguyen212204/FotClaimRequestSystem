@@ -6,7 +6,7 @@ export const PATH = {
   checkbox: "/checkbox",
   resetPassword: "/reset-password", //nguyen
   createRequest: "/create-claim", //an
-  pending: "/pending", //tri
+  pending: "/pending-claim", //tri
   details: "/details/:id", //tri
   myClaims: "/my-claims", //nam
   userClaimDetails: "/user-claim/:id",

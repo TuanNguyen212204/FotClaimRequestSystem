@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 // import { fetchAllPendingClaimAsync } from "@/redux/thunk/Approver/pendingThunk";
 import type { claimPending } from "@/types/Pending.d.ts";
 import httpClient from "@/constant/apiInstance.ts";
+import { EyeIcon, TrashIcon, CheckIcon } from "lucide-react";
+import styles from "@/pages/Approver/PendingApproval.module.css";
 
 
 
@@ -20,15 +22,22 @@ export const PendingComponent: React.FC = () => {
   }, []);
 
   const fetchAllPendingClaimAsync = async () => {
-    const res = await httpClient.get<{ data: claimPending[]}>(
-      `/approvers/pending-claim`
-    );
-    console.log("data: ", res.data.data)
-    setPending(res.data.data);
-    setLoading(false); 
+    try {
+      const res = await httpClient.get<{ data: claimPending[] }>(
+        `/approvers/pending-claim`
+      );
+      console.log("data: ", res.data.data)
+      setPending(res.data.data);
+      setLoading(false);
+    } catch (error) {
+      console.log("Error at PendingApproval: ", error);
+    }
   };
 
-  
+  const handleViewDetail = (claimId: string) => {
+    navigate(`/approve/detail/${claimId}`); //sửa lại url ở đây để truyền
+  };
+
 
   if (loading) {
     return <p>Loading...</p>;
@@ -82,6 +91,23 @@ export const PendingComponent: React.FC = () => {
       dataIndex: "project_name",
       title: "Project Name",
     },
+    {
+      key: "action",
+      dataIndex: "claim_id",
+      title: "Action",
+      cell: ({ value }) => (
+        <div className={styles.actionIcons}>
+          <EyeIcon
+            className={styles.icon}
+            onClick={() => handleViewDetail(value as string)}
+          />
+          &nbsp;&nbsp;&nbsp;
+          <CheckIcon className={styles.icon} />
+          &nbsp;&nbsp;&nbsp;
+          <TrashIcon className={styles.icon} />
+        </div> 
+      ),
+    },
   ];
 
   const dataSource = pending.map((item, index) => ({
@@ -97,7 +123,7 @@ export const PendingComponent: React.FC = () => {
         loading={false}
         pagination={true}
         name="Claims"
-        pageLength={10}
+        pageLength={2}
       />
     </div>
   );
