@@ -12,6 +12,8 @@ export interface User {
   id: ID;
   picture: Picture;
   nat: string; // Nationality
+  department: string; // e.g., "IT", "HR", "Finance", etc.
+  job_rank: string; // e.g., "Junior", "Senior", "Manager", etc.
 }
 export interface NewUser extends User {
   role: string; // e.g., "Dev", "BA", "PM", etc.

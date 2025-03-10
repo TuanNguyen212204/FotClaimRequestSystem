@@ -10,7 +10,7 @@ import { PendingComponent } from "@ui/approve/PendingApproval";
 import { DetailsComponents } from "@ui/approve/DetailsApproval";
 import UserClaims from "@pages/User/UserClaims";
 import { UserClaimDetails } from "@pages/User/UserClaimDetails";
-import UserSettings from "@pages/admin/UserSettings";
+import AllUserInformation from "@/pages/admin/AllUserInformation";
 import ApproveDetail from "@pages/ClaimRequest/ApproveDetail";
 import ClaimStatus from "@pages/Finance/ClaimStatus";
 import PaidClaims from "@pages/Finance/PaidClaims";
@@ -76,8 +76,8 @@ const router: RouteObject[] = [
         element: <DetailsComponents />,
       },
       {
-        path: PATH.userSettings,
-        element: <UserSettings />,
+        path: PATH.allUserInformation,
+        element: <AllUserInformation />,
       },
       {
         path: PATH.approveDetails,
