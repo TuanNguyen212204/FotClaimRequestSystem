@@ -1,78 +1,3 @@
-// import axios, { AxiosInstance } from "axios";
-
-// class axiosInstance {
-//   private api: AxiosInstance;
-
-//   constructor(baseURL: string, timeout: number = 5000) {
-//     this.api = axios.create({
-//       baseURL: baseURL,
-//       timeout: timeout,
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//     });
-
-//     this.setupInterceptors();
-//   }
-
-//   private setupInterceptors() {
-//     this.api.interceptors.request.use(
-//       (config) => {
-//         const token = localStorage.getItem("access_token");
-//         if (token) {
-//           config.headers.Authorization = `Bearer ${token}`;
-//         }
-//         return config;
-//       },
-//       (error) => {
-//         return Promise.reject(error);
-//       }
-//     );
-
-//     this.api.interceptors.response.use(
-//       (response) => {
-//         return response;
-//       },
-//       (error) => {
-//         if (error.response?.status === 401) {
-//           // Optional chaining
-//           localStorage.removeItem("access_token");
-//           window.location.href = "/login";
-//         }
-//         return Promise.reject(error);
-//       }
-//     );
-//   }
-
-//   get(url: string, params = {}) {
-//     return this.api.get(url, { params });
-//   }
-
-//   post(url: string, data = {}) {
-//     return this.api.post(url, data);
-//   }
-
-//   put(url: string, data = {}) {
-//     return this.api.put(url, data);
-//   }
-
-//   delete(url: string) {
-//     return this.api.delete(url);
-//   }
-
-//   update(url: string, data = {}) {
-//     return this.api.patch(url, data);
-//   }
-
-//   patch(url: string, data = {}) {
-//     return this.api.patch(url, data);
-//   }
-// }
-
-// const apiInstance = new axiosInstance("https://claimsystem.info.vn/api/v1");
-
-// export default apiInstance;
-
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 
 export class HttpClient {
@@ -134,7 +59,7 @@ export class HttpClient {
     });
   }
   //axios.post(url[, data[, config]])
-  post<T>(
+  async post<T>(
     url: string,
     data: unknown,
     config?: AxiosRequestConfig<unknown> | undefined
@@ -142,7 +67,7 @@ export class HttpClient {
     return this.createAxios.post(url, data, config);
   }
   //axios.put(url[, data[, config]])
-  put<T>(
+  async put<T>(
     url: string,
     data: unknown,
     config?: AxiosRequestConfig<unknown> | undefined
@@ -150,7 +75,7 @@ export class HttpClient {
     return this.createAxios.put(url, data, config);
   }
   //axios.patch(url[, data[, config]])
-  patch<T>(
+  async patch<T>(
     url: string,
     data: unknown,
     config?: AxiosRequestConfig<unknown> | undefined
@@ -158,13 +83,13 @@ export class HttpClient {
     return this.createAxios.patch(url, data, config);
   }
   //axios.delete(url[, config])
-  delete<T>(url: string, params?: unknown): Promise<AxiosResponse<T>> {
+  async delete<T>(url: string, params?: unknown): Promise<AxiosResponse<T>> {
     return this.createAxios.delete(url, {
       params,
     });
   }
 }
-// const httpClient = new HttpClient("https://claimsystem.info.vn/api/v1");
+
 const httpClient = new HttpClient(import.meta.env.VITE_API_BASE_URL);
 
 export default httpClient;

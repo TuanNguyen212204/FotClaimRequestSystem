@@ -42,6 +42,11 @@ export const ApprovedFinanceComponent: React.FC = () => {
     }
   };
 
+  const handleUpload = (files: FileList) => {
+    console.log("Files uploaded:", files);
+    // Gửi file lên server hoặc xử lý khác
+  };
+
   return (
     <div className={styles.container}>
       {/* <h1 className={styles.table_header}>Approved Claims</h1>
