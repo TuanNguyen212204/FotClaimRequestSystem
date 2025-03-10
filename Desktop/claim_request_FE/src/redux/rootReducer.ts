@@ -10,7 +10,7 @@ import { combineReducers } from "@reduxjs/toolkit";
 import { userSlice } from "./slices/User/userSlice";
 import { claimSlice } from "./slices/Claim/claimSlice";
 import { projectSlice } from "./slices/Project/projectSlice";
-import { pendingSlice } from "./slice/pendingSlice.ts";
+import { pendingSlice } from "./slices/Approver/pendingSlice.ts";
 export const rootReducer = combineReducers({
   // pending: pendingSlice.reducer,
   // details: detailsSlice.reducer,
@@ -25,3 +25,5 @@ export const rootReducer = combineReducers({
   // claims: claimsReducer,
   // approver: approverSlice.reducer,
 });
+
+export type RootState = ReturnType<typeof rootReducer>;

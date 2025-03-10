@@ -1,8 +1,9 @@
 export interface Claim {
-  claimID: string;
-  userID: string;
-  projectID: string;
-  totalWorkingHours: number;
-  submittedDate: string;
-  claimStatus: string;
+  claim_id: string;
+  user_id: string;
+  project_id: string;
+  total_working_hours: number;
+  submitted_date: string;
+  claim_status: string;
+  approved_date: string;
 }

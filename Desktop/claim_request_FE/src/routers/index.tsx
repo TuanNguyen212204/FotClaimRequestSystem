@@ -10,7 +10,7 @@ import { PendingComponent } from "@pages/Approver/PendingApproval";
 import { DetailsComponents } from "@pages/Approver/DetailsApproval";
 import UserClaims from "@pages/User/UserClaims";
 import { UserClaimDetails } from "@pages/User/UserClaimDetails";
-import UserSettings from "@pages/admin/UserSettings";
+import AllUserInformation from "@/pages/admin/AllUserInformation";
 import ApproveDetail from "@pages/ClaimRequest/ApproveDetail";
 import ClaimStatus from "@pages/Finance/ClaimStatus";
 import PaidClaims from "@pages/Finance/PaidClaims";
@@ -18,6 +18,8 @@ import ProjectInformation from "@pages/admin/ProjectInformation";
 import StaffInformation from "@pages/admin/StaffInformation";
 import DraftCoponent from "@/components/ui/user/DraftCoponent";
 import ApprovedFinancePage from "@/pages/Finance/ApprovedFinancePage";
+import ApprovedApproverPage from "@/pages/Approver/ApprovedApproverPage";
+import Test from "@/pages/Test";
 import CheckBoxTest from "@/components/ui/Checkbox/Checkboxtest";
 const router: RouteObject[] = [
   {
@@ -65,7 +67,7 @@ const router: RouteObject[] = [
       },
       {
         path: PATH.approvedApprover,
-        element: <ApprovedFinancePage />,
+        element: <ApprovedApproverPage />,
       },
       {
         path: PATH.pending,
@@ -76,8 +78,8 @@ const router: RouteObject[] = [
         element: <DetailsComponents />,
       },
       {
-        path: PATH.userSettings,
-        element: <UserSettings />,
+        path: PATH.allUserInformation,
+        element: <AllUserInformation />,
       },
       {
         path: PATH.approveDetails,
@@ -98,6 +100,10 @@ const router: RouteObject[] = [
       {
         path: PATH.staffInformation,
         element: <StaffInformation />,
+      },
+      {
+        path: PATH.test,
+        element: <Test />,
       },
     ],
   },

@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import type { Pending } from "@types/Pending";
+import type { claimPending } from "@/types/Pending";
 import { fetchAllPendingClaimAsync } from "@/redux/thunk/Approver/pendingThunk";
 
 const initialState: {
-  data: Pending[];
+  data: claimPending[];
   status: string;
   error: string | null;
 } = {
