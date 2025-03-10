@@ -1,4 +1,4 @@
-import { AxiosRequestConfig, InternalAxiosRequestConfig } from "axios";
+import { AxiosRequestConfig } from "axios";
 /**
  * @interface ExtendedAxiosRequestConfig
  *@extends AxiosRequestConfig
@@ -7,7 +7,7 @@ import { AxiosRequestConfig, InternalAxiosRequestConfig } from "axios";
  *@property {number} [_delayMs] - thoi gian cho giua cac lan thu lai don vi ms
  *@property {boolean} [skipAuth] - bo qua qua trinh xac thuc VD: Beaber token
  */
-export interface ExtendedAxiosRequestConfig extends InternalAxiosRequestConfig {
+export interface ExtendedAxiosRequestConfig extends AxiosRequestConfig {
   _retry?: number;
   _maxRetries?: number;
   _delayMs?: number;
@@ -27,7 +27,7 @@ export interface ApiResponse<T> {
   data: T;
   status: number;
   statusText: string;
-  header: Record<string, string | undefined>;
+  headers: Record<string, string | undefined>;
 }
 
 /**
@@ -82,6 +82,7 @@ export interface HttpClientConfig {
     maxRetries: number;
     delayMs: number;
   };
+  DEBUG?: boolean;
 }
 /**
  * @interface HttpClientService
@@ -96,20 +97,20 @@ export interface HttpClientService {
   post<T = any, D = any>(
     url: string,
     data?: D,
-    options?: RequestOptions
+    options?: RequestOptions,
   ): Promise<ApiResponse<T>>;
   put<T = any, D = any>(
     url: string,
     data?: D,
-    options?: RequestOptions
+    options?: RequestOptions,
   ): Promise<ApiResponse<T>>;
   patch<T = any, D = any>(
     url: string,
     data?: D,
-    options?: RequestOptions
+    options?: RequestOptions,
   ): Promise<ApiResponse<T>>;
   delete<T = any>(
     url: string,
-    options?: RequestOptions
+    options?: RequestOptions,
   ): Promise<ApiResponse<T>>;
 }
