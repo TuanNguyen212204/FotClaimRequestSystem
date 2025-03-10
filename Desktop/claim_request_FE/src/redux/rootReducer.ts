@@ -23,3 +23,5 @@ export const rootReducer = combineReducers({
   // claims: claimsReducer,
   // approver: approverSlice.reducer,
 });
+
+export type RootState = ReturnType<typeof rootReducer>;
