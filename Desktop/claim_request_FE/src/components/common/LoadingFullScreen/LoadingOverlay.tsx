@@ -22,7 +22,7 @@ const LoadingOverlay: React.FC = () => {
             animate={{ scale: 1 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
           >
-            {/* Spinner Animation */}
+       
             <motion.div
               className={styles.spinner}
               animate={{ rotate: 360, scale: [1, 1.2, 1] }}
@@ -36,7 +36,7 @@ const LoadingOverlay: React.FC = () => {
               <GiSpinningSword />
             </motion.div>
 
-            {/* Loading Text & Dots */}
+          
             <div className="flex gap-3.5 ml-0.5">
               <motion.div
                 className={styles.loadingText}
