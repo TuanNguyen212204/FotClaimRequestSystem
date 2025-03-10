@@ -47,7 +47,7 @@ export const fetchProject = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error);
     }
-  }
+  },
 );
 
 const projectSlice = createSlice({
@@ -68,10 +68,10 @@ const projectSlice = createSlice({
         (state, action: PayloadAction<ProjectListResponse>) => {
           console.log(action.payload.ProjectList);
           state.projectList = action.payload.ProjectList.sort((a, b) =>
-            a.projectName.localeCompare(b.projectName)
+            a.projectName.localeCompare(b.projectName),
           );
           state.loading = "succeeded";
-        }
+        },
       )
       .addCase(fetchProject.rejected, (state) => {
         state.loading = "failed";
