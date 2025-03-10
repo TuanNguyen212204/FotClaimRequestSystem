@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Radio.module.css";
 
 export interface RadioGroupProps {
@@ -8,6 +8,7 @@ export interface RadioGroupProps {
   disabled: boolean;
   configDefault?: ConfigDefault;
   name: string;
+  selectedOption: string;
 }
 
 export interface ConfigDefault {
@@ -30,14 +31,21 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
   onSelect,
   disabled,
   name,
+  selectedOption,
 }) => {
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  // const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [selectedLabel, setSelectedLabel] = useState<string | null>(label);
+  const [selected, setSelected] = useState<string | null>(selectedOption);
+
+  useEffect(() => {
+    setSelected(selectedOption);
+  }, [selectedOption]);
 
   const handleOptionClick = (value: string, label: string) => {
     if (!disabled) {
-      setSelectedOption(value);
+      // setSelectedOption(value);
       setSelectedLabel(label);
+      setSelected(value);
       onSelect(value);
     }
   };
@@ -81,23 +89,32 @@ export const RadioGroupButton: React.FC<RadioGroupProps> = ({
   onSelect,
   disabled,
   name,
+  selectedOption
 }) => {
- const [selectedOption, setSelectedOption] = useState<string | null>(configDefault.value  || null);
- const [selectedLabel, setSelectedLabel] = useState<string | null>(label);
+  // const [selectedOption, setSelectedOption] = useState<string | null>(
+  //   configDefault.value || null
+  // );
+  const [selectedLabel, setSelectedLabel] = useState<string | null>(label);
+  const [selected, setSelected] = useState<string | null>(selectedOption);
 
- const handleOptionClick = (value: string, label: string) => {
-   if (!disabled) {
-     setSelectedOption(value);
-     setSelectedLabel(label);
-     onSelect(value);
-   }
- };
+  useEffect(() => {
+    setSelected(selectedOption);
+  }, [selectedOption]);
 
- const newOptions = options.map((option) => ({
-   label: option[configDefault.label] || "",
-   value: option[configDefault.value] || "",
-   disabled: option.disabled || false,
- }));
+  const handleOptionClick = (value: string, label: string) => {
+    if (!disabled) {
+      // setSelectedOption(value);
+      setSelectedLabel(label);
+      setSelected(value);
+      onSelect(value);
+    }
+  };
+
+  const newOptions = options.map((option) => ({
+    label: option[configDefault.label] || "",
+    value: option[configDefault.value] || "",
+    disabled: option.disabled || false,
+  }));
 
   return (
     <div className={styles.radioGroupButton}>
