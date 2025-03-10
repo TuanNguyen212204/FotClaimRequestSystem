@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Star, ThumbsUp, ThumbsDown } from "lucide-react";
-import { toast } from "@context/ReactToastifyProvider";
+import { ToastContainer, toast } from "react-toastify"; 
+import "react-toastify/dist/ReactToastify.css";
 import styles from "./Rating.module.css";
 
 const Ratings = () => {
@@ -18,12 +19,12 @@ const Ratings = () => {
   };
 
   const submitFeedback = () => {
-    toast.success("Thank for your feedback!");
+    toast.success("Thank for your feedback!"); 
     closeFeedbackForm();
   };
 
   const cancelFeedback = () => {
-    toast.info("You have canceled the feedback.");
+    toast.info("You have canceled the feedback."); 
     closeFeedbackForm();
   };
 
@@ -32,7 +33,7 @@ const Ratings = () => {
     if (index < 3) {
       openFeedbackForm();
     } else {
-      toast.success("Thank for your feedback!");
+      toast.success("Thank for your feedback!"); 
     }
   };
 
@@ -41,7 +42,7 @@ const Ratings = () => {
     if (value === "bad") {
       openFeedbackForm();
     } else {
-      toast.success("Thank for your feedback!");
+      toast.success("Thank for your feedback!"); 
     }
   };
 
@@ -50,12 +51,13 @@ const Ratings = () => {
     if (value === "down") {
       openFeedbackForm();
     } else {
-      toast.success("Thank for your feedback!");
+      toast.success("Thank for your feedback!"); 
     }
   };
 
   return (
     <div className={styles.container}>
+      <ToastContainer /> 
       <div className={styles.ratingSection}>
         <div className={styles.ratingBox}>
           <h3>Basic</h3>
@@ -135,7 +137,6 @@ const Ratings = () => {
       )}
     </div>
   );
-  
 };
 
 export default Ratings;

@@ -102,7 +102,10 @@ const router: RouteObject[] = [
         path: PATH.staffInformation,
         element: <StaffInformation />,
       },
-    
+      {
+        path: PATH.dashboard,
+        element: <Dashboard />,
+      },
       {
         path: PATH.test,
         element: <Test />,

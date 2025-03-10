@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import SummaryCard from "@/components/card/SummaryCard";
 import RecentClaims from "@/components/card/RecentClaims";
 import Ratings from "@/components/card/Ratings";
-import Progress from "@/components/card/Progress";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { TrendingUp, CheckCircle, XCircle, Wallet } from "lucide-react";
 import styles from "./Dashboard.module.css"; 
@@ -95,15 +94,6 @@ const Dashboard = () => {
       
       <div className="mb-6">
         < Ratings />
-      </div>
-
-      <div className="mb-6">
-        <h3>Progress Project Overview</h3>
-        <Progress value={10} type="base" />
-        <Progress value={50} type="title" label="Progress Title" />
-        <Progress value={70} type="top-floating" label="Top floating label" /> 
-        <Progress value={30} type="trailing" label="Trailing Label" />
-
       </div>
 
     </div>
