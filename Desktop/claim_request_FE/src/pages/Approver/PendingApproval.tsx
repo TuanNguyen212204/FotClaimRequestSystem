@@ -8,6 +8,7 @@ import type { claimPending } from "@/types/Pending.d.ts";
 import httpClient from "@/constant/apiInstance.ts";
 import { EyeIcon, TrashIcon, CheckIcon } from "lucide-react";
 import styles from "@/pages/Approver/PendingApproval.module.css";
+import { Link } from "react-router-dom";
 
 
 
@@ -34,9 +35,9 @@ export const PendingComponent: React.FC = () => {
     }
   };
 
-  const handleViewDetail = (claimId: string) => {
-    navigate(`/approve/detail/${claimId}`); //sửa lại url ở đây để truyền
-  };
+  // const handleViewDetail = (claimId: string) => {
+  //   navigate(`/approve/detail/${claimId}`); //sửa lại url ở đây để truyền
+  // };
 
 
   if (loading) {
@@ -99,7 +100,7 @@ export const PendingComponent: React.FC = () => {
         <div className={styles.actionIcons}>
           <EyeIcon
             className={styles.icon}
-            onClick={() => handleViewDetail(value as string)}
+            // onClick={() => handleViewDetail(value as string)}
           />
           &nbsp;&nbsp;&nbsp;
           <CheckIcon className={styles.icon} />
@@ -116,7 +117,12 @@ export const PendingComponent: React.FC = () => {
   }));
 
   return (
-    <div>
+    <div className={styles.container}>
+      <h1 className={styles.title}>Pending Approval Claims</h1>
+      <nav className={styles.breadcrumb}>
+        <Link to="/">My Claims</Link> &gt;{" "}
+        <Link to="/pending-claim">Pending Approval</Link>
+      </nav>
       <TableComponent
         columns={columns}
         dataSource={dataSource}
