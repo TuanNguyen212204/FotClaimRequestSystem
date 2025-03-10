@@ -1,76 +1,48 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import ProjectInfo from "../Body/ProjectInfo";
-import Header from "../Header/index";
+import Header from "../Header";
 import StaffInfo from "../Body/StaffInfo";
-import ClaimTable from "../Body/ClaimTable";
-import AdditionalInfo from "../Body/AdditionalInfo";
-import styles from "../../Claim.module.css";
-import {
-  fetchProject,
-  selectProject,
-} from "@/redux/slices/Project/projectSlice";
-import { AppDispatch } from "@/redux";
 import useCreateClaimForm from "@/Hooks/useCreateClaimForm";
-
+import ClaimBody from "../Body/ClaimBody";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/redux";
+import { fetchProject } from "@/redux/slices/Project/projectSlice";
+import { useSelector } from "react-redux";
+import { selectProject } from "@/redux/slices/Project/projectSlice";
 export default function CreateClaim() {
-  const dispatch = useDispatch<AppDispatch>();
-  const projectList = useSelector(selectProject);
-  console.log(projectList);
   const {
     register,
-    handleSubmit,
     setValue,
     control,
     fields,
     append,
     remove,
     errors,
-    watch,
+    handleSubmit,
   } = useCreateClaimForm();
-
+  const dispatch = useDispatch<AppDispatch>();
+  const projectList = useSelector(selectProject);
+  console.log(errors);
   useEffect(() => {
     dispatch(fetchProject());
   }, [dispatch]);
-  const selectedYet = watch("currentSelectedProject");
-  //console.log(selectedYet)
   return (
     <form
       onSubmit={handleSubmit((data) => {
-        console.log(data);
+        console.log(data, "Submitted");
       })}
     >
-      <Header prepareBy="John Doe" status="Draft" title="Create New Claim" />
+      <Header prepareBy="John Doe" status="Draft" title="New Claim Request" />
       <StaffInfo department="Dev" name="John Doe" staffID="#123123" />
-      <ProjectInfo
-        control={control}
-        register={register}
-        setValue={setValue}
+      <ClaimBody
         ProjectList={projectList.projectList}
+        append={append}
+        control={control}
+        errors={errors}
+        fields={fields}
+        register={register}
+        remove={remove}
+        setValue={setValue}
       />
-      {selectedYet.ProjectName === "" ? (
-        <></>
-      ) : (
-        <>
-          <ClaimTable
-            append={append}
-            control={control}
-            fields={fields}
-            register={register}
-            remove={remove}
-            errors={errors}
-          />
-          <AdditionalInfo register={register} />
-          <div className="mt-6 text-left">
-            <button
-              type="submit"
-              className={`px-6 py-3 text-white font-semibold text-center rounded-lg ${styles.submit_button}`}
-            >
-              Send
-            </button>
-          </div>
-        </>
-      )}
     </form>
   );
 }
