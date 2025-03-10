@@ -21,7 +21,6 @@ import ApprovedFinancePage from "@/pages/Finance/ApprovedFinancePage";
 import ApprovedApproverPage from "@/pages/Approver/ApprovedApproverPage";
 import Test from "@/pages/Test";
 import CheckBoxTest from "@/components/ui/Checkbox/Checkboxtest";
-import ApprovedApproverPage from "@/pages/Approver/ApprovedApproverPage";
 const router: RouteObject[] = [
   {
     element: <CheckBoxTest />,
