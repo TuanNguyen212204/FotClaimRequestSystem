@@ -17,7 +17,7 @@ export default function useCreateClaimForm() {
     mode: "onChange",
     defaultValues: {
       currentSelectedProject: {
-        ProjectName: "",
+        projectName: "",
         RoleInTheProject: "",
         ProjectDuration: {
           from: "",
@@ -56,7 +56,7 @@ export default function useCreateClaimForm() {
 
         const total = value.claims?.reduce(
           (sum, claim) => sum + (claim ? claim.hours || 0 : 0),
-          0
+          0,
         );
         setValue("totalHours", total || 0);
       }
