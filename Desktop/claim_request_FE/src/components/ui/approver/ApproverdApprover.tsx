@@ -24,11 +24,15 @@ export const ApprovedApproverComponent: React.FC = () => {
   }, []);
 
   const fetchApprovedClaimAysnc = async () => {
-    const res = await httpClient.get<{ data: claimList[] }>(
-      `/approvers/approved-claim`
-    );
-    console.log("data: ", res.data.data);
-    setClaimList(res.data.data);
+    try {
+      const res = await httpClient.get<{ data: claimList[] }>(
+        `/approvers/approved-claim`
+      );
+      console.log("data: ", res.data.data);
+      setClaimList(res.data.data);
+    } catch (error) {
+      console.log("Error at ApprovedApprover: ", error);
+    }
   };
 
   const handleViewDetail = (claimId: string) => {
