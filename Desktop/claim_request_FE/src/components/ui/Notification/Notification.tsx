@@ -1,32 +1,41 @@
-import React, { useEffect } from 'react';
-import styles from '@components/ui/Notification/Notification.module.css';
+import React, { useEffect } from "react";
+import styles from "@components/ui/Notification/Notification.module.css";
 
 interface NotificationProps {
   message: string;
-  type: 'success' | 'error' | 'warning' | 'info';
+  type: "success" | "error" | "warning" | "info";
   duration?: number;
   onClose?: () => void;
 }
 
-const Notification : React.FC<NotificationProps> = ({message, type, duration = 5000, onClose}) => {
+const Notification: React.FC<NotificationProps> = ({
+  message,
+  type,
+  duration = 5000,
+  onClose,
+}) => {
   useEffect(() => {
-    const timer = setTimeout(()=>{
+    const timer = setTimeout(() => {
       onClose?.();
-    },duration);
+    }, duration);
     return () => clearTimeout(timer);
   }, [duration, onClose]);
-    return (
+  return (
     <div className={styles.notificationContainer}>
-    <div className={`${styles.notification} ${styles[`notification-${type}`]} ${styles.fadeOut}`}
-    onAnimationEnd = {onClose}>
-    <p>{message}</p>
-    <button
-    onClick={onClose}
-    className={styles.closeButton}>
-    Close
-    </button>
-    </div>
+      <div
+        className={`${styles.notification} ${styles[`notification-${type}`]} ${
+          styles.fadeOut
+        }`}
+        onAnimationEnd={onClose}
+      >
+        <span className={styles.notificationContent}>
+          <p>{message}</p>
+        </span>
+        <button onClick={onClose} className={styles.closeButton}>
+          x
+        </button>
       </div>
+    </div>
   );
 };
 

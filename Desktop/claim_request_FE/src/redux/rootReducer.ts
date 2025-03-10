@@ -5,7 +5,7 @@ import { combineReducers } from "@reduxjs/toolkit";
 // import { financeSlice } from "./slices/Finance/claimsSlice";
 // import claimsReducer from "./slices/Claim/claimsSlice";
 // import { approverSlice } from "./slices/Approver/claimsSlice";
-import claimStatusReducer from "./paid/claimStatusSlice";
+import userReducer from "@redux/slices/UserInfo/UserInfoSlice"
 export const rootReducer = combineReducers({
   // pending: pendingSlice.reducer,
   // details: detailsSlice.reducer,
@@ -13,7 +13,7 @@ export const rootReducer = combineReducers({
   // userClaims: userClaimSlice.reducer,
   // claims: claimsReducer,
   // approver: approverSlice.reducer,
-  claimStatus: claimStatusReducer,
+  user: userReducer,
 });
 
 
