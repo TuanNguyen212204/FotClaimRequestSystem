@@ -14,7 +14,9 @@ interface Project {
 }
 
 interface ProjectsResponse {
-  projects: Project[];
+  httpStatus: number;
+  message: string;
+  data: Project[];
 }
 
 const config: HttpClientConfig = {
@@ -40,8 +42,7 @@ class ProjectService {
             delayMs: 1000,
           },
         });
-
-      return response.data.projects;
+      return response.data.data;
     } catch (error) {
       console.error("Failed to fetch projects:", error);
       throw error;
