@@ -46,14 +46,18 @@ export class HttpClient implements HttpClientService {
           }
         }
         return config;
-      }
+      },
     );
 
     this.client.interceptors.response.use(
-      (response) => response,
+      (response) => {
+        if (this.config.DEBUG) {
+          console.table(response);
+        }
+        return response;
+      },
       async (error) => {
         const originalRequest = error.config as ExtendedAxiosRequestConfig;
-
         if (
           error.response?.status === 401 &&
           this.config.auth?.refreshToken &&
@@ -62,6 +66,9 @@ export class HttpClient implements HttpClientService {
         ) {
           originalRequest._retry = -1;
 
+          if (this.config.DEBUG) {
+            console.error(error);
+          }
           if (this.isRefreshing) {
             try {
               return new Promise((resolve, reject) => {
@@ -69,7 +76,7 @@ export class HttpClient implements HttpClientService {
                   if (token) {
                     originalRequest.headers.set(
                       "Authorization",
-                      `Bearer ${token}`
+                      `Bearer ${token}`,
                     );
                     resolve(this.client(originalRequest));
                   } else {
@@ -92,7 +99,7 @@ export class HttpClient implements HttpClientService {
               if (newToken) {
                 originalRequest.headers.set(
                   "Authorization",
-                  `Bearer ${newToken}`
+                  `Bearer ${newToken}`,
                 );
                 this.onRefreshSuccess(newToken);
                 return this.client(originalRequest);
@@ -130,7 +137,7 @@ export class HttpClient implements HttpClientService {
         }
 
         throw new ApiError(error);
-      }
+      },
     );
   }
 
@@ -163,7 +170,7 @@ export class HttpClient implements HttpClientService {
     method: string,
     url: string,
     data?: any,
-    options?: RequestOptions
+    options?: RequestOptions,
   ): Promise<ApiResponse<T>> {
     const requestConfig: AxiosRequestConfig = {
       method,
@@ -195,7 +202,7 @@ export class HttpClient implements HttpClientService {
         data: response.data,
         status: response.status,
         statusText: response.statusText,
-        header: response.headers as Record<string, string | undefined>,
+        headers: response.headers as Record<string, string | undefined>,
       };
     } catch (error) {
       if (error instanceof ApiError) {
@@ -207,7 +214,7 @@ export class HttpClient implements HttpClientService {
 
   public async get<T>(
     url: string,
-    options?: RequestOptions
+    options?: RequestOptions,
   ): Promise<ApiResponse<T>> {
     return this.request<T>("GET", url, undefined, options);
   }
@@ -215,7 +222,7 @@ export class HttpClient implements HttpClientService {
   public async post<T, D = any>(
     url: string,
     data?: D,
-    options?: RequestOptions
+    options?: RequestOptions,
   ): Promise<ApiResponse<T>> {
     return this.request<T>("POST", url, data, options);
   }
@@ -223,7 +230,7 @@ export class HttpClient implements HttpClientService {
   public async put<T, D = any>(
     url: string,
     data?: D,
-    options?: RequestOptions
+    options?: RequestOptions,
   ): Promise<ApiResponse<T>> {
     return this.request<T>("PUT", url, data, options);
   }
@@ -231,14 +238,14 @@ export class HttpClient implements HttpClientService {
   public async patch<T, D = any>(
     url: string,
     data?: D,
-    options?: RequestOptions
+    options?: RequestOptions,
   ): Promise<ApiResponse<T>> {
     return this.request<T>("PATCH", url, data, options);
   }
 
   public async delete<T>(
     url: string,
-    options?: RequestOptions
+    options?: RequestOptions,
   ): Promise<ApiResponse<T>> {
     return this.request<T>("DELETE", url, undefined, options);
   }
