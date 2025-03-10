@@ -9,6 +9,11 @@
 // import type { RootState } from "@redux/index";
 // import { toast } from "react-toastify";
 import TableComponent from "@/components/ui/Table/Table";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "@/redux/index";
+import { selectAllPending } from "@/redux/selector/pendingSelector";
+import { useEffect } from "react";
+import { fetchAllPendingClaimAsync } from "@/redux/thunk/Approver/pendingThunk";
 
 export const PendingComponent: React.FC = () => {
   // const dispatch = useAppDispatch();
@@ -23,6 +28,31 @@ export const PendingComponent: React.FC = () => {
   //   const value = e.target.value;
   //   setSelectedValue(value);
   // };
+
+  const dispatch = useDispatch<AppDispatch>();
+  const pending = useSelector(selectAllPending);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      await dispatch(fetchAllPendingClaimAsync());
+      setLoading(false);
+    };
+    fetchData();
+  }, [dispatch]);
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+  if (!pending || pending.length === 0) {
+    return <p>No data available</p>;
+  }
+  const columns = [
+    ...Object.keys(pending[0]).map((key) => {
+      if (key === "status") {
+        return
+      }
+    }),
+  ];
 
   return (
     <div>
