@@ -19,6 +19,7 @@ import StaffInformation from "@pages/admin/StaffInformation";
 import DraftCoponent from "@/components/ui/user/DraftCoponent";
 import ApprovedFinancePage from "@/pages/Finance/ApprovedFinancePage";
 import CheckBoxTest from "@/components/ui/Checkbox/Checkboxtest";
+import ApprovedApproverPage from "@/pages/Approver/ApprovedApproverPage";
 const router: RouteObject[] = [
   {
     element: <CheckBoxTest />,
@@ -65,7 +66,7 @@ const router: RouteObject[] = [
       },
       {
         path: PATH.approvedApprover,
-        element: <ApprovedFinancePage />,
+        element: <ApprovedApproverPage />,
       },
       {
         path: PATH.pending,
