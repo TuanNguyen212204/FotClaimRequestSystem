@@ -32,12 +32,12 @@ function TestRadio() {
         }}
         name="myRadio"
       />
-      <div style={{display: "flex", marginTop: "20px"}}>
+      <div style={{ display: "flex", marginTop: "20px" }}>
         <Tooltip text="Hover this" position="top">
           <button>Click me</button>
         </Tooltip>
       </div>
-      <div style={{display: "flex", marginTop: "20px"}}>
+      <div style={{ display: "flex", marginTop: "20px" }}>
         <Tooltip text="Hover this" position="bottom">
           <button>Click me</button>
         </Tooltip>
