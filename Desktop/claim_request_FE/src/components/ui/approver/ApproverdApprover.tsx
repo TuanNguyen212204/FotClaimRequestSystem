@@ -6,13 +6,13 @@ import httpClient from "@/constant/apiInstance";
 import TableComponent, { Column } from "../Table/Table";
 
 interface claimList {
-  claim_id: string;
-  user_id: string;
-  project_id: string;
-  total_working_hours: number;
-  submitted_date: Date;
-  claim_status: string;
-  project_name: string;
+  claim_id?: string;
+  user_id?: string;
+  project_id?: string;
+  total_working_hours?: number;
+  submitted_date?: Date;
+  claim_status?: string;
+  project_name?: string;
 }
 
 export const ApprovedApproverComponent: React.FC = () => {
