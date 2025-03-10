@@ -1,28 +1,29 @@
 import { UseFormRegister } from "react-hook-form";
 import { FormData } from "@/types/claimForm.type";
-interface AdditionalInfoProps {
-  register : UseFormRegister<FormData>
+import styles from "@pages/CreateClaim/Claim.module.css";
+export interface AdditionalInfoProps {
+  register: UseFormRegister<FormData>;
 }
-export default function AdditionalInfo({register}:AdditionalInfoProps) {
+export default function AdditionalInfo({ register }: AdditionalInfoProps) {
   return (
-    <div className="mb-5 box-border">
-      <div className="mb-2.5">
-        <span className="block mb-1 font-bold">Claim Remarks</span>
+    <div>
+      <div className={styles.form_group} style={{ marginTop: "20px" }}>
+        <label className={styles.form_label}>Claim Remarks</label>
         <textarea
-          {...register('claimRemark')}
-          rows={4}
+          {...register("claimRemark")}
           placeholder="Enter addtional remarks"
-          className="w-full p-2 mb-2.5 border-2 border-gray-400 box-border rounded-sm"
+          className={styles.form_control}
+          rows={4}
         ></textarea>
       </div>
 
-      <div className="mb-2.5">
-        <span className="block mb-1 font-bold">Audit Trail</span>
+      <div className={styles.form_group} style={{ marginTop: "20px" }}>
+        <label className={styles.form_label}>System audit trail</label>
         <textarea
           rows={4}
           readOnly
           placeholder="System audit trail"
-          className="w-full p-2 mb-2.5 border-2 border-gray-400 box-border rounded-sm"
+          className={styles.form_control}
         ></textarea>
       </div>
     </div>

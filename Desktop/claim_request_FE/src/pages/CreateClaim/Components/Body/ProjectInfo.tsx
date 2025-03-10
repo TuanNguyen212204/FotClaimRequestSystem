@@ -5,10 +5,10 @@ import {
   UseFormSetValue,
   useFormState,
 } from "react-hook-form";
-import { JSX, useState } from "react";
+import { JSX, ReactNode } from "react";
 import { FormData } from "@/types/claimForm.type";
 import { TProjectInfo } from "@/redux/slices/Project/projectSlice";
-
+import styles from "@pages/CreateClaim/Claim.module.css";
 export interface IProjectInfoProps {
   ProjectList: TProjectInfo[];
   setValue: UseFormSetValue<FormData>;
@@ -24,7 +24,6 @@ export default function ProjectInfo({
 }: IProjectInfoProps): JSX.Element {
   const currentProject = useWatch({ control, name: "currentSelectedProject" });
   const { errors } = useFormState({ control, name: "currentSelectedProject" });
-  //console.log(currentProject); // nay de debgug
   function formatDateRange(from: string, to: string): string {
     const fromDate = new Date(from);
     const toDate = new Date(to);
@@ -34,51 +33,40 @@ export default function ProjectInfo({
     const toYear = toDate.getFullYear();
     return `${fromMonth} ${fromYear} - ${toMonth} ${toYear}`;
   }
-  console.log(ProjectList);
-  const [isCollapsed, setIsCollapsed] = useState<boolean>(true);
   return (
-    <div className="mb-5 box-border">
-      <div className="flex justify-between items-center border-b border-gray-400 pb-1.5 mb-4">
-        <h2 className="text-lg">Project Information</h2>
-        <button
-          type="button"
-          onClick={() => setIsCollapsed(!isCollapsed)}
-          className="text-blue-500 "
-        >
-          {isCollapsed ? "Collapse" : "Expand"}
-        </button>
-      </div>
-      <div
-        className={`overflow-hidden transition-all duration-500 ease-in-out ${
-          isCollapsed ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-        }`}
-      >
-        <div className="mb-2.5">
-          <select
-            title="Projects"
-            className="w-full p-3.5 mb-2.5 text-base border-2 border-gray-200 box-border rounded-sm"
-            defaultValue={""}
-            onChange={(e) => {
-              const selectedProject = ProjectList.find(
-                (p) => p.projectName === e.target.value
-              );
-              if (selectedProject) {
-                setValue("currentSelectedProject", selectedProject, {
-                  shouldValidate: true,
-                });
-              }
-            }}
-          >
-            <option value="" disabled>
-              Select a Project
-            </option>
-            {ProjectList.map((project) => (
-              <option key={project.projectName} value={project.projectName}>
-                {project.projectName}
+    <FormRow>
+      <FormColumn>
+        <FormGroup
+          label="Project Name"
+          input={
+            <select
+              title="Projects"
+              className="w-full p-3.5! mb-2.5 text-base border-2 border-gray-200 box-border rounded-sm"
+              defaultValue={""}
+              onChange={(e) => {
+                const selectedProject = ProjectList.find(
+                  (p) => p.projectName === e.target.value,
+                );
+                if (selectedProject) {
+                  setValue("currentSelectedProject", selectedProject, {
+                    shouldValidate: true,
+                  });
+                }
+              }}
+            >
+              <option value="" disabled>
+                Select a Project
               </option>
-            ))}
-          </select>
-        </div>
+              {ProjectList.length > 0 &&
+                ProjectList.map((project) => (
+                  <option key={project.projectName} value={project.projectName}>
+                    {project.projectName}
+                  </option>
+                ))}
+            </select>
+          }
+        />
+
         {errors.currentSelectedProject?.projectName && (
           <p className="text-black text-sm w-full bg-red-200 border-2 border-red-300 p-1">
             {
@@ -88,32 +76,60 @@ export default function ProjectInfo({
             }
           </p>
         )}
-        <div className="mb-2.5">
-          <input
-            disabled
-            placeholder="Role in Project"
-            className="w-full p-2 mb-2.5 border-2 border-white box-border rounded-sm"
-            {...register("currentSelectedProject.RoleInTheProject")}
-            value={currentProject?.RoleInTheProject || ""}
-          />
-        </div>
-        <div className="mb-2.5">
-          <input
-            disabled
-            placeholder="Project Duration"
-            className="w-full p-2 mb-2.5 border-2 border-white box-border rounded-sm"
-            value={
-              currentProject?.ProjectDuration?.from &&
-              currentProject?.ProjectDuration?.to
-                ? formatDateRange(
-                    currentProject.ProjectDuration.from,
-                    currentProject.ProjectDuration.to
-                  )
-                : ""
-            }
-          />
-        </div>
-      </div>
-    </div>
+      </FormColumn>
+      <FormColumn>
+        <FormGroup
+          label="Role in Project"
+          input={
+            <input
+              disabled
+              placeholder="Role in Project"
+              className="w-full p-2 mb-2.5 border-2 border-white box-border rounded-sm"
+              {...register("currentSelectedProject.RoleInTheProject")}
+              value={currentProject?.RoleInTheProject || ""}
+            />
+          }
+        />
+      </FormColumn>
+      <FormColumn>
+        <FormGroup
+          label="Project Duration"
+          input={
+            <input
+              disabled
+              placeholder="Project Duration"
+              className={`w-full p-2 mb-2.5 border-2 border-white box-border rounded-sm ${styles.form_control}`}
+              value={
+                currentProject?.ProjectDuration?.from &&
+                currentProject?.ProjectDuration?.to
+                  ? formatDateRange(
+                      currentProject.ProjectDuration.from,
+                      currentProject.ProjectDuration.to,
+                    )
+                  : ""
+              }
+            />
+          }
+        />
+      </FormColumn>
+    </FormRow>
   );
 }
+const FormRow = ({ children }: { children: ReactNode }): JSX.Element => {
+  return <div className={styles.form_row}>{children}</div>;
+};
+interface formGroupProps {
+  label: string;
+  input: JSX.Element;
+}
+const FormGroup = ({ label, input }: formGroupProps): JSX.Element => {
+  return (
+    <div className={styles.form_group}>
+      <label className={styles.form_label}>{label}</label>
+      {input}
+    </div>
+  );
+};
+const FormColumn = ({ children }: { children: ReactNode }): JSX.Element => {
+  return <div className={styles.form_col}>{children}</div>;
+};

@@ -5,18 +5,15 @@ import {
   UseFormRegister,
   FieldErrors,
 } from "react-hook-form";
-
+import { useWatch } from "react-hook-form";
 import styles from "@pages/CreateClaim/Claim.module.css";
 import { FormData } from "@/types/claimForm.type";
-import { useWatch } from "react-hook-form";
-import { Trash2 } from "lucide-react";
 
-interface ClaimTableProps {
+export interface ClaimTableProps {
   control: Control<FormData>;
   register: UseFormRegister<FormData>;
   fields: Record<"id", string>[];
   append: UseFieldArrayAppend<FormData>;
-
   remove: UseFieldArrayRemove;
   errors: FieldErrors<FormData>;
 }
@@ -30,9 +27,8 @@ export default function ClaimTable({
   errors,
 }: ClaimTableProps) {
   const currentProject = useWatch({ control, name: "currentSelectedProject" });
+  //const claims = useWatch({ control, name: "claims" });
 
-  const claims = useWatch({ control, name: "claims" });
-  console.log(claims[0].from);
   function getTime(time: string): string {
     return time ? time.split("T")[0] : "";
   }
@@ -41,97 +37,21 @@ export default function ClaimTable({
   const maxDate = getTime(currentProject?.ProjectDuration?.to || "");
 
   return (
-    <div className="mb-5 box-border overflow-x-auto ">
-      <h2 className="text-lg pb-1.5 mb-4 border-b border-gray-400">
-        Claim Table
-      </h2>
+    <div className="mb-5 box-border overflow-x-auto">
+      <h2 className="text-lg pb-1.5! mb-4!">Claim Details</h2>
 
-      <div className="overflow-x-auto">
-        <table className="table-cell  border box-border border-spacing-1 border-gray-300 mb-2.5 w-full">
-          <thead>
-            <tr className="border-b-2 border-black">
-              <th className="w-3/12">Date</th>
-              <th className="w-2/12">From Time</th>
-              <th className="w-2/12">To Time</th>
-              <th className="w-1/12">Hours</th>
-              <th className="w-3/12">Remarks</th>
-              <th className="w-1/12">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {fields.map((field, index) => (
-              <tr key={field.id} className="h-24">
-                <TdWithError
-                  className="w-6/24"
-                  error={errors.claims?.[index]?.date?.message}
-                >
-                  <input
-                    title="Claim Date"
-                    type="date"
-                    {...register(`claims.${index}.date`)}
-                    min={minDate}
-                    max={maxDate}
-                  />
-                </TdWithError>
-                <TdWithError
-                  className="w-5/24"
-                  error={errors.claims?.[index]?.from?.message}
-                >
-                  <input
-                    title="From"
-                    type="time"
-                    {...register(`claims.${index}.from`)}
-                  />
-                </TdWithError>
-                <TdWithError
-                  className="w-5/24"
-                  error={errors.claims?.[index]?.to?.message}
-                >
-                  <input
-                    title="To"
-                    type="time"
-                    {...register(`claims.${index}.to`)}
-                  />
-                </TdWithError>
-                <TdWithError className="w-1/12">
-                  <input
-                    type="number"
-                    className="text-center"
-                    disabled
-                    placeholder="0"
-                    {...register(`claims.${index}.hours`)}
-                  />
-                </TdWithError>
-                <TdWithError
-                  className="w-4/24"
-                  error={errors.claims?.[index]?.remarks?.message}
-                >
-                  <input
-                    type="text"
-                    placeholder="Enter remarks"
-                    className="text-center"
-                    {...register(`claims.${index}.remarks`)}
-                  />
-                </TdWithError>
-                <TdWithError className="text-center    p-2 ">
-                  {fields.length > 1 ? (
-                    <Trash2
-                      onClick={() => remove(index)}
-                      size={32}
-                      className="cursor-pointer self-center  text-red-500"
-                    />
-                  ) : (
-                    <Trash2
-                      className="cursor-not-allowed text-gray-600 self-center"
-                      size={32}
-                    />
-                  )}
-                </TdWithError>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <Table>
+        <TableHead />
+        <TableBody
+          fields={fields}
+          register={register}
+          errors={errors}
+          remove={remove}
+          minDate={minDate}
+          maxDate={maxDate}
+        />
+        <TableFoot register={register} />
+      </Table>
 
       <button
         title="Add More"
@@ -139,27 +59,133 @@ export default function ClaimTable({
         onClick={() =>
           append({ date: "", from: "", to: "", hours: 0, remarks: "" })
         }
-        className={`mt-2 p-2 max-w-24 rounded ${styles.add_button}`}
+        className={`${styles.btn} ${styles.btn_add}`}
       >
         Add Row
       </button>
-      <div className="mb-2.5">
-        <span className="block mb-1 font-bold">Total Working Hours</span>
-        <input
-          disabled
-          placeholder="Total Hours"
-          className="w-full p-2 mb-2.5 border-2 border-white box-border rounded-sm"
-          {...register("totalHours")}
-        />
-        {errors.totalHours && (
-          <p className="text-red-500 text-xs mt-1">
-            {errors.totalHours.message}
-          </p>
-        )}
-      </div>
     </div>
   );
 }
+
+const Table: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  return <table className={styles.claim_table}>{children}</table>;
+};
+
+const TableHead: React.FC = () => (
+  <thead>
+    <tr>
+      <TableHeaderCell>Date</TableHeaderCell>
+      <TableHeaderCell>From Time</TableHeaderCell>
+      <TableHeaderCell>To Time</TableHeaderCell>
+      <TableHeaderCell>Hours</TableHeaderCell>
+      <TableHeaderCell>Remarks</TableHeaderCell>
+      <TableHeaderCell></TableHeaderCell>
+    </tr>
+  </thead>
+);
+
+const TableBody: React.FC<{
+  fields: Record<"id", string>[];
+  register: UseFormRegister<FormData>;
+  errors: FieldErrors<FormData>;
+  remove: UseFieldArrayRemove;
+  minDate: string;
+  maxDate: string;
+}> = ({ fields, register, errors, remove, minDate, maxDate }) => (
+  <tbody>
+    {fields.map((field, index) => (
+      <tr key={field.id}>
+        <TdWithError
+          className="w-4/24"
+          error={errors.claims?.[index]?.date?.message}
+        >
+          <input
+            title="Claim Date"
+            type="date"
+            {...register(`claims.${index}.date`)}
+            min={minDate}
+            max={maxDate}
+          />
+        </TdWithError>
+        <TdWithError
+          className="w-5/24"
+          error={errors.claims?.[index]?.from?.message}
+        >
+          <input
+            title="From"
+            type="time"
+            {...register(`claims.${index}.from`)}
+          />
+        </TdWithError>
+        <TdWithError
+          className="w-5/24"
+          error={errors.claims?.[index]?.to?.message}
+        >
+          <input title="To" type="time" {...register(`claims.${index}.to`)} />
+        </TdWithError>
+        <TdWithError className="w-1/12">
+          <input
+            type="number"
+            disabled
+            placeholder="0"
+            {...register(`claims.${index}.hours`)}
+          />
+        </TdWithError>
+        <TdWithError
+          className="w-6/24"
+          error={errors.claims?.[index]?.remarks?.message}
+        >
+          <input
+            type="text"
+            placeholder="Enter remarks"
+            {...register(`claims.${index}.remarks`)}
+          />
+        </TdWithError>
+        <TdWithError className="text-center p-2">
+          {index !== 0 && fields.length > 1 ? (
+            <div className="flex align-middle justify-center">
+              <span
+                onClick={() => remove(index)}
+                className={styles.file_remove}
+              >
+                ×
+              </span>
+            </div>
+          ) : (
+            index !== 0 && <span className={styles.file_remove}></span>
+          )}
+        </TdWithError>
+      </tr>
+    ))}
+  </tbody>
+);
+
+const TableFoot: React.FC<{ register: UseFormRegister<FormData> }> = ({
+  register,
+}) => (
+  <tfoot>
+    <tr>
+      <td colSpan={4} className="text-right font-bold" title="Total Hours">
+        Total Working Hours
+      </td>
+      <td>
+        <input
+          disabled
+          placeholder="Total Hours"
+          className="w-full p-2 border-2 border-white box-border rounded-sm"
+          {...register("totalHours")}
+        />
+      </td>
+      <td colSpan={2}></td>
+    </tr>
+  </tfoot>
+);
+
+const TableHeaderCell: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
+  return <th>{children}</th>;
+};
 
 interface TdWithErrorProps {
   children: React.ReactNode;
@@ -174,9 +200,9 @@ const TdWithError: React.FC<TdWithErrorProps> = ({
 }) => {
   return (
     <td className={`p-2 ${className}`}>
-      <div className="flex flex-col justify-center min-h-[3rem]">
+      <div className="flex flex-col gap-1">
         {children}
-        <div className="min-h-[1.5rem]">
+        <div>
           {error ? (
             <p className="text-red-500 text-xs mt-1">{error}</p>
           ) : (
