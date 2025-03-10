@@ -1,9 +1,10 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import httpClient from '../constant/apiInstance';
 
 interface TableState<T> {
   data: T[];
   loading: boolean;
+  lastUrl?: string; // Add this property
   pagination: {
     currentPage: number;
     totalPages: number;
@@ -14,6 +15,16 @@ interface TableState<T> {
 
 interface UseTableProps {
   initialPageSize?: number;
+}
+
+interface ApiResponse<T> {
+  data: T[];
+  pagination?: {
+    total: number;
+    totalPages: number;
+    currentPage: number;
+    pageSize: number;
+  };
 }
 
 export function useTable<T>({ initialPageSize = 10 }: UseTableProps = {}) {
@@ -27,6 +38,32 @@ export function useTable<T>({ initialPageSize = 10 }: UseTableProps = {}) {
       total: 0
     }
   });
+
+  const fetchData = useCallback(async (url: string) => {
+    setState(prev => ({ ...prev, loading: true, lastUrl: url })); // Store the URL
+    try {
+      const params = {
+        page: state.pagination.currentPage,
+        pageSize: state.pagination.pageSize
+      };
+
+      const response = await httpClient.get<ApiResponse<T>>(url, params);
+      const { data, pagination } = response.data;
+      
+      setState(prev => ({
+        data,
+        loading: false,
+        pagination: pagination || {
+          ...prev.pagination,
+          total: data.length,
+          totalPages: Math.ceil(data.length / prev.pagination.pageSize)
+        }
+      }));
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      setState(prev => ({ ...prev, loading: false }));
+    }
+  }, [state.pagination.currentPage, state.pagination.pageSize]);
 
   const setPage = useCallback((page: number) => {
     setState(prev => ({
@@ -44,31 +81,17 @@ export function useTable<T>({ initialPageSize = 10 }: UseTableProps = {}) {
       pagination: {
         ...prev.pagination,
         pageSize: size,
-        currentPage: 1 // Reset to first page when changing page size
+        currentPage: 1
       }
     }));
   }, []);
 
-  const fetchData = useCallback(async (url: string) => {
-    setState(prev => ({ ...prev, loading: true }));
-    try {
-      const response = await httpClient.get<T[]>(url);
-      const data = response.data;
-      
-      setState(prev => ({
-        data,
-        loading: false,
-        pagination: {
-          ...prev.pagination,
-          total: data.length,
-          totalPages: Math.ceil(data.length / prev.pagination.pageSize)
-        }
-      }));
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      setState(prev => ({ ...prev, loading: false }));
+  // Refetch when page or pageSize changes
+  useEffect(() => {
+    if (state.lastUrl) {
+      void fetchData(state.lastUrl);
     }
-  }, []);
+  }, [state.pagination.currentPage, state.pagination.pageSize]);
 
   const addData = useCallback((newData: T) => {
     setState(prev => {

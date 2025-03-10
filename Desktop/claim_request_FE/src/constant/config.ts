@@ -21,5 +21,4 @@ export const PATH = {
   projectInformation: "/project-information",
   staffInformation: "/staff-information",
   test: "/test",
-  test2: "/radio-tooltip-test",
 };
