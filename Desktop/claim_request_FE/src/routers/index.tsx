@@ -1,6 +1,5 @@
 import { RouteObject, useRoutes } from "react-router-dom";
 import { MainLayout } from "@components/layouts/MainLayout";
-import { HomePage } from "@pages/HomePage";
 import { PATH } from "@constant/config";
 import { UserInfoComponent } from "@ui/user/UserInfoComponent";
 import LoginForm from "@ui/login/LoginForm";
@@ -14,8 +13,8 @@ import AllUserInformation from "@/pages/admin/AllUserInformation";
 import ApproveDetail from "@pages/ClaimRequest/ApproveDetail";
 import ClaimStatus from "@pages/Finance/ClaimStatus";
 import PaidClaims from "@pages/Finance/PaidClaims";
-import ProjectInformation from "@/pages/Admin/ProjectInformation";
-import StaffInformation from "@/pages/Admin/StaffInformation";
+import ProjectInformation from "@/pages/admin/ProjectInformation";
+import StaffInformation from "@/pages/admin/StaffInformation";
 import CheckMail from "@/components/ui/login/CheckMail";
 import CreateNewPassword from "@/components/ui/login/CreateNewPassword";
 import ApprovedFinancePage from "@/pages/Finance/ApprovedFinancePage";
