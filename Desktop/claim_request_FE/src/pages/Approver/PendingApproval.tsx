@@ -98,13 +98,10 @@ export const PendingComponent: React.FC = () => {
       title: "Action",
       cell: ({ value }) => (
         <div className={styles.actions}>
-          <EyeIcon
+          {/* <EyeIcon
             className={styles.icon}
-            // onClick={() => handleViewDetail(value as string)}
-          />
-          {/* &nbsp;&nbsp;&nbsp; */}
+          /> */}
           <CheckIcon className={styles.icon} />
-          {/* &nbsp;&nbsp;&nbsp; */}
           <TrashIcon className={styles.icon} />
         </div> 
       ),
