@@ -3,7 +3,7 @@ import styles from "./ApproverdApprover.module.css";
 import { EyeIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import httpClient from "@/constant/apiInstance";
-import TableComponent, { Column } from "../Table/Table";
+import TableComponent, { Column, DataRecord } from "../Table/Table";
 
 interface claimList {
   claim_id?: string;
@@ -87,12 +87,17 @@ export const ApprovedApproverComponent: React.FC = () => {
       ),
     },
   ];
-
+  const dataSource: DataRecord[] = claimList.map((claim, index) => ({
+    ...claim,
+    key: index,
+    id: claim.claim_id ? claim.claim_id.toString() : "",
+    status: claim.claim_id ? claim.claim_id : "",
+  }));
   return (
     <div>
       <TableComponent
         columns={columns}
-        dataSource={claimList}
+        dataSource={dataSource}
         loading={false}
         pagination={true}
         name="Claims"

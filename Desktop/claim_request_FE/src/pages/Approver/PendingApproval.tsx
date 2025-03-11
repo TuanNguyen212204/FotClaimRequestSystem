@@ -9,9 +9,7 @@ import httpClient from "@/constant/apiInstance.ts";
 import { EyeIcon, TrashIcon, CheckIcon } from "lucide-react";
 import styles from "@/pages/Approver/PendingApproval.module.css";
 import { Link } from "react-router-dom";
-
-
-
+import { DataRecord } from "@/components/ui/Table/Table";
 export const PendingComponent: React.FC = () => {
   // const dispatch = useDispatch<AppDispatch>();
   // const pending = useSelector(selectAllPending);
@@ -27,7 +25,7 @@ export const PendingComponent: React.FC = () => {
       const res = await httpClient.get<{ data: claimPending[] }>(
         `/approvers/pending-claim`
       );
-      console.log("data: ", res.data.data)
+      console.log("data: ", res.data.data);
       setPending(res.data.data);
       setLoading(false);
     } catch (error) {
@@ -38,7 +36,6 @@ export const PendingComponent: React.FC = () => {
   // const handleViewDetail = (claimId: string) => {
   //   navigate(`/approve/detail/${claimId}`); //sửa lại url ở đây để truyền
   // };
-
 
   if (loading) {
     return <p>Loading...</p>;
@@ -56,11 +53,11 @@ export const PendingComponent: React.FC = () => {
   };
 
   const columns: Column[] = [
-    // {
-    //   key: "claim_id",
-    //   dataIndex: "claim_id",
-    //   title: "Claim ID",
-    // },
+    {
+      key: "claim_id",
+      dataIndex: "claim_id",
+      title: "Claim ID",
+    },
     {
       key: "user_id",
       dataIndex: "user_id",
@@ -106,16 +103,22 @@ export const PendingComponent: React.FC = () => {
           <CheckIcon className={styles.icon} />
           {/* &nbsp;&nbsp;&nbsp; */}
           <TrashIcon className={styles.icon} />
-        </div> 
+        </div>
       ),
     },
   ];
 
-  const dataSource = pending.map((item, index) => ({
-    key: index,
-    ...item,
-  }));
+  // const dataSource = pending.map((item, index) => ({
+  //   key: index,
+  //   ...item,
+  // }));
 
+  const dataSource: DataRecord[] = pending.map((a, index) => ({
+    ...a,
+    key: index,
+    id: a.claim_id ? a.claim_id.toString() : "",
+    status: a.project_name ? a.project_name : "",
+  }));
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Pending Approval Claims</h1>

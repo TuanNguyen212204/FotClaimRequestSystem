@@ -94,7 +94,11 @@ const router: RouteObject[] = [
       },
       {
         path: PATH.approvedApprover,
-        element: <ApprovedApproverPage />,
+        element: (
+          <Authorization role_id={[ROLE.APPROVER]}>
+            <ApprovedApproverPage />
+          </Authorization>
+        ),
       },
       {
         path: PATH.pending,
