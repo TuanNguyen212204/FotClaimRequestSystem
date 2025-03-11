@@ -32,9 +32,9 @@ const ClaimStatus: React.FC = () => {
     loading,
     pagination,
     setPage,
-    fetchData
+    fetchData,
   } = useTable<ClaimDetail>({
-    initialPageSize: 5
+    initialPageSize: 5,
   });
 
   useEffect(() => {
@@ -43,7 +43,7 @@ const ClaimStatus: React.FC = () => {
         const response = await httpClient.get<ClaimInfo>(`/claims/${id}`);
         setClaimInfo(response.data);
       } catch (error) {
-        console.error('Failed to fetch claim info:', error);
+        console.error("Failed to fetch claim info:", error);
       }
     };
 
@@ -52,17 +52,17 @@ const ClaimStatus: React.FC = () => {
   }, [id, fetchData]);
 
   const columns: Column[] = [
-    { key: 'id', dataIndex: 'id', title: 'No.' },
-    { key: 'duration', dataIndex: 'duration', title: 'Overtime Duration' },
-    { key: 'date', dataIndex: 'date', title: 'Overtime Date' },
-    { key: 'hours', dataIndex: 'hours', title: 'Total No.Hours' },
-    { key: 'paid', dataIndex: 'paid', title: 'Overtime Paid' },
-    { 
-      key: 'status', 
-      dataIndex: 'status', 
-      title: 'Status',
-      cell: () => <span className={styles.style_td_Status}>Paid</span>
-    }
+    { key: "id", dataIndex: "id", title: "No." },
+    { key: "duration", dataIndex: "duration", title: "Overtime Duration" },
+    { key: "date", dataIndex: "date", title: "Overtime Date" },
+    { key: "hours", dataIndex: "hours", title: "Total No.Hours" },
+    { key: "paid", dataIndex: "paid", title: "Overtime Paid" },
+    {
+      key: "status",
+      dataIndex: "status",
+      title: "Status",
+      cell: () => <span className={styles.style_td_Status}>Paid</span>,
+    },
   ];
 
   const handlePrint = () => {
@@ -105,9 +105,13 @@ const ClaimStatus: React.FC = () => {
           <thead>
             <tr>
               {columns.map((column) => (
-                <th 
-                  key={column.key} 
-                  className={column.key === 'status' ? styles.style_th_Status : styles.style_th}
+                <th
+                  key={column.key}
+                  className={
+                    column.key === "status"
+                      ? styles.style_th_Status
+                      : styles.style_th
+                  }
                 >
                   {column.title}
                 </th>
@@ -118,15 +122,20 @@ const ClaimStatus: React.FC = () => {
             {claimDetails.map((record) => (
               <tr key={record.id}>
                 {columns.map((column) => (
-                  <td 
-                    key={`${record.id}-${column.key}`} 
-                    className={column.key === 'status' ? styles.style_td_Status : styles.style_td}
+                  <td
+                    key={`${record.id}-${column.key}`}
+                    className={
+                      column.key === "status"
+                        ? styles.style_td_Status
+                        : styles.style_td
+                    }
                   >
-                    {column.cell ? 
-                      column.cell({ 
-                        value: record[column.dataIndex as keyof typeof record], 
-                        record 
-                      }) 
+                    {column.cell
+                      ? column.cell({
+                          value:
+                            record[column.dataIndex as keyof typeof record],
+                          record,
+                        })
                       : record[column.dataIndex as keyof typeof record]}
                   </td>
                 ))}
@@ -135,10 +144,10 @@ const ClaimStatus: React.FC = () => {
           </tbody>
         </table>
       </div>
-      
+
       <div className={styles.pagination_container}>
         <div className={styles.pagination}>
-          <button 
+          <button
             onClick={() => setPage(pagination.currentPage - 1)}
             disabled={pagination.currentPage === 1}
             className={styles.pageButton}
@@ -146,17 +155,21 @@ const ClaimStatus: React.FC = () => {
             Previous
           </button>
           <div className={styles.pageNumbers}>
-            {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map((page) => (
-              <button
-                key={page}
-                onClick={() => setPage(page)}
-                className={`${styles.pageNumber} ${pagination.currentPage === page ? styles.activePage : ''}`}
-              >
-                {page}
-              </button>
-            ))}
+            {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map(
+              (page) => (
+                <button
+                  key={page}
+                  onClick={() => setPage(page)}
+                  className={`${styles.pageNumber} ${
+                    pagination.currentPage === page ? styles.activePage : ""
+                  }`}
+                >
+                  {page}
+                </button>
+              )
+            )}
           </div>
-          <button 
+          <button
             onClick={() => setPage(pagination.currentPage + 1)}
             disabled={pagination.currentPage === pagination.totalPages}
             className={styles.pageButton}
@@ -164,10 +177,7 @@ const ClaimStatus: React.FC = () => {
             Next
           </button>
         </div>
-        <button 
-          className={styles.print_button}
-          onClick={handlePrint}
-        >
+        <button className={styles.print_button} onClick={handlePrint}>
           Print
         </button>
       </div>

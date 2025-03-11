@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import type { User } from "@/types/User";
-import { fetchAllUserAsync } from "@/redux/thunk/User/userThunk";
+import type { Project } from "@/types/Project";
+import { fetchAllProjectAsync } from "@/redux/thunk/Project/projectThunk";
 
 const initialState: {
-  data: User[];
+  data: Project[];
   status: string;
   error: string | null;
 } = {
@@ -11,23 +11,23 @@ const initialState: {
   status: "",
   error: null,
 };
-export const userSlice = createSlice({
-  name: "user",
+export const projectSlice = createSlice({
+  name: "project",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchAllUserAsync.rejected, (state, action) => {
+      .addCase(fetchAllProjectAsync.rejected, (state, action) => {
         state.status = "failed";
         state.error = String(action.error.message);
       })
-      .addCase(fetchAllUserAsync.pending, (state) => {
+      .addCase(fetchAllProjectAsync.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(fetchAllUserAsync.fulfilled, (state, action) => {
+      .addCase(fetchAllProjectAsync.fulfilled, (state, action) => {
         state.status = "success";
         state.data = action.payload;
       });
   },
 });
-export default userSlice.reducer;
+export default projectSlice.reducer;

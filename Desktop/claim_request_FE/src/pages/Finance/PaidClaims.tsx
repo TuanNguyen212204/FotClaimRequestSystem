@@ -22,10 +22,10 @@ const PaidClaims: React.FC = () => {
 
   const fetchPaidClaims = async () => {
     try {
-      const response = await httpClient.get<ClaimData[]>('/paidclaims');
+      const response = await httpClient.get<ClaimData[]>("/paidclaims");
       return response.data;
     } catch (error) {
-      console.error('Failed to fetch paid claims:', error);
+      console.error("Failed to fetch paid claims:", error);
       return [];
     }
   };
@@ -35,47 +35,47 @@ const PaidClaims: React.FC = () => {
     loading,
     pagination,
     setPage,
-    fetchData
+    fetchData,
   } = useTable<ClaimData>({
-    initialPageSize: 5
+    initialPageSize: 5,
   });
 
   useEffect(() => {
-    void fetchData('/paidclaims');
+    void fetchData("/paidclaims");
   }, []);
 
   const columns: Column[] = [
-    { key: 'claimId', dataIndex: 'claimId', title: 'Claim ID' },
-    { key: 'staffName', dataIndex: 'staffName', title: 'Staff Name' },
-    { key: 'projectName', dataIndex: 'projectName', title: 'Project Name' },
-    { key: 'duration', dataIndex: 'duration', title: 'Project Duration' },
-    { 
-      key: 'totalHours', 
-      dataIndex: 'totalHours', 
-      title: 'Total Hours Working',
-      cell: () => <span>100 hours</span>
-    },
-    { 
-      key: 'approverName', 
-      dataIndex: 'approverName', 
-      title: 'Approver Name',
-      cell: () => <span>Marco</span>
+    { key: "claimId", dataIndex: "claimId", title: "Claim ID" },
+    { key: "staffName", dataIndex: "staffName", title: "Staff Name" },
+    { key: "projectName", dataIndex: "projectName", title: "Project Name" },
+    { key: "duration", dataIndex: "duration", title: "Project Duration" },
+    {
+      key: "totalHours",
+      dataIndex: "totalHours",
+      title: "Total Hours Working",
+      cell: () => <span>100 hours</span>,
     },
     {
-      key: 'action',
-      dataIndex: 'claimId',
-      title: 'Action',
+      key: "approverName",
+      dataIndex: "approverName",
+      title: "Approver Name",
+      cell: () => <span>Marco</span>,
+    },
+    {
+      key: "action",
+      dataIndex: "claimId",
+      title: "Action",
       cell: ({ value }) => (
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <button 
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <button
             onClick={() => navigate(`${PATH.claimStatus}/${value}`)}
-            style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+            style={{ background: "none", border: "none", cursor: "pointer" }}
           >
             👁
           </button>
         </div>
-      )
-    }
+      ),
+    },
   ];
 
   return (
@@ -84,23 +84,20 @@ const PaidClaims: React.FC = () => {
         <h1 className={styles.claimStatus_h1}>Paid Claims</h1>
         <hr style={{ width: "100%" }} />
       </div>
-      
+
       <div
         style={{
           overflow: "hidden",
           borderRadius: "10px",
           border: "2px solid black",
-          marginBottom: "20px"
+          marginBottom: "20px",
         }}
       >
         <table className={styles.table}>
           <thead>
             <tr className={styles.style_tr}>
               {columns.map((column) => (
-                <th 
-                  key={column.key} 
-                  className={styles.style_th}
-                >
+                <th key={column.key} className={styles.style_th}>
                   {column.title}
                 </th>
               ))}
@@ -123,12 +120,16 @@ const PaidClaims: React.FC = () => {
               claims.map((claim) => (
                 <tr key={claim.claimId}>
                   {columns.map((column) => (
-                    <td key={`${claim.claimId}-${column.key}`} className={styles.style_td}>
-                      {column.cell ? 
-                        column.cell({ 
-                          value: claim[column.dataIndex as keyof typeof claim], 
-                          record: claim 
-                        }) 
+                    <td
+                      key={`${claim.claimId}-${column.key}`}
+                      className={styles.style_td}
+                    >
+                      {column.cell
+                        ? column.cell({
+                            value:
+                              claim[column.dataIndex as keyof typeof claim],
+                            record: claim,
+                          })
                         : claim[column.dataIndex as keyof typeof claim]}
                     </td>
                   ))}
@@ -138,9 +139,9 @@ const PaidClaims: React.FC = () => {
           </tbody>
         </table>
       </div>
-      
+
       <div className={styles.pagination}>
-        <button 
+        <button
           onClick={() => setPage(pagination.currentPage - 1)}
           disabled={pagination.currentPage === 1}
           className={styles.pageButton}
@@ -148,17 +149,21 @@ const PaidClaims: React.FC = () => {
           Previous
         </button>
         <div className={styles.pageNumbers}>
-          {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map((page) => (
-            <button
-              key={page}
-              onClick={() => setPage(page)}
-              className={`${styles.pageNumber} ${pagination.currentPage === page ? styles.activePage : ''}`}
-            >
-              {page}
-            </button>
-          ))}
+          {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map(
+            (page) => (
+              <button
+                key={page}
+                onClick={() => setPage(page)}
+                className={`${styles.pageNumber} ${
+                  pagination.currentPage === page ? styles.activePage : ""
+                }`}
+              >
+                {page}
+              </button>
+            )
+          )}
         </div>
-        <button 
+        <button
           onClick={() => setPage(pagination.currentPage + 1)}
           disabled={pagination.currentPage === pagination.totalPages}
           className={styles.pageButton}

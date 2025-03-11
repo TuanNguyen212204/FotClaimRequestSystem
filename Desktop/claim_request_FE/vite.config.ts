@@ -5,6 +5,9 @@ import { fileURLToPath, URL } from "node:url";
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  define: {
+    "process.env": process.env,
+  },
   resolve: {
     // phai add nhung cai nay neu ko build se fail cho tung cai ben trong tsconfig.app.json
     alias: {
