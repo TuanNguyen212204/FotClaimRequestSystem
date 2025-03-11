@@ -1,27 +1,43 @@
 import { useEffect, useState } from "react";
 import { Table, Space, message, Spin } from "antd";
 import { FilePen, Trash } from "lucide-react";
-import axios from "axios";
+import httpClient from "@/constant/apiInstance";
 import styles from "./StaffInformation.module.css";
 import StaffDetails from "./StaffDetail";
 
+interface Staff {
+  user_id: string;
+  full_name: string;
+  email: string;
+  department: string;
+  job_rank: string;
+}
+
+interface StaffTableData {
+  key: string;
+  index: number;
+  fullName: string;
+  email: string;
+  department: string;
+  jobRank: string;
+  action: JSX.Element;
+}
+
 const StaffInformation = () => {
-  const [dataSource, setDataSource] = useState([]);
+  const [dataSource, setDataSource] = useState<StaffTableData[]>([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedStaff, setSelectedStaff] = useState<any>(null);
+  const [selectedStaff, setSelectedStaff] = useState<Staff | null>(null);
 
   const fetchData = async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
-      const { data } = await axios.get("https://claimsystem.info.vn/api/v1/admin/staffs", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await httpClient.get<{ httpStatus: number; data: Staff[] }>("/admin/staffs");
+      const { data } = response;
 
       if (data.httpStatus === 200) {
         setDataSource(
-          data.data.map((item: any, index: number) => ({
+          data.data.map((item, index) => ({
             key: item.user_id,
             index: index + 1,
             fullName: item.full_name,
@@ -58,10 +74,8 @@ const StaffInformation = () => {
     setIsModalOpen(true);
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
-      const { data } = await axios.get(`https://claimsystem.info.vn/api/v1/admin/staff/${userId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await httpClient.get<{ httpStatus: number; data: Staff }>(`/admin/staff/${userId}`);
+      const { data } = response;
 
       if (data.httpStatus === 200) {
         setSelectedStaff(data.data);
@@ -78,11 +92,7 @@ const StaffInformation = () => {
   const handleDelete = async (id: string) => {
     if (window.confirm("Are you sure you want to delete this staff?")) {
       try {
-        const token = localStorage.getItem("token");
-        await axios.delete(`https://claimsystem.info.vn/api/v1/admin/staffs/${id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
+        await httpClient.delete(`/admin/staffs/${id}`);
         setDataSource((prevData) => prevData.filter((item) => item.key !== id));
         message.success(`Deleted staff with ID: ${id}`);
       } catch (error) {
@@ -104,7 +114,6 @@ const StaffInformation = () => {
     <div className={styles.container}>
       <h2>Staff Information</h2>
       {loading ? <Spin size="large" /> : <Table columns={columns} dataSource={dataSource} pagination />}
-
       <StaffDetails isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} staff={selectedStaff} loading={loading} />
     </div>
   );
