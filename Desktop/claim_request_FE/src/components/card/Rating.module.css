@@ -14,12 +14,11 @@
     display: flex;
     justify-content: flex-start;
     align-items: flex-start;
-    width: 120%; /* Tăng chiều rộng */
-    max-width: 1200px; /* Giới hạn tối đa */
+    width: 120%; 
+    max-width: 1200px; 
     margin: 20px auto;
     gap: 20px;
 }
-
 
 .ratingBox {
     display: inline-block;
