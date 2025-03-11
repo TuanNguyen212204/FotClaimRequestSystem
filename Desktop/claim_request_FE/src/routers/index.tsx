@@ -19,6 +19,7 @@ import StaffInformation from "@pages/admin/StaffInformation";
 import DraftCoponent from "@/components/ui/user/DraftCoponent";
 import ApprovedFinancePage from "@/pages/Finance/ApprovedFinancePage";
 import ApprovedApproverPage from "@/pages/Approver/ApprovedApproverPage";
+import Dashboard from "@/pages/admin/Dashboard";
 import Test from "@/pages/Test";
 import CheckBoxTest from "@/components/ui/Checkbox/Checkboxtest";
 const router: RouteObject[] = [
@@ -100,6 +101,10 @@ const router: RouteObject[] = [
       {
         path: PATH.staffInformation,
         element: <StaffInformation />,
+      },
+      {
+        path: PATH.dashboard,
+        element: <Dashboard />,
       },
       {
         path: PATH.test,

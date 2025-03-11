@@ -1,3 +1,4 @@
+
 export const PATH = {
   home: "/",
   userInfo: "/user-info", //tuan
@@ -18,5 +19,6 @@ export const PATH = {
   approvedApprover: "/approver/approved",
   projectInformation: "/project-information",
   staffInformation: "/staff-information",
+  dashboard: "/dashboard",
   test: "/test",
 };
