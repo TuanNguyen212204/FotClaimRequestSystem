@@ -65,10 +65,10 @@ const router: RouteObject[] = [
       //   path: PATH.draft,
       //   element: <DraftCoponent />,
       // },
-      {
-        path: PATH.home,
-        element: <HomePage />,
-      },
+      // {
+      //   path: PATH.home,
+      //   element: <HomePage />,
+      // },
       {
         path: PATH.createRequest,
         element: <CreateClaimPage />,
@@ -108,7 +108,7 @@ const router: RouteObject[] = [
       {
         path: PATH.approveDetails,
         element: (
-          <Authorization roleID={[ROLE.APPROVER]}>
+          <Authorization role_id={[ROLE.APPROVER]}>
             <ApproveDetail />
           </Authorization>
         ),
