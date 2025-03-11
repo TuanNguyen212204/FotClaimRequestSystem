@@ -11,7 +11,7 @@ import { useNotification } from "@/components/ui/Notification/NotificationContex
 
 export const UserInfoComponent: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const selectedUser = useSelector((state: any) => state.user.selectedUser);
+  const selectedUser = useSelector((state: any) => state.userInfo.selectedUser);
   const [isEditing, setIsEditing] = useState(false);
   const [staffInfo, setStaffInfo] = useState<User | null>(selectedUser || null);
   const notification = useNotification();

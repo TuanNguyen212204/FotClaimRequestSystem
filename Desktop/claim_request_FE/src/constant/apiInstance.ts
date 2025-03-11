@@ -93,4 +93,3 @@ export class HttpClient {
 const httpClient = new HttpClient(import.meta.env.VITE_API_BASE_URL);
 
 export default httpClient;
-
