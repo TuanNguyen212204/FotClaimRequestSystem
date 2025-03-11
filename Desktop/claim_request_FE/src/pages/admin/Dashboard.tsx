@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import SummaryCard from "@/components/card/SummaryCard";
 import RecentClaims from "@/components/card/RecentClaims";
-import Ratings from "@/components/card/Ratings";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { TrendingUp, CheckCircle, XCircle, Wallet } from "lucide-react";
 import styles from "./Dashboard.module.css"; 
@@ -90,10 +89,6 @@ const Dashboard = () => {
             </LineChart>
           </ResponsiveContainer>
         )}
-      </div>
-      
-      <div className="mb-6">
-        < Ratings />
       </div>
 
     </div>
