@@ -4,6 +4,7 @@ import {
   HttpClientService,
   ApiResponse,
 } from "../api/index";
+import { FormData } from "@/types/claimForm.type";
 interface Project {
   project_id: string;
   project_name: string;
@@ -18,7 +19,17 @@ interface ProjectsResponse {
   message: string;
   data: Project[];
 }
-
+interface PostClaimResponse {
+  httpStatus: number;
+  message: string;
+  data: {
+    project_id: string;
+    project_name: string;
+    start_date: string;
+    end_date: string;
+    project_status: number;
+  };
+}
 const config: HttpClientConfig = {
   baseURL: "https://claimsystem.info.vn/api/v1/",
   timeout: 10000, //simple add token later don gian
@@ -48,6 +59,15 @@ class ProjectService {
       throw error;
     }
   }
+
+  // async createClaim(data: FormData): Promise<PostClaimResponse> {
+  //   const { claims, currentSelectedProject, claimRemark } = data;
+  //   const newdata = {
+  //     project_id: currentSelectedProject.projectID,
+  //     project_name: currentSelectedProject.projectName,
+  //     start_date: currentSelectedProject.ProjectDuration.from,
+  //   };
+  // }
 }
 
 const projectService = new ProjectService(httpClient);

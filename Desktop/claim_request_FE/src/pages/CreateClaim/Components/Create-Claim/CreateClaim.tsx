@@ -9,7 +9,9 @@ import { fetchProject } from "@/redux/slices/Project/projectSlice";
 import { useSelector } from "react-redux";
 import { selectProject } from "@/redux/slices/Project/projectSlice";
 import { toast } from "react-toastify";
+import { useState } from "react";
 export default function CreateClaim() {
+  const [user, setUser] = useState<any>();
   const {
     register,
     setValue,
@@ -26,16 +28,30 @@ export default function CreateClaim() {
   useEffect(() => {
     dispatch(fetchProject());
   }, [dispatch]);
+  useEffect(() => {
+    const User = localStorage.getItem("user");
+    if (User) {
+      setUser(JSON.parse(User));
+    }
+  }, []);
   return (
     <form
       onSubmit={handleSubmit((data) => {
-        console.log(data);
         toast.success("Claim Submitted Successfully");
         reset();
       })}
     >
-      <Header prepareBy="John Doe" status="Draft" title="New Claim Request" />
-      <StaffInfo department="Dev" name="John Doe" staffID="#123123" />
+      <Header
+        prepareBy={user?.full_name}
+        status="Draft"
+        title="New Claim Request"
+      />
+
+      <StaffInfo
+        department={user?.job_rank}
+        name={user?.full_name}
+        staffID={user?.user_id}
+      />
       <ClaimBody
         ProjectList={projectList.projectList}
         append={append}
