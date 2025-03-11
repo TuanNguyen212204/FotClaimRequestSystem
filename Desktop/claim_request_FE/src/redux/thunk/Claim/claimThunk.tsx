@@ -1,8 +1,8 @@
-import httpClient from "@/constant/apiInstance";
+import httpClient from "@constant/apiInstance";
 import { ApiResponse } from "@/types/ApiResponse";
 import { Claim } from "@/types/Claim";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { delay } from "@/utils/delay";
+import { delay } from "@utils/delay";
 export const fetchAllClaimAsync = createAsyncThunk<Claim[]>(
   "claim/fetchAllClaim",
   async (): Promise<Claim[]> => {

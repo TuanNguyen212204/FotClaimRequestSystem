@@ -15,15 +15,15 @@ import ClaimStatus from "@pages/Finance/ClaimStatus";
 import PaidClaims from "@pages/Finance/PaidClaims";
 import ProjectInformation from "@/pages/admin/ProjectInformation";
 import StaffInformation from "@/pages/admin/StaffInformation";
-import CheckMail from "@/components/ui/login/CheckMail";
-import CreateNewPassword from "@/components/ui/login/CreateNewPassword";
-import ApprovedFinancePage from "@/pages/Finance/ApprovedFinancePage";
-import ApprovedApproverPage from "@/pages/Approver/ApprovedApproverPage";
-import UnauthorizedPage from "@/auth/Unauthorized.tsx";
-import Authentication from "@/auth/Authentication.tsx";
-import Authorization from "@/auth/Authorization";
-import Unauthenticated from "@/auth/Unauthenticated";
-import { ROLE } from "@/constant/role";
+import CheckMail from "@components/ui/login/CheckMail";
+import CreateNewPassword from "@components/ui/login/CreateNewPassword";
+import ApprovedFinancePage from "@pages/Finance/ApprovedFinancePage";
+import ApprovedApproverPage from "@pages/Approver/ApprovedApproverPage";
+import UnauthorizedPage from "@auth/Unauthorized.tsx";
+import Authentication from "@auth/Authentication.tsx";
+import Authorization from "@auth/Authorization";
+import Unauthenticated from "@auth/Unauthenticated";
+import { ROLE } from "@constant/role";
 const router: RouteObject[] = [
   // {
   //   element: <CheckBoxTest />,

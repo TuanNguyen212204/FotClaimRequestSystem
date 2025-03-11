@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { Claim } from "@/types/Claim";
-import { fetchAllClaimAsync } from "@/redux/thunk/Claim/claimThunk";
+import { fetchAllClaimAsync } from "@redux/thunk/Claim/claimThunk";
 
 const initialState: {
   data: Claim[];
