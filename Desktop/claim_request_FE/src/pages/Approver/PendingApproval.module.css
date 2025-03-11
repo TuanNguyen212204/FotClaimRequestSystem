@@ -69,14 +69,24 @@
   
 }
 
-.icon {
+.iconApprove {
   cursor: pointer;
   color: #6b7280;
   transition: color 0.2s ease;
 }
 
-.icon:hover {
-  color: #2563eb;
+.iconApprove:hover {
+  color: #89AC46;
+}
+
+.iconReject {
+  cursor: pointer;
+  color: #6b7280;
+  transition: color 0.2s ease;
+}
+
+.iconReject:hover {
+  color: #A31D1D;
 }
 
 .pagination {

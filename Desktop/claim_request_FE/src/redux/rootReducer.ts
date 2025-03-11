@@ -12,7 +12,7 @@ import { claimSlice } from "./slices/Claim/claimSlice";
 import { projectSlice } from "./slices/Project/projectSlice";
 import { pendingSlice } from "./slices/Approver/pendingSlice.ts";
 export const rootReducer = combineReducers({
-  // pending: pendingSlice.reducer,
+  pending: pendingSlice.reducer,
   // details: detailsSlice.reducer,
   // finance: financeSlice.reducer,
   //

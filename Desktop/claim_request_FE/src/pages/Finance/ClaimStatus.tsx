@@ -52,17 +52,17 @@ const ClaimStatus: React.FC = () => {
   }, [id, fetchData]);
 
   const columns: Column[] = [
-    { key: "id", dataIndex: "id", title: "No." },
-    { key: "duration", dataIndex: "duration", title: "Overtime Duration" },
-    { key: "date", dataIndex: "date", title: "Overtime Date" },
-    { key: "hours", dataIndex: "hours", title: "Total No.Hours" },
-    { key: "paid", dataIndex: "paid", title: "Overtime Paid" },
-    {
-      key: "status",
-      dataIndex: "status",
-      title: "Status",
-      cell: () => <span className={styles.style_td_Status}>Paid</span>,
-    },
+    { key: 'id', dataIndex: 'id', title: 'No.' },
+    { key: 'duration', dataIndex: 'duration', title: 'Overtime Duration' },
+    { key: 'date', dataIndex: 'date', title: 'Overtime Date' },
+    { key: 'hours', dataIndex: 'hours', title: 'Total No.Hours' },
+    { key: 'paid', dataIndex: 'paid', title: 'Overtime Paid' },
+    { 
+      key: 'status', 
+      dataIndex: 'status', 
+      title: 'Status',
+      cell: () => <span className={styles.style_td_Status}>Paid</span>
+    }
   ];
 
   const handlePrint = () => {
@@ -177,7 +177,10 @@ const ClaimStatus: React.FC = () => {
             Next
           </button>
         </div>
-        <button className={styles.print_button} onClick={handlePrint}>
+        <button 
+          className={styles.print_button}
+          onClick={handlePrint}
+        >
           Print
         </button>
       </div>

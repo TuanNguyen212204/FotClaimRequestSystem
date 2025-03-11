@@ -20,7 +20,13 @@ import DraftCoponent from "@/components/ui/user/DraftCoponent";
 import ApprovedFinancePage from "@/pages/Finance/ApprovedFinancePage";
 import ApprovedApproverPage from "@/pages/Approver/ApprovedApproverPage";
 import Test from "@/pages/Test";
+import TestRadio from "@/pages/Radio+TooltipTest";
 import CheckBoxTest from "@/components/ui/Checkbox/Checkboxtest";
+import CheckMail from "@/components/ui/login/CheckMail";
+import CreateNewPassword from "@/components/ui/login/CreateNewPassword";
+import  Authorization  from "@/auth/Authorization";
+import { ROLE } from "@/constant/role";
+import { PendingPage } from "@/pages/Pending/PendingApproval";
 const router: RouteObject[] = [
   {
     element: <CheckBoxTest />,
@@ -34,6 +40,23 @@ const router: RouteObject[] = [
     element: <ResetPassword />,
     path: PATH.resetPassword,
   },
+  {
+    element: <CheckMail />,
+    path: PATH.checkToMail,
+  },
+  {
+    element: <CreateNewPassword />,
+    path: PATH.createNewPassword,
+  },
+  // {
+  //   path: "/unauthorized",
+  //   element: <UnauthorizedPage />, //không đủ quyền
+  // },
+  // {
+  //   path: "/unauthenticated",
+  //   element: <Unauthenticated />, //chưa đăng nhập
+  // },
+
   {
     element: <MainLayout />,
     children: [
@@ -72,6 +95,7 @@ const router: RouteObject[] = [
       {
         path: PATH.pending,
         element: <PendingComponent />,
+        // element: <PendingPage />
       },
       {
         path: PATH.details,
@@ -83,7 +107,11 @@ const router: RouteObject[] = [
       },
       {
         path: PATH.approveDetails,
-        element: <ApproveDetail />,
+        element: (
+          <Authorization roleID={[ROLE.APPROVER]}>
+            <ApproveDetail />
+          </Authorization>
+        ),
       },
       {
         path: `${PATH.claimStatus}/:id`,
@@ -105,6 +133,10 @@ const router: RouteObject[] = [
         path: PATH.test,
         element: <Test />,
       },
+      {
+        path: PATH.test2,
+        element: <TestRadio />,
+      }
     ],
   },
 ];

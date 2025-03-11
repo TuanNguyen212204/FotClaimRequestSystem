@@ -1,12 +1,15 @@
-import { useState, ChangeEvent, useEffect } from 'react';
-import './Checkbox.css';
+import { useState, ChangeEvent, useEffect } from "react";
+import "./Checkbox.css";
 
 interface CheckboxProps {
   checked?: boolean;
   onChange?: (checked: boolean) => void;
 }
 
-export const BasicCheckbox = ({ checked: checkChange, onChange }: CheckboxProps) => {
+export const BasicCheckbox = ({
+  checked: checkChange,
+  onChange,
+}: CheckboxProps) => {
   const storageChange = `checkbox_basic`;
   const [isChecked, setIsChecked] = useState(() => {
     const storageValue = localStorage.getItem(storageChange);
@@ -38,7 +41,10 @@ export const BasicCheckbox = ({ checked: checkChange, onChange }: CheckboxProps)
   );
 };
 
-export const AnimatedCheckbox = ({ checked: checkChange, onChange }: CheckboxProps) => {
+export const AnimatedCheckbox = ({
+  checked: checkChange,
+  onChange,
+}: CheckboxProps) => {
   const storageChange = `checkbox_animated`;
   const [isChecked, setIsChecked] = useState(() => {
     const storageValue = localStorage.getItem(storageChange);
@@ -70,7 +76,10 @@ export const AnimatedCheckbox = ({ checked: checkChange, onChange }: CheckboxPro
   );
 };
 
-export const MinimalCheckbox = ({ checked: checkChange, onChange }: CheckboxProps) => {
+export const MinimalCheckbox = ({
+  checked: checkChange,
+  onChange,
+}: CheckboxProps) => {
   const storageChange = `checkbox_minimal`;
   const [isChecked, setIsChecked] = useState(() => {
     const storageValue = localStorage.getItem(storageChange);

@@ -6,9 +6,10 @@ import { useEffect, useState } from "react";
 // import { fetchAllPendingClaimAsync } from "@/redux/thunk/Approver/pendingThunk";
 import type { claimPending } from "@/types/Pending.d.ts";
 import httpClient from "@/constant/apiInstance.ts";
-import { EyeIcon, TrashIcon, CheckIcon } from "lucide-react";
+import { CheckIcon, X, CheckCircle2, XCircle } from "lucide-react";
 import styles from "@/pages/Approver/PendingApproval.module.css";
 import { Link } from "react-router-dom";
+import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
 
 
 
@@ -39,12 +40,37 @@ export const PendingComponent: React.FC = () => {
   //   navigate(`/approve/detail/${claimId}`); //sửa lại url ở đây để truyền
   // };
 
+  const handleApproveClaim = async (claimId: string) => {
+    try {
+      await httpClient.post(`/approvers/${claimId}/approve-claim`, {});
+      setPending((prevPending) =>
+        prevPending.map((claim) =>
+          claim.claim_id === claimId ? { ...claim, claim_status: "Approved" } : claim
+        )
+      );
+    } catch (error) {
+      console.log("Error approving claim: ", error);
+    }
+  };
+
+  const handleRejectClaim = async (claimId: string) => {
+    try {
+      await httpClient.post(`/approvers/${claimId}/rejected-claim`, {});
+      setPending((prevPending) =>
+        prevPending.map((claim) =>
+          claim.claim_id === claimId ? { ...claim, claim_status: "Rejected" } : claim
+        )
+      );
+    } catch (error) {
+      console.log("Error rejecting claim: ", error);
+    }
+  };
 
   if (loading) {
     return <p>Loading...</p>;
   }
   if (!pending || pending.length === 0) {
-    return <p>No data available</p>;
+    return <p>No claim!</p>;
   }
 
   const formatDateToDDMMYYYY = (date: string) => {
@@ -95,15 +121,28 @@ export const PendingComponent: React.FC = () => {
     {
       key: "action",
       dataIndex: "claim_id",
-      title: "Action",
+      title: "",
       cell: ({ value }) => (
         <div className={styles.actions}>
-          {/* <EyeIcon
-            className={styles.icon}
-          /> */}
-          <CheckIcon className={styles.icon} />
-          <TrashIcon className={styles.icon} />
-        </div> 
+          {/* <Tooltip text="Approve" position="top">
+            <CheckIcon className={styles.icon} />
+          </Tooltip>
+          <Tooltip text="Reject" position="top">
+            <X className={styles.icon} />
+          </Tooltip> */}
+          <Tooltip text="Approve" position="top">
+            <CheckCircle2
+              className={styles.iconApprove}
+              onClick={() => handleApproveClaim(value as string)}
+            />
+          </Tooltip>
+          <Tooltip text="Reject" position="top">
+            <XCircle
+              className={styles.iconReject}
+              onClick={() => handleRejectClaim(value as string)}
+            />
+          </Tooltip>
+        </div>
       ),
     },
   ];
