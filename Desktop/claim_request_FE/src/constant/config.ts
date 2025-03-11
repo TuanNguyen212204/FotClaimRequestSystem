@@ -7,7 +7,7 @@ export const PATH = {
   login: "/", //nguyen
   resetPassword: "/reset-password", //nguyen
   createRequest: "/create-claim", //an
-  pending: "/pending", //tri approver first page
+  pending: "/pending-claim", //tri  approver first page
   details: "/details/:id", //tri
   myClaims: "/my-claims", //nam claimer first page
   userClaimDetails: "/user-claim/:id",
