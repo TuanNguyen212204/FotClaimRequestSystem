@@ -5,16 +5,27 @@ import { AppDispatch } from "@redux/index";
 import {
   fetchUserByIdAsync,
   updateUserAsync,
-} from "@redux/thunk/UserInfo/userInfoThunks";
-import { User, Experience } from "@types/User.type";
+} from "@/redux/thunk/UserInfo/userInfoThunks";
+import { User } from "@/types/User";
 import { useNotification } from "@/components/ui/Notification/NotificationContext";
+import { selectUserInfo } from "@redux/selector/UserInfoSelector";
 
 export const UserInfoComponent: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const selectedUser = useSelector((state: any) => state.userInfo.selectedUser);
+  const selectedUser = useSelector(selectUserInfo);
   const [isEditing, setIsEditing] = useState(false);
-  const [staffInfo, setStaffInfo] = useState<User | null>(selectedUser || null);
+  const [staffInfo, setStaffInfo] = useState<User | null>(null);
   const notification = useNotification();
+
+  const accessToken = localStorage.getItem("access_token");
+  const userId = localStorage.getItem("user_id");
+
+  useEffect(() => {
+    if (accessToken && userId) {
+      // Nếu đã đăng nhập, fetch thông tin người dùng dựa trên user_id
+      dispatch(fetchUserByIdAsync(userId));
+    }
+  }, [dispatch, accessToken, userId]);
 
   useEffect(() => {
     dispatch(fetchUserByIdAsync("1"));
@@ -25,6 +36,23 @@ export const UserInfoComponent: React.FC = () => {
       setStaffInfo(selectedUser);
     }
   }, [selectedUser, isEditing]);
+
+  // if (!accessToken || !userId) {
+  //   return (
+  //     <div className={styles.profileContainer}>
+  //       <h2 style={{ textAlign: "center", color: "#ff4d4f" }}>
+  //         Bạn cần đăng nhập để xem thông tin cá nhân.
+  //       </h2>
+  //       <button
+  //         onClick={() => (window.location.href = "/login")}
+  //         className={styles.saveButton}
+  //         style={{ display: "block", margin: "1rem auto" }}
+  //       >
+  //         Đăng nhập
+  //       </button>
+  //     </div>
+  //   );
+  // }
 
   const validateFields = (): string | null => {
     if (!staffInfo) return "User data is invalid";
@@ -147,7 +175,7 @@ export const UserInfoComponent: React.FC = () => {
   };
 
   if (!staffInfo) {
-    return <div>User Loading...</div>;
+    return <div className={styles.profileContainer}>Đang tải thông tin...</div>;
   }
 
   return (

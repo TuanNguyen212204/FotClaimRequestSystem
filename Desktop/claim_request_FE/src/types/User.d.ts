@@ -5,22 +5,6 @@ export interface Experience {
 }
 
 export interface User {
-<<<<<<< HEAD:Desktop/claim_request_FE/src/types/User.d.ts
-  gender: string; // "male" | "female"
-  name: Name;
-  location: Location;
-  email: string;
-  login: Login;
-  dob: DateOfBirth;
-  registered: Registered;
-  phone: string;
-  cell: string;
-  id: ID;
-  picture: Picture;
-  nat: string; // Nationality
-  department: string; // e.g., "IT", "HR", "Finance", etc.
-  job_rank: string; // e.g., "Junior", "Senior", "Manager", etc.
-=======
   userID: string;
   userName: string;
   hashPassword: string;
@@ -34,7 +18,6 @@ export interface User {
   bio?: string;
   projects?: string[];
   experiences?: Experience[];
->>>>>>> feature/common-components:Desktop/claim_request_FE/src/types/User.type.ts
 }
 
 export interface NewUser extends User {
