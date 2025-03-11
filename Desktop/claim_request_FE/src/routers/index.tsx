@@ -74,7 +74,11 @@ const router: RouteObject[] = [
       },
       {
         path: PATH.myClaims,
-        element: <UserClaims />,
+        element: (
+          <Authorization role_id={[ROLE.CLAIMER]}>
+            <UserClaims />
+          </Authorization>
+        ),
       },
       {
         path: PATH.userClaimDetails,
@@ -94,7 +98,11 @@ const router: RouteObject[] = [
       },
       {
         path: PATH.pending,
-        element: <PendingComponent />,
+        element: (
+          <Authorization role_id={[ROLE.APPROVER]}>
+            <PendingComponent />
+          </Authorization>
+        ),
       },
       {
         path: PATH.details,
