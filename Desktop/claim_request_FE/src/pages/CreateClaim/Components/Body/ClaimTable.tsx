@@ -52,7 +52,7 @@ export default function ClaimTable({
         />
         <TableFoot register={register} />
       </Table>
-
+      {/*
       <button
         title="Add More"
         type="button"
@@ -62,7 +62,7 @@ export default function ClaimTable({
         className={`${styles.btn} ${styles.btn_add}`}
       >
         Add Row
-      </button>
+      </button> */}
     </div>
   );
 }

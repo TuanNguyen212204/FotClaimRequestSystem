@@ -8,6 +8,7 @@ import { AppDispatch } from "@/redux";
 import { fetchProject } from "@/redux/slices/Project/projectSlice";
 import { useSelector } from "react-redux";
 import { selectProject } from "@/redux/slices/Project/projectSlice";
+import { toast } from "react-toastify";
 export default function CreateClaim() {
   const {
     register,
@@ -22,14 +23,14 @@ export default function CreateClaim() {
   } = useCreateClaimForm();
   const dispatch = useDispatch<AppDispatch>();
   const projectList = useSelector(selectProject);
-  console.log(errors);
   useEffect(() => {
     dispatch(fetchProject());
   }, [dispatch]);
   return (
     <form
       onSubmit={handleSubmit((data) => {
-        console.log(data, "Submitted");
+        console.log(data);
+        toast.success("Claim Submitted Successfully");
         reset();
       })}
     >

@@ -23,6 +23,7 @@ export default function ProjectInfo({
   control,
 }: IProjectInfoProps): JSX.Element {
   const currentProject = useWatch({ control, name: "currentSelectedProject" });
+  console.log(currentProject);
   const { errors } = useFormState({ control, name: "currentSelectedProject" });
   function formatDateRange(from: string, to: string): string {
     const fromDate = new Date(from);
@@ -45,7 +46,7 @@ export default function ProjectInfo({
               defaultValue={""}
               onChange={(e) => {
                 const selectedProject = ProjectList.find(
-                  (p) => p.projectName === e.target.value
+                  (p) => p.projectName === e.target.value,
                 );
                 if (selectedProject) {
                   setValue("currentSelectedProject", selectedProject, {
@@ -77,7 +78,8 @@ export default function ProjectInfo({
           </p>
         )}
       </FormColumn>
-      <FormColumn>
+      {/* <FormColumn  console.log(errors);
+>
         <FormGroup
           label="Role in Project"
           input={
@@ -90,7 +92,7 @@ export default function ProjectInfo({
             />
           }
         />
-      </FormColumn>
+      </FormColumn> */}
       <FormColumn>
         <FormGroup
           label="Project Duration"
@@ -104,7 +106,7 @@ export default function ProjectInfo({
                 currentProject?.ProjectDuration?.to
                   ? formatDateRange(
                       currentProject.ProjectDuration.from,
-                      currentProject.ProjectDuration.to
+                      currentProject.ProjectDuration.to,
                     )
                   : ""
               }

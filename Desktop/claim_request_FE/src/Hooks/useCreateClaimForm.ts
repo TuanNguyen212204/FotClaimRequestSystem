@@ -18,6 +18,7 @@ export default function useCreateClaimForm() {
     mode: "onChange",
     defaultValues: {
       currentSelectedProject: {
+        projectID: "",
         projectName: "",
         RoleInTheProject: "",
         ProjectDuration: {

@@ -30,7 +30,7 @@
 .container input {
     min-height: 54px;
 }
-* {
+.container * {
     box-sizing: border-box;
     font-family: "Roboto", "Open Sans", sans-serif;
     margin: 0;

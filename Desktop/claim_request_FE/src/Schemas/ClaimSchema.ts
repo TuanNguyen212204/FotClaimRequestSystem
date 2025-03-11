@@ -2,6 +2,7 @@ import { z } from "zod";
 import { parse, differenceInHours } from "date-fns";
 
 export const ProjectInfoSchema = z.object({
+  projectID: z.string().optional(),
   projectName: z.string().nonempty("Project Name is required"),
   RoleInTheProject: z.string().optional(),
   ProjectDuration: z.object({

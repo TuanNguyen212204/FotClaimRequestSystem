@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "@/redux";
 import projectService from "@/Services/projectService";
 export type TProjectInfo = {
-  ProjectID: string;
+  projectID: string;
   projectName: string;
   RoleInTheProject: string;
   ProjectDuration: {
@@ -34,7 +34,7 @@ export const fetchProject = createAsyncThunk(
     try {
       const projects = await projectService.getProjects();
       const mappedProjects: TProjectInfo[] = projects.map((project) => ({
-        ProjectID: project.project_id,
+        projectID: project.project_id,
         projectName: project.project_name,
         RoleInTheProject: project.role || "", // TODO : THONG BAO BE HIEN TAI API KHONG TRA VE ROLE TUNG NGUOW PHAI CO MOT ROLE RIENG TORNG TUNG PROENCT
         ProjectDuration: {
@@ -66,7 +66,7 @@ const projectSlice = createSlice({
       .addCase(
         fetchProject.fulfilled,
         (state, action: PayloadAction<ProjectListResponse>) => {
-          console.log(action.payload.ProjectList);
+          console.log(action.payload.ProjectList, "action.payload.ProjectList");
           state.projectList = action.payload.ProjectList.sort((a, b) =>
             a.projectName.localeCompare(b.projectName),
           );
