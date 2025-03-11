@@ -1,4 +1,4 @@
-import ApprovedFinanceComponent from "../../components/ui/finance/ApprovedFinanceComponent";
+import ApprovedFinanceComponent from "../../components/ui/finance/ApprovedFinance";
 
 export const ApprovedFinancePage: React.FC = () => {
   return (

@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllClaims } from "../../../redux/Approver/claimsSlice";
-import styles from "./ApproverdApproverComponent.module.css";
+import { fetchAllClaims } from "../../../redux/Finance/claimsSlice";
+import styles from "./ApprovedFinance.module.css";
 import { ArrowLeftSquare, ArrowRightSquare, EyeIcon } from "lucide-react";
 import { RootState, AppDispatch } from "../../../redux/index";
+import { useNavigate } from "react-router-dom";
+import { PATH } from "../../../constant/config";
+import { selectAllClaim } from "@/redux/selector/claimSelector";
 
-export const ApprovedApproverComponent: React.FC = () => {
+export const ApprovedFinanceComponent: React.FC = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const listClaims = useSelector(
-    (state: RootState) => state.approver.listClaims
-  );
+  const listClaims = useSelector(selectAllClaim);
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 7;
@@ -40,9 +42,14 @@ export const ApprovedApproverComponent: React.FC = () => {
     }
   };
 
+  const handleUpload = (files: FileList) => {
+    console.log("Files uploaded:", files);
+    // Gửi file lên server hoặc xử lý khác
+  };
+
   return (
     <div className={styles.container}>
-      <h1 className={styles.table_header}>Approved Claims</h1>
+      {/* <h1 className={styles.table_header}>Approved Claims</h1>
       <div className={styles.container_table}>
         <table className={styles.table_body}>
           <thead>
@@ -68,7 +75,10 @@ export const ApprovedApproverComponent: React.FC = () => {
                 <td>{item.hour} hours</td>
                 <td>{item.approverName}</td>
                 <td>
-                  <EyeIcon className={styles.icon} />
+                  <EyeIcon
+                    className={styles.icon}
+                    onClick={() => navigate(PATH.approveDetails)}
+                  />
                 </td>
               </tr>
             ))}
@@ -102,9 +112,10 @@ export const ApprovedApproverComponent: React.FC = () => {
             <ArrowRightSquare />
           </span>
         </div>
-      </div>
+      </div> */}
+      hello 1
     </div>
   );
 };
 
-export default ApprovedApproverComponent;
+export default ApprovedFinanceComponent;

@@ -22,10 +22,6 @@
   vertical-align: middle;
 }
 
-th {
-  border-left: 1px solid white;
-}
-
 .table_body tr {
   height: 50px;
 }
