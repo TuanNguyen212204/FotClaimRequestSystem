@@ -2,8 +2,9 @@ export const PATH = {
   home: "/",
   userInfo: "/user-info", //tuan
   draft: "/draft",
+  checkToMail: "/check-to-mail",
+  createNewPassword: "/create-new-password",
   login: "/login", //nguyen
-  checkbox: "/checkbox",
   resetPassword: "/reset-password", //nguyen
   createRequest: "/create-claim", //an
   pending: "/pending", //tri
@@ -18,5 +19,6 @@ export const PATH = {
   approvedApprover: "/approver/approved",
   projectInformation: "/project-information",
   staffInformation: "/staff-information",
-  test: "/test",
+  unauthorized: "/unauthorized",
+  unauthenticated: "/unauthenticated",
 };

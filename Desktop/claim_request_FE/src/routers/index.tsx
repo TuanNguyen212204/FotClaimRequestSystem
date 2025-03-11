@@ -10,17 +10,21 @@ import { PendingComponent } from "@ui/approve/PendingApproval";
 import { DetailsComponents } from "@ui/approve/DetailsApproval";
 import UserClaims from "@pages/User/UserClaims";
 import { UserClaimDetails } from "@pages/User/UserClaimDetails";
-import UserSettings from "@pages/admin/UserSettings";
+import UserSettings from "@/pages/Admin/UserSettings";
 import ApproveDetail from "@pages/ClaimRequest/ApproveDetail";
 import ClaimStatus from "@pages/Finance/ClaimStatus";
 import PaidClaims from "@pages/Finance/PaidClaims";
-import ProjectInformation from "@pages/admin/ProjectInformation";
-import StaffInformation from "@pages/admin/StaffInformation";
-import DraftCoponent from "@/components/ui/user/DraftCoponent";
+import ProjectInformation from "@/pages/Admin/ProjectInformation";
+import StaffInformation from "@/pages/Admin/StaffInformation";
+import CheckMail from "@/components/ui/login/CheckMail";
+import CreateNewPassword from "@/components/ui/login/CreateNewPassword";
 import ApprovedFinancePage from "@/pages/Finance/ApprovedFinancePage";
 import ApprovedApproverPage from "@/pages/Approver/ApprovedApproverPage";
-import Test from "@/pages/Test";
-import CheckBoxTest from "@/components/ui/Checkbox/Checkboxtest";
+import UnauthorizedPage from "@/auth/Unauthorized.tsx";
+import Authentication from "@/auth/Authentication.tsx";
+import Authorization from "@/auth/Authorization";
+import Unauthenticated from "@/auth/Unauthenticated";
+import { ROLE } from "@/constant/role";
 const router: RouteObject[] = [
   {
     element: <CheckBoxTest />,
@@ -35,7 +39,27 @@ const router: RouteObject[] = [
     path: PATH.resetPassword,
   },
   {
-    element: <MainLayout />,
+    element: <CheckMail />,
+    path: PATH.checkToMail,
+  },
+  {
+    element: <CreateNewPassword />,
+    path: PATH.createNewPassword,
+  },
+  {
+    path: "/unauthorized",
+    element: <UnauthorizedPage />, //không đủ quyền
+  },
+  {
+    path: "/unauthenticated",
+    element: <Unauthenticated />, //chưa đăng nhập
+  },
+  {
+    element: (
+      <Authentication>
+        <MainLayout />
+      </Authentication>
+    ),
     children: [
       {
         path: PATH.draft,
@@ -83,7 +107,11 @@ const router: RouteObject[] = [
       },
       {
         path: PATH.approveDetails,
-        element: <ApproveDetail />,
+        element: (
+          <Authorization roleID={[ROLE.APPROVER]}>
+            <ApproveDetail />
+          </Authorization>
+        ),
       },
       {
         path: `${PATH.claimStatus}/:id`,
