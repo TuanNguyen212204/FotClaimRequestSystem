@@ -95,7 +95,7 @@ const ClaimStatus: React.FC = () => {
       key: 'overtime_paid', 
       dataIndex: 'total_working_hours', 
       title: 'Overtime Paid',
-      cell: ({ value }) => `${(value * 250000).toLocaleString('vi-VN')}vnd`
+      cell: ({ value }) => `${(value * 25000).toLocaleString('vi-VN')}vnd`
     },
     { 
       key: 'status', 
