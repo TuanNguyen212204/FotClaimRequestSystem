@@ -9,17 +9,21 @@ interface ClaimDetail {
   id: string;
   duration: string;
   date: string;
-  hours: string;
-  paid: string;
+  hours: number;
+  paid: number;
   status: string;
 }
 
 interface ClaimInfo {
-  claimId: string;
-  projectName: string;
-  duration: string;
-  staffName: string;
-  projectId: string;
+  claim_id: string;
+  user_id: string;
+  project: {
+    project_id: string;
+    project_name: string;
+    time_durations: string;
+  };
+  total_working_hours: number;
+  claim_status: string;
 }
 
 const ClaimStatus: React.FC = () => {
@@ -40,7 +44,7 @@ const ClaimStatus: React.FC = () => {
   useEffect(() => {
     const fetchClaimInfo = async () => {
       try {
-        const response = await httpClient.get<ClaimInfo>(`/claims/${id}`);
+        const response = await httpClient.get<ClaimInfo>(`https://claimsystem.info.vn/api/v1/finance/claims/paid/{claimID}`);
         setClaimInfo(response.data);
       } catch (error) {
         console.error('Failed to fetch claim info:', error);
@@ -48,15 +52,25 @@ const ClaimStatus: React.FC = () => {
     };
 
     void fetchClaimInfo();
-    void fetchData(`/claims/${id}/details`);
+    void fetchData(`https://claimsystem.info.vn/api/v1/finance/claims/paid/{claimID}`);
   }, [id, fetchData]);
 
   const columns: Column[] = [
     { key: 'id', dataIndex: 'id', title: 'No.' },
     { key: 'duration', dataIndex: 'duration', title: 'Overtime Duration' },
     { key: 'date', dataIndex: 'date', title: 'Overtime Date' },
-    { key: 'hours', dataIndex: 'hours', title: 'Total No.Hours' },
-    { key: 'paid', dataIndex: 'paid', title: 'Overtime Paid' },
+    { 
+      key: 'hours', 
+      dataIndex: 'hours', 
+      title: 'Total Hours',
+      cell: ({ value }) => <span>{value} hours</span>
+    },
+    { 
+      key: 'paid', 
+      dataIndex: 'paid', 
+      title: 'Overtime Paid',
+      cell: ({ value }) => <span>${value}</span>
+    },
     { 
       key: 'status', 
       dataIndex: 'status', 
@@ -68,22 +82,16 @@ const ClaimStatus: React.FC = () => {
   const handlePrint = () => {
     window.print();
   };
-  if (loading) {
+
+  if (loading || !claimInfo) {
     return (
       <div className={styles.container}>
         <h1 className={styles.claimStatus_h1}>Claim Status</h1>
-        <p>Loading...</p>
+        <p>{loading ? "Loading..." : `No claim information found for ID: ${id}`}</p>
       </div>
     );
   }
-  if (!claimInfo) {
-    return (
-      <div className={styles.container}>
-        <h1 className={styles.claimStatus_h1}>Claim Status</h1>
-        <p>Không tìm thấy thông tin claim với ID: {id}</p>
-      </div>
-    );
-  }
+
   return (
     <div className={styles.container}>
       <div>
@@ -91,13 +99,14 @@ const ClaimStatus: React.FC = () => {
       </div>
       <div className={styles.box}>
         <div style={{ marginLeft: "50px" }}>
-          <p>Claim ID : {claimInfo.claimId}</p>
-          <p>Project Name : {claimInfo.projectName}</p>
-          <p>Project Duration : {claimInfo.duration}</p>
+          <p>Claim ID: {claimInfo?.claim_id || 'N/A'}</p>
+          <p>Project Name: {claimInfo?.project?.project_name || 'N/A'}</p>
+          <p>Project Duration: {claimInfo?.project?.time_durations || 'N/A'}</p>
         </div>
         <div>
-          <p>Staff Name : {claimInfo.staffName}</p>
-          <p>Project ID : {claimInfo.projectId}</p>
+          <p>User ID: {claimInfo?.user_id || 'N/A'}</p>
+          <p>Project ID: {claimInfo?.project?.project_id || 'N/A'}</p>
+          <p>Total Working Hours: {claimInfo?.total_working_hours || 'N/A'}</p>
         </div>
       </div>
       <div className={styles["table-container"]}>

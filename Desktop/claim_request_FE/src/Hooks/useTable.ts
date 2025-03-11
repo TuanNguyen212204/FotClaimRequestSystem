@@ -18,13 +18,8 @@ interface UseTableProps {
 }
 
 interface ApiResponse<T> {
-  data: T[];
-  pagination?: {
-    total: number;
-    totalPages: number;
-    currentPage: number;
-    pageSize: number;
-  };
+  success: boolean;
+  claims: T[];
 }
 
 export function useTable<T>({ initialPageSize = 10 }: UseTableProps = {}) {
@@ -40,7 +35,7 @@ export function useTable<T>({ initialPageSize = 10 }: UseTableProps = {}) {
   });
 
   const fetchData = useCallback(async (url: string) => {
-    setState(prev => ({ ...prev, loading: true, lastUrl: url })); // Store the URL
+    setState(prev => ({ ...prev, loading: true, lastUrl: url }));
     try {
       const params = {
         page: state.pagination.currentPage,
@@ -48,15 +43,18 @@ export function useTable<T>({ initialPageSize = 10 }: UseTableProps = {}) {
       };
 
       const response = await httpClient.get<ApiResponse<T>>(url, params);
-      const { data, pagination } = response.data;
+      
+      // Update to match API response structure
+      const responseData = response.data?.claims || [];
       
       setState(prev => ({
-        data,
+        ...prev,
+        data: responseData,
         loading: false,
-        pagination: pagination || {
+        pagination: {
           ...prev.pagination,
-          total: data.length,
-          totalPages: Math.ceil(data.length / prev.pagination.pageSize)
+          total: responseData.length,
+          totalPages: Math.ceil(responseData.length / prev.pagination.pageSize)
         }
       }));
     } catch (error) {
