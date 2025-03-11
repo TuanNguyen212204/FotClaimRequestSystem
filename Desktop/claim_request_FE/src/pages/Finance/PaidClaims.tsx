@@ -4,7 +4,6 @@ import styles from "./PaidClaims.module.css";
 import { PATH } from "../../constant/config";
 import { useTable } from "../../Hooks/useTable";
 import { Column } from "../../components/ui/Table/Table";
-import httpClient from "../../constant/apiInstance";
 
 interface Project {
   project_id: string;
@@ -15,32 +14,49 @@ interface Project {
 interface ClaimData {
   claim_id: string;
   user_id: string;
+  full_name: string;
+  submitted_date: string;
+  approved_date: string | null;
   total_working_hours: number;
   claim_status: string;
   project: Project;
 }
 
-interface ApiResponse {
-  success: boolean;
-  claims: ClaimData[];
-}
+const formatDate = (dateString: string | null) => {
+  if (!dateString) return 'Pending';
+  return new Date(dateString).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  });
+};
 
 const PaidClaims: React.FC = () => {
   const navigate = useNavigate();
-  const { data: claims, loading, fetchData } = useTable<ClaimData>({
+  const { data: claims, loading, pagination, setPage, fetchData } = useTable<ClaimData>({
     initialPageSize: 5
   });
 
   useEffect(() => {
-    // Gọi fetchData trực tiếp với URL
-    void fetchData('finance/claims/paid');
+    void fetchData('https://claimsystem.info.vn/api/v1/finance/claims/paid');
   }, [fetchData]);
 
   const columns: Column[] = [
     { key: 'claim_id', dataIndex: 'claim_id', title: 'Claim ID' },
-    { key: 'user_id', dataIndex: 'user_id', title: 'User ID' },
+    { key: 'full_name', dataIndex: 'full_name', title: 'Employee Name' },
     { key: 'project_name', dataIndex: ['project', 'project_name'], title: 'Project Name' },
-    { key: 'time_durations', dataIndex: ['project', 'time_durations'], title: 'Project Duration' },
+    { 
+      key: 'submitted_date', 
+      dataIndex: 'submitted_date', 
+      title: 'Submitted Date',
+      cell: ({ value }) => <span>{formatDate(value)}</span>
+    },
+    { 
+      key: 'approved_date', 
+      dataIndex: 'approved_date', 
+      title: 'Approved Date',
+      cell: ({ value }) => <span>{formatDate(value)}</span>
+    },
     { 
       key: 'total_working_hours', 
       dataIndex: 'total_working_hours', 
@@ -116,6 +132,26 @@ const PaidClaims: React.FC = () => {
           </tbody>
         </table>
       </div>
+
+      {pagination && (
+        <div className={styles.pagination}>
+          <button 
+            onClick={() => setPage(pagination.currentPage - 1)}
+            disabled={pagination.currentPage === 1}
+          >
+            Previous
+          </button>
+          <span>
+            Page {pagination.currentPage} of {pagination.totalPages}
+          </span>
+          <button 
+            onClick={() => setPage(pagination.currentPage + 1)}
+            disabled={pagination.currentPage === pagination.totalPages}
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 };

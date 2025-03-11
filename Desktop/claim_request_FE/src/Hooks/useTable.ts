@@ -1,10 +1,9 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import httpClient from '../constant/apiInstance';
 
 interface TableState<T> {
   data: T[];
   loading: boolean;
-  lastUrl?: string; // Add this property
   pagination: {
     currentPage: number;
     totalPages: number;
@@ -19,7 +18,13 @@ interface UseTableProps {
 
 interface ApiResponse<T> {
   success: boolean;
-  claims: T[];
+  data: T[];
+  pagination?: {
+    total: number;
+    totalPages: number;
+    currentPage: number;
+    pageSize: number;
+  };
 }
 
 export function useTable<T>({ initialPageSize = 10 }: UseTableProps = {}) {
@@ -35,7 +40,7 @@ export function useTable<T>({ initialPageSize = 10 }: UseTableProps = {}) {
   });
 
   const fetchData = useCallback(async (url: string) => {
-    setState(prev => ({ ...prev, loading: true, lastUrl: url }));
+    setState(prev => ({ ...prev, loading: true }));
     try {
       const params = {
         page: state.pagination.currentPage,
@@ -44,17 +49,13 @@ export function useTable<T>({ initialPageSize = 10 }: UseTableProps = {}) {
 
       const response = await httpClient.get<ApiResponse<T>>(url, params);
       
-      // Update to match API response structure
-      const responseData = response.data?.claims || [];
-      
       setState(prev => ({
         ...prev,
-        data: responseData,
+        data: response.data?.data || [],
         loading: false,
         pagination: {
           ...prev.pagination,
-          total: responseData.length,
-          totalPages: Math.ceil(responseData.length / prev.pagination.pageSize)
+          ...(response.data?.pagination || {}),
         }
       }));
     } catch (error) {
@@ -84,26 +85,11 @@ export function useTable<T>({ initialPageSize = 10 }: UseTableProps = {}) {
     }));
   }, []);
 
-  // Refetch when page or pageSize changes
-  useEffect(() => {
-    if (state.lastUrl) {
-      void fetchData(state.lastUrl);
-    }
-  }, [state.pagination.currentPage, state.pagination.pageSize]);
-
   const addData = useCallback((newData: T) => {
-    setState(prev => {
-      const updatedData = [...prev.data, newData];
-      return {
-        ...prev,
-        data: updatedData,
-        pagination: {
-          ...prev.pagination,
-          total: updatedData.length,
-          totalPages: Math.ceil(updatedData.length / prev.pagination.pageSize)
-        }
-      };
-    });
+    setState(prev => ({
+      ...prev,
+      data: [...prev.data, newData],
+    }));
   }, []);
 
   return {
