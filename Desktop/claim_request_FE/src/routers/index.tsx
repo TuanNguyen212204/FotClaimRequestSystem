@@ -26,10 +26,10 @@ import Authorization from "@/auth/Authorization";
 import Unauthenticated from "@/auth/Unauthenticated";
 import { ROLE } from "@/constant/role";
 const router: RouteObject[] = [
-  {
-    element: <CheckBoxTest />,
-    path: PATH.checkbox,
-  },
+  // {
+  //   element: <CheckBoxTest />,
+  //   path: PATH.checkbox,
+  // },
   {
     element: <LoginForm />,
     path: PATH.login,
@@ -61,10 +61,10 @@ const router: RouteObject[] = [
       </Authentication>
     ),
     children: [
-      {
-        path: PATH.draft,
-        element: <DraftCoponent />,
-      },
+      // {
+      //   path: PATH.draft,
+      //   element: <DraftCoponent />,
+      // },
       {
         path: PATH.home,
         element: <HomePage />,
@@ -129,10 +129,10 @@ const router: RouteObject[] = [
         path: PATH.staffInformation,
         element: <StaffInformation />,
       },
-      {
-        path: PATH.test,
-        element: <Test />,
-      },
+      // {
+      //   path: PATH.test,
+      //   element: <Test />,
+      // },
     ],
   },
 ];

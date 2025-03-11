@@ -24,8 +24,8 @@ function LoginForm() {
     onSubmit: async (values) => {
       try {
         const response = await fetch(
-          "http://localhost:4000/api/v1/auth/login",
-          // "https://claimsystem.info.vn/api/v1/auth/login", //test VPS
+          // "http://localhost:4000/api/v1/auth/login",
+          "https://claimsystem.info.vn/api/v1/auth/login", //test VPS
           {
             method: "POST",
             headers: {
