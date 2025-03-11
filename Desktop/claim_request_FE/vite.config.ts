@@ -26,6 +26,7 @@ export default defineConfig({
       "@Hooks": fileURLToPath(new URL("./src/Hooks", import.meta.url)),
       "@user": fileURLToPath(new URL("./src/pages/User", import.meta.url)),
       "@assets": fileURLToPath(new URL("./src/assets/", import.meta.url)),
+      "@auth": fileURLToPath(new URL("./src/auth", import.meta.url)),
     },
   },
   server: {

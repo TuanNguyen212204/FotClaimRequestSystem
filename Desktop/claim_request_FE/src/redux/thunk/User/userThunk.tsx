@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { User } from "@/types/User";
 import { ApiResponse } from "@/types/ApiResponse";
-import { delay } from "@/utils/delay";
+import { delay } from "@utils/delay";
 import httpClient from "@constant/apiInstance";
 //Hàm này dùng để fetchAllUser
 export const fetchAllUserAsync = createAsyncThunk<User[]>(
