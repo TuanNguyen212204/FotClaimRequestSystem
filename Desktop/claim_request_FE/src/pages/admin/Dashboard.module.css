@@ -1,55 +1,30 @@
+.chartContainer, .lastClaimCard, .statsContainer {
+  background-color: white; /* Giữ nền trắng để nổi bật */
+  padding: 1.5rem; /* Tăng padding giúp nội dung thoáng hơn */
+  border-radius: 0.75rem; /* Bo góc mềm mại */
+  border: 1px solid #ddd; /* Viền nhẹ giúp phân biệt với nền */
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1); /* Tăng độ nổi bật */
+}
 
 .flex-container {
-    padding: 1rem;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-  
-  @media (min-width: 768px) {
-    .container {
-      grid-template-columns: repeat(3, 1fr);
-    }
-  }
-  
-  .chartContainer {
-    grid-column: 1 / -1;
-    background-color: white;
-    padding: 1rem;
-    border-radius: 0.75rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  }
-  
-  .header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 1rem;
-  }
-  
-  .title {
-    font-size: 1.125rem;
-    font-weight: 600;
-  }
-  
-  .select {
-    border: 1px solid #e2e8f0;
-    padding: 0.5rem;
-    border-radius: 0.375rem;
-  }
-
-  .lastClaimCard {
-    min-height: 100px; 
+  padding: 1.5rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem; /* Tăng khoảng cách giữa các box */
 }
 
-.statsContainer {
-  margin-bottom: 20px; 
+@media (min-width: 768px) {
+  .container {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem; /* Tăng khoảng cách giữa các box trên màn hình lớn */
+  }
 }
 
-.lastClaimTable {
-  border-collapse: collapse;
-  width: 100%;
+.lastClaimTable th {
+  background-color: #f8f9fa; /* Nền nhạt cho tiêu đề bảng */
+  border-bottom: 2px solid #ddd; /* Tạo sự tách biệt */
 }
+
 .lastClaimTable th, .lastClaimTable td {
-  padding: 8px 12px;
-  text-align: left;
+  border: 1px solid #ddd; /* Viền từng ô giúp bảng dễ nhìn hơn */
 }

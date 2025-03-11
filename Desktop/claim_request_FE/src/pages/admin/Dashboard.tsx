@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import SummaryCard from "@/components/card/SummaryCard";
-import RecentClaims from "@/components/card/RecentClaims";
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
-import { TrendingUp, CheckCircle, XCircle, Wallet } from "lucide-react";
-import styles from "./Dashboard.module.css"; 
+import DashboardHeader from "@/components/card/DashboardHeader";
+import { Chart } from "react-google-charts";
+import { TrendingUp, CheckCircle, XCircle, Wallet, Briefcase, Users, Clock, ClipboardList } from "lucide-react";
+import styles from "./Dashboard.module.css";
 
 const Dashboard = () => {
   const [timeframe, setTimeframe] = useState("monthly");
@@ -12,32 +12,15 @@ const Dashboard = () => {
 
   const fetchData = async () => {
     setLoading(true);
-    let url = "";
-
-    switch (timeframe) {
-      case "weekly":
-        url = ""; // API weekly sau
-        break;
-      case "yearly":
-        url = "https://67b847da699a8a7baef3677f.mockapi.io/yearly";
-        break;
-      default:
-        url = "https://67b847da699a8a7baef3677f.mockapi.io/monthly";
-    }
-
-    if (!url) {
-      setData([]); 
-      setLoading(false);
-      return;
-    }
-
+    let url = `https://67b847da699a8a7baef3677f.mockapi.io/${timeframe}`;
+    
     try {
       const response = await fetch(url);
       const result = await response.json();
       setData(result);
     } catch (error) {
       console.error("Error fetching data:", error);
-      setData([]); 
+      setData([]);
     } finally {
       setLoading(false);
     }
@@ -47,26 +30,32 @@ const Dashboard = () => {
     fetchData();
   }, [timeframe]);
 
+  const chartData = [
+    ["Time", "Pending", "Approved", "Rejected"],
+    ...data.map(item => [item.name, item.pending, item.approved, item.rejected])
+  ];
+
   return (
     <div className={styles.container}>
-      
-      <div className="grid grid-cols-4 gap-4 mb-6">
-        <SummaryCard title="Pending Claims" value={30} icon={<TrendingUp />} type="warning" />
-        <SummaryCard title="Approved Claims" value={50} icon={<CheckCircle />} type="success" />
-        <SummaryCard title="Rejected Claims" value={10} icon={<XCircle />} type="error" />
-        <SummaryCard title="Paid" value={15} icon={<Wallet />} type="primary" />
+      <DashboardHeader />
+
+      {/* Thống kê tổng quan */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-12">
+        <SummaryCard title="Total Claims" value={105} icon={<ClipboardList />} percentage={10} />
+        <SummaryCard title="Pending Claims" value={30} icon={<Clock />} percentage={-5} />
+        <SummaryCard title="Approved Claims" value={50} icon={<CheckCircle />} percentage={20} />
+        <SummaryCard title="Rejected Claims" value={10} icon={<XCircle />} percentage={-12} />
+        <SummaryCard title="Total Users" value={500} icon={<Users />} percentage={8} />
+        <SummaryCard title="Total Projects" value={20} icon={<Briefcase />} percentage={15} />
       </div>
 
-      <div className="mb-6">
-        <RecentClaims />
-      </div>
-
+      {/* Biểu đồ */}
       <div className={styles.chartContainer}>
         <div className={styles.header}>
           <h2 className={styles.title}>📊 Claim Status Overview</h2>
-          <select 
-            className={styles.select} 
-            value={timeframe} 
+          <select
+            className={`${styles.select} p-2 border rounded-md shadow-sm transition-all duration-300`}
+            value={timeframe}
             onChange={(e) => setTimeframe(e.target.value)}
           >
             <option value="weekly">Weekly</option>
@@ -76,21 +65,26 @@ const Dashboard = () => {
         </div>
 
         {loading ? (
-          <p>Loading...</p>
+          <p className="text-center text-gray-500">Loading data...</p>
         ) : (
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={data}>
-              <XAxis dataKey="name" />
-              <YAxis /> 
-              <Tooltip />
-              <Line type="monotone" dataKey="pending" stroke="#FFA500" strokeWidth={2} dot={false} />
-              <Line type="monotone" dataKey="approved" stroke="#00C853" strokeWidth={2} dot={false} />
-              <Line type="monotone" dataKey="rejected" stroke="#D50000" strokeWidth={2} dot={false} />
-            </LineChart>
-          </ResponsiveContainer>
+          <Chart
+            chartType="LineChart"
+            width="100%"
+            height="300px"
+            data={chartData}
+            options={{
+              hAxis: { title: "Time" },
+              vAxis: { title: "Claims" },
+              series: {
+                0: { color: "#FFA500" }, // Pending (Orange)
+                1: { color: "#00C853" }, // Approved (Green)
+                2: { color: "#D50000" }  // Rejected (Red)
+              },
+              legend: { position: "bottom" }
+            }}
+          />
         )}
       </div>
-
     </div>
   );
 };

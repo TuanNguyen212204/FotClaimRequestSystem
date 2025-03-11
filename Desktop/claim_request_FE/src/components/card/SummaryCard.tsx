@@ -1,21 +1,33 @@
 import { ReactNode } from "react";
+import styles from "./SummaryCard.module.css";
+import { ArrowUp, ArrowDown } from "lucide-react";
 
-const SummaryCard = ({ title, value, icon, type }: { title: string; value: number; icon: ReactNode; type: "primary" | "error" | "success" | "warning" }) => {
-  const colors = {
-    primary: "bg-blue-100 text-blue-500",
-    error: "bg-red-100 text-red-500",
-    success: "bg-green-100 text-green-500",
-    warning: "bg-yellow-100 text-yellow-500",
-  };
-
+const SummaryCard = ({
+  title,
+  value,
+  icon,
+  percentage,
+}: {
+  title: string;
+  value: number;
+  icon: ReactNode;
+  percentage: number;
+}) => {
   return (
-    <div className={`p-4 rounded-xl shadow ${colors[type]}`}>
-      <div className="flex items-center">
-        <div className="text-2xl">{icon}</div>
-        <h2 className="text-lg font-semibold ml-2">{title}</h2>
+    <div className={`card ${styles.card}`}>
+      <div className={styles.header}>
+        <div className={styles.icon}>{icon}</div>
+        <h2 className={styles.title}>{title}</h2>
       </div>
-      <p className="text-2xl font-bold mt-2">{value}</p>
+      <p className={`${styles.value}`}>{value}</p>
+      <div className={`flex items-center ${percentage >= 0 ? "text-green-600" : "text-red-600"} ${styles.percentage}`}>
+        {percentage >= 0 ? <ArrowUp size={16} /> : <ArrowDown size={16} />}
+      <span className="ml-1 font-semibold">{Math.abs(percentage)}%</span>
+      <span className="text-gray-500 ml-1 text-sm">vs last month</span>
+      </div>
     </div>
+
+
   );
 };
 
