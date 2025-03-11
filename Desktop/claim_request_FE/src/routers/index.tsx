@@ -103,7 +103,11 @@ const router: RouteObject[] = [
       },
       {
         path: PATH.allUserInformation,
-        element: <AllUserInformation />,
+        element: (
+          <Authorization role_id={[ROLE.ADMIN]}>
+            <AllUserInformation />
+          </Authorization>
+        ),
       },
       {
         path: PATH.approveDetails,
