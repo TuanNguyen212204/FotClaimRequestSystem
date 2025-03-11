@@ -4,7 +4,7 @@ import styles from "./PendingApproval.module.css";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { fetchAllClaims, deleteClaim } from "@/redux/Claim/store/pendingThunk";
+import { fetchAllClaims, deleteClaim } from "@/redux/thunk/pendingThunk.ts";
 import { useAppDispatch } from "@redux/index";
 import type { RootState } from "@redux/index";
 import { toast } from "react-toastify";
@@ -12,9 +12,10 @@ import { Link } from "react-router-dom";
 import { Tooltip } from "@components/ui/Tooltip/Tooltip";
 import { RadioGroup } from "@/components/ui/Radio/Radio";
 
+
 export const PendingComponent: React.FC = () => {
   const dispatch = useAppDispatch();
-  const claims = useSelector((state: RootState) => state.claim.data);
+  const claims = useSelector((state: RootState) => state.pending.listClaims);
   const [selectedValue, setSelectedValue] = useState("all");
 
   useEffect(() => {

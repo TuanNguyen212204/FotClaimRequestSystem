@@ -5,9 +5,10 @@ import { combineReducers } from "@reduxjs/toolkit";
 // import { financeSlice } from "./slices/Finance/claimsSlice";
 // import claimsReducer from "./slices/Claim/claimsSlice";
 // import { approverSlice } from "./slices/Approver/claimsSlice";
+import { pendingSlice } from "./thunk/pendingThunk.ts";
 import userReducer from "@redux/slices/UserInfo/UserInfoSlice"
 export const rootReducer = combineReducers({
-  // pending: pendingSlice.reducer,
+  pending: pendingSlice.reducer,
   // details: detailsSlice.reducer,
   // finance: financeSlice.reducer,
   // userClaims: userClaimSlice.reducer,

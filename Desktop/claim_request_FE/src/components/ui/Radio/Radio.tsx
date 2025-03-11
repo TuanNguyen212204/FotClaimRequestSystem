@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from "./Radio.module.css";
 
 export interface RadioGroupProps {
-  options: Option[];
+  options: any[];
   label?: string;
   onSelect: (value: string) => void;
   disabled: boolean;
@@ -35,7 +35,7 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
 }) => {
   // const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [selectedLabel, setSelectedLabel] = useState<string | null>(label);
-  const [selected, setSelected] = useState<string | null>(selectedOption);
+  const [selected, setSelected] = useState(selectedOption || configDefault.value);
 
   useEffect(() => {
     setSelected(selectedOption);
@@ -95,7 +95,7 @@ export const RadioGroupButton: React.FC<RadioGroupProps> = ({
   //   configDefault.value || null
   // );
   const [selectedLabel, setSelectedLabel] = useState<string | null>(label);
-  const [selected, setSelected] = useState<string | null>(selectedOption);
+  const [selected, setSelected] = useState(selectedOption || configDefault.value);
 
   useEffect(() => {
     setSelected(selectedOption);
