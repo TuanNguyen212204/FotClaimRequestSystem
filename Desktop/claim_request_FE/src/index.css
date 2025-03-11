@@ -4,9 +4,8 @@
 @layer theme, base, components, utilities;
 @import "tailwindcss/theme.css" layer(theme);
 * {
-  font-family: "Roboto", sans-serif;
+  font-family: "Poppins", sans-serif;
   font-style: normal;
-  font-weight: 350;
 }
 
 body {

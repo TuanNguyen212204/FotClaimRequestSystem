@@ -6,6 +6,7 @@ import { useFormik } from "formik";
 import { Typewriter } from "react-simple-typewriter";
 import httpClient from "@/constant/apiInstance";
 import { useState } from "react";
+import { PATH } from "@/constant/config";
 
 async function loginUser(values: {
   username: string;
@@ -23,9 +24,15 @@ async function loginUser(values: {
   }
 }
 
+const approverFirstPage = PATH.pending;
+const financeFirstPage = PATH.approvedFinance;
+const claimerFirstPage = PATH.myClaims;
+const adminFirstPage = PATH.allUserInformation;
+
 function LoginForm() {
   const navigate = useNavigate();
   const [loginError, setLoginError] = useState("");
+
 
   const initialValues = {
     username: "",
@@ -46,13 +53,13 @@ function LoginForm() {
         await loginUser(values);
         const role_id = localStorage.getItem("role_id");
         if (role_id === "1") {
-          navigate("/user-information");
+          navigate(`${adminFirstPage}`);
         } else if (role_id === "2") {
-          navigate("/pending");
+          navigate(`${approverFirstPage}`);
         } else if (role_id === "3") {
-          navigate("/finance/approved");
+          navigate(`${financeFirstPage}`);
         } else if (role_id === "4") {
-          navigate("/my-claims");
+          navigate(`${claimerFirstPage}`);
         } else {
           // alert("Login failed"); // chưa điều hướng
           setLoginError("Login failed: Unknown role");

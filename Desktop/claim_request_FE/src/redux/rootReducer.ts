@@ -19,8 +19,7 @@ export const rootReducer = combineReducers({
   //
   user: userSlice.reducer,
   claim: claimSlice.reducer,
-  project: projectSlice.reducer,
-  pending: pendingSlice.reducer
+  pending: pendingSlice.reducer,
   //
   // userClaims: userClaimSlice.reducer,
   // claims: claimsReducer,
