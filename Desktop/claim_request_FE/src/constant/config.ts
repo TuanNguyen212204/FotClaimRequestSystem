@@ -7,15 +7,15 @@ export const PATH = {
   login: "/", //nguyen
   resetPassword: "/reset-password", //nguyen
   createRequest: "/create-claim", //an
-  pending: "/pending", //tri
+  pending: "/pending", //tri approver first page
   details: "/details/:id", //tri
-  myClaims: "/my-claims", //nam
+  myClaims: "/my-claims", //nam claimer first page
   userClaimDetails: "/user-claim/:id",
-  allUserInformation: "/user-information",
+  allUserInformation: "/user-information", //admin first page
   approveDetails: "/approve-details",
   claimStatus: "/claim-status/:id",
   paidClaim: "/paid-claim",
-  approvedFinance: "/finance/approved",
+  approvedFinance: "/finance/approved", //finance first page
   approvedApprover: "/approver/approved",
   projectInformation: "/project-information",
   staffInformation: "/staff-information",

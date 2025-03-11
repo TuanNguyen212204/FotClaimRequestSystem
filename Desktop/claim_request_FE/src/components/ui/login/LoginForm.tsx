@@ -4,9 +4,28 @@ import fot from "@assets/fot.png";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { Typewriter } from "react-simple-typewriter";
+import httpClient from "@/constant/apiInstance";
+import { useState } from "react";
+
+async function loginUser(values: {
+  username: string;
+  password: string;
+}): Promise<void> {
+  const response = await httpClient.post("auth/login", values);
+  if (response.status === 200) {
+    const data = response.data as {
+      tokens: { access: { token: string } };
+      user: { user_id: string; role_id: number };
+    };
+    localStorage.setItem("access_token", data.tokens.access.token);
+    localStorage.setItem("user_id", data.user.user_id);
+    localStorage.setItem("role_id", data.user.role_id.toString());
+  }
+}
 
 function LoginForm() {
   const navigate = useNavigate();
+  const [loginError, setLoginError] = useState("");
 
   const initialValues = {
     username: "",
@@ -21,32 +40,37 @@ function LoginForm() {
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: loginSchema,
-    onSubmit: async (values) => {
+    onSubmit: async (values, { setFieldError, setSubmitting }) => {
       try {
-        const response = await fetch(
-          // "http://localhost:4000/api/v1/auth/login",
-          "https://claimsystem.info.vn/api/v1/auth/login", //test VPS
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(values),
-          }
-        );
-        const data = await response.json();
-
-        if (response.ok) {
-          localStorage.setItem("access_token", data.tokens.access.token);
-          localStorage.setItem("user", JSON.stringify(data.user));
-
+        setLoginError("");
+        await loginUser(values);
+        const role_id = localStorage.getItem("role_id");
+        if (role_id === "1") {
           navigate("/user-information");
+        } else if (role_id === "2") {
+          navigate("/pending");
+        } else if (role_id === "3") {
+          navigate("/finance/approved");
+        } else if (role_id === "4") {
+          navigate("/my-claims");
         } else {
-          alert(data.message || "Login failed");
+          // alert("Login failed"); // chưa điều hướng
+          setLoginError("Login failed: Unknown role");
         }
-      } catch (error) {
-        console.error("Login error:", error);
-        alert("An error occurred, please try again later.");
+      } catch (error: any) {
+        const errMsg =
+          error.response?.data?.message ||
+          error.message ||
+          "Msg Login thất bại ngay chỗ onSubmit, không nhận thông báo từ backend đưa lên";
+        if (errMsg.toLowerCase().includes("username")) {
+          setFieldError("username", errMsg);
+        } else if (errMsg.toLowerCase().includes("password")) {
+          setFieldError("password", errMsg);
+        } else {
+          alert(errMsg);
+        }
+      } finally {
+        setSubmitting(false);
       }
     },
   });
