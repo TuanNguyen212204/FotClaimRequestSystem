@@ -16,6 +16,7 @@
     top: 0;
     transition: width 0.3s ease;
     overflow: hidden;
+    /* margin-top: 50px; */
   }
   
   .collapsed {
@@ -42,6 +43,8 @@
   
   .logoImage {
     width: 60%;
+    height: auto;
+    object-fit: cover;
     transition: width 0.3s ease;
   }
   
@@ -56,6 +59,7 @@
     padding: 10px;
     cursor: pointer;
     width: 100%;
+    border-radius: 5px;
   }
   
   .menu {
@@ -163,4 +167,15 @@
     border-left: 5px solid transparent;
     border-right: 5px solid transparent;
     border-top: 5px solid white; /* Change color as needed */
+}
+
+.languageToggle {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+  display: block;
+  text-align: center;
 }

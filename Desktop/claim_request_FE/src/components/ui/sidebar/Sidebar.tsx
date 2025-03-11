@@ -82,7 +82,7 @@ export const Sidebar = () => {
         </div>
 
         <div className={styles.logo}>
-          <img src="/imgs/logo.png" alt="logo" className={styles.logoImage} />
+          <img src="/imgs/FOT.jpg" alt="logo" className={styles.logoImage} />
         </div>
 
         {/* Bỏ nút Create Claims nếu vai trò là approve hoặc finance */}

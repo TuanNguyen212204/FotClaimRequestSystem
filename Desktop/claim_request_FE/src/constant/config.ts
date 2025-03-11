@@ -3,6 +3,8 @@ export const PATH = {
   home: "/",
   userInfo: "/user-info", //tuan
   draft: "/draft",
+  checkToMail: "/check-to-mail",
+  createNewPassword: "/create-new-password",
   login: "/login", //nguyen
   checkbox: "/checkbox",
   resetPassword: "/reset-password", //nguyen
@@ -21,4 +23,5 @@ export const PATH = {
   staffInformation: "/staff-information",
   dashboard: "/dashboard",
   test: "/test",
+  test2: "/radio-tooltip-test",
 };

@@ -11,7 +11,7 @@ import { PATH } from "../../constant/config";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux";
-import { fetchUserClaims } from "../../redux/slice/userClaimSlice";
+import { fetchUserClaims } from "../../redux/Claim/store/userClaimSlice";
 
 
 const UserClaims = () => {

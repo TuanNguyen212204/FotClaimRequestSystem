@@ -135,7 +135,7 @@ const ClaimStatus: React.FC = () => {
           </tbody>
         </table>
       </div>
-      
+
       <div className={styles.pagination_container}>
         <div className={styles.pagination}>
           <button 

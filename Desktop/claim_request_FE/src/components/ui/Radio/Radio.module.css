@@ -1,0 +1,136 @@
+.radioGroupContainer {
+    margin-bottom: 20px;
+}
+
+.radioGroup {
+    display: flex;
+    flex-direction: row; 
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.radioLabel {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 16px;
+    color: #374151;
+}
+
+.radioInput {
+    display: none;
+}
+
+.radioCustom {
+    width: 16px;
+    height: 16px;
+    border: 2px solid #2C3E50;
+    border-radius: 50%;
+    margin-right: 10px;
+    position: relative;
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.radioLabel:hover .radioCustom {
+    border-color: #2563eb;
+}
+
+.radioInput:checked + .radioCustom {
+    transform: scale(1.2);
+}
+
+.radioInput:checked + .radioCustom::after {
+    content: "";
+    width: 8px;
+    height: 8px;
+    background-color: #2563eb;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.radioInput:checked + .radioCustom + span {
+    background-color: #2563eb;
+    color: #ffffff;
+    padding: 2px 4px;
+    border-radius: 3px;
+}
+
+.disabled {
+    cursor: not-allowed;
+    color: #9ca3af;
+}
+
+.disabled .radioCustom {
+    border-color: #9ca3af;
+}
+
+.radioInput:disabled + .radioCustom {
+    background-color: #e5e7eb;
+    border-color: #9ca3af;
+    pointer-events: none;
+}
+
+.radioGroupButton {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 20px;
+}
+
+.radioButtonLabel {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 16px;
+    color: #374151;
+    padding: 10px 20px;
+    border: 2px solid #2C3E50;
+    transition: all 0.2s ease;
+    margin-left: -2px;
+    position: relative;
+    background-color: #ffffff;
+}
+
+.radioButtonLabel:first-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    margin-left: 0;
+}
+
+.radioButtonLabel:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+/* Active/selected state for both checked and default */
+.radioButtonInput:checked + .radioButtonLabel,
+.radioButtonLabel.active {  /* Added .active class for default state */
+    background-color: #2563eb;
+    color: #ffffff;
+    border-color: #2563eb;
+    z-index: 1;
+}
+
+.radioButtonInput {
+    display: none;
+}
+
+/* Hover state for non-active buttons */
+.radioButtonLabel:hover:not(:has(.radioButtonInput:checked)):not(.active) {
+    border-color: #2563eb;
+    background-color: #eff6ff;
+}
+
+/* Disabled state */
+.radioButtonLabel.disabled,
+.radioButtonLabel:has(.radioButtonInput:disabled) {
+    cursor: not-allowed;
+    color: #9ca3af;
+    border-color: #9ca3af;
+    background-color: #e5e7eb;
+}

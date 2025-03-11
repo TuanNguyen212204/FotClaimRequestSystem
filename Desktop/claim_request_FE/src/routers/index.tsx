@@ -6,8 +6,8 @@ import { UserInfoComponent } from "@ui/user/UserInfoComponent";
 import LoginForm from "@ui/login/LoginForm";
 import ResetPassword from "@ui/login/ResetPassword";
 import CreateClaimPage from "@pages/CreateClaim";
-import { PendingComponent } from "@ui/approve/PendingApproval";
-import { DetailsComponents } from "@ui/approve/DetailsApproval";
+import { PendingComponent } from "@/pages/Pending/PendingApproval";
+import { DetailsComponents } from "@/pages/Pending/DetailsApproval";
 import UserClaims from "@pages/User/UserClaims";
 import { UserClaimDetails } from "@pages/User/UserClaimDetails";
 import UserSettings from "@pages/admin/UserSettings";
@@ -21,7 +21,12 @@ import ApprovedFinancePage from "@/pages/Finance/ApprovedFinancePage";
 import ApprovedApproverPage from "@/pages/Approver/ApprovedApproverPage";
 import Dashboard from "@/pages/admin/Dashboard";
 import Test from "@/pages/Test";
+import TestRadio from "@/pages/Radio+TooltipTest";
 import CheckBoxTest from "@/components/ui/Checkbox/Checkboxtest";
+import CheckMail from "@/components/ui/login/CheckMail";
+import CreateNewPassword from "@/components/ui/login/CreateNewPassword";
+import  Authorization  from "@/auth/Authorization";
+import { ROLE } from "@/constant/role";
 const router: RouteObject[] = [
   {
     element: <CheckBoxTest />,
@@ -35,6 +40,23 @@ const router: RouteObject[] = [
     element: <ResetPassword />,
     path: PATH.resetPassword,
   },
+  {
+    element: <CheckMail />,
+    path: PATH.checkToMail,
+  },
+  {
+    element: <CreateNewPassword />,
+    path: PATH.createNewPassword,
+  },
+  // {
+  //   path: "/unauthorized",
+  //   element: <UnauthorizedPage />, //không đủ quyền
+  // },
+  // {
+  //   path: "/unauthenticated",
+  //   element: <Unauthenticated />, //chưa đăng nhập
+  // },
+
   {
     element: <MainLayout />,
     children: [
@@ -84,7 +106,11 @@ const router: RouteObject[] = [
       },
       {
         path: PATH.approveDetails,
-        element: <ApproveDetail />,
+        element: (
+          <Authorization roleID={[ROLE.APPROVER]}>
+            <ApproveDetail />
+          </Authorization>
+        ),
       },
       {
         path: `${PATH.claimStatus}/:id`,
@@ -110,6 +136,10 @@ const router: RouteObject[] = [
         path: PATH.test,
         element: <Test />,
       },
+      {
+        path: PATH.test2,
+        element: <TestRadio />,
+      }
     ],
   },
 ];
