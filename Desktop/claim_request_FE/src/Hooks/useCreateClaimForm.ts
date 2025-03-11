@@ -11,6 +11,7 @@ export default function useCreateClaimForm() {
     handleSubmit,
     setValue,
     watch,
+    reset,
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -75,5 +76,6 @@ export default function useCreateClaimForm() {
     remove,
     errors,
     formSchema,
+    reset,
   };
 }

@@ -3,7 +3,7 @@ import { parse, differenceInHours } from "date-fns";
 
 export const ProjectInfoSchema = z.object({
   projectName: z.string().nonempty("Project Name is required"),
-  RoleInTheProject: z.string().nonempty("Role in the Project is required"),
+  RoleInTheProject: z.string().optional(),
   ProjectDuration: z.object({
     from: z.string().nonempty("Start date is required"),
     to: z.string().nonempty("End date is required"),

@@ -18,6 +18,7 @@ export default function CreateClaim() {
     remove,
     errors,
     handleSubmit,
+    reset,
   } = useCreateClaimForm();
   const dispatch = useDispatch<AppDispatch>();
   const projectList = useSelector(selectProject);
@@ -29,6 +30,7 @@ export default function CreateClaim() {
     <form
       onSubmit={handleSubmit((data) => {
         console.log(data, "Submitted");
+        reset();
       })}
     >
       <Header prepareBy="John Doe" status="Draft" title="New Claim Request" />
