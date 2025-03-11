@@ -165,8 +165,8 @@
   transition: 0.05s;
 }
 /* .table tr:nth-child(even) {
-  background-color: #fbfbfb;
-} */
+    background-color: #fbfbfb;
+  } */
 
 .activePage {
   border: 2px solid #007bff;
@@ -242,10 +242,10 @@
   }
 }
 /* @media (min-width: 902px) {
-  .table_container {
-    min-width: 2000px;
-  }
-} */
+    .table_container {
+      min-width: 2000px;
+    }
+  } */
 
 @media (max-width: 768px) {
   .table_container {

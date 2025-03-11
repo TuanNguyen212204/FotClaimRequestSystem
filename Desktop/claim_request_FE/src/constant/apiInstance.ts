@@ -30,11 +30,11 @@ export class HttpClient {
         switch (status) {
           case 401:
             localStorage.removeItem("access_token");
-            window.location.href = "/login";
             console.log("API: 401 Unauthorized");
             break;
           case 403:
             console.log("API: 403 Forbidden");
+            window.location.href = "/";
             break;
           case 404:
             console.log("API: 404 Not Found");
