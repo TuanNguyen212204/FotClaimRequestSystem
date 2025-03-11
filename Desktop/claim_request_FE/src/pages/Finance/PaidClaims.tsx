@@ -33,7 +33,7 @@ const PaidClaims: React.FC = () => {
 
   useEffect(() => {
     // Gọi fetchData trực tiếp với URL
-    void fetchData('https://claimsystem.info.vn/api/v1/finance/claims/paid');
+    void fetchData('finance/claims/paid');
   }, [fetchData]);
 
   const columns: Column[] = [

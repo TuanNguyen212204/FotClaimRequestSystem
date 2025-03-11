@@ -44,7 +44,7 @@ const ClaimStatus: React.FC = () => {
   useEffect(() => {
     const fetchClaimInfo = async () => {
       try {
-        const response = await httpClient.get<ClaimInfo>(`https://claimsystem.info.vn/api/v1/finance/claims/paid/{claimID}`);
+        const response = await httpClient.get<ClaimInfo>(`finance/claims/paid/{claimID}`);
         setClaimInfo(response.data);
       } catch (error) {
         console.error('Failed to fetch claim info:', error);
@@ -52,7 +52,7 @@ const ClaimStatus: React.FC = () => {
     };
 
     void fetchClaimInfo();
-    void fetchData(`https://claimsystem.info.vn/api/v1/finance/claims/paid/{claimID}`);
+    void fetchData(`finance/claims/paid/{claimID}`);
   }, [id, fetchData]);
 
   const columns: Column[] = [
