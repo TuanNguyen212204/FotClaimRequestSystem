@@ -12,6 +12,7 @@ export const fetchAllUserAsync = createAsyncThunk<User[]>(
       const response = await httpClient.get<ApiResponse<User[]>>(
         "/admin/staffs"
       );
+      console.log(response.data.data);
       return response.data.data;
     } catch (error) {
       console.error("Fetch Users error " + error);

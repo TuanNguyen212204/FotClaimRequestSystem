@@ -15,10 +15,14 @@ const AllUserInformation: React.FC = () => {
     const fetchData = async () => {
       setLoading(true);
       await dispatch(fetchAllUserAsync());
+
       setLoading(false);
     };
     fetchData();
   }, [dispatch]);
+  useEffect(() => {
+    console.log(users);
+  }, [users]);
   if (loading) {
     return <p>Loading...</p>;
   }

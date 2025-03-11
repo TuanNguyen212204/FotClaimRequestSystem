@@ -40,7 +40,7 @@ function LoginForm() {
           localStorage.setItem("access_token", data.tokens.access.token);
           localStorage.setItem("user", JSON.stringify(data.user));
 
-          navigate("/approve-details");
+          navigate("/user-information");
         } else {
           alert(data.message || "Login failed");
         }
