@@ -1,78 +1,82 @@
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-
-const createRequestFormSchema = (minDate: string, maxDate: string) =>
-  z.object({
-    from: z
-      .string()
-      .nonempty("From date is required")
-      .refine((val) => new Date(val) >= new Date(minDate), {
-        message: `From date must be after ${minDate}`,
-      }),
-    to: z
-      .string()
-      .nonempty("To date is required")
-      .refine((val) => new Date(val) <= new Date(maxDate), {
-        message: `To date must be before ${maxDate}`,
-      }),
-    workingHoursFrom: z.string().nonempty("Working Hours From is required"),
-    workingHoursTo: z.string().nonempty("Working Hours To is required"),
-  });
-
-export type RequestFormValues = z.infer<ReturnType<typeof createRequestFormSchema>>;
-export const useCreateClaimForm = () => {
-  const [minDate] = useState("2025-01-01");
-  const [maxDate] = useState("2025-12-31");
-
-  const schema = createRequestFormSchema(minDate, maxDate);
-
-  const methods = useForm<RequestFormValues>({
-    resolver: zodResolver(schema),
-    mode: "all",
+import { calculateClaimHours } from "@/utils/claimHelpers";
+import { formSchema } from "@/Schemas/ClaimSchema";
+import { useEffect } from "react";
+import { FormData } from "@/types/claimForm.type";
+export default function useCreateClaimForm() {
+  const {
+    control,
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    reset,
+    formState: { errors },
+  } = useForm<FormData>({
+    resolver: zodResolver(formSchema),
+    mode: "onChange",
     defaultValues: {
-      from: "",
-      to: "",
-      workingHoursFrom: "17:00",
-      workingHoursTo: "23:59",
+      currentSelectedProject: {
+        projectID: "",
+        projectName: "",
+        RoleInTheProject: "",
+        ProjectDuration: {
+          from: "",
+          to: "",
+        },
+      },
+      claims: [{ date: "", from: "", to: "", hours: 0, remarks: "" }],
+      totalHours: 0,
+      claimRemark: "",
     },
   });
 
-  const {
-    watch,
-    formState: { errors },
-  } = methods;
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "claims",
+  });
 
-  const fromDate = watch("from");
-  const toDate = watch("to");
-  const workingHoursFrom = watch("workingHoursFrom");
-  const workingHoursTo = watch("workingHoursTo");
+  useEffect(() => {
+    const subscription = watch((value, { name }) => {
+      //console.log(value);
+      if (name?.includes(".from") || name?.includes(".to")) {
+        const index = parseInt(name.split(".")[1]);
+        if (isNaN(index)) return;
 
-  
-  const computedOvertimeDuration = (() => {
-    if (!fromDate || !toDate) return "";
-    const date1 = new Date(fromDate);
-    const date2 = new Date(toDate);
-    const diffTime = Math.abs(date2.getTime() - date1.getTime());
-    return (diffTime / (1000 * 60 * 60 * 24)).toFixed(0);
-  })();
+        const currentClaim = value.claims?.[index];
+        console.log(currentClaim);
+        if (!currentClaim) return;
 
-  
-  const computedTotalHours = (() => {
-    if (!workingHoursFrom || !workingHoursTo) return "";
-    const [startHour, startMinute] = workingHoursFrom.split(":").map(Number);
-    const [endHour, endMinute] = workingHoursTo.split(":").map(Number);
-    const startTotal = startHour * 60 + startMinute;
-    let endTotal = endHour * 60 + endMinute;
-    if (endTotal < startTotal) endTotal += 24 * 60;
-    return Math.round((endTotal - startTotal) / 60).toString();
-  })();
+        const { from, to } = currentClaim;
+        if (from && to) {
+          const calculatedHours = calculateClaimHours(from, to);
+          setValue(`claims.${index}.hours`, calculatedHours);
+        } else {
+          return;
+        }
 
+        const total = value.claims?.reduce(
+          (sum, claim) => sum + (claim ? claim.hours || 0 : 0),
+          0,
+        );
+        setValue("totalHours", total || 0);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [watch, setValue]);
   return {
-    methods,
+    control,
+    register,
+    handleSubmit,
+    setValue,
+    watch, //debug
+    fields,
+    append,
+    remove,
     errors,
-    computedOvertimeDuration,
-    computedTotalHours,
+    formSchema,
+    reset,
   };
-};
+}

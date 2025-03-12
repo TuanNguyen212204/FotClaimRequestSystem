@@ -233,8 +233,8 @@ const TableComponent = forwardRef(
                   <tr>
                     <th className={styles.th}>
                       {/* {checkedItems.size === dataSource.length
-                          ? "Deselect All"
-                          : "Select All"} */}
+                            ? "Deselect All"
+                            : "Select All"} */}
 
                       <div className="">
                         <input
