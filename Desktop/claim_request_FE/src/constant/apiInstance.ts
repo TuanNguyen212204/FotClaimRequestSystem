@@ -53,7 +53,7 @@ export class HttpClient {
     );
   }
 
-  async get<T>(url: string, params?: unknown): Promise<AxiosResponse<T>> {
+  async get<T>(url: string, params?: AxiosRequestConfig["params"]): Promise<AxiosResponse<T>> {
     return this.createAxios.get(url, {
       params,
     });

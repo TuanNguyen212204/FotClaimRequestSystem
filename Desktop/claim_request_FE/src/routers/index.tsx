@@ -75,11 +75,7 @@ const router: RouteObject[] = [
       },
       {
         path: PATH.myClaims,
-        element: (
-          <Authorization role_id={[ROLE.CLAIMER]}>
-            <UserClaims />
-          </Authorization>
-        ),
+        element: <UserClaimsPage />,
       },
       {
         path: PATH.userClaimDetails,
