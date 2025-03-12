@@ -1,129 +1,145 @@
 .container {
-  width: 1087px;
-  min-height: 487px;
-  position: relative;
-  padding: 30px;
+  width: 120%;
+  max-width: 1100px;
+  min-height: 400px;
+  margin: 0 auto;
+  padding: 1.5rem;
   background-color: #FFFFFF;
-  display: flex;
-  flex-direction: column;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+  margin-bottom: 1rem;
 }
 
 .claimStatus_h1 {
   font-size: 24px;
-  color: #090909;
-  margin-bottom: 20px;
+  color: #2D3142;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
 }
 
-.style_hr {
-  width: 80%;
-  margin-left: 11em;
-}
-
-.box {
-  display: flex;
-  justify-content: space-between;
-  font-size: 1.5em;
+.tableContainer {
+  margin: 0.75rem 0;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .table {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
-  border: 2px solid #000;
-  border-radius: 8px;
-  overflow: hidden;
+  background: white;
 }
 
 .style_th {
-  padding: 15px;
+  padding: 0.75rem;
   background-color: #2D3142;
-  border-right: 1px solid #cccccc;
-  border-bottom: 1px solid #ccc;
-  font-weight: normal;
-  color: #f6f6f6;
-} 
+  color: #ffffff;
+  font-weight: 500;
+  text-align: left;
+  font-size: 14px;
+}
 
 .style_td {
-  padding: 15px;
-  border-right: 1px solid #cccccc;
-  border-bottom: 1px solid #ccc;
-  background-color: #FFFFFF;
+  padding: 0.75rem;
+  color: #4a4a4a;
+  border-bottom: 1px solid #eaeaea;
+  font-size: 14px;
 }
 
-.style_th:last-child,
-.style_td:last-child {
-  border-right: none;
+.thContent {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  cursor: pointer;
 }
 
-tr:last-child .style_td {
-  border-bottom: none;
+.selectedRow {
+  background-color: rgba(45, 49, 66, 0.05);
 }
 
-.col_claim_id { width: 8%; }
-.col_staff_name { width: 12%; }
-.col_project_name { width: 20%; }
-.col_project_duration { width: 25%; }
-.col_total_hours { width: 15%; }
-.col_approver_name { width: 12%; }
-.col_action { width: 8%; }
-
-.action_column {
-  text-align: center;
+.style_tr:hover .style_td {
+  background-color: rgba(45, 49, 66, 0.02);
 }
 
-.action_column button {
+.actionButton {
+  padding: 0.25rem;
   background: none;
   border: none;
   cursor: pointer;
-  padding: 5px;
+  border-radius: 4px;
 }
 
-.pagination {
-  position: fixed;
-  bottom: 20px;
-  right: 350px;
-  transform: translateX(-50%); 
+.pagination_container {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 1rem;
-  padding: 15px;
-  width: auto;
-  
+  margin-top: 20px;
 }
 
-.pageNumbers {
+.pagination {
   display: flex;
-  gap: 0.5rem;
-  align-self: center;
+  align-items: center;
+  gap: 4px;
 }
 
-.pageNumber {
-  padding: 0.25rem 0.75rem;
-  background: none;
-  border: none;
+.pageNumber,
+.pageButton {
+  min-width: 32px;
+  height: 32px;
+  padding: 0;
+  background: white;
+  border: 1px solid #d9d9d9;
+  border-radius: 2px;
   cursor: pointer;
-  color: #666;
-}
-
-.activePage {
-  color: #2D3142;
-  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(0, 0, 0, 0.88);
 }
 
 .pageButton {
-  padding: 0.25rem 0.75rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #666;
+  color: rgba(0, 0, 0, 0.88);
 }
 
 .pageButton:disabled {
-  color: #d9d9d9;
+  color: rgba(0, 0, 0, 0.25);
+  border-color: #d9d9d9;
   cursor: not-allowed;
 }
 
-.style_tr:hover {
-  background-color: #f5f5f5;
+.activePage {
+  border-color: #1677ff;
+  color: #1677ff;
+}
+
+.pageNumber:hover,
+.pageButton:hover:not(:disabled) {
+  border-color: #1677ff;
+  color: #1677ff;
+}
+
+.paginationButton {
+  padding: 0.4rem 0.75rem;
+  background-color: #2D3142;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.pageInfo {
+  color: #4a4a4a;
+  font-size: 14px;
+}
+
+input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+  accent-color: #2D3142;
 }

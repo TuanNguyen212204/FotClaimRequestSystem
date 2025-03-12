@@ -14,7 +14,7 @@ createRoot(document.getElementById("root")!).render(
       <Provider store={store}>
         <ReactQueryProvider>
           <NotificationProvider>
-                      <App />
+            <App />
           </NotificationProvider>
         </ReactQueryProvider>
       </Provider>

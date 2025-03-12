@@ -5,15 +5,18 @@ export interface Experience {
 }
 
 export interface User {
-  userID: string;
-  userName: string;
-  hashPassword: string;
-  fullName?: string;
+  user_id: string;
+  username: string;
+  email: string;
+  hash_password: string;
+  password?: string;
+  full_name?: string;
   department?: string;
-  jobRank?: string;
-  salary?: number;
-  roleID?: number;
-  userStatus?: number;
+  job_rank?: string;
+  salary?: string;
+  role_id?: number;
+  user_status?: number;
+  role_name?: string;
   avatar?: string;
   bio?: string;
   projects?: string[];

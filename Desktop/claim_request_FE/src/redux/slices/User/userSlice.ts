@@ -1,15 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { User } from "@/types/User";
-import { fetchAllUserAsync } from "@/redux/thunk/User/userThunk";
+import { fetchAllUserAsync } from "@redux/thunk/User/userThunk";
 
 const initialState: {
   data: User[];
   status: string;
-  error: string | null;
+  error?: string;
 } = {
   data: [],
   status: "",
-  error: null,
+  error: "null",
 };
 export const userSlice = createSlice({
   name: "user",
