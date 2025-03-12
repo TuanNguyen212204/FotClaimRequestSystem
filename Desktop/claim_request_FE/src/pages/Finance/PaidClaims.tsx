@@ -49,7 +49,16 @@ const PaidClaims: React.FC = () => {
     { 
       key: 'project_duration', 
       dataIndex: ['project', 'time_durations'], 
-      title: 'Project Duration'
+      title: 'Project Duration',
+      cell: ({ value }) => {
+        const [startDate, endDate] = value.split(' - ');
+        return (
+          <div>
+            <div>From: {startDate}</div>
+            <div>To: {endDate}</div>
+          </div>
+        );
+      }
     },
     { 
       key: 'total_working_hours', 

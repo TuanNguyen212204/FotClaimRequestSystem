@@ -124,7 +124,11 @@ const ClaimStatus: React.FC = () => {
         <div>
           <p className={styles.infoLabel}>User ID: <span>{claimInfo.user_id}</span></p>
           <p className={styles.infoLabel}>Project Name: <span>{claimInfo.project.project_name}</span></p>
-          <p className={styles.infoLabel}>Project Duration: <span>{claimInfo.project.time_durations}</span></p>
+          <p className={styles.infoLabel}>Project Duration: <span>
+            {claimInfo.project.time_durations.split(' - ').map((date, index) => (
+              <span key={index}>{index === 0 ? 'From: ' : 'To: '}{date}{index === 0 ? '': ''}</span>
+            ))}
+          </span></p>
         </div>
         <div className={styles.rightAligned}>
           <p className={styles.infoLabel}>Staff Name: <span>{claimInfo.full_name}</span></p>
