@@ -3,7 +3,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import styles from "./ClaimStatus.module.css";
 import { useTable } from "../../Hooks/useTable";
 import { Column } from "../../components/ui/Table/Table";
-import httpClient from "../../constant/apiInstance";
+import { ArrowDown, ArrowUp } from "lucide-react";
+
+interface Project {
+  project_id: string;
+  project_name: string;
+  time_durations: string;
+}
 
 interface ClaimData {
   claim_id: string;
@@ -13,11 +19,9 @@ interface ClaimData {
   approved_date: string | null;
   total_working_hours: number;
   claim_status: string;
-  project: {
-    project_id: string;
-    project_name: string;
-    time_durations: string;
-  };
+  project: Project;
+  id?: string;
+  status?: string;
 }
 
 const formatDate = (dateString: string | null) => {
@@ -32,70 +36,42 @@ const formatDate = (dateString: string | null) => {
 const ClaimStatus: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
-  const { data: claims, loading, pagination, setPage, fetchData } = useTable<ClaimData>({
-    initialPageSize: 5
-  });
-
-  const handlePrint = () => {
-    window.print();
-  };
-
-  useEffect(() => {
-    const fetchClaimData = async () => {
-      try {
-        await fetchData('https://claimsystem.info.vn/api/v1/finance/claims/paid');
-      } catch (error) {
-        console.error('Failed to fetch claims:', error);
-      }
-    };
-    void fetchClaimData();
-  }, [fetchData]);
-
-  if (loading || !claims.length) {
-    return (
-      <div className={styles.container}>
-        <h1 className={styles.claimStatus_h1}>Claim Status</h1>
-        <p>{loading ? "Loading..." : `No claim information found for ID: ${id}`}</p>
-      </div>
-    );
-  }
-
-  const claimInfo = claims.find(claim => claim.claim_id === id) || claims[0];
-
+  
   const columns: Column[] = [
     { 
-      key: 'no', 
+      key: 'claim_id', 
       dataIndex: 'claim_id', 
-      title: 'No.',
+      title: 'Claim ID',
+      cell: ({ value }) => <span>{value}</span>
     },
     { 
       key: 'overtime_duration', 
       dataIndex: 'submitted_date', 
       title: 'Overtime Duration',
       cell: ({ record }) => (
-        <>
-          From: {formatDate(record.submitted_date)}<br />
-          To: {formatDate(record.approved_date)}
-        </>
+        <div>
+          <div>From: {formatDate(record.submitted_date)}</div>
+          <div>To: {formatDate(record.approved_date)}</div>
+        </div>
       )
     },
     { 
       key: 'overtime_date', 
       dataIndex: 'submitted_date', 
       title: 'Overtime Date',
-      cell: ({ value }) => formatDate(value)
+      cell: ({ value }) => <span>{formatDate(value)}</span>
     },
     { 
       key: 'total_hours', 
       dataIndex: 'total_working_hours', 
       title: 'Total No. Hours',
-      cell: ({ value }) => `${value} hours`
+      cell: ({ value }) => <span>{value} hours</span>
     },
     { 
       key: 'overtime_paid', 
       dataIndex: 'total_working_hours', 
       title: 'Overtime Paid',
-      cell: ({ value }) => `${(value * 25000).toLocaleString('vi-VN')}vnd`
+      cell: ({ value }) => <span>{(value * 25000).toLocaleString('vi-VN')}vnd</span>
     },
     { 
       key: 'status', 
@@ -105,22 +81,65 @@ const ClaimStatus: React.FC = () => {
     }
   ];
 
+  const { 
+    data: claims, 
+    loading, 
+    pagination,
+    sortConfig,
+    checkedItems,
+    selectedStatus,
+    setPage,
+    handleSort,
+    handleStatusSelect,
+    handleCheck,
+    fetchData 
+  } = useTable<ClaimData>({
+    initialPageSize: 5,
+    defaultSortConfig: { columnKey: 'overtime_date', order: 'desc' },
+    columns,
+    name: 'claim-status'
+  });
+
+  useEffect(() => {
+    void fetchData('/finance/claims/paid');
+  }, [fetchData]);
+
+  if (loading || !claims.length) {
+    return (
+      <div className={styles.container}>
+        <div className={styles.header}></div>
+        <h1 className={styles.claimStatus_h1}>Claim Status</h1>
+        <p>{loading ? "Loading..." : `No claim information found for ID: ${id}`}</p>
+      </div>
+    );
+  }
+
+  const claimInfo = claims.find(claim => claim.claim_id === id) || claims[0];
+
+  const handlePrint = () => {
+    window.print();
+  };
+
   return (
     <div className={styles.container}>
-      <h1 className={styles.claimStatus_h1}>Claim Status</h1>
+      <div className={styles.header}>
+        <h1 className={styles.claimStatus_h1}>Claim Status</h1>
+      </div>
       
       <div className={styles.box}>
         <div>
-          <p>Claim ID: {claimInfo.claim_id}</p>
-          <p>Project Name: {claimInfo.project.project_name}</p>
+          <p className={styles.infoLabel}>User ID: <span>{claimInfo.user_id}</span></p>
+          <p className={styles.infoLabel}>Project Name: <span>{claimInfo.project.project_name}</span></p>
+          <p className={styles.infoLabel}>Project Duration: <span>{claimInfo.project.time_durations}</span></p>
         </div>
-        <div>
-          <p>Staff Name: {claimInfo.full_name}</p>
-          <p>Project Duration: {claimInfo.project.time_durations}</p>
+        <div className={styles.rightAligned}>
+          <p className={styles.infoLabel}>Staff Name: <span>{claimInfo.full_name}</span></p>
+          <p className={styles.infoLabel}>Project ID: <span>{claimInfo.project.project_id}</span></p>
+          
         </div>
       </div>
 
-      <div className={styles["table-container"]}>
+      <div className={styles.tableContainer}>
         <table className={styles.table}>
           <thead>
             <tr>
@@ -128,8 +147,14 @@ const ClaimStatus: React.FC = () => {
                 <th 
                   key={column.key} 
                   className={column.key === 'status' ? styles.style_th_Status : styles.style_th}
+                  onClick={() => column.key && handleSort(column.key)}
                 >
-                  {column.title}
+                  <div className={styles.thContent}>
+                    {column.title}
+                    {sortConfig.columnKey === column.key && (
+                      sortConfig.order === 'asc' ? <ArrowUp size={14} /> : <ArrowDown size={14} />
+                    )}
+                  </div>
                 </th>
               ))}
             </tr>
