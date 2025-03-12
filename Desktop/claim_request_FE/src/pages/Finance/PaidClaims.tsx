@@ -25,53 +25,51 @@ interface ClaimData {
   status?: string;
 }
 
-
-  const {
-    data: claims,
-    loading,
-    pagination,
-    setPage,
-    fetchData,
-  } = useTable<ClaimData>({
-    initialPageSize: 5,
-  });
-
-  useEffect(() => {
-    void fetchData("/paidclaims");
-  }, []);
+const PaidClaims: React.FC = () => {
+  const navigate = useNavigate();
 
   const columns: Column[] = [
-    { key: "claimId", dataIndex: "claimId", title: "Claim ID" },
-    { key: "staffName", dataIndex: "staffName", title: "Staff Name" },
-    { key: "projectName", dataIndex: "projectName", title: "Project Name" },
-    { key: "duration", dataIndex: "duration", title: "Project Duration" },
-    {
-      key: "totalHours",
-      dataIndex: "totalHours",
-      title: "Total Hours Working",
-      cell: () => <span>100 hours</span>,
+    { 
+      key: 'claim_id', 
+      dataIndex: 'claim_id', 
+      title: 'Claim ID',
+      cell: ({ value }) => <span>{value}</span>
+    },
+    { 
+      key: 'full_name', 
+      dataIndex: 'full_name', 
+      title: 'Employee Name',
+      cell: ({ value }) => <span>{value}</span>
+    },
+    { 
+      key: 'project_name', 
+      dataIndex: ['project', 'project_name'], 
+      title: 'Project Name' 
+    },
+    { 
+      key: 'project_duration', 
+      dataIndex: ['project', 'time_durations'], 
+      title: 'Project Duration'
+    },
+    { 
+      key: 'total_working_hours', 
+      dataIndex: 'total_working_hours', 
+      title: 'Total Hours',
+      cell: ({ value }) => <span>{value} hours</span>
     },
     {
-      key: "approverName",
-      dataIndex: "approverName",
-      title: "Approver Name",
-      cell: () => <span>Marco</span>,
-    },
-    {
-      key: "action",
-      dataIndex: "claimId",
-      title: "Action",
+      key: 'action',
+      dataIndex: 'claim_id',
+      title: 'Action',
       cell: ({ value }) => (
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <button
-            onClick={() => navigate(`${PATH.claimStatus}/${value}`)}
-            style={{ background: "none", border: "none", cursor: "pointer" }}
-          >
-            👁
-          </button>
-        </div>
-      ),
-    },
+        <button 
+          onClick={() => navigate(`${PATH.claimStatus}/${value}`)}
+          className={styles.actionButton}
+        >
+          👁
+        </button>
+      )
+    }
   ];
 
   const { 
