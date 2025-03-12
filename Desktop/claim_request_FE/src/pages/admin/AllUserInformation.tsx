@@ -59,7 +59,7 @@ const AllUserInformation: React.FC = () => {
   const dataSource: DataRecord[] = users.map((user, index) => ({
     ...user,
     key: index,
-    id: user.id ? user.id.toString() : "",
+    id: user.user_id ? user.user_id.toString() : "",
     status: user.department ? user.department : "",
   }));
 

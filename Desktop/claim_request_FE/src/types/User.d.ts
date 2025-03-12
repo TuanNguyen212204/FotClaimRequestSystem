@@ -5,19 +5,11 @@ export interface Experience {
 }
 
 export interface User {
-  userID: string;
-  userName: string;
-  hashPassword: string;
-  fullName?: string;
-  department?: string;
-  jobRank?: string;
-  salary?: number;
-  roleID?: number;
-  userStatus?: number;
-  avatar?: string;
-  bio?: string;
-  projects?: string[];
-  experiences?: Experience[];
+  user_id: string;
+  full_name: string;
+  email: string;
+  department: string;
+  job_rank: string;
 }
 
 export interface NewUser extends User {

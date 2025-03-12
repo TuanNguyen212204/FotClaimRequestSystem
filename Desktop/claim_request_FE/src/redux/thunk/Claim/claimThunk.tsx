@@ -11,7 +11,6 @@ export const fetchAllClaimAsync = createAsyncThunk<Claim[]>(
       const response = await httpClient.get<ApiResponse<Claim[]>>(
         "/approvers/approved-claim"
       );
-
       return response.data.data;
     } catch (error) {
       console.error("Fetch Claims error " + error);

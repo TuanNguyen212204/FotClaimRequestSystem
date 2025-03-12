@@ -132,7 +132,7 @@ export const PendingComponent: React.FC = () => {
         loading={false}
         pagination={true}
         name="Claims"
-        pageLength={2}
+        pageLength={8}
       />
     </div>
   );
