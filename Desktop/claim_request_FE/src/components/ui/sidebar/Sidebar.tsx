@@ -2,6 +2,7 @@ import styles from "./Sidebar.module.css";
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { PATH } from "../../../constant/config";
+import { Button } from "@/components/ui/button/Button";
 
 export const Sidebar = () => {
   const [selectedClaim, setSelectedClaim] = useState("");
@@ -32,7 +33,7 @@ export const Sidebar = () => {
       //   navigate(PATH.pending);
       //   break;
       case "approved":
-        navigate(PATH.approved);
+        navigate(PATH.approvedFinance);
         break;
       case "pending":
         navigate(PATH.pending);
@@ -237,7 +238,6 @@ export const Sidebar = () => {
             </ul>
           )}
         </div>
-
         <button className={styles.logout}>Logout</button>
       </div>
     </div>

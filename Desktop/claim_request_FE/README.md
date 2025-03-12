@@ -48,3 +48,76 @@ export default tseslint.config({
   },
 });
 ```
+
+### File Structure
+```
+.
+├── .dockerignore
+├── .editorconfig
+├── .gitignore
+├── Dockerfile
+├── LICENSE
+├── README.md
+├── README-zh_CN.md
+├── CONTRIBUTING.md
+├── package.json
+├── tsconfig.json
+├── tsconfig.app.json
+├── tsconfig.node.json
+├── vite.config.ts
+├── src/
+│   ├── assets/
+│   │   ├── logo/
+│   │   │   ├── eslint.svg
+│   │   │   └── faker.svg
+│   │   └── stories/
+│   │       └── assets/
+│   │           └── tutorials.svg
+│   ├── components/
+│   │   ├── layout/
+│   │   └── ui/
+│   │   ├── xxxx/
+│   ├── constants/
+│   │   └── index.ts
+│   ├── global.d.ts
+│   ├── i18n/
+│   │   ├── locales/
+│   │   │       ├── common/
+│   │   │       │  └── vi.json
+│   │   │       └── vi.json
+│   │   └── index.ts
+│   ├── lib/
+│   │   └── route-builder.ts
+│   ├── routers/
+│   ├── pages/
+│   │   ├── admin/
+│   │   │      ├── components/
+│   │   │      ├── context/
+│   │   │      ├── data/
+│   │   │      │      ├── schema.ts
+│   │   │      │      └── admin.json
+│   │   │      ├── hooks/
+│   │   │      └── index.tsx
+│   │   └── main/
+│   │       └── index.tsx
+│   ├── utils/
+│   ├── hooks/
+│   ├── services/
+│   ├── stores/
+│   │   ├── slices/
+│   │   │      └── adminSlice.ts
+│   │   ├── thunks/
+│   │   │      └── adminThunk.ts
+│   │   ├── actions/
+│   │   │      └── adminAction.ts
+│   │   ├── selectors/
+│   │   │      └── adminSelector.ts
+│   │   └── rootReducer.ts
+│   ├── types/
+│   ├── styles/
+│   │   └── tailwind.css
+│   └── stories/
+│       └── Configure.mdx
+└── .storybook/
+    └── main.ts
+

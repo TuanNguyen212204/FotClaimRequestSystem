@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import styles from "./UserClaims.module.css";
-import axios from "axios";
 import {
   AiFillDelete,
   AiFillEdit,
@@ -10,43 +9,23 @@ import {
 } from "react-icons/ai";
 import { PATH } from "../../../constant/config";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux";
+// import { fetchUserClaims } from "../../redux/slice/userClaimSlice";
 
-interface Claim {
-  id: string;
-  claimID: number;
-  pName: string;
-  pDuration: string;
-  totalWorkingHours: string;
-  status: string;
-}
 
 const UserClaims = () => {
-  const [claims, setClaims] = useState<Claim[]>([]);
-  const [filteredClaims, setFilteredClaims] = useState<Claim[]>([]);
+  const dispatch = useDispatch<AppDispatch>();
+  const { items: claims, loading, error } = useSelector((state: RootState) => state.claims);
+  const [filteredClaims, setFilteredClaims] = useState(claims);
   const [selectedStatus, setSelectedStatus] = useState<string>("Processing");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 5;
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios
-      .get("https://6780c0ac85151f714b07bbd0.mockapi.io/myclaims")
-      .then((response) => {
-        const formattedData: Claim[] = response.data.map(
-          (item: Claim, index: number) => ({
-            ...item,
-            claimID: index + 1,
-          })
-        );
-        setClaims(formattedData);
-        setFilteredClaims(
-          formattedData.filter((claim) => claim.status === "Processing")
-        );
-      })
-      .catch((error) => {
-        console.error("Error fetching claims:", error);
-      });
-  }, []);
+    dispatch(fetchUserClaims());
+  }, [dispatch]);
 
   const handleDelete = (id: string) => {
     if (window.confirm("Are you sure you want to delete this claim?")) {
