@@ -78,12 +78,8 @@ const PaidClaims: React.FC = () => {
     pagination, 
     sortConfig,
     checkedItems,
-    selectedStatus,
-    isDropdownOpen,
     setPage,
     handleSort,
-    toggleDropdown,
-    handleStatusSelect,
     handleCheck,
     handleSelectAll,
     fetchData 

@@ -84,14 +84,8 @@ const ClaimStatus: React.FC = () => {
   const { 
     data: claims, 
     loading, 
-    pagination,
     sortConfig,
-    checkedItems,
-    selectedStatus,
-    setPage,
     handleSort,
-    handleStatusSelect,
-    handleCheck,
     fetchData 
   } = useTable<ClaimData>({
     initialPageSize: 5,
