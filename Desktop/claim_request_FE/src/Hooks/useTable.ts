@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import httpClient from '../constant/apiInstance';
 import { DataRecord, SortConfig, Column } from '../components/ui/Table/Table';
+import { set } from 'date-fns';
 
 interface TableState<T> {
   data: T[];
@@ -26,6 +27,7 @@ interface UseTableProps<T> {
   defaultSortConfig?: SortConfig;
   columns: Column[];
   name?: string;
+  initialData?: T[];
 }
 
 interface ApiResponse<T> {
@@ -43,10 +45,11 @@ export function useTable<T extends DataRecord>({
   initialPageSize = 10,
   defaultSortConfig,
   columns,
-  name
+  name,
+  initialData = []
 }: UseTableProps<T>) {
   const [state, setState] = useState<TableState<T>>({
-    data: [],
+    data: initialData,
     loading: false,
     pagination: {
       currentPage: 1,
@@ -63,6 +66,14 @@ export function useTable<T extends DataRecord>({
     isDropdownOpen: false,
     filteredData: []
   });
+  const setData = useCallback((newData: T[]) => {
+    setState(prev => ({
+      ...prev,
+      data: newData,
+      filteredData: prev.selectedStatus === 'All' ? newData : 
+        newData.filter(item => item.status === prev.selectedStatus)
+    }));
+  }, []);
 
   const fetchData = useCallback(async (url: string) => {
     setState(prev => ({ ...prev, loading: true }));
@@ -177,7 +188,8 @@ export function useTable<T extends DataRecord>({
   }, [state.filteredData, state.sortConfig]);
 
   return {
-    data: getSortedData(),
+    setData,
+    dataSource: getSortedData(),
     loading: state.loading,
     pagination: state.pagination,
     sortConfig: state.sortConfig,
