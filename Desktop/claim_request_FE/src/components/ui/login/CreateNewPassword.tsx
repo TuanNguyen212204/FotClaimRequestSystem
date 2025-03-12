@@ -4,6 +4,36 @@ import fot from "@assets/fot.png";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 
+const passwordCriteria = [
+  {
+    label: "At least one lowercase letter",
+    test: (password: string) => /[a-z]/.test(password),
+  },
+  {
+    label: "At least one uppercase letter",
+    test: (password: string) => /[A-Z]/.test(password),
+  },
+  {
+    label: "At least one number",
+    test: (password: string) => /[0-9]/.test(password),
+  },
+  {
+    label: "At least one special character",
+    test: (password: string) => /[@$!%*?&]/.test(password),
+  },
+  {
+    label: "6 - 10 characters",
+    test: (password: string) => /^.{6,10}$/.test(password),
+  },
+];
+
+const countValidCriteria = (password: string): number => {
+  return passwordCriteria.reduce(
+    (count, crit) => (crit.test(password) ? count + 1 : count),
+    0
+  );
+};
+
 function CreateNewPassword() {
   const navigate = useNavigate();
 
@@ -15,19 +45,29 @@ function CreateNewPassword() {
   const createNewPassWordSchema = Yup.object().shape({
     password: Yup.string()
       .required("Password is Required")
-      .min(6, "Password must be at least 6 characters")
-      .max(10, "Password must be at most 10 characters")
-      .test("Password must be strong", "Password must be strong", (value) => {
-        const regex =
-          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,10}$/;
-        return regex.test(value);
-      }),
-    confirmPassword: Yup.string()
-      .required("Confirm Password is Required")
-      .oneOf(
-        [Yup.ref("password")],
-        "Confirm Passwords must match with Password"
+      .test("length-rule", "Password must be 6–10 characters", (value) =>
+        value ? /^.{6,10}$/.test(value) : false
+      )
+      .test(
+        "optional-rules",
+        "Password must meet at least 3 of: lowercase, uppercase, number, special",
+        (value) => {
+          if (!value) return false;
+          const optionalRules = [/[a-z]/, /[A-Z]/, /[0-9]/, /[@$!%*?&]/];
+          const count = optionalRules.reduce(
+            (acc, rule) => (rule.test(value) ? acc + 1 : acc),
+            0
+          );
+          return count >= 3;
+        }
       ),
+    confirmPassword: Yup.string().when("password", (password, schema) => {
+      return password
+        ? schema
+            .required("Confirm Password is Required")
+            .oneOf([Yup.ref("password")], "Confirm Password does not match")
+        : schema;
+    }),
   });
 
   const formik = useFormik({
@@ -52,7 +92,6 @@ function CreateNewPassword() {
             </div>
             <div className={styles.leftSideText}>
               <h1>Don't worry,</h1>
-
               <p>We are here help you to recover your password.</p>
             </div>
           </div>
@@ -62,22 +101,33 @@ function CreateNewPassword() {
         <div className={styles.rightSide}>
           <div className={styles.rightSideContainer}>
             <h1>Create new password</h1>
-
             <p>
-              Your new password must be different from previous used passwords.
+              Your new password must be different from previously used
+              passwords.
             </p>
 
             <form onSubmit={formik.handleSubmit}>
               <div className={styles.inputForm}>
+                <div className={styles.passwordCriteria}>
+                  {passwordCriteria.map((criterion, index) => {
+                    const valid = criterion.test(formik.values.password);
+                    return (
+                      <div
+                        key={index}
+                        className={valid ? styles.valid : styles.invalid}
+                      >
+                        {valid ? "✓" : "✗"} {criterion.label}
+                      </div>
+                    );
+                  })}
+                </div>
                 <div className={styles.inputForm__message}>
                   <label htmlFor="password">Password</label>
-                  <label htmlFor="password">
-                    {formik.touched.password && formik.errors.password && (
-                      <div className={styles.label__error}>
-                        {formik.errors.password}
-                      </div>
-                    )}
-                  </label>
+                  {formik.touched.password && formik.errors.password && (
+                    <div className={styles.label__error}>
+                      {formik.errors.password}
+                    </div>
+                  )}
                 </div>
                 <input
                   type="password"
@@ -86,18 +136,19 @@ function CreateNewPassword() {
                   placeholder="Enter new password"
                   value={formik.values.password}
                   onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                 />
               </div>
 
               <div className={styles.inputForm}>
                 <div className={styles.inputForm__message}>
-                  <label htmlFor="confirmPassword">Confirm-Password</label>
                   <label htmlFor="confirmPassword">
+                    Confirm-Password
                     {formik.touched.confirmPassword &&
                       formik.errors.confirmPassword && (
-                        <div className={styles.label__error}>
+                        <span className={styles.label__error}>
                           {formik.errors.confirmPassword}
-                        </div>
+                        </span>
                       )}
                   </label>
                 </div>
@@ -108,10 +159,19 @@ function CreateNewPassword() {
                   placeholder="Enter confirm password"
                   value={formik.values.confirmPassword}
                   onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                 />
               </div>
 
-              <button type="submit" className={styles.btnSubmitForm}>
+              <button
+                type="submit"
+                className={styles.btnSubmitForm}
+                disabled={
+                  countValidCriteria(formik.values.password) < 4 ||
+                  (countValidCriteria(formik.values.password) >= 4 &&
+                    formik.values.password !== formik.values.confirmPassword)
+                }
+              >
                 Reset Password
               </button>
             </form>

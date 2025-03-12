@@ -90,7 +90,7 @@
   width: 100%;
   max-width: 450px;
   background-color: white;
-  padding: 40px;
+  /* padding: 40px; */
   /* box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); */
   /* border-radius: 12px; */
 }
@@ -204,6 +204,8 @@
 
 .label__error {
   color: red;
+  text-align: right;
+  margin-left: 20px;
 }
 
 .typewriterText {
@@ -214,4 +216,18 @@
   text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
   letter-spacing: 2px;
   margin: 0;
+}
+
+.passwordCriteria {
+  margin: 8px 0;
+  font-size: 14px;
+  text-align: left;
+}
+.valid {
+  color: green;
+  margin-bottom: 4px;
+}
+.invalid {
+  color: red;
+  margin-bottom: 4px;
 }
