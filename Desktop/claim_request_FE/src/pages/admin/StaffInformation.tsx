@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { message, Spin, Tooltip } from "antd";
-import { FilePen, Trash } from "lucide-react";
+import { ExternalLink, Trash } from "lucide-react";
 import httpClient from "@/constant/apiInstance";
 import styles from "./StaffInformation.module.css";
 import StaffDetails from "./StaffDetail";
@@ -18,7 +18,7 @@ const StaffInformation = () => {
   const [dataSource, setDataSource] = useState<Staff[]>([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedStaff, setSelectedStaff] = useState<Staff | null>(null);
+  const [selectedStaff, setSelectedStaff] = useState("");
 
   const fetchData = async () => {
     setLoading(true);
@@ -40,8 +40,9 @@ const StaffInformation = () => {
     fetchData();
   }, []);
 
-  const handleEdit = async (record: Staff) => {
+  const handleEdit = async (record: string) => {
     console.log("Editing user:", record); 
+    console.log("record: ", record);
     setSelectedStaff(record);  
     setIsModalOpen(true);
   };
@@ -71,8 +72,8 @@ const StaffInformation = () => {
       cell: ({ record }: { record: Staff }) => {
         return (
           <div className={styles.actions}>
-            <Tooltip title="Edit">
-              <FilePen
+            <Tooltip title="Detail">
+              <ExternalLink
                 className={styles.iconApprove}
                 onClick={() => handleEdit(record)}
               />
@@ -93,12 +94,15 @@ const StaffInformation = () => {
     <div className={styles.container}>
       <h2>Staff Information</h2>
       {loading ? <Spin size="large" /> : <TableComponent columns={columns} dataSource={dataSource} pagination />}
-      <StaffDetails 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
-        staff={selectedStaff} 
-        loading={loading} 
-      />
+      {isModalOpen && (
+        <StaffDetails 
+          isOpen={isModalOpen} 
+          onClose={() => setIsModalOpen(false)} 
+          staff={selectedStaff} 
+          loading={loading} 
+        />
+      )}
+
     </div>
   );
 };

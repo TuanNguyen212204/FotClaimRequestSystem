@@ -1,5 +1,7 @@
-import { Modal, Form, Input, Row, Col, Button, Spin, message } from "antd";
 import { useEffect, useState } from "react";
+import { message, Spin, Button } from "antd";
+import { IdCard ,User, Mail, Flame, Briefcase, DollarSign, CheckCircle, XCircle } from "lucide-react";
+import httpClient from "@/constant/apiInstance";
 import styles from "./StaffInformation.module.css";
 
 interface Staff {
@@ -16,92 +18,65 @@ interface Staff {
 interface StaffDetailProps {
   isOpen: boolean;
   onClose: () => void;
-  staff: Staff | null;
+  staff?: string;
   loading: boolean;
 }
 
 const StaffDetail = ({ isOpen, onClose, staff, loading }: StaffDetailProps) => {
-  const [form] = Form.useForm();
-  const [isSaving, setIsSaving] = useState(false);
+  const [staffInfo, setStaffInfo] = useState<Staff | null>(null);
 
   useEffect(() => {
-    fetchStaffData();
-  }, []);
-  
+    if (staff) {
+      fetchStaffData();
+    }
+  }, [staff]);
+
   const fetchStaffData = async () => {
+    if (!staff) {
+      console.warn("Staff ID is missing!");
+      return;
+    }
     try {
-      const response = await fetch("/api/staff");
-      const data = await response.json();
-      console.log("Fetched Data:", data);
+      const response = await httpClient.get<{ data: Staff[] }>(`/admin/staff/${staff}`);
+      if (response.data && response.data.data.length > 0) {
+        setStaffInfo(response.data.data[0]);
+      }
     } catch (error) {
       console.error("Error fetching staff data:", error);
+      message.error("Failed to fetch staff data.");
     }
   };
-  
 
-  const handleSave = async () => {
-    try {
-      setIsSaving(true);
-      const values = form.getFieldsValue();
-      console.log("Saving data:", values);
-      setTimeout(() => {
-        setIsSaving(false);
-        message.success("Staff details saved successfully!");
-        onClose();
-      }, 1000);
-    } catch (error) {
-      console.error("Error saving staff details:", error);
-      message.error("Error saving staff details.");
-    }
-  };
+  if (!isOpen) return null;
 
   return (
-    <Modal title="Staff Details" open={isOpen} onCancel={onClose} footer={null}>
-      {loading ? (
-        <Spin size="large" />
-      ) : (
-        <Form form={form} layout="vertical">
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item label="User ID" name="user_id">
-                <Input disabled />
-              </Form.Item>
-              <Form.Item label="Full Name" name="full_name">
-                <Input disabled />
-              </Form.Item>
-              <Form.Item label="Email" name="email">
-                <Input disabled />
-              </Form.Item>
-              <Form.Item label="Department" name="department">
-                <Input disabled />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item label="Job Rank" name="job_rank">
-                <Input disabled />
-              </Form.Item>
-              <Form.Item label="Salary" name="salary">
-                <Input disabled />
-              </Form.Item>
-              <Form.Item label="User Status" name="user_status">
-                <Input value={staff?.user_status === 1 ? "Active" : "Inactive"} disabled />
-              </Form.Item>
-              <Form.Item label="Role Name" name="role_name">
-                <Input disabled />
-              </Form.Item>
-            </Col>
-          </Row>
-          <div className={styles.buttonContainer}>
-            <Button type="primary" loading={isSaving} onClick={handleSave}>
-              Save
-            </Button>
-            <Button onClick={onClose} className={styles.cancelButton}>
-              Cancel
-            </Button>
+    <div className={styles.modalOverlay}>
+      <div className={styles.modalContent}>
+        <div className={styles.modalHeader}>
+          <h2>Staff Details</h2>
+        </div>
+        {loading || !staffInfo ? (
+          <Spin size="large" />
+        ) : (
+          <div className={styles.staffDetails}>
+            <p><IdCard /> <strong>User ID:</strong> {staffInfo.user_id}</p>
+            <p><User /> <strong>Full Name:</strong> {staffInfo.full_name}</p>
+            <p><Mail /> <strong>Email:</strong> {staffInfo.email}</p>
+            <p><Flame /> <strong>Department:</strong> {staffInfo.department}</p>
+            <p><Briefcase /> <strong>Job Rank:</strong> {staffInfo.job_rank}</p>
+            <p><DollarSign /> <strong>Salary:</strong> {staffInfo.salary || "N/A"}</p>
+            <p>
+              {staffInfo.user_status === 1 ? <CheckCircle color="green" /> : <XCircle color="red" />} 
+              <strong>User Status:</strong> {staffInfo.user_status === 1 ? "Active" : "Inactive"}
+            </p>
+            <p><Briefcase /> <strong>Role Name:</strong> {staffInfo.role_name || "N/A"}</p>
           </div>
-        </Form>
-      )}
-    </Modal>
+        )}
+        <Button type="primary" danger className={styles.cancelButton} onClick={onClose}>
+          Cancel
+        </Button>
+      </div>
+    </div>
   );
 };
 

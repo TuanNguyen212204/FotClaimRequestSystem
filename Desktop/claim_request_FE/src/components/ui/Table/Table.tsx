@@ -60,7 +60,7 @@ const TableComponent = forwardRef(
       name,
       pagination = false,
       sortConfig,
-      pageLength = 10,
+      pageLength = 5,
     }: TableComponentProps<T>,
     ref: React.Ref<{
       getSelectedData: () => T[];
