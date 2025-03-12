@@ -53,15 +53,18 @@ export class HttpClient {
     );
   }
 
-  async get<T>(url: string, params?: unknown): Promise<AxiosResponse<T>> {
+  async get<T>(
+    url: string,
+    params?: AxiosRequestConfig["params"]
+  ): Promise<AxiosResponse<T>> {
     return this.createAxios.get(url, {
-      params,
+      params: params ?? {}, // Đảm bảo params luôn là object
     });
   }
   //axios.post(url[, data[, config]])
   async post<T>(
     url: string,
-    data: unknown,
+    data: AxiosRequestConfig["data"],
     config?: AxiosRequestConfig<unknown> | undefined
   ): Promise<AxiosResponse<T>> {
     return this.createAxios.post(url, data, config);
@@ -69,7 +72,7 @@ export class HttpClient {
   //axios.put(url[, data[, config]])
   async put<T>(
     url: string,
-    data: unknown,
+    data: AxiosRequestConfig["data"],
     config?: AxiosRequestConfig<unknown> | undefined
   ): Promise<AxiosResponse<T>> {
     return this.createAxios.put(url, data, config);
@@ -77,13 +80,16 @@ export class HttpClient {
   //axios.patch(url[, data[, config]])
   async patch<T>(
     url: string,
-    data: unknown,
+    data: AxiosRequestConfig["data"],
     config?: AxiosRequestConfig<unknown> | undefined
   ): Promise<AxiosResponse<T>> {
     return this.createAxios.patch(url, data, config);
   }
   //axios.delete(url[, config])
-  async delete<T>(url: string, params?: unknown): Promise<AxiosResponse<T>> {
+  async delete<T>(
+    url: string,
+    params?: AxiosRequestConfig["params"]
+  ): Promise<AxiosResponse<T>> {
     return this.createAxios.delete(url, {
       params,
     });
