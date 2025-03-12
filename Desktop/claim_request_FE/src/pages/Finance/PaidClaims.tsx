@@ -3,32 +3,28 @@ import { useNavigate } from "react-router-dom";
 import styles from "./PaidClaims.module.css";
 import { PATH } from "../../constant/config";
 import { useTable } from "../../Hooks/useTable";
+import { ArrowDown, ArrowUp } from "lucide-react";
 import { Column } from "../../components/ui/Table/Table";
-import httpClient from "../../constant/apiInstance";
 
-interface ClaimData {
-  id: string;
-  claimId: string;
-  staffName: string;
-  projectName: string;
-  duration: string;
-  totalHours: number;
-  approverName: string;
-  status: string;
+interface Project {
+  project_id: string;
+  project_name: string;
+  time_durations: string;
 }
 
-const PaidClaims: React.FC = () => {
-  const navigate = useNavigate();
+interface ClaimData {
+  claim_id: string;
+  user_id: string;
+  full_name: string;
+  submitted_date: string;
+  approved_date: string | null;
+  total_working_hours: number;
+  claim_status: string;
+  project: Project;
+  id?: string;
+  status?: string;
+}
 
-  const fetchPaidClaims = async () => {
-    try {
-      const response = await httpClient.get<ClaimData[]>("/paidclaims");
-      return response.data;
-    } catch (error) {
-      console.error("Failed to fetch paid claims:", error);
-      return [];
-    }
-  };
 
   const {
     data: claims,
@@ -78,27 +74,58 @@ const PaidClaims: React.FC = () => {
     },
   ];
 
+  const { 
+    data: claims, 
+    loading, 
+    pagination, 
+    sortConfig,
+    checkedItems,
+    setPage,
+    handleSort,
+    handleCheck,
+    handleSelectAll,
+    fetchData 
+  } = useTable<ClaimData>({
+    initialPageSize: 5,
+    defaultSortConfig: { columnKey: 'claim_id', order: 'desc' },
+    columns,
+    name: 'paid-claims'
+  });
+
+  useEffect(() => {
+    void fetchData('/finance/claims/paid');
+  }, [fetchData]);
+
   return (
     <div className={styles.container}>
-      <div>
+      <div className={styles.header}>
         <h1 className={styles.claimStatus_h1}>Paid Claims</h1>
-        <hr style={{ width: "100%" }} />
+        <hr />
       </div>
 
-      <div
-        style={{
-          overflow: "hidden",
-          borderRadius: "10px",
-          border: "2px solid black",
-          marginBottom: "20px",
-        }}
-      >
+      <div className={styles.tableContainer}>
         <table className={styles.table}>
           <thead>
             <tr className={styles.style_tr}>
+              <th className={styles.style_th}>
+                <input
+                  type="checkbox"
+                  onChange={handleSelectAll}
+                  checked={checkedItems.size === claims.length && claims.length > 0}
+                />
+              </th>
               {columns.map((column) => (
-                <th key={column.key} className={styles.style_th}>
-                  {column.title}
+                <th 
+                  key={column.key} 
+                  className={styles.style_th}
+                  onClick={() => column.key && handleSort(column.key)}
+                >
+                  <div className={styles.thContent}>
+                    {column.title}
+                    {sortConfig.columnKey === column.key && (
+                      sortConfig.order === 'asc' ? <ArrowUp size={16} /> : <ArrowDown size={16} />
+                    )}
+                  </div>
                 </th>
               ))}
             </tr>
@@ -106,31 +133,44 @@ const PaidClaims: React.FC = () => {
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={columns.length} className={styles.style_td}>
+                <td colSpan={columns.length + 1} className={styles.style_td}>
                   Loading...
                 </td>
               </tr>
-            ) : claims.length === 0 ? (
+            ) : !claims?.length ? (
               <tr>
-                <td colSpan={columns.length} className={styles.style_td}>
+                <td colSpan={columns.length + 1} className={styles.style_td}>
                   No data available
                 </td>
               </tr>
             ) : (
               claims.map((claim) => (
-                <tr key={claim.claimId}>
+                <tr 
+                  key={claim.claim_id}
+                  className={checkedItems.has(claim.claim_id) ? styles.selectedRow : ''}
+                >
+                  <td className={styles.style_td}>
+                    <input
+                      type="checkbox"
+                      checked={checkedItems.has(claim.claim_id)}
+                      onChange={() => handleCheck(claim.claim_id)}
+                    />
+                  </td>
                   {columns.map((column) => (
-                    <td
-                      key={`${claim.claimId}-${column.key}`}
+                    <td 
+                      key={`${claim.claim_id}-${column.key}`} 
                       className={styles.style_td}
                     >
-                      {column.cell
-                        ? column.cell({
-                            value:
-                              claim[column.dataIndex as keyof typeof claim],
-                            record: claim,
-                          })
-                        : claim[column.dataIndex as keyof typeof claim]}
+                      {column.cell ? 
+                        column.cell({ 
+                          value: Array.isArray(column.dataIndex) ? 
+                            claim[column.dataIndex[0]]?.[column.dataIndex[1]] : 
+                            claim[column.dataIndex],
+                          record: claim 
+                        }) 
+                        : Array.isArray(column.dataIndex) ? 
+                          claim[column.dataIndex[0]]?.[column.dataIndex[1]] : 
+                          claim[column.dataIndex]}
                     </td>
                   ))}
                 </tr>
@@ -140,37 +180,37 @@ const PaidClaims: React.FC = () => {
         </table>
       </div>
 
-      <div className={styles.pagination}>
-        <button
-          onClick={() => setPage(pagination.currentPage - 1)}
-          disabled={pagination.currentPage === 1}
-          className={styles.pageButton}
-        >
-          Previous
-        </button>
-        <div className={styles.pageNumbers}>
-          {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map(
-            (page) => (
+      {pagination && (
+        <div className={styles.pagination_container}>
+          <div className={styles.pagination}>
+            <button 
+              className={styles.pageButton}
+              onClick={() => setPage(pagination.currentPage - 1)}
+              disabled={pagination.currentPage === 1}
+            >
+              ←
+            </button>
+            
+            {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map((pageNum) => (
               <button
-                key={page}
-                onClick={() => setPage(page)}
-                className={`${styles.pageNumber} ${
-                  pagination.currentPage === page ? styles.activePage : ""
-                }`}
+                key={pageNum}
+                onClick={() => setPage(pageNum)}
+                className={`${styles.pageNumber} ${pageNum === pagination.currentPage ? styles.activePage : ''}`}
               >
-                {page}
+                {pageNum}
               </button>
-            )
-          )}
+            ))}
+
+            <button 
+              className={styles.pageButton}
+              onClick={() => setPage(pagination.currentPage + 1)}
+              disabled={pagination.currentPage === pagination.totalPages}
+            >
+              →
+            </button>
+          </div>
         </div>
-        <button
-          onClick={() => setPage(pagination.currentPage + 1)}
-          disabled={pagination.currentPage === pagination.totalPages}
-          className={styles.pageButton}
-        >
-          Next
-        </button>
-      </div>
+      )}
     </div>
   );
 };
