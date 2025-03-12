@@ -7,10 +7,12 @@ import {
 
 const initialState: {
   data: Claim[];
+  listClaimApproved: Claim[];
   status: string;
   error: string | null;
 } = {
   data: [],
+  listClaimApproved: [],
   status: "",
   error: null,
 };
@@ -38,7 +40,7 @@ export const claimSlice = createSlice({
       })
       .addCase(fetchApprovedClaimsApproverAsync.fulfilled, (state, action) => {
         state.status = "success";
-        state.data = action.payload;
+        state.listClaimApproved = action.payload;
       })
       .addCase(fetchApprovedClaimsApproverAsync.pending, (state) => {
         state.status = "loading";
