@@ -82,7 +82,7 @@ const PaidClaims: React.FC = () => {
   ];
 
   const { 
-    data: claims, 
+    dataSource: claims, 
     loading, 
     pagination, 
     sortConfig,

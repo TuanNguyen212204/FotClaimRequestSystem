@@ -1,20 +1,15 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
+import type { User } from "@/types/User";
 import {
-  fetchAllUsersAsync,
   fetchUserByIdAsync,
   updateUserAsync,
 } from "@redux/thunk/UserInfo/userInfoThunks";
-import { User } from "@/types/User";
 
-interface UserState {
-  data: User[];
+const initialState: {
   selectedUser: User | null;
   status: string;
   error: string | null;
-}
-
-const initialState: UserState = {
-  data: [],
+} = {
   selectedUser: null,
   status: "",
   error: null,
@@ -23,67 +18,34 @@ const initialState: UserState = {
 export const userInfoSlice = createSlice({
   name: "userInfo",
   initialState,
-  reducers: {
-    setSelectedUser: (state, action: PayloadAction<User | null>) => {
-      state.selectedUser = action.payload;
-    },
-    updateUser: (state, action: PayloadAction<User>) => {
-      state.selectedUser = action.payload;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
+
+      .addCase(fetchUserByIdAsync.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = String(action.error.message);
+      })
       .addCase(fetchUserByIdAsync.pending, (state) => {
         state.status = "loading";
-        state.error = null;
       })
-      .addCase(
-        fetchUserByIdAsync.fulfilled,
-        (state, action: PayloadAction<User>) => {
-          state.status = "success";
-          state.selectedUser = action.payload;
-        }
-      )
-      .addCase(
-        fetchUserByIdAsync.rejected,
-        (state, action: PayloadAction<any>) => {
-          state.status = "failed";
-          state.error = action.payload || "Failed to fetch user";
-        }
-      )
+      .addCase(fetchUserByIdAsync.fulfilled, (state, action) => {
+        state.status = "success";
+        state.selectedUser = action.payload;
+      })
 
-      .addCase(fetchAllUsersAsync.pending, (state) => {
-        state.status = "loading";
-        state.error = null;
-      })
-      .addCase(
-        fetchAllUsersAsync.fulfilled,
-        (state, action: PayloadAction<User[]>) => {
-          state.status = "success";
-          state.data = action.payload;
-        }
-      )
-      .addCase(fetchAllUsersAsync.rejected, (state, action) => {
+      .addCase(updateUserAsync.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.payload || "Failed to fetch users";
+        state.error = String(action.error.message);
       })
       .addCase(updateUserAsync.pending, (state) => {
         state.status = "loading";
-        state.error = null;
       })
-      .addCase(
-        updateUserAsync.fulfilled,
-        (state, action: PayloadAction<User>) => {
-          state.status = "success";
-          state.selectedUser = action.payload;
-        }
-      )
-      .addCase(updateUserAsync.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.payload || "Failed to update user";
+      .addCase(updateUserAsync.fulfilled, (state, action) => {
+        state.status = "success";
+        state.selectedUser = action.payload;
       });
   },
 });
 
-export const { setSelectedUser, updateUser } = userInfoSlice.actions;
 export default userInfoSlice.reducer;

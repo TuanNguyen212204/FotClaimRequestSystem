@@ -9,5 +9,3 @@ export const selectUserInfoStatus = (state: RootState): string =>
 
 export const selectUserInfoError = (state: RootState): string | null =>
   state.userInfo.error;
-
-export const selectAllUsers = (state: RootState): User[] => state.userInfo.data;

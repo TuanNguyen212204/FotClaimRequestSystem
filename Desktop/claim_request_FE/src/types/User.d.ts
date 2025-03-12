@@ -1,9 +1,3 @@
-export interface Experience {
-  title: string;
-  company: string;
-  description: string;
-}
-
 export interface User {
   user_id: string;
   username: string;
@@ -17,12 +11,8 @@ export interface User {
   role_id?: number;
   user_status?: number;
   role_name?: string;
-  avatar?: string;
-  bio?: string;
-  projects?: string[];
-  experiences?: Experience[];
 }
 
 export interface NewUser extends User {
-  role: string; //(e.g., "Dev", "BA", "PM")
+  role: string; // (e.g., "Dev", "BA", "PM")
 }

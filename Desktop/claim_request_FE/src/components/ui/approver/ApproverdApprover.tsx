@@ -53,16 +53,16 @@ export const ApprovedApproverComponent: React.FC = () => {
   };
 
   const columns: Column[] = [
-    {
-      key: "claim_id",
-      dataIndex: "claim_id",
-      title: "Claim ID",
-    },
-    {
-      key: "user_id",
-      dataIndex: "user_id",
-      title: "User ID",
-    },
+    // {
+    //   key: "claim_id",
+    //   dataIndex: "claim_id",
+    //   title: "Claim ID",
+    // },
+    // {
+    //   key: "user_id",
+    //   dataIndex: "user_id",
+    //   title: "User ID",
+    // },
     {
       key: "project_name",
       dataIndex: "project_name",

@@ -9,6 +9,8 @@ import {
 import styles from "./Table.module.css";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import PaginationForTable from "./PaginationForTable";
+import { LoadingProvider } from "../Loading/LoadingContext";
+import LoadingOverlay from "../Loading/LoadingOverlay";
 export type Column = {
   key?: string;
   dataIndex: string;
@@ -87,6 +89,7 @@ const TableComponent = forwardRef(
     const [sortColumn, setSortColumn] = useState<string | null>(
       sortConfig?.columnKey || null
     );
+    const [isLoading, setIsLoading] = useState(loading);
 
     const uniqueStatuses = [
       "All",
@@ -187,6 +190,25 @@ const TableComponent = forwardRef(
         });
       },
     }));
+    useEffect(() => {
+      if (loading) {
+        setIsLoading(true);
+        const timer = setTimeout(() => {
+          setIsLoading(false);
+        }, 2000);
+        return () => clearTimeout(timer);
+      } else {
+        setIsLoading(false);
+      }
+    }, [loading]);
+
+    if (isLoading) {
+      return (
+        <div className="flex justify-center items-center min-h-[300px]">
+          {/* <p className="text-lg font-semibold">Loading...</p> */}
+        </div>
+      );
+    }
 
     return (
       <div className={styles.container}>
@@ -225,7 +247,6 @@ const TableComponent = forwardRef(
         </section>
 
         <div>
-          {loading && <div className="loading">Loading...</div>}
           {filteredData.length.toString() !== "0" ? (
             <section className={styles.table_body}>
               <table className={styles.table}>

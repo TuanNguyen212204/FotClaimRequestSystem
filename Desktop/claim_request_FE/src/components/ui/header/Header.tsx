@@ -4,7 +4,7 @@ import SearchBar from "../searchbar/SearchBar";
 import { FaBell, FaUserCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { PATH } from "../../../constant/config";
-import Badge from "@components/ui/Badge/Badge";
+import Badge from "@/components/ui/Badge";
 
 const Header: React.FC = () => {
   const navigate = useNavigate();

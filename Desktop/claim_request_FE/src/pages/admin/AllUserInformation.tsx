@@ -3,19 +3,24 @@ import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch } from "@redux/index.ts";
 import { useEffect, useState } from "react";
 import { selectAllUser } from "@redux/selector/userSelector";
-import { fetchAllUserAsync } from "@redux/thunk/User/userThunk";
+import { selectUserById } from "@redux/selector/userSelector";
+import {
+  fetchAllUserAsync,
+  fetchUserByIdAsync,
+} from "@redux/thunk/User/userThunk";
 import { Column } from "@components/ui/Table/Table";
 import { DataRecord } from "@components/ui/Table/Table";
-import { data } from "react-router-dom";
 const AllUserInformation: React.FC = () => {
   const users = useSelector(selectAllUser);
+  const user = useSelector(selectUserById);
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch<AppDispatch>();
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       await dispatch(fetchAllUserAsync());
-
+      await dispatch(fetchUserByIdAsync());
       setLoading(false);
     };
     fetchData();
@@ -23,12 +28,15 @@ const AllUserInformation: React.FC = () => {
   useEffect(() => {
     console.log(users);
   }, [users]);
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-  if (!users || users.length === 0) {
-    return <p>No data available</p>;
-  }
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
+  // if (loading) {
+  //   return <p>Loading...</p>;
+  // }
+  // if (!users || users.length === 0) {
+  //   return <p>No data available</p>;
+  // }
   const columns: Column[] = [
     {
       key: "user_id",
@@ -55,6 +63,11 @@ const AllUserInformation: React.FC = () => {
       dataIndex: "job_rank",
       title: "Job Rank",
     },
+    {
+      key: "Action",
+      dataIndex: "Action",
+      title: "Action",
+    },
   ];
   const dataSource: DataRecord[] = users.map((user, index) => ({
     ...user,
@@ -68,7 +81,7 @@ const AllUserInformation: React.FC = () => {
       <TableComponent
         columns={columns}
         dataSource={dataSource}
-        loading={false}
+        loading={true}
         pagination={true}
         pageLength={8}
         name="Role"

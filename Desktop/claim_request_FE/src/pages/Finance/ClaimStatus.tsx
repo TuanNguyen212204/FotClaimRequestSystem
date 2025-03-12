@@ -82,7 +82,7 @@ const ClaimStatus: React.FC = () => {
   ];
 
   const { 
-    data: claims, 
+    dataSource: claims, 
     loading, 
     sortConfig,
     handleSort,

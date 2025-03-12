@@ -49,6 +49,7 @@
 .editButton:hover {
   background: #e63946;
 }
+
 .profileInfo {
   flex-grow: 1;
 }
@@ -95,7 +96,7 @@
 
 .profileContent {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 2rem;
 }
 
@@ -112,15 +113,6 @@
   margin-bottom: 1.5rem;
   padding-bottom: 0.5rem;
   border-bottom: 2px solid #e2e8f0;
-}
-
-.inputField {
-  width: 100%;
-  padding: 10px;
-  font-size: 1rem;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  resize: none;
 }
 
 .editModal {
@@ -140,57 +132,12 @@
   background: white;
   padding: 2.5rem;
   border-radius: 15px;
-  width: 800px;
+  width: 600px;
   max-height: 90vh;
   overflow-y: auto;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
   animation: slideIn 0.3s ease-out;
   background: linear-gradient(135deg, #f9f9f9, #ffffff);
-}
-.avatarUploadSection {
-  text-align: center;
-  margin-bottom: 2rem;
-  position: relative;
-  padding: 1rem;
-  background: #f8fafc;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-
-.avatarPreview {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-bottom: 1rem;
-  border: 3px solid #eee;
-  transition: transform 0.3s ease;
-}
-
-.avatarPreview:hover {
-  transform: scale(1.05);
-}
-
-.hiddenInput {
-  display: none;
-}
-
-.uploadButton {
-  background: #2d3142;
-  color: white;
-  padding: 8px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.3s, transform 0.3s;
-  display: block;
-  margin: 1rem auto 0;
-  font-weight: 500;
-  max-width: 150px;
-}
-
-.uploadButton:hover {
-  background: #404761;
-  transform: translateY(-2px);
 }
 
 .formSection {
@@ -205,7 +152,6 @@
   font-size: 1.1rem;
 }
 
-.formSection textarea,
 .formSection input {
   width: 100%;
   padding: 12px;
@@ -216,50 +162,10 @@
   transition: border-color 0.3s ease;
 }
 
-.formSection textarea:focus,
 .formSection input:focus {
   border-color: #2d3142;
   outline: none;
   box-shadow: 0 0 8px rgba(45, 49, 66, 0.2);
-}
-
-.arrayItem {
-  position: relative;
-  margin-bottom: 1.5rem;
-  padding: 1.5rem;
-  border: 1px solid #eee;
-  border-radius: 10px;
-  background: #f9f9f9;
-  transition: box-shadow 0.3s ease;
-}
-
-.arrayItem:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-
-.removeButton {
-  margin-left: 10px;
-  padding: 5px 10px;
-  background-color: #ff4d4f;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.removeButton:hover {
-  background-color: #ff1a1a;
-}
-
-.addButton {
-  background: #4caf50;
-  color: white;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 8px;
 }
 
 .buttonGroup {
@@ -288,44 +194,6 @@
   cursor: pointer;
 }
 
-.bioText {
-  line-height: 1.6;
-  color: #4a5568;
-}
-
-.projectsGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 1rem;
-}
-
-.projectCard {
-  background: #f8fafc;
-  padding: 1rem;
-  border-radius: 8px;
-  text-align: center;
-  font-weight: 500;
-  transition: transform 0.2s;
-}
-
-.projectCard:hover {
-  transform: translateY(-3px);
-}
-
-.experienceItem {
-  margin-bottom: 2rem;
-}
-
-.companyName {
-  color: #4a5568;
-  margin: 0.5rem 0;
-}
-
-.experienceDesc {
-  color: #718096;
-  line-height: 1.6;
-}
-
 @media (max-width: 768px) {
   .profileHeader {
     flex-direction: column;
@@ -340,9 +208,7 @@
     flex-direction: column;
     gap: 1.5rem;
   }
-}
 
-@media (max-width: 768px) {
   .modalContent {
     background: white;
     padding: 1.5rem;
@@ -352,11 +218,6 @@
     overflow-y: auto;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
     animation: slideIn 0.3s ease-out;
-  }
-
-  .avatarPreview {
-    width: 100px;
-    height: 100px;
   }
 
   @keyframes slideIn {
