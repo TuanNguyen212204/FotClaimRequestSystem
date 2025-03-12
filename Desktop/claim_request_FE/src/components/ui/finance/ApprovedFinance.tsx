@@ -1,119 +1,108 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchAllClaims } from "../../../redux/Finance/claimsSlice";
 import styles from "./ApprovedFinance.module.css";
-import { ArrowLeftSquare, ArrowRightSquare, EyeIcon } from "lucide-react";
-import { RootState, AppDispatch } from "../../../redux/index";
+import { EyeIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { PATH } from "../../../constant/config";
-import { selectAllClaim } from "@/redux/selector/claimSelector";
+import TableComponent, { Column, DataRecord } from "../Table/Table";
+import httpClient from "@/constant/apiInstance";
+
+interface claimList {
+  claim_id?: string;
+  user_id?: string;
+  project_id?: string;
+  total_working_hours?: number;
+  submitted_date?: Date;
+  claim_status?: string;
+  project_name?: string;
+}
 
 export const ApprovedFinanceComponent: React.FC = () => {
+  const [claimList, setClaimList] = useState<claimList[]>([]);
   const navigate = useNavigate();
-  const dispatch = useDispatch<AppDispatch>();
-  const listClaims = useSelector(selectAllClaim);
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 7;
 
   useEffect(() => {
-    dispatch(fetchAllClaims());
-  }, [dispatch]);
+    fetchApprovedClaimAysnc();
+  }, []);
 
-  const formatDate = (dateString: string) => {
-    const options = {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    } as const;
-    return new Date(dateString).toLocaleDateString("en-US", options);
-  };
-
-  const totalPages = Math.ceil(listClaims.length / itemsPerPage);
-
-  const currentData = listClaims.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
-
-  const handlePageChange = (page: number) => {
-    if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
+  const fetchApprovedClaimAysnc = async () => {
+    try {
+      const res = await httpClient.get<{ data: claimList[] }>(
+        `/approvers/approved-claim`
+      );
+      console.log("data: ", res.data.data);
+      setClaimList(res.data.data);
+    } catch (error) {
+      console.log("Error at ApprovedApprover: ", error);
     }
   };
 
-  const handleUpload = (files: FileList) => {
-    console.log("Files uploaded:", files);
-    // Gửi file lên server hoặc xử lý khác
+  const handleViewDetail = (claimId: string) => {
+    navigate(`/approve/detail/${claimId}`); //sửa lại url ở đây để truyền
   };
 
+  const formatDateToDDMMYYYY = (date: string) => {
+    const dateObj = new Date(date);
+    const day = dateObj.getDate();
+    const month = dateObj.getMonth() + 1;
+    const year = dateObj.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
+  const columns: Column[] = [
+    {
+      key: "claim_id",
+      dataIndex: "claim_id",
+      title: "Claim ID",
+    },
+    {
+      key: "user_id",
+      dataIndex: "user_id",
+      title: "User ID",
+    },
+    {
+      key: "project_name",
+      dataIndex: "project_name",
+      title: "Project Name",
+    },
+    {
+      key: "total_working_hours",
+      dataIndex: "total_working_hours",
+      title: "Total Working Hours",
+      cell: ({ value }) => `${value} hours`,
+    },
+    {
+      key: "submitted_date",
+      dataIndex: "submitted_date",
+      title: "Submitted Date",
+      cell: ({ value }) => formatDateToDDMMYYYY(value as string),
+    },
+    {
+      key: "action",
+      dataIndex: "claim_id",
+      title: "Action",
+      cell: ({ value }) => (
+        <EyeIcon
+          className={styles.icon}
+          onClick={() => handleViewDetail(value as string)}
+        />
+      ),
+    },
+  ];
+  const dataSource: DataRecord[] = claimList.map((claim, index) => ({
+    ...claim,
+    key: index,
+    id: claim.claim_id ? claim.claim_id.toString() : "",
+    status: claim.claim_id ? claim.claim_id : "",
+  }));
   return (
-    <div className={styles.container}>
-      {/* <h1 className={styles.table_header}>Approved Claims</h1>
-      <div className={styles.container_table}>
-        <table className={styles.table_body}>
-          <thead>
-            <tr>
-              <th>Claim ID</th>
-              <th>Staff Name</th>
-              <th>Project Name</th>
-              <th>Project Duration</th>
-              <th>Total Hours Working</th>
-              <th>Approver Name</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentData.map((item, index) => (
-              <tr key={index}>
-                <td>{item.claimId}</td>
-                <td>{item.staffName}</td>
-                <td>{item.projectName}</td>
-                <td>
-                  {formatDate(item.startAt)} to {formatDate(item.finishAt)}
-                </td>
-                <td>{item.hour} hours</td>
-                <td>{item.approverName}</td>
-                <td>
-                  <EyeIcon
-                    className={styles.icon}
-                    onClick={() => navigate(PATH.approveDetails)}
-                  />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
-        <div className={styles.pagination}>
-          <span
-            className={styles.pageIcon}
-            onClick={() => handlePageChange(currentPage - 1)}
-          >
-            <ArrowLeftSquare />
-          </span>
-
-          {[...Array(totalPages)].map((_, index) => (
-            <span
-              key={index}
-              className={`${styles.pageNumber} ${
-                currentPage === index + 1 ? styles.active : ""
-              }`}
-              onClick={() => handlePageChange(index + 1)}
-            >
-              {index + 1}
-            </span>
-          ))}
-
-          <span
-            className={styles.pageIcon}
-            onClick={() => handlePageChange(currentPage + 1)}
-          >
-            <ArrowRightSquare />
-          </span>
-        </div>
-      </div> */}
-      hello 1
+    <div>
+      <TableComponent
+        columns={columns}
+        dataSource={dataSource}
+        loading={false}
+        pagination={true}
+        name="Claims"
+        pageLength={7}
+      />
     </div>
   );
 };
