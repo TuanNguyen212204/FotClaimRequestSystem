@@ -3,7 +3,7 @@ import { combineReducers } from "@reduxjs/toolkit";
 // import { detailsSlice } from "./slice/detailsSlice";
 // import { financeSlice } from "./slices/financeSlice";
 // import claimsReducer from "./slice/claimsSlice";
-// import userClaimSlice from "./slice/userClaimSlice";
+import userClaimSlice from "./slices/Claim/userClaimSlice";
 // import { financeSlice } from "./Finance/claimsSlice";
 // import claimsReducer from "./slice/claimsSlice";
 // import { approverSlice } from "./Approver/claimsSlice";
@@ -21,7 +21,7 @@ export const rootReducer = combineReducers({
   pending: pendingSlice.reducer,
   // details: detailsSlice.reducer,
   //
-  // userClaims: userClaimSlice.reducer,
+  userClaims: userClaimSlice.reducer,
   // claims: claimsReducer,
   // approver: approverSlice.reducer,
   projects: projectReducer,

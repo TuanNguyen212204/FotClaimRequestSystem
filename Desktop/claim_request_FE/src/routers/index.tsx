@@ -24,6 +24,7 @@ import Unauthenticated from "@auth/Unauthenticated";
 import { ROLE } from "@constant/role";
 import UserClaimsPage from "@/pages/User/UserClaimsPage";
 import UserClaimDetailsPage from "@/pages/User/UserClaimDetailsPage";
+import UserClaims from "@/components/ui/claimer/UserClaims";
 const router: RouteObject[] = [
   // {
   //   element: <CheckBoxTest />,

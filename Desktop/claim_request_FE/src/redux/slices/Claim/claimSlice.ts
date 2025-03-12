@@ -7,6 +7,7 @@ import {
 
 const initialState: {
   data: Claim[];
+  
   status: string;
   error: string | null;
 } = {
