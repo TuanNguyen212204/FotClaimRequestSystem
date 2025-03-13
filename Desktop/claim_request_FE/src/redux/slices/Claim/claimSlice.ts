@@ -14,6 +14,7 @@ const initialState: {
   myClaim: Claim[];
   listClaimPending: Claim[];
   totalPages: number;
+  totalPages: number;
   status: string;
   error: string | null;
 } = {
@@ -22,7 +23,6 @@ const initialState: {
   listClaimPending: [],
   totalPages: 1,
   myClaim: [],
-
   status: "",
   error: null,
 };
@@ -50,7 +50,8 @@ export const claimSlice = createSlice({
       })
       .addCase(fetchApprovedClaimsApproverAsync.fulfilled, (state, action) => {
         state.status = "success";
-        state.listClaimApproved = action.payload;
+        state.listClaimApproved = action.payload.data;
+        state.totalPages = action.payload.totalPages;
       })
       .addCase(fetchApprovedClaimsApproverAsync.pending, (state) => {
         state.status = "loading";

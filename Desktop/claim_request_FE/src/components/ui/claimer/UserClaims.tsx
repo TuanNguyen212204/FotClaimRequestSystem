@@ -103,7 +103,7 @@ const UserClaims = () => {
       <TableComponent
         columns={columns}
         dataSource={dataSource}
-        loading={false}
+        loading={true}
         pagination={true}
         name="My Claims"
         totalPage={1}
