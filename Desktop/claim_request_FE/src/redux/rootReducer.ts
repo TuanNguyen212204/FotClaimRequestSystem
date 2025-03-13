@@ -10,11 +10,13 @@ import { combineReducers } from "@reduxjs/toolkit";
 import projectReducer from "./slices/Project/projectSlice";
 import { userSlice } from "./slices/User/userSlice.ts";
 import { claimSlice } from "./slices/Claim/claimSlice";
+import paidClaimsReducer from './slices/Claim/paidClaimsSlice';
 export const rootReducer = combineReducers({
   // pending: pendingSlice.reducer,
   // details: detailsSlice.reducer,
   // finance: financeSlice.reducer,
   //
+  paidClaims: paidClaimsReducer,
   user: userSlice.reducer,
   claim: claimSlice.reducer,
   projects: projectReducer,
