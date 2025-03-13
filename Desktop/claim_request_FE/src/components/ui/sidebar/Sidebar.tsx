@@ -165,6 +165,17 @@ export const Sidebar = () => {
                       {!isCollapsed && "Staff Information"}
                     </button>
                   </li>
+                  <li
+                    key="projectinformation"
+                    className={`${styles.claimItem} ${
+                      selectedClaim === "projectinformation" ? styles.active : ""
+                    }`}
+                    onClick={() => handleSelect("projectinformation")}
+                  >
+                    <button className={styles.claimButton}>
+                      {!isCollapsed && "Project Information"}
+                    </button>
+                  </li>
                 </>
               )}
               {role === "approve" && (

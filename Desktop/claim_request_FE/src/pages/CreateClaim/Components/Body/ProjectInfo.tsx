@@ -7,7 +7,7 @@ import {
 } from "react-hook-form";
 import { JSX, ReactNode } from "react";
 import { FormData } from "@/types/claimForm.type";
-import { TProjectInfo } from "@/redux/slices/Project/projectSlice";
+import { TProjectInfo } from "@/redux/slices/Project/projecInfotSlice";
 import styles from "@pages/CreateClaim/Claim.module.css";
 export interface IProjectInfoProps {
   ProjectList: TProjectInfo[];

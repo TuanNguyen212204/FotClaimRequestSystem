@@ -17,6 +17,7 @@ export const PATH = {
   approveDetails: "/approve-details",
   claimStatus: "/claim-status/:id",
   paidClaim: "/paid-claim",
+  dashboard: "/dashboard",
   approvedFinance: "/finance/approved", //finance first page
   approvedApprover: "/approver/approved",
   projectInformation: "/project-information",
@@ -25,4 +26,6 @@ export const PATH = {
   unauthenticated: "/unauthenticated",
   updateUser: "/update-user",
   createUser: "/create-user",
+  createProject: "/create-project",
+  updateProject: "/update-project",
 };
