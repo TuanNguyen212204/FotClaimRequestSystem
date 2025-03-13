@@ -1,109 +1,74 @@
-import { useEffect, useState } from "react";
-import { message, Spin, Tooltip } from "antd";
-import { ExternalLink, Trash } from "lucide-react";
-import httpClient from "@/constant/apiInstance";
-import styles from "./StaffInformation.module.css";
-import StaffDetails from "./StaffDetail";
-import TableComponent from "@/components/ui/Table/Table";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import styles from "./UserSetting.module.css";
+import TableComponent, { Column, DataRecord } from "../../components/ui/Table/Table";
+import { fetchStaffAsync } from "@/redux/slices/User/userSlice"; 
+import { AppDispatch } from "@/redux";
+import { FilePen, Trash2 } from "lucide-react";
 
-interface Staff {
-  user_id: string;
-  full_name: string;
-  email: string;
+interface StaffData {
+  id: string;
+  name: string;
   department: string;
-  job_rank: string;
+  jobRank: string;
+  salary: number;
 }
 
-const StaffInformation = () => {
-  const [dataSource, setDataSource] = useState<Staff[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedStaff, setSelectedStaff] = useState("");
-
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      const response = await httpClient.get<{ httpStatus: number; data: Staff[] }>("/admin/staffs");
-      if (response.data.httpStatus === 200) {
-        setDataSource(response.data.data);
-      } else {
-        message.error("Failed to fetch staff data.");
-      }
-    } catch (error) {
-      message.error("An error occurred while fetching staff data.");
-    } finally {
-      setLoading(false);
-    }
-  };
+const StaffInformation: React.FC = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+  const staffList = useSelector((state: any) => state.staff.data);
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    dispatch(fetchStaffAsync());
+  }, [dispatch]);
 
-  const handleEdit = async (record: string) => {
-    console.log("Editing user:", record); 
-    console.log("record: ", record);
-    setSelectedStaff(record);  
-    setIsModalOpen(true);
+  const handleEdit = (staffId: string) => {
+    navigate(`/staff/edit/${staffId}`);
   };
 
-  const handleDelete = async (record: string) => {
-    if (window.confirm("Are you sure you want to delete this staff?")) {
-        try {
-            await httpClient.delete(`/admin/staffs/${record}`);
-            setDataSource((prevData) => prevData.filter((item) => item.user_id !== record));
-            message.success(`Deleted staff with ID: ${record}`);
-        } catch (error) {
-            message.error("Error deleting staff! Try again.");
-        }
-    }
+  const handleDelete = (staffId: string) => {
+    console.log(`Deleting staff ID: ${staffId}`);
   };
 
-  const columns = [
-    
-    { dataIndex: "user_id", title: "User ID" },
-    { dataIndex: "full_name", title: "Full Name" },
-    { dataIndex: "email", title: "Email" },
-    { dataIndex: "department", title: "Department" },
-    { dataIndex: "job_rank", title: "Job Rank" },
+  const columns: Column[] = [
+    { key: "id", dataIndex: "id", title: "#" },
+    { key: "name", dataIndex: "name", title: "Name" },
+    { key: "department", dataIndex: "department", title: "Department" },
+    { key: "jobRank", dataIndex: "jobRank", title: "Job Rank" },
+    { key: "salary", dataIndex: "salary", title: "Salary", cell: ({ value }) => `$${value}` },
     {
       key: "action",
-      dataIndex: "user_id",
+      dataIndex: "id",
       title: "Action",
-      cell: ({ record }: { record: Staff }) => {
-        return (
-          <div className={styles.actions}>
-            <Tooltip title="Detail">
-              <ExternalLink
-                className={styles.iconApprove}
-                onClick={() => handleEdit(record)}
-              />
-            </Tooltip>
-            <Tooltip title="Delete">
-              <Trash
-                className={styles.iconReject}
-                onClick={() => handleDelete(record.user_id)}
-              />
-            </Tooltip>
-          </div>
-        );
-      },
-    }
+      cell: ({ value }) => (
+        <div className={styles.actionIcons}>
+          <FilePen className={styles.icon} onClick={() => handleEdit(value as string)} />
+          <Trash2 className={styles.icon} onClick={() => handleDelete(value as string)} />
+        </div>
+      ),
+    },
   ];
+
+  const dataSource: DataRecord[] = staffList.map((staff: StaffData, index: number) => ({
+    ...staff,
+    key: index,
+  }));
 
   return (
     <div className={styles.container}>
-      <h2>Staff Information</h2>
-      {loading ? <Spin size="large" /> : <TableComponent columns={columns} dataSource={dataSource} pagination />}
-      {isModalOpen && (
-        <StaffDetails 
-          isOpen={isModalOpen} 
-          onClose={() => setIsModalOpen(false)} 
-          staff={selectedStaff} 
-          loading={loading} 
-        />
-      )}
+      <div className={styles.header}>
+        <h1>User Settings</h1>
+        <hr />
+      </div>
 
+      <TableComponent 
+        columns={columns} 
+        dataSource={dataSource} 
+        pagination={true} 
+        pageLength={7} 
+        name="Staff List" />
     </div>
   );
 };

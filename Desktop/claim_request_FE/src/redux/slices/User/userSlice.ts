@@ -3,28 +3,33 @@ import { message } from "antd";
 import httpClient from "@/constant/apiInstance";
 
 interface Staff {
-  user_id: string;
-  full_name: string;
+  id: string; // Đổi từ user_id thành id
+  name: string; // Đổi từ full_name thành name
   email: string;
   department: string;
-  job_rank: string;
+  jobRank: string; // Đổi từ job_rank thành jobRank để phù hợp với component Table
 }
 
 interface StaffState {
-  staffList: Staff[];
+  data: Staff[];
   loading: boolean;
 }
 
 const initialState: StaffState = {
-  staffList: [],
+  data: [],
   loading: false,
 };
 
-export const fetchStaff = createAsyncThunk("staff/fetchStaff", async (_, { rejectWithValue }) => {
+export const fetchStaffAsync = createAsyncThunk("staff/fetchStaffAsync", async (_, { rejectWithValue }) => {
   try {
     const response = await httpClient.get<{ httpStatus: number; data: Staff[] }>("/admin/staffs");
     if (response.data.httpStatus === 200) {
-      return response.data.data;
+      return response.data.data.map((staff) => ({
+        ...staff,
+        id: staff.user_id, // Chuyển user_id thành id
+        name: staff.full_name, // Chuyển full_name thành name
+        jobRank: staff.job_rank, // Chuyển job_rank thành jobRank
+      }));
     } else {
       message.error("Failed to fetch staff data.");
       return rejectWithValue("Failed to fetch staff data.");
@@ -41,14 +46,14 @@ const staffSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchStaff.pending, (state) => {
+      .addCase(fetchStaffAsync.pending, (state) => {
         state.loading = true;
       })
-      .addCase(fetchStaff.fulfilled, (state, action) => {
+      .addCase(fetchStaffAsync.fulfilled, (state, action) => {
         state.loading = false;
-        state.staffList = action.payload;
+        state.data = action.payload;
       })
-      .addCase(fetchStaff.rejected, (state) => {
+      .addCase(fetchStaffAsync.rejected, (state) => {
         state.loading = false;
       });
   },
