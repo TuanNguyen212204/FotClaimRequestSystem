@@ -111,6 +111,7 @@ const AllUserInformation: React.FC = () => {
         loading={loading}
         pagination={true}
         name="Role"
+        createButton={true}
         totalPage={totalPage}
         onPageChange={handlePageChange}
         onCreateButtonClick={handleCreateUser}

@@ -2,8 +2,7 @@ import styles from "./Sidebar.module.css";
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { PATH } from "../../../constant/config";
-import { Button } from "@/components/ui/button/Button";
-
+import fptlogo from "@assets/fot.png";
 export const Sidebar = () => {
   const [selectedClaim, setSelectedClaim] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -91,7 +90,7 @@ export const Sidebar = () => {
         </div>
 
         <div className={styles.logo}>
-          <img src="/imgs/logo.png" alt="logo" className={styles.logoImage} />
+          <img src={fptlogo} alt="logo" className={styles.logoImage} />
         </div>
 
         {/* Bỏ nút Create Claims nếu vai trò là approve hoặc finance */}

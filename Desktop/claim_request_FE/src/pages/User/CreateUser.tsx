@@ -60,10 +60,14 @@ export const CreateUser: React.FC = () => {
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             {/* Full Name */}
             <div>
-              <label className="block text-sm font-medium text-gray-600">
+              <label
+                className="block text-sm font-medium text-gray-600"
+                htmlFor="full_name"
+              >
                 Full Name
               </label>
               <input
+                id="full_name"
                 {...register("full_name", {
                   required: "Full name is required",
                   minLength: {
@@ -84,10 +88,14 @@ export const CreateUser: React.FC = () => {
               )}
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-600">
+              <label
+                className="block text-sm font-medium text-gray-600"
+                htmlFor="email"
+              >
                 Email
               </label>
               <input
+                id="email"
                 type="email"
                 {...register("email", {
                   required: "Email is required",
@@ -101,10 +109,15 @@ export const CreateUser: React.FC = () => {
               )}
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-600">
+              <label
+                className="block text-sm font-medium text-gray-600"
+                htmlFor="department"
+              >
                 Department
               </label>
               <input
+                id="department"
+                type="text"
                 {...register("department", {
                   required: "Department is required",
                   minLength: {
@@ -125,7 +138,10 @@ export const CreateUser: React.FC = () => {
               )}
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-600">
+              <label
+                className="block text-sm font-medium text-gray-600"
+                htmlFor="salary"
+              >
                 Salary
               </label>
               <input
