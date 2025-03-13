@@ -1,9 +1,11 @@
 import React, { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import styles from "./ClaimStatus.module.css";
-import { useTable } from "../../Hooks/useTable";
 import { Column } from "../../components/ui/Table/Table";
-import { ArrowDown, ArrowUp } from "lucide-react";
+import { Printer } from "lucide-react";
+import { AppDispatch } from "@/redux";
+import { fetchPaidClaimsAsync } from "../../redux/slices/Claim/paidClaimsSlice";
 
 interface Project {
   project_id: string;
@@ -20,36 +22,38 @@ interface ClaimData {
   total_working_hours: number;
   claim_status: string;
   project: Project;
-  id?: string;
-  status?: string;
 }
 
-const formatDate = (dateString: string | null) => {
-  if (!dateString) return 'Pending';
-  return new Date(dateString).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric'
-  });
-};
-
 const ClaimStatus: React.FC = () => {
-  const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
-  
+  const dispatch = useDispatch<AppDispatch>();
+  const { data: claims, loading } = useSelector((state: any) => state.paidClaims);
+
+  useEffect(() => {
+    dispatch(fetchPaidClaimsAsync("1"));
+  }, [dispatch]);
+
+  const formatDate = (dateString: string | null) => {
+    if (!dateString) return 'Pending';
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
   const columns: Column[] = [
     { 
       key: 'claim_id', 
       dataIndex: 'claim_id', 
-      title: 'Claim ID',
-      cell: ({ value }) => <span>{value}</span>
+      title: 'Claim ID'
     },
     { 
       key: 'overtime_duration', 
       dataIndex: 'submitted_date', 
       title: 'Overtime Duration',
       cell: ({ record }) => (
-        <div>
+        <div className={styles.dateRange}>
           <div>From: {formatDate(record.submitted_date)}</div>
           <div>To: {formatDate(record.approved_date)}</div>
         </div>
@@ -59,81 +63,75 @@ const ClaimStatus: React.FC = () => {
       key: 'overtime_date', 
       dataIndex: 'submitted_date', 
       title: 'Overtime Date',
-      cell: ({ value }) => <span>{formatDate(value)}</span>
+      cell: ({ value }) => formatDate(value)
     },
     { 
       key: 'total_hours', 
       dataIndex: 'total_working_hours', 
-      title: 'Total No. Hours',
-      cell: ({ value }) => <span>{value} hours</span>
+      title: 'Total Hours',
+      cell: ({ value }) => `${value} hours`
     },
     { 
       key: 'overtime_paid', 
       dataIndex: 'total_working_hours', 
       title: 'Overtime Paid',
-      cell: ({ value }) => <span>{(value * 25000).toLocaleString('vi-VN')}vnd</span>
+      cell: ({ value }) => `${(value * 25000).toLocaleString('vi-VN')} VND`
     },
     { 
       key: 'status', 
       dataIndex: 'claim_status', 
       title: 'Status',
-      cell: () => <span className={styles.style_td_Status}>Paid</span>
+      cell: () => <span className={styles.statusPaid}>Paid</span>
     }
   ];
-
-  const { 
-    dataSource: claims, 
-    loading, 
-    sortConfig,
-    handleSort,
-    fetchData 
-  } = useTable<ClaimData>({
-    initialPageSize: 5,
-    defaultSortConfig: { columnKey: 'overtime_date', order: 'desc' },
-    columns,
-    name: 'claim-status'
-  });
-
-  useEffect(() => {
-    void fetchData('/finance/claims/paid');
-  }, [fetchData]);
 
   if (loading || !claims.length) {
     return (
       <div className={styles.container}>
-        <div className={styles.header}></div>
-        <h1 className={styles.claimStatus_h1}>Claim Status</h1>
-        <p>{loading ? "Loading..." : `No claim information found for ID: ${id}`}</p>
+        <div className={styles.header}>
+          <h1 className={styles.title}>Claim Status</h1>
+        </div>
+        <div className={styles.loading}>
+          {loading ? "Loading..." : `No claim information found for ID: ${id}`}
+        </div>
       </div>
     );
   }
 
-  const claimInfo = claims.find(claim => claim.claim_id === id) || claims[0];
-
-  const handlePrint = () => {
-    window.print();
-  };
+  const claimDetail = claims.find(claim => claim.claim_id === id) || claims[0];
+  const [startDate, endDate] = claimDetail.project.time_durations.split(' - ');
 
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h1 className={styles.claimStatus_h1}>Claim Status</h1>
+        <h1 className={styles.title}>Claim Status</h1>
+        <hr />
       </div>
       
-      <div className={styles.box}>
-        <div>
-          <p className={styles.infoLabel}>User ID: <span>{claimInfo.user_id}</span></p>
-          <p className={styles.infoLabel}>Project Name: <span>{claimInfo.project.project_name}</span></p>
-          <p className={styles.infoLabel}>Project Duration: <span>
-            {claimInfo.project.time_durations.split(' - ').map((date, index) => (
-              <span key={index}>{index === 0 ? 'From: ' : 'To: '}{date}{index === 0 ? '': ''}</span>
-            ))}
-          </span></p>
+      <div className={styles.infoBox}>
+        <div className={styles.infoColumn}>
+          <div className={styles.infoItem}>
+            <label>User ID:</label>
+            <span>{claimDetail.user_id}</span>
+          </div>
+          <div className={styles.infoItem}>
+            <label>Project Name:</label>
+            <span>{claimDetail.project.project_name}</span>
+          </div>
+          <div className={styles.infoItem}>
+            <label>Project Duration:</label>
+            <span>From: {startDate} To: {endDate}</span>
+          </div>
         </div>
-        <div className={styles.rightAligned}>
-          <p className={styles.infoLabel}>Staff Name: <span>{claimInfo.full_name}</span></p>
-          <p className={styles.infoLabel}>Project ID: <span>{claimInfo.project.project_id}</span></p>
-          
+        <div className={styles.infoColumn}>
+          <div className={styles.infoItem}>
+            <label>Staff Name:</label>
+            <span>{claimDetail.full_name}</span>
+          </div>
+          <div className={styles.infoItem}>
+            <label>Project ID:</label>
+            <span>{claimDetail.project.project_id}</span>
+          </div>
         </div>
       </div>
 
@@ -144,14 +142,10 @@ const ClaimStatus: React.FC = () => {
               {columns.map((column) => (
                 <th 
                   key={column.key} 
-                  className={column.key === 'status' ? styles.style_th_Status : styles.style_th}
-                  onClick={() => column.key && handleSort(column.key)}
+                  className={column.key === 'status' ? styles.statusHeader : styles.tableHeader}
                 >
-                  <div className={styles.thContent}>
+                  <div className={styles.headerContent}>
                     {column.title}
-                    {sortConfig.columnKey === column.key && (
-                      sortConfig.order === 'asc' ? <ArrowUp size={14} /> : <ArrowDown size={14} />
-                    )}
                   </div>
                 </th>
               ))}
@@ -162,14 +156,14 @@ const ClaimStatus: React.FC = () => {
               {columns.map((column) => (
                 <td 
                   key={column.key}
-                  className={column.key === 'status' ? styles.style_td_Status : styles.style_td}
+                  className={column.key === 'status' ? styles.statusCell : styles.tableCell}
                 >
                   {column.cell ? 
                     column.cell({ 
-                      value: claimInfo[column.dataIndex as keyof typeof claimInfo],
-                      record: claimInfo 
+                      value: claimDetail[column.dataIndex as keyof typeof claimDetail],
+                      record: claimDetail 
                     }) 
-                    : claimInfo[column.dataIndex as keyof typeof claimInfo]}
+                    : claimDetail[column.dataIndex as keyof typeof claimDetail]}
                 </td>
               ))}
             </tr>
@@ -177,8 +171,9 @@ const ClaimStatus: React.FC = () => {
         </table>
       </div>
 
-      <div className={styles.pagination_container}>
-        <button className={styles.print_button} onClick={handlePrint}>
+      <div className={styles.actions}>
+        <button className={styles.printButton} onClick={() => window.print()}>
+          <Printer size={16} />
           Print
         </button>
       </div>
