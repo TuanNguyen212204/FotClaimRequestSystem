@@ -20,6 +20,13 @@ import {
 //   claim_status?: string;
 //   project_name?: string;
 // }
+const formatDateToDDMMYYYY = (date: string) => {
+  const dateObj = new Date(date);
+  const day = dateObj.getDate();
+  const month = dateObj.getMonth() + 1;
+  const year = dateObj.getFullYear();
+  return `${day}/${month}/${year}`;
+};
 
 export const ApprovedFinanceComponent: React.FC = () => {
   const navigate = useNavigate();
@@ -41,15 +48,7 @@ export const ApprovedFinanceComponent: React.FC = () => {
   }, [currentPage]);
 
   const handleViewDetail = (claimId: string) => {
-    navigate(`/approve/detail/${claimId}`); //sửa lại url ở đây để truyềnS
-  };
-
-  const formatDateToDDMMYYYY = (date: string) => {
-    const dateObj = new Date(date);
-    const day = dateObj.getDate();
-    const month = dateObj.getMonth() + 1;
-    const year = dateObj.getFullYear();
-    return `${day}/${month}/${year}`;
+    navigate(`/finance/approved/detail/${claimId}`); //sửa lại url ở đây để truyềnS
   };
 
   const handlePageChange = (newPage: number) => {

@@ -25,6 +25,7 @@ import Authorization from "@auth/Authorization";
 import Unauthenticated from "@auth/Unauthenticated";
 import { ROLE } from "@constant/role";
 import { UpdateUser } from "@/pages/User/UpdateUser";
+import ApprovedDetailFinancePage from "@/pages/Finance/ApprovedDetailFinancePage";
 const router: RouteObject[] = [
   // {
   //   element: <CheckBoxTest />,
@@ -152,6 +153,10 @@ const router: RouteObject[] = [
       {
         path: PATH.staffInformation,
         element: <StaffInformation />,
+      },
+      {
+        path: PATH.approvedDetailFinance,
+        element: <ApprovedDetailFinancePage />,
       },
       // {
       //   path: PATH.test,

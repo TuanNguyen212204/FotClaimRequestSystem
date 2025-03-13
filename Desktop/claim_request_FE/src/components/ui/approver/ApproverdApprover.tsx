@@ -105,15 +105,20 @@ export const ApprovedApproverComponent: React.FC = () => {
   }));
   return (
     <div>
-      <TableComponent
-        columns={columns}
-        dataSource={dataSource}
-        loading={loading}
-        totalPage={totalPages}
-        pagination={true}
-        name="Claims"
-        onPageChange={handlePageChange}
-      />
+      <div>
+        <h1>Approved Claims</h1>
+      </div>
+      <div>
+        <TableComponent
+          columns={columns}
+          dataSource={dataSource}
+          loading={loading}
+          totalPage={totalPages}
+          pagination={true}
+          name="Claims"
+          onPageChange={handlePageChange}
+        />
+      </div>
     </div>
   );
 };
