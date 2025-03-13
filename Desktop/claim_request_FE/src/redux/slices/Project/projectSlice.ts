@@ -1,6 +1,6 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "@/redux";
-import projectService from "@/Services/projectService";
+import { fetchProject, createClaim } from "@/redux/thunk/CreateClaim";
 export type TProjectInfo = {
   projectID: string;
   projectName: string;
@@ -15,46 +15,19 @@ export type TProjectInfo = {
 interface ProjectListResponse {
   ProjectList: TProjectInfo[];
 }
-
 interface IProjectSlice {
   selectedProject: TProjectInfo | null;
   projectList: TProjectInfo[];
   loading: "idle" | "pending" | "succeeded" | "failed";
+  claimCreationStatus: "idle" | "pending" | "succeeded" | "failed";
 }
 
 const initialState: IProjectSlice = {
   selectedProject: null,
   projectList: [],
   loading: "idle",
+  claimCreationStatus: "idle",
 };
-
-export const fetchProject = createAsyncThunk(
-  "project/fetchProject",
-  async (_, { getState, rejectWithValue }) => {
-    const state = getState() as RootState;
-    const user = state.user;
-    const userId = user?.user?.user_id;
-    if (!userId) {
-      return rejectWithValue("User ID not found in state");
-    }
-    try {
-      const projects = await projectService.getProjects(userId);
-      const mappedProjects: TProjectInfo[] = projects.map((project) => ({
-        projectID: project.project_id,
-        projectName: project.project_name,
-        RoleInTheProject: project.role,
-        ProjectDuration: {
-          from: project.start_date,
-          to: project.end_date,
-        },
-        ProjectStatus: project.project_status,
-      }));
-      return { ProjectList: mappedProjects };
-    } catch (error) {
-      return rejectWithValue(error);
-    }
-  },
-);
 
 const projectSlice = createSlice({
   name: "projects",
@@ -62,6 +35,9 @@ const projectSlice = createSlice({
   reducers: {
     selectedProject(state, action: PayloadAction<TProjectInfo>) {
       state.selectedProject = action.payload;
+    },
+    setLoading(state, action: PayloadAction<IProjectSlice["loading"]>) {
+      state.loading = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -72,7 +48,6 @@ const projectSlice = createSlice({
       .addCase(
         fetchProject.fulfilled,
         (state, action: PayloadAction<ProjectListResponse>) => {
-          console.log(action.payload.ProjectList, "action.payload.ProjectList");
           state.projectList = action.payload.ProjectList.sort((a, b) =>
             a.projectName.localeCompare(b.projectName),
           );
@@ -81,10 +56,23 @@ const projectSlice = createSlice({
       )
       .addCase(fetchProject.rejected, (state) => {
         state.loading = "failed";
+      })
+      .addCase(createClaim.pending, (state) => {
+        state.claimCreationStatus = "pending";
+      })
+      .addCase(createClaim.fulfilled, (state) => {
+        state.claimCreationStatus = "succeeded";
+      })
+      .addCase(createClaim.rejected, (state) => {
+        state.claimCreationStatus = "failed";
       });
   },
 });
 
 export const selectProject = (state: RootState) => state.projects;
-export const { selectedProject } = projectSlice.actions;
+export const isProjectLoading = (state: RootState) =>
+  state.projects.loading === "pending";
+export const isClaimCreationLoading = (state: RootState) =>
+  state.projects.claimCreationStatus === "pending";
+export const { selectedProject, setLoading } = projectSlice.actions;
 export default projectSlice.reducer;
