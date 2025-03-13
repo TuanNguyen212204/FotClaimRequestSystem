@@ -5,7 +5,7 @@ import { ClaimTableProps } from "./ClaimTable";
 import { AdditionalInfoProps } from "./AdditionalInfo";
 import { IProjectInfoProps } from "./ProjectInfo";
 import ClaimTable from "./ClaimTable";
-import AdditionalInfo from "./AdditionalInfo";
+// import AdditionalInfo from "./AdditionalInfo";
 import ButtonGroup from "./ButtonGroup";
 interface IClaimBodyProps
   extends ClaimTableProps,
@@ -37,7 +37,7 @@ export default function ClaimBody({
         remove={remove}
         errors={errors}
       />
-      <AdditionalInfo register={register} />
+      {/* <AdditionalInfo register={register} /> */}
       <ButtonGroup />
     </Card>
   );

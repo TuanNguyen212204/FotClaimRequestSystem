@@ -30,13 +30,19 @@ const initialState: IProjectSlice = {
 
 export const fetchProject = createAsyncThunk(
   "project/fetchProject",
-  async (_, { rejectWithValue }) => {
+  async (_, { getState, rejectWithValue }) => {
+    const state = getState() as RootState;
+    const user = state.user;
+    const userId = user?.user?.user_id;
+    if (!userId) {
+      return rejectWithValue("User ID not found in state");
+    }
     try {
-      const projects = await projectService.getProjects();
+      const projects = await projectService.getProjects(userId);
       const mappedProjects: TProjectInfo[] = projects.map((project) => ({
         projectID: project.project_id,
         projectName: project.project_name,
-        RoleInTheProject: project.role || "", // TODO : THONG BAO BE HIEN TAI API KHONG TRA VE ROLE TUNG NGUOW PHAI CO MOT ROLE RIENG TORNG TUNG PROENCT
+        RoleInTheProject: project.role,
         ProjectDuration: {
           from: project.start_date,
           to: project.end_date,

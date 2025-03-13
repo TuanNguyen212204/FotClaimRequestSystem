@@ -3,15 +3,15 @@ import StaffInfo from "../Body/StaffInfo";
 import useCreateClaimForm from "@/Hooks/useCreateClaimForm";
 import ClaimBody from "../Body/ClaimBody";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@/redux";
 import { fetchProject } from "@/redux/slices/Project/projectSlice";
-import { useSelector } from "react-redux";
 import { selectProject } from "@/redux/slices/Project/projectSlice";
 import { toast } from "react-toastify";
-import { useState } from "react";
+import { selectUserById } from "@/redux/selector/userSelector";
+import { fetchUserByIdAsync } from "@/redux/thunk/User/userThunk";
+
 export default function CreateClaim() {
-  const [user, setUser] = useState<any>();
   const {
     register,
     setValue,
@@ -23,18 +23,18 @@ export default function CreateClaim() {
     handleSubmit,
     reset,
   } = useCreateClaimForm();
+
   const dispatch = useDispatch<AppDispatch>();
   const projectList = useSelector(selectProject);
+  const user = useSelector(selectUserById);
+
   useEffect(() => {
-    dispatch(fetchProject());
+    dispatch(fetchUserByIdAsync()).then(() => {
+      dispatch(fetchProject());
+    });
   }, [dispatch]);
-  useEffect(() => {
-    const User = localStorage.getItem("user");
-    if (User) {
-      setUser(JSON.parse(User));
-    }
-  }, []);
-  return (
+
+  return user ? (
     <form
       onSubmit={handleSubmit((data) => {
         toast.success("Claim Submitted Successfully");
@@ -46,7 +46,6 @@ export default function CreateClaim() {
         status="Draft"
         title="New Claim Request"
       />
-
       <StaffInfo
         department={user?.job_rank}
         name={user?.full_name}
@@ -63,5 +62,7 @@ export default function CreateClaim() {
         setValue={setValue}
       />
     </form>
+  ) : (
+    <div>Loading...</div>
   );
 }
