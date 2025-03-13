@@ -4,6 +4,7 @@ import { Claim } from "@/types/Claim";
 import {
   fetchAllClaimAsync,
   fetchApprovedClaimsApproverAsync,
+  fetchAllPendingClaimAsync,
   fetchClaimByUserAsync,
 } from "@/redux/thunk/Claim/claimThunk";
 
@@ -11,11 +12,15 @@ const initialState: {
   data: Claim[];
   listClaimApproved: Claim[];
   myClaim: Claim[];
+  listClaimPending: Claim[];
+  totalPages: number;
   status: string;
   error: string | null;
 } = {
   data: [],
   listClaimApproved: [],
+  listClaimPending: [],
+  totalPages: 1,
   myClaim: [],
 
   status: "",
@@ -60,6 +65,44 @@ export const claimSlice = createSlice({
         state.myClaim = action.payload;
       })
       .addCase(fetchClaimByUserAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      //---------------------------------------------- My Claims -----------------------------------------------------
+      .addCase(fetchClaimByUserAsync.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = String(action.error.message);
+      })
+      .addCase(fetchClaimByUserAsync.fulfilled, (state, action) => {
+        state.status = "success";
+        state.myClaim = action.payload;
+      })
+      .addCase(fetchClaimByUserAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      //---------------------------------------------- Pending Claims for Approver -----------------------------------------------------
+      .addCase(fetchAllPendingClaimAsync.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = String(action.error.message);
+      })
+      .addCase(fetchAllPendingClaimAsync.fulfilled, (state, action) => {
+        state.status = "success";
+        state.listClaimPending = action.payload.data;
+        state.totalPages = action.payload.totalPages;
+      })
+      .addCase(fetchAllPendingClaimAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      //---------------------------------------------- Pending Claims for Approver -----------------------------------------------------
+      .addCase(fetchAllPendingClaimAsync.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = String(action.error.message);
+      })
+      .addCase(fetchAllPendingClaimAsync.fulfilled, (state, action) => {
+        state.status = "success";
+        state.listClaimPending = action.payload.data;
+        state.totalPages = action.payload.totalPages;
+      })
+      .addCase(fetchAllPendingClaimAsync.pending, (state) => {
         state.status = "loading";
       });
   },
