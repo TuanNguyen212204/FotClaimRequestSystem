@@ -9,8 +9,8 @@ import {
 import styles from "./Table.module.css";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import PaginationForTable from "./PaginationForTable";
-import { LoadingProvider } from "../Loading/LoadingContext";
-import LoadingOverlay from "../Loading/LoadingOverlay";
+
+import React from "react";
 export type Column = {
   key?: string;
   dataIndex: string;
@@ -38,6 +38,8 @@ export type TableComponentProps<T extends DataRecord> = {
   name?: string;
   sortConfig?: SortConfig;
   pageLength?: number;
+  totalPage?: number;
+  onPageChange?: (newPage: number) => void;
 };
 
 const Cell = ({ children }: { children: ReactNode }) => {
@@ -62,23 +64,20 @@ const TableComponent = forwardRef(
       name,
       pagination = false,
       sortConfig,
+      totalPage = 3,
       pageLength = 10,
+      onPageChange,
     }: TableComponentProps<T>,
     ref: React.Ref<{
       getSelectedData: () => T[];
       getSortedData: () => T[];
     }>
   ) => {
-    console.log("TableComponent Props:", {
-      columns,
-      dataSource,
-      loading,
-      name,
-      ref,
-      pagination,
-      sortConfig,
-    });
-
+    useEffect(() => {
+      console.log("Table có nhận paginatedData:", pagination);
+      console.log("TableComponent nhận dataSource:", dataSource);
+    }, [dataSource, pagination]);
+    const [table, setTable] = useState<T[]>(dataSource);
     const [currentPage, setCurrentPage] = useState(1);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [selectedStatus, setSelectedStatus] = useState<string>("All");
@@ -111,25 +110,27 @@ const TableComponent = forwardRef(
         })
       : filteredData;
 
-    const totalPages = Math.ceil(sortedData.length / pageLength);
+    const totalPages = totalPage;
 
-    const paginatedData = pagination
-      ? sortedData.slice(
-          (currentPage - 1) * pageLength,
-          currentPage * pageLength
-        )
-      : sortedData;
-
+    // const paginatedData = pagination
+    //   ? sortedData.slice(
+    //       (currentPage - 1) * pageLength,
+    //       currentPage * pageLength
+    //     )
+    //   : sortedData;
+    const paginatedData = sortedData;
     useEffect(() => {
       setCurrentPage(1);
     }, [selectedStatus]);
 
     const handlePageChange = (newPage: number) => {
-      if (newPage >= 1 && newPage <= totalPages) {
+      if (newPage >= 1 && newPage <= totalPage) {
         setCurrentPage(newPage);
+        if (onPageChange) {
+          onPageChange(newPage);
+        }
       }
     };
-
     const toggleDropdown = () => {
       setIsDropdownOpen(!isDropdownOpen);
     };
@@ -205,7 +206,7 @@ const TableComponent = forwardRef(
     if (isLoading) {
       return (
         <div className="flex justify-center items-center min-h-[300px]">
-          {/* <p className="text-lg font-semibold">Loading...</p> */}
+          <p className="text-lg font-semibold">Loading...</p>
         </div>
       );
     }

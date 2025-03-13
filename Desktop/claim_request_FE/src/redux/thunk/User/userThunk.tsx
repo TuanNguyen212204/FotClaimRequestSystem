@@ -4,13 +4,14 @@ import { ApiResponse } from "@/types/ApiResponse";
 import { delay } from "@utils/delay";
 import httpClient from "@constant/apiInstance";
 //Hàm này dùng để fetchAllUser
-export const fetchAllUserAsync = createAsyncThunk<User[]>(
+export const fetchAllUserAsync = createAsyncThunk<User[], string>(
   "user/fetchAllUser",
-  async (): Promise<User[]> => {
+  async (page: string): Promise<User[]> => {
     try {
       await delay(1000);
       const response = await httpClient.get<ApiResponse<User[]>>(
-        "/admin/staffs"
+        "/admin/staffs",
+        { page: page }
       );
       console.log(response.data.data);
       return response.data.data;
