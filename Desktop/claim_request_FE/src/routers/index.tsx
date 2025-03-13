@@ -7,8 +7,6 @@ import ResetPassword from "@ui/login/ResetPassword";
 import CreateClaimPage from "@pages/CreateClaim";
 import { PendingComponent } from "@pages/Approver/PendingApproval";
 import { DetailsComponents } from "@pages/Approver/DetailsApproval";
-import UserClaims from "@pages/User/UserClaims";
-import { UserClaimDetails } from "@pages/User/UserClaimDetails";
 import AllUserInformation from "@/pages/admin/AllUserInformation";
 import ApproveDetail from "@pages/ClaimRequest/ApproveDetail";
 import ClaimStatus from "@pages/Finance/ClaimStatus";
@@ -24,8 +22,12 @@ import Authentication from "@auth/Authentication.tsx";
 import Authorization from "@auth/Authorization";
 import Unauthenticated from "@auth/Unauthenticated";
 import { ROLE } from "@constant/role";
+import UserClaimsPage from "@/pages/User/UserClaimsPage";
+import UserClaimDetailsPage from "@/pages/User/UserClaimDetailsPage";
+import UserClaims from "@/components/ui/claimer/UserClaims";
 import { UpdateUser } from "@/pages/User/UpdateUser";
 import ApprovedDetailFinancePage from "@/pages/Finance/ApprovedDetailFinancePage";
+import { CreateUser } from "@/pages/User/CreateUser";
 const router: RouteObject[] = [
   // {
   //   element: <CheckBoxTest />,
@@ -75,6 +77,14 @@ const router: RouteObject[] = [
         element: <CreateClaimPage />,
       },
       {
+        path: PATH.createUser,
+        element: (
+          <Authorization role_id={[ROLE.ADMIN]}>
+            <CreateUser />
+          </Authorization>
+        ),
+      },
+      {
         path: PATH.updateUser,
         element: (
           <Authorization role_id={[ROLE.ADMIN]}>
@@ -84,15 +94,11 @@ const router: RouteObject[] = [
       },
       {
         path: PATH.myClaims,
-        element: (
-          <Authorization role_id={[ROLE.CLAIMER]}>
-            <UserClaims />
-          </Authorization>
-        ),
+        element: <UserClaimsPage />,
       },
       {
         path: PATH.userClaimDetails,
-        element: <UserClaimDetails />,
+        element: <UserClaimDetailsPage />,
       },
       {
         path: PATH.userInfo,

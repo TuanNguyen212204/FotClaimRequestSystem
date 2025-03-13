@@ -11,6 +11,8 @@ import { ArrowDown, ArrowUp } from "lucide-react";
 import PaginationForTable from "./PaginationForTable";
 
 import React from "react";
+import { LoadingProvider } from "../Loading/LoadingContext";
+import LoadingOverlay from "../Loading/LoadingOverlay";
 export type Column = {
   key?: string;
   dataIndex: string;
@@ -39,6 +41,8 @@ export type TableComponentProps<T extends DataRecord> = {
   sortConfig?: SortConfig;
   // pageLength?: number;
   totalPage?: number;
+  createButton?: boolean;
+  onCreateButtonClick?: () => void;
   onPageChange?: (newPage: number) => void;
 };
 
@@ -64,8 +68,10 @@ const TableComponent = forwardRef(
       name,
       pagination = false,
       sortConfig,
+      createButton,
       totalPage = 3,
       // pageLength = 10,
+      onCreateButtonClick,
       onPageChange,
     }: TableComponentProps<T>,
     ref: React.Ref<{
@@ -77,7 +83,7 @@ const TableComponent = forwardRef(
       console.log("Table có nhận paginatedData:", pagination);
       console.log("TableComponent nhận dataSource:", dataSource);
     }, [dataSource, pagination]);
-    const [table, setTable] = useState<T[]>(dataSource);
+
     const [currentPage, setCurrentPage] = useState(1);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [selectedStatus, setSelectedStatus] = useState<string>("All");
@@ -206,46 +212,60 @@ const TableComponent = forwardRef(
     if (isLoading) {
       return (
         <div className="flex justify-center items-center min-h-[300px]">
-          <p className="text-lg font-semibold">Loading...</p>
+          <LoadingProvider>
+            <LoadingOverlay></LoadingOverlay>
+          </LoadingProvider>
         </div>
       );
     }
 
     return (
       <div className={styles.container}>
-        <section className={styles.filter_section}>
-          <div className={styles.filterStatusP}>
-            <p>Filter By {name}:</p>
-          </div>
-          <div
-            className="relative inline-block text-left"
-            style={{ marginTop: "12px", marginLeft: "15px" }}
-          >
-            <button
-              onClick={toggleDropdown}
-              className="flex items-center justify-between px-4 py-2 text-sm font-medium text-gray-700 bg-white border rounded-md shadow-sm hover:bg-gray-100 focus:outline-none"
+        <div style={{ display: "flex" }}>
+          <section className={styles.filter_section}>
+            <div className={styles.filterStatusP}>
+              <p>Filter By {name}:</p>
+            </div>
+            <div
+              className="relative inline-block text-left"
+              style={{ marginTop: "15px", marginLeft: "15px" }}
             >
-              <span>{selectedStatus}</span>
-              <ArrowDown className="w-4 h-4 ml-2" />
-            </button>
+              <button
+                onClick={toggleDropdown}
+                className="flex items-center justify-between px-4 py-2 text-sm font-medium text-gray-700 bg-white border rounded-md shadow-sm hover:bg-gray-100 focus:outline-none"
+              >
+                <span>{selectedStatus}</span>
+                <ArrowDown className="w-4 h-4 ml-2" />
+              </button>
 
-            {isDropdownOpen && (
-              <div className="absolute right-0 z-10 mt-2 origin-top-right bg-white border border-gray-300 rounded-md shadow-lg w-48">
-                <div className="py-1">
-                  {uniqueStatuses.map((status) => (
-                    <button
-                      key={status}
-                      onClick={() => handleStatusSelect(status)}
-                      className="block px-4 py-2 text-sm text-gray-700 w-full text-left hover:bg-gray-100"
-                    >
-                      {status}
-                    </button>
-                  ))}
+              {isDropdownOpen && (
+                <div className="absolute right-0 z-10 mt-2 origin-top-right bg-white border border-gray-300 rounded-md shadow-lg w-48">
+                  <div className="py-1">
+                    {uniqueStatuses.map((status) => (
+                      <button
+                        key={status}
+                        onClick={() => handleStatusSelect(status)}
+                        className="block px-4 py-2 text-sm text-gray-700 w-full text-left hover:bg-gray-100"
+                      >
+                        {status}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
-        </section>
+              )}
+            </div>
+          </section>
+          {createButton && (
+            <div style={{ paddingLeft: "1200px", paddingTop: "30px" }}>
+              <button
+                className={styles.create_button}
+                onClick={() => onCreateButtonClick()}
+              >
+                Create
+              </button>
+            </div>
+          )}
+        </div>
 
         <div>
           {filteredData.length.toString() !== "0" ? (

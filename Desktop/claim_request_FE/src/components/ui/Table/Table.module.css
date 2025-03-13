@@ -273,3 +273,14 @@
     height: 2rem;
   }
 }
+.create_button_container {
+  display: flex;
+  padding-left: 1200px;
+}
+.create_button {
+  color: white;
+  background-color: green;
+  border-radius: 10px;
+  font-size: 1rem;
+  padding: 5px;
+}

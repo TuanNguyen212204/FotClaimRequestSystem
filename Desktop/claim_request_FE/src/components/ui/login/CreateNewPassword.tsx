@@ -1,8 +1,12 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import styles from "@components/ui/login/LoginForm.module.css";
 import fot from "@assets/fot.png";
 import * as Yup from "yup";
 import { useFormik } from "formik";
+import httpClient from "@/constant/apiInstance";
+import { useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const passwordCriteria = [
   {
@@ -34,8 +38,32 @@ const countValidCriteria = (password: string): number => {
   );
 };
 
+async function resetPasswordAPI(payload: {
+  token: string;
+  newPassword: string;
+  confirmPassword: string;
+}): Promise<void> {
+  try {
+    await httpClient.post("auth/reset-password", payload);
+  } catch (error: any) {
+    if (error.response && error.response.data && error.response.data.message) {
+      throw error.response.data;
+    }
+    throw error;
+  }
+}
+
 function CreateNewPassword() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get("token");
+  const [globalError, setGlobalError] = useState("");
+
+  useEffect(() => {
+    if (!token) {
+      navigate("/reset-password");
+    }
+  }, [token, navigate]);
 
   const initialValues = {
     password: "",
@@ -65,7 +93,7 @@ function CreateNewPassword() {
       return password
         ? schema
             .required("Confirm Password is Required")
-            .oneOf([Yup.ref("password")], "Confirm Password does not match")
+            .oneOf([Yup.ref("password")], "Confirm Password does not matchhhh")
         : schema;
     }),
   });
@@ -73,8 +101,37 @@ function CreateNewPassword() {
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: createNewPassWordSchema,
-    onSubmit: () => {
-      navigate("/login");
+    onSubmit: async (values, { setSubmitting, setFieldError }) => {
+      try {
+        const payload = {
+          token: token!,
+          newPassword: values.password,
+          confirmPassword: values.confirmPassword,
+        };
+        await resetPasswordAPI(payload);
+        toast.success("Password reset successfully", {
+          position: "top-right",
+          autoClose: 2000,
+        });
+        setTimeout(() => {
+          navigate("/");
+        }, 3000);
+      } catch (error: any) {
+        if (error.errorCode === 3 || error.errorCode === 2) {
+          toast.error(error.message, {
+            position: "top-right",
+            autoClose: 2000,
+          });
+        } else if (error.errorCode === 6) {
+          setFieldError("password", error.message);
+        } else if (error.errorCode === 5) {
+          setFieldError("confirmPassword", error.message);
+        } else {
+          setGlobalError(error.message || "An error occurred");
+        }
+      } finally {
+        setSubmitting(false);
+      }
     },
   });
 
@@ -100,11 +157,10 @@ function CreateNewPassword() {
         {/* Login Section */}
         <div className={styles.rightSide}>
           <div className={styles.rightSideContainer}>
+            {globalError && (
+              <div className={styles.globalError}>{globalError}</div>
+            )}
             <h1>Create new password</h1>
-            <p>
-              Your new password must be different from previously used
-              passwords.
-            </p>
 
             <form onSubmit={formik.handleSubmit}>
               <div className={styles.inputForm}>
@@ -116,7 +172,7 @@ function CreateNewPassword() {
                         key={index}
                         className={valid ? styles.valid : styles.invalid}
                       >
-                        {valid ? "✓" : "✗"} {criterion.label}
+                        {valid ? "✓" : "*"} {criterion.label}
                       </div>
                     );
                   })}
@@ -177,11 +233,12 @@ function CreateNewPassword() {
             </form>
 
             <div className={styles.backToLogin}>
-              <Link to="/login">Back to Login</Link>
+              <Link to="/">Back to Login</Link>
             </div>
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }

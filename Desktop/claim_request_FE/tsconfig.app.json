@@ -20,7 +20,8 @@
       "@pages/*": ["./src/pages/*"],
       "@Hooks/*": ["./src/Hooks/*"],
       "@ui/*": ["./src/components/ui/*"],
-      "@auth/*": ["./src/auth/*"]
+      "@auth/*": ["./src/auth/*"],
+      "@assets/*": ["./src/assets/*"]
     },
     /* Bundler mode */
     "moduleResolution": "bundler",

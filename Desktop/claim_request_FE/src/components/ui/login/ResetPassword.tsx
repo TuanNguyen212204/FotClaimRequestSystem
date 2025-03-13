@@ -3,7 +3,21 @@ import styles from "@components/ui/login/LoginForm.module.css";
 import fot from "@assets/fot.png";
 import * as Yup from "yup";
 import { useFormik } from "formik";
+import httpClient from "@/constant/apiInstance";
 
+async function sendResetEmail(values: { email: string }): Promise<void> {
+  try {
+    const response = await httpClient.post("auth/forgot-password", values);
+    const data = response.data as { errorCode: number; message: string };
+    if (data.errorCode === 1 || data.errorCode === 6) {
+      throw new Error(data.message);
+    }
+  } catch (error: any) {
+    if (error.response && error.response.data && error.response.data.message) {
+      throw new Error(error.response.data.message);
+    }
+  }
+}
 function ResetPassword() {
   const navigate = useNavigate();
 
@@ -16,7 +30,7 @@ function ResetPassword() {
       .required("Email is Required")
       .test(
         "includes-@fpt",
-        "Email must be included '@fpt'",
+        "Email must be include @fpt",
         (value) => (value ? value.includes("@fpt") : false)
       ),
   });
@@ -24,10 +38,18 @@ function ResetPassword() {
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: resetPasswordSchema,
-    onSubmit: () => {
+    onSubmit: async (values, {setSubmitting, setFieldError}) => {
+     try {
+      await sendResetEmail(values);
       navigate("/check-to-mail");
+     } catch (error: any) {
+       setFieldError("email", error.message || "Error trong catch chỗ onSubmit của useFormil");
+     }finally{
+      setSubmitting(false);
+     }
     },
   });
+
 
   return (
     <div className={styles.container}>
@@ -86,7 +108,7 @@ function ResetPassword() {
               </button>
             </form>
             <div className={styles.backToLogin}>
-              <Link to="/login">Back to Login</Link>
+              <Link to="/">Back to Login</Link>
             </div>
           </div>
         </div>

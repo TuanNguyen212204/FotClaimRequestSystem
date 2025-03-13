@@ -2,152 +2,111 @@ import React, { useState, useEffect } from "react";
 import styles from "@components/ui/user/UserInfoComponent.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@redux/index";
-import {
-  fetchUserByIdAsync,
-  updateUserAsync,
-} from "@redux/thunk/UserInfo/userInfoThunks";
-import { User, Experience } from "@types/User.type";
+import { fetchUserByIdAsync } from "@redux/thunk/User/userThunk";
+import { User } from "@/types/User";
 import { useNotification } from "@/components/ui/Notification/NotificationContext";
+import { selectUserById } from "@redux/selector/userSelector";
+import httpClient from "@constant/apiInstance";
+import LoadingOverlay from "@components/ui/Loading/LoadingOverlay";
 
 export const UserInfoComponent: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const selectedUser = useSelector((state: any) => state.user.selectedUser);
+  const selectedUser = useSelector(selectUserById);
   const [isEditing, setIsEditing] = useState(false);
-  const [staffInfo, setStaffInfo] = useState<User | null>(selectedUser || null);
+  const [editedUser, setEditedUser] = useState<Partial<User>>({});
+  const [confirmPassword, setConfirmPassword] = useState("");
   const notification = useNotification();
 
-  useEffect(() => {
-    dispatch(fetchUserByIdAsync("1"));
-  }, [dispatch]);
+  const accessToken = localStorage.getItem("access_token");
+  const userId = localStorage.getItem("user_id");
 
   useEffect(() => {
-    if (!isEditing) {
-      setStaffInfo(selectedUser);
+    if (accessToken && userId) {
+      dispatch(fetchUserByIdAsync());
     }
-  }, [selectedUser, isEditing]);
+  }, [dispatch, accessToken, userId]);
 
-  const validateFields = (): string | null => {
-    if (!staffInfo) return "User data is invalid";
-
-    if (!staffInfo.bio || staffInfo.bio.trim().length === 0) {
-      return "Bio cannot be empty";
+  useEffect(() => {
+    if (selectedUser) {
+      setEditedUser(selectedUser);
+    } else {
+      setEditedUser({});
     }
+  }, [selectedUser]);
 
-    if (staffInfo.bio.length > 500) {
-      return "Bio must not exceed 500 characters";
-    }
-
-    if (staffInfo.projects) {
-      const emptyProjects = staffInfo.projects.filter(
-        (project) => !project || project.trim().length === 0
-      );
-      if (emptyProjects.length > 0) {
-        return "All projects must hae a name";
-      }
-    }
-
-    if (staffInfo.experiences) {
-      for (const exp of staffInfo.experiences) {
-        if (!exp.title || exp.title.trim().length === 0) {
-          return "Experience title cannot be empty";
-        }
-        if (!exp.company || exp.company.trim().length === 0) {
-          return "Experience company cannot be empty";
-        }
-        if (!exp.description || exp.description.trim().length === 0) {
-          return "Experience description cannot be empty";
-        }
-      }
-    }
-
-    return null;
-  };
-
-  const handleSave = () => {
-    const validationError = validateFields();
-    if (validationError) {
-      notification.show({ message: validationError, type: "error" });
+  const handleSave = async () => {
+    if (!userId || !editedUser) {
+      notification.show({
+        message: "Cannot save, missing user information.",
+        type: "error",
+      });
       return;
     }
 
-    if (staffInfo && staffInfo.userID) {
-      dispatch(
-        updateUserAsync({ userId: staffInfo.userID, userData: staffInfo })
-      )
-        .unwrap()
-        .then((updatedUser: User) => {
-          setIsEditing(false);
-          setStaffInfo(updatedUser);
-          notification.show({
-            message: "Profile saved successfully!",
-            type: "success",
-          });
-        })
-        .catch((error: any) => {
-          notification.show({
-            message: "Failed to save profile: " + error.message,
-            type: "error",
-          });
-        });
-    } else {
-      notification.show({
-        message: "User ID not found. Cannot save profile.",
-        type: "error",
-      });
-    }
-  };
-
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file && staffInfo) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        if (event.target?.result) {
-          setStaffInfo({ ...staffInfo, avatar: event.target.result as string });
-          notification.show({
-            message: "Avatar updated successfully!",
-            type: "success",
-          });
-        } else {
-          notification.show({
-            message: "Failed to upload image. Please try again.",
-            type: "error",
-          });
-        }
-      };
-      reader.onerror = () => {
+    if (editedUser.password && editedUser.password.trim() !== "") {
+      if (editedUser.password !== confirmPassword) {
         notification.show({
-          message: "Failed to upload image. Please try again.",
+          message: "New password and confirm password do not match.",
           type: "error",
         });
+        return;
+      }
+    }
+
+    try {
+      const requestBody: {
+        full_name: string;
+        email: string;
+        department: string;
+        job_rank: string;
+        password?: string;
+      } = {
+        full_name: editedUser.full_name || "",
+        email: editedUser.email || "",
+        department: editedUser.department || "",
+        job_rank: editedUser.job_rank || "",
       };
-      reader.readAsDataURL(file);
-    } else {
+
+      if (editedUser.password && editedUser.password.trim() !== "") {
+        requestBody.password = editedUser.password;
+      }
+
+      await httpClient.put(`/admin/staff/${userId}`, requestBody);
+
+      dispatch(fetchUserByIdAsync());
+      setIsEditing(false);
       notification.show({
-        message: "Failed to upload image. Please try again.",
+        message: "Update user successfully.",
+        type: "success",
+      });
+    } catch (error) {
+      console.error("Update User error: " + error);
+      notification.show({
+        message: "Update user failed: " + (error as any).message,
         type: "error",
       });
     }
   };
 
-  const handleRemoveProject = (index: number) => {
-    if (staffInfo && staffInfo.projects) {
-      const newProjects = staffInfo.projects.filter((_, i) => i !== index);
-      setStaffInfo({ ...staffInfo, projects: newProjects });
-    }
-  };
+  if (!accessToken || !userId) {
+    return (
+      <div className={styles.profileContainer}>
+        <h2 style={{ textAlign: "center", color: "#ff4d4f" }}>
+          You need to login to view personal information.
+        </h2>
+        <button
+          onClick={() => (window.location.href = "/login")}
+          className={styles.saveButton}
+          style={{ display: "block", margin: "1rem auto" }}
+        >
+          Login
+        </button>
+      </div>
+    );
+  }
 
-  const handleRemoveExperience = (index: number) => {
-    if (staffInfo && staffInfo.experiences) {
-      const newExperiences = staffInfo.experiences.filter(
-        (_, i) => i !== index
-      );
-      setStaffInfo({ ...staffInfo, experiences: newExperiences });
-    }
-  };
-
-  if (!staffInfo) {
-    return <div>User Loading...</div>;
+  if (!selectedUser) {
+    return <LoadingOverlay />;
   }
 
   return (
@@ -155,18 +114,12 @@ export const UserInfoComponent: React.FC = () => {
       <div className={styles.profileHeader}>
         <div className={styles.avatarSection}>
           <img
-            src={
-              staffInfo.avatar ||
-              "https://i.pinimg.com/736x/63/f0/0d/63f00d6ebe2c93b945be3c39135503c2.jpg"
-            }
+            src="https://i.pinimg.com/736x/63/f0/0d/63f00d6ebe2c93b945be3c39135503c2.jpg"
             alt="Avatar"
             className={styles.profileAvatar}
           />
           <button
-            onClick={() => {
-              setIsEditing(true);
-              console.log("Editing mode activated:", true);
-            }}
+            onClick={() => setIsEditing(true)}
             className={styles.editButton}
           >
             ✏️
@@ -174,26 +127,22 @@ export const UserInfoComponent: React.FC = () => {
         </div>
 
         <div className={styles.profileInfo}>
-          <h1>{staffInfo.fullName || "Username not found"}</h1>
+          <h1>{selectedUser.full_name || "Full Name"}</h1>
           <p className={styles.position}>
-            {staffInfo.jobRank || "No position available"}
+            {selectedUser.job_rank || "No position"}
           </p>
           <p className={styles.company}>
-            © {staffInfo.department || "No company available"}.
+            Department: {selectedUser.department || "Undetermined"}
           </p>
 
           <div className={styles.statsContainer}>
             <div className={styles.statItem}>
-              <h3>{staffInfo.projects?.length || 113}</h3>
-              <span>Projects</span>
+              <h3>{`${selectedUser.salary || "N/A"} $`}</h3>
+              <span>Salary</span>
             </div>
             <div className={styles.statItem}>
-              <h3>23.86%</h3>
-              <span>Success Rate</span>
-            </div>
-            <div className={styles.statItem}>
-              <h3>{staffInfo.salary || 512.6}K</h3>
-              <span>Earning</span>
+              <h3>{selectedUser.user_status === 1 ? "Online" : "Offline"}</h3>
+              <span>Status</span>
             </div>
           </div>
         </div>
@@ -201,198 +150,118 @@ export const UserInfoComponent: React.FC = () => {
 
       <div className={styles.profileContent}>
         <div className={styles.section}>
-          <h2 className={styles.sectionTitle}>Personal Bio</h2>
-          {isEditing ? (
-            <textarea
-              className={styles.inputField}
-              value={staffInfo.bio || ""}
-              onChange={(e) =>
-                setStaffInfo({ ...staffInfo, bio: e.target.value })
-              }
-            />
+          <h2 className={styles.sectionTitle}>User Information</h2>
+          {!isEditing ? (
+            <>
+              <p>
+                <strong>Username:</strong> {selectedUser.username || "N/A"}
+              </p>
+              <p>
+                <strong>Fullname:</strong> {selectedUser.full_name || "N/A"}
+              </p>
+              <p>
+                <strong>Email:</strong> {selectedUser.email || "N/A"}
+              </p>
+              <p>
+                <strong>Department:</strong> {selectedUser.department || "N/A"}
+              </p>
+              <p>
+                <strong>Position:</strong> {selectedUser.job_rank || "N/A"}
+              </p>
+              <p>
+                <strong>Salary:</strong> {selectedUser.salary || "N/A"}
+              </p>
+              <p>
+                <strong>Role:</strong> {selectedUser.role_name || "N/A"}
+              </p>
+              <p>
+                <strong>Status:</strong>{" "}
+                {selectedUser.user_status === 1 ? "Online" : "Offline"}
+              </p>
+            </>
           ) : (
-            <p className={styles.bioText}>
-              {staffInfo.bio || "No bio available"}
-            </p>
+            <div className={styles.editModal}>
+              <div className={styles.modalContent}>
+                <h2>Edit Information</h2>
+                <div className={styles.formSection}>
+                  <label>Full Name:</label>
+                  <input
+                    value={editedUser.full_name || ""}
+                    onChange={(e) =>
+                      setEditedUser({
+                        ...editedUser,
+                        full_name: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div className={styles.formSection}>
+                  <label>Email:</label>
+                  <input
+                    type="email"
+                    value={editedUser.email || ""}
+                    onChange={(e) =>
+                      setEditedUser({ ...editedUser, email: e.target.value })
+                    }
+                  />
+                </div>
+                <div className={styles.formSection}>
+                  <label>New Password:</label>
+                  <input
+                    type="password"
+                    value={editedUser.password || ""}
+                    onChange={(e) =>
+                      setEditedUser({ ...editedUser, password: e.target.value })
+                    }
+                    placeholder="password"
+                  />
+                </div>
+                <div className={styles.formSection}>
+                  <label>Verify New Password:</label>
+                  <input
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    placeholder="verify password"
+                  />
+                </div>
+                <div className={styles.formSection}>
+                  <label>Department:</label>
+                  <input
+                    value={editedUser.department || ""}
+                    onChange={(e) =>
+                      setEditedUser({
+                        ...editedUser,
+                        department: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div className={styles.formSection}>
+                  <label>Position:</label>
+                  <input
+                    value={editedUser.job_rank || ""}
+                    onChange={(e) =>
+                      setEditedUser({ ...editedUser, job_rank: e.target.value })
+                    }
+                  />
+                </div>
+                <div className={styles.buttonGroup}>
+                  <button className={styles.saveButton} onClick={handleSave}>
+                    Save
+                  </button>
+                  <button
+                    className={styles.cancelButton}
+                    onClick={() => setIsEditing(false)}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
           )}
         </div>
-
-        <div className={styles.section}>
-          <h2 className={styles.sectionTitle}>Projects</h2>
-          <div className={styles.projectsGrid}>
-            {(!isEditing &&
-              staffInfo.projects?.map((project) => (
-                <div key={project} className={styles.projectCard}>
-                  {project}
-                </div>
-              ))) || <p>No projects available</p>}
-          </div>
-        </div>
-
-        <div className={styles.section}>
-          <h2 className={styles.sectionTitle}>Experience</h2>
-          {(!isEditing &&
-            staffInfo.experiences?.map((exp, index) => (
-              <div key={index} className={styles.experienceItem}>
-                <h3>{exp.title}</h3>
-                <p className={styles.companyName}>{exp.company}</p>
-                <p className={styles.experienceDesc}>{exp.description}</p>
-              </div>
-            ))) || <p>No experiences available</p>}
-        </div>
       </div>
-
-      {isEditing && (
-        <div className={styles.editModal}>
-          <div className={styles.modalContent}>
-            <h2>Edit Profile</h2>
-            <div className={styles.avatarUploadSection}>
-              <img
-                src={
-                  staffInfo.avatar ||
-                  "https://static-cse.canva.com/blob/1806764/1600w-_q--r1GW6_E.jpg"
-                }
-                alt="Avatar Preview"
-                className={styles.avatarPreview}
-              />
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageUpload}
-                id="avatarUpload"
-                className={styles.hiddenInput}
-              />
-              <label htmlFor="avatarUpload" className={styles.uploadButton}>
-                Avatar
-              </label>
-            </div>
-            <div className={styles.formSection}>
-              <label>Bio</label>
-              <textarea
-                value={staffInfo.bio || ""}
-                onChange={(e) =>
-                  setStaffInfo({ ...staffInfo, bio: e.target.value })
-                }
-              />
-            </div>
-            <div className={styles.formSection}>
-              <label>Projects</label>
-              {staffInfo.projects?.map((project, index) => (
-                <div key={index} className={styles.arrayItem}>
-                  <input
-                    value={project}
-                    onChange={(e) => {
-                      const newProjects = [...(staffInfo.projects || [])];
-                      newProjects[index] = e.target.value;
-                      setStaffInfo({ ...staffInfo, projects: newProjects });
-                    }}
-                  />
-                  <button
-                    className={styles.removeButton}
-                    onClick={() => handleRemoveProject(index)}
-                  >
-                    Remove
-                  </button>
-                </div>
-              ))}
-              <button
-                onClick={() =>
-                  setStaffInfo({
-                    ...staffInfo,
-                    projects: [...(staffInfo.projects || []), ""],
-                  })
-                }
-                className={styles.addButton}
-              >
-                Add Project
-              </button>
-            </div>
-            <div className={styles.formSection}>
-              <label>Experiences</label>
-              {staffInfo.experiences?.map((exp, index) => (
-                <div key={index} className={styles.arrayItem}>
-                  <input
-                    placeholder="Title"
-                    value={exp.title}
-                    onChange={(e) => {
-                      const newExperiences = [...(staffInfo.experiences || [])];
-                      newExperiences[index] = {
-                        ...newExperiences[index],
-                        title: e.target.value,
-                      };
-                      setStaffInfo({
-                        ...staffInfo,
-                        experiences: newExperiences,
-                      });
-                    }}
-                  />
-                  <input
-                    placeholder="Company"
-                    value={exp.company}
-                    onChange={(e) => {
-                      const newExperiences = [...(staffInfo.experiences || [])];
-                      newExperiences[index] = {
-                        ...newExperiences[index],
-                        company: e.target.value,
-                      };
-                      setStaffInfo({
-                        ...staffInfo,
-                        experiences: newExperiences,
-                      });
-                    }}
-                  />
-                  <textarea
-                    placeholder="Description"
-                    value={exp.description}
-                    onChange={(e) => {
-                      const newExperiences = [...(staffInfo.experiences || [])];
-                      newExperiences[index] = {
-                        ...newExperiences[index],
-                        description: e.target.value,
-                      };
-                      setStaffInfo({
-                        ...staffInfo,
-                        experiences: newExperiences,
-                      });
-                    }}
-                  />
-                  <button
-                    className={styles.removeButton}
-                    onClick={() => handleRemoveExperience(index)}
-                  >
-                    Remove
-                  </button>
-                </div>
-              ))}
-              <button
-                onClick={() =>
-                  setStaffInfo({
-                    ...staffInfo,
-                    experiences: [
-                      ...(staffInfo.experiences || []),
-                      { title: "", company: "", description: "" },
-                    ],
-                  })
-                }
-                className={styles.addButton}
-              >
-                Add Experience
-              </button>
-            </div>
-            <div className={styles.buttonGroup}>
-              <button className={styles.saveButton} onClick={handleSave}>
-                Save
-              </button>
-              <button
-                className={styles.cancelButton}
-                onClick={() => setIsEditing(false)}
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

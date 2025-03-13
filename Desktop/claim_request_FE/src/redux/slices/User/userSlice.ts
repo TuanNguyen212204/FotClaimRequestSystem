@@ -3,15 +3,18 @@ import type { User } from "@/types/User";
 import {
   fetchAllUserAsync,
   fetchUserByIdAsync,
+  fetchTotalPage,
 } from "@redux/thunk/User/userThunk";
 const initialState: {
   data: User[];
-  user: User[];
+  user: User | null;
+  totalPageOfAllUser: number;
   status: string;
   error?: string;
 } = {
   data: [],
-  user: [],
+  user: null,
+  totalPageOfAllUser: 0,
   status: "",
   error: "null",
 };
@@ -25,6 +28,7 @@ export const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+
       .addCase(fetchAllUserAsync.rejected, (state, action) => {
         state.status = "failed";
         state.error = String(action.error.message);
@@ -45,7 +49,19 @@ export const userSlice = createSlice({
       })
       .addCase(fetchUserByIdAsync.fulfilled, (state, action) => {
         state.status = "success";
-        state.user = action.payload;
+        console.log(action.payload[0]);
+        state.user = action.payload[0];
+      })
+      .addCase(fetchTotalPage.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = String(action.error.message);
+      })
+      .addCase(fetchTotalPage.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchTotalPage.fulfilled, (state, action) => {
+        state.status = "success";
+        state.totalPageOfAllUser = action.payload;
       });
   },
 });

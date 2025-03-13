@@ -2,8 +2,7 @@ import styles from "./Sidebar.module.css";
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { PATH } from "../../../constant/config";
-import { Button } from "@/components/ui/button/Button";
-
+import fptlogo from "@assets/fot.png";
 export const Sidebar = () => {
   const [selectedClaim, setSelectedClaim] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -61,6 +60,18 @@ export const Sidebar = () => {
       case "approvedApprover":
         navigate(PATH.approvedApprover);
         break;
+      case "profile":
+        navigate(PATH.userInfo);
+        break;
+      case "pendingClaim":
+        navigate(PATH.pending);
+        break;
+      case "approvedFinance":
+        navigate(PATH.approvedFinance);
+        break;
+      case "paid":
+        navigate(PATH.paidClaim);
+        break;
       default:
         break;
     }
@@ -91,7 +102,7 @@ export const Sidebar = () => {
         </div>
 
         <div className={styles.logo}>
-          <img src="/imgs/logo.png" alt="logo" className={styles.logoImage} />
+          <img src={fptlogo} alt="logo" className={styles.logoImage} />
         </div>
 
         {/* Bỏ nút Create Claims nếu vai trò là approve hoặc finance */}
@@ -134,14 +145,14 @@ export const Sidebar = () => {
                     </button>
                   </li>
                   <li
-                    key="configuration"
+                    key="projectInformation"
                     className={`${styles.claimItem} ${
                       selectedClaim === "configuration" ? styles.active : ""
                     }`}
-                    onClick={() => handleSelect("configuration")}
+                    onClick={() => handleSelect("projectInformation")}
                   >
                     <button className={styles.claimButton}>
-                      {!isCollapsed && "Configuration"}
+                      {!isCollapsed && "Project Information"}
                     </button>
                   </li>
                   <li
@@ -152,17 +163,6 @@ export const Sidebar = () => {
                     onClick={() => handleSelect("usersetting")}
                   >
                     <button className={styles.claimButton}>
-                      {!isCollapsed && "User Setting"}
-                    </button>
-                  </li>
-                  <li
-                    key="staffinformation"
-                    className={`${styles.claimItem} ${
-                      selectedClaim === "staffinformation" ? styles.active : ""
-                    }`}
-                    onClick={() => handleSelect("staffinformation")}
-                  >
-                    <button className={styles.claimButton}>
                       {!isCollapsed && "Staff Information"}
                     </button>
                   </li>
@@ -171,14 +171,14 @@ export const Sidebar = () => {
               {role === "approve" && (
                 <>
                   <li
-                    key="vetting"
+                    key="pendingClaim"
                     className={`${styles.claimItem} ${
-                      selectedClaim === "vetting" ? styles.active : ""
+                      selectedClaim === "pendingClaim" ? styles.active : ""
                     }`}
-                    onClick={() => handleSelect("vetting")}
+                    onClick={() => handleSelect("pendingClaim")}
                   >
                     <button className={styles.claimButton}>
-                      {!isCollapsed && "For My Vetting"}
+                      {!isCollapsed && "Pending Claim"}
                     </button>
                   </li>
                   <li
@@ -193,14 +193,14 @@ export const Sidebar = () => {
                     </button>
                   </li>
                   <li
-                    key="employee_profile"
+                    key="profile"
                     className={`${styles.claimItem} ${
-                      selectedClaim === "employee_profile" ? styles.active : ""
+                      selectedClaim === "profile" ? styles.active : ""
                     }`}
-                    onClick={() => handleSelect("employee_profile")}
+                    onClick={() => handleSelect("profile")}
                   >
                     <button className={styles.claimButton}>
-                      {!isCollapsed && "Employee Profile"}
+                      {!isCollapsed && "Profile"}
                     </button>
                   </li>
                 </>
@@ -208,14 +208,14 @@ export const Sidebar = () => {
               {role === "finance" && (
                 <>
                   <li
-                    key="approved"
+                    key="approvedFinance"
                     className={`${styles.claimItem} ${
-                      selectedClaim === "approved" ? styles.active : ""
+                      selectedClaim === "approvedFinance" ? styles.active : ""
                     }`}
-                    onClick={() => handleSelect("approved")}
+                    onClick={() => handleSelect("approvedFinance")}
                   >
                     <button className={styles.claimButton}>
-                      {!isCollapsed && "Approved"}
+                      {!isCollapsed && "Approved Claim"}
                     </button>
                   </li>
                   <li
@@ -233,7 +233,7 @@ export const Sidebar = () => {
               )}
               {role === "user" && (
                 <>
-                  <li
+                  {/* <li
                     key="draft"
                     className={`${styles.claimItem} ${
                       selectedClaim === "draft" ? styles.active : ""
@@ -243,7 +243,7 @@ export const Sidebar = () => {
                     <button className={styles.claimButton}>
                       {!isCollapsed && "Draft"}
                     </button>
-                  </li>
+                  </li> */}
                   <li
                     key="pending"
                     className={`${styles.claimItem} ${
