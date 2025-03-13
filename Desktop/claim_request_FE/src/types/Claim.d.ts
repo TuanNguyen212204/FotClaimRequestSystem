@@ -6,4 +6,5 @@ export interface Claim {
   submitted_date: string;
   claim_status: string;
   approved_date: string;
+  project_name: string;
 }

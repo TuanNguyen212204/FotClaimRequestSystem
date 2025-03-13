@@ -1,6 +1,5 @@
 import TableComponent, { Column } from "@/components/ui/Table/Table";
 import { useEffect, useState } from "react";
-import type { claimPending } from "@/types/Pending.d.ts";
 import { selectAllPending } from "@/redux/selector/pendingSelector";
 import httpClient from "@/constant/apiInstance.ts";
 import { CheckIcon, X, CheckCircle2, XCircle } from "lucide-react";
@@ -10,43 +9,35 @@ import { DataRecord } from "@/components/ui/Table/Table";
 import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
 import { AppDispatch } from "@/redux";
 import { useDispatch, useSelector } from "react-redux";
+import { fetchAllPendingClaimAsync } from "@/redux/thunk/Claim/claimThunk";
+// import type { claimPending } from "@/types/Pending";
+
+
+// interface claimList {
+//   claim_id?: string;
+//   user_id?: string;
+//   project_id?: string;
+//   total_working_hours?: number;
+//   submitted_date?: Date;
+//   claim_status?: string;
+//   project_name?: string;
+// }
 
 export const PendingComponent: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const [pending, setPending] = useState<claimPending[]>([]);
-  const [loading, setLoading] = useState(true);
-  const listClaim = useSelector(selectAllPending);
+  // const [claimList, setClaimList] = useState<claimList[]>([]);
+  const claimList = useSelector(selectAllPending);
 
   useEffect(() => {
-    fetchAllPendingClaimAsync();
-    // dispatch(fetchAllPendingClaimAsync());
-  }, []);
+    dispatch(fetchAllPendingClaimAsync());
+  }, [dispatch]);
 
-  const fetchAllPendingClaimAsync = async () => {
-    try {
-      const res = await httpClient.get<{ data: claimPending[] }>(
-        `/approvers/pending-claim`
-      );
-      console.log("data: ", res.data.data);
-      setPending(res.data.data);
-      setLoading(false);
-    } catch (error) {
-      console.log("Error at PendingApproval: ", error);
-    }
-  };
 
-  // const handleViewDetail = (claimId: string) => {
-  //   navigate(`/approve/detail/${claimId}`); //sửa lại url ở đây để truyền
-  // };
 
   const handleApproveClaim = async (claimId: string) => {
     try {
       await httpClient.post(`/approvers/${claimId}/approve-claim`, {});
-      setPending((prevPending) =>
-        prevPending.map((claim) =>
-          claim.claim_id === claimId ? { ...claim, claim_status: "Approved" } : claim
-        )
-      );
+      dispatch(fetchAllPendingClaimAsync());
     } catch (error) {
       console.log("Error approving claim: ", error);
     }
@@ -55,23 +46,13 @@ export const PendingComponent: React.FC = () => {
   const handleRejectClaim = async (claimId: string) => {
     try {
       await httpClient.post(`/approvers/${claimId}/rejected-claim`, {});
-      setPending((prevPending) =>
-        prevPending.map((claim) =>
-          claim.claim_id === claimId ? { ...claim, claim_status: "Rejected" } : claim
-        )
-      );
+      dispatch(fetchAllPendingClaimAsync());
     } catch (error) {
       console.log("Error rejecting claim: ", error);
     }
   };
 
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-  if (!pending || pending.length === 0) {
-    return <p>No data available</p>;
-  }
 
   const formatDateToDDMMYYYY = (date: string) => {
     const dateObj = new Date(date);
@@ -132,7 +113,7 @@ export const PendingComponent: React.FC = () => {
   //   ...item,
   // }));
 
-  const dataSource: DataRecord[] = pending.map((a, index) => ({
+  const dataSource: DataRecord[] = claimList.map((a, index) => ({
     ...a,
     key: index,
     id: a.claim_id ? a.claim_id.toString() : "",
@@ -151,7 +132,7 @@ export const PendingComponent: React.FC = () => {
         loading={false}
         pagination={true}
         name="Claims"
-        pageLength={10}
+        // pageLength={10}
       />
     </div>
   );

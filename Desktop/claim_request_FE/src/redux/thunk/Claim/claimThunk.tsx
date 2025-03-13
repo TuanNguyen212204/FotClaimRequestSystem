@@ -1,7 +1,6 @@
 import httpClient from "@constant/apiInstance";
 import { ApiResponse } from "@/types/ApiResponse";
 import { Claim } from "@/types/Claim";
-import { claimPending } from "@/types/Pending";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { delay } from "@utils/delay";
 export const fetchAllClaimAsync = createAsyncThunk<Claim[]>(
@@ -36,12 +35,12 @@ export const fetchApprovedClaimsApproverAsync = createAsyncThunk<Claim[]>(
   }
 );
 
-export const fetchAllPendingClaimAsync = createAsyncThunk<claimPending[]>(
+export const fetchAllPendingClaimAsync = createAsyncThunk<Claim[]>(
   "claim/approver/fetchPendingClaim",
-  async (): Promise<claimPending[]> => {
+  async (): Promise<Claim[]> => {
     try {
       await delay(1000);
-      const response = await httpClient.get<ApiResponse<claimPending[]>>(
+      const response = await httpClient.get<ApiResponse<Claim[]>>(
         "/approvers/pending-claim"
 
       );
