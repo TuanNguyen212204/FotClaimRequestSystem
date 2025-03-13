@@ -1,18 +1,23 @@
 import { createSlice } from "@reduxjs/toolkit";
-import type { Claim } from "@/types/Claim.type";
+import { Claim } from "@/types/Claim";
+
 import {
   fetchAllClaimAsync,
   fetchApprovedClaimsApproverAsync,
+  fetchClaimByUserAsync,
 } from "@/redux/thunk/Claim/claimThunk";
 
 const initialState: {
   data: Claim[];
   listClaimApproved: Claim[];
+  myClaim: Claim[];
   status: string;
   error: string | null;
 } = {
   data: [],
   listClaimApproved: [],
+  myClaim: [],
+
   status: "",
   error: null,
 };
@@ -43,6 +48,18 @@ export const claimSlice = createSlice({
         state.listClaimApproved = action.payload;
       })
       .addCase(fetchApprovedClaimsApproverAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      //---------------------------------------------- My Claims -----------------------------------------------------
+      .addCase(fetchClaimByUserAsync.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = String(action.error.message);
+      })
+      .addCase(fetchClaimByUserAsync.fulfilled, (state, action) => {
+        state.status = "success";
+        state.myClaim = action.payload;
+      })
+      .addCase(fetchClaimByUserAsync.pending, (state) => {
         state.status = "loading";
       });
   },
