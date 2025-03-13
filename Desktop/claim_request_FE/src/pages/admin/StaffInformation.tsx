@@ -47,19 +47,20 @@ const StaffInformation = () => {
     setIsModalOpen(true);
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (record: string) => {
     if (window.confirm("Are you sure you want to delete this staff?")) {
-      try {
-        await httpClient.delete(`/admin/staffs/${id}`);
-        setDataSource((prevData) => prevData.filter((item) => item.user_id !== id));
-        message.success(`Deleted staff with ID: ${id}`);
-      } catch (error) {
-        message.error("Error deleting staff! Try again.");
-      }
+        try {
+            await httpClient.delete(`/admin/staffs/${record}`);
+            setDataSource((prevData) => prevData.filter((item) => item.user_id !== record));
+            message.success(`Deleted staff with ID: ${record}`);
+        } catch (error) {
+            message.error("Error deleting staff! Try again.");
+        }
     }
   };
 
   const columns = [
+    
     { dataIndex: "user_id", title: "User ID" },
     { dataIndex: "full_name", title: "Full Name" },
     { dataIndex: "email", title: "Email" },
