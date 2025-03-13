@@ -20,22 +20,22 @@ export const fetchAllClaimAsync = createAsyncThunk<Claim[]>(
 );
 
 export const fetchApprovedClaimsApproverAsync = createAsyncThunk<
-  Claim[],
+  { data: Claim[]; totalPages: number },
   { page: string; limit: string }
->(
-  "claim/approver/fetchApprovedClaim",
-  async ({ page, limit }): Promise<Claim[]> => {
-    try {
-      await delay(1000);
-      const response = await httpClient.get<ApiResponse<Claim[]>>(
-        "/approvers/approved-claim",
-        { page: page, limit: limit }
-      );
-      console.log("data: ", response.data.data);
-      return response.data.data;
-    } catch (error) {
-      console.error("Fetch Approverd Claims for Approver error " + error);
-      throw error;
-    }
+>("claim/approver/fetchApprovedClaim", async ({ page, limit }) => {
+  try {
+    await delay(1000);
+    const response = await httpClient.get<ApiResponse<Claim[]>>(
+      "/approvers/approved-claim",
+      { page: page, limit: limit }
+    );
+    console.log("data: ", response.data);
+    return {
+      data: response.data.data,
+      totalPages: response.data.pagination.totalPages,
+    };
+  } catch (error) {
+    console.error("Fetch Approverd Claims for Approver error " + error);
+    throw error;
   }
-);
+});
