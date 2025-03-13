@@ -9,7 +9,8 @@ import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
 import { AppDispatch } from "@/redux";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllPendingClaimAsync } from "@/redux/thunk/Claim/claimThunk";
-// import type { claimPending } from "@/types/Pending";
+import { toast } from "react-toastify";
+
 
 
 // interface claimList {
@@ -48,8 +49,11 @@ export const PendingComponent: React.FC = () => {
         page: currentPage.toString(),
         limit: limit.toString(),
       }));
+      toast.success("Claim approved successfully!");
+      window.confirm("Are you sure you want to approve this claim?");
     } catch (error) {
       console.log("Error approving claim: ", error);
+      toast.error("Failed to approve claim.");
     }
   };
 
@@ -60,8 +64,11 @@ export const PendingComponent: React.FC = () => {
         page: currentPage.toString(),
         limit: limit.toString(),
       }));
+      toast.success("Claim rejected successfully!");
+      window.confirm("Are you sure you want to reject this claim?");
     } catch (error) {
       console.log("Error rejecting claim: ", error);
+      toast.error("Failed to reject claim.");
     }
   };
 
@@ -108,7 +115,7 @@ export const PendingComponent: React.FC = () => {
     {
       key: "action",
       dataIndex: "claim_id",
-      title: "Action",
+      title: "",
       cell: ({ value }) => (
         <div className={styles.actions}>
           <Tooltip text="Approve" position="top">
