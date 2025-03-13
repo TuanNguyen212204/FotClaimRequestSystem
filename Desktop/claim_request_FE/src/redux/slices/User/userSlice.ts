@@ -6,12 +6,12 @@ import {
 } from "@redux/thunk/User/userThunk";
 const initialState: {
   data: User[];
-  user: User[];
+  user: User | null;
   status: string;
   error?: string;
 } = {
   data: [],
-  user: [],
+  user: null,
   status: "",
   error: "null",
 };
@@ -45,7 +45,8 @@ export const userSlice = createSlice({
       })
       .addCase(fetchUserByIdAsync.fulfilled, (state, action) => {
         state.status = "success";
-        state.user = action.payload;
+        console.log(action.payload[0]);
+        state.user = action.payload[0];
       });
   },
 });
