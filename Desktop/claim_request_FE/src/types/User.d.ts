@@ -12,6 +12,7 @@ export interface User {
   job_rank: string;
   role_id: string;
   password: string;
+  salary: string;
 }
 
 export interface NewUser extends User {

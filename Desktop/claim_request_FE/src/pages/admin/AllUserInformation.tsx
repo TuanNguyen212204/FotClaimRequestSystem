@@ -25,7 +25,9 @@ const AllUserInformation: React.FC = () => {
     };
     fetchData();
   }, [dispatch, currentPage]);
-
+  const handleCreateUser = async () => {
+    navigate(PATH.createUser);
+  };
   const dataSource: DataRecord[] = users.map((user, index) => ({
     ...user,
     key: index,
@@ -61,7 +63,7 @@ const AllUserInformation: React.FC = () => {
 
   const handleUpdate = (id?: string) => {
     if (!id) return;
-    console.log("Updateng user with ID:", id);
+    console.log("Updated user with ID:", id);
     navigate(`/update-user?id=${id}`);
   };
   const columns: Column[] = [
@@ -101,10 +103,10 @@ const AllUserInformation: React.FC = () => {
         dataSource={dataSource}
         loading={loading}
         pagination={true}
-        // pageLength={10}
         name="Role"
         totalPage={2}
         onPageChange={handlePageChange}
+        onCreateButtonClick={handleCreateUser}
       />
     </div>
   );
