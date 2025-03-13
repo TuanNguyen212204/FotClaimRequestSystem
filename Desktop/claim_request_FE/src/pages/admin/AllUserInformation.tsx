@@ -10,6 +10,7 @@ import httpClient from "@/constant/apiInstance";
 import { ApiResponse } from "@/types/ApiResponse";
 import { useNavigate } from "react-router-dom";
 import { PATH } from "@constant/config";
+import { ApiResponseNoGeneric } from "@/types/ApiResponse";
 const AllUserInformation: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
@@ -41,7 +42,7 @@ const AllUserInformation: React.FC = () => {
   };
   const deleteUser = async (id: string) => {
     try {
-      const response = await httpClient.delete<ApiResponse>(
+      const response = await httpClient.delete<ApiResponseNoGeneric>(
         "/admin/staff/" + id
       );
       console.log(response.data.message);
@@ -63,7 +64,7 @@ const AllUserInformation: React.FC = () => {
 
   const handleUpdate = (id?: string) => {
     if (!id) return;
-    console.log("Updated user with ID:", id);
+    console.log("Update user with ID:", id);
     navigate(`/update-user?id=${id}`);
   };
   const columns: Column[] = [
