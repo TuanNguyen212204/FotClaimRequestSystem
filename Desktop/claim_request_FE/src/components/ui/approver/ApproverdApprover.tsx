@@ -20,29 +20,26 @@ interface claimList {
 }
 
 export const ApprovedApproverComponent: React.FC = () => {
-  const [claimList, setClaimList] = useState<claimList[]>([]);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const listClaim = useSelector(selectAppovedClaim);
+  const claimList = useSelector(selectAppovedClaim);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [limit] = useState(7);
+
   useEffect(() => {
-    // fetchApprovedClaimAysnc();
-    dispatch(fetchApprovedClaimsApproverAsync());
+    setLoading(true);
+    dispatch(
+      fetchApprovedClaimsApproverAsync({
+        page: currentPage.toString(),
+        limit: limit.toString(),
+      })
+    );
+    setLoading(false);
   }, []);
 
-  const fetchApprovedClaimAysnc = async () => {
-    try {
-      const res = await httpClient.get<{ data: claimList[] }>(
-        `/approvers/approved-claim`
-      );
-      console.log("data: ", res.data.data);
-      setClaimList(res.data.data);
-    } catch (error) {
-      console.log("Error at ApprovedApprover: ", error);
-    }
-  };
-
   const handleViewDetail = (claimId: string) => {
-    navigate(`/approve/detail/${claimId}`); //sửa lại url ở đây để truyền
+    navigate(`/approve/detail/${claimId}`); //sửa lại url ở đây để truyềnS
   };
 
   const formatDateToDDMMYYYY = (date: string) => {
@@ -51,6 +48,11 @@ export const ApprovedApproverComponent: React.FC = () => {
     const month = dateObj.getMonth() + 1;
     const year = dateObj.getFullYear();
     return `${day}/${month}/${year}`;
+  };
+
+  const handlePageChange = (newPage: number) => {
+    console.log("Trang mới: ", newPage);
+    setCurrentPage(newPage);
   };
 
   const columns: Column[] = [
@@ -93,7 +95,7 @@ export const ApprovedApproverComponent: React.FC = () => {
       ),
     },
   ];
-  const dataSource: DataRecord[] = listClaim.map((claim, index) => ({
+  const dataSource: DataRecord[] = claimList.map((claim, index) => ({
     ...claim,
     key: index,
     id: claim.claim_id ? claim.claim_id.toString() : "",
@@ -107,7 +109,7 @@ export const ApprovedApproverComponent: React.FC = () => {
         loading={false}
         pagination={true}
         name="Claims"
-        pageLength={7}
+        onPageChange={handlePageChange}
       />
     </div>
   );
