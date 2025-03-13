@@ -37,7 +37,7 @@ export type TableComponentProps<T extends DataRecord> = {
   pagination?: boolean;
   name?: string;
   sortConfig?: SortConfig;
-  pageLength?: number;
+  // pageLength?: number;
   totalPage?: number;
   onPageChange?: (newPage: number) => void;
 };
@@ -65,7 +65,7 @@ const TableComponent = forwardRef(
       pagination = false,
       sortConfig,
       totalPage = 3,
-      pageLength = 10,
+      // pageLength = 10,
       onPageChange,
     }: TableComponentProps<T>,
     ref: React.Ref<{
