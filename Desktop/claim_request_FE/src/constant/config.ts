@@ -25,4 +25,5 @@ export const PATH = {
   unauthenticated: "/unauthenticated",
   updateUser: "/update-user",
   createUser: "/create-user",
+  claimDetail: "/claim-detail",
 };

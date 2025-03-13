@@ -26,7 +26,7 @@ export const LoadingProvider: React.FC<{ children: ReactNode }> = ({
 
   useEffect(() => {
     showLoading();
-    const timer = setTimeout(() => hideLoading(), 1000);
+    const timer = setTimeout(() => hideLoading(), 2000);
     return () => clearTimeout(timer);
   }, [location]);
 

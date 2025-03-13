@@ -35,10 +35,9 @@ const UserClaims = () => {
     console.log(userClaim);
   }, [userClaim]);
 
-  const handleViewDetail = (claimId: string) => {
-    navigate(`/claims/${claimId}`);
+  const handleViewDetail = (id: string) => {
+    navigate(`/claim-detail?id=${id}`);
   };
-
   const handlePageChange = (newPage: number) => {
     console.log("Trang mới: ", newPage);
     setCurrentPage(newPage);
@@ -53,11 +52,6 @@ const UserClaims = () => {
   };
 
   const columns: Column[] = [
-    {
-      key: "claim_id",
-      dataIndex: "claim_id",
-      title: "Claim ID",
-    },
     {
       key: "project_id",
       dataIndex: "project_id",

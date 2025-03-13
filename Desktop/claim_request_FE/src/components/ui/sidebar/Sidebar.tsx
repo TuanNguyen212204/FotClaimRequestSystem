@@ -72,6 +72,9 @@ export const Sidebar = () => {
       case "paid":
         navigate(PATH.paidClaim);
         break;
+      case "all":
+        navigate(PATH.myClaims);
+        break;
       default:
         break;
     }
@@ -246,6 +249,17 @@ export const Sidebar = () => {
                     </button>
                   </li> */}
                   <li
+                    key="all"
+                    className={`${styles.claimItem} ${
+                      selectedClaim === "all" ? styles.active : ""
+                    }`}
+                    onClick={() => handleSelect("all")}
+                  >
+                    <button className={styles.claimButton}>
+                      {!isCollapsed && "All Claim"}
+                    </button>
+                  </li>
+                  <li
                     key="pending"
                     className={`${styles.claimItem} ${
                       selectedClaim === "pending" ? styles.active : ""
@@ -287,6 +301,17 @@ export const Sidebar = () => {
                   >
                     <button className={styles.claimButton}>
                       {!isCollapsed && "Rejected"}
+                    </button>
+                  </li>
+                  <li
+                    key="profile"
+                    className={`${styles.claimItem} ${
+                      selectedClaim === "profile" ? styles.active : ""
+                    }`}
+                    onClick={() => handleSelect("profile")}
+                  >
+                    <button className={styles.claimButton}>
+                      {!isCollapsed && "Profile"}
                     </button>
                   </li>
                 </>
