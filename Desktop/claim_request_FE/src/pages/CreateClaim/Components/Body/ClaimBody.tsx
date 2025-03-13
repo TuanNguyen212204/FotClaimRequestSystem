@@ -13,12 +13,9 @@ interface IClaimBodyProps
     AdditionalInfoProps {}
 export default function ClaimBody({
   ProjectList,
-  append,
   control,
   errors,
-  fields,
   register,
-  remove,
   setValue,
 }: IClaimBodyProps): JSX.Element {
   return (
@@ -29,14 +26,7 @@ export default function ClaimBody({
         setValue={setValue}
         ProjectList={ProjectList}
       />
-      <ClaimTable
-        append={append}
-        control={control}
-        fields={fields}
-        register={register}
-        remove={remove}
-        errors={errors}
-      />
+      <ClaimTable control={control} register={register} errors={errors} />
       {/* <AdditionalInfo register={register} /> */}
       <ButtonGroup />
     </Card>

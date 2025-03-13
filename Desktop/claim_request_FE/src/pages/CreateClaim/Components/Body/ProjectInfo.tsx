@@ -69,7 +69,7 @@ export default function ProjectInfo({
         />
 
         {errors.currentSelectedProject?.projectName && (
-          <p className="text-black text-sm w-full bg-red-200 border-2 border-red-300 p-1">
+          <p className="text-red-500 text-sm p-1">
             {
               "Select a Project" /**
               gu
