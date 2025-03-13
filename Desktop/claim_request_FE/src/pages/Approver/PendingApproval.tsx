@@ -1,23 +1,25 @@
 import TableComponent, { Column } from "@/components/ui/Table/Table";
-// import { useDispatch, useSelector } from "react-redux";
-// import { AppDispatch } from "@/redux/index";
-// import { selectAllPending } from "@/redux/selector/pendingSelector";
 import { useEffect, useState } from "react";
-// import { fetchAllPendingClaimAsync } from "@/redux/thunk/Approver/pendingThunk";
 import type { claimPending } from "@/types/Pending.d.ts";
+import { selectAllPending } from "@/redux/selector/pendingSelector";
 import httpClient from "@/constant/apiInstance.ts";
-import { EyeIcon, TrashIcon, CheckIcon } from "lucide-react";
+import { CheckIcon, X, CheckCircle2, XCircle } from "lucide-react";
 import styles from "@/pages/Approver/PendingApproval.module.css";
 import { Link } from "react-router-dom";
 import { DataRecord } from "@/components/ui/Table/Table";
+import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
+import { AppDispatch } from "@/redux";
+import { useDispatch, useSelector } from "react-redux";
+
 export const PendingComponent: React.FC = () => {
-  // const dispatch = useDispatch<AppDispatch>();
-  // const pending = useSelector(selectAllPending);
+  const dispatch = useDispatch<AppDispatch>();
   const [pending, setPending] = useState<claimPending[]>([]);
   const [loading, setLoading] = useState(true);
+  const listClaim = useSelector(selectAllPending);
 
   useEffect(() => {
     fetchAllPendingClaimAsync();
+    // dispatch(fetchAllPendingClaimAsync());
   }, []);
 
   const fetchAllPendingClaimAsync = async () => {
@@ -36,6 +38,33 @@ export const PendingComponent: React.FC = () => {
   // const handleViewDetail = (claimId: string) => {
   //   navigate(`/approve/detail/${claimId}`); //sửa lại url ở đây để truyền
   // };
+
+  const handleApproveClaim = async (claimId: string) => {
+    try {
+      await httpClient.post(`/approvers/${claimId}/approve-claim`, {});
+      setPending((prevPending) =>
+        prevPending.map((claim) =>
+          claim.claim_id === claimId ? { ...claim, claim_status: "Approved" } : claim
+        )
+      );
+    } catch (error) {
+      console.log("Error approving claim: ", error);
+    }
+  };
+
+  const handleRejectClaim = async (claimId: string) => {
+    try {
+      await httpClient.post(`/approvers/${claimId}/rejected-claim`, {});
+      setPending((prevPending) =>
+        prevPending.map((claim) =>
+          claim.claim_id === claimId ? { ...claim, claim_status: "Rejected" } : claim
+        )
+      );
+    } catch (error) {
+      console.log("Error rejecting claim: ", error);
+    }
+  };
+
 
   if (loading) {
     return <p>Loading...</p>;
@@ -85,14 +114,14 @@ export const PendingComponent: React.FC = () => {
       title: "Action",
       cell: ({ value }) => (
         <div className={styles.actions}>
-          <EyeIcon
-            className={styles.icon}
-            // onClick={() => handleViewDetail(value as string)}
-          />
-          {/* &nbsp;&nbsp;&nbsp; */}
-          <CheckIcon className={styles.icon} />
-          {/* &nbsp;&nbsp;&nbsp; */}
-          <TrashIcon className={styles.icon} />
+          <Tooltip text="Approve" position="top">
+            <CheckCircle2 className={styles.iconApprove}
+              onClick={() => handleApproveClaim(value as string)} />
+          </Tooltip>
+          <Tooltip text="Reject" position="top">
+            <XCircle className={styles.iconReject}
+              onClick={() => handleRejectClaim(value as string)} />
+          </Tooltip>
         </div>
       ),
     },
@@ -122,7 +151,7 @@ export const PendingComponent: React.FC = () => {
         loading={false}
         pagination={true}
         name="Claims"
-        pageLength={8}
+        pageLength={10}
       />
     </div>
   );
