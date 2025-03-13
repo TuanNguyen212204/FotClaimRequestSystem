@@ -1,20 +1,18 @@
-export interface Experience {
-  title: string;
-  company: string;
-  description: string;
-}
-
 export interface User {
   user_id: string;
-  full_name: string;
+  username: string;
   email: string;
-  department: string;
-  job_rank: string;
-  role_id: string;
-  password: string;
-  salary: string;
+  hash_password: string;
+  password?: string;
+  full_name?: string;
+  department?: string;
+  job_rank?: string;
+  salary?: string;
+  role_id?: number;
+  user_status?: number;
+  role_name?: string;
 }
 
 export interface NewUser extends User {
-  role: string; //(e.g., "Dev", "BA", "PM")
+  role: string; // (e.g., "Dev", "BA", "PM")
 }

@@ -1,54 +1,80 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios"; 
-import { User, Experience } from "@types/User.type"; 
+import type { User } from "@/types/User";
+import httpClient from "@/constant/apiInstance";
 
 
-export const fetchUserByIdAsync = createAsyncThunk<User, string, { rejectValue: string }>(
-  "user/fetchUserById",
-  async (userId: string, { rejectWithValue }) => {
+export const fetchUserByIdAsync = createAsyncThunk<User, string>(
+  "userInfo/fetchUserById",
+  async (userId: string): Promise<User> => {
     try {
-      const response = await axios.get<User>(
-        `https://67be8a29b2320ee0501072e3.mockapi.io/userInfo/${userId}`
-      );
-      return response.data;
-    } catch (error: any) {
-      return rejectWithValue("Fetch user error: " + error.message);
+      await new Promise((resolve) => setTimeout(resolve, 1000)); 
+      const response = await httpClient.get<{
+        httpStatus: number;
+        errorCode: number;
+        data: User[];
+      }>(`/admin/staff/${userId}`);
+      const userData = response.data.data[0]; 
+      return {
+        user_id: userData.user_id,
+        username: userData.username,
+        email: userData.email,
+        hash_password: userData.hash_password,
+        full_name: userData.full_name,
+        department: userData.department,
+        job_rank: userData.job_rank,
+        salary: userData.salary,
+        role_id: userData.role_id,
+        user_status: userData.user_status,
+        role_name: userData.role_name,
+      };
+    } catch (error) {
+      console.error("Fetch User error: " + error);
+      throw error;
     }
   }
 );
 
 
-export const fetchAllUsersAsync = createAsyncThunk<User[], void, { rejectValue: string }>(
-  "user/fetchAllUsers",
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await axios.get<User[]>(
-        "https://67be8a29b2320ee0501072e3.mockapi.io/userInfo"
-      );
-      return response.data;
-    } catch (error: any) {
-      return rejectWithValue("Fetch users error: " + error.message);
+export const updateUserAsync = createAsyncThunk<
+  User,
+  { userId: string; userData: Partial<User> }
+>("userInfo/updateUser", async ({ userId, userData }): Promise<User> => {
+  try {
+    await new Promise((resolve) => setTimeout(resolve, 1000)); 
+
+    const requestBody = {
+      full_name: userData.full_name || "",
+      email: userData.email || "",
+      department: userData.department || "",
+      role_id: userData.role_id || 0,
+      job_rank: userData.job_rank || "",
+    };
+ 
+    if (userData.password && userData.password.trim() !== "") {
+      requestBody.password = userData.password;
     }
+
+    const response = await httpClient.put<{
+      httpStatus: number;
+      errorCode: number;
+      data: User[];
+    }>(`/admin/staff/${userId}`, requestBody);
+    const updatedUser = response.data.data[0]; 
+    return {
+      user_id: updatedUser.user_id,
+      username: updatedUser.username,
+      email: updatedUser.email,
+      hash_password: updatedUser.hash_password,
+      full_name: updatedUser.full_name,
+      department: updatedUser.department,
+      job_rank: updatedUser.job_rank,
+      salary: updatedUser.salary,
+      role_id: updatedUser.role_id,
+      user_status: updatedUser.user_status,
+      role_name: updatedUser.role_name,
+    };
+  } catch (error) {
+    console.error("Update User error: " + error);
+    throw error;
   }
-);
-
-
-export const updateUserAsync = createAsyncThunk<User, { userId: string; userData: User }, { rejectValue: string }>(
-  "user/updateUser",
-  async ({ userId, userData }, { rejectWithValue, dispatch }) => {
-    try {
-
-      const response = await axios.put<User>(
-        `https://67be8a29b2320ee0501072e3.mockapi.io/userInfo/${userId}`,
-        userData
-      );
-      
-
-      await dispatch(fetchUserByIdAsync(userId));
-      
-      return response.data;
-    } catch (error: any) {
-      return rejectWithValue("Update user error: " + error.message);
-    }
-  }
-);
+});
