@@ -8,7 +8,10 @@ import { Column, DataRecord } from "@components/ui/Table/Table";
 import styles from "./AllUserInformation.module.css";
 import httpClient from "@/constant/apiInstance";
 import { ApiResponse } from "@/types/ApiResponse";
+import { useNavigate } from "react-router-dom";
+import { PATH } from "@constant/config";
 const AllUserInformation: React.FC = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const users = useSelector(selectAllUser); // Lấy danh sách user từ Redux store
   const [loading, setLoading] = useState(true);
@@ -46,13 +49,10 @@ const AllUserInformation: React.FC = () => {
   };
   const handleDelete = async (id?: string) => {
     if (!id) return;
-
     try {
       await deleteUser(id);
       window.alert("Deleted user with ID: " + id);
       console.log("Deleted user with ID:", id);
-
-      // Gọi lại API để lấy danh sách user mới
       dispatch(fetchAllUserAsync(currentPage.toString()));
     } catch (error) {
       console.error("Error deleting user:", error);
@@ -62,7 +62,7 @@ const AllUserInformation: React.FC = () => {
   const handleUpdate = (id?: string) => {
     if (!id) return;
     console.log("Updateng user with ID:", id);
-    // Call API or update state to remove user by ID
+    navigate(`/update-user?id=${id}`);
   };
   const columns: Column[] = [
     { key: "full_name", dataIndex: "full_name", title: "Full Name" },
