@@ -1,5 +1,5 @@
 import { selectMyClaim } from "@/redux/selector/claimSelector";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styles from "./UserClaims.module.css";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,15 +20,28 @@ const UserClaims = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const userClaim = useSelector(selectMyClaim);
+  const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+
   useEffect(() => {
-    dispatch(fetchClaimByUserAsync());
-  }, [dispatch]);
+    // dispatch(fetchClaimByUserAsync());
+    const fetchData = async () => {
+      await dispatch(fetchClaimByUserAsync(currentPage.toString()));
+      setLoading(false);
+    };
+    fetchData();
+  }, [dispatch, currentPage]);
   useEffect(() => {
     console.log(userClaim);
   }, [userClaim]);
 
   const handleViewDetail = (claimId: string) => {
     navigate(`/claims/${claimId}`);
+  };
+
+  const handlePageChange = (newPage: number) => {
+    console.log("Trang mới: ", newPage);
+    setCurrentPage(newPage);
   };
 
   const formatDateToDDMMYYYY = (date: string) => {
