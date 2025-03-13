@@ -75,6 +75,15 @@ export const Sidebar = () => {
       case "all":
         navigate(PATH.myClaims);
         break;
+      case "approvedPage":
+        navigate(PATH.approvedClaimWithUserID);
+        break;
+      case "pendingPage":
+        navigate(PATH.pendingClaimByUserID);
+        break;
+      case "rejectedPage":
+        navigate(PATH.rejectedClaimWithUserID);
+        break;
       default:
         break;
     }
@@ -260,28 +269,28 @@ export const Sidebar = () => {
                     </button>
                   </li>
                   <li
-                    key="pending"
+                    key="pendingPage"
                     className={`${styles.claimItem} ${
-                      selectedClaim === "pending" ? styles.active : ""
+                      selectedClaim === "pendingPage" ? styles.active : ""
                     }`}
-                    onClick={() => handleSelect("pending")}
+                    onClick={() => handleSelect("pendingPage")}
                   >
                     <button className={styles.claimButton}>
-                      {!isCollapsed && "Pending Approval"}
+                      {!isCollapsed && "Pending Claim"}
                     </button>
                   </li>
                   <li
-                    key="approved"
+                    key="approvedPage"
                     className={`${styles.claimItem} ${
-                      selectedClaim === "approved" ? styles.active : ""
+                      selectedClaim === "approvedPage" ? styles.active : ""
                     }`}
-                    onClick={() => handleSelect("approved")}
+                    onClick={() => handleSelect("approvedPage")}
                   >
                     <button className={styles.claimButton}>
-                      {!isCollapsed && "Approved"}
+                      {!isCollapsed && "Approved Claim"}
                     </button>
                   </li>
-                  <li
+                  {/* <li
                     key="paid"
                     className={`${styles.claimItem} ${
                       selectedClaim === "paid" ? styles.active : ""
@@ -289,18 +298,18 @@ export const Sidebar = () => {
                     onClick={() => handleSelect("paid")}
                   >
                     <button className={styles.claimButton}>
-                      {!isCollapsed && "Paid"}
+                      {!isCollapsed && "Paid Claim"}
                     </button>
-                  </li>
+                  </li> */}
                   <li
-                    key="rejected"
+                    key="rejectedPage"
                     className={`${styles.claimItem} ${
-                      selectedClaim === "rejected" ? styles.active : ""
+                      selectedClaim === "rejectedPage" ? styles.active : ""
                     }`}
-                    onClick={() => handleSelect("rejected")}
+                    onClick={() => handleSelect("rejectedPage")}
                   >
                     <button className={styles.claimButton}>
-                      {!isCollapsed && "Rejected"}
+                      {!isCollapsed && "Rejected Claim"}
                     </button>
                   </li>
                   <li
@@ -311,7 +320,7 @@ export const Sidebar = () => {
                     onClick={() => handleSelect("profile")}
                   >
                     <button className={styles.claimButton}>
-                      {!isCollapsed && "Profile"}
+                      {!isCollapsed && "Your Profile"}
                     </button>
                   </li>
                 </>

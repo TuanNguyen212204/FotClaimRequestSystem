@@ -3,7 +3,7 @@ import { ApiResponse } from "@/types/ApiResponse";
 import { Claim } from "@/types/Claim";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { delay } from "@utils/delay";
-import axios from "axios";
+
 export const fetchAllClaimAsync = createAsyncThunk<Claim[]>(
   "claim/fetchAllClaim",
   async (): Promise<Claim[]> => {
@@ -71,12 +71,78 @@ export const fetchClaimByUserAsync = createAsyncThunk<Claim[]>(
       if (!userId) {
         throw new Error("User id not found");
       }
-      const response = await httpClient.get<ApiResponse<Claim[]>>(
-        `https://claimsystem.info.vn/api/v1/claims`,
-
-        { userID: userId }
-      );
+      const response = await httpClient.get<ApiResponse<Claim[]>>("/claims", {
+        userID: userId,
+      });
       return response.data.data;
+    } catch (error) {
+      console.error("Fetch Claims error " + error);
+      throw error;
+    }
+  }
+);
+
+export const fetchClaimByUserWithPendingStatusAsync = createAsyncThunk<Claim[]>(
+  "claim/fetchClaimByUserWithPendingStatusAsync",
+  async (): Promise<Claim[]> => {
+    try {
+      await delay(1000);
+      const userId = localStorage.getItem("user_id");
+      if (!userId) {
+        throw new Error("User id not found");
+      }
+      const response = await httpClient.get<ApiResponse<Claim[]>>("/claims", {
+        userID: userId,
+      });
+      return response.data.data.filter(
+        (claim) => claim.claim_status === "PENDING"
+      );
+    } catch (error) {
+      console.error("Fetch Claims error " + error);
+      throw error;
+    }
+  }
+);
+
+export const fetchClaimByUserWithApprovedStatusAsync = createAsyncThunk<
+  Claim[]
+>(
+  "claim/fetchClaimByUserWithApprovedStatusAsync",
+  async (): Promise<Claim[]> => {
+    try {
+      await delay(1000);
+      const userId = localStorage.getItem("user_id");
+      if (!userId) {
+        throw new Error("User id not found");
+      }
+      const response = await httpClient.get<ApiResponse<Claim[]>>("/claims", {
+        userID: userId,
+      });
+      return response.data.data.filter(
+        (claim) => claim.claim_status === "APPROVED"
+      );
+    } catch (error) {
+      console.error("Fetch Claims error " + error);
+      throw error;
+    }
+  }
+);
+
+export const fetchClaimByUserWithRejectStatusAsync = createAsyncThunk<Claim[]>(
+  "claim/fetchClaimByUserWithRejectStatusAsync",
+  async (): Promise<Claim[]> => {
+    try {
+      await delay(1000);
+      const userId = localStorage.getItem("user_id");
+      if (!userId) {
+        throw new Error("User id not found");
+      }
+      const response = await httpClient.get<ApiResponse<Claim[]>>("/claims", {
+        userID: userId,
+      });
+      return response.data.data.filter(
+        (claim) => claim.claim_status === "REJECTED"
+      );
     } catch (error) {
       console.error("Fetch Claims error " + error);
       throw error;
