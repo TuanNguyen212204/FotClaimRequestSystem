@@ -64,7 +64,7 @@ export class HttpClient {
   //axios.post(url[, data[, config]])
   async post<T>(
     url: string,
-    data: AxiosRequestConfig["data"],
+    data?: AxiosRequestConfig["data"],
     config?: AxiosRequestConfig<unknown> | undefined
   ): Promise<AxiosResponse<T>> {
     return this.createAxios.post(url, data, config);
@@ -72,7 +72,7 @@ export class HttpClient {
   //axios.put(url[, data[, config]])
   async put<T>(
     url: string,
-    data: AxiosRequestConfig["data"],
+    data?: AxiosRequestConfig["data"],
     config?: AxiosRequestConfig<unknown> | undefined
   ): Promise<AxiosResponse<T>> {
     return this.createAxios.put(url, data, config);
@@ -80,7 +80,7 @@ export class HttpClient {
   //axios.patch(url[, data[, config]])
   async patch<T>(
     url: string,
-    data: AxiosRequestConfig["data"],
+    data?: AxiosRequestConfig["data"],
     config?: AxiosRequestConfig<unknown> | undefined
   ): Promise<AxiosResponse<T>> {
     return this.createAxios.patch(url, data, config);

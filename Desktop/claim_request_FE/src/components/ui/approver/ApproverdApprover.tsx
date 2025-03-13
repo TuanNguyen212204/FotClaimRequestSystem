@@ -5,9 +5,10 @@ import { useNavigate } from "react-router-dom";
 import httpClient from "@/constant/apiInstance";
 import TableComponent, { Column, DataRecord } from "../Table/Table";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchApprovedClaimsApproverAsync } from "@/redux/thunk/Claim/claimThunk";
-import { AppDispatch } from "@/redux";
-import { selectAppovedClaim } from "@/redux/selector/claimSelector";
+import { fetchApprovedClaimsApproverAsync } from "@redux/thunk/Claim/claimThunk";
+import { AppDispatch } from "@redux";
+import { selectAppovedClaim } from "@redux/selector/claimSelector";
+import { PATH } from "@constant/config";
 interface claimList {
   claim_id?: string;
   user_id?: string;

@@ -1,0 +1,12 @@
+.update_button {
+  background-color: orange;
+  color: white;
+  padding: 0.5rem;
+  border-radius: 5px;
+}
+.delete_button {
+  background-color: red;
+  color: white;
+  padding: 0.5rem;
+  border-radius: 5px;
+}

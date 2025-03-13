@@ -21,4 +21,5 @@ export const PATH = {
   staffInformation: "/staff-information",
   unauthorized: "/unauthorized",
   unauthenticated: "/unauthenticated",
+  updateUser: "/update-user",
 };

@@ -10,6 +10,8 @@ export interface User {
   email: string;
   department: string;
   job_rank: string;
+  role_id: string;
+  password: string;
 }
 
 export interface NewUser extends User {
