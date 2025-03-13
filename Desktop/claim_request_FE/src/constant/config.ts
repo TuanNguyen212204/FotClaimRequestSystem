@@ -1,3 +1,5 @@
+import { createECDH } from "crypto";
+
 export const PATH = {
   // home: "/",
   userInfo: "/user-info", //tuan
@@ -22,4 +24,5 @@ export const PATH = {
   unauthorized: "/unauthorized",
   unauthenticated: "/unauthenticated",
   updateUser: "/update-user",
+  createUser: "/create-user",
 };

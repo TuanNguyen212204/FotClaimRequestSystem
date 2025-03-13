@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import httpClient from "@constant/apiInstance";
 import { ApiResponse } from "@/types/ApiResponse";
+import { ApiResponseNoGeneric } from "@/types/ApiResponse";
 import { User } from "@/types/User";
 import { useNavigate } from "react-router-dom";
 import { PATH } from "@constant/config";
@@ -53,7 +54,10 @@ export const UpdateUser: React.FC = () => {
 
     console.log(requestBody);
     try {
-      await httpClient.put(`/admin/staff/${id}`, requestBody);
+      await httpClient.put<ApiResponseNoGeneric>(
+        `/admin/staff/${id}`,
+        requestBody
+      );
       alert("User updated successfully!");
       navigate(PATH.allUserInformation);
     } catch (error) {

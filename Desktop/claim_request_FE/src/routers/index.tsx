@@ -25,6 +25,7 @@ import Authorization from "@auth/Authorization";
 import Unauthenticated from "@auth/Unauthenticated";
 import { ROLE } from "@constant/role";
 import { UpdateUser } from "@/pages/User/UpdateUser";
+import { CreateUser } from "@/pages/User/CreateUser";
 const router: RouteObject[] = [
   // {
   //   element: <CheckBoxTest />,
@@ -72,6 +73,14 @@ const router: RouteObject[] = [
       {
         path: PATH.createRequest,
         element: <CreateClaimPage />,
+      },
+      {
+        path: PATH.createUser,
+        element: (
+          <Authorization role_id={[ROLE.ADMIN]}>
+            <CreateUser />
+          </Authorization>
+        ),
       },
       {
         path: PATH.updateUser,
