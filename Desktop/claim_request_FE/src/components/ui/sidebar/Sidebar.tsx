@@ -86,7 +86,8 @@ export const Sidebar = () => {
   };
 
   const toggleSidebar = () => {
-    setIsCollapsed(!isCollapsed);
+    setIsCollapsed((prev) => !prev);
+    console.log("Toggled Sidebar:", !isCollapsed);
   };
 
   return (

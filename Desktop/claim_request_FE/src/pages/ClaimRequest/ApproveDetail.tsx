@@ -25,7 +25,9 @@ export const ApproveDetail: React.FC = () => {
     }
   };
   useEffect(() => {
-    fetchClaimById("C002");
+    if (id) {
+      fetchClaimById(id);
+    }
   }, [id]);
   const formatDateToDDMMYYYY = (date: string) => {
     const dateObj = new Date(date);
