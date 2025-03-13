@@ -2,8 +2,11 @@ import TableComponent from "@components/ui/Table/Table";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch } from "@redux/index.ts";
 import { useEffect, useState } from "react";
-import { selectAllUser } from "@redux/selector/userSelector";
-import { fetchAllUserAsync } from "@redux/thunk/User/userThunk";
+import {
+  selectAllUser,
+  selectTotalPageOfAllUser,
+} from "@redux/selector/userSelector";
+import { fetchAllUserAsync, fetchTotalPage } from "@redux/thunk/User/userThunk";
 import { Column, DataRecord } from "@components/ui/Table/Table";
 import styles from "./AllUserInformation.module.css";
 import httpClient from "@/constant/apiInstance";
@@ -11,10 +14,12 @@ import { ApiResponse } from "@/types/ApiResponse";
 import { useNavigate } from "react-router-dom";
 import { PATH } from "@constant/config";
 import { ApiResponseNoGeneric } from "@/types/ApiResponse";
+import { ToastContainer, toast } from "react-toastify";
 const AllUserInformation: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const users = useSelector(selectAllUser); // Lấy danh sách user từ Redux store
+  const users = useSelector(selectAllUser);
+  const totalPage = useSelector(selectTotalPageOfAllUser); // Lấy danh sách user từ Redux store
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState<number>(1);
 
@@ -22,6 +27,7 @@ const AllUserInformation: React.FC = () => {
     const fetchData = async () => {
       setLoading(true);
       await dispatch(fetchAllUserAsync(currentPage.toString()));
+      await dispatch(fetchTotalPage({ page: currentPage.toString() }));
       setLoading(false);
     };
     fetchData();
@@ -54,7 +60,7 @@ const AllUserInformation: React.FC = () => {
     if (!id) return;
     try {
       await deleteUser(id);
-      window.alert("Deleted user with ID: " + id);
+      toast("Delete user successfully!");
       console.log("Deleted user with ID:", id);
       dispatch(fetchAllUserAsync(currentPage.toString()));
     } catch (error) {
@@ -105,7 +111,7 @@ const AllUserInformation: React.FC = () => {
         loading={loading}
         pagination={true}
         name="Role"
-        totalPage={2}
+        totalPage={totalPage}
         onPageChange={handlePageChange}
         onCreateButtonClick={handleCreateUser}
       />

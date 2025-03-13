@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { PATH } from "@constant/config";
 import { X } from "lucide-react";
 import styles from "./UpdateUser.module.css";
+import { ToastContainer, toast } from "react-toastify";
 export const UpdateUser: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -58,7 +59,8 @@ export const UpdateUser: React.FC = () => {
         `/admin/staff/${id}`,
         requestBody
       );
-      alert("User updated successfully!");
+      toast("User updated successfully!");
+
       navigate(PATH.allUserInformation);
     } catch (error) {
       console.error("Update user error: " + error);

@@ -11,6 +11,8 @@ import { ArrowDown, ArrowUp } from "lucide-react";
 import PaginationForTable from "./PaginationForTable";
 
 import React from "react";
+import { LoadingProvider } from "../Loading/LoadingContext";
+import LoadingOverlay from "../Loading/LoadingOverlay";
 export type Column = {
   key?: string;
   dataIndex: string;
@@ -66,6 +68,7 @@ const TableComponent = forwardRef(
       name,
       pagination = false,
       sortConfig,
+      createButton,
       totalPage = 3,
       // pageLength = 10,
       onCreateButtonClick,
@@ -209,7 +212,9 @@ const TableComponent = forwardRef(
     if (isLoading) {
       return (
         <div className="flex justify-center items-center min-h-[300px]">
-          <p className="text-lg font-semibold">Loading...</p>
+          <LoadingProvider>
+            <LoadingOverlay></LoadingOverlay>
+          </LoadingProvider>
         </div>
       );
     }
@@ -250,14 +255,16 @@ const TableComponent = forwardRef(
               )}
             </div>
           </section>
-          <div style={{ paddingLeft: "1200px", paddingTop: "30px" }}>
-            <button
-              className={styles.create_button}
-              onClick={() => onCreateButtonClick()}
-            >
-              Create
-            </button>
-          </div>
+          {createButton && (
+            <div style={{ paddingLeft: "1200px", paddingTop: "30px" }}>
+              <button
+                className={styles.create_button}
+                onClick={() => onCreateButtonClick()}
+              >
+                Create
+              </button>
+            </div>
+          )}
         </div>
 
         <div>

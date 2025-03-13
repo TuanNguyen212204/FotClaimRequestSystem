@@ -1,12 +1,13 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { PATH } from "@constant/config";
-import { ApiResponse } from "@/api";
+
 import httpClient from "@/constant/apiInstance";
 import { User } from "@/types/User";
 import { useForm } from "react-hook-form";
 import styles from "./UpdateUser.module.css";
 import { X } from "lucide-react";
+import { toast } from "react-toastify";
 export const CreateUser: React.FC = () => {
   const navigate = useNavigate();
 
@@ -29,10 +30,14 @@ export const CreateUser: React.FC = () => {
     console.log(requestBody);
     try {
       await httpClient.post("/admin/create-staff", requestBody);
-      alert("Create user successfully!");
+      toast("Create user successfully!");
       navigate(PATH.allUserInformation);
-    } catch (error: any) {
-      console.error("Update user error: " + error.message);
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error("Update user error: " + error.message);
+      } else {
+        console.error("Unexpected error", error);
+      }
       alert("Failed to create user. Please try again.");
     }
   };
