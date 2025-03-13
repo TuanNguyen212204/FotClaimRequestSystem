@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { Claim } from "@/types/Claim";
-import type { claimPending } from "@/types/Pending";
+// import type { claimPending } from "@/types/Pending";
 import {
   fetchAllClaimAsync,
   fetchApprovedClaimsApproverAsync,
@@ -11,12 +11,14 @@ const initialState: {
   data: Claim[];
   listClaimApproved: Claim[];
   listClaimPending: Claim[];
+  totalPages: number;
   status: string;
   error: string | null;
 } = {
   data: [],
   listClaimApproved: [],
   listClaimPending: [],
+  totalPages: 1,
   status: "",
   error: null,
 };
@@ -56,7 +58,8 @@ export const claimSlice = createSlice({
       })
       .addCase(fetchAllPendingClaimAsync.fulfilled, (state, action) => {
         state.status = "success";
-        state.listClaimPending = action.payload;
+        state.listClaimPending = action.payload.data;
+        state.totalPages = action.payload.totalPages;
       })
       .addCase(fetchAllPendingClaimAsync.pending, (state) => {
         state.status = "loading";

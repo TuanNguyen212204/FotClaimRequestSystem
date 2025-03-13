@@ -34,21 +34,28 @@ export const fetchApprovedClaimsApproverAsync = createAsyncThunk<Claim[]>(
     }
   }
 );
-
-export const fetchAllPendingClaimAsync = createAsyncThunk<Claim[]>(
+// Pending fetching api
+export const fetchAllPendingClaimAsync = createAsyncThunk<{ data: Claim[]; totalPages: number },
+  { page: string; limit: string }
+>(
   "claim/approver/fetchPendingClaim",
-  async (): Promise<Claim[]> => {
+  async ({ page, limit }) => {
     try {
       await delay(1000);
       const response = await httpClient.get<ApiResponse<Claim[]>>(
-        "/approvers/pending-claim"
-
+        "/approvers/pending-claim",
+        { page: page, limit: limit }
       );
-      return response.data.data;
+      console.log("data: ", response.data);
+      return {
+        data: response.data.data,
+        totalPages: response.data.pagination.totalPages,
+      };
     } catch (error) {
       console.error("Fetch Pending Claims for Approver error " + error);
       throw error;
     }
   }
 );
+
 

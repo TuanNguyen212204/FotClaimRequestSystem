@@ -4,5 +4,9 @@ export interface ApiResponse<T> {
   totalItems: number;
   totalPages: number;
   currentPage: number;
+  pagination: {
+    totalItems: number;
+    totalPages: number;
+  };
   data: T;
 }

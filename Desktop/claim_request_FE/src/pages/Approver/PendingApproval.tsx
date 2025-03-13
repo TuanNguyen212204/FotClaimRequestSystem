@@ -1,11 +1,10 @@
-import TableComponent, { Column } from "@/components/ui/Table/Table";
+import TableComponent, { Column, DataRecord } from "@/components/ui/Table/Table";
 import { useEffect, useState } from "react";
-import { selectAllPending } from "@/redux/selector/pendingSelector";
+import { selectAllPending, selectAllPendingTotalPages } from "@/redux/selector/pendingSelector";
 import httpClient from "@/constant/apiInstance.ts";
 import { CheckIcon, X, CheckCircle2, XCircle } from "lucide-react";
 import styles from "@/pages/Approver/PendingApproval.module.css";
 import { Link } from "react-router-dom";
-import { DataRecord } from "@/components/ui/Table/Table";
 import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
 import { AppDispatch } from "@/redux";
 import { useDispatch, useSelector } from "react-redux";
@@ -27,17 +26,28 @@ export const PendingComponent: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   // const [claimList, setClaimList] = useState<claimList[]>([]);
   const claimList = useSelector(selectAllPending);
+  const totalPages = useSelector(selectAllPendingTotalPages);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [limit] = useState(7);
 
   useEffect(() => {
-    dispatch(fetchAllPendingClaimAsync());
-  }, [dispatch]);
+    setLoading(true);
+    dispatch(fetchAllPendingClaimAsync({
+      page: currentPage.toString(),
+      limit: limit.toString(),
+    })).finally(() => setLoading(false));
+  }, [currentPage]);
 
 
 
   const handleApproveClaim = async (claimId: string) => {
     try {
       await httpClient.post(`/approvers/${claimId}/approve-claim`, {});
-      dispatch(fetchAllPendingClaimAsync());
+      dispatch(fetchAllPendingClaimAsync({
+        page: currentPage.toString(),
+        limit: limit.toString(),
+      }));
     } catch (error) {
       console.log("Error approving claim: ", error);
     }
@@ -46,13 +56,19 @@ export const PendingComponent: React.FC = () => {
   const handleRejectClaim = async (claimId: string) => {
     try {
       await httpClient.post(`/approvers/${claimId}/rejected-claim`, {});
-      dispatch(fetchAllPendingClaimAsync());
+      dispatch(fetchAllPendingClaimAsync({
+        page: currentPage.toString(),
+        limit: limit.toString(),
+      }));
     } catch (error) {
       console.log("Error rejecting claim: ", error);
     }
   };
 
-
+  const handlePageChange = (newPage: number) => {
+    console.log("Trang mới: ", newPage);
+    setCurrentPage(newPage);
+  };
 
   const formatDateToDDMMYYYY = (date: string) => {
     const dateObj = new Date(date);
@@ -119,6 +135,7 @@ export const PendingComponent: React.FC = () => {
     id: a.claim_id ? a.claim_id.toString() : "",
     status: a.project_name ? a.project_name : "",
   }));
+
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Pending Approval Claims</h1>
@@ -129,10 +146,11 @@ export const PendingComponent: React.FC = () => {
       <TableComponent
         columns={columns}
         dataSource={dataSource}
-        loading={false}
+        loading={loading}
+        totalPage={totalPages}
         pagination={true}
         name="Claims"
-        // pageLength={10}
+        onPageChange={handlePageChange}
       />
     </div>
   );
