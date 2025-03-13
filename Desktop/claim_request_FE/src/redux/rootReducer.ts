@@ -7,11 +7,7 @@ import { combineReducers } from "@reduxjs/toolkit";
 // import { financeSlice } from "./Finance/claimsSlice";
 // import claimsReducer from "./slice/claimsSlice";
 // import { approverSlice } from "./Approver/claimsSlice";
-// import userReducer, {
-//   userInfoSlice,
-// } from "@redux/slices/UserInfo/UserInfoSlice";
 import projectReducer from "./slices/Project/projectSlice";
-import { pendingSlice } from "./slices/Approver/pendingSlice.ts";
 import { userSlice } from "./slices/User/userSlice.ts";
 import { claimSlice } from "./slices/Claim/claimSlice";
 export const rootReducer = combineReducers({
@@ -21,14 +17,12 @@ export const rootReducer = combineReducers({
   //
   user: userSlice.reducer,
   claim: claimSlice.reducer,
-  pending: pendingSlice.reducer,
-  // userInfo: userInfoSlice.reducer,
+  projects: projectReducer,
   // details: detailsSlice.reducer,
   //
   // userClaims: userClaimSlice.reducer,
   // claims: claimsReducer,
   // approver: approverSlice.reducer,
-  projects: projectReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
