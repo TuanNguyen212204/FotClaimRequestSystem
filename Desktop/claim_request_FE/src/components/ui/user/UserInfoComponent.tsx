@@ -27,8 +27,10 @@ export const UserInfoComponent: React.FC = () => {
   }, [dispatch, accessToken, userId]);
 
   useEffect(() => {
-    if (selectedUser && selectedUser.length > 0) {
-      setEditedUser(selectedUser[0]);
+    if (selectedUser) {
+      setEditedUser(selectedUser);
+    } else {
+      setEditedUser({});
     }
   }, [selectedUser]);
 
@@ -103,8 +105,8 @@ export const UserInfoComponent: React.FC = () => {
     );
   }
 
-  if (!selectedUser || selectedUser.length === 0) {
-    return <LoadingOverlay></LoadingOverlay>;
+  if (!selectedUser) {
+    return <LoadingOverlay />;
   }
 
   return (
@@ -125,23 +127,21 @@ export const UserInfoComponent: React.FC = () => {
         </div>
 
         <div className={styles.profileInfo}>
-          <h1>{selectedUser[0].full_name || "Full Name"}</h1>
+          <h1>{selectedUser.full_name || "Full Name"}</h1>
           <p className={styles.position}>
-            {selectedUser[0].job_rank || "No position"}
+            {selectedUser.job_rank || "No position"}
           </p>
           <p className={styles.company}>
-            Department: {selectedUser[0].department || "Undetermined"}
+            Department: {selectedUser.department || "Undetermined"}
           </p>
 
           <div className={styles.statsContainer}>
             <div className={styles.statItem}>
-              <h3>{`${selectedUser[0].salary || "N/A"} $`}</h3>
+              <h3>{`${selectedUser.salary || "N/A"} $`}</h3>
               <span>Salary</span>
             </div>
             <div className={styles.statItem}>
-              <h3>
-                {selectedUser[0].user_status === 1 ? "Online" : "Offline"}
-              </h3>
+              <h3>{selectedUser.user_status === 1 ? "Online" : "Offline"}</h3>
               <span>Status</span>
             </div>
           </div>
@@ -154,31 +154,29 @@ export const UserInfoComponent: React.FC = () => {
           {!isEditing ? (
             <>
               <p>
-                <strong>Username:</strong>
-                {selectedUser[0].username || "N/A"}
+                <strong>Username:</strong> {selectedUser.username || "N/A"}
               </p>
               <p>
-                <strong>Fullname:</strong> {selectedUser[0].full_name || "N/A"}
+                <strong>Fullname:</strong> {selectedUser.full_name || "N/A"}
               </p>
               <p>
-                <strong>Email:</strong> {selectedUser[0].email || "N/A"}
+                <strong>Email:</strong> {selectedUser.email || "N/A"}
               </p>
               <p>
-                <strong>Department:</strong>
-                {selectedUser[0].department || "N/A"}
+                <strong>Department:</strong> {selectedUser.department || "N/A"}
               </p>
               <p>
-                <strong>Position:</strong> {selectedUser[0].job_rank || "N/A"}
+                <strong>Position:</strong> {selectedUser.job_rank || "N/A"}
               </p>
               <p>
-                <strong>Salary:</strong> {selectedUser[0].salary || "N/A"}
+                <strong>Salary:</strong> {selectedUser.salary || "N/A"}
               </p>
               <p>
-                <strong>Role:</strong> {selectedUser[0].role_name || "N/A"}
+                <strong>Role:</strong> {selectedUser.role_name || "N/A"}
               </p>
               <p>
                 <strong>Status:</strong>{" "}
-                {selectedUser[0].user_status === 1 ? "Online" : "Offline"}
+                {selectedUser.user_status === 1 ? "Online" : "Offline"}
               </p>
             </>
           ) : (
