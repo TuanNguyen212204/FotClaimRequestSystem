@@ -8,6 +8,7 @@ import { fetchApprovedClaimsApproverAsync } from "@redux/thunk/Claim/claimThunk"
 import { AppDispatch } from "@redux";
 import {
   selectAppovedClaim,
+  selectAppovedClaimApprover,
   selectApprovedClaimTotalPages,
 } from "@redux/selector/claimSelector";
 
@@ -24,7 +25,7 @@ import {
 export const ApprovedApproverComponent: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const claimList = useSelector(selectAppovedClaim);
+  const claimList = useSelector(selectAppovedClaimApprover);
   const totalPages = useSelector(selectApprovedClaimTotalPages);
   const [loading, setLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);

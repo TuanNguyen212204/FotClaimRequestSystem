@@ -1,6 +1,6 @@
 import httpClient from "@constant/apiInstance";
 import { ApiResponse } from "@/types/ApiResponse";
-import { Claim } from "@/types/Claim";
+import { Claim, ClaimFinance } from "@/types/Claim";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { delay } from "@utils/delay";
 import axios from "axios";
@@ -40,6 +40,27 @@ export const fetchApprovedClaimsApproverAsync = createAsyncThunk<
     throw error;
   }
 });
+
+export const fetchApprovedClaimsFinanceAsync = createAsyncThunk<
+  { data: ClaimFinance[]; totalPages: number },
+  { page: string; limit: string }
+>("claim/finance/fetchApprovedClaim", async ({ page, limit }) => {
+  try {
+    await delay(1000);
+    const response = await httpClient.get<ApiResponse<ClaimFinance[]>>(
+      "/finance/claims",
+      { page: page, limit: limit }
+    );
+    return {
+      data: response.data.data,
+      totalPages: response.data.totalPages,
+    };
+  } catch (error) {
+    console.error("Fetch Approved Claims for Finance error " + error);
+    throw error;
+  }
+});
+
 // Pending fetching api
 export const fetchAllPendingClaimAsync = createAsyncThunk<
   { data: Claim[]; totalPages: number },

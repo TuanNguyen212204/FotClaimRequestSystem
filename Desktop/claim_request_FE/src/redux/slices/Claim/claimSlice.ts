@@ -1,25 +1,27 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Claim } from "@/types/Claim";
+import { Claim, ClaimFinance } from "@/types/Claim";
 
 import {
   fetchAllClaimAsync,
   fetchApprovedClaimsApproverAsync,
   fetchAllPendingClaimAsync,
   fetchClaimByUserAsync,
+  fetchApprovedClaimsFinanceAsync,
 } from "@/redux/thunk/Claim/claimThunk";
 
 const initialState: {
   data: Claim[];
-  listClaimApproved: Claim[];
+  listClaimApprovedApprover: Claim[];
+  listClaimApprovedFiance: ClaimFinance[];
   myClaim: Claim[];
   listClaimPending: Claim[];
-  totalPages: number;
   totalPages: number;
   status: string;
   error: string | null;
 } = {
   data: [],
-  listClaimApproved: [],
+  listClaimApprovedApprover: [],
+  listClaimApprovedFiance: [],
   listClaimPending: [],
   totalPages: 1,
   myClaim: [],
@@ -50,10 +52,23 @@ export const claimSlice = createSlice({
       })
       .addCase(fetchApprovedClaimsApproverAsync.fulfilled, (state, action) => {
         state.status = "success";
-        state.listClaimApproved = action.payload.data;
+        state.listClaimApprovedApprover = action.payload.data;
         state.totalPages = action.payload.totalPages;
       })
       .addCase(fetchApprovedClaimsApproverAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      //---------------------------------------------- Approved Claims for Finance -----------------------------------------------------
+      .addCase(fetchApprovedClaimsFinanceAsync.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = String(action.error.message);
+      })
+      .addCase(fetchApprovedClaimsFinanceAsync.fulfilled, (state, action) => {
+        state.status = "success";
+        state.listClaimApprovedFiance = action.payload.data;
+        state.totalPages = action.payload.totalPages;
+      })
+      .addCase(fetchApprovedClaimsFinanceAsync.pending, (state) => {
         state.status = "loading";
       })
       //---------------------------------------------- My Claims -----------------------------------------------------

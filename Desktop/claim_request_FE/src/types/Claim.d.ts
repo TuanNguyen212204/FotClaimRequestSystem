@@ -9,3 +9,16 @@ export interface Claim {
   start_date: string;
   end_date: string;
 }
+
+export interface ClaimFinance {
+  claim_id: string;
+  user_id: string;
+  full_name: string;
+  total_working_hours: string;
+  claim_status: string;
+  project: {
+    project_id: string;
+    project_name: string;
+    time_durations: string;
+  };
+}
