@@ -26,6 +26,7 @@ const ProjectInformation: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState<number>(1);
   console.log("Dữ liệu lấy từ Redux:", project);
+  const [limit] = useState(7);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,6 +49,7 @@ const ProjectInformation: React.FC = () => {
 
   useEffect(() => {
     console.log("Current project state:", project);
+    
   }, [project]);
 
   const handleCreateProject = async () => {

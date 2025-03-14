@@ -10,16 +10,15 @@ import { fetchAllUserAsync, fetchTotalPage } from "@redux/thunk/User/userThunk";
 import { Column, DataRecord } from "@components/ui/Table/Table";
 import styles from "./AllUserInformation.module.css";
 import httpClient from "@/constant/apiInstance";
-import { ApiResponse } from "@/types/ApiResponse";
 import { useNavigate } from "react-router-dom";
 import { PATH } from "@constant/config";
 import { ApiResponseNoGeneric } from "@/types/ApiResponse";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 const AllUserInformation: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const users = useSelector(selectAllUser);
-  const totalPage = useSelector(selectTotalPageOfAllUser); // Lấy danh sách user từ Redux store
+  const totalPage = useSelector(selectTotalPageOfAllUser);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState<number>(1);
 

@@ -8,10 +8,11 @@ import { combineReducers } from "@reduxjs/toolkit";
 // import claimsReducer from "./slice/claimsSlice";
 // import { approverSlice } from "./Approver/claimsSlice";
 
-import projectReducer from "./slices/Project/projectSlice";
+import projectReducer from './slice/projectSlice';
 import { userSlice } from "./slices/User/userSlice.ts";
 import { claimSlice } from "./slices/Claim/claimSlice";
 import paidClaimsReducer from "./slices/Claim/paidClaimsSlice";
+
 export const rootReducer = combineReducers({
   // pending: pendingSlice.reducer,
   // details: detailsSlice.reducer,

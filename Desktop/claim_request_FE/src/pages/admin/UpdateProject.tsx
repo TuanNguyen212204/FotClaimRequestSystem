@@ -136,7 +136,7 @@ const UpdateProject: React.FC = () => {
           </select>
         </div>
         <button type="submit">Update Project</button>
-        <button type="button" onClick={() => navigate("/admin/projects")}>
+        <button type="button" onClick={() => navigate("/project-information")}>
           Cancel
         </button>
       </form>

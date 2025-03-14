@@ -19,7 +19,7 @@
 }
 
 .collapsed {
-  width: 80px;
+  width: 100px;
 }
 
 .header {
@@ -33,6 +33,7 @@
   color: white;
   font-size: 20px;
   cursor: pointer;
+  margin-top: 50px;
 }
 
 .logo {
