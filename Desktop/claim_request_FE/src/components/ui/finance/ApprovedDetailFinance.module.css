@@ -1,4 +1,8 @@
 .info {
   display: flex;
-  justify-content: left;
+  justify-content: start;
+}
+
+.info2 {
+  padding-left: 50%;
 }

@@ -7,3 +7,5 @@ export const selectApprovedClaimTotalPages = (state: RootState) =>
   state.claim.totalPages;
 export const selectApprovedClaimFinance = (state: RootState) =>
   state.claim.listClaimApprovedFiance;
+export const selectApprovedDetailFinance = (state: RootState) =>
+  state.claim.listDetailClaimApprovedFiance;

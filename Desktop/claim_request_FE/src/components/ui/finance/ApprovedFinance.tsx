@@ -47,8 +47,8 @@ export const ApprovedFinanceComponent: React.FC = () => {
     ).finally(() => setLoading(false));
   }, [currentPage]);
 
-  const handleViewDetail = (claimId: string) => {
-    navigate(`/finance/approved/detail/${claimId}`); //sửa lại url ở đây để truyềnS
+  const handleViewDetail = (user_id: string) => {
+    navigate(`/finance/approved/detail/${user_id}`); //sửa lại url ở đây để truyềnS
   };
 
   const handlePageChange = (newPage: number) => {
@@ -80,7 +80,7 @@ export const ApprovedFinanceComponent: React.FC = () => {
     },
     {
       key: "action",
-      dataIndex: "claim_id",
+      dataIndex: "user_id",
       title: "Action",
       cell: ({ value }) => (
         <EyeIcon

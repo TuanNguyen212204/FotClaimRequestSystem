@@ -19,7 +19,7 @@ export const PATH = {
   paidClaim: "/paid-claim",
   approvedFinance: "/finance/approved", //finance first page
   approvedApprover: "/approver/approved",
-  approvedDetailFinance: "/finance/approved/detail/:claim_id",
+  approvedDetailFinance: "/finance/approved/detail/:user_id",
   projectInformation: "/project-information",
   staffInformation: "/staff-information",
   unauthorized: "/unauthorized",
