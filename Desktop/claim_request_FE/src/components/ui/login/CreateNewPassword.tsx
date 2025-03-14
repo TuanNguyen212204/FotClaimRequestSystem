@@ -7,6 +7,7 @@ import httpClient from "@/constant/apiInstance";
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import PasswordProgress from "./PasswordProgress";
 
 const passwordCriteria = [
   {
@@ -177,6 +178,7 @@ function CreateNewPassword() {
                     );
                   })}
                 </div>
+                <PasswordProgress validCount={countValidCriteria(formik.values.password)} />
                 <div className={styles.inputForm__message}>
                   <label htmlFor="password">Password</label>
                   {formik.touched.password && formik.errors.password && (

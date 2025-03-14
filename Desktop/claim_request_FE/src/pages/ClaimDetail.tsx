@@ -8,7 +8,7 @@ import { ApiResponse } from "@/types/ApiResponse";
 import { useLocation } from "react-router-dom";
 import { AxiosResponse } from "axios";
 import { error } from "console";
-export const ApproveDetail: React.FC = () => {
+export const ClaimDetail: React.FC = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const id = queryParams.get("id");
@@ -80,4 +80,4 @@ export const ApproveDetail: React.FC = () => {
     </div>
   );
 };
-export default ApproveDetail;
+export default ClaimDetail;

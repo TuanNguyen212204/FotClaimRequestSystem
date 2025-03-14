@@ -79,10 +79,10 @@ const TableComponent = forwardRef(
       getSortedData: () => T[];
     }>
   ) => {
-    useEffect(() => {
-      console.log("Table có nhận paginatedData:", pagination);
-      console.log("TableComponent nhận dataSource:", dataSource);
-    }, [dataSource, pagination]);
+    // useEffect(() => {
+    //   console.log("Table có nhận paginatedData:", pagination);
+    //   console.log("TableComponent nhận dataSource:", dataSource);
+    // }, [dataSource, pagination]);
 
     const [currentPage, setCurrentPage] = useState(1);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);

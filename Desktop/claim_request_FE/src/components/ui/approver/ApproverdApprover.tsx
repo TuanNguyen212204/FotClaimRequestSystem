@@ -1,48 +1,47 @@
 import React, { useEffect, useState } from "react";
-import styles from "./ApproverdApprover.module.css";
+import styles from "@ui/approver/ApproverdApprover.module.css";
 import { EyeIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import httpClient from "@/constant/apiInstance";
-import TableComponent, { Column, DataRecord } from "../Table/Table";
+import TableComponent, { Column, DataRecord } from "@ui/Table/Table";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchApprovedClaimsApproverAsync } from "@redux/thunk/Claim/claimThunk";
 import { AppDispatch } from "@redux";
-import { selectAppovedClaim } from "@redux/selector/claimSelector";
-import { PATH } from "@constant/config";
-interface claimList {
-  claim_id?: string;
-  user_id?: string;
-  project_id?: string;
-  total_working_hours?: number;
-  submitted_date?: Date;
-  claim_status?: string;
-  project_name?: string;
-}
+import {
+  selectAppovedClaim,
+  selectApprovedClaimTotalPages,
+} from "@redux/selector/claimSelector";
+
+// interface claimList {
+//   claim_id?: string;
+//   user_id?: string;
+//   project_id?: string;
+//   total_working_hours?: number;
+//   submitted_date?: Date;
+//   claim_status?: string;
+//   project_name?: string;
+// }
 
 export const ApprovedApproverComponent: React.FC = () => {
-  const [claimList, setClaimList] = useState<claimList[]>([]);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const listClaim = useSelector(selectAppovedClaim);
+  const claimList = useSelector(selectAppovedClaim);
+  const totalPages = useSelector(selectApprovedClaimTotalPages);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [limit] = useState(7);
+
   useEffect(() => {
-    // fetchApprovedClaimAysnc();
-    dispatch(fetchApprovedClaimsApproverAsync());
-  }, []);
+    setLoading(true);
+    dispatch(
+      fetchApprovedClaimsApproverAsync({
+        page: currentPage.toString(),
+        limit: limit.toString(),
+      })
+    ).finally(() => setLoading(false));
+  }, [currentPage]);
 
-  const fetchApprovedClaimAysnc = async () => {
-    try {
-      const res = await httpClient.get<{ data: claimList[] }>(
-        `/approvers/approved-claim`
-      );
-      console.log("data: ", res.data.data);
-      setClaimList(res.data.data);
-    } catch (error) {
-      console.log("Error at ApprovedApprover: ", error);
-    }
-  };
-
-  const handleViewDetail = (claimId: string) => {
-    navigate(`/approve/detail/${claimId}`); //sửa lại url ở đây để truyền
+  const handleViewDetail = (id: string) => {
+    navigate(`/approve-details?id=${id}`);
   };
 
   const formatDateToDDMMYYYY = (date: string) => {
@@ -51,6 +50,11 @@ export const ApprovedApproverComponent: React.FC = () => {
     const month = dateObj.getMonth() + 1;
     const year = dateObj.getFullYear();
     return `${day}/${month}/${year}`;
+  };
+
+  const handlePageChange = (newPage: number) => {
+    console.log("Trang mới: ", newPage);
+    setCurrentPage(newPage);
   };
 
   const columns: Column[] = [
@@ -93,7 +97,7 @@ export const ApprovedApproverComponent: React.FC = () => {
       ),
     },
   ];
-  const dataSource: DataRecord[] = listClaim.map((claim, index) => ({
+  const dataSource: DataRecord[] = claimList.map((claim, index) => ({
     ...claim,
     key: index,
     id: claim.claim_id ? claim.claim_id.toString() : "",
@@ -104,10 +108,11 @@ export const ApprovedApproverComponent: React.FC = () => {
       <TableComponent
         columns={columns}
         dataSource={dataSource}
-        loading={false}
+        loading={loading}
+        totalPage={totalPages}
         pagination={true}
         name="Claims"
-        pageLength={7}
+        onPageChange={handlePageChange}
       />
     </div>
   );

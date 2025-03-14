@@ -170,8 +170,8 @@ export const CreateUser: React.FC = () => {
               >
                 <option value="">Select Role</option>
                 <option value="1">1 - Admin</option>
-                <option value="2">2 - Manager</option>
-                <option value="3">3 - Staff</option>
+                <option value="2">2 - Approver</option>
+                <option value="3">3 - Finance</option>
                 <option value="4">4 - Claimer</option>
               </select>
               {errors.role_id && (

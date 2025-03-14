@@ -1,42 +1,47 @@
 import React, { useEffect, useState } from "react";
-import styles from "./ApprovedFinance.module.css";
+import styles from "@ui/finance/ApprovedFinance.module.css";
 import { EyeIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import TableComponent, { Column, DataRecord } from "../Table/Table";
-import httpClient from "@/constant/apiInstance";
+import TableComponent, { Column, DataRecord } from "@ui/Table/Table";
+import { fetchApprovedClaimsApproverAsync } from "@/redux/thunk/Claim/claimThunk";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "@/redux";
+import {
+  selectAppovedClaim,
+  selectApprovedClaimTotalPages,
+} from "@/redux/selector/claimSelector";
 
-interface claimList {
-  claim_id?: string;
-  user_id?: string;
-  project_id?: string;
-  total_working_hours?: number;
-  submitted_date?: Date;
-  claim_status?: string;
-  project_name?: string;
-}
+// interface claimList {
+//   claim_id?: string;
+//   user_id?: string;
+//   project_id?: string;
+//   total_working_hours?: number;
+//   submitted_date?: Date;
+//   claim_status?: string;
+//   project_name?: string;
+// }
 
 export const ApprovedFinanceComponent: React.FC = () => {
-  const [claimList, setClaimList] = useState<claimList[]>([]);
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+  const claimList = useSelector(selectAppovedClaim);
+  const totalPages = useSelector(selectApprovedClaimTotalPages);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [limit] = useState(7);
 
   useEffect(() => {
-    fetchApprovedClaimAysnc();
-  }, []);
-
-  const fetchApprovedClaimAysnc = async () => {
-    try {
-      const res = await httpClient.get<{ data: claimList[] }>(
-        `/approvers/approved-claim`
-      );
-      console.log("data: ", res.data.data);
-      setClaimList(res.data.data);
-    } catch (error) {
-      console.log("Error at ApprovedApprover: ", error);
-    }
-  };
+    setLoading(true);
+    dispatch(
+      fetchApprovedClaimsApproverAsync({
+        page: currentPage.toString(),
+        limit: limit.toString(),
+      })
+    ).finally(() => setLoading(false));
+  }, [currentPage]);
 
   const handleViewDetail = (claimId: string) => {
-    navigate(`/approve/detail/${claimId}`); //sửa lại url ở đây để truyền
+    navigate(`/approve/detail/${claimId}`); //sửa lại url ở đây để truyềnS
   };
 
   const formatDateToDDMMYYYY = (date: string) => {
@@ -47,17 +52,22 @@ export const ApprovedFinanceComponent: React.FC = () => {
     return `${day}/${month}/${year}`;
   };
 
+  const handlePageChange = (newPage: number) => {
+    console.log("Trang mới: ", newPage);
+    setCurrentPage(newPage);
+  };
+
   const columns: Column[] = [
-    {
-      key: "claim_id",
-      dataIndex: "claim_id",
-      title: "Claim ID",
-    },
-    {
-      key: "user_id",
-      dataIndex: "user_id",
-      title: "User ID",
-    },
+    // {
+    //   key: "claim_id",
+    //   dataIndex: "claim_id",
+    //   title: "Claim ID",
+    // },
+    // {
+    //   key: "user_id",
+    //   dataIndex: "user_id",
+    //   title: "User ID",
+    // },
     {
       key: "project_name",
       dataIndex: "project_name",
@@ -98,10 +108,11 @@ export const ApprovedFinanceComponent: React.FC = () => {
       <TableComponent
         columns={columns}
         dataSource={dataSource}
-        loading={false}
+        loading={loading}
+        totalPage={totalPages}
         pagination={true}
         name="Claims"
-        pageLength={7}
+        onPageChange={handlePageChange}
       />
     </div>
   );
