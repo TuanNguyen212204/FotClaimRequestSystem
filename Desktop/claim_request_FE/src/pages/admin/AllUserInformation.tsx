@@ -2,6 +2,7 @@ import TableComponent from "@components/ui/Table/Table";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch } from "@redux/index.ts";
 import { useEffect, useState } from "react";
+import ConfirmModal from "@/components/ui/modal/ConfirmModal";
 import {
   selectAllUser,
   selectTotalPageOfAllUser,
@@ -14,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { PATH } from "@constant/config";
 import { ApiResponseNoGeneric } from "@/types/ApiResponse";
 import { toast } from "react-toastify";
+import Modal from "@/components/ui/modal/Modal";
 const AllUserInformation: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
@@ -21,7 +23,7 @@ const AllUserInformation: React.FC = () => {
   const totalPage = useSelector(selectTotalPageOfAllUser);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState<number>(1);
-
+  const [openModal, setOpenModal] = useState<boolean>(false);
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -66,12 +68,31 @@ const AllUserInformation: React.FC = () => {
       console.error("Error deleting user:", error);
     }
   };
-
+  const handleOpenModal = () => {
+    setOpenModal(true);
+  };
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
   const handleUpdate = (id?: string) => {
     if (!id) return;
     console.log("Update user with ID:", id);
     navigate(`/update-user?id=${id}`);
   };
+
+  const handleDeleteConfirm = (userId: string) => {
+    Modal.confirm({
+      title: "Do you want to delete this user?",
+      children: "",
+      onOk() {
+        handleDelete(userId); // Gọi hàm xóa người dùng
+      },
+      onCancel() {
+        console.log("User canceled deletion");
+      },
+    });
+  };
+
   const columns: Column[] = [
     { key: "full_name", dataIndex: "full_name", title: "Full Name" },
     { key: "email", dataIndex: "email", title: "Email" },
@@ -86,7 +107,7 @@ const AllUserInformation: React.FC = () => {
           <div>
             <button
               className={styles.delete_button}
-              onClick={() => handleDelete(value as string)}
+              onClick={() => handleDeleteConfirm(value as string)}
             >
               Delete
             </button>

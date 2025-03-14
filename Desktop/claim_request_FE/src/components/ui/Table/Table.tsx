@@ -256,7 +256,12 @@ const TableComponent = forwardRef(
             </div>
           </section>
           {createButton && (
-            <div style={{ paddingLeft: "1200px", paddingTop: "30px" }}>
+            <div
+              style={{
+                paddingTop: "30px",
+                paddingLeft: "1180px",
+              }}
+            >
               <button
                 className={styles.create_button}
                 onClick={() => onCreateButtonClick()}

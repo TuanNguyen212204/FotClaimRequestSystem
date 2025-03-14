@@ -258,6 +258,17 @@ export const Sidebar = () => {
                     </button>
                   </li> */}
                   <li
+                    key="draft"
+                    className={`${styles.claimItem} ${
+                      selectedClaim === "all" ? styles.active : ""
+                    }`}
+                    onClick={() => handleSelect("draft")}
+                  >
+                    <button className={styles.claimButton}>
+                      {!isCollapsed && "Draft"}
+                    </button>
+                  </li>
+                  <li
                     key="all"
                     className={`${styles.claimItem} ${
                       selectedClaim === "all" ? styles.active : ""
