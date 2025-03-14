@@ -138,7 +138,7 @@ const ProjectInformation: React.FC = () => {
         dataSource={dataSource}
         loading={loading}
         pagination={true}
-        name="Role"
+        name="Status"
         createButton={true}
         totalPage={totalPage}
         onPageChange={handlePageChange}
