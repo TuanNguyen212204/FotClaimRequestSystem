@@ -2,17 +2,21 @@ import TableComponent from "@components/ui/Table/Table";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch } from "@redux/index.ts";
 import { useEffect, useState } from "react";
-import { selectAllProject, selectTotalPageOfAllProject } from "@redux/selector/projectSelector"
-import { fetchAllProjectAsync, fetchTotalPage } from "@redux/thunk/Project/projectThunk";
+import {
+  selectAllProject,
+  selectTotalPageOfAllProject,
+} from "@redux/selector/projectSelector";
+import {
+  fetchAllProjectAsync,
+  fetchTotalPage,
+} from "@redux/thunk/Project/projectThunk";
 import { Column, DataRecord } from "@components/ui/Table/Table";
 import styles from "./AllUserInformation.module.css";
 import httpClient from "@/constant/apiInstance";
 import { useNavigate } from "react-router-dom";
 import { PATH } from "@constant/config";
 import { ApiResponseNoGeneric } from "@/types/ApiResponse";
-import { ToastContainer, toast } from "react-toastify";
 import { Project } from "@/types/Project";
-
 
 const ProjectInformation: React.FC = () => {
   const navigate = useNavigate();
@@ -27,27 +31,43 @@ const ProjectInformation: React.FC = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        await dispatch(fetchAllProjectAsync(currentPage.toString()));
+        console.log("Fetching projects for page:", currentPage);
+        const result = await dispatch(
+          fetchAllProjectAsync(currentPage.toString())
+        );
+        console.log("Fetch result:", result);
         await dispatch(fetchTotalPage({ page: currentPage.toString() }));
       } catch (error) {
         console.error("Error fetching projects:", error);
-        toast.error("Failed to load projects");
       } finally {
         setLoading(false);
       }
     };
     fetchData();
   }, [dispatch, currentPage]);
+
+  useEffect(() => {
+    console.log("Current project state:", project);
+  }, [project]);
+
   const handleCreateProject = async () => {
     navigate(PATH.createProject);
   };
 
-  const dataSource: DataRecord[] = Array.isArray(project) ? project.map((project: Project, index: any) => ({
-    ...project,
-    key: index,
-    id: project.projectID ? project.projectID.toString() : "",
-    status: project.projectStatus ? project.projectStatus.toString() : "",
-  })) : [];
+  const dataSource: DataRecord[] = Array.isArray(project)
+    ? project.map((project: Project, index: number) => ({
+        key: index,
+        projectID: project.projectID || project.project_id,
+        projectName: project.projectName || project.project_name,
+        startDate: new Date(
+          project.startDate || project.start_date
+        ).toLocaleDateString(),
+        endDate: new Date(
+          project.endDate || project.end_date
+        ).toLocaleDateString(),
+        projectStatus: project.projectStatus || project.project_status,
+      }))
+    : [];
 
   const handlePageChange = (newPage: number) => {
     console.log("Trang mới:", newPage);
@@ -67,7 +87,6 @@ const ProjectInformation: React.FC = () => {
     if (!id) return;
     try {
       await deleteProject(id);
-      toast("Delete project successfully!");
       console.log("Deleted project with ID:", id);
       dispatch(fetchAllProjectAsync(currentPage.toString()));
     } catch (error) {
@@ -80,12 +99,12 @@ const ProjectInformation: React.FC = () => {
     console.log("Update project with ID:", id);
     navigate(`/update-project?id=${id}`);
   };
-  
+
   const columns: Column[] = [
     { key: "projectID", dataIndex: "projectID", title: "Project ID" },
     { key: "projectName", dataIndex: "projectName", title: "Project Name" },
     { key: "startDate", dataIndex: "startDate", title: "Start Date" },
-    { key: "endDate", dataIndex: "endDate", title: "End date" },
+    { key: "endDate", dataIndex: "endDate", title: "End Date" },
     { key: "projectStatus", dataIndex: "projectStatus", title: "Status" },
     {
       key: "projectID",

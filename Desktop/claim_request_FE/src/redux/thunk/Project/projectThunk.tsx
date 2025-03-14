@@ -13,10 +13,11 @@ export const fetchAllProjectAsync = createAsyncThunk<Project[], string>(
         `/projects?page=${page}&limit=10`
       );
 
-      console.log("API Response:", response.data); 
-      console.log("Projects:", response.data.data); 
+      if (!response.data.data || !Array.isArray(response.data.data)) {
+        throw new Error('Invalid data format from API');
+      }
 
-      return response.data.data; 
+      return response.data.data;
     } catch (error) {
       console.error("Fetch Projects error:", error);
       throw error;
@@ -47,10 +48,12 @@ export const fetchProjectByIdAsync = createAsyncThunk<Project[], string>(
   async (id: string): Promise<Project[]> => {
     try {
       const response = await httpClient.get<ApiResponse<Project[]>>(`/projects/${id}`);
+      
+      if (!response.data.data || !Array.isArray(response.data.data)) {
+        throw new Error('Invalid data format from API');
+      }
 
-      console.log("Fetched project:", response.data.projects); // Kiểm tra dữ liệu
-
-      return response.data.projects; // ✅ Lấy danh sách dự án từ API
+      return response.data.data;
     } catch (error) {
       console.error("Fetch Project by ID error:", error);
       throw error;

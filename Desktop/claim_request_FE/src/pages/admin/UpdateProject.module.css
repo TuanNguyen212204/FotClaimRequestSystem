@@ -1,0 +1,45 @@
+.update-project-container {
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.update-project-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.update-project-container div {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.update-project-container label {
+  font-weight: bold;
+}
+
+.update-project-container input,
+.update-project-container select {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.update-project-container button {
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.update-project-container button[type="submit"] {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.update-project-container button[type="button"] {
+  background-color: #f44336;
+  color: white;
+} 

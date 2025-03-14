@@ -28,6 +28,8 @@ import UserClaimDetailsPage from "@/pages/User/UserClaimDetailsPage";
 import UserClaims from "@/components/ui/claimer/UserClaims";
 import { UpdateUser } from "@/pages/User/UpdateUser";
 import { CreateUser } from "@/pages/User/CreateUser";
+import UpdateProject from "@pages/admin/UpdateProject";
+
 const router: RouteObject[] = [
   // {
   //   element: <CheckBoxTest />,
@@ -144,14 +146,14 @@ const router: RouteObject[] = [
           </Authorization>
         ),
       },
-      {
-        path: PATH.projectInformation,
-        element: (
-          <Authorization role_id={[ROLE.ADMIN]}>
-            <ProjectInformation />
-          </Authorization>
-        ),
-      },
+      // {
+      //   path: PATH.projectInformation,
+      //   element: (
+      //     <Authorization role_id={[ROLE.ADMIN]}>
+      //       <ProjectInformation />
+      //     </Authorization>
+      //   ),
+      // },
       {
         path: PATH.approveDetails,
         element: (
@@ -172,6 +174,14 @@ const router: RouteObject[] = [
         path: PATH.staffInformation,
         element: <StaffInformation />,
       },
+      {
+        path: "/update-project",
+        element: <UpdateProject />,
+      },
+      {
+        path: "/project-information",
+        element: <ProjectInformation />,
+      }
       // {
       //   path: PATH.test,
       //   element: <Test />,
