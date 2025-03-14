@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams,useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./ClaimStatus.module.css";
 import { Column } from "../../components/ui/Table/Table";
 import { Printer } from "lucide-react";
 import { AppDispatch } from "@/redux";
 import { fetchPaidClaimsAsync } from "../../redux/slices/Claim/paidClaimsSlice";
+import { ArrowLeft } from "lucide-react"; 
 
 interface Project {
   project_id: string;
@@ -25,6 +26,7 @@ interface ClaimData {
 }
 
 const ClaimStatus: React.FC = () => {
+  const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const dispatch = useDispatch<AppDispatch>();
   const { data: claims, loading } = useSelector((state: any) => state.paidClaims);
@@ -104,7 +106,13 @@ const ClaimStatus: React.FC = () => {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h1 className={styles.title}>Claim Status</h1>
+        <button 
+          className={styles.backButton} 
+          onClick={() => navigate(-1)}
+        >
+          <ArrowLeft size={20} />
+        </button>
+        <h1 className={styles.title}>Claim Details</h1>
         <hr />
       </div>
       
