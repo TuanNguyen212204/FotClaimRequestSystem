@@ -12,6 +12,8 @@ import { fetchAllPendingClaimAsync } from "@/redux/thunk/Claim/claimThunk";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import Modal from "@/components/ui/modal/Modal";
+import StatusTag, { StatusType } from "@/components/ui/StatusTag/StatusTag";
+
 
 export const PendingComponent: React.FC = () => {
   const navigate = useNavigate();
@@ -123,6 +125,7 @@ export const PendingComponent: React.FC = () => {
       key: "claim_status",
       dataIndex: "claim_status",
       title: "Claim Status",
+      cell: ({ value }) => <StatusTag status={value as StatusType} />,
     },
     {
       key: "project_name",
@@ -152,7 +155,7 @@ export const PendingComponent: React.FC = () => {
     ...a,
     key: index,
     id: a.claim_id ? a.claim_id.toString() : "",
-    status: a.project_name ? a.project_name : "",
+    claim_status: "pending", // Set claim_status to "pending"
   }));
 
   return (
