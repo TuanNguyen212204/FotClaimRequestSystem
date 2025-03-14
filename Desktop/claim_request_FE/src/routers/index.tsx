@@ -146,14 +146,14 @@ const router: RouteObject[] = [
           </Authorization>
         ),
       },
-      // {
-      //   path: PATH.projectInformation,
-      //   element: (
-      //     <Authorization role_id={[ROLE.ADMIN]}>
-      //       <ProjectInformation />
-      //     </Authorization>
-      //   ),
-      // },
+      {
+        path: PATH.projectInformation,
+        element: (
+          <Authorization role_id={[ROLE.ADMIN]}>
+            <ProjectInformation />
+          </Authorization>
+        ),
+      },
       {
         path: PATH.approveDetails,
         element: (
@@ -178,10 +178,6 @@ const router: RouteObject[] = [
         path: "/update-project",
         element: <UpdateProject />,
       },
-      {
-        path: "/project-information",
-        element: <ProjectInformation />,
-      }
       // {
       //   path: PATH.test,
       //   element: <Test />,
