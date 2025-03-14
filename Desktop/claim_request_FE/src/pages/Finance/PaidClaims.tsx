@@ -6,7 +6,6 @@ import { PATH } from "../../constant/config";
 import TableComponent, { Column, DataRecord } from "../../components/ui/Table/Table";
 import { fetchPaidClaimsAsync } from "../../redux/slices/Claim/paidClaimsSlice";
 import { AppDispatch } from "@/redux";
-import { EyeIcon } from "lucide-react";
 
 interface PaidClaimData {
   claim_id: string;
@@ -72,10 +71,12 @@ const PaidClaims: React.FC = () => {
       dataIndex: 'claim_id',
       title: 'Action',
       cell: ({ value }) => (
-        <EyeIcon 
-          className={styles.icon}
+        <button 
+          className={styles.detailButton}
           onClick={() => handleViewDetail(value as string)}
-        />
+        >
+          Details
+        </button>
       )
     }
   ];
@@ -84,8 +85,12 @@ const PaidClaims: React.FC = () => {
     ...claim,
     key: index,
     id: claim.claim_id,
-    project_name: claim.project?.project_name || '',
+    project_name: claim.project_name,
   }));
+
+  const handlePageChange = (page: number) => {
+    dispatch(fetchPaidClaimsAsync(page.toString()));
+  };
 
   return (
     <div className={styles.container}>
@@ -99,8 +104,10 @@ const PaidClaims: React.FC = () => {
         dataSource={dataSource}
         loading={false}
         pagination={true}
-        pageLength={7}
+        pageLength={10}
+        totalPage={2}
         name="Paid Claims"
+        onPageChange={handlePageChange}
       />
     </div>
   );

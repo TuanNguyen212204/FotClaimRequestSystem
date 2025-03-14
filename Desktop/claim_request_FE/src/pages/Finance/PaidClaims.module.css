@@ -99,13 +99,18 @@
   transform: scale(0.9);
 }
 
-.actionButton {
-  background: none;
+.detailButton {
+  padding: 6px 12px;
+  background-color: #2D3142;
+  color: white;
   border: none;
+  border-radius: 4px;
   cursor: pointer;
-  padding: 0.5rem;
+  font-size: 14px;
+  transition: background-color 0.2s;
 }
 
-.actionButton:hover {
-  transform: scale(1.1);
+.detailButton:hover {
+  background-color: #3d4257;
+  text-decoration: none;
 }

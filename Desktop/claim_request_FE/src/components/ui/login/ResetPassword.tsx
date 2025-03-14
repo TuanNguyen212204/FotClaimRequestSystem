@@ -4,6 +4,7 @@ import fot from "@assets/fot.png";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import httpClient from "@/constant/apiInstance";
+import { useLoading } from "@/components/ui/Loading/LoadingContext";
 
 async function sendResetEmail(values: { email: string }): Promise<void> {
   try {
@@ -20,6 +21,7 @@ async function sendResetEmail(values: { email: string }): Promise<void> {
 }
 function ResetPassword() {
   const navigate = useNavigate();
+  const { showLoading, hideLoading } = useLoading();
 
   const initialValues = {
     email: "",
@@ -28,28 +30,30 @@ function ResetPassword() {
   const resetPasswordSchema = Yup.object().shape({
     email: Yup.string()
       .required("Email is Required")
-      .test(
-        "includes-@fpt",
-        "Email must be include @fpt",
-        (value) => (value ? value.includes("@fpt") : false)
+      .test("includes-@fpt", "Email must be include @fpt", (value) =>
+        value ? value.includes("@fpt") : false
       ),
   });
 
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: resetPasswordSchema,
-    onSubmit: async (values, {setSubmitting, setFieldError}) => {
-     try {
-      await sendResetEmail(values);
-      navigate("/check-to-mail");
-     } catch (error: any) {
-       setFieldError("email", error.message || "Error trong catch chỗ onSubmit của useFormil");
-     }finally{
-      setSubmitting(false);
-     }
+    onSubmit: async (values, { setSubmitting, setFieldError }) => {
+      try {
+        showLoading();
+        await sendResetEmail(values);
+        navigate("/check-to-mail");
+      } catch (error: any) {
+        setFieldError(
+          "email",
+          error.message || "Error trong catch chỗ onSubmit của useFormil"
+        );
+        hideLoading();
+      } finally {
+        setSubmitting(false);
+      }
     },
   });
-
 
   return (
     <div className={styles.container}>
