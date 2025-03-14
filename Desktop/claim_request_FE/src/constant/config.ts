@@ -28,4 +28,8 @@ export const PATH = {
   createUser: "/create-user",
   createProject: "/create-project",
   updateProject: "/update-project",
+  claimDetail: "/claim-detail",
+  approvedClaimWithUserID: "/approved-claim-by-user-id",
+  rejectedClaimWithUserID: "/rejected-claim-by-user-id",
+  pendingClaimByUserID: "/pending-claim-by-user-id",
 };
