@@ -85,7 +85,7 @@ const PaidClaims: React.FC = () => {
     ...claim,
     key: index,
     id: claim.claim_id,
-    project_name: claim.project?.project_name || '',
+    project_name: claim.project_name,
   }));
 
   const handlePageChange = (page: number) => {

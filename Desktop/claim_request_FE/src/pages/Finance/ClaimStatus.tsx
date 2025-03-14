@@ -56,8 +56,8 @@ const ClaimStatus: React.FC = () => {
       title: 'Overtime Duration',
       cell: ({ record }) => (
         <div className={styles.dateRange}>
-          <div>From: {formatDate(record.submitted_date)}</div>
-          <div>To: {formatDate(record.approved_date)}</div>
+          <div>From: {formatDate((record as ClaimData).submitted_date)}</div>
+          <div>To: {formatDate((record as ClaimData).approved_date)}</div>
         </div>
       )
     },
@@ -65,7 +65,7 @@ const ClaimStatus: React.FC = () => {
       key: 'overtime_date', 
       dataIndex: 'submitted_date', 
       title: 'Overtime Date',
-      cell: ({ value }) => formatDate(value)
+      cell: ({ value }) => formatDate(value as string)
     },
     { 
       key: 'total_hours', 
@@ -77,7 +77,7 @@ const ClaimStatus: React.FC = () => {
       key: 'overtime_paid', 
       dataIndex: 'total_working_hours', 
       title: 'Overtime Paid',
-      cell: ({ value }) => `${(value * 25000).toLocaleString('vi-VN')} VND`
+      cell: ({ value }) => `${((value as number) * 25000).toLocaleString('vi-VN')} VND`
     },
     { 
       key: 'status', 
@@ -100,7 +100,7 @@ const ClaimStatus: React.FC = () => {
     );
   }
 
-  const claimDetail = claims.find(claim => claim.claim_id === id) || claims[0];
+  const claimDetail = claims.find((claim: ClaimData) => claim.claim_id === id) || claims[0];
   const [startDate, endDate] = claimDetail.project.time_durations.split(' - ');
 
   return (
