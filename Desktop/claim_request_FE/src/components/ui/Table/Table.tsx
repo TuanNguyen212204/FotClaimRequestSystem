@@ -173,6 +173,7 @@ const TableComponent = forwardRef(
         checkboxRef.current.indeterminate = someChecked && !allChecked;
       }
     }, [checkedItems, dataSource.length]);
+
     useImperativeHandle(ref, () => ({
       getSelectedData: () => {
         return dataSource.filter((record) => checkedItems.has(record.id || ""));
@@ -313,7 +314,7 @@ const TableComponent = forwardRef(
                     <tr key={record.key || record.id}>
                       <td style={{ paddingTop: "3rem" }}>
                         {isHaveCheckbox && (
-                          <div>
+                          <div className={styles.checkbox}>
                             <input
                               type="checkbox"
                               checked={checkedItems.has(record.id || "")}
@@ -351,7 +352,7 @@ const TableComponent = forwardRef(
           </section>
 
           <div>
-            {pagination && totalPages >= 1 && (
+            {pagination && totalPages >= 1 && filteredData.length > 0 && (
               <PaginationForTable
                 currentPage={currentPage}
                 totalPages={totalPages}

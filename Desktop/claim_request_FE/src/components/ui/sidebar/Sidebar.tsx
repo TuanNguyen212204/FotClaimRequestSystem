@@ -138,12 +138,16 @@ export const Sidebar = ({
       <div
         className={`${styles.sidebar} ${isCollapsed1 ? styles.collapsed : ""}`}
       >
-        <div className={styles.header}>
-          <button onClick={toggleSidebar} className={styles.toggleButton}>
-            <span style={{ marginLeft: "10px" }}>
-              <Menu />
-            </span>
-          </button>
+        <div
+          className={`${isCollapsed1 ? styles.headerCollapse : styles.header}`}
+        >
+          <div>
+            <button onClick={toggleSidebar} className={styles.toggleButton}>
+              <span style={{ marginLeft: "10px" }}>
+                <Menu />
+              </span>
+            </button>
+          </div>
         </div>
 
         {role !== "approve" && role !== "finance" && role !== "admin" && (
