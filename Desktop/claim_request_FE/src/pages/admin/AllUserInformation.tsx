@@ -150,8 +150,6 @@ const AllUserInformation: React.FC = () => {
 
   return (
     <div>
-      {/* <button onClick={handleGetSelectedData}>Get Selected Data</button>
-      <button onClick={handleGetSortedData}>Get Sorted Data</button> */}
       <TableComponent
         ref={tableRef}
         isHaveCheckbox={true}

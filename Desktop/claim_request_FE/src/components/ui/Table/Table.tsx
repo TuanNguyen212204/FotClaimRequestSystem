@@ -311,7 +311,7 @@ const TableComponent = forwardRef(
                 {filteredData.length > 0 ? (
                   paginatedData.map((record) => (
                     <tr key={record.key || record.id}>
-                      <td style={{ paddingTop: "0rem" }}>
+                      <td style={{ paddingTop: "3rem" }}>
                         {isHaveCheckbox && (
                           <div>
                             <input
