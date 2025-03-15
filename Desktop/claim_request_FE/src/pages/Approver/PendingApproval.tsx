@@ -100,6 +100,21 @@ export const PendingComponent: React.FC = () => {
       title: "Project ID",
     },
     {
+      key: "claim_id",
+      dataIndex: "claim_id",
+      title: "Claim ID",
+    },
+    {
+      key: "username",
+      dataIndex: "username",
+      title: "Username",
+    },
+    {
+      key: "email",
+      dataIndex: "email",
+      title: "Email",
+    },
+    {
       key: "total_working_hours",
       dataIndex: "total_working_hours",
       title: "Total Working Hours",
