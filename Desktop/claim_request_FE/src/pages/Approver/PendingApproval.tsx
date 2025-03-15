@@ -10,24 +10,18 @@ import {
 import httpClient from "@/constant/apiInstance.ts";
 import { CheckIcon, X, CheckCircle2, XCircle } from "lucide-react";
 import styles from "@/pages/Approver/PendingApproval.module.css";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
 import { AppDispatch } from "@/redux";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllPendingClaimAsync } from "@/redux/thunk/Claim/claimThunk";
 import { toast } from "react-toastify";
-
-// interface claimList {
-//   claim_id?: string;
-//   user_id?: string;
-//   project_id?: string;
-//   total_working_hours?: number;
-//   submitted_date?: Date;
-//   claim_status?: string;
-//   project_name?: string;
-// }
+import { useNavigate } from "react-router-dom";
+import Modal from "@/components/ui/modal/Modal";
+import StatusTag, { StatusType } from "@/components/ui/StatusTag/StatusTag";
 
 export const PendingComponent: React.FC = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   // const [claimList, setClaimList] = useState<claimList[]>([]);
   const claimList = useSelector(selectAllPending);
@@ -35,6 +29,12 @@ export const PendingComponent: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [limit] = useState(7);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalContent, setModalContent] = useState<{
+    title: string;
+    onOk: () => void;
+  } | null>(null);
+
 
   useEffect(() => {
     setLoading(true);
@@ -46,38 +46,50 @@ export const PendingComponent: React.FC = () => {
     ).finally(() => setLoading(false));
   }, [currentPage]);
 
-  const handleApproveClaim = async (claimId: string) => {
-    try {
-      await httpClient.post(`/approvers/${claimId}/approve-claim`, {});
-      dispatch(
-        fetchAllPendingClaimAsync({
-          page: currentPage.toString(),
-          limit: limit.toString(),
-        })
-      );
-      toast.success("Claim approved successfully!");
-      window.confirm("Are you sure you want to approve this claim?");
-    } catch (error) {
-      console.log("Error approving claim: ", error);
-      toast.error("Failed to approve claim.");
-    }
+  const handleReturn = () => {
+    navigate(`/claim`);
   };
 
+
+  const handleApproveClaim = async (claimId: string) => {
+    setModalContent({
+      title: "Are you sure you want to approve this claim?",
+      onOk: async () => {
+        try {
+          await httpClient.post(`/approvers/${claimId}/approve-claim`, {});
+          dispatch(fetchAllPendingClaimAsync({
+            page: currentPage.toString(),
+            limit: limit.toString(),
+          }));
+          toast.success("Claim approved successfully!");
+        } catch (error) {
+          console.log("Error approving claim: ", error);
+          toast.error("Failed to approve claim.");
+        }
+      },
+    });
+    setModalVisible(true);
+  };
+
+
   const handleRejectClaim = async (claimId: string) => {
-    try {
-      await httpClient.post(`/approvers/${claimId}/reject-claim`, {});
-      dispatch(
-        fetchAllPendingClaimAsync({
-          page: currentPage.toString(),
-          limit: limit.toString(),
-        })
-      );
-      toast.success("Claim rejected successfully!");
-      window.confirm("Are you sure you want to reject this claim?");
-    } catch (error) {
-      console.log("Error rejecting claim: ", error);
-      toast.error("Failed to reject claim.");
-    }
+    setModalContent({
+      title: "Are you sure you want to reject this claim?",
+      onOk: async () => {
+        try {
+          await httpClient.post(`/approvers/${claimId}/reject-claim`, {});
+          dispatch(fetchAllPendingClaimAsync({
+            page: currentPage.toString(),
+            limit: limit.toString(),
+          }));
+          toast.success("Claim rejected successfully!");
+        } catch (error) {
+          console.log("Error rejecting claim: ", error);
+          toast.error("Failed to reject claim.");
+        }
+      },
+    });
+    setModalVisible(true);
   };
 
   const handlePageChange = (newPage: number) => {
@@ -129,6 +141,7 @@ export const PendingComponent: React.FC = () => {
       key: "claim_status",
       dataIndex: "claim_status",
       title: "Claim Status",
+      cell: ({ value }) => <StatusTag status={value as StatusType} />,
     },
     {
       key: "project_name",
@@ -167,7 +180,7 @@ export const PendingComponent: React.FC = () => {
     ...a,
     key: index,
     id: a.claim_id ? a.claim_id.toString() : "",
-    status: a.project_name ? a.project_name : "",
+    claim_status: "pending",
   }));
 
   return (
@@ -185,7 +198,19 @@ export const PendingComponent: React.FC = () => {
         pagination={true}
         name="Claims"
         onPageChange={handlePageChange}
+        isHaveCheckbox={true}
       />
+      <Modal
+        open={modalVisible}
+        title={modalContent?.title}
+        onCancel={() => setModalVisible(false)}
+        onOk={() => {
+          modalContent?.onOk();
+          setModalVisible(false);
+        }}
+      >
+        <p>Do you want to proceed?</p>
+      </Modal>
     </div>
   );
 };
