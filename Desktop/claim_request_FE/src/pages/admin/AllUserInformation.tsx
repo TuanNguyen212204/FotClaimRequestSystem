@@ -18,24 +18,35 @@ import { toast } from "react-toastify";
 import Modal from "@/components/ui/modal/Modal";
 import { X } from "lucide-react";
 import { SquarePen } from "lucide-react";
+import { User } from "@/types/User";
+import { GiCogLock } from "react-icons/gi";
+import { set } from "date-fns";
 const AllUserInformation: React.FC = () => {
   const tableRef = useRef<{
     getSelectedData: () => DataRecord[];
-    getSortedData: () => DataRecord[];
   }>(null);
+  const [selectedData, setSelectedData] = useState<DataRecord[]>([]);
+
   const handleGetSelectedData = () => {
     if (tableRef.current) {
-      const selectedData = tableRef.current.getSelectedData();
-      console.log("Selected Data:", selectedData);
+      const a = tableRef.current.getSelectedData();
+      setSelectedData(a);
     }
   };
 
-  const handleGetSortedData = () => {
-    if (tableRef.current) {
-      const sortedData = tableRef.current.getSortedData();
-      console.log("Sorted Data:", sortedData);
-    }
+  const listUserIDisDeleted: string[] = selectedData.map((data) => data.id);
+
+  const deleteAllOFSelectedData = () => {
+    handleGetSelectedData();
+    console.log("Selected data:", selectedData);
   };
+
+  // useEffect(() => {
+  //   if (tableRef.current) {
+  //     handleGetSelectedData();
+  //     console.log("a");
+  //   }
+  // }, []); //
 
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
@@ -63,7 +74,6 @@ const AllUserInformation: React.FC = () => {
     status: user.department ? user.department : "",
   }));
 
-  const fakeData: DataRecord[] = [];
   const handlePageChange = (newPage: number) => {
     console.log("Trang mới:", newPage);
     setCurrentPage(newPage);
@@ -104,7 +114,7 @@ const AllUserInformation: React.FC = () => {
   const handleDeleteConfirm = (userId: string) => {
     Modal.confirm({
       title: "Do you want to delete this user?",
-      children: "",
+      children: `User ID: ${userId} will be deleted`,
       onOk() {
         handleDelete(userId); // Gọi hàm xóa người dùng
       },
@@ -116,6 +126,7 @@ const AllUserInformation: React.FC = () => {
 
   const columns: Column[] = [
     { key: "full_name", dataIndex: "full_name", title: "Full Name" },
+    { key: "username", dataIndex: "username", title: "Username" },
     { key: "email", dataIndex: "email", title: "Email" },
     { key: "department", dataIndex: "department", title: "Department" },
     { key: "job_rank", dataIndex: "job_rank", title: "Job Rank" },
@@ -125,23 +136,27 @@ const AllUserInformation: React.FC = () => {
       title: "Action",
       cell: ({ value }) => {
         return (
-          <div>
-            <button
-              className={styles.delete_button}
-              onClick={() => handleDeleteConfirm(value as string)}
-            >
-              <span>
-                <X />
-              </span>
-            </button>
-            <button
-              className={styles.update_button}
-              onClick={() => handleUpdate(value as string)}
-            >
-              <span>
-                <SquarePen />
-              </span>
-            </button>
+          <div style={{ display: "flex" }}>
+            <div>
+              <button
+                className={styles.update_button}
+                onClick={() => handleUpdate(value as string)}
+              >
+                <span>
+                  <SquarePen />
+                </span>
+              </button>
+            </div>
+            <div>
+              <button
+                className={styles.delete_button}
+                onClick={() => handleDeleteConfirm(value as string)}
+              >
+                <span>
+                  <X />
+                </span>
+              </button>
+            </div>
           </div>
         );
       },
@@ -150,6 +165,9 @@ const AllUserInformation: React.FC = () => {
 
   return (
     <div>
+      <div>
+        <button onClick={() => deleteAllOFSelectedData()}>Delete</button>
+      </div>
       <TableComponent
         ref={tableRef}
         isHaveCheckbox={true}

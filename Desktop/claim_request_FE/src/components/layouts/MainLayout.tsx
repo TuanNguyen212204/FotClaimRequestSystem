@@ -12,7 +12,7 @@ export const MainLayout = () => {
         <Sidebar isCollapse={isCollapse} setIsCollapsed={setIsCollapsed} />
         <div
           className={styles.outletContainer}
-          style={{ marginLeft: isCollapse ? "100px" : "300px" }}
+          style={{ marginLeft: isCollapse ? "60px" : "300px" }}
         >
           <Outlet />
         </div>
