@@ -1,20 +1,29 @@
 .layout {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-  }
-  
-  .mainContent {
-    display: flex;
-    flex: 1;
-  }
-  
-  .outletContainer {
-    margin-left: 275px;
-    margin-top: 80px;
-    flex: 1;
-    background-color: white;
-    padding: 20px;
-    overflow: auto;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding-bottom: 10px;
+}
+
+.mainContent {
+  display: flex;
+  flex: 1;
+  grid-template-columns: 100px auto;
+}
+
+.outletContainer {
+  margin-left: 150px;
+  margin-top: 80px;
+  flex: 1;
+  background-color: white;
+  padding: 20px;
+  overflow: auto;
+}
+.collapsed {
+  margin-left: 150px;
+  margin-top: 80px;
+  flex: 1;
+  background-color: white;
+  padding: 20px;
+  overflow: auto;
+}

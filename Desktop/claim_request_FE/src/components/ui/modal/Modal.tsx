@@ -230,7 +230,7 @@ const Modal_: React.FC<ModalProps> = ({
         onClick={onOk}
         className={styles.buttonOk}
       >
-        {buttonOk ? buttonOk : "Confirm"}
+        {buttonOk ? buttonOk : "OK"}
       </button>
     </div>
   );

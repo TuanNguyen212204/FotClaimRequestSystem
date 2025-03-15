@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams,useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./ClaimStatus.module.css";
 import { Column } from "../../components/ui/Table/Table";
 import { Printer } from "lucide-react";
 import { AppDispatch } from "@/redux";
 import { fetchPaidClaimsAsync } from "../../redux/slices/Claim/paidClaimsSlice";
+import { ArrowLeft } from "lucide-react"; 
 
 interface Project {
   project_id: string;
@@ -25,6 +26,7 @@ interface ClaimData {
 }
 
 const ClaimStatus: React.FC = () => {
+  const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const dispatch = useDispatch<AppDispatch>();
   const { data: claims, loading } = useSelector((state: any) => state.paidClaims);
@@ -54,8 +56,8 @@ const ClaimStatus: React.FC = () => {
       title: 'Overtime Duration',
       cell: ({ record }) => (
         <div className={styles.dateRange}>
-          <div>From: {formatDate(record.submitted_date)}</div>
-          <div>To: {formatDate(record.approved_date)}</div>
+          <div>From: {formatDate((record as ClaimData).submitted_date)}</div>
+          <div>To: {formatDate((record as ClaimData).approved_date)}</div>
         </div>
       )
     },
@@ -63,19 +65,19 @@ const ClaimStatus: React.FC = () => {
       key: 'overtime_date', 
       dataIndex: 'submitted_date', 
       title: 'Overtime Date',
-      cell: ({ value }) => formatDate(value)
+      cell: ({ value }) => formatDate(value as string)
     },
     { 
       key: 'total_hours', 
-      dataIndex: 'total_working_hours', 
+      dataIndex: 'working_hours', 
       title: 'Total Hours',
       cell: ({ value }) => `${value} hours`
     },
     { 
       key: 'overtime_paid', 
-      dataIndex: 'total_working_hours', 
+      dataIndex: 'working_hours', 
       title: 'Overtime Paid',
-      cell: ({ value }) => `${(value * 25000).toLocaleString('vi-VN')} VND`
+      cell: ({ value }) => `${((value as number) * 50000).toLocaleString('vi-VN')} VND`
     },
     { 
       key: 'status', 
@@ -98,13 +100,19 @@ const ClaimStatus: React.FC = () => {
     );
   }
 
-  const claimDetail = claims.find(claim => claim.claim_id === id) || claims[0];
+  const claimDetail = claims.find((claim: ClaimData) => claim.claim_id === id) || claims[0];
   const [startDate, endDate] = claimDetail.project.time_durations.split(' - ');
 
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h1 className={styles.title}>Claim Status</h1>
+        <button 
+          className={styles.backButton} 
+          onClick={() => navigate(-1)}
+        >
+          <ArrowLeft size={20} />
+        </button>
+        <h1 className={styles.title}>Claim Details</h1>
         <hr />
       </div>
       

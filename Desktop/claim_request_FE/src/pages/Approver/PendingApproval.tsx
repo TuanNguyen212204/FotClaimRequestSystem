@@ -1,84 +1,83 @@
-import TableComponent, { Column, DataRecord } from "@/components/ui/Table/Table";
+import TableComponent, {
+  Column,
+  DataRecord,
+} from "@/components/ui/Table/Table";
 import { useEffect, useState } from "react";
-import { selectAllPending, selectAllPendingTotalPages } from "@/redux/selector/pendingSelector";
+import {
+  selectAllPending,
+  selectAllPendingTotalPages,
+} from "@/redux/selector/pendingSelector";
 import httpClient from "@/constant/apiInstance.ts";
 import { CheckIcon, X, CheckCircle2, XCircle } from "lucide-react";
 import styles from "@/pages/Approver/PendingApproval.module.css";
-import { Link, Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
 import { AppDispatch } from "@/redux";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllPendingClaimAsync } from "@/redux/thunk/Claim/claimThunk";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import Modal from "@/components/ui/modal/Modal";
-import StatusTag, { StatusType } from "@/components/ui/StatusTag/StatusTag";
 
+// interface claimList {
+//   claim_id?: string;
+//   user_id?: string;
+//   project_id?: string;
+//   total_working_hours?: number;
+//   submitted_date?: Date;
+//   claim_status?: string;
+//   project_name?: string;
+// }
 
 export const PendingComponent: React.FC = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
+  // const [claimList, setClaimList] = useState<claimList[]>([]);
   const claimList = useSelector(selectAllPending);
   const totalPages = useSelector(selectAllPendingTotalPages);
   const [loading, setLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [limit] = useState(7);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [modalContent, setModalContent] = useState<{
-    title: string;
-    onOk: () => void;
-  } | null>(null);
 
   useEffect(() => {
     setLoading(true);
-    dispatch(fetchAllPendingClaimAsync({
-      page: currentPage.toString(),
-      limit: limit.toString(),
-    })).finally(() => setLoading(false));
+    dispatch(
+      fetchAllPendingClaimAsync({
+        page: currentPage.toString(),
+        limit: limit.toString(),
+      })
+    ).finally(() => setLoading(false));
   }, [currentPage]);
 
-  const handleReturn = () => {
-    navigate(`/claim`);
-  };
-
   const handleApproveClaim = async (claimId: string) => {
-    setModalContent({
-      title: "Are you sure you want to approve this claim?",
-      onOk: async () => {
-        try {
-          await httpClient.post(`/approvers/${claimId}/approve-claim`, {});
-          dispatch(fetchAllPendingClaimAsync({
-            page: currentPage.toString(),
-            limit: limit.toString(),
-          }));
-          toast.success("Claim approved successfully!");
-        } catch (error) {
-          console.log("Error approving claim: ", error);
-          toast.error("Failed to approve claim.");
-        }
-      },
-    });
-    setModalVisible(true);
+    try {
+      await httpClient.post(`/approvers/${claimId}/approve-claim`, {});
+      dispatch(
+        fetchAllPendingClaimAsync({
+          page: currentPage.toString(),
+          limit: limit.toString(),
+        })
+      );
+      toast.success("Claim approved successfully!");
+      window.confirm("Are you sure you want to approve this claim?");
+    } catch (error) {
+      console.log("Error approving claim: ", error);
+      toast.error("Failed to approve claim.");
+    }
   };
 
   const handleRejectClaim = async (claimId: string) => {
-    setModalContent({
-      title: "Are you sure you want to reject this claim?",
-      onOk: async () => {
-        try {
-          await httpClient.post(`/approvers/${claimId}/reject-claim`, {});
-          dispatch(fetchAllPendingClaimAsync({
-            page: currentPage.toString(),
-            limit: limit.toString(),
-          }));
-          toast.success("Claim rejected successfully!");
-        } catch (error) {
-          console.log("Error rejecting claim: ", error);
-          toast.error("Failed to reject claim.");
-        }
-      },
-    });
-    setModalVisible(true);
+    try {
+      await httpClient.post(`/approvers/${claimId}/reject-claim`, {});
+      dispatch(
+        fetchAllPendingClaimAsync({
+          page: currentPage.toString(),
+          limit: limit.toString(),
+        })
+      );
+      toast.success("Claim rejected successfully!");
+      window.confirm("Are you sure you want to reject this claim?");
+    } catch (error) {
+      console.log("Error rejecting claim: ", error);
+      toast.error("Failed to reject claim.");
+    }
   };
 
   const handlePageChange = (newPage: number) => {
@@ -101,16 +100,6 @@ export const PendingComponent: React.FC = () => {
       title: "Project ID",
     },
     {
-      key: "username",
-      dataIndex: "username",
-      title: "Username",
-    },
-    {
-      key: "email",
-      dataIndex: "email",
-      title: "Email",
-    },
-    {
       key: "total_working_hours",
       dataIndex: "total_working_hours",
       title: "Total Working Hours",
@@ -125,7 +114,6 @@ export const PendingComponent: React.FC = () => {
       key: "claim_status",
       dataIndex: "claim_status",
       title: "Claim Status",
-      cell: ({ value }) => <StatusTag status={value as StatusType} />,
     },
     {
       key: "project_name",
@@ -139,28 +127,37 @@ export const PendingComponent: React.FC = () => {
       cell: ({ value }) => (
         <div className={styles.actions}>
           <Tooltip text="Approve" position="top">
-            <CheckCircle2 className={styles.iconApprove}
-              onClick={() => handleApproveClaim(value as string)} />
+            <CheckCircle2
+              className={styles.iconApprove}
+              onClick={() => handleApproveClaim(value as string)}
+            />
           </Tooltip>
           <Tooltip text="Reject" position="top">
-            <XCircle className={styles.iconReject}
-              onClick={() => handleRejectClaim(value as string)} />
+            <XCircle
+              className={styles.iconReject}
+              onClick={() => handleRejectClaim(value as string)}
+            />
           </Tooltip>
         </div>
       ),
     },
   ];
 
+  // const dataSource = pending.map((item, index) => ({
+  //   key: index,
+  //   ...item,
+  // }));
+
   const dataSource: DataRecord[] = claimList.map((a, index) => ({
     ...a,
     key: index,
     id: a.claim_id ? a.claim_id.toString() : "",
-    claim_status: "pending", // Set claim_status to "pending"
+    status: a.project_name ? a.project_name : "",
   }));
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>Pending Request</h1>
+      <h1 className={styles.title}>Pending Approval Claims</h1>
       <nav className={styles.breadcrumb}>
         <Link to="/">My Claims</Link> &gt;{" "}
         <Link to="/pending-claim">Pending Approval</Link>
@@ -174,17 +171,6 @@ export const PendingComponent: React.FC = () => {
         name="Claims"
         onPageChange={handlePageChange}
       />
-      <Modal
-        open={modalVisible}
-        title={modalContent?.title}
-        onCancel={() => setModalVisible(false)}
-        onOk={() => {
-          modalContent?.onOk();
-          setModalVisible(false);
-        }}
-      >
-        <p>Do you want to proceed?</p>
-      </Modal>
     </div>
   );
 };
