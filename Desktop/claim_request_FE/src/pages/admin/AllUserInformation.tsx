@@ -1,7 +1,7 @@
 import TableComponent from "@components/ui/Table/Table";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch } from "@redux/index.ts";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import ConfirmModal from "@/components/ui/modal/ConfirmModal";
 import {
   selectAllUser,
@@ -16,7 +16,27 @@ import { PATH } from "@constant/config";
 import { ApiResponseNoGeneric } from "@/types/ApiResponse";
 import { toast } from "react-toastify";
 import Modal from "@/components/ui/modal/Modal";
+import { X } from "lucide-react";
+import { SquarePen } from "lucide-react";
 const AllUserInformation: React.FC = () => {
+  const tableRef = useRef<{
+    getSelectedData: () => DataRecord[];
+    getSortedData: () => DataRecord[];
+  }>(null);
+  const handleGetSelectedData = () => {
+    if (tableRef.current) {
+      const selectedData = tableRef.current.getSelectedData();
+      console.log("Selected Data:", selectedData);
+    }
+  };
+
+  const handleGetSortedData = () => {
+    if (tableRef.current) {
+      const sortedData = tableRef.current.getSortedData();
+      console.log("Sorted Data:", sortedData);
+    }
+  };
+
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const users = useSelector(selectAllUser);
@@ -43,6 +63,7 @@ const AllUserInformation: React.FC = () => {
     status: user.department ? user.department : "",
   }));
 
+  const fakeData: DataRecord[] = [];
   const handlePageChange = (newPage: number) => {
     console.log("Trang mới:", newPage);
     setCurrentPage(newPage);
@@ -109,13 +130,17 @@ const AllUserInformation: React.FC = () => {
               className={styles.delete_button}
               onClick={() => handleDeleteConfirm(value as string)}
             >
-              Delete
+              <span>
+                <X />
+              </span>
             </button>
             <button
               className={styles.update_button}
               onClick={() => handleUpdate(value as string)}
             >
-              Update
+              <span>
+                <SquarePen />
+              </span>
             </button>
           </div>
         );
@@ -125,7 +150,11 @@ const AllUserInformation: React.FC = () => {
 
   return (
     <div>
+      {/* <button onClick={handleGetSelectedData}>Get Selected Data</button>
+      <button onClick={handleGetSortedData}>Get Sorted Data</button> */}
       <TableComponent
+        ref={tableRef}
+        isHaveCheckbox={true}
         columns={columns}
         dataSource={dataSource}
         loading={loading}
