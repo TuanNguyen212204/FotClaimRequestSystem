@@ -54,9 +54,7 @@
 .collapsed .logoImage {
   width: 50px;
 }
-.collapsed .logout {
-  left: 45%;
-}
+
 .createClaim {
   background-color: #4caf50;
   color: white;
@@ -200,7 +198,7 @@
   width: 50%;
   position: absolute;
   bottom: 70px;
-  left: 50%;
+  left: 43%;
   transform: translateX(-50%);
   text-align: center;
   border-radius: 5px;
