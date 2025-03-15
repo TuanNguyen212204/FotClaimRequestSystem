@@ -41,8 +41,8 @@ export const ApprovedApproverComponent: React.FC = () => {
     ).finally(() => setLoading(false));
   }, [currentPage]);
 
-  const handleViewDetail = (claimId: string) => {
-    navigate(`/approve/detail/${claimId}`); //sửa lại url ở đây để truyềnS
+  const handleViewDetail = (id: string) => {
+    navigate(`/approve-details?id=${id}`);
   };
 
   const formatDateToDDMMYYYY = (date: string) => {

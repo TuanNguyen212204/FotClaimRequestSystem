@@ -26,4 +26,8 @@ export const PATH = {
   unauthenticated: "/unauthenticated",
   updateUser: "/update-user",
   createUser: "/create-user",
+  claimDetail: "/claim-detail",
+  approvedClaimWithUserID: "/approved-claim-by-user-id",
+  rejectedClaimWithUserID: "/rejected-claim-by-user-id",
+  pendingClaimByUserID: "/pending-claim-by-user-id",
 };

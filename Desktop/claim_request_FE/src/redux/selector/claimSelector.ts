@@ -9,3 +9,9 @@ export const selectApprovedClaimFinance = (state: RootState) =>
   state.claim.listClaimApprovedFiance;
 export const selectApprovedDetailFinance = (state: RootState) =>
   state.claim.listDetailClaimApprovedFiance;
+export const selectApprovedClaimByUserID = (state: RootState) =>
+  state.claim.listClaimUserApproved;
+export const selectPendingClaimByUserID = (state: RootState) =>
+  state.claim.listClaimUserPending;
+export const selectRejectedClaimByUserID = (state: RootState) =>
+  state.claim.listClaimUserRejected;

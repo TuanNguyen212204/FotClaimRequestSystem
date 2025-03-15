@@ -1,48 +1,27 @@
-import { selectMyClaim } from "@/redux/selector/claimSelector";
+import React from "react";
+import { AppDispatch } from "@/redux";
 import { useEffect, useState } from "react";
-import styles from "./UserClaims.module.css";
-import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch } from "@redux/index";
-import { fetchClaimByUserAsync } from "@redux/thunk/Claim/claimThunk";
+import { useSelector, useDispatch } from "react-redux";
+import { selectApprovedClaimByUserID } from "@/redux/selector/claimSelector";
+import { fetchClaimByUserWithApprovedStatusAsync } from "@/redux/thunk/Claim/claimThunk";
+import TableComponent, {
+  DataRecord,
+  Column,
+} from "@/components/ui/Table/Table";
 import { EyeIcon } from "lucide-react";
-import TableComponent, { Column, DataRecord } from "../Table/Table";
-
-interface userClaims {
-  claim_id?: string;
-  project_name?: string;
-  total_working_hours?: number;
-  submitted_date?: Date;
-  claim_status?: string;
-}
-
-const UserClaims = () => {
+import styles from "./UpdateUser.module.css";
+export const ApprovedClaimByUserID: React.FC = () => {
+  const listApprovedClaim = useSelector(selectApprovedClaimByUserID);
   const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
-  const userClaim = useSelector(selectMyClaim);
   const [loading, setLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState<number>(1);
-
   useEffect(() => {
-    // dispatch(fetchClaimByUserAsync());
     const fetchData = async () => {
-      await dispatch(fetchClaimByUserAsync(currentPage.toString()));
+      setLoading(true);
+      await dispatch(fetchClaimByUserWithApprovedStatusAsync());
       setLoading(false);
     };
     fetchData();
-  }, [dispatch, currentPage]);
-  useEffect(() => {
-    console.log(userClaim);
-  }, [userClaim]);
-
-  const handleViewDetail = (id: string) => {
-    navigate(`/claim-detail?id=${id}`);
-  };
-  const handlePageChange = (newPage: number) => {
-    console.log("Trang mới: ", newPage);
-    setCurrentPage(newPage);
-  };
-
+  }, [dispatch]);
   const formatDateToDDMMYYYY = (date: string) => {
     const dateObj = new Date(date);
     const day = dateObj.getDate();
@@ -50,7 +29,9 @@ const UserClaims = () => {
     const year = dateObj.getFullYear();
     return `${day}/${month}/${year}`;
   };
-
+  const handleViewDetail = (id: string) => {
+    console.log("View detail", id);
+  };
   const columns: Column[] = [
     {
       key: "project_id",
@@ -75,21 +56,10 @@ const UserClaims = () => {
       title: "Claim Status",
       cell: ({ value }: { value: unknown }) => {
         const stringValue = value as string;
-        return (
-          <span
-            style={{
-              color:
-                stringValue === "APPROVED"
-                  ? "green"
-                  : stringValue === "REJECTED"
-                  ? "red"
-                  : stringValue === "PENDING"
-                  ? "orange"
-                  : "inherit",
-            }}
-          >
-            {stringValue}
-          </span>
+        return stringValue === "APPROVED" ? (
+          <span style={{ color: "green" }}>{stringValue}</span>
+        ) : (
+          <span>{stringValue}</span>
         );
       },
     },
@@ -105,14 +75,14 @@ const UserClaims = () => {
       ),
     },
   ];
-  const dataSource: DataRecord[] = userClaim.map((claim, index) => ({
+  const dataSource: DataRecord[] = listApprovedClaim.map((claim, index) => ({
     ...claim,
     key: index,
     id: claim.claim_id ? claim.claim_id.toString() : "",
     status: claim.claim_status ? claim.claim_status : "",
   }));
   return (
-    <div className={styles.container}>
+    <div>
       <TableComponent
         columns={columns}
         dataSource={dataSource}
@@ -124,4 +94,3 @@ const UserClaims = () => {
     </div>
   );
 };
-export default UserClaims;

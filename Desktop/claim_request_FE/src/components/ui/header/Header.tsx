@@ -5,9 +5,11 @@ import { FaBell, FaUserCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { PATH } from "../../../constant/config";
 import Badge from "@components/ui/Badge";
+import fptlogo from "@assets/fot.png";
 import { useState } from "react";
 const Header: React.FC = () => {
   const [role, setRole] = useState<string>();
+  const username = localStorage.getItem("username");
   const navigate = useNavigate();
   useEffect(() => {
     const record = Number(localStorage.getItem("role_id"));
@@ -23,20 +25,27 @@ const Header: React.FC = () => {
   }, []);
   return (
     <header className={styles.header}>
-      {/* <div className={styles.leftSection}>
-      </div> */}
+      <div>
+        <img src={fptlogo} alt="logo" className={styles.logoImage} />
+      </div>
       <div className={styles.rightSection}>
-        <SearchBar />
-        <Badge count={100}>
-          <FaBell className={styles.icon} />
-        </Badge>
-        <FaUserCircle
-          className={styles.icon}
-          onClick={() => {
-            navigate(PATH.userInfo);
-          }}
-        />
-        <span className={styles.username}>{role}</span>
+        <div>
+          <SearchBar />
+        </div>
+        <div>
+          <Badge count={100}>
+            <FaBell className={styles.icon} />
+          </Badge>
+        </div>
+        <div>
+          <FaUserCircle
+            className={styles.icon}
+            onClick={() => {
+              navigate(PATH.userInfo);
+            }}
+          />
+        </div>
+        <span className={styles.username}>{username}</span>
       </div>
     </header>
   );

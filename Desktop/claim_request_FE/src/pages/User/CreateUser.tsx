@@ -145,6 +145,7 @@ export const CreateUser: React.FC = () => {
                 Salary
               </label>
               <input
+                id="salary"
                 {...register("salary", {
                   required: "Salary is required",
                   minLength: {
@@ -161,17 +162,21 @@ export const CreateUser: React.FC = () => {
               )}
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-600">
+              <label
+                className="block text-sm font-medium text-gray-600"
+                htmlFor="role_id"
+              >
                 Role ID
               </label>
               <select
+                id="role_id"
                 {...register("role_id", { required: "Role ID is required" })}
                 className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200"
               >
                 <option value="">Select Role</option>
                 <option value="1">1 - Admin</option>
-                <option value="2">2 - Manager</option>
-                <option value="3">3 - Staff</option>
+                <option value="2">2 - Approver</option>
+                <option value="3">3 - Finance</option>
                 <option value="4">4 - Claimer</option>
               </select>
               {errors.role_id && (
@@ -182,10 +187,14 @@ export const CreateUser: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-600">
+              <label
+                className="block text-sm font-medium text-gray-600"
+                htmlFor="job_rank"
+              >
                 Job Rank
               </label>
               <input
+                id="job_rank"
                 {...register("job_rank", {
                   required: "Job Rank is required",
                   minLength: {

@@ -122,6 +122,7 @@
   width: 100%;
   padding: 10px 15px;
   border: 1px solid #ccc;
+  box-sizing: border-box;
   border-radius: 8px;
   font-size: 1rem;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
@@ -230,4 +231,32 @@
 .invalid {
   color: red;
   margin-bottom: 4px;
+}
+
+.passwordProgress {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.passwordProgress__item {
+  flex: 1;
+  margin-right: 2px;
+  height: 8px;
+  background-color: #eee;
+}
+
+.passwordProgress__item:last-child {
+  margin-right: 0;
+}
+
+.passwordProgress__item--red {
+  background-color: red;
+}
+
+.passwordProgress__item--orange {
+  background-color: orange;
+}
+
+.passwordProgress__item--green {
+  background-color: green;
 }

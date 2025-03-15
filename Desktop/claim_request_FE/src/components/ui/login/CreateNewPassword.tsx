@@ -7,6 +7,7 @@ import httpClient from "@/constant/apiInstance";
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import PasswordProgress from "./PasswordProgress";
 
 const passwordCriteria = [
   {
@@ -93,7 +94,7 @@ function CreateNewPassword() {
       return password
         ? schema
             .required("Confirm Password is Required")
-            .oneOf([Yup.ref("password")], "Confirm Password does not matchhhh")
+            .oneOf([Yup.ref("password")], "Confirm Password does not match")
         : schema;
     }),
   });
@@ -161,29 +162,34 @@ function CreateNewPassword() {
               <div className={styles.globalError}>{globalError}</div>
             )}
             <h1>Create new password</h1>
+            <div className={styles.passwordCriteria}>
+              {passwordCriteria.map((criterion, index) => {
+                const valid = criterion.test(formik.values.password);
+                return (
+                  <div
+                    key={index}
+                    className={valid ? styles.valid : styles.invalid}
+                  >
+                    {valid ? "✓" : "*"} {criterion.label}
+                  </div>
+                );
+              })}
+            </div>
+            <PasswordProgress
+              validCount={countValidCriteria(formik.values.password)}
+            />
 
             <form onSubmit={formik.handleSubmit}>
               <div className={styles.inputForm}>
-                <div className={styles.passwordCriteria}>
-                  {passwordCriteria.map((criterion, index) => {
-                    const valid = criterion.test(formik.values.password);
-                    return (
-                      <div
-                        key={index}
-                        className={valid ? styles.valid : styles.invalid}
-                      >
-                        {valid ? "✓" : "*"} {criterion.label}
-                      </div>
-                    );
-                  })}
-                </div>
                 <div className={styles.inputForm__message}>
                   <label htmlFor="password">Password</label>
-                  {formik.touched.password && formik.errors.password && (
-                    <div className={styles.label__error}>
-                      {formik.errors.password}
-                    </div>
-                  )}
+                  <label htmlFor="password">
+                    {formik.touched.password && formik.errors.password && (
+                      <div className={styles.label__error}>
+                        {formik.errors.password}
+                      </div>
+                    )}
+                  </label>
                 </div>
                 <input
                   type="password"
@@ -198,13 +204,13 @@ function CreateNewPassword() {
 
               <div className={styles.inputForm}>
                 <div className={styles.inputForm__message}>
+                  <label htmlFor="confirmPassword">Confirm-Password </label>
                   <label htmlFor="confirmPassword">
-                    Confirm-Password
                     {formik.touched.confirmPassword &&
                       formik.errors.confirmPassword && (
-                        <span className={styles.label__error}>
+                        <div className={styles.label__error}>
                           {formik.errors.confirmPassword}
-                        </span>
+                        </div>
                       )}
                   </label>
                 </div>

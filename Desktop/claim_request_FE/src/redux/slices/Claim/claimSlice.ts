@@ -8,6 +8,9 @@ import {
   fetchClaimByUserAsync,
   fetchApprovedClaimsFinanceAsync,
   fetchApprovedDetailFinanceAsync,
+  fetchClaimByUserWithRejectStatusAsync,
+  fetchClaimByUserWithPendingStatusAsync,
+  fetchClaimByUserWithApprovedStatusAsync,
 } from "@/redux/thunk/Claim/claimThunk";
 
 const initialState: {
@@ -18,6 +21,9 @@ const initialState: {
   myClaim: Claim[];
   listClaimPending: Claim[];
   totalPages: number;
+  listClaimUserApproved: Claim[];
+  listClaimUserPending: Claim[];
+  listClaimUserRejected: Claim[];
   status: string;
   error: string | null;
 } = {
@@ -26,6 +32,9 @@ const initialState: {
   listClaimApprovedFiance: [],
   listDetailClaimApprovedFiance: [],
   listClaimPending: [],
+  listClaimUserApproved: [],
+  listClaimUserPending: [],
+  listClaimUserRejected: [],
   totalPages: 1,
   myClaim: [],
   status: "",
@@ -48,7 +57,7 @@ export const claimSlice = createSlice({
         state.status = "success";
         state.data = action.payload;
       })
-      //---------------------------------------------- Approved Claims for Approver -----------------------------------------------------
+      //fetch all approved claim with role is Approver
       .addCase(fetchApprovedClaimsApproverAsync.rejected, (state, action) => {
         state.status = "failed";
         state.error = String(action.error.message);
@@ -88,6 +97,7 @@ export const claimSlice = createSlice({
         state.status = "loading";
       })
       //---------------------------------------------- My Claims -----------------------------------------------------
+      //fetch all claim by user_id
       .addCase(fetchClaimByUserAsync.rejected, (state, action) => {
         state.status = "failed";
         state.error = String(action.error.message);
@@ -100,9 +110,7 @@ export const claimSlice = createSlice({
         state.status = "loading";
       })
 
-      //---------------------------------------------- Pending Claims for Approver -----------------------------------------------------
-
-      //---------------------------------------------- Pending Claims for Approver -----------------------------------------------------
+      //fetch all pending claim with role is Approver
       .addCase(fetchAllPendingClaimAsync.rejected, (state, action) => {
         state.status = "failed";
         state.error = String(action.error.message);
@@ -114,7 +122,61 @@ export const claimSlice = createSlice({
       })
       .addCase(fetchAllPendingClaimAsync.pending, (state) => {
         state.status = "loading";
-      });
+      })
+      //my claim is with approved status
+      .addCase(
+        fetchClaimByUserWithApprovedStatusAsync.rejected,
+        (state, action) => {
+          state.status = "failed";
+          state.error = String(action.error.message);
+        }
+      )
+      .addCase(
+        fetchClaimByUserWithApprovedStatusAsync.fulfilled,
+        (state, action) => {
+          state.status = "success";
+          state.listClaimUserApproved = action.payload;
+        }
+      )
+      .addCase(fetchClaimByUserWithApprovedStatusAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      //my claim is with pending status
+      .addCase(
+        fetchClaimByUserWithPendingStatusAsync.rejected,
+        (state, action) => {
+          state.status = "failed";
+          state.error = String(action.error.message);
+        }
+      )
+      .addCase(fetchClaimByUserWithPendingStatusAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(
+        fetchClaimByUserWithPendingStatusAsync.fulfilled,
+        (state, action) => {
+          state.status = "success";
+          state.listClaimUserPending = action.payload;
+        }
+      )
+      //my claim is with rejected status
+      .addCase(
+        fetchClaimByUserWithRejectStatusAsync.rejected,
+        (state, action) => {
+          state.status = "failed";
+          state.error = String(action.error.message);
+        }
+      )
+      .addCase(fetchClaimByUserWithRejectStatusAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(
+        fetchClaimByUserWithRejectStatusAsync.fulfilled,
+        (state, action) => {
+          state.status = "success";
+          state.listClaimUserRejected = action.payload;
+        }
+      );
   },
 });
 export default claimSlice.reducer;

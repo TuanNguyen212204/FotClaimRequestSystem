@@ -34,7 +34,7 @@ export const PasswordInput = React.forwardRef<
   Omit<InputProps, "type">
 >(({ size = "medium", maxLength = 100, ...props }, ref) => {
   const [visible, setVisible] = useState(false);
-  const [inputValue, setInputValue] = useState("");
+  // const [inputValue, setInputValue] = useState("");
   const toggleVisibility = () => setVisible(!visible);
   // const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   //   const { value } = e.target;
@@ -42,9 +42,9 @@ export const PasswordInput = React.forwardRef<
   //     setInputValue(value);
   //   }
   // };
-  useEffect(() => {
-    console.log(inputValue);
-  }, [inputValue]);
+  // useEffect(() => {
+  //   console.log(inputValue);
+  // }, [inputValue]);
   return (
     <div className={styles.passwordInputWrapper}>
       <Input
