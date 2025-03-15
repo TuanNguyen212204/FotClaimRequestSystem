@@ -80,21 +80,23 @@
 .iconApprove {
   cursor: pointer;
   color: #6b7280;
-  transition: color 0.2s ease;
+  transition: transform 0.2s ease-in-out, color 0.2s;
 }
 
 .iconApprove:hover {
   color: #89AC46;
+  transform: scale(1.2);
 }
 
 .iconReject {
   cursor: pointer;
   color: #6b7280;
-  transition: color 0.2s ease;
+  transition: transform 0.2s ease-in-out, color 0.2s;
 }
 
 .iconReject:hover {
   color: #A31D1D;
+  transform: scale(1.2);
 }
 
 .pagination {
