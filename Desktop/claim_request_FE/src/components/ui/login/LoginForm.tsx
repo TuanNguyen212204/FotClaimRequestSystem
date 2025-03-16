@@ -21,6 +21,7 @@ async function loginUser(values: {
     localStorage.setItem("access_token", data.tokens.access.token);
     localStorage.setItem("username", data.user.username);
     localStorage.setItem("user_id", data.user.user_id);
+    localStorage.setItem("count", "0");
     localStorage.setItem("role_id", data.user.role_id.toString());
   }
 }

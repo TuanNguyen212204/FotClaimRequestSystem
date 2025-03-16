@@ -279,10 +279,10 @@
 }
 .create_button {
   color: white;
-  background-color: green;
-  border-radius: 10px;
-  font-size: 1rem;
+  background-color: #4ade80;
+  border-radius: 25px;
   padding: 5px;
+  width: 100%;
 }
 .checkbox {
   margin-top: -36px;

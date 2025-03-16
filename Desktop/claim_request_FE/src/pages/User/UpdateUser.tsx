@@ -10,12 +10,13 @@ import { PATH } from "@constant/config";
 import { X } from "lucide-react";
 import styles from "./UpdateUser.module.css";
 import { ToastContainer, toast } from "react-toastify";
-export const UpdateUser: React.FC = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const id = queryParams.get("id");
-
+export const UpdateUser: React.FC = ({
+  id,
+  setOpenModal,
+}: {
+  id: string;
+  setOpenModal: () => string;
+}) => {
   const {
     register,
     handleSubmit,
@@ -47,7 +48,6 @@ export const UpdateUser: React.FC = () => {
   const onSubmit = async (data: User) => {
     if (!user) return;
     const requestBody = {
-      full_name: data.full_name || user.full_name,
       department: data.department || user.department,
       role_id: data.role_id || user.role_id,
       job_rank: data.job_rank || user.job_rank,
@@ -60,14 +60,12 @@ export const UpdateUser: React.FC = () => {
         requestBody
       );
       toast("User updated successfully!");
-
-      navigate(PATH.allUserInformation);
     } catch (error) {
       console.error("Update user error: " + error);
     }
   };
   const handleCancel = () => {
-    navigate(PATH.allUserInformation);
+    setOpenModal(false);
   };
   return (
     <div style={{ marginTop: "50px" }}>
@@ -79,8 +77,7 @@ export const UpdateUser: React.FC = () => {
           Update User
         </h1>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-          {/* Full Name */}
-          <div>
+          <div className={styles.input_container}>
             <label
               className="block text-sm font-medium text-gray-600"
               htmlFor="full_name"
@@ -88,18 +85,9 @@ export const UpdateUser: React.FC = () => {
               Full Name
             </label>
             <input
+              disabled
               id="full_name"
-              {...register("full_name", {
-                required: "Full name is required",
-                minLength: {
-                  value: 3,
-                  message: "Must be at least 3 characters",
-                },
-                maxLength: {
-                  value: 100,
-                  message: "Must be at most 50 characters",
-                },
-              })}
+              {...register("full_name")}
               className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200"
             />
             {errors.full_name && (
@@ -108,7 +96,21 @@ export const UpdateUser: React.FC = () => {
               </p>
             )}
           </div>
-          <div>
+          <div className={styles.input_container}>
+            <label
+              className="block text-sm font-medium text-gray-600"
+              htmlFor="email"
+            >
+              Email
+            </label>
+            <input
+              {...register("email")}
+              disabled
+              id="email"
+              className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200"
+            />
+          </div>
+          <div className={styles.input_container}>
             <label
               className="block text-sm font-medium text-gray-600"
               id="department"
@@ -137,7 +139,7 @@ export const UpdateUser: React.FC = () => {
             )}
           </div>
 
-          <div>
+          <div className={styles.input_container}>
             <label
               className="block text-sm font-medium text-gray-600"
               htmlFor="role_id"
@@ -162,7 +164,7 @@ export const UpdateUser: React.FC = () => {
             )}
           </div>
 
-          <div>
+          <div className={styles.input_container}>
             <label
               className="block text-sm font-medium text-gray-600"
               htmlFor="job_rank"
