@@ -9,7 +9,7 @@ import {
 import styles from "./Table.module.css";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import PaginationForTable from "./PaginationForTable";
-
+import { X } from "lucide-react";
 import React from "react";
 import { LoadingProvider } from "../Loading/LoadingContext";
 import LoadingOverlay from "../Loading/LoadingOverlay";
@@ -41,6 +41,7 @@ export type TableComponentProps<T extends DataRecord> = {
   sortConfig?: SortConfig;
   // pageLength?: number;
   totalPage?: number;
+  isHaveCheckbox?: boolean;
   createButton?: boolean;
   onCreateButtonClick?: () => void;
   onPageChange?: (newPage: number) => void;
@@ -68,6 +69,7 @@ const TableComponent = forwardRef(
       name,
       pagination = false,
       sortConfig,
+      isHaveCheckbox,
       createButton,
       totalPage = 3,
       // pageLength = 10,
@@ -79,11 +81,6 @@ const TableComponent = forwardRef(
       getSortedData: () => T[];
     }>
   ) => {
-    // useEffect(() => {
-    //   console.log("Table có nhận paginatedData:", pagination);
-    //   console.log("TableComponent nhận dataSource:", dataSource);
-    // }, [dataSource, pagination]);
-
     const [currentPage, setCurrentPage] = useState(1);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [selectedStatus, setSelectedStatus] = useState<string>("All");
@@ -118,12 +115,6 @@ const TableComponent = forwardRef(
 
     const totalPages = totalPage;
 
-    // const paginatedData = pagination
-    //   ? sortedData.slice(
-    //       (currentPage - 1) * pageLength,
-    //       currentPage * pageLength
-    //     )
-    //   : sortedData;
     const paginatedData = sortedData;
     useEffect(() => {
       setCurrentPage(1);
@@ -182,6 +173,7 @@ const TableComponent = forwardRef(
         checkboxRef.current.indeterminate = someChecked && !allChecked;
       }
     }, [checkedItems, dataSource.length]);
+
     useImperativeHandle(ref, () => ({
       getSelectedData: () => {
         return dataSource.filter((record) => checkedItems.has(record.id || ""));
@@ -256,7 +248,12 @@ const TableComponent = forwardRef(
             </div>
           </section>
           {createButton && (
-            <div style={{ paddingLeft: "1200px", paddingTop: "30px" }}>
+            <div
+              style={{
+                paddingTop: "20px",
+                marginLeft: "auto",
+              }}
+            >
               <button
                 className={styles.create_button}
                 onClick={() => onCreateButtonClick()}
@@ -268,17 +265,13 @@ const TableComponent = forwardRef(
         </div>
 
         <div>
-          {filteredData.length.toString() !== "0" ? (
-            <section className={styles.table_body}>
-              <table className={styles.table}>
-                <thead className={styles.thead}>
-                  <tr>
-                    <th className={styles.th}>
-                      {/* {checkedItems.size === dataSource.length
-                            ? "Deselect All"
-                            : "Select All"} */}
-
-                      <div className="">
+          <section className={styles.table_body}>
+            <table className={styles.table}>
+              <thead className={styles.thead}>
+                <tr>
+                  <th className={styles.th}>
+                    {isHaveCheckbox && (
+                      <div>
                         <input
                           ref={checkboxRef}
                           onClick={handleSelectAll}
@@ -290,42 +283,45 @@ const TableComponent = forwardRef(
                           className=" text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 "
                         />
                       </div>
+                    )}
+                  </th>
+                  {columns.map((col) => (
+                    <th
+                      key={col.key || col.dataIndex}
+                      onClick={
+                        sortConfig?.columnKey === col.dataIndex
+                          ? () => handleSort(col.dataIndex)
+                          : undefined
+                      }
+                    >
+                      {col.title}
+                      {sortColumn === col.dataIndex && (
+                        <span>
+                          {sortOrder === "asc" ? (
+                            <ArrowUp className="w-4 h-4 ml-2" />
+                          ) : (
+                            <ArrowDown className="w-4 h-4 ml-2" />
+                          )}
+                        </span>
+                      )}
                     </th>
-
-                    {columns.map((col) => (
-                      <th
-                        key={col.key || col.dataIndex}
-                        className="thead_style"
-                        onClick={
-                          sortConfig?.columnKey === col.dataIndex
-                            ? () => handleSort(col.dataIndex)
-                            : undefined
-                        }
-                      >
-                        {col.title}
-                        {sortColumn === col.dataIndex && (
-                          <span>
-                            {sortOrder === "asc" ? (
-                              <ArrowUp className="w-4 h-4 ml-2" />
-                            ) : (
-                              <ArrowDown className="w-4 h-4 ml-2" />
-                            )}
-                          </span>
-                        )}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody className={styles.tbody}>
-                  {paginatedData.map((record) => (
+                  ))}
+                </tr>
+              </thead>
+              <tbody className={styles.tbody}>
+                {filteredData.length > 0 ? (
+                  paginatedData.map((record) => (
                     <tr key={record.key || record.id}>
-                      <td style={{ paddingTop: "1.8rem" }}>
-                        <input
-                          style={{ marginBottom: "2rem" }}
-                          type="checkbox"
-                          checked={checkedItems.has(record.id || "")}
-                          onChange={() => handleCheck(record.id || "")}
-                        />
+                      <td style={{ paddingTop: "3rem" }}>
+                        {isHaveCheckbox && (
+                          <div className={styles.checkbox}>
+                            <input
+                              type="checkbox"
+                              checked={checkedItems.has(record.id || "")}
+                              onChange={() => handleCheck(record.id || "")}
+                            />
+                          </div>
+                        )}
                       </td>
                       {columns.map((col) => (
                         <td key={col.key || col.dataIndex}>
@@ -340,15 +336,23 @@ const TableComponent = forwardRef(
                         </td>
                       ))}
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </section>
-          ) : (
-            <h1>No data</h1>
-          )}
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan={columns.length + (isHaveCheckbox ? 1 : 0)}
+                      style={{ textAlign: "center", paddingLeft: "200px" }}
+                    >
+                      <h1>No Data</h1>
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </section>
+
           <div>
-            {pagination && totalPages >= 1 && (
+            {pagination && totalPages >= 1 && filteredData.length > 0 && (
               <PaginationForTable
                 currentPage={currentPage}
                 totalPages={totalPages}

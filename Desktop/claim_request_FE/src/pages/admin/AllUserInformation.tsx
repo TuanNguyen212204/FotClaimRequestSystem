@@ -1,7 +1,8 @@
 import TableComponent from "@components/ui/Table/Table";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch } from "@redux/index.ts";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import ConfirmModal from "@/components/ui/modal/ConfirmModal";
 import {
   selectAllUser,
   selectTotalPageOfAllUser,
@@ -14,14 +15,46 @@ import { useNavigate } from "react-router-dom";
 import { PATH } from "@constant/config";
 import { ApiResponseNoGeneric } from "@/types/ApiResponse";
 import { toast } from "react-toastify";
+import Modal from "@/components/ui/modal/Modal";
+import { X } from "lucide-react";
+import { SquarePen } from "lucide-react";
+import { User } from "@/types/User";
+import { GiCogLock } from "react-icons/gi";
+import { set } from "date-fns";
 const AllUserInformation: React.FC = () => {
+  const tableRef = useRef<{
+    getSelectedData: () => DataRecord[];
+  }>(null);
+  const [selectedData, setSelectedData] = useState<DataRecord[]>([]);
+
+  const handleGetSelectedData = () => {
+    if (tableRef.current) {
+      const a = tableRef.current.getSelectedData();
+      setSelectedData(a);
+    }
+  };
+
+  const listUserIDisDeleted: string[] = selectedData.map((data) => data.id);
+
+  const deleteAllOFSelectedData = () => {
+    handleGetSelectedData();
+    console.log("Selected data:", selectedData);
+  };
+
+  // useEffect(() => {
+  //   if (tableRef.current) {
+  //     handleGetSelectedData();
+  //     console.log("a");
+  //   }
+  // }, []); //
+
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const users = useSelector(selectAllUser);
   const totalPage = useSelector(selectTotalPageOfAllUser);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState<number>(1);
-
+  const [openModal, setOpenModal] = useState<boolean>(false);
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -66,14 +99,34 @@ const AllUserInformation: React.FC = () => {
       console.error("Error deleting user:", error);
     }
   };
-
+  const handleOpenModal = () => {
+    setOpenModal(true);
+  };
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
   const handleUpdate = (id?: string) => {
     if (!id) return;
     console.log("Update user with ID:", id);
     navigate(`/update-user?id=${id}`);
   };
+
+  const handleDeleteConfirm = (userId: string) => {
+    Modal.confirm({
+      title: "Do you want to delete this user?",
+      children: `User ID: ${userId} will be deleted`,
+      onOk() {
+        handleDelete(userId); // Gọi hàm xóa người dùng
+      },
+      onCancel() {
+        console.log("User canceled deletion");
+      },
+    });
+  };
+
   const columns: Column[] = [
     { key: "full_name", dataIndex: "full_name", title: "Full Name" },
+    { key: "username", dataIndex: "username", title: "Username" },
     { key: "email", dataIndex: "email", title: "Email" },
     { key: "department", dataIndex: "department", title: "Department" },
     { key: "job_rank", dataIndex: "job_rank", title: "Job Rank" },
@@ -83,19 +136,27 @@ const AllUserInformation: React.FC = () => {
       title: "Action",
       cell: ({ value }) => {
         return (
-          <div>
-            <button
-              className={styles.delete_button}
-              onClick={() => handleDelete(value as string)}
-            >
-              Delete
-            </button>
-            <button
-              className={styles.update_button}
-              onClick={() => handleUpdate(value as string)}
-            >
-              Update
-            </button>
+          <div style={{ display: "flex" }}>
+            <div>
+              <button
+                className={styles.update_button}
+                onClick={() => handleUpdate(value as string)}
+              >
+                <span>
+                  <SquarePen />
+                </span>
+              </button>
+            </div>
+            <div>
+              <button
+                className={styles.delete_button}
+                onClick={() => handleDeleteConfirm(value as string)}
+              >
+                <span>
+                  <X />
+                </span>
+              </button>
+            </div>
           </div>
         );
       },
@@ -104,7 +165,12 @@ const AllUserInformation: React.FC = () => {
 
   return (
     <div>
+      <div>
+        <button onClick={() => deleteAllOFSelectedData()}>Delete</button>
+      </div>
       <TableComponent
+        ref={tableRef}
+        isHaveCheckbox={true}
         columns={columns}
         dataSource={dataSource}
         loading={loading}

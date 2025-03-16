@@ -109,7 +109,7 @@ const UserClaims = () => {
     ...claim,
     key: index,
     id: claim.claim_id ? claim.claim_id.toString() : "",
-    status: claim.claim_id ? claim.claim_id : "",
+    status: claim.claim_status ? claim.claim_status : "",
   }));
   return (
     <div className={styles.container}>

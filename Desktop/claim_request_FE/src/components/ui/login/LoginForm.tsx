@@ -16,9 +16,10 @@ async function loginUser(values: {
   if (response.status === 200) {
     const data = response.data as {
       tokens: { access: { token: string } };
-      user: { user_id: string; role_id: number };
+      user: { user_id: string; role_id: number; username: string };
     };
     localStorage.setItem("access_token", data.tokens.access.token);
+    localStorage.setItem("username", data.user.username);
     localStorage.setItem("user_id", data.user.user_id);
     localStorage.setItem("role_id", data.user.role_id.toString());
   }
