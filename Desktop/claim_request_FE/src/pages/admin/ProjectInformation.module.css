@@ -1,13 +1,16 @@
-.update_button {
-    background-color: orange;
-    color: white;
-    padding: 0.5rem;
-    border-radius: 5px;
-  }
-  .delete_button {
-    background-color: red;
-    color: white;
-    padding: 0.5rem;
-    border-radius: 5px;
-  }
-  
+.button_container {
+  display: flex;
+  gap: 8px;
+}
+
+.icon_button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  transition: transform 0.2s ease-in-out;
+}
+
+.icon_button:hover {
+  transform: scale(1.1);
+}

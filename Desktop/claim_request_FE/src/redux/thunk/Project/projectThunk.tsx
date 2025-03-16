@@ -16,8 +16,6 @@ export const fetchAllProjectAsync = createAsyncThunk<Project[], string>(
         `/projects?page=${page}&limit=5`
       );
 
-      
-
       if (!response.data.data || !Array.isArray(response.data.data)) {
         throw new Error('Invalid data format from API');
       }

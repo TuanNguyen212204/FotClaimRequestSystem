@@ -33,8 +33,8 @@ const UpdateProject: React.FC = () => {
           setFormData({
             project_id: projectData.project_id,
             project_name: projectData.project_name,
-            start_date: projectData.start_date.split("T")[0], // Lấy chỉ phần ngày
-            end_date: projectData.end_date.split("T")[0], // Lấy chỉ phần ngày
+            start_date: projectData.start_date.split("T")[0], 
+            end_date: projectData.end_date.split("T")[0], 
             project_status: projectData.project_status,
           });
         }
@@ -53,9 +53,8 @@ const UpdateProject: React.FC = () => {
     if (!projectId) return;
 
     try {
-      // Chuyển đổi dữ liệu theo format API yêu cầu
       const apiData = {
-        project_id: projectId, // Thêm project_id vào request
+        project_id: projectId, 
         project_name: formData.project_name,
         start_date: new Date(formData.start_date).toISOString(),
         end_date: new Date(formData.end_date).toISOString(),

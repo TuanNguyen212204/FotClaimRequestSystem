@@ -2,7 +2,6 @@ import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
 import { rootReducer } from "./rootReducer";
 import { thunk } from "redux-thunk";
-// import projectReducer from './slice/projectSlice';
 
 export const store = configureStore({
   reducer :  rootReducer ,

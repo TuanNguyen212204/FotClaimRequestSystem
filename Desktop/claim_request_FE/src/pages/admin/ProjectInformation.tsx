@@ -17,6 +17,8 @@ import { useNavigate } from "react-router-dom";
 import { PATH } from "@constant/config";
 import { ApiResponseNoGeneric } from "@/types/ApiResponse";
 import { Project } from "@/types/Project";
+import { Trash2, FilePen } from "lucide-react";
+import { confirmModal } from "@/components/ui/modal/Modal";
 
 const ProjectInformation: React.FC = () => {
   const navigate = useNavigate();
@@ -87,14 +89,24 @@ const ProjectInformation: React.FC = () => {
   };
   const handleDelete = async (id?: string) => {
     if (!id) return;
-    try {
-      await deleteProject(id);
-      console.log("Deleted project with ID:", id);
-      dispatch(fetchAllProjectAsync(currentPage.toString()));
-    } catch (error) {
-      console.error("Error deleting project:", error);
-    }
+  
+    confirmModal({
+      title: "Do you want to delete this project?",
+      onOk: async () => {
+        try {
+          await deleteProject(id);
+          console.log("Deleted project with ID:", id);
+          dispatch(fetchAllProjectAsync(currentPage.toString()));
+        } catch (error) {
+          console.error("Error deleting project:", error);
+        }
+      },
+      onCancel: () => {
+        console.log("Delete cancelled");
+      },
+    });
   };
+  
 
   const handleUpdate = (id?: string) => {
     if (!id) return;
@@ -114,18 +126,20 @@ const ProjectInformation: React.FC = () => {
       title: "Action",
       cell: ({ value }) => {
         return (
-          <div>
+          <div className={styles.button_container}>
             <button
-              className={styles.delete_button}
-              onClick={() => handleDelete(value as string)}
+              className={styles.icon_button}
+              onClick={() => handleUpdate(value as string)}
+              title="Update"
             >
-              Delete
+              <FilePen size={20} />
             </button>
             <button
-              className={styles.update_button}
-              onClick={() => handleUpdate(value as string)}
+              className={styles.icon_button}
+              onClick={() => handleDelete(value as string)}
+              title="Delete"
             >
-              Update
+              <Trash2 size={20} />
             </button>
           </div>
         );
