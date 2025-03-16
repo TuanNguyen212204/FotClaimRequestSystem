@@ -9,15 +9,15 @@ import {
 import styles from "./Table.module.css";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import PaginationForTable from "./PaginationForTable";
-import { X } from "lucide-react";
 import React from "react";
 import { LoadingProvider } from "../Loading/LoadingContext";
 import LoadingOverlay from "../Loading/LoadingOverlay";
-export type Column = {
+import { Plus } from "lucide-react";
+export type Column<T> = {
   key?: string;
-  dataIndex: string;
+  dataIndex?: keyof T | string;
   title: string;
-  cell?: ({ value, record }: { value: unknown; record: unknown }) => ReactNode;
+  cell?: ({ value, record }: { value: any; record: T }) => ReactNode;
 };
 
 export type DataRecord = {
@@ -33,7 +33,7 @@ export type SortConfig = {
 };
 
 export type TableComponentProps<T extends DataRecord> = {
-  columns: Column[];
+  columns: Column<T>[];
   dataSource: T[];
   loading?: boolean;
   pagination?: boolean;
@@ -256,9 +256,13 @@ const TableComponent = forwardRef(
             >
               <button
                 className={styles.create_button}
-                onClick={() => onCreateButtonClick()}
+                onClick={() => onCreateButtonClick && onCreateButtonClick()}
               >
-                Create
+                <div style={{ marginTop: "5px" }}>
+                  <span>
+                    <Plus />
+                  </span>
+                </div>
               </button>
             </div>
           )}
@@ -329,7 +333,7 @@ const TableComponent = forwardRef(
                             {col.cell
                               ? col.cell({
                                   value: record[col.dataIndex as keyof T],
-                                  record: record[col.dataIndex as keyof T],
+                                  record: record,
                                 })
                               : String(record[col.dataIndex as keyof T])}
                           </Cell>

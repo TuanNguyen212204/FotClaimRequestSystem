@@ -15,12 +15,12 @@ createRoot(document.getElementById("root")!).render(
     <BrowserRouter>
       <Provider store={store}>
         <ReactQueryProvider>
-          <LoadingProvider>
-            <NotificationProvider>
-              <LoadingOverlay />
-              <App />
-            </NotificationProvider>
-          </LoadingProvider>
+          {/* <LoadingProvider> */}
+          <NotificationProvider>
+            {/* <LoadingOverlay /> */}
+            <App />
+          </NotificationProvider>
+          {/* </LoadingProvider> */}
         </ReactQueryProvider>
       </Provider>
     </BrowserRouter>

@@ -21,6 +21,8 @@
 .collapsed {
   width: 50px;
   padding: 10px;
+  transition: 0.3s ease;
+  overflow: hidden;
 }
 .collapsed.claimItem {
   width: 10px;
@@ -119,7 +121,7 @@
   border-radius: 5px;
   display: flex;
   align-items: center;
-  transition: background 0.3s;
+  transition: none !important;
 }
 .claimItem {
   padding: 8px;
@@ -129,7 +131,7 @@
   border-radius: 5px;
   display: flex;
   align-items: center;
-  transition: background 0.3s;
+  transition: none !important;
 }
 .claimItem:hover {
   background-color: #16a085;
@@ -229,6 +231,7 @@
 }
 .claimButton {
   color: white;
+  transition: none !important;
   padding-top: 5px;
 }
 .claimButtonCollapse {
@@ -236,10 +239,13 @@
 .claimButtonIngredient {
   display: flex;
   flex-direction: row;
+  transition: none !important;
 }
 .iconInClaimButton_1 {
   margin-top: 2px;
+  transition: none !important;
 }
 .iconInClaimButton_2 {
   margin-left: 5px;
+  transition: none !important;
 }
