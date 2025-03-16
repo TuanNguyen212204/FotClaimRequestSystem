@@ -291,10 +291,10 @@ const TableComponent = forwardRef(
                   </th>
                   {columns.map((col) => (
                     <th
-                      key={col.key || col.dataIndex}
+                      key={String(col.key || col.dataIndex)}
                       onClick={
                         sortConfig?.columnKey === col.dataIndex
-                          ? () => handleSort(col.dataIndex)
+                          ? () => handleSort(String(col.dataIndex))
                           : undefined
                       }
                     >
@@ -328,7 +328,7 @@ const TableComponent = forwardRef(
                         )}
                       </td>
                       {columns.map((col) => (
-                        <td key={col.key || col.dataIndex}>
+                        <td key={String(col.key || col.dataIndex)}>
                           <Cell>
                             {col.cell
                               ? col.cell({

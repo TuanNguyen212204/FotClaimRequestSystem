@@ -33,7 +33,7 @@ export const UpdateUser: React.FC = ({
       const userData = response.data.data[0];
       console.log(userData);
       setUser(userData);
-      reset(userData); // Gán dữ liệu cũ vào form
+      reset(userData);
     } catch (error) {
       console.error("Fetch user error: " + error);
     }
@@ -67,13 +67,21 @@ export const UpdateUser: React.FC = ({
   const handleCancel = () => {
     setOpenModal(false);
   };
+
   return (
     <div style={{ marginTop: "50px" }}>
-      <div className="max-w-lg mx-auto p-9 bg-white shadow-xl rounded-xl">
-        <button onClick={() => handleCancel()} className={styles.cancel_button}>
-          <X />
-        </button>
-        <h1 className="text-3xl font-bold text-gray-700 mb-6 text-center">
+      <div className="mx-auto p-8 bg-white shadow-xl rounded-xl">
+        <div>
+          <button
+            onClick={() => handleCancel()}
+            className={styles.cancel_button}
+          >
+            <div>
+              <X />
+            </div>
+          </button>
+        </div>
+        <h1 className="text-3xl font-bold text-blue-700 mb-6 text-center">
           Update User
         </h1>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
@@ -82,7 +90,14 @@ export const UpdateUser: React.FC = ({
               className="block text-sm font-medium text-gray-600"
               htmlFor="full_name"
             >
-              Full Name
+              <div className={styles.flex}>
+                <div className={styles.label_container}>
+                  <span>*</span>
+                </div>
+                <div>
+                  <span>Full Name</span>
+                </div>
+              </div>
             </label>
             <input
               disabled
@@ -101,7 +116,14 @@ export const UpdateUser: React.FC = ({
               className="block text-sm font-medium text-gray-600"
               htmlFor="email"
             >
-              Email
+              <div className={styles.flex}>
+                <div className={styles.label_container}>
+                  <span>*</span>
+                </div>
+                <div>
+                  <span>Email</span>
+                </div>
+              </div>
             </label>
             <input
               {...register("email")}
@@ -115,7 +137,14 @@ export const UpdateUser: React.FC = ({
               className="block text-sm font-medium text-gray-600"
               id="department"
             >
-              Department
+              <div className={styles.flex}>
+                <div className={styles.label_container}>
+                  <span>*</span>
+                </div>
+                <div>
+                  <span>Department</span>
+                </div>
+              </div>
             </label>
             <input
               id="department"
@@ -144,7 +173,14 @@ export const UpdateUser: React.FC = ({
               className="block text-sm font-medium text-gray-600"
               htmlFor="role_id"
             >
-              Role ID
+              <div className={styles.flex}>
+                <div className={styles.label_container}>
+                  <span>*</span>
+                </div>
+                <div>
+                  <span>Role ID</span>
+                </div>
+              </div>
             </label>
             <select
               id="role_id"
@@ -169,7 +205,14 @@ export const UpdateUser: React.FC = ({
               className="block text-sm font-medium text-gray-600"
               htmlFor="job_rank"
             >
-              Job Rank
+              <div className={styles.flex}>
+                <div className={styles.label_container}>
+                  <span>*</span>
+                </div>
+                <div>
+                  <span>Job Rank</span>
+                </div>
+              </div>
             </label>
             <input
               id="job_rank"

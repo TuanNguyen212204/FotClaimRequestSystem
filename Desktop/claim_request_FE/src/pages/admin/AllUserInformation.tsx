@@ -1,4 +1,4 @@
-import TableComponent from "@components/ui/Table/Table";
+import TableComponent, { SortConfig } from "@components/ui/Table/Table";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch } from "@redux/index.ts";
 import { useEffect, useState, useRef } from "react";
@@ -13,7 +13,7 @@ import styles from "./AllUserInformation.module.css";
 import httpClient from "@/constant/apiInstance";
 import { useNavigate } from "react-router-dom";
 import { PATH } from "@constant/config";
-import { ApiResponseNoGeneric } from "@/types/ApiResponse";
+import { ApiResponse, ApiResponseNoGeneric } from "@/types/ApiResponse";
 import { toast } from "react-toastify";
 import Modal from "@/components/ui/modal/Modal";
 import { X } from "lucide-react";
@@ -62,6 +62,8 @@ const AllUserInformation: React.FC = () => {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [openUpdate, setOpenUpdate] = useState<boolean>(false);
   const [userID, setUserID] = useState<string>("");
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -115,10 +117,35 @@ const AllUserInformation: React.FC = () => {
     setUserID(id ? id : "");
     setOpenUpdate(true);
   };
+  const handleFetchUserNameByID = async (id: string) => {
+    try {
+      const response = await httpClient.get<ApiResponse<User[]>>(
+        `/admin/staff/${id}`
+      );
+      setName(response.data.data[0].username);
+      setEmail(response.data.data[0].email);
+      return;
+    } catch (error: any) {
+      console.error("Error get user by id:", error);
+    }
+  };
+  const sortConfig: SortConfig = {
+    columnKey: "full_name",
+    order: "asc",
+  };
   const handleDeleteConfirm = (userId: string) => {
+    handleFetchUserNameByID(userId);
     Modal.confirm({
       title: "Do you want to delete this user?",
-      children: `User ID: ${userId} will be deleted`,
+      children: (
+        <div>
+          <span style={{ color: "green" }}>Username: </span> {name} <br />
+          <span style={{ color: "green" }}>Email:</span> {email} <br /> will be{" "}
+          {""}
+          <span style={{ color: "red" }}> Deleted</span>
+        </div>
+      ),
+
       onOk() {
         handleDelete(userId); // Gọi hàm xóa người dùng
       },
@@ -226,7 +253,8 @@ const AllUserInformation: React.FC = () => {
       )}
 
       <div>
-        <TableComponent
+        <TableComponent<User>
+          // sortConfig={sortConfig}
           ref={tableRef}
           isHaveCheckbox={true}
           columns={columns}

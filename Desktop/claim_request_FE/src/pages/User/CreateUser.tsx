@@ -32,6 +32,7 @@ export const CreateUser: React.FC = ({
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<User>();
 
@@ -52,8 +53,9 @@ export const CreateUser: React.FC = ({
         requestBody
       );
       if (response.status === 200) {
-        await dispatch(fetchAllUserAsync(totalPage.toString()));
         toast.success("Create user successfully!");
+        reset();
+        setLoading(false);
         navigate(PATH.allUserInformation);
       }
     } catch (error) {
@@ -63,8 +65,6 @@ export const CreateUser: React.FC = ({
         toast.error("Unexpected error", error);
       }
       alert("Failed to create user. Please try again.");
-    } finally {
-      setLoading(false);
     }
   };
   const handleCancel = () => {
@@ -84,12 +84,16 @@ export const CreateUser: React.FC = ({
       </div>
       <div style={{ marginTop: "50px" }}>
         <div className=" mx-auto p-8 bg-white shadow-xl rounded-xl">
-          <button
-            onClick={() => handleCancel()}
-            className={styles.cancel_button}
-          >
-            <X />
-          </button>
+          <div>
+            <button
+              onClick={() => handleCancel()}
+              className={styles.cancel_button}
+            >
+              <div>
+                <X />
+              </div>
+            </button>
+          </div>
           <h1 className="text-3xl font-bold text-green-700 mb-6 text-center">
             Create User
           </h1>
@@ -100,9 +104,9 @@ export const CreateUser: React.FC = ({
                 className="block text-sm font-medium text-gray-600"
                 htmlFor="full_name"
               >
-                <div style={{ display: "flex" }}>
-                  <div style={{ paddingTop: "2px", color: "red" }}>
-                    <span style={{ paddingTop: "2px" }}>*</span>
+                <div className={styles.flex}>
+                  <div className={styles.label_container}>
+                    <span>*</span>
                   </div>
                   <div>
                     <span>Full Name</span>
@@ -135,9 +139,9 @@ export const CreateUser: React.FC = ({
                 className="block text-sm font-medium text-gray-600"
                 htmlFor="email"
               >
-                <div style={{ display: "flex" }}>
-                  <div style={{ paddingTop: "2px", color: "red" }}>
-                    <span style={{ paddingTop: "2px" }}>*</span>
+                <div className={styles.flex}>
+                  <div className={styles.label_container}>
+                    <span>*</span>
                   </div>
                   <div>
                     <span>Email</span>
@@ -163,9 +167,9 @@ export const CreateUser: React.FC = ({
                 className="block text-sm font-medium text-gray-600"
                 htmlFor="department"
               >
-                <div style={{ display: "flex" }}>
-                  <div style={{ paddingTop: "2px", color: "red" }}>
-                    <span style={{ paddingTop: "2px" }}>*</span>
+                <div className={styles.flex}>
+                  <div className={styles.label_container}>
+                    <span>*</span>
                   </div>
                   <div>
                     <span>Department</span>
@@ -199,9 +203,9 @@ export const CreateUser: React.FC = ({
                 className="block text-sm font-medium text-gray-600"
                 htmlFor="salary"
               >
-                <div style={{ display: "flex" }}>
-                  <div style={{ paddingTop: "2px", color: "red" }}>
-                    <span style={{ paddingTop: "2px" }}>*</span>
+                <div className={styles.flex}>
+                  <div className={styles.label_container}>
+                    <span>*</span>
                   </div>
                   <div>
                     <span>Salary</span>
@@ -230,9 +234,9 @@ export const CreateUser: React.FC = ({
                 className="block text-sm font-medium text-gray-600"
                 htmlFor="role_id"
               >
-                <div style={{ display: "flex" }}>
-                  <div style={{ paddingTop: "2px", color: "red" }}>
-                    <span style={{ paddingTop: "2px" }}>*</span>
+                <div className={styles.flex}>
+                  <div className={styles.label_container}>
+                    <span>*</span>
                   </div>
                   <div>
                     <span>Role ID</span>
@@ -262,9 +266,9 @@ export const CreateUser: React.FC = ({
                 className="block text-sm font-medium text-gray-600"
                 htmlFor="job_rank"
               >
-                <div style={{ display: "flex" }}>
-                  <div style={{ paddingTop: "2px", color: "red" }}>
-                    <span style={{ paddingTop: "2px" }}>*</span>
+                <div className={styles.flex}>
+                  <div className={styles.label_container}>
+                    <span>*</span>
                   </div>
                   <div>
                     <span>Job Rank</span>
