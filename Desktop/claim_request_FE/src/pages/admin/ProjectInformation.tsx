@@ -1,7 +1,7 @@
 import TableComponent from "@components/ui/Table/Table";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch } from "@redux/index.ts";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   selectAllProject,
   selectTotalPageOfAllProject,
@@ -157,7 +157,7 @@ const ProjectInformation: React.FC = () => {
     <div>
       <TableComponent
         // ref={tableRef}
-        isHaveCheckbox={true}
+        // isHaveCheckbox={true}
         columns={columns}
         dataSource={dataSource}
         loading={loading}
