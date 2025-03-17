@@ -62,7 +62,7 @@ const PaidClaims: React.FC = () => {
     },
     { 
       key: 'total_working_hours', 
-      dataIndex: 'total_working_hours', 
+      dataIndex: 'working_hours', 
       title: 'Total Hours',
       cell: ({ value }) => `${value} hours`,
     },

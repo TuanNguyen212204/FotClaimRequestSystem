@@ -7,9 +7,9 @@
 /* Sidebar */
 .sidebar {
   width: 250px;
-  background-color: #2c3e50;
+  background-color: #213555;
   color: white;
-  padding: 20px;
+  padding: 30px;
   height: 100vh;
   position: fixed;
   left: 0;
@@ -19,10 +19,17 @@
 }
 
 .collapsed {
-  width: 100px;
+  width: 50px;
+  padding: 10px;
+}
+.collapsed.claimItem {
+  width: 10px;
 }
 
 .header {
+  margin-left: 77px;
+}
+.headerCollapse {
   display: flex;
   justify-content: flex-end;
 }
@@ -33,7 +40,8 @@
   color: white;
   font-size: 20px;
   cursor: pointer;
-  margin-top: 50px;
+  margin-top: 80px;
+  margin-left: 150px;
 }
 
 .logo {
@@ -58,18 +66,44 @@
   cursor: pointer;
   width: 100%;
 }
-
-.menu {
-  margin-bottom: 20px;
+.createClaimCollapse {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 8px;
+  margin: 15px 0px;
+  cursor: pointer;
+  font-size: 10px;
+  width: 100%;
 }
 
+/* .menu {
+  margin-bottom: 20px;
+} */
+
 .claimHeader {
+  color: white;
   display: flex;
   justify-content: space-between;
   cursor: pointer;
   font-size: 16px;
+  font-weight: 900;
+  text-align: center;
 }
-
+.menuText {
+  font-size: 20px;
+  font-weight: 900;
+  margin-left: 82px;
+}
+.menuTextCollapse {
+  font-size: 20px;
+  font-weight: 900;
+  margin-left: 5px;
+}
+.menuIcon {
+  margin-left: 10px;
+  margin-top: 2px;
+}
 .claimList {
   transition: max-height 0.3s ease;
   overflow: hidden;
@@ -77,21 +111,32 @@
   padding: 0;
 }
 
-.claimItem {
-  padding: 10px;
+.claimItemCollapse {
+  padding: 4px;
   cursor: pointer;
   background-color: #34495e;
-  margin: 5px 0;
+  margin: 15px 0;
   border-radius: 5px;
   display: flex;
   align-items: center;
   transition: background 0.3s;
 }
-
-.claimItem:hover {
-  background-color: #1abc9c;
+.claimItem {
+  padding: 8px;
+  cursor: pointer;
+  background-color: #34495e;
+  margin: 20px 0;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  transition: background 0.3s;
 }
-
+.claimItem:hover {
+  background-color: #16a085;
+}
+.claimItemCollapse:hover {
+  background-color: #16a085;
+}
 .claimItem .icon {
   margin-right: 10px;
 }
@@ -102,6 +147,9 @@
 
 .active {
   background-color: #16a085;
+}
+.noActive {
+  background-color: none;
 }
 
 /* Content Area */
@@ -136,10 +184,24 @@
   border: none;
   padding: 10px;
   cursor: pointer;
-  width: 80%;
+  width: 50%;
   position: absolute;
   bottom: 70px;
   left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  border-radius: 5px;
+}
+.logoutCollapse {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  width: 70%;
+  position: absolute;
+  bottom: 70px;
+  left: 43%;
   transform: translateX(-50%);
   text-align: center;
   border-radius: 5px;
@@ -167,4 +229,17 @@
 }
 .claimButton {
   color: white;
+  padding-top: 5px;
+}
+.claimButtonCollapse {
+}
+.claimButtonIngredient {
+  display: flex;
+  flex-direction: row;
+}
+.iconInClaimButton_1 {
+  margin-top: 2px;
+}
+.iconInClaimButton_2 {
+  margin-left: 5px;
 }

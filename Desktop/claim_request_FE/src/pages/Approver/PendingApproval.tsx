@@ -1,6 +1,12 @@
-import TableComponent, { Column, DataRecord } from "@/components/ui/Table/Table";
+import TableComponent, {
+  Column,
+  DataRecord,
+} from "@/components/ui/Table/Table";
 import { useEffect, useState } from "react";
-import { selectAllPending, selectAllPendingTotalPages } from "@/redux/selector/pendingSelector";
+import {
+  selectAllPending,
+  selectAllPendingTotalPages,
+} from "@/redux/selector/pendingSelector";
 import httpClient from "@/constant/apiInstance.ts";
 import { CheckIcon, X, CheckCircle2, XCircle } from "lucide-react";
 import styles from "@/pages/Approver/PendingApproval.module.css";
@@ -10,8 +16,6 @@ import { AppDispatch } from "@/redux";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllPendingClaimAsync } from "@/redux/thunk/Claim/claimThunk";
 import { toast } from "react-toastify";
-
-
 
 // interface claimList {
 //   claim_id?: string;
@@ -34,21 +38,23 @@ export const PendingComponent: React.FC = () => {
 
   useEffect(() => {
     setLoading(true);
-    dispatch(fetchAllPendingClaimAsync({
-      page: currentPage.toString(),
-      limit: limit.toString(),
-    })).finally(() => setLoading(false));
+    dispatch(
+      fetchAllPendingClaimAsync({
+        page: currentPage.toString(),
+        limit: limit.toString(),
+      })
+    ).finally(() => setLoading(false));
   }, [currentPage]);
-
-
 
   const handleApproveClaim = async (claimId: string) => {
     try {
       await httpClient.post(`/approvers/${claimId}/approve-claim`, {});
-      dispatch(fetchAllPendingClaimAsync({
-        page: currentPage.toString(),
-        limit: limit.toString(),
-      }));
+      dispatch(
+        fetchAllPendingClaimAsync({
+          page: currentPage.toString(),
+          limit: limit.toString(),
+        })
+      );
       toast.success("Claim approved successfully!");
       window.confirm("Are you sure you want to approve this claim?");
     } catch (error) {
@@ -59,11 +65,13 @@ export const PendingComponent: React.FC = () => {
 
   const handleRejectClaim = async (claimId: string) => {
     try {
-      await httpClient.post(`/approvers/${claimId}/rejected-claim`, {});
-      dispatch(fetchAllPendingClaimAsync({
-        page: currentPage.toString(),
-        limit: limit.toString(),
-      }));
+      await httpClient.post(`/approvers/${claimId}/reject-claim`, {});
+      dispatch(
+        fetchAllPendingClaimAsync({
+          page: currentPage.toString(),
+          limit: limit.toString(),
+        })
+      );
       toast.success("Claim rejected successfully!");
       window.confirm("Are you sure you want to reject this claim?");
     } catch (error) {
@@ -119,12 +127,16 @@ export const PendingComponent: React.FC = () => {
       cell: ({ value }) => (
         <div className={styles.actions}>
           <Tooltip text="Approve" position="top">
-            <CheckCircle2 className={styles.iconApprove}
-              onClick={() => handleApproveClaim(value as string)} />
+            <CheckCircle2
+              className={styles.iconApprove}
+              onClick={() => handleApproveClaim(value as string)}
+            />
           </Tooltip>
           <Tooltip text="Reject" position="top">
-            <XCircle className={styles.iconReject}
-              onClick={() => handleRejectClaim(value as string)} />
+            <XCircle
+              className={styles.iconReject}
+              onClick={() => handleRejectClaim(value as string)}
+            />
           </Tooltip>
         </div>
       ),
@@ -151,6 +163,7 @@ export const PendingComponent: React.FC = () => {
         <Link to="/pending-claim">Pending Approval</Link>
       </nav>
       <TableComponent
+        isHaveCheckbox={true}
         columns={columns}
         dataSource={dataSource}
         loading={loading}

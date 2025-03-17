@@ -8,13 +8,13 @@ function ConfirmModal() {
     confirm({
       title: "Do you want to delete these items?",
       onOk() {
-        console.log("Yes");
+        console.log("OK");
       },
       onCancel() {
         console.log("Cancel");
       },
     }).then((result) => {
-      console.log("Confirm: ", result ? "Yes" : "Cancel");
+      console.log("tui đã chọn", result ? "OK" : "Cancel");
     });
   };
 
