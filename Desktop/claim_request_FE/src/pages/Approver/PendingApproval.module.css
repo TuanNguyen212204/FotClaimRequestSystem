@@ -110,6 +110,17 @@
   transform: scale(1.2);
 }
 
+.iconSearch {
+  cursor: pointer;
+  color: #6b7280;
+  transition: transform 0.2s ease-in-out, color 0.2s;
+}
+
+.iconSearch:hover {
+  color: #212121;
+  transform: scale(1.2);
+}
+
 .pagination {
   display: flex;
   justify-content: end;

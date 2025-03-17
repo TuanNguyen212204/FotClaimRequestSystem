@@ -8,21 +8,21 @@ import {
   selectAllPendingTotalPages,
 } from "@/redux/selector/pendingSelector";
 import httpClient from "@/constant/apiInstance.ts";
-import { CheckCircle2, XCircle, ArrowLeftCircle } from "lucide-react";
+import { FileSearchIcon ,CheckCircle2, XCircle, ArrowLeftCircle } from "lucide-react";
 import styles from "@/pages/Approver/PendingApproval.module.css";
-import { Link, Navigate } from "react-router-dom";
+// import { Link, Navigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
 import { AppDispatch } from "@/redux";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllPendingClaimAsync } from "@/redux/thunk/Claim/claimThunk";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 import Modal from "@/components/ui/modal/Modal";
 import StatusTag, { StatusType } from "@/components/ui/StatusTag/StatusTag";
 import { Claim } from "../../types/Claim";
 
 export const PendingComponent: React.FC = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const claimList = useSelector(selectAllPending);
   const totalPages = useSelector(selectAllPendingTotalPages);
@@ -211,6 +211,9 @@ export const PendingComponent: React.FC = () => {
       title: "",
       cell: ({ value }) => (
         <div className={styles.actions}>
+          <Tooltip text="File Search" position="top">
+            <FileSearchIcon className={styles.iconSearch} />
+          </Tooltip>
           <Tooltip text="Approve" position="top">
             <CheckCircle2
               className={styles.iconApprove}
