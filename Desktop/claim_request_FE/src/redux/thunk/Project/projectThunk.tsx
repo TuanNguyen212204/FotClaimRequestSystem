@@ -13,7 +13,7 @@ export const fetchAllProjectAsync = createAsyncThunk<Project[], string>(
       console.log("page", page);
       
       const response = await httpClient.get<ApiResponse<Project[]>>(
-        `/projects?page=${page}&limit=5`
+        `/projects?page=${page}&limit=10`
       );
 
       if (!response.data.data || !Array.isArray(response.data.data)) {
@@ -35,11 +35,11 @@ export const fetchTotalPage = createAsyncThunk<number, { page: number }>(
     try {
       await delay(1000);
       const response = await httpClient.get<ApiResponse<Project[]>>(
-        `/projects?page=${page}&limit=5`
+        `/projects?page=${page}&limit=10`
       );
       console.log("response", response.data);
       console.log("total Page:",response.data.totalPages);
-      return response.data.totalPages; // Đúng key "totalPages"
+      return response.data.totalPages; 
     } catch (error) {
       console.error("Fetch Project error " + error);
       throw error;

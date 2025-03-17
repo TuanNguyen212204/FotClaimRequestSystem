@@ -61,15 +61,15 @@ const ProjectInformation: React.FC = () => {
   const dataSource: DataRecord[] = Array.isArray(project)
     ? project.map((project: Project, index: number) => ({
         key: index,
-        projectID: project.projectID || project.project_id,
-        projectName: project.projectName || project.project_name,
+        projectID: project.project_id,
+        projectName: project.project_name,
         startDate: new Date(
-          project.startDate || project.start_date
+          project.start_date
         ).toLocaleDateString(),
         endDate: new Date(
-          project.endDate || project.end_date
+          project.end_date || project.end_date
         ).toLocaleDateString(),
-        projectStatus: project.projectStatus || project.project_status,
+        projectStatus:project.project_status,
       }))
     : [];
 
@@ -77,6 +77,7 @@ const ProjectInformation: React.FC = () => {
     console.log("Trang mới:", newPage);
     setCurrentPage(newPage);
   };
+
   const deleteProject = async (id: string) => {
     try {
       const response = await httpClient.delete<ApiResponseNoGeneric>(
@@ -87,6 +88,7 @@ const ProjectInformation: React.FC = () => {
       console.error("Delete project error " + error);
     }
   };
+
   const handleDelete = async (id?: string) => {
     if (!id) return;
   
@@ -150,6 +152,8 @@ const ProjectInformation: React.FC = () => {
   return (
     <div>
       <TableComponent
+        // ref={tableRef}
+        isHaveCheckbox={true}
         columns={columns}
         dataSource={dataSource}
         loading={loading}

@@ -12,6 +12,7 @@ import ClaimStatus from "@pages/Finance/ClaimStatus";
 import PaidClaims from "@pages/Finance/PaidClaims";
 import ProjectInformation from "@/pages/admin/ProjectInformation";
 import UpdateProject from "@/pages/admin/UpdateProject";
+import { CreateProject } from "@pages/Project/CreateProject";
 import StaffInformation from "@/pages/admin/StaffInformation";
 import Dashboard from "@/pages/admin/Dashboard";
 import CheckMail from "@components/ui/login/CheckMail";
@@ -214,6 +215,14 @@ const router: RouteObject[] = [
         element: (
           <Authorization role_id={[ROLE.ADMIN]}>
             <UpdateProject />
+          </Authorization>
+        ),
+      },
+      {
+        path: PATH.createProject,
+        element: (
+          <Authorization role_id={[ROLE.ADMIN]}>
+            <CreateProject />
           </Authorization>
         ),
       },

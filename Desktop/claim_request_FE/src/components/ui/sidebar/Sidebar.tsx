@@ -289,7 +289,7 @@ export const Sidebar = ({
                             <Smile size={20} />
                           </div>{" "}
                           <div className={styles.iconInClaimButton_2}>
-                            <span>Project Information</span>
+                            <span>Staff Information</span>
                           </div>
                         </div>
                       )}

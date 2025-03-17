@@ -12,7 +12,7 @@ const UpdateProject: React.FC = () => {
 
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
-    project_id: "",
+    // project_id: "",
     project_name: "",
     start_date: "",
     end_date: "",
@@ -27,11 +27,12 @@ const UpdateProject: React.FC = () => {
           `/projects/${projectId}`
         );
         console.log("Project Data:", response.data);
-
+        console.log("Project ID:", projectId);
+        
         const projectData = response.data;
         if (projectData) {
           setFormData({
-            project_id: projectData.project_id,
+            // project_id: projectData.project_id,
             project_name: projectData.project_name,
             start_date: projectData.start_date.split("T")[0], 
             end_date: projectData.end_date.split("T")[0], 
@@ -54,7 +55,7 @@ const UpdateProject: React.FC = () => {
 
     try {
       const apiData = {
-        project_id: projectId, 
+        // project_id: projectId, 
         project_name: formData.project_name,
         start_date: new Date(formData.start_date).toISOString(),
         end_date: new Date(formData.end_date).toISOString(),
@@ -62,22 +63,30 @@ const UpdateProject: React.FC = () => {
       };
 
       console.log("Sending update data:", apiData);
-
-      // Sửa lại endpoint update
-      const response = await httpClient.put<ApiResponse<Project>>(
-        `/projects/${projectId}`, // hoặc endpoint chính xác của bạn
+    
+      const response = await httpClient.patch<ApiResponse<Project>>(
+        `/projects/${projectId}`,
         apiData
-      );
+      );      
 
       if (response.data.httpStatus === 200) {
         console.log("Update successful:", response.data);
         navigate("/admin/projects");
       } else {
         console.error("Update failed:", response.data);
+        console.log("API Response:", response);
+        console.log("Response Status:", response.status);
+        console.log("Response Data:", response.data);
       }
-    } catch (error) {
-      console.error("Error updating project:", error);
-    }
+    } catch (error: any) {
+      if (error.response) {
+        console.error("API Error:", error.response.data);
+      } else if (error.request) {
+        console.error("No response received:", error.request);
+      } else {
+        console.error("Request setup error:", error.message);
+      }
+    }    
   };
 
   const handleChange = (
