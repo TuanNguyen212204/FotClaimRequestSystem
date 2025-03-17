@@ -85,7 +85,7 @@ const PaidClaims: React.FC = () => {
       </div>
 
       <TableComponent
-        columns={columns}
+        columns={columns as Column<DataRecord>[]}
         dataSource={claims.map((claim: ClaimData) => ({
           ...claim,
           key: claim.request_id // Add unique key for each row
