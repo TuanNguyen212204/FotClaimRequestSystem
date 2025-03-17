@@ -1,4 +1,4 @@
-export interface Claim {
+export interface PendingClaim {
   request_id: string;
   user_id: string;
   start_date: string;
