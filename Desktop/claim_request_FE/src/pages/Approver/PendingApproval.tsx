@@ -90,19 +90,24 @@ export const PendingComponent: React.FC = () => {
   };
 
   const handleReturnClaim = async (request_id: string) => {
-    try {
-      await httpClient.post(`/approvers/${request_id}/return-claim`, {});
-      dispatch(
-        fetchAllPendingClaimAsync({
-          page: currentPage.toString(),
-          limit: limit.toString(),
-        })
-      );
-      toast.success("Claim returned successfully!");
-    } catch (error) {
-      console.log("Error returning claim: ", error);
-      toast.error("Failed to return claim.");
-    }
+    setModalContent({
+      title: "Are you sure you want to return this claim?",
+      onOk: async () => {
+        try {
+          await httpClient.post(`/approvers/${request_id}/return-claim`, {});
+          dispatch(
+            fetchAllPendingClaimAsync({
+              page: currentPage.toString(),
+              limit: limit.toString(),
+            })
+          );
+          toast.success("Claim returned successfully!");
+        } catch (error) {
+          console.log("Error returning claim: ", error);
+          toast.error("Failed to return claim.");
+        }
+      },
+    });
   };
 
   const handlePageChange = (newPage: number) => {
@@ -228,7 +233,7 @@ export const PendingComponent: React.FC = () => {
   }));
 
   return (
-    <div className={styles.container}>
+    <div>
       <h1 className={styles.title}>Pending Approval Claims</h1>
       {/* <nav className={styles.breadcrumb}>
         <Link to="/">My Claims</Link> &gt;{" "}
