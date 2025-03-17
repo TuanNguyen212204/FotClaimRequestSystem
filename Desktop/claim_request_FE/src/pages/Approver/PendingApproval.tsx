@@ -8,7 +8,7 @@ import {
   selectAllPendingTotalPages,
 } from "@/redux/selector/pendingSelector";
 import httpClient from "@/constant/apiInstance.ts";
-import { CheckIcon, X, CheckCircle2, XCircle } from "lucide-react";
+import { CheckCircle2, XCircle, ArrowLeftCircle } from "lucide-react";
 import styles from "@/pages/Approver/PendingApproval.module.css";
 import { Link, Navigate } from "react-router-dom";
 import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
@@ -19,12 +19,11 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import Modal from "@/components/ui/modal/Modal";
 import StatusTag, { StatusType } from "@/components/ui/StatusTag/StatusTag";
-import { Claim } from "@/types/Claim";
+// import { Claim } from "@/types/Claim";
 
 export const PendingComponent: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  // const [claimList, setClaimList] = useState<claimList[]>([]);
   const claimList = useSelector(selectAllPending);
   const totalPages = useSelector(selectAllPendingTotalPages);
   const [loading, setLoading] = useState<boolean>(false);
@@ -36,7 +35,6 @@ export const PendingComponent: React.FC = () => {
     onOk: () => void;
   } | null>(null);
 
-
   useEffect(() => {
     setLoading(true);
     dispatch(
@@ -47,21 +45,18 @@ export const PendingComponent: React.FC = () => {
     ).finally(() => setLoading(false));
   }, [currentPage]);
 
-  const handleReturn = () => {
-    navigate(`/claim`);
-  };
-
-
-  const handleApproveClaim = async (claimId: string) => {
+  const handleApproveClaim = async (request_id: string) => {
     setModalContent({
       title: "Are you sure you want to approve this claim?",
       onOk: async () => {
         try {
-          await httpClient.post(`/approvers/${claimId}/approve-claim`, {});
-          dispatch(fetchAllPendingClaimAsync({
-            page: currentPage.toString(),
-            limit: limit.toString(),
-          }));
+          await httpClient.post(`/approvers/${request_id}/approve-claim`, {});
+          dispatch(
+            fetchAllPendingClaimAsync({
+              page: currentPage.toString(),
+              limit: limit.toString(),
+            })
+          );
           toast.success("Claim approved successfully!");
         } catch (error) {
           console.log("Error approving claim: ", error);
@@ -72,17 +67,18 @@ export const PendingComponent: React.FC = () => {
     setModalVisible(true);
   };
 
-
-  const handleRejectClaim = async (claimId: string) => {
+  const handleRejectClaim = async (request_id: string) => {
     setModalContent({
       title: "Are you sure you want to reject this claim?",
       onOk: async () => {
         try {
-          await httpClient.post(`/approvers/${claimId}/reject-claim`, {});
-          dispatch(fetchAllPendingClaimAsync({
-            page: currentPage.toString(),
-            limit: limit.toString(),
-          }));
+          await httpClient.post(`/approvers/${request_id}/reject-claim`, {});
+          dispatch(
+            fetchAllPendingClaimAsync({
+              page: currentPage.toString(),
+              limit: limit.toString(),
+            })
+          );
           toast.success("Claim rejected successfully!");
         } catch (error) {
           console.log("Error rejecting claim: ", error);
@@ -91,6 +87,22 @@ export const PendingComponent: React.FC = () => {
       },
     });
     setModalVisible(true);
+  };
+
+  const handleReturnClaim = async (request_id: string) => {
+    try {
+      await httpClient.post(`/approvers/${request_id}/return-claim`, {});
+      dispatch(
+        fetchAllPendingClaimAsync({
+          page: currentPage.toString(),
+          limit: limit.toString(),
+        })
+      );
+      toast.success("Claim returned successfully!");
+    } catch (error) {
+      console.log("Error returning claim: ", error);
+      toast.error("Failed to return claim.");
+    }
   };
 
   const handlePageChange = (newPage: number) => {
@@ -110,7 +122,7 @@ export const PendingComponent: React.FC = () => {
     // {
     //   key: "request_id",
     //   dataIndex: "request_id",
-    //   title: "Request ID",  
+    //   title: "Request ID",
     // },
     {
       key: "user_id",
@@ -189,6 +201,18 @@ export const PendingComponent: React.FC = () => {
               onClick={() => handleRejectClaim(value as string)}
             />
           </Tooltip>
+          <Tooltip text="Return" position="top">
+            <ArrowLeftCircle
+              className={styles.iconReturn}
+              onClick={() => handleReturnClaim(value as string)}
+            />
+          </Tooltip>
+          {/* <button
+            className={styles.deleteButton}
+            onClick={() => handleReturnClaim(value as string)}
+          >
+            Return
+          </button> */}
         </div>
       ),
     },
@@ -200,7 +224,7 @@ export const PendingComponent: React.FC = () => {
     user_full_name: claim.user.full_name,
     user_salary: claim.user.salary,
     user_ot_rate: claim.user.ot_rate,
-    claim_status: "pending"
+    claim_status: "pending",
   }));
 
   return (
