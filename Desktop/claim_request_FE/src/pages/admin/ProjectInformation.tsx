@@ -19,6 +19,7 @@ import { ApiResponseNoGeneric } from "@/types/ApiResponse";
 import { Project } from "@/types/Project";
 import { Trash2, FilePen } from "lucide-react";
 import { confirmModal } from "@/components/ui/modal/Modal";
+import { toast } from "react-toastify";
 
 const ProjectInformation: React.FC = () => {
   const navigate = useNavigate();
@@ -91,20 +92,23 @@ const ProjectInformation: React.FC = () => {
 
   const handleDelete = async (id?: string) => {
     if (!id) return;
-  
     confirmModal({
       title: "Do you want to delete this project?",
+      children: `Project ID: ${id} will be deleted`,
       onOk: async () => {
         try {
           await deleteProject(id);
           console.log("Deleted project with ID:", id);
           dispatch(fetchAllProjectAsync(currentPage.toString()));
+          toast.success("Project deleted successfully!");
         } catch (error) {
           console.error("Error deleting project:", error);
+          toast.error("Failed to delete project. Please try again.");
         }
       },
       onCancel: () => {
         console.log("Delete cancelled");
+        toast.info("Project deletion cancelled.");
       },
     });
   };

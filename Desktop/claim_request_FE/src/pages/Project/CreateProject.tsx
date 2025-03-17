@@ -34,6 +34,7 @@ export const CreateProject: React.FC = () => {
       navigate(PATH.projectInformation);
     } catch (error) {
       console.error("Create project error:", error);
+      console.log("requestBody", requestBody);
       toast.error("Failed to create project. Please try again.");
     }
   };
@@ -183,8 +184,8 @@ export const CreateProject: React.FC = () => {
               className="w-full p-2 border border-gray-300 rounded-md"
           >
               <option value="">Select Status</option>
-              <option value="In Progress">In Progress</option>
-              <option value="Completed">Completed</option>
+              <option value="1">In Progress</option>
+              <option value="2">Completed</option>
           </select>
           </div>
 

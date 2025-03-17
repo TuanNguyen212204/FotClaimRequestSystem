@@ -4,6 +4,7 @@ import httpClient from "@/constant/apiInstance";
 import { ApiResponse } from "@/types/ApiResponse";
 import styles from "./UpdateProject.module.css";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 const UpdateProject: React.FC = () => {
   const navigate = useNavigate();
@@ -71,6 +72,7 @@ const UpdateProject: React.FC = () => {
 
       if (response.data.httpStatus === 200) {
         console.log("Update successful:", response.data);
+        toast("Project updated successfully!");
         navigate("/admin/projects");
       } else {
         console.error("Update failed:", response.data);
