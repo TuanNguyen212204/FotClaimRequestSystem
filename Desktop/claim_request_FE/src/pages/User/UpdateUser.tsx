@@ -60,6 +60,9 @@ export const UpdateUser: React.FC = ({
         requestBody
       );
       toast("User updated successfully!");
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
     } catch (error) {
       console.error("Update user error: " + error);
     }
