@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "@/redux";
-import { fetchProject, createClaim } from "@/redux/thunk/CreateClaim";
+import { fetchProjectByID, createClaim } from "@/redux/thunk/CreateClaim";
 export type TProjectInfo = {
   projectID: string;
   projectName: string;
@@ -42,11 +42,11 @@ const projectSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchProject.pending, (state) => {
+      .addCase(fetchProjectByID.pending, (state) => {
         state.loading = "pending";
       })
       .addCase(
-        fetchProject.fulfilled,
+        fetchProjectByID.fulfilled,
         (state, action: PayloadAction<ProjectListResponse>) => {
           state.projectList = action.payload.ProjectList.sort((a, b) =>
             a.projectName.localeCompare(b.projectName),
@@ -54,7 +54,7 @@ const projectSlice = createSlice({
           state.loading = "succeeded";
         },
       )
-      .addCase(fetchProject.rejected, (state) => {
+      .addCase(fetchProjectByID.rejected, (state) => {
         state.loading = "failed";
       })
       .addCase(createClaim.pending, (state) => {
