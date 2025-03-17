@@ -65,15 +65,15 @@ const UpdateProject: React.FC = () => {
 
       console.log("Sending update data:", apiData);
     
-      const response = await httpClient.patch<ApiResponse<Project>>(
+      const response = await httpClient.put<ApiResponse<Project>>(
         `/projects/${projectId}`,
         apiData
       );      
 
       if (response.data.httpStatus === 200) {
         console.log("Update successful:", response.data);
-        toast("Project updated successfully!");
-        navigate("/admin/projects");
+        toast.success("Project updated successfully!");
+        navigate("/project-information");
       } else {
         console.error("Update failed:", response.data);
         console.log("API Response:", response);
@@ -89,6 +89,11 @@ const UpdateProject: React.FC = () => {
         console.error("Request setup error:", error.message);
       }
     }    
+  };
+
+  const handleCancel = () => {
+    toast.info("Update canceled."); 
+    navigate("/project-information"); 
   };
 
   const handleChange = (
@@ -146,7 +151,7 @@ const UpdateProject: React.FC = () => {
           </select>
         </div>
         <button type="submit">Update Project</button>
-        <button type="button" onClick={() => navigate("/project-information")}>
+        <button type="button" onClick={handleCancel}>
           Cancel
         </button>
       </form>

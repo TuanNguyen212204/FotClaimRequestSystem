@@ -125,7 +125,12 @@ const ProjectInformation: React.FC = () => {
     { key: "projectName", dataIndex: "projectName", title: "Project Name" },
     { key: "startDate", dataIndex: "startDate", title: "Start Date" },
     { key: "endDate", dataIndex: "endDate", title: "End Date" },
-    { key: "projectStatus", dataIndex: "projectStatus", title: "Status" },
+    { 
+      key: "projectStatus", 
+      dataIndex: "projectStatus", 
+      title: "Status",
+      cell: ({ value }) => (value === 1 ? "Active" : "Inactive") 
+    },
     {
       key: "projectID",
       dataIndex: "projectID",
