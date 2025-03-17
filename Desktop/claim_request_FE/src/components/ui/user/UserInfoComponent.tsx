@@ -140,15 +140,10 @@ export const UserInfoComponent: React.FC = () => {
         requestBody.password = editedUser.password;
       }
 
-      console.log("Request Body:", requestBody);
-      console.log("User ID:", userId);
-
       const response = await httpClient.put(
         `/admin/staff/${userId}`,
         requestBody
       );
-
-      console.log("API Response:", response.data);
 
       dispatch(fetchUserByIdAsync());
       setIsEditing(false);
