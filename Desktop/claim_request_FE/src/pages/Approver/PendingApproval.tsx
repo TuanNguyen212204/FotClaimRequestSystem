@@ -2,7 +2,7 @@ import TableComponent, {
   Column,
   DataRecord,
 } from "@/components/ui/Table/Table";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   selectAllPending,
   selectAllPendingTotalPages,
@@ -19,7 +19,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import Modal from "@/components/ui/modal/Modal";
 import StatusTag, { StatusType } from "@/components/ui/StatusTag/StatusTag";
-// import { Claim } from "@/types/Claim";
+import { Claim } from "../../types/Claim";
 
 export const PendingComponent: React.FC = () => {
   const navigate = useNavigate();
@@ -45,7 +45,18 @@ export const PendingComponent: React.FC = () => {
     ).finally(() => setLoading(false));
   }, [currentPage]);
 
+  const tableRef = useRef<{ getSelectionData: () => DataRecord[] }>(null);
+  const [selectedData, setSelectedData] = useState<DataRecord[]>([]);
+
+  const handleGetSelectedData = () => {
+    if (tableRef.current) {
+      const a = tableRef.current.getSelectionData();
+      setSelectedData(a);
+    }
+  };
+
   const handleApproveClaim = async (request_id: string) => {
+    handleGetSelectedData();
     setModalContent({
       title: "Are you sure you want to approve this claim?",
       onOk: async () => {
@@ -65,9 +76,11 @@ export const PendingComponent: React.FC = () => {
       },
     });
     setModalVisible(true);
+    console.log("Selected data:", selectedData);
   };
 
   const handleRejectClaim = async (request_id: string) => {
+    handleGetSelectedData();
     setModalContent({
       title: "Are you sure you want to reject this claim?",
       onOk: async () => {
@@ -87,9 +100,11 @@ export const PendingComponent: React.FC = () => {
       },
     });
     setModalVisible(true);
+    console.log("Selected data:", selectedData);
   };
 
   const handleReturnClaim = async (request_id: string) => {
+    handleGetSelectedData();
     setModalContent({
       title: "Are you sure you want to return this claim?",
       onOk: async () => {
@@ -108,6 +123,8 @@ export const PendingComponent: React.FC = () => {
         }
       },
     });
+    setModalVisible(true);
+    console.log("Selected data:", selectedData);
   };
 
   const handlePageChange = (newPage: number) => {
@@ -123,7 +140,7 @@ export const PendingComponent: React.FC = () => {
     return `${day}/${month}/${year}`;
   };
 
-  const columns: Column<DataRecord>[] = [
+  const columns: Column<Claim>[] = [
     // {
     //   key: "request_id",
     //   dataIndex: "request_id",
