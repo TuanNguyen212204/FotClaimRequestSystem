@@ -14,16 +14,19 @@ import { ChevronLeft } from "lucide-react";
 import { ArrowUp } from "lucide-react";
 import { LogOut } from "lucide-react";
 import { Menu } from "lucide-react";
+import { MdPaid } from "react-icons/md";
+import { Compass } from "lucide-react";
+import { CircleX } from "lucide-react";
+import { Pencil } from "lucide-react";
+import { Plus } from "lucide-react";
 export const Sidebar = ({
-  isCollapsed,
   setIsCollapsed,
 }: {
-  isCollapsed: boolean;
   setIsCollapsed: (value: boolean) => void;
 }) => {
   const [selectedClaim, setSelectedClaim] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  const [isCollapsed1, setIsCollapsed1] = useState<boolean>(false);
+  const [isCollapsed1, setIsCollapsed1] = useState<boolean>(true);
   const [role, setRole] = useState("user");
   const location = useLocation();
   const currentPath = location.pathname;
@@ -115,43 +118,61 @@ export const Sidebar = ({
   };
 
   const toggleSidebar = () => {
-    setIsCollapsed1((prev) => !prev);
-    isCollapsed = !isCollapsed1;
-    console.log("isCollapsed1:", isCollapsed1);
+    setIsCollapsed1(!isCollapsed1);
     setIsCollapsed(!isCollapsed1);
-    console.log("Toggled Sidebar:", !isCollapsed);
-  };
-  const toggleCloseSidebar = () => {
-    setIsCollapsed1(false);
-    setIsCollapsed(false);
-    console.log("Sidebar closed");
+    console.log(isCollapsed1);
   };
 
   return (
     <div className={styles.container}>
-      {/* Sidebar */}
       <div
         className={`${styles.sidebar} ${isCollapsed1 ? styles.collapsed : ""}`}
       >
-        <div className={styles.header}>
-          <button onClick={toggleSidebar} className={styles.toggleButton}>
-            {isCollapsed1 ? <Menu /> : <Menu />}
-          </button>
+        <div
+          className={`${isCollapsed1 ? styles.headerCollapse : styles.header}`}
+        >
+          <div>
+            <button onClick={toggleSidebar} className={styles.toggleButton}>
+              <span style={{ marginLeft: "10px" }}>
+                <Menu />
+              </span>
+            </button>
+          </div>
         </div>
 
-        {/* <div className={styles.logo}>
-          <img src={fptlogo} alt="logo" className={styles.logoImage} />
-        </div> */}
-
-        {/* Bỏ nút Create Claims nếu vai trò là approve hoặc finance */}
         {role !== "approve" && role !== "finance" && role !== "admin" && (
           <button
             onClick={() => {
               handleSelect("createClaim");
             }}
-            className={styles.createClaim}
+            className={`${
+              isCollapsed1 ? styles.createClaimCollapse : styles.createClaim
+            }`}
           >
-            Create Claims
+            {!isCollapsed1 && (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  padding: "2px",
+                  marginTop: "2px",
+                }}
+              >
+                <div>
+                  <span className={styles.iconInClaimButton_1}>
+                    <Plus />
+                  </span>
+                </div>
+                <div className={styles.iconInClaimButton_2}>
+                  <span> Create Claims</span>
+                </div>
+              </div>
+            )}
+            {isCollapsed1 && (
+              <div>
+                <Plus size={20} />
+              </div>
+            )}
           </button>
         )}
 
@@ -197,22 +218,17 @@ export const Sidebar = ({
                       }`}
                     >
                       {!isCollapsed1 && (
-                        <div
-                          style={{
-                            display: "flex",
-                            flexDirection: "row",
-                          }}
-                        >
-                          <div style={{ marginTop: "2px" }}>
+                        <div className={styles.claimButtonIngredient}>
+                          <div className={styles.iconInClaimButton_1}>
                             <House size={20} />
                           </div>{" "}
-                          <div style={{ marginLeft: "5px" }}>
+                          <div className={styles.iconInClaimButton_2}>
                             <span>Dashboard</span>
                           </div>
                         </div>
                       )}
                       {isCollapsed1 && (
-                        <div style={{ width: "100%" }}>
+                        <div>
                           <House size={20} />
                         </div>
                       )}
@@ -231,17 +247,12 @@ export const Sidebar = ({
                   >
                     <button className={styles.claimButton}>
                       {!isCollapsed1 && (
-                        <div
-                          style={{
-                            display: "flex",
-                            flexDirection: "row",
-                          }}
-                        >
-                          <div>
+                        <div className={styles.claimButtonIngredient}>
+                          <div className={styles.iconInClaimButton_1}>
                             <BriefcaseBusiness size={20} />
                           </div>{" "}
-                          <div>
-                            <span>Project Information</span>
+                          <div className={styles.iconInClaimButton_2}>
+                            <span>Project</span>
                           </div>
                         </div>
                       )}
@@ -257,17 +268,12 @@ export const Sidebar = ({
                   >
                     <button className={styles.claimButton}>
                       {!isCollapsed1 && (
-                        <div
-                          style={{
-                            display: "flex",
-                            flexDirection: "row",
-                          }}
-                        >
-                          <div>
+                        <div className={styles.claimButtonIngredient}>
+                          <div className={styles.iconInClaimButton_1}>
                             <Smile size={20} />
                           </div>{" "}
-                          <div>
-                            <span>Project Information</span>
+                          <div className={styles.iconInClaimButton_2}>
+                            <span>Staff </span>
                           </div>
                         </div>
                       )}
@@ -289,16 +295,11 @@ export const Sidebar = ({
                   >
                     <button className={styles.claimButton}>
                       {!isCollapsed1 && (
-                        <div
-                          style={{
-                            display: "flex",
-                            flexDirection: "row",
-                          }}
-                        >
-                          <div>
-                            <MdOutlinePendingActions />
+                        <div className={styles.claimButtonIngredient}>
+                          <div className={styles.iconInClaimButton_1}>
+                            <MdOutlinePendingActions />z
                           </div>{" "}
-                          <div>
+                          <div className={styles.iconInClaimButton_2}>
                             <span>Pending Claim</span>
                           </div>
                         </div>
@@ -317,16 +318,11 @@ export const Sidebar = ({
                   >
                     <button className={styles.claimButton}>
                       {!isCollapsed1 && (
-                        <div
-                          style={{
-                            display: "flex",
-                            flexDirection: "row",
-                          }}
-                        >
-                          <div>
+                        <div className={styles.claimButtonIngredient}>
+                          <div className={styles.iconInClaimButton_1}>
                             <FaCheck />
-                          </div>{" "}
-                          <div>
+                          </div>
+                          <div className={styles.iconInClaimButton_2}>
                             <span>Approved Claim</span>
                           </div>
                         </div>
@@ -343,16 +339,11 @@ export const Sidebar = ({
                   >
                     <button className={styles.claimButton}>
                       {!isCollapsed1 && (
-                        <div
-                          style={{
-                            display: "flex",
-                            flexDirection: "row",
-                          }}
-                        >
-                          <div>
+                        <div className={styles.claimButtonIngredient}>
+                          <div className={styles.iconInClaimButton_1}>
                             <UserPen size={20} />
-                          </div>{" "}
-                          <div>
+                          </div>
+                          <div className={styles.iconInClaimButton_2}>
                             <span>Profile</span>
                           </div>
                         </div>
@@ -366,83 +357,136 @@ export const Sidebar = ({
                 <>
                   <li
                     key="approvedFinance"
-                    className={`${styles.claimItem} ${
+                    className={`${
+                      isCollapsed1 ? styles.claimItemCollapse : styles.claimItem
+                    } ${
                       selectedClaim === "approvedFinance" ? styles.active : ""
-                    }`}
+                    } `}
                     onClick={() => handleSelect("approvedFinance")}
                   >
                     <button className={styles.claimButton}>
-                      {!isCollapsed && "Approved Claim"}
+                      {!isCollapsed1 && (
+                        <div className={styles.claimButtonIngredient}>
+                          <div className={styles.iconInClaimButton_1}>
+                            <FaCheck size={20} />
+                          </div>
+                          <div className={styles.iconInClaimButton_2}>
+                            <span>Approved Claim</span>
+                          </div>
+                        </div>
+                      )}
+                      {isCollapsed1 && <FaCheck size={20} />}
                     </button>
                   </li>
                   <li
                     key="paid"
-                    className={`${styles.claimItem} ${
-                      selectedClaim === "paid" ? styles.active : ""
-                    }`}
+                    className={`${
+                      isCollapsed1 ? styles.claimItemCollapse : styles.claimItem
+                    } ${selectedClaim === "paid" ? styles.active : ""} `}
                     onClick={() => handleSelect("paid")}
                   >
                     <button className={styles.claimButton}>
-                      {!isCollapsed && "Paid"}
+                      {!isCollapsed1 && (
+                        <div className={styles.claimButtonIngredient}>
+                          <div className={styles.iconInClaimButton_1}>
+                            <MdPaid size={20} />
+                          </div>
+                          <div className={styles.iconInClaimButton_2}>
+                            <span>Paid Claim</span>
+                          </div>
+                        </div>
+                      )}
+                      {isCollapsed1 && <MdPaid size={20} />}
                     </button>
                   </li>
                 </>
               )}
               {role === "user" && (
                 <>
-                  {/* <li
-                    key="draft"
-                    className={`${styles.claimItem} ${
-                      selectedClaim === "draft" ? styles.active : ""
-                    }`}
-                    onClick={() => handleSelect("draft")}
-                  >
-                    <button className={styles.claimButton}>
-                      {!isCollapsed && "Draft"}
-                    </button>
-                  </li> */}
                   <li
                     key="draft"
-                    className={`${styles.claimItem} ${
-                      selectedClaim === "all" ? styles.active : ""
-                    }`}
+                    className={`${
+                      isCollapsed1 ? styles.claimItemCollapse : styles.claimItem
+                    } ${selectedClaim === "draft" ? styles.active : ""} `}
                     onClick={() => handleSelect("draft")}
                   >
                     <button className={styles.claimButton}>
-                      {!isCollapsed && "Draft"}
+                      {!isCollapsed1 && (
+                        <div className={styles.claimButtonIngredient}>
+                          <div className={styles.iconInClaimButton_1}>
+                            <Pencil />
+                          </div>{" "}
+                          <div className={styles.iconInClaimButton_2}>
+                            <span>Draft Claim</span>
+                          </div>
+                        </div>
+                      )}
+                      {isCollapsed1 && <Pencil size={20} />}
                     </button>
                   </li>
                   <li
                     key="all"
-                    className={`${styles.claimItem} ${
-                      selectedClaim === "all" ? styles.active : ""
-                    }`}
+                    className={`${
+                      isCollapsed1 ? styles.claimItemCollapse : styles.claimItem
+                    } ${selectedClaim === "all" ? styles.active : ""} `}
                     onClick={() => handleSelect("all")}
                   >
                     <button className={styles.claimButton}>
-                      {!isCollapsed && "All Claim"}
+                      {!isCollapsed1 && (
+                        <div className={styles.claimButtonIngredient}>
+                          <div className={styles.iconInClaimButton_1}>
+                            <Compass />
+                          </div>{" "}
+                          <div className={styles.iconInClaimButton_2}>
+                            <span>All Claim</span>
+                          </div>
+                        </div>
+                      )}
+                      {isCollapsed1 && <Compass size={20} />}
                     </button>
                   </li>
                   <li
                     key="pendingPage"
-                    className={`${styles.claimItem} ${
-                      selectedClaim === "pendingPage" ? styles.active : ""
-                    }`}
+                    className={`${
+                      isCollapsed1 ? styles.claimItemCollapse : styles.claimItem
+                    } ${selectedClaim === "pendingPage" ? styles.active : ""} `}
                     onClick={() => handleSelect("pendingPage")}
                   >
                     <button className={styles.claimButton}>
-                      {!isCollapsed && "Pending Claim"}
+                      {!isCollapsed1 && (
+                        <div className={styles.claimButtonIngredient}>
+                          <div className={styles.iconInClaimButton_1}>
+                            <MdOutlinePendingActions />
+                          </div>{" "}
+                          <div className={styles.iconInClaimButton_2}>
+                            <span>Pending Claim</span>
+                          </div>
+                        </div>
+                      )}
+                      {isCollapsed1 && <MdOutlinePendingActions size={20} />}
                     </button>
                   </li>
                   <li
                     key="approvedPage"
-                    className={`${styles.claimItem} ${
+                    className={`${
+                      isCollapsed1 ? styles.claimItemCollapse : styles.claimItem
+                    } ${
                       selectedClaim === "approvedPage" ? styles.active : ""
-                    }`}
+                    } `}
                     onClick={() => handleSelect("approvedPage")}
                   >
                     <button className={styles.claimButton}>
-                      {!isCollapsed && "Approved Claim"}
+                      {!isCollapsed1 && (
+                        <div className={styles.claimButtonIngredient}>
+                          <div className={styles.iconInClaimButton_1}>
+                            <FaCheck />
+                          </div>
+                          <div className={styles.iconInClaimButton_2}>
+                            <span>Approved Claim</span>
+                          </div>
+                        </div>
+                      )}
+                      {isCollapsed1 && <FaCheck size={20} />}
                     </button>
                   </li>
                   {/* <li
@@ -458,24 +502,46 @@ export const Sidebar = ({
                   </li> */}
                   <li
                     key="rejectedPage"
-                    className={`${styles.claimItem} ${
+                    className={`${
+                      isCollapsed1 ? styles.claimItemCollapse : styles.claimItem
+                    } ${
                       selectedClaim === "rejectedPage" ? styles.active : ""
-                    }`}
+                    } `}
                     onClick={() => handleSelect("rejectedPage")}
                   >
                     <button className={styles.claimButton}>
-                      {!isCollapsed && "Rejected Claim"}
+                      {!isCollapsed1 && (
+                        <div className={styles.claimButtonIngredient}>
+                          <div className={styles.iconInClaimButton_1}>
+                            <CircleX />
+                          </div>
+                          <div className={styles.iconInClaimButton_2}>
+                            <span>Rejected Claim</span>
+                          </div>
+                        </div>
+                      )}
+                      {isCollapsed1 && <CircleX size={20} />}
                     </button>
                   </li>
                   <li
                     key="profile"
-                    className={`${styles.claimItem} ${
-                      selectedClaim === "profile" ? styles.active : ""
-                    }`}
+                    className={`${
+                      isCollapsed1 ? styles.claimItemCollapse : styles.claimItem
+                    } ${selectedClaim === "profile" ? styles.active : ""} `}
                     onClick={() => handleSelect("profile")}
                   >
                     <button className={styles.claimButton}>
-                      {!isCollapsed && "Your Profile"}
+                      {!isCollapsed1 && (
+                        <div className={styles.claimButtonIngredient}>
+                          <div className={styles.iconInClaimButton_1}>
+                            <UserPen size={20} />
+                          </div>
+                          <div className={styles.iconInClaimButton_2}>
+                            <span>Profile</span>
+                          </div>
+                        </div>
+                      )}
+                      {isCollapsed1 && <UserPen />}
                     </button>
                   </li>
                 </>
@@ -483,12 +549,39 @@ export const Sidebar = ({
             </ul>
           }
         </div>
-        <button
-          className={`${isCollapsed1 ? styles.logoutCollapse : styles.logout}`}
-          onClick={() => handleLogOut()}
-        >
-          <LogOut size={20} />
-        </button>
+        <div>
+          <div>
+            {isCollapsed1 && (
+              <button
+                className={`${
+                  isCollapsed1 ? styles.logoutCollapse : styles.logout
+                }`}
+                onClick={() => handleLogOut()}
+              >
+                <LogOut size={20} />
+              </button>
+            )}
+            {!isCollapsed1 && (
+              <button
+                className={`${
+                  isCollapsed1 ? styles.logoutCollapse : styles.logout
+                }`}
+                onClick={() => handleLogOut()}
+              >
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <div>
+                    <span>Log Out</span>
+                  </div>
+                  <div style={{ marginLeft: "10px", marginTop: "2px" }}>
+                    <span>
+                      <LogOut size={20} />
+                    </span>
+                  </div>
+                </div>
+              </button>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );

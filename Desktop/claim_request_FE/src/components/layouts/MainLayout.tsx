@@ -4,15 +4,15 @@ import { Sidebar } from "../ui/sidebar/Sidebar";
 import styles from "./MainLayout.module.css"; // Dùng CSS Module để quản lý styles
 import { useState } from "react";
 export const MainLayout = () => {
-  const [isCollapse, setIsCollapsed] = useState<boolean>(false);
+  const [isCollapse, setIsCollapsed] = useState<boolean>(true);
   return (
     <div className={styles.layout}>
       <Header />
       <div className={styles.mainContent}>
-        <Sidebar isCollapse={isCollapse} setIsCollapsed={setIsCollapsed} />
+        <Sidebar setIsCollapsed={setIsCollapsed} />
         <div
           className={styles.outletContainer}
-          style={{ marginLeft: isCollapse ? "100px" : "300px" }}
+          style={{ marginLeft: isCollapse ? "60px" : "300px" }}
         >
           <Outlet />
         </div>

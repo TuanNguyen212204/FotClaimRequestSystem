@@ -10,12 +10,13 @@ import { PATH } from "@constant/config";
 import { X } from "lucide-react";
 import styles from "./UpdateUser.module.css";
 import { ToastContainer, toast } from "react-toastify";
-export const UpdateUser: React.FC = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const id = queryParams.get("id");
-
+export const UpdateUser: React.FC = ({
+  id,
+  setOpenModal,
+}: {
+  id: string;
+  setOpenModal: () => string;
+}) => {
   const {
     register,
     handleSubmit,
@@ -32,7 +33,7 @@ export const UpdateUser: React.FC = () => {
       const userData = response.data.data[0];
       console.log(userData);
       setUser(userData);
-      reset(userData); // Gán dữ liệu cũ vào form
+      reset(userData);
     } catch (error) {
       console.error("Fetch user error: " + error);
     }
@@ -47,7 +48,6 @@ export const UpdateUser: React.FC = () => {
   const onSubmit = async (data: User) => {
     if (!user) return;
     const requestBody = {
-      full_name: data.full_name || user.full_name,
       department: data.department || user.department,
       role_id: data.role_id || user.role_id,
       job_rank: data.job_rank || user.job_rank,
@@ -60,46 +60,49 @@ export const UpdateUser: React.FC = () => {
         requestBody
       );
       toast("User updated successfully!");
-
-      navigate(PATH.allUserInformation);
     } catch (error) {
       console.error("Update user error: " + error);
     }
   };
   const handleCancel = () => {
-    navigate(PATH.allUserInformation);
+    setOpenModal(false);
   };
+
   return (
     <div style={{ marginTop: "50px" }}>
-      <div className="max-w-lg mx-auto p-9 bg-white shadow-xl rounded-xl">
-        <button onClick={() => handleCancel()} className={styles.cancel_button}>
-          <X />
-        </button>
-        <h1 className="text-3xl font-bold text-gray-700 mb-6 text-center">
+      <div className="mx-auto p-8 bg-white shadow-xl rounded-xl">
+        <div>
+          <button
+            onClick={() => handleCancel()}
+            className={styles.cancel_button}
+          >
+            <div>
+              <X />
+            </div>
+          </button>
+        </div>
+        <h1 className="text-3xl font-bold text-blue-700 mb-6 text-center">
           Update User
         </h1>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-          {/* Full Name */}
-          <div>
+          <div className={styles.input_container}>
             <label
               className="block text-sm font-medium text-gray-600"
               htmlFor="full_name"
             >
-              Full Name
+              <div className={styles.flex}>
+                <div className={styles.label_container}>
+                  <span>*</span>
+                </div>
+                <div>
+                  <span>Full Name</span>
+                </div>
+              </div>
             </label>
             <input
+              disabled
               id="full_name"
-              {...register("full_name", {
-                required: "Full name is required",
-                minLength: {
-                  value: 3,
-                  message: "Must be at least 3 characters",
-                },
-                maxLength: {
-                  value: 100,
-                  message: "Must be at most 50 characters",
-                },
-              })}
+              {...register("full_name")}
               className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200"
             />
             {errors.full_name && (
@@ -108,12 +111,40 @@ export const UpdateUser: React.FC = () => {
               </p>
             )}
           </div>
-          <div>
+          <div className={styles.input_container}>
+            <label
+              className="block text-sm font-medium text-gray-600"
+              htmlFor="email"
+            >
+              <div className={styles.flex}>
+                <div className={styles.label_container}>
+                  <span>*</span>
+                </div>
+                <div>
+                  <span>Email</span>
+                </div>
+              </div>
+            </label>
+            <input
+              {...register("email")}
+              disabled
+              id="email"
+              className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200"
+            />
+          </div>
+          <div className={styles.input_container}>
             <label
               className="block text-sm font-medium text-gray-600"
               id="department"
             >
-              Department
+              <div className={styles.flex}>
+                <div className={styles.label_container}>
+                  <span>*</span>
+                </div>
+                <div>
+                  <span>Department</span>
+                </div>
+              </div>
             </label>
             <input
               id="department"
@@ -137,12 +168,19 @@ export const UpdateUser: React.FC = () => {
             )}
           </div>
 
-          <div>
+          <div className={styles.input_container}>
             <label
               className="block text-sm font-medium text-gray-600"
               htmlFor="role_id"
             >
-              Role ID
+              <div className={styles.flex}>
+                <div className={styles.label_container}>
+                  <span>*</span>
+                </div>
+                <div>
+                  <span>Role ID</span>
+                </div>
+              </div>
             </label>
             <select
               id="role_id"
@@ -162,12 +200,19 @@ export const UpdateUser: React.FC = () => {
             )}
           </div>
 
-          <div>
+          <div className={styles.input_container}>
             <label
               className="block text-sm font-medium text-gray-600"
               htmlFor="job_rank"
             >
-              Job Rank
+              <div className={styles.flex}>
+                <div className={styles.label_container}>
+                  <span>*</span>
+                </div>
+                <div>
+                  <span>Job Rank</span>
+                </div>
+              </div>
             </label>
             <input
               id="job_rank"

@@ -9,15 +9,15 @@ import {
 import styles from "./Table.module.css";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import PaginationForTable from "./PaginationForTable";
-import { X } from "lucide-react";
 import React from "react";
 import { LoadingProvider } from "../Loading/LoadingContext";
 import LoadingOverlay from "../Loading/LoadingOverlay";
-export type Column = {
+import { Plus } from "lucide-react";
+export type Column<T> = {
   key?: string;
-  dataIndex: string;
+  dataIndex?: keyof T | string;
   title: string;
-  cell?: ({ value, record }: { value: unknown; record: unknown }) => ReactNode;
+  cell?: ({ value, record }: { value: any; record: T }) => ReactNode;
 };
 
 export type DataRecord = {
@@ -33,7 +33,7 @@ export type SortConfig = {
 };
 
 export type TableComponentProps<T extends DataRecord> = {
-  columns: Column[];
+  columns: Column<T>[];
   dataSource: T[];
   loading?: boolean;
   pagination?: boolean;
@@ -173,6 +173,7 @@ const TableComponent = forwardRef(
         checkboxRef.current.indeterminate = someChecked && !allChecked;
       }
     }, [checkedItems, dataSource.length]);
+
     useImperativeHandle(ref, () => ({
       getSelectedData: () => {
         return dataSource.filter((record) => checkedItems.has(record.id || ""));
@@ -255,9 +256,13 @@ const TableComponent = forwardRef(
             >
               <button
                 className={styles.create_button}
-                onClick={() => onCreateButtonClick()}
+                onClick={() => onCreateButtonClick && onCreateButtonClick()}
               >
-                Create
+                <div style={{ marginTop: "5px" }}>
+                  <span>
+                    <Plus />
+                  </span>
+                </div>
               </button>
             </div>
           )}
@@ -286,10 +291,10 @@ const TableComponent = forwardRef(
                   </th>
                   {columns.map((col) => (
                     <th
-                      key={col.key || col.dataIndex}
+                      key={String(col.key || col.dataIndex)}
                       onClick={
                         sortConfig?.columnKey === col.dataIndex
-                          ? () => handleSort(col.dataIndex)
+                          ? () => handleSort(String(col.dataIndex))
                           : undefined
                       }
                     >
@@ -311,9 +316,9 @@ const TableComponent = forwardRef(
                 {filteredData.length > 0 ? (
                   paginatedData.map((record) => (
                     <tr key={record.key || record.id}>
-                      <td style={{ paddingTop: "0rem" }}>
+                      <td style={{ paddingTop: "3rem" }}>
                         {isHaveCheckbox && (
-                          <div>
+                          <div className={styles.checkbox}>
                             <input
                               type="checkbox"
                               checked={checkedItems.has(record.id || "")}
@@ -323,12 +328,12 @@ const TableComponent = forwardRef(
                         )}
                       </td>
                       {columns.map((col) => (
-                        <td key={col.key || col.dataIndex}>
+                        <td key={String(col.key || col.dataIndex)}>
                           <Cell>
                             {col.cell
                               ? col.cell({
                                   value: record[col.dataIndex as keyof T],
-                                  record: record[col.dataIndex as keyof T],
+                                  record: record,
                                 })
                               : String(record[col.dataIndex as keyof T])}
                           </Cell>
@@ -351,7 +356,7 @@ const TableComponent = forwardRef(
           </section>
 
           <div>
-            {pagination && totalPages >= 1 && (
+            {pagination && totalPages >= 1 && filteredData.length > 0 && (
               <PaginationForTable
                 currentPage={currentPage}
                 totalPages={totalPages}

@@ -163,6 +163,7 @@ export const PendingComponent: React.FC = () => {
         <Link to="/pending-claim">Pending Approval</Link>
       </nav>
       <TableComponent
+        isHaveCheckbox={true}
         columns={columns}
         dataSource={dataSource}
         loading={loading}

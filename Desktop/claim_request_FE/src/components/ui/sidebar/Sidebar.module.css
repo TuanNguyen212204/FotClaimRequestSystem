@@ -9,7 +9,7 @@
   width: 250px;
   background-color: #213555;
   color: white;
-  padding: 20px;
+  padding: 30px;
   height: 100vh;
   position: fixed;
   left: 0;
@@ -20,12 +20,18 @@
 
 .collapsed {
   width: 50px;
+  padding: 10px;
+  transition: 0.3s ease;
+  overflow: hidden;
 }
 .collapsed.claimItem {
   width: 10px;
 }
 
 .header {
+  margin-left: 77px;
+}
+.headerCollapse {
   display: flex;
   justify-content: flex-end;
 }
@@ -53,15 +59,23 @@
 .collapsed .logoImage {
   width: 50px;
 }
-.collapsed .logout {
-  left: 45%;
-}
+
 .createClaim {
   background-color: #4caf50;
   color: white;
   border: none;
   padding: 10px;
   cursor: pointer;
+  width: 100%;
+}
+.createClaimCollapse {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 8px;
+  margin: 15px 0px;
+  cursor: pointer;
+  font-size: 10px;
   width: 100%;
 }
 
@@ -107,7 +121,7 @@
   border-radius: 5px;
   display: flex;
   align-items: center;
-  transition: background 0.3s;
+  transition: none !important;
 }
 .claimItem {
   padding: 8px;
@@ -117,7 +131,7 @@
   border-radius: 5px;
   display: flex;
   align-items: center;
-  transition: background 0.3s;
+  transition: none !important;
 }
 .claimItem:hover {
   background-color: #16a085;
@@ -186,10 +200,10 @@
   border: none;
   padding: 10px;
   cursor: pointer;
-  width: 50%;
+  width: 70%;
   position: absolute;
   bottom: 70px;
-  left: 50%;
+  left: 43%;
   transform: translateX(-50%);
   text-align: center;
   border-radius: 5px;
@@ -217,6 +231,21 @@
 }
 .claimButton {
   color: white;
+  transition: none !important;
+  padding-top: 5px;
 }
 .claimButtonCollapse {
+}
+.claimButtonIngredient {
+  display: flex;
+  flex-direction: row;
+  transition: none !important;
+}
+.iconInClaimButton_1 {
+  margin-top: 2px;
+  transition: none !important;
+}
+.iconInClaimButton_2 {
+  margin-left: 5px;
+  transition: none !important;
 }
