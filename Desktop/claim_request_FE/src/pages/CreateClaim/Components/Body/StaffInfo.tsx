@@ -3,14 +3,14 @@ import staffInfoCss from "../../Claim.module.css";
 import Card from "../Card";
 
 interface IStaffInfoProps {
-  name: string;
-  department: string;
+  name: string | undefined;
+  department: string | undefined;
   staffID: string;
 }
 
 export default function StaffInfo({
-  name,
-  department,
+  name = "",
+  department = "",
   staffID,
 }: IStaffInfoProps): JSX.Element {
   return (
