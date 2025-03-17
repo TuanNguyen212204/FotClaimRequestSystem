@@ -48,7 +48,7 @@ export const fetchApprovedClaimsFinanceAsync = createAsyncThunk<
   try {
     await delay(1000);
     const response = await httpClient.get<ApiResponse<ClaimFinance[]>>(
-      "/finance/claims",
+      "/finance/claims/approved",
       { page: page, limit: limit }
     );
     return {

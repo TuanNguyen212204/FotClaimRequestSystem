@@ -20,13 +20,13 @@ import {
 //   claim_status?: string;
 //   project_name?: string;
 // }
-// const formatDateToDDMMYYYY = (date: string) => {
-//   const dateObj = new Date(date);
-//   const day = dateObj.getDate();
-//   const month = dateObj.getMonth() + 1;
-//   const year = dateObj.getFullYear();
-//   return `${day}/${month}/${year}`;
-// };
+const formatDateToDDMMYYYY = (date: string) => {
+  const dateObj = new Date(date);
+  const day = dateObj.getDate();
+  const month = dateObj.getMonth() + 1;
+  const year = dateObj.getFullYear();
+  return `${day}/${month}/${year}`;
+};
 
 export const ApprovedFinanceComponent: React.FC = () => {
   const navigate = useNavigate();
@@ -57,11 +57,11 @@ export const ApprovedFinanceComponent: React.FC = () => {
   };
 
   const columns: Column[] = [
-    {
-      key: "claim_id",
-      dataIndex: "claim_id",
-      title: "Claim ID",
-    },
+    // {
+    //   key: "request_id",
+    //   dataIndex: "request_id",
+    //   title: "Request ID",
+    // },
     {
       key: "full_name",
       dataIndex: "full_name",
@@ -73,10 +73,17 @@ export const ApprovedFinanceComponent: React.FC = () => {
       title: "Project Name",
     },
     {
-      key: "time_durations",
-      dataIndex: "time_durations",
-      title: "Time Durations",
-      cell: ({ value }) => `${value}`,
+      key: "time_duration",
+      dataIndex: "time_duration",
+      title: "Time Duration",
+    },
+    {
+      key: "total_hours",
+      dataIndex: "total_hours",
+      title: "Total Working Hours",
+      cell: ({ value }) => {
+        return `${value} hours`;
+      },
     },
     {
       key: "action",
@@ -90,14 +97,24 @@ export const ApprovedFinanceComponent: React.FC = () => {
       ),
     },
   ];
-  const dataSource: DataRecord[] = claimList.map((claim, index) => ({
-    ...claim,
-    key: index,
-    id: claim.claim_id ? claim.claim_id.toString() : "",
-    status: claim.claim_id ? claim.claim_id : "",
-    project_name: claim.project ? claim.project.project_name : "",
-    time_durations: claim.project ? claim.project.time_durations : "",
-  }));
+  const dataSource: DataRecord[] = claimList.map((claim, index) => {
+    console.log("claim:", claim);
+    return {
+      ...claim,
+      key: index,
+      id: claim.request_id || "",
+      project_name: claim.project_name || "",
+      start_date: claim.start_date || null,
+      end_date: claim.end_date || null,
+      full_name: claim.full_name || "",
+      time_duration:
+        claim.start_date && claim.end_date
+          ? `${formatDateToDDMMYYYY(claim.start_date)} - ${formatDateToDDMMYYYY(
+              claim.end_date
+            )}`
+          : "N/A",
+    };
+  });
   return (
     <div>
       <h1>Approved Claims</h1>
