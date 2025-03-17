@@ -4,10 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@redux/index";
 import { fetchUserByIdAsync } from "@redux/thunk/User/userThunk";
 import { User } from "@/types/User";
-import { useNotification } from "@/components/ui/Notification/NotificationContext";
 import { selectUserById } from "@redux/selector/userSelector";
 import httpClient from "@constant/apiInstance";
-import LoadingOverlay from "@components/ui/Loading/LoadingOverlay";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const UserInfoComponent: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -15,7 +15,7 @@ export const UserInfoComponent: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedUser, setEditedUser] = useState<Partial<User>>({});
   const [confirmPassword, setConfirmPassword] = useState("");
-  const notification = useNotification();
+  const [isSalaryVisible, setIsSalaryVisible] = useState(false);
 
   const accessToken = localStorage.getItem("access_token");
   const userId = localStorage.getItem("user_id");
@@ -34,23 +34,69 @@ export const UserInfoComponent: React.FC = () => {
     }
   }, [selectedUser]);
 
-  const handleSave = async () => {
-    if (!userId || !editedUser) {
-      notification.show({
-        message: "Cannot save, missing user information.",
-        type: "error",
-      });
-      return;
+  const validateFields = async () => {
+    if (!editedUser.full_name || editedUser.full_name.trim() === "") {
+      toast.error("Full Name is required!");
+      return false;
+    }
+    if (!editedUser.email || editedUser.email.trim() === "") {
+      toast.error("Email is required!");
+      return false;
+    }
+    if (!editedUser.department || editedUser.department.trim() === "") {
+      toast.error("Department is required!");
+      return false;
+    }
+    if (!editedUser.job_rank || editedUser.job_rank.trim() === "") {
+      toast.error("Job Rank is required!");
+      return false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(editedUser.email || "")) {
+      toast.error("Please enter a valid email address!");
+      return false;
+    }
+
+    try {
+      const response = await httpClient.get<any>("/admin/staffs");
+      const users = response.data.data;
+      const emailExists = users.some(
+        (user: User) =>
+          user.email === editedUser.email && user.user_id !== userId
+      );
+      if (emailExists) {
+        toast.error("This email is already in use!");
+        return false;
+      }
+    } catch (error) {
+      toast.error("Failed to validate email. Please try again.");
+      return false;
     }
 
     if (editedUser.password && editedUser.password.trim() !== "") {
       if (editedUser.password !== confirmPassword) {
-        notification.show({
-          message: "New password and confirm password do not match.",
-          type: "error",
-        });
-        return;
+        toast.error("New password and confirm password do not match!");
+        return false;
       }
+      if (editedUser.password.length < 6) {
+        toast.error("Password must be at least 6 characters long!");
+        return false;
+      }
+    }
+
+    return true;
+  };
+
+  const handleSave = async () => {
+    if (!userId || !editedUser) {
+      toast.error("Cannot save, missing user information.");
+      return;
+    }
+
+    const isValid = await validateFields();
+    if (!isValid) {
+      return;
     }
 
     try {
@@ -75,16 +121,10 @@ export const UserInfoComponent: React.FC = () => {
 
       dispatch(fetchUserByIdAsync());
       setIsEditing(false);
-      notification.show({
-        message: "Update user successfully.",
-        type: "success",
-      });
+      toast.success("Update user successfully.");
     } catch (error) {
       console.error("Update User error: " + error);
-      notification.show({
-        message: "Update user failed: " + (error as any).message,
-        type: "error",
-      });
+      toast.error("Update user failed: " + (error as any).message);
     }
   };
 
@@ -106,7 +146,12 @@ export const UserInfoComponent: React.FC = () => {
   }
 
   if (!selectedUser) {
-    return <LoadingOverlay />;
+    return (
+      <div className={styles.loadingContainer}>
+        <div className={styles.spinner}></div>
+        <p>Loading...</p>
+      </div>
+    );
   }
 
   return (
@@ -137,7 +182,19 @@ export const UserInfoComponent: React.FC = () => {
 
           <div className={styles.statsContainer}>
             <div className={styles.statItem}>
-              <h3>{`${selectedUser.salary || "N/A"} $`}</h3>
+              <div className={styles.salaryWrapper}>
+                <h3>
+                  {isSalaryVisible
+                    ? `${selectedUser.salary || "N/A"} $`
+                    : "****"}
+                </h3>
+                <button
+                  onClick={() => setIsSalaryVisible(!isSalaryVisible)}
+                  className={styles.eyeButton}
+                >
+                  {isSalaryVisible ? "👁️" : "👁️‍🗨️"}
+                </button>
+              </div>
               <span>Salary</span>
             </div>
             <div className={styles.statItem}>
@@ -169,7 +226,18 @@ export const UserInfoComponent: React.FC = () => {
                 <strong>Position:</strong> {selectedUser.job_rank || "N/A"}
               </p>
               <p>
-                <strong>Salary:</strong> {selectedUser.salary || "N/A"}
+                <strong>Salary:</strong>
+                <div className={styles.salaryWrapper}>
+                  <span>
+                    {isSalaryVisible ? selectedUser.salary || "N/A" : "****"}
+                  </span>
+                  <button
+                    onClick={() => setIsSalaryVisible(!isSalaryVisible)}
+                    className={styles.eyeButton}
+                  >
+                    {isSalaryVisible ? "👁️" : "👁️‍🗨️"}
+                  </button>
+                </div>
               </p>
               <p>
                 <strong>Role:</strong> {selectedUser.role_name || "N/A"}
@@ -184,7 +252,9 @@ export const UserInfoComponent: React.FC = () => {
               <div className={styles.modalContent}>
                 <h2>Edit Information</h2>
                 <div className={styles.formSection}>
-                  <label>Full Name:</label>
+                  <label>
+                    <span className={styles.required}>*</span> Full Name:
+                  </label>
                   <input
                     value={editedUser.full_name || ""}
                     onChange={(e) =>
@@ -196,7 +266,9 @@ export const UserInfoComponent: React.FC = () => {
                   />
                 </div>
                 <div className={styles.formSection}>
-                  <label>Email:</label>
+                  <label>
+                    <span className={styles.required}>*</span> Email:
+                  </label>
                   <input
                     type="email"
                     value={editedUser.email || ""}
@@ -226,7 +298,9 @@ export const UserInfoComponent: React.FC = () => {
                   />
                 </div>
                 <div className={styles.formSection}>
-                  <label>Department:</label>
+                  <label>
+                    <span className={styles.required}>*</span> Department:
+                  </label>
                   <input
                     value={editedUser.department || ""}
                     onChange={(e) =>
@@ -238,7 +312,9 @@ export const UserInfoComponent: React.FC = () => {
                   />
                 </div>
                 <div className={styles.formSection}>
-                  <label>Position:</label>
+                  <label>
+                    <span className={styles.required}>*</span> Position:
+                  </label>
                   <input
                     value={editedUser.job_rank || ""}
                     onChange={(e) =>

@@ -1,7 +1,6 @@
 .profileContainer {
   max-width: 1200px;
   margin: 2rem auto;
-  /* background: linear-gradient(145deg, #f8f9fa 0%, #e9ecef 100%); */
 }
 
 .profileHeader {
@@ -58,6 +57,7 @@
 .editButton:hover {
   background: #2563eb;
   transform: rotate(15deg) scale(1.1);
+  text-decoration: none;
 }
 
 .profileInfo {
@@ -120,6 +120,10 @@
   color: #1e293b;
   margin-bottom: 0.5rem;
   font-weight: 600;
+  width: 150px;
+  display: inline-block;
+  text-align: left;
+  white-space: nowrap;
 }
 
 .statItem span {
@@ -160,7 +164,6 @@
   left: 0;
   width: 60px;
   height: 3px;
-  /* background: #3b82f6; */
   border-radius: 2px;
 }
 
@@ -172,11 +175,28 @@
   border-radius: 8px;
   display: flex;
   gap: 1rem;
+  align-items: center;
 }
 
 .section p strong {
   color: #3b82f6;
   min-width: 120px;
+}
+
+.section p .salaryWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 150px;
+}
+
+.section p .salaryWrapper span {
+  display: inline-block;
+  width: 100px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #000;
 }
 
 .editModal {
@@ -329,4 +349,58 @@
     flex-direction: column;
     gap: 0.5rem;
   }
+}
+
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.eyeButton {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  margin-left: 0.5rem;
+  transition: all 0.3s ease;
+  line-height: 1;
+}
+
+.eyeButton:hover {
+  transform: scale(1.1);
+  text-decoration: none;
+}
+
+.salaryWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.required {
+  color: #ff4d4f;
+  font-weight: bold;
+  margin-right: 0.3rem;
 }
