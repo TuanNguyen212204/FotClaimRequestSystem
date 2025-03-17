@@ -106,52 +106,74 @@ export const PendingComponent: React.FC = () => {
     return `${day}/${month}/${year}`;
   };
 
-  const columns: Column<Claim>[] = [
+  const columns: Column<DataRecord>[] = [
+    // {
+    //   key: "request_id",
+    //   dataIndex: "request_id",
+    //   title: "Request ID",  
+    // },
     {
-      key: "request_id",
-      dataIndex: "request_id",
-      title: "Request ID",  
+      key: "user_id",
+      dataIndex: "user_id",
+      title: "User ID",
     },
-    // {
-    //   key: "claim_id",
-    //   dataIndex: "claim_id",
-    //   title: "Claim ID",
-    // },
-    // {
-    //   key: "username",
-    //   dataIndex: "username",
-    //   title: "Username",
-    // },
-    // {
-    //   key: "email",
-    //   dataIndex: "email",
-    //   title: "Email",
-    // },
-    // {
-    //   key: "total_working_hours",
-    //   dataIndex: "total_working_hours",
-    //   title: "Total Working Hours",
-    // },
-    // {
-    //   key: "submitted_date",
-    //   dataIndex: "submitted_date",
-    //   title: "Submitted Date",
-    //   cell: ({ value }) => formatDateToDDMMYYYY(value as string),
-    // },
-    // {
-    //   key: "claim_status",
-    //   dataIndex: "claim_status",
-    //   title: "Claim Status",
-    //   cell: ({ value }) => <StatusTag status={value as StatusType} />,
-    // },
-    // {
-    //   key: "project_name",
-    //   dataIndex: "project_name",
-    //   title: "Project Name",
-    // },
+    {
+      key: "user_name",
+      dataIndex: "user_full_name",
+      title: "Full Name",
+    },
+    {
+      key: "start_date",
+      dataIndex: "start_date",
+      title: "Start Date",
+      cell: ({ value }) => formatDateToDDMMYYYY(value as string),
+    },
+    {
+      key: "end_date",
+      dataIndex: "end_date",
+      title: "End Date",
+      cell: ({ value }) => formatDateToDDMMYYYY(value as string),
+    },
+    {
+      key: "total_hours",
+      dataIndex: "total_hours",
+      title: "Total Hours",
+    },
+    {
+      key: "project_id",
+      dataIndex: "project_id",
+      title: "Project ID",
+    },
+    {
+      key: "submitted_date",
+      dataIndex: "submitted_date",
+      title: "Submitted Date",
+      cell: ({ value }) => formatDateToDDMMYYYY(value as string),
+    },
+    {
+      key: "salary",
+      dataIndex: "user_salary",
+      title: "Salary",
+    },
+    {
+      key: "ot_rate",
+      dataIndex: "user_ot_rate",
+      title: "OT Rate",
+    },
+    {
+      key: "salary_overtime",
+      dataIndex: "salary_overtime",
+      title: "Salary Overtime",
+    },
+    {
+      key: "claim_status",
+      dataIndex: "claim_status",
+      title: "Claim Status",
+      cell: ({ value }) => <StatusTag status={value as StatusType} />,
+    },
     {
       key: "action",
-      dataIndex: "claim_id",
+      dataIndex: "request_id",
       title: "",
       cell: ({ value }) => (
         <div className={styles.actions}>
@@ -172,20 +194,22 @@ export const PendingComponent: React.FC = () => {
     },
   ];
 
-  const dataSource: DataRecord[] = claimList.map((a, index) => ({
-    ...a,
-    key: index,
-    id: a.claim_id ? a.claim_id.toString() : "",
-    claim_status: "pending",
+  const dataSource: DataRecord[] = claimList.map((claim) => ({
+    key: claim.request_id,
+    ...claim,
+    user_full_name: claim.user.full_name,
+    user_salary: claim.user.salary,
+    user_ot_rate: claim.user.ot_rate,
+    claim_status: "pending"
   }));
 
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Pending Approval Claims</h1>
-      <nav className={styles.breadcrumb}>
+      {/* <nav className={styles.breadcrumb}>
         <Link to="/">My Claims</Link> &gt;{" "}
         <Link to="/pending-claim">Pending Approval</Link>
-      </nav>
+      </nav> */}
       <TableComponent
         columns={columns}
         dataSource={dataSource}
