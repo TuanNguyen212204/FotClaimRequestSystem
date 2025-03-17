@@ -133,7 +133,7 @@ export const Sidebar = ({
         >
           <div>
             <button onClick={toggleSidebar} className={styles.toggleButton}>
-              <span style={{ marginLeft: "10px" }}>
+              <span>
                 <Menu />
               </span>
             </button>

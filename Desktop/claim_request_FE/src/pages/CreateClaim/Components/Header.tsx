@@ -1,15 +1,15 @@
 import { JSX, ReactNode } from "react";
 import headerStyle from "../Claim.module.css";
 export interface IHeadProps {
-  title: string;
-  status: string;
-  prepareBy: string;
+  title: string | undefined;
+  status: string | undefined;
+  prepareBy: string | undefined;
 }
 
 export default function Header({
-  title,
-  status,
-  prepareBy,
+  title = "",
+  status = "",
+  prepareBy = "",
 }: IHeadProps): JSX.Element {
   return (
     <HeaderContainer>

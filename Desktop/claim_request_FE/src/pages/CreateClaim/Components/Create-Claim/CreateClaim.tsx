@@ -6,12 +6,13 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@/redux";
 import { createClaim } from "@/redux/thunk/CreateClaim";
+import { getAllProjects } from "@/redux/thunk/CreateClaim";
 import { selectProject } from "@/redux/slices/Project/projectSlice";
 import { selectUserById } from "@/redux/selector/userSelector";
 import { fetchUserByIdAsync } from "@/redux/thunk/User/userThunk";
-import { CreateClaimData } from "@/Services/project";
+import { CreateClaimData } from "@/Services/Project/Project.type";
 import { toast } from "react-toastify";
-import { fetchProject } from "@/redux/thunk/CreateClaim";
+import { fetchProjectByID } from "@/redux/thunk/CreateClaim";
 import { ApiError } from "@/api";
 export default function CreateClaim() {
   const { register, setValue, control, errors, handleSubmit, reset } =
@@ -22,9 +23,17 @@ export default function CreateClaim() {
   const user = useSelector(selectUserById);
 
   useEffect(() => {
+    dispatch(
+      getAllProjects({
+        page: 1,
+        limit: 10,
+        order: "ASC",
+        sortBy: "project_id",
+      }),
+    );
     dispatch(fetchUserByIdAsync())
       .unwrap()
-      .then(() => dispatch(fetchProject()))
+      .then(() => dispatch(fetchProjectByID()))
       .catch((error) => {
         console.error("Failed to fetch data:", error);
         toast.error("Failed to load data. Please refresh the page.");
@@ -54,7 +63,7 @@ export default function CreateClaim() {
             reset();
           } else {
             const payloadError = resultAction.payload as any;
-            console.log("Error:", payloadError);
+            // console.log("Error:", payloadError);
             const errorMessage =
               payloadError?.message || "Unknown error occurred";
 
