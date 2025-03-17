@@ -171,11 +171,6 @@ export const PendingComponent: React.FC = () => {
     },
   ];
 
-  // const dataSource = pending.map((item, index) => ({
-  //   key: index,
-  //   ...item,
-  // }));
-
   const dataSource: DataRecord[] = claimList.map((a, index) => ({
     ...a,
     key: index,

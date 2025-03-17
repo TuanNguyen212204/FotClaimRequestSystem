@@ -21,5 +21,6 @@ export interface ApiResponseNoGeneric {
     totalItems: number;
     totalPages: number;
   };
+  data: any;
   message: string;
 }
