@@ -34,26 +34,24 @@ export const UserInfoComponent: React.FC = () => {
     }
   }, [selectedUser]);
 
-  const validateFields = async () => {
-    const nameRegex = /^[A-Za-z\s]+$/;
-    if (!editedUser.full_name || editedUser.full_name.trim() === "") {
-      toast.error("Full Name is required!");
-      return false;
-    } else if (!nameRegex.test(editedUser.full_name)) {
-      toast.error("Full Name cannot contain numbers or special characters!");
-      return false;
+  const getRoleName = (roleId: number | undefined): string => {
+    switch (roleId) {
+      case 1:
+        return "Admin";
+      case 2:
+        return "Approver";
+      case 3:
+        return "Finance";
+      case 4:
+        return "Claimer";
+      default:
+        return "N/A";
     }
+  };
 
+  const validateFields = async () => {
     if (!editedUser.email || editedUser.email.trim() === "") {
       toast.error("Email is required!");
-      return false;
-    }
-    if (!editedUser.department || editedUser.department.trim() === "") {
-      toast.error("Department is required!");
-      return false;
-    }
-    if (!editedUser.job_rank || editedUser.job_rank.trim() === "") {
-      toast.error("Job Rank is required!");
       return false;
     }
 
@@ -62,6 +60,7 @@ export const UserInfoComponent: React.FC = () => {
       toast.error("Please enter a valid email address!");
       return false;
     }
+
 
     try {
       const response = await httpClient.get<any>("/admin/staffs");
@@ -76,6 +75,30 @@ export const UserInfoComponent: React.FC = () => {
       }
     } catch (error) {
       toast.error("Failed to validate email. Please try again.");
+      return false;
+    }
+
+
+    if (!editedUser.department || editedUser.department.trim() === "") {
+      toast.error("Department is required!");
+      return false;
+    }
+
+    const deptRegex = /^[A-Za-z\s]+$/; 
+    if (!deptRegex.test(editedUser.department)) {
+      toast.error("Department can only contain letters and spaces!");
+      return false;
+    }
+
+
+    if (!editedUser.job_rank || editedUser.job_rank.trim() === "") {
+      toast.error("Job Rank is required!");
+      return false;
+    }
+
+    const jobRankRegex = /^[A-Za-z\s]+$/; 
+    if (!jobRankRegex.test(editedUser.job_rank)) {
+      toast.error("Job Rank can only contain letters and spaces!");
       return false;
     }
 
@@ -106,13 +129,11 @@ export const UserInfoComponent: React.FC = () => {
 
     try {
       const requestBody: {
-        full_name: string;
         email: string;
         department: string;
         job_rank: string;
         password?: string;
       } = {
-        full_name: editedUser.full_name || "",
         email: editedUser.email || "",
         department: editedUser.department || "",
         job_rank: editedUser.job_rank || "",
@@ -122,13 +143,21 @@ export const UserInfoComponent: React.FC = () => {
         requestBody.password = editedUser.password;
       }
 
-      await httpClient.put(`/admin/staff/${userId}`, requestBody);
+      console.log("Request Body:", requestBody);
+      console.log("User ID:", userId);
+
+      const response = await httpClient.put(
+        `/admin/staff/${userId}`,
+        requestBody
+      );
+
+      console.log("API Response:", response.data);
 
       dispatch(fetchUserByIdAsync());
       setIsEditing(false);
       toast.success("Update user successfully.");
     } catch (error) {
-      console.error("Update User error: " + error);
+      console.error("Update User error: ", error);
       toast.error("Update user failed: " + (error as any).message);
     }
   };
@@ -245,7 +274,8 @@ export const UserInfoComponent: React.FC = () => {
                 </div>
               </p>
               <p>
-                <strong>Role:</strong> {selectedUser.role_name || "N/A"}
+                <strong>Role:</strong>{" "}
+                {getRoleName(selectedUser.role_id) || "N/A"}
               </p>
               <p>
                 <strong>Status:</strong>{" "}
@@ -262,12 +292,11 @@ export const UserInfoComponent: React.FC = () => {
                   </label>
                   <input
                     value={editedUser.full_name || ""}
-                    onChange={(e) =>
-                      setEditedUser({
-                        ...editedUser,
-                        full_name: e.target.value,
-                      })
-                    }
+                    disabled
+                    style={{
+                      backgroundColor: "#f0f0f0",
+                      cursor: "not-allowed",
+                    }}
                   />
                 </div>
                 <div className={styles.formSection}>
