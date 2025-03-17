@@ -163,6 +163,7 @@ const ProjectInformation: React.FC = () => {
       <TableComponent
         // ref={tableRef}
         // isHaveCheckbox={true}
+        // isHaveCheckbox={true}
         columns={columns}
         dataSource={dataSource}
         loading={loading}
