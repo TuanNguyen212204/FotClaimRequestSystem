@@ -79,6 +79,12 @@ export const Sidebar = ({
       case "userinfo":
         navigate(PATH.userInfo);
         break;
+      case "projectInformation":
+        navigate(PATH.projectInformation);
+        break;
+      case "dashboard":
+        navigate(PATH.dashboard);
+        break;
       case "approvedApprover":
         navigate(PATH.approvedApprover);
         break;
