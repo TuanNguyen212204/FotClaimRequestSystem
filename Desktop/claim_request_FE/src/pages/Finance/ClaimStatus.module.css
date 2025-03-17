@@ -5,7 +5,7 @@
   padding: 2rem;
   border-radius: 1rem;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-  position: relative;
+  
 }
 
 .header {
@@ -89,19 +89,21 @@
 }
 
 .tableContainer {
-  margin: 2rem 0;
+  width: 90%;
+  margin: 2rem auto;
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  
 }
 
 .table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
 }
 
 .tableHeader, .statusHeader {
-  padding: 1.25rem 1rem;
+  padding: 1rem;
   background-color: #2d3142;
   color: white;
   text-align: center;
@@ -109,12 +111,39 @@
   font-size: 0.95rem;
 }
 
+
+.tableHeader:nth-child(1), 
+.tableCell:nth-child(1) {
+  width: 15%;  
+}
+
+.tableHeader:nth-child(2), 
+.tableCell:nth-child(2) {
+  width: 20%;  
+}
+
+.tableHeader:nth-child(3), 
+.tableCell:nth-child(3) {
+  width: 25%;  
+}
+
+.tableHeader:nth-child(4), 
+.tableCell:nth-child(4) {
+  width: 25%;  
+}
+
+.tableHeader:nth-child(5), 
+.tableCell:nth-child(5) {
+  width: 15%;  
+}
+
 .tableCell, .statusCell {
-  padding: 1.25rem 1rem;
+  padding: 1rem;
   text-align: center;
   border-bottom: 1px solid #eaeaea;
   font-size: 0.95rem;
   color: #4a4a4a;
+  width: 20%;
 }
 
 .statusCell {
