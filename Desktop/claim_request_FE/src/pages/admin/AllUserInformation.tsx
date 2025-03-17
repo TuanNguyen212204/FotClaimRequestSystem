@@ -153,20 +153,30 @@ const AllUserInformation: React.FC = () => {
       dataIndex: "user_status",
       title: "Status",
       cell: ({ value, record }: { value: number; record: User }) => {
-        const isChecked = value === 1 ? true : false;
-        setInitialToggleStates((prev) => ({
-          ...prev,
-          [record.user_id as string]: isChecked,
-        }));
         return (
           <div>
-            <ToggleButton
-              userId={record.user_id}
-              checked={isChecked}
-              onChange={() => {
-                handleToggleStatus(record.user_id as string);
-              }}
-            />
+            {value === 1 && (
+              <div>
+              <ToggleButton
+                userId={record.user_id}
+                checked={true}
+                onChange={() => {
+                  handleToggleStatus(record.user_id as string);
+                }}
+              />
+            </div>
+            )}
+             {value === 0 && (
+              <div>
+              <ToggleButton
+                userId={record.user_id}
+                checked={false}
+                onChange={() => {
+                  handleToggleStatus(record.user_id as string);
+                }}
+              />
+            </div>
+            )}
           </div>
         );
       },
