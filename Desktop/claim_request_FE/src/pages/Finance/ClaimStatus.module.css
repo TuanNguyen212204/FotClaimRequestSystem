@@ -9,15 +9,24 @@
 }
 
 .header {
+  display: flex;
+  align-items: center;
   margin-bottom: 2rem;
-  text-align: right;
   position: relative;
+}
+
+.title {
+  flex-grow: 1;
+  text-align: center;
+  font-size: 1.75rem;
+  color: #2d3142;
+  margin: 0;
+  font-weight: 600;
 }
 
 .backButton {
   position: absolute;
   left: 0;
-  top: 0;
   padding: 8px;
   background-color: #2D3142;
   color: white;
@@ -145,11 +154,14 @@
   cursor: pointer;
   font-size: 0.95rem;
   transition: all 0.2s ease;
+  margin-left: auto;
+  text-decoration: none;
 }
 
 .printButton:hover {
   background-color: #3d4257;
   transform: translateY(-2px);
+  text-decoration: none;
 }
 
 .loading {

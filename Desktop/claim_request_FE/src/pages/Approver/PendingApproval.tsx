@@ -13,6 +13,7 @@ import {
   CheckCircle2,
   XCircle,
   ArrowLeftCircle,
+  Undo2,
 } from "lucide-react";
 import styles from "@/pages/Approver/PendingApproval.module.css";
 // import { Link, Navigate } from "react-router-dom";
@@ -134,6 +135,10 @@ export const PendingComponent: React.FC = () => {
     console.log("Selected data:", selectedData);
   };
 
+  const handleMultipleApprove = async () => {
+
+  }
+
   const handleViewDetail = (request_id: string) => {
     const selectedClaim = claimList.find(claim => claim.request_id === request_id);
     if (selectedClaim) {
@@ -249,7 +254,7 @@ export const PendingComponent: React.FC = () => {
             />
           </Tooltip>
           <Tooltip text="Return" position="top">
-            <ArrowLeftCircle
+            <Undo2
               className={styles.iconReturn}
               onClick={() => handleReturnClaim(value as string)}
             />

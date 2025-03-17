@@ -70,7 +70,9 @@ const AllUserInformation: React.FC = () => {
   const [initialToggleStates, setInitialToggleStates] = useState<{
     [key: string]: boolean;
   }>({});
-  const [toggleState, setToggleState] = useState<boolean>(true);
+  const [toggleState, setToggleState] = useState<{ [key: string]: boolean }>(
+    {}
+  );
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -141,6 +143,33 @@ const AllUserInformation: React.FC = () => {
       console.error("Error toggle status:", error);
     }
   };
+  const handleUpdateConfirm = (
+    name: string,
+    email: string,
+    id: string,
+    value: boolean
+  ) => {
+    setName(name);
+    setEmail(email);
+
+    Modal.confirm({
+      title: value ? "Disable User" : "Enable User",
+      children: `Are you sure you want to ${
+        value ? "disable" : "enable"
+      } user ${name} with email ${email}?`,
+      onOk: () => {
+        handleToggleStatus(id);
+        toast.success("Update status successful!");
+      },
+      onCancel: () => {
+        toast.error("Update status failed!");
+        setToggleState((prev) => ({
+          ...prev,
+          [id]: !value,
+        }));
+      },
+    });
+  };
 
   const columns: Column<User>[] = [
     { key: "full_name", dataIndex: "full_name", title: "Full Name" },
@@ -153,20 +182,49 @@ const AllUserInformation: React.FC = () => {
       dataIndex: "user_status",
       title: "Status",
       cell: ({ value, record }: { value: number; record: User }) => {
-        const isChecked = value === 1 ? true : false;
-        setInitialToggleStates((prev) => ({
-          ...prev,
-          [record.user_id as string]: isChecked,
-        }));
         return (
           <div>
-            <ToggleButton
-              userId={record.user_id}
-              checked={isChecked}
-              onChange={() => {
-                handleToggleStatus(record.user_id as string);
-              }}
-            />
+            <div>
+              <ToggleButton
+                userId={record.user_id}
+                checked={
+                  toggleState[record.user_id] ?? record.user_status === 1
+                }
+                onChange={(newChecked) => {
+                  setToggleState((prev) => ({
+                    ...prev,
+                    [record.user_id]: newChecked,
+                  }));
+                  handleUpdateConfirm(
+                    record.username,
+                    record.email,
+                    record.user_id,
+                    newChecked
+                  );
+                }}
+              />
+            </div>
+
+            {/* {value === 0 && (
+              <div>
+                <ToggleButton
+                  userId={record.user_id}
+                  checked={toggleState[record.user_id] ?? false}
+                  onChange={(newChecked) => {
+                    setToggleState((prev) => ({
+                      ...prev,
+                      [record.user_id]: newChecked,
+                    }));
+                    handleUpdateConfirm(
+                      record.username,
+                      record.email,
+                      record.user_id,
+                      newChecked
+                    );
+                  }}
+                />
+              </div>
+            )} */}
           </div>
         );
       },
