@@ -35,10 +35,15 @@ export const UserInfoComponent: React.FC = () => {
   }, [selectedUser]);
 
   const validateFields = async () => {
+    const nameRegex = /^[A-Za-z\s]+$/;
     if (!editedUser.full_name || editedUser.full_name.trim() === "") {
       toast.error("Full Name is required!");
       return false;
+    } else if (!nameRegex.test(editedUser.full_name)) {
+      toast.error("Full Name cannot contain numbers or special characters!");
+      return false;
     }
+
     if (!editedUser.email || editedUser.email.trim() === "") {
       toast.error("Email is required!");
       return false;
@@ -174,7 +179,7 @@ export const UserInfoComponent: React.FC = () => {
         <div className={styles.profileInfo}>
           <h1>{selectedUser.full_name || "Full Name"}</h1>
           <p className={styles.position}>
-            {selectedUser.job_rank || "No position"}
+            {selectedUser.job_rank || "No Job Rank"}
           </p>
           <p className={styles.company}>
             Department: {selectedUser.department || "Undetermined"}
@@ -223,7 +228,7 @@ export const UserInfoComponent: React.FC = () => {
                 <strong>Department:</strong> {selectedUser.department || "N/A"}
               </p>
               <p>
-                <strong>Position:</strong> {selectedUser.job_rank || "N/A"}
+                <strong>Job Rank:</strong> {selectedUser.job_rank || "N/A"}
               </p>
               <p>
                 <strong>Salary:</strong>
@@ -313,7 +318,7 @@ export const UserInfoComponent: React.FC = () => {
                 </div>
                 <div className={styles.formSection}>
                   <label>
-                    <span className={styles.required}>*</span> Position:
+                    <span className={styles.required}>*</span> Job Rank:
                   </label>
                   <input
                     value={editedUser.job_rank || ""}
