@@ -61,7 +61,6 @@ export const UserInfoComponent: React.FC = () => {
       return false;
     }
 
-
     try {
       const response = await httpClient.get<any>("/admin/staffs");
       const users = response.data.data;
@@ -78,25 +77,23 @@ export const UserInfoComponent: React.FC = () => {
       return false;
     }
 
-
     if (!editedUser.department || editedUser.department.trim() === "") {
       toast.error("Department is required!");
       return false;
     }
 
-    const deptRegex = /^[A-Za-z\s]+$/; 
+    const deptRegex = /^[A-Za-z\s]+$/;
     if (!deptRegex.test(editedUser.department)) {
       toast.error("Department can only contain letters and spaces!");
       return false;
     }
-
 
     if (!editedUser.job_rank || editedUser.job_rank.trim() === "") {
       toast.error("Job Rank is required!");
       return false;
     }
 
-    const jobRankRegex = /^[A-Za-z\s]+$/; 
+    const jobRankRegex = /^[A-Za-z\s]+$/;
     if (!jobRankRegex.test(editedUser.job_rank)) {
       toast.error("Job Rank can only contain letters and spaces!");
       return false;
@@ -197,41 +194,39 @@ export const UserInfoComponent: React.FC = () => {
             alt="Avatar"
             className={styles.profileAvatar}
           />
-          <button
-            onClick={() => setIsEditing(true)}
-            className={styles.editButton}
-          >
-            ✏️
-          </button>
+          <div className={styles.updateButtonWrapper}>
+            <button
+              onClick={() => setIsEditing(true)}
+              className={styles.editButton}
+            >
+              UPDATE
+            </button>
+          </div>
         </div>
 
         <div className={styles.profileInfo}>
           <h1>{selectedUser.full_name || "Full Name"}</h1>
           <p className={styles.position}>
-            {selectedUser.job_rank || "No Job Rank"}
-          </p>
-          <p className={styles.company}>
-            Department: {selectedUser.department || "Undetermined"}
+            <span>Job Rank:</span> {selectedUser.job_rank || "No Job Rank"},{" "}
+            <span>Department:</span> {selectedUser.department || "Undetermined"}
           </p>
 
           <div className={styles.statsContainer}>
             <div className={styles.statItem}>
-              <div className={styles.salaryWrapper}>
-                <h3>
-                  {isSalaryVisible
-                    ? `${selectedUser.salary || "N/A"} $`
-                    : "****"}
-                </h3>
-                <button
-                  onClick={() => setIsSalaryVisible(!isSalaryVisible)}
-                  className={styles.eyeButton}
-                >
-                  {isSalaryVisible ? "👁️" : "👁️‍🗨️"}
-                </button>
-              </div>
+              <span className={styles.statIcon}>💰</span>
+              <h3>
+                {isSalaryVisible ? `${selectedUser.salary || "N/A"} $` : "****"}
+              </h3>
+              <button
+                onClick={() => setIsSalaryVisible(!isSalaryVisible)}
+                className={styles.eyeButton}
+              >
+                {isSalaryVisible ? "👁️" : "👁️‍🗨️"}
+              </button>
               <span>Salary</span>
             </div>
             <div className={styles.statItem}>
+              <span className={styles.statIcon}>📡</span>
               <h3>{selectedUser.user_status === 1 ? "Online" : "Offline"}</h3>
               <span>Status</span>
             </div>
@@ -240,138 +235,117 @@ export const UserInfoComponent: React.FC = () => {
       </div>
 
       <div className={styles.profileContent}>
-        <div className={styles.section}>
-          <h2 className={styles.sectionTitle}>User Information</h2>
-          {!isEditing ? (
-            <>
-              <p>
-                <strong>Username:</strong> {selectedUser.username || "N/A"}
-              </p>
-              <p>
-                <strong>Fullname:</strong> {selectedUser.full_name || "N/A"}
-              </p>
-              <p>
-                <strong>Email:</strong> {selectedUser.email || "N/A"}
-              </p>
-              <p>
-                <strong>Department:</strong> {selectedUser.department || "N/A"}
-              </p>
-              <p>
-                <strong>Job Rank:</strong> {selectedUser.job_rank || "N/A"}
-              </p>
-              <p>
-                <strong>Salary:</strong>
-                <div className={styles.salaryWrapper}>
-                  <span>
-                    {isSalaryVisible ? selectedUser.salary || "N/A" : "****"}
-                  </span>
-                  <button
-                    onClick={() => setIsSalaryVisible(!isSalaryVisible)}
-                    className={styles.eyeButton}
-                  >
-                    {isSalaryVisible ? "👁️" : "👁️‍🗨️"}
-                  </button>
-                </div>
-              </p>
-              <p>
-                <strong>Role:</strong>{" "}
-                {getRoleName(selectedUser.role_id) || "N/A"}
-              </p>
-              <p>
-                <strong>Status:</strong>{" "}
-                {selectedUser.user_status === 1 ? "Online" : "Offline"}
-              </p>
-            </>
-          ) : (
-            <div className={styles.editModal}>
-              <div className={styles.modalContent}>
-                <h2>Edit Information</h2>
-                <div className={styles.formSection}>
-                  <label>
-                    <span className={styles.required}>*</span> Full Name:
-                  </label>
-                  <input
-                    value={editedUser.full_name || ""}
-                    disabled
-                    style={{
-                      backgroundColor: "#f0f0f0",
-                      cursor: "not-allowed",
-                    }}
-                  />
-                </div>
-                <div className={styles.formSection}>
-                  <label>
-                    <span className={styles.required}>*</span> Email:
-                  </label>
-                  <input
-                    type="email"
-                    value={editedUser.email || ""}
-                    onChange={(e) =>
-                      setEditedUser({ ...editedUser, email: e.target.value })
-                    }
-                  />
-                </div>
-                <div className={styles.formSection}>
-                  <label>New Password:</label>
-                  <input
-                    type="password"
-                    value={editedUser.password || ""}
-                    onChange={(e) =>
-                      setEditedUser({ ...editedUser, password: e.target.value })
-                    }
-                    placeholder="password"
-                  />
-                </div>
-                <div className={styles.formSection}>
-                  <label>Verify New Password:</label>
-                  <input
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="verify password"
-                  />
-                </div>
-                <div className={styles.formSection}>
-                  <label>
-                    <span className={styles.required}>*</span> Department:
-                  </label>
-                  <input
-                    value={editedUser.department || ""}
-                    onChange={(e) =>
-                      setEditedUser({
-                        ...editedUser,
-                        department: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-                <div className={styles.formSection}>
-                  <label>
-                    <span className={styles.required}>*</span> Job Rank:
-                  </label>
-                  <input
-                    value={editedUser.job_rank || ""}
-                    onChange={(e) =>
-                      setEditedUser({ ...editedUser, job_rank: e.target.value })
-                    }
-                  />
-                </div>
-                <div className={styles.buttonGroup}>
-                  <button className={styles.saveButton} onClick={handleSave}>
-                    Save
-                  </button>
-                  <button
-                    className={styles.cancelButton}
-                    onClick={() => setIsEditing(false)}
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
+        <div className={styles.infoSection}>
+          <h2 className={styles.sectionTitle}>INFORMATION</h2>
+          <div className={styles.infoDetails}>
+            <p>
+              <strong>Username:</strong> {selectedUser.username || "N/A"}
+            </p>
+            <p>
+              <strong>Email:</strong> {selectedUser.email || "N/A"}
+            </p>
+            <p>
+              <strong>Role:</strong>{" "}
+              {getRoleName(selectedUser.role_id) || "N/A"}
+            </p>
+            <p>
+              <strong>Department:</strong> {selectedUser.department || "N/A"}
+            </p>
+            <p>
+              <strong>Job Rank:</strong> {selectedUser.job_rank || "N/A"}
+            </p>
+          </div>
         </div>
       </div>
+
+      {isEditing && (
+        <div className={styles.editModal}>
+          <div className={styles.modalContent}>
+            <h2>Edit Information</h2>
+            <div className={styles.formSection}>
+              <label>
+                <span className={styles.required}>*</span> Full Name:
+              </label>
+              <input
+                value={editedUser.full_name || ""}
+                disabled
+                style={{
+                  backgroundColor: "#f0f0f0",
+                  cursor: "not-allowed",
+                }}
+              />
+            </div>
+            <div className={styles.formSection}>
+              <label>
+                <span className={styles.required}>*</span> Email:
+              </label>
+              <input
+                type="email"
+                value={editedUser.email || ""}
+                onChange={(e) =>
+                  setEditedUser({ ...editedUser, email: e.target.value })
+                }
+              />
+            </div>
+            <div className={styles.formSection}>
+              <label>New Password:</label>
+              <input
+                type="password"
+                value={editedUser.password || ""}
+                onChange={(e) =>
+                  setEditedUser({ ...editedUser, password: e.target.value })
+                }
+                placeholder="password"
+              />
+            </div>
+            <div className={styles.formSection}>
+              <label>Verify New Password:</label>
+              <input
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="verify password"
+              />
+            </div>
+            <div className={styles.formSection}>
+              <label>
+                <span className={styles.required}>*</span> Department:
+              </label>
+              <input
+                value={editedUser.department || ""}
+                onChange={(e) =>
+                  setEditedUser({
+                    ...editedUser,
+                    department: e.target.value,
+                  })
+                }
+              />
+            </div>
+            <div className={styles.formSection}>
+              <label>
+                <span className={styles.required}>*</span> Job Rank:
+              </label>
+              <input
+                value={editedUser.job_rank || ""}
+                onChange={(e) =>
+                  setEditedUser({ ...editedUser, job_rank: e.target.value })
+                }
+              />
+            </div>
+            <div className={styles.buttonGroup}>
+              <button className={styles.saveButton} onClick={handleSave}>
+                Save
+              </button>
+              <button
+                className={styles.cancelButton}
+                onClick={() => setIsEditing(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

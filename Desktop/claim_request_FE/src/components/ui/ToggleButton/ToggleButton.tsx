@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./ToggleButton.css"; // Import file CSS
 
 const ToggleButton = ({
@@ -8,21 +8,24 @@ const ToggleButton = ({
 }: {
   userId: string;
   checked: boolean;
-  onChange: (userId: string, currentStatus: number) => void;
+  onChange: (userId: string) => void;
 }) => {
   const [enabled, setEnabled] = useState(checked);
   const handleClick = () => {
     const newStatus = enabled ? 0 : 1;
     setEnabled(!enabled);
-    onChange(userId, newStatus);
+    onChange(userId);
   };
+
   return (
-    <button
-      className={`toggle-wrapper ${enabled ? "enabled" : ""}`}
-      onClick={() => handleClick()}
-    >
-      <span className="toggle-circle"></span>
-    </button>
+    <div>
+      <button
+        className={`toggle-wrapper ${enabled ? "enabled" : ""}`}
+        onClick={() => handleClick()}
+      >
+        <span className="toggle-circle"></span>
+      </button>
+    </div>
   );
 };
 

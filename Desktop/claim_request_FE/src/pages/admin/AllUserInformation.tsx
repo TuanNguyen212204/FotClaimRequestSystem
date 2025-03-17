@@ -1,7 +1,7 @@
 import TableComponent, { SortConfig } from "@components/ui/Table/Table";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch } from "@redux/index.ts";
-import { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import ConfirmModal from "@/components/ui/modal/ConfirmModal";
 import {
   selectAllUser,
@@ -24,6 +24,8 @@ import { set } from "date-fns";
 import { UpdateUser } from "../User/UpdateUser";
 import ToggleButton from "@/components/ui/ToggleButton/ToggleButton";
 import { CreateUser } from "../User/CreateUser";
+import { CircleCheck } from "lucide-react";
+import { h } from "node_modules/framer-motion/dist/types.d-B50aGbjN";
 
 const AllUserInformation: React.FC = () => {
   const tableRef = useRef<{
@@ -64,6 +66,11 @@ const AllUserInformation: React.FC = () => {
   const [userID, setUserID] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
+  const [checkedDisable, setCheckedDisable] = useState<boolean>(true);
+  const [initialToggleStates, setInitialToggleStates] = useState<{
+    [key: string]: boolean;
+  }>({});
+  const [toggleState, setToggleState] = useState<boolean>(true);
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -107,6 +114,7 @@ const AllUserInformation: React.FC = () => {
       console.error("Error deleting user:", error);
     }
   };
+
   const handleOpenModal = () => {
     setOpenModal(true);
   };
@@ -117,51 +125,18 @@ const AllUserInformation: React.FC = () => {
     setUserID(id ? id : "");
     setOpenUpdate(true);
   };
-  const handleFetchUserNameByID = async (id: string) => {
-    try {
-      const response = await httpClient.get<ApiResponse<User[]>>(
-        `/admin/staff/${id}`
-      );
-      setName(response.data.data[0].username);
-      setEmail(response.data.data[0].email);
-      return;
-    } catch (error: any) {
-      console.error("Error get user by id:", error);
-    }
-  };
+
   const sortConfig: SortConfig = {
     columnKey: "full_name",
     order: "asc",
   };
-  const handleDeleteConfirm = (userId: string) => {
-    handleFetchUserNameByID(userId);
-    Modal.confirm({
-      title: "Do you want to delete this user?",
-      children: (
-        <div>
-          <span style={{ color: "green" }}>Username: </span> {name} <br />
-          <span style={{ color: "green" }}>Email:</span> {email} <br /> will be{" "}
-          {""}
-          <span style={{ color: "red" }}> Deleted</span>
-        </div>
-      ),
 
-      onOk() {
-        handleDelete(userId); // Gọi hàm xóa người dùng
-      },
-      onCancel() {
-        console.log("User canceled deletion");
-      },
-    });
-  };
-
-  const handleToggleStatus = (userId: string, newStatus: number) => {
+  const handleToggleStatus = async (userId: string) => {
     try {
       const response = httpClient.put<ApiResponseNoGeneric>(
         `/admin/staff/${userId}/status`
       );
       console.log(response);
-      dispatch(fetchAllUserAsync(currentPage.toString()));
     } catch (error) {
       console.error("Error toggle status:", error);
     }
@@ -178,26 +153,36 @@ const AllUserInformation: React.FC = () => {
       dataIndex: "user_status",
       title: "Status",
       cell: ({ value, record }: { value: number; record: User }) => {
+        const isChecked = value === 1 ? true : false;
+        setInitialToggleStates((prev) => ({
+          ...prev,
+          [record.user_id as string]: isChecked,
+        }));
         return (
           <div>
-            {value === 1 && (
+            <ToggleButton
+              userId={record.user_id}
+              checked={isChecked}
+              onChange={() => {
+                handleToggleStatus(record.user_id as string);
+              }}
+            />
+          </div>
+        );
+      },
+    },
+    {
+      key: "assign",
+      dataIndex: "assign",
+      title: "Assign",
+      cell: ({ value, record }: { value: string; record: User }) => {
+        return (
+          <div>
+            <button>
               <div>
-                <ToggleButton
-                  userId={record.user_id}
-                  checked={true}
-                  onChange={() => handleToggleStatus(record.user_id, value)}
-                />
+                <CircleCheck />
               </div>
-            )}
-            {value === 0 && (
-              <div>
-                <ToggleButton
-                  userId={record.user_id}
-                  checked={false}
-                  onChange={() => handleToggleStatus(record.user_id, value)}
-                />
-              </div>
-            )}
+            </button>
           </div>
         );
       },
@@ -206,7 +191,7 @@ const AllUserInformation: React.FC = () => {
       key: "user_id",
       dataIndex: "user_id",
       title: "Action",
-      cell: ({ value }) => {
+      cell: ({ value, record }: { value: string; record: User }) => {
         return (
           <div style={{ display: "flex" }}>
             <div>
@@ -219,16 +204,22 @@ const AllUserInformation: React.FC = () => {
                 </span>
               </button>
             </div>
-            <div>
+            {/* <div>
               <button
                 className={styles.delete_button}
-                onClick={() => handleDeleteConfirm(value as string)}
+                onClick={() =>
+                  handleDeleteConfirm(
+                    record.username as string,
+                    record.email as string,
+                    record.user_id as string
+                  )
+                }
               >
                 <span>
                   <X />
                 </span>
               </button>
-            </div>
+            </div> */}
           </div>
         );
       },
