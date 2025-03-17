@@ -53,8 +53,8 @@ export const fetchAllPendingClaimAsync = createAsyncThunk<
     );
     console.log("data: ", response.data);
     return {
-      data: response.data.data,
-      totalPages: response.data.pagination.totalPages,
+      data: response.data.data || [],
+      totalPages: response.data.pagination?.totalPages || 1,
     };
   } catch (error) {
     console.error("Fetch Pending Claims for Approver error " + error);

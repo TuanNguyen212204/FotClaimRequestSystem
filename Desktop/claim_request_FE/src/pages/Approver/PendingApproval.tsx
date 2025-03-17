@@ -19,6 +19,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import Modal from "@/components/ui/modal/Modal";
 import StatusTag, { StatusType } from "@/components/ui/StatusTag/StatusTag";
+import { Claim } from "@/types/Claim";
 
 export const PendingComponent: React.FC = () => {
   const navigate = useNavigate();
@@ -105,49 +106,49 @@ export const PendingComponent: React.FC = () => {
     return `${day}/${month}/${year}`;
   };
 
-  const columns: Column[] = [
+  const columns: Column<Claim>[] = [
     {
-      key: "project_id",
-      dataIndex: "project_id",
-      title: "Project ID",
+      key: "request_id",
+      dataIndex: "request_id",
+      title: "Request ID",  
     },
-    {
-      key: "claim_id",
-      dataIndex: "claim_id",
-      title: "Claim ID",
-    },
-    {
-      key: "username",
-      dataIndex: "username",
-      title: "Username",
-    },
-    {
-      key: "email",
-      dataIndex: "email",
-      title: "Email",
-    },
-    {
-      key: "total_working_hours",
-      dataIndex: "total_working_hours",
-      title: "Total Working Hours",
-    },
-    {
-      key: "submitted_date",
-      dataIndex: "submitted_date",
-      title: "Submitted Date",
-      cell: ({ value }) => formatDateToDDMMYYYY(value as string),
-    },
-    {
-      key: "claim_status",
-      dataIndex: "claim_status",
-      title: "Claim Status",
-      cell: ({ value }) => <StatusTag status={value as StatusType} />,
-    },
-    {
-      key: "project_name",
-      dataIndex: "project_name",
-      title: "Project Name",
-    },
+    // {
+    //   key: "claim_id",
+    //   dataIndex: "claim_id",
+    //   title: "Claim ID",
+    // },
+    // {
+    //   key: "username",
+    //   dataIndex: "username",
+    //   title: "Username",
+    // },
+    // {
+    //   key: "email",
+    //   dataIndex: "email",
+    //   title: "Email",
+    // },
+    // {
+    //   key: "total_working_hours",
+    //   dataIndex: "total_working_hours",
+    //   title: "Total Working Hours",
+    // },
+    // {
+    //   key: "submitted_date",
+    //   dataIndex: "submitted_date",
+    //   title: "Submitted Date",
+    //   cell: ({ value }) => formatDateToDDMMYYYY(value as string),
+    // },
+    // {
+    //   key: "claim_status",
+    //   dataIndex: "claim_status",
+    //   title: "Claim Status",
+    //   cell: ({ value }) => <StatusTag status={value as StatusType} />,
+    // },
+    // {
+    //   key: "project_name",
+    //   dataIndex: "project_name",
+    //   title: "Project Name",
+    // },
     {
       key: "action",
       dataIndex: "claim_id",
