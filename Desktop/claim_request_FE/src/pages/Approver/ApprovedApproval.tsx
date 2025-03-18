@@ -20,7 +20,7 @@ export const ApprovedApproverComponent: React.FC = () => {
   const totalPages = useSelector(selectApprovedClaimTotalPages);
   const [loading, setLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [limit] = useState(5);
+  const [limit] = useState(10);
 
   useEffect(() => {
     setLoading(true);
@@ -110,17 +110,17 @@ export const ApprovedApproverComponent: React.FC = () => {
       title: "Claim Status",
       cell: ({ value }) => <StatusTag status={value as StatusType} />,
     },
-    {
-      key: "action",
-      dataIndex: "claim_id",
-      title: "",
-      cell: ({ value }) => (
-        <EyeIcon
-          className={styles.icon}
-          onClick={() => handleViewDetail(value as string)}
-        />
-      ),
-    },
+    // {
+    //   key: "action",
+    //   dataIndex: "claim_id",
+    //   title: "",
+    //   cell: ({ value }) => (
+    //     <EyeIcon
+    //       className={styles.icon}
+    //       onClick={() => handleViewDetail(value as string)}
+    //     />
+    //   ),
+    // },
   ];
   const dataSource: DataRecord[] = claimList.map((claim) => ({
     key: claim.request_id,

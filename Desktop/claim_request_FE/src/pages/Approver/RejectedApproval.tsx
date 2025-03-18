@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import styles from "./RejectedApproval.module.css";
-import { EyeIcon } from "lucide-react";
+import { EyeIcon, EyeOffIcon } from "lucide-react";
 // import { useNavigate } from "react-router-dom";
 import TableComponent, { Column, DataRecord } from "@ui/Table/Table";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllRejectedClaimAsync } from "@redux/thunk/Claim/claimThunk";
 import { AppDispatch } from "@/redux";
 import StatusTag, { StatusType } from "@/components/ui/StatusTag/StatusTag";
-import { selectAllRejected, selectAllRejectedTotalPages } from "@/redux/selector/rejectedSelector.ts";
+import {
+  selectAllRejected,
+  selectAllRejectedTotalPages,
+} from "@/redux/selector/rejectedSelector.ts";
 
 export const RejectedComponent: React.FC = () => {
   // const navigate = useNavigate();
@@ -16,7 +19,8 @@ export const RejectedComponent: React.FC = () => {
   const totalPages = useSelector(selectAllRejectedTotalPages);
   const [loading, setLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [limit] = useState(5);
+  const [limit] = useState(10);
+  const [isSalaryVisible, setIsSalaryVisible] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -43,6 +47,10 @@ export const RejectedComponent: React.FC = () => {
   const handlePageChange = (newPage: number) => {
     console.log("New Page: ", newPage);
     setCurrentPage(newPage);
+  };
+
+  const toggleSalaryVisibility = () => {
+    setIsSalaryVisible(!isSalaryVisible);
   };
 
   const columns: Column<DataRecord>[] = [
@@ -88,6 +96,17 @@ export const RejectedComponent: React.FC = () => {
       key: "salary",
       dataIndex: "user_salary",
       title: "Salary",
+      cell: ({ value }) => (
+        <div>
+          {isSalaryVisible ? value : "******"}
+          <button
+            onClick={toggleSalaryVisibility}
+            className={styles.iconButton}
+          >
+            {isSalaryVisible ? <EyeOffIcon /> : <EyeIcon />}
+          </button>
+        </div>
+      ),
     },
     {
       key: "ot_rate",
@@ -98,6 +117,17 @@ export const RejectedComponent: React.FC = () => {
       key: "salary_overtime",
       dataIndex: "salary_overtime",
       title: "Salary Overtime",
+      cell: ({ value }) => (
+        <div>
+          {isSalaryVisible ? value : "******"}
+          <button
+            onClick={toggleSalaryVisibility}
+            className={styles.iconButton}
+          >
+            {isSalaryVisible ? <EyeOffIcon /> : <EyeIcon />}
+          </button>
+        </div>
+      ),
     },
     {
       key: "claim_status",
@@ -105,18 +135,18 @@ export const RejectedComponent: React.FC = () => {
       title: "Claim Status",
       cell: ({ value }) => <StatusTag status={value as StatusType} />,
     },
-    {
-      key: "action",
-      dataIndex: "claim_id",
-      title: "",
-      cell: ({ value }) => (
-        <EyeIcon
-          className={styles.icon}
-          // onClick={() => handleViewDetail(value as string)}
-        />
-      ),
-    },
-  ];
+    // {
+    //   key: "action",
+    //   dataIndex: "claim_id",
+    //   title: "",
+    //   cell: ({ value }) => (
+    //     <EyeIcon
+    //       className={styles.icon}
+    //       // onClick={() => handleViewDetail(value as string)}
+    //     />
+    //   ),
+    // },
+  ].filter((column) => !column.hidden);
 
   const dataSource: DataRecord[] = claimList.map((claim) => ({
     key: claim.request_id,
@@ -130,6 +160,9 @@ export const RejectedComponent: React.FC = () => {
   return (
     <div>
       <h1 className={styles.title}>Rejected Claims</h1>
+      {/* <button onClick={toggleSalaryVisibility}>
+        {isSalaryVisible ? "Hide Salary" : "Show Salary"}
+      </button> */}
       <TableComponent
         columns={columns}
         dataSource={dataSource}

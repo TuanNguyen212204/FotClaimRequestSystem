@@ -38,7 +38,7 @@ export const fetchApprovedClaimsApproverAsync = createAsyncThunk<
     console.log("data: ", response.data);
     return {
       data: response.data.data,
-      totalPages: response.data.pagination?.totalPages || 1,
+      totalPages: response.data.totalPages,
     };
   } catch (error) {
     console.error("Fetch Approverd Claims for Approver error " + error);
@@ -58,8 +58,8 @@ export const fetchAllPendingClaimAsync = createAsyncThunk<
     );
     console.log("data: ", response.data);
     return {
-      data: response.data.data || [],
-      totalPages: response.data.pagination?.totalPages,
+      data: response.data.data,
+      totalPages: response.data.totalPages,
     };
   } catch (error) {
     console.error("Fetch Pending Claims for Approver error " + error);
@@ -81,7 +81,7 @@ export const fetchAllRejectedClaimAsync = createAsyncThunk<
     console.log("data: ", response.data);
     return {
       data: response.data.data || [],
-      totalPages: response.data.pagination?.totalPages || 1,
+      totalPages: response.data.totalPages,
     };
   } catch (error) {
     console.error("Fetch Rejected Claims for Approver error " + error);

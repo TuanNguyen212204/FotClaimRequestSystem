@@ -31,7 +31,7 @@ export const PendingComponent: React.FC = () => {
   const totalPages = useSelector(selectAllPendingTotalPages);
   const [loading, setLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [limit] = useState(5);
+  const [limit] = useState(8);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalContent, setModalContent] = useState<{
     title: string;
