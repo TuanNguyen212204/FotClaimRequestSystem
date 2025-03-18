@@ -1,0 +1,32 @@
+.toggle-wrapper {
+  width: 56px;
+  height: 32px;
+  background-color: #d1d5db;
+  border-radius: 9999px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  transition: background-color 0.3s ease-in-out;
+  border: none;
+  cursor: pointer;
+}
+
+.toggle-circle {
+  width: 24px;
+  height: 24px;
+  background: white;
+  border-radius: 50%;
+  position: absolute;
+  left: 4px;
+  transition: left 0.3s ease-in-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-wrapper.enabled {
+  background-color: #4ade80;
+}
+
+.toggle-wrapper.enabled .toggle-circle {
+  left: 28px;
+}

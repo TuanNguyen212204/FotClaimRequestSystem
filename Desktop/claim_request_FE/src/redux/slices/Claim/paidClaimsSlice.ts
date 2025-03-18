@@ -3,19 +3,26 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import httpClient from "@/constant/apiInstance";
 import { AxiosResponse } from "axios";
 
-interface Project {
-  project_id: string;
-  project_name: string;
-  time_durations: string;
+interface ClaimDetail {
+  date: string;
+  working_hours: number;
 }
 
 interface ClaimData {
-  claim_id: string;
+  request_id: string;
   user_id: string;
-  full_name: string;
+  project_id: string;
+  project_name: string;
+  start_date: string;
+  end_date: string;
+  total_hours: number;
   submitted_date: string;
-  total_working_hours: number;
-  project: Project;
+  approved_date: string;
+  paid_date: string;
+  claim_status: string;
+  full_name: string;
+  salary_overtime: string;
+  claim_details: ClaimDetail[];
 }
 
 interface PaidClaimsState {
@@ -31,11 +38,7 @@ export const fetchPaidClaimsAsync = createAsyncThunk<ApiResponse<ClaimData[]>, s
   async (page: string): Promise<ApiResponse<ClaimData[]>> => {
     try {
       const response: AxiosResponse<ApiResponse<ClaimData[]>> = await httpClient.get(
-        '/finance/claims/paid',
-        {
-          page: parseInt(page),
-          limit: 10
-        }
+        `/finance/claims/paid?page=${page}&limit=10`
       );
       return response.data;
     } catch (error) {

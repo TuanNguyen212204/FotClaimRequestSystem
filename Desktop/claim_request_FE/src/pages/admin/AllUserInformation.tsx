@@ -1,7 +1,7 @@
-import TableComponent from "@components/ui/Table/Table";
+import TableComponent, { SortConfig } from "@components/ui/Table/Table";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch } from "@redux/index.ts";
-import { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import ConfirmModal from "@/components/ui/modal/ConfirmModal";
 import {
   selectAllUser,
@@ -13,14 +13,21 @@ import styles from "./AllUserInformation.module.css";
 import httpClient from "@/constant/apiInstance";
 import { useNavigate } from "react-router-dom";
 import { PATH } from "@constant/config";
-import { ApiResponseNoGeneric } from "@/types/ApiResponse";
+import { ApiResponse, ApiResponseNoGeneric } from "@/types/ApiResponse";
 import { toast } from "react-toastify";
 import Modal from "@/components/ui/modal/Modal";
-import { X } from "lucide-react";
+import { CloudCog, X } from "lucide-react";
 import { SquarePen } from "lucide-react";
 import { User } from "@/types/User";
 import { GiCogLock } from "react-icons/gi";
 import { set } from "date-fns";
+import { UpdateUser } from "../User/UpdateUser";
+import ToggleButton from "@/components/ui/ToggleButton/ToggleButton";
+import { CreateUser } from "../User/CreateUser";
+import { CircleCheck } from "lucide-react";
+import { h } from "node_modules/framer-motion/dist/types.d-B50aGbjN";
+import { AssignProject } from "../AssignProject";
+
 const AllUserInformation: React.FC = () => {
   const tableRef = useRef<{
     getSelectedData: () => DataRecord[];
@@ -41,13 +48,14 @@ const AllUserInformation: React.FC = () => {
     console.log("Selected data:", selectedData);
   };
 
-  // useEffect(() => {
-  //   if (tableRef.current) {
-  //     handleGetSelectedData();
-  //     console.log("a");
-  //   }
-  // }, []); //
-
+  const username = localStorage.getItem("username");
+  const count = localStorage.getItem("count");
+  useEffect(() => {
+    if (count === "0") {
+      toast.success("Welcome back" + username + " to the system!");
+      localStorage.setItem("count", "1");
+    }
+  }, [username]);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const users = useSelector(selectAllUser);
@@ -55,6 +63,29 @@ const AllUserInformation: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const [openUpdate, setOpenUpdate] = useState<boolean>(false);
+  const [openAssign, setOpenAssign] = useState<boolean>(false);
+  const [userID, setUserID] = useState<string>("");
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [checkedDisable, setCheckedDisable] = useState<boolean>(true);
+  const [initialToggleStates, setInitialToggleStates] = useState<{
+    [key: string]: boolean;
+  }>({});
+  const [userStatuses, setUserStatuses] = useState<{ [key: string]: number }>({});
+  useEffect(() => {
+    const statuses = users.reduce((acc, user) => {
+      acc[user.user_id] = user.user_status ?? 0;
+      return acc;
+    }, {} as { [key: string]: number });
+    setUserStatuses(statuses);
+  }, [users]);
+
+  const [assignID, setAssignID] = useState<string>("");
+  const [toggleState, setToggleState] = useState<{ [key: string]: boolean }>(
+    {}
+  );
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -65,7 +96,7 @@ const AllUserInformation: React.FC = () => {
     fetchData();
   }, [dispatch, currentPage]);
   const handleCreateUser = async () => {
-    navigate(PATH.createUser);
+    handleOpenModal();
   };
   const dataSource: DataRecord[] = users.map((user, index) => ({
     ...user,
@@ -75,7 +106,6 @@ const AllUserInformation: React.FC = () => {
   }));
 
   const handlePageChange = (newPage: number) => {
-    console.log("Trang mới:", newPage);
     setCurrentPage(newPage);
   };
   const deleteUser = async (id: string) => {
@@ -99,6 +129,7 @@ const AllUserInformation: React.FC = () => {
       console.error("Error deleting user:", error);
     }
   };
+
   const handleOpenModal = () => {
     setOpenModal(true);
   };
@@ -106,35 +137,130 @@ const AllUserInformation: React.FC = () => {
     setOpenModal(false);
   };
   const handleUpdate = (id?: string) => {
-    if (!id) return;
-    console.log("Update user with ID:", id);
-    navigate(`/update-user?id=${id}`);
+    setUserID(id ? id : "");
+    setOpenUpdate(true);
+  };
+  const sortConfig: SortConfig = {
+    columnKey: "full_name",
+    order: "asc",
   };
 
-  const handleDeleteConfirm = (userId: string) => {
+  const handleToggleStatus = async (userId: string) => {
+    try {
+      const response = httpClient.put<ApiResponseNoGeneric>(
+        `/admin/staff/${userId}/status`
+      );
+      console.log(response);
+      setUserStatuses((prev) => ({
+        ...prev,
+        [userId]: prev[userId] === 1 ? 0 : 1,
+      }));
+    } catch (error) {
+      console.error("Error toggle status:", error);
+    }
+  };
+  const handleUpdateConfirm = (
+    name: string,
+    email: string,
+    id: string,
+    value: boolean
+  ) => {
+    setName(name);
+    setEmail(email);
     Modal.confirm({
-      title: "Do you want to delete this user?",
-      children: `User ID: ${userId} will be deleted`,
-      onOk() {
-        handleDelete(userId); // Gọi hàm xóa người dùng
+      title: value ? "Enable User" : "Disable User",
+      children: `Are you sure you want to ${
+        value ? "Enable" : "Disable"
+      } user ${name} with email ${email}?`,
+      onOk: () => {
+        handleToggleStatus(id);
+        toast.success("Update status successful!");
       },
-      onCancel() {
-        console.log("User canceled deletion");
+      onCancel: () => {
+        toast.error("Update status failed!");
+        setToggleState((prev) => ({
+          ...prev,
+          [id]: !value,
+        }));
       },
     });
   };
-
-  const columns: Column[] = [
+  const handleAssignUser = (id: string) => {
+    setOpenAssign(true);
+    setAssignID(id);
+  };
+  const columns: Column<User>[] = [
     { key: "full_name", dataIndex: "full_name", title: "Full Name" },
     { key: "username", dataIndex: "username", title: "Username" },
     { key: "email", dataIndex: "email", title: "Email" },
     { key: "department", dataIndex: "department", title: "Department" },
     { key: "job_rank", dataIndex: "job_rank", title: "Job Rank" },
     {
+      key: "user_status",
+      dataIndex: "user_status",
+      title: "Status",
+      cell: ({ value, record }: { value: number; record: User }) => {
+        return (
+          <div>
+            <div>
+              <ToggleButton
+                userId={record.user_id}
+                checked={
+                  toggleState[record.user_id] ?? record.user_status === 1
+                }
+                onChange={(newChecked) => {
+                  setToggleState((prev) => ({
+                    ...prev,
+                    [record.user_id]: newChecked,
+                  }));
+                  handleUpdateConfirm(
+                    record.username,
+                    record.email,
+                    record.user_id,
+                    newChecked
+                  );
+                }}
+              />
+            </div>
+          </div>
+        );
+      },
+    },
+    {
+      key: "assign",
+      dataIndex: "assign",
+      title: "Assign",
+      cell: ({ value, record }: { value: string; record: User }) => {
+        return (
+          <div>
+             {userStatuses[record.user_id] === 1 && (
+              <button
+                onClick={() => handleAssignUser(record.user_id as string)}
+              >
+                <div>
+                  <CircleCheck />
+                </div>
+              </button>
+            )}
+            {userStatuses[record.user_id] === 0 && (
+              <button
+                disabled
+                onClick={() => handleAssignUser(record.user_id as string)}
+              >
+                <div>
+                  <X />
+                </div>
+              </button>
+            )}
+          </div>
+        );
+      },
+    },
+    {
       key: "user_id",
       dataIndex: "user_id",
       title: "Action",
-      cell: ({ value }) => {
+      cell: ({ value, record }: { value: string; record: User }) => {
         return (
           <div style={{ display: "flex" }}>
             <div>
@@ -147,16 +273,22 @@ const AllUserInformation: React.FC = () => {
                 </span>
               </button>
             </div>
-            <div>
+            {/* <div>
               <button
                 className={styles.delete_button}
-                onClick={() => handleDeleteConfirm(value as string)}
+                onClick={() =>
+                  handleDeleteConfirm(
+                    record.username as string,
+                    record.email as string,
+                    record.user_id as string
+                  )
+                }
               >
                 <span>
                   <X />
                 </span>
               </button>
-            </div>
+            </div> */}
           </div>
         );
       },
@@ -165,22 +297,45 @@ const AllUserInformation: React.FC = () => {
 
   return (
     <div>
+      {openModal && (
+        <div className={styles.editModal}>
+          <div>
+            <CreateUser openModal={openModal} setOpenModal={setOpenModal} />
+          </div>
+        </div>
+      )}
+      {openUpdate && (
+        <div className={styles.editModal}>
+          <div>
+            <UpdateUser id={userID} setOpenModal={setOpenUpdate} />
+          </div>
+        </div>
+      )}
+      {openAssign && (
+        <div className={styles.editModal}>
+          <div>
+            {" "}
+            <AssignProject id={assignID} setOpen={setOpenAssign} />
+          </div>
+        </div>
+      )}
+
       <div>
-        <button onClick={() => deleteAllOFSelectedData()}>Delete</button>
+        <TableComponent<User>
+          // sortConfig={sortConfig}
+          ref={tableRef}
+          isHaveCheckbox={false}
+          columns={columns}
+          dataSource={dataSource}
+          loading={loading}
+          pagination={true}
+          name="Role"
+          createButton={true}
+          totalPage={totalPage}
+          onPageChange={handlePageChange}
+          onCreateButtonClick={handleCreateUser}
+        />
       </div>
-      <TableComponent
-        ref={tableRef}
-        isHaveCheckbox={true}
-        columns={columns}
-        dataSource={dataSource}
-        loading={loading}
-        pagination={true}
-        name="Role"
-        createButton={true}
-        totalPage={totalPage}
-        onPageChange={handlePageChange}
-        onCreateButtonClick={handleCreateUser}
-      />
     </div>
   );
 };

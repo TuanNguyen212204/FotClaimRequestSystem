@@ -1,0 +1,31 @@
+.cancel_button {
+  margin-left: 418px;
+  margin-top: -18px;
+  color: red;
+}
+.update_button_container {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+.update_button {
+  margin-top: 20px;
+  margin-left: 10px;
+  background-color: #89cff0;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.input_container {
+  margin-left: 50px;
+}
+.flex {
+  display: flex;
+}
+.label_container {
+  padding-top: 2px;
+  color: red;
+}
+.label_container div {
+  color: red;
+}

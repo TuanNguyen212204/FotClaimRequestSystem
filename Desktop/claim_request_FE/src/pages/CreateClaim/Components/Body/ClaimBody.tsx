@@ -26,7 +26,12 @@ export default function ClaimBody({
         setValue={setValue}
         ProjectList={ProjectList}
       />
-      <ClaimTable control={control} register={register} errors={errors} />
+      <ClaimTable
+        control={control}
+        register={register}
+        errors={errors}
+        setValue={setValue}
+      />
       {/* <AdditionalInfo register={register} /> */}
       <ButtonGroup />
     </Card>

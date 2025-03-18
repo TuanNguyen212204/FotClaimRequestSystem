@@ -1,42 +1,29 @@
 import React, { useEffect } from "react";
-import { useParams,useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { IoArrowBack } from "react-icons/io5"; 
 import styles from "./ClaimStatus.module.css";
-import { Column } from "../../components/ui/Table/Table";
-import { Printer } from "lucide-react";
+import TableComponent, { Column } from "../../components/ui/Table/Table";
 import { AppDispatch } from "@/redux";
 import { fetchPaidClaimsAsync } from "../../redux/slices/Claim/paidClaimsSlice";
-import { ArrowLeft } from "lucide-react"; 
+ 
 
-interface Project {
-  project_id: string;
-  project_name: string;
-  time_durations: string;
-}
-
-interface ClaimData {
-  claim_id: string;
-  user_id: string;
-  full_name: string;
-  submitted_date: string;
-  approved_date: string | null;
-  total_working_hours: number;
-  claim_status: string;
-  project: Project;
+interface ClaimDetail {
+  date: string;
+  working_hours: number;
 }
 
 const ClaimStatus: React.FC = () => {
-  const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const dispatch = useDispatch<AppDispatch>();
   const { data: claims, loading } = useSelector((state: any) => state.paidClaims);
-
+  const navigate = useNavigate(); 
   useEffect(() => {
     dispatch(fetchPaidClaimsAsync("1"));
   }, [dispatch]);
 
-  const formatDate = (dateString: string | null) => {
-    if (!dateString) return 'Pending';
+  const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const day = date.getDate();
     const month = date.getMonth() + 1;
@@ -44,146 +31,127 @@ const ClaimStatus: React.FC = () => {
     return `${day}/${month}/${year}`;
   };
 
-  const columns: Column[] = [
+  const columns: Column<ClaimDetail>[] = [
     { 
-      key: 'claim_id', 
-      dataIndex: 'claim_id', 
-      title: 'Claim ID'
+      key: 'date', 
+      dataIndex: 'date', 
+      title: 'Date',
+      cell: ({ value }) => formatDate(value)
     },
     { 
-      key: 'overtime_duration', 
-      dataIndex: 'submitted_date', 
-      title: 'Overtime Duration',
-      cell: ({ record }) => (
-        <div className={styles.dateRange}>
-          <div>From: {formatDate((record as ClaimData).submitted_date)}</div>
-          <div>To: {formatDate((record as ClaimData).approved_date)}</div>
-        </div>
-      )
-    },
-    { 
-      key: 'overtime_date', 
-      dataIndex: 'submitted_date', 
-      title: 'Overtime Date',
-      cell: ({ value }) => formatDate(value as string)
-    },
-    { 
-      key: 'total_hours', 
+      key: 'working_hours', 
       dataIndex: 'working_hours', 
-      title: 'Total Hours',
+      title: 'Working Hours',
       cell: ({ value }) => `${value} hours`
     },
-    { 
-      key: 'overtime_paid', 
-      dataIndex: 'working_hours', 
-      title: 'Overtime Paid',
-      cell: ({ value }) => `${((value as number) * 50000).toLocaleString('vi-VN')} VND`
+    {
+      key: 'hourly_rate',
+      dataIndex: 'working_hours',
+      title: 'Amount',
+      cell: ({ value }) => {
+        const hourlyRate = Number(selectedClaim.salary_overtime) / selectedClaim.total_hours;
+        const amount = hourlyRate * value;
+        return `${amount.toLocaleString('vi-VN')} USD`;
+      }
     },
-    { 
-      key: 'status', 
-      dataIndex: 'claim_status', 
+    {
+      key: 'average_rate',
+      dataIndex: 'working_hours',
+      title: 'Hourly Rate',
+      cell: () => {
+        const hourlyRate = Number(selectedClaim.salary_overtime) / selectedClaim.total_hours;
+        return `${hourlyRate.toLocaleString('vi-VN')} USD/hour`;
+      }
+    },
+    {
+      key: 'status',
+      dataIndex: 'working_hours',
       title: 'Status',
-      cell: () => <span className={styles.statusPaid}>Paid</span>
+      cell: () => (
+        <div className={styles.statusPaid}>
+          Paid
+        </div>
+      )
     }
   ];
 
-  if (loading || !claims.length) {
-    return (
-      <div className={styles.container}>
-        <div className={styles.header}>
-          <h1 className={styles.title}>Claim Status</h1>
-        </div>
-        <div className={styles.loading}>
-          {loading ? "Loading..." : `No claim information found for ID: ${id}`}
-        </div>
-      </div>
-    );
+  if (loading || !claims?.length) {
+    return <div className={styles.loading}>Loading claim details...</div>;
   }
 
-  const claimDetail = claims.find((claim: ClaimData) => claim.claim_id === id) || claims[0];
-  const [startDate, endDate] = claimDetail.project.time_durations.split(' - ');
+  const selectedClaim = claims.find((claim: any) => claim.request_id === id);
+  
+  if (!selectedClaim?.claim_details?.length) {
+    return <div className={styles.loading}>No overtime details found</div>;
+  }
 
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <button 
-          className={styles.backButton} 
+          className={styles.backButton}
           onClick={() => navigate(-1)}
         >
-          <ArrowLeft size={20} />
+          <IoArrowBack size={20} />
         </button>
-        <h1 className={styles.title}>Claim Details</h1>
-        <hr />
-      </div>
-      
-      <div className={styles.infoBox}>
-        <div className={styles.infoColumn}>
-          <div className={styles.infoItem}>
-            <label>User ID:</label>
-            <span>{claimDetail.user_id}</span>
-          </div>
-          <div className={styles.infoItem}>
-            <label>Project Name:</label>
-            <span>{claimDetail.project.project_name}</span>
-          </div>
-          <div className={styles.infoItem}>
-            <label>Project Duration:</label>
-            <span>From: {startDate} To: {endDate}</span>
-          </div>
-        </div>
-        <div className={styles.infoColumn}>
-          <div className={styles.infoItem}>
-            <label>Staff Name:</label>
-            <span>{claimDetail.full_name}</span>
-          </div>
-          <div className={styles.infoItem}>
-            <label>Project ID:</label>
-            <span>{claimDetail.project.project_id}</span>
-          </div>
-        </div>
+        <h1 className={styles.title}>Claim Status</h1>
       </div>
 
       <div className={styles.tableContainer}>
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              {columns.map((column) => (
-                <th 
-                  key={column.key} 
-                  className={column.key === 'status' ? styles.statusHeader : styles.tableHeader}
+        <TableComponent
+          columns={[
+            
+            { key: 'project_name', dataIndex: 'project_name', title: 'Project Name' },
+            { 
+              key: 'overtime_duration', 
+              dataIndex: 'overtime_duration', 
+              title: 'Overtime Duration',
+              cell: () => (
+                <div>
+                  <div>From: {formatDate(selectedClaim?.start_date)}</div>
+                  <div>To: {formatDate(selectedClaim?.end_date)}</div>
+                </div>
+              )
+            },
+            { 
+              key: 'total_hours', 
+              dataIndex: 'total_hours', 
+              title: 'Total Working Hours',
+              cell: () => `${selectedClaim?.total_hours} hours`
+            },
+            {
+              key: 'overtime_paid',
+              dataIndex: 'salary_overtime',
+              title: 'Overtime Paid',
+              cell: () => `${Number(selectedClaim?.salary_overtime).toLocaleString('vi-VN')} USD`
+            },
+            {
+              key: 'status',
+              dataIndex: 'claim_status',
+              title: 'Status',
+              cell: () => (
+                <div className={styles.statusPaid}>
+                  Paid
+                </div>
+              )
+            },
+            {
+              key: 'action',
+              title: 'Action',
+              cell: () => (
+                <button 
+                  className={styles.printButton}
+                  onClick={() => window.print()}
                 >
-                  <div className={styles.headerContent}>
-                    {column.title}
-                  </div>
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              {columns.map((column) => (
-                <td 
-                  key={column.key}
-                  className={column.key === 'status' ? styles.statusCell : styles.tableCell}
-                >
-                  {column.cell ? 
-                    column.cell({ 
-                      value: claimDetail[column.dataIndex as keyof typeof claimDetail],
-                      record: claimDetail 
-                    }) 
-                    : claimDetail[column.dataIndex as keyof typeof claimDetail]}
-                </td>
-              ))}
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div className={styles.actions}>
-        <button className={styles.printButton} onClick={() => window.print()}>
-          <Printer size={16} />
-          Print
-        </button>
+                  Print
+                </button>
+              )
+            }
+          ]}
+          dataSource={[{ ...selectedClaim, key: selectedClaim?.request_id }]}
+          loading={loading}
+          pagination={false}
+        />
       </div>
     </div>
   );
