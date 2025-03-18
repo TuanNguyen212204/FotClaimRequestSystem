@@ -104,12 +104,7 @@ const ClaimStatus: React.FC = () => {
       <div className={styles.tableContainer}>
         <TableComponent
           columns={[
-            { 
-              key: 'claim_id', 
-              dataIndex: 'claim_id', 
-              title: 'Claim ID',
-              cell: () => `C${String(selectedClaim?.request_id).padStart(3, '0')}`
-            },
+            
             { key: 'project_name', dataIndex: 'project_name', title: 'Project Name' },
             { 
               key: 'overtime_duration', 
