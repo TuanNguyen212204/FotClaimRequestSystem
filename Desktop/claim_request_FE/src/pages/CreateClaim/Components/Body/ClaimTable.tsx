@@ -28,7 +28,6 @@ export default function ClaimTable({
     (sum, claim) => sum + (claim.working_hours || 0),
     0,
   );
-
   return (
     <div className="mb-5 box-border overflow-x-auto">
       <h2 className="text-lg pb-1.5! mb-4!">Claim Details</h2>
@@ -46,21 +45,7 @@ export default function ClaimTable({
                 <input
                   type="date"
                   className={styles.form_control}
-                  {...register(`claims.${index}.date`, {
-                    validate: (value, formValues) => {
-                      const allDates = formValues.claims.map(
-                        (claim) => claim.date,
-                      );
-                      console.log(allDates + "dater");
-                      const duplicateCount = allDates.filter(
-                        (date) => date === value,
-                      ).length;
-                      console.log(duplicateCount + "dup count");
-                      return (
-                        duplicateCount <= 1 || "This date is already selected"
-                      );
-                    },
-                  })}
+                  {...register(`claims.${index}.date`)}
                   min={minDate}
                   max={maxDate}
                 />
