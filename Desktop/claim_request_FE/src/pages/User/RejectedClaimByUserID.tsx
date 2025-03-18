@@ -39,9 +39,9 @@ export const RejectedClaimByUserID: React.FC = () => {
       title: "Project ID",
     },
     {
-      key: "total_working_hours",
-      dataIndex: "total_working_hours",
-      title: "Total Working Hours",
+      key: "total_hours",
+      dataIndex: "total_hours",
+      title: "Total Hours",
       cell: ({ value }) => `${value} hours`,
     },
     {
