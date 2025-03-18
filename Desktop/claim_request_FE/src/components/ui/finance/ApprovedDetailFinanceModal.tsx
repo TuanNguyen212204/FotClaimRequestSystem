@@ -1,5 +1,5 @@
 import Modal, { confirmModal } from "@ui/modal/Modal";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@/redux";
 import {
@@ -11,7 +11,6 @@ import StatusTag from "@ui/StatusTag/StatusTag";
 import styles from "@ui/finance/ApprovedDetailFinance.module.css";
 import { MoveRight } from "lucide-react";
 import httpClient from "@/constant/apiInstance";
-import { ConfirmModal } from "@ui/modal/ConfirmModal";
 
 const formatDateToMonthDay = (date: string) => {
   const dateObj = new Date(date);
@@ -102,7 +101,7 @@ const ApprovedDetailFinanceModal = ({
       centered={false}
       position={{ right: 20, top: 23 }}
       height="95%"
-      classname={styles.modal}
+      className={styles.modal}
     >
       <hr />
       <div className={styles.container}>

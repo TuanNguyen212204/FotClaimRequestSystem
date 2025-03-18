@@ -1,5 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Claim, ClaimFinance, DetailClaimFinance } from "@/types/Claim";
+import {
+  Claim,
+  ClaimApprover,
+  ClaimFinance,
+  DetailClaimFinance,
+} from "@/types/Claim";
 
 import {
   fetchAllClaimAsync,
@@ -15,7 +20,7 @@ import {
 
 const initialState: {
   data: Claim[];
-  listClaimApprovedApprover: Claim[];
+  listClaimApprovedApprover: ClaimApprover[];
   listClaimApprovedFiance: ClaimFinance[];
   detailClaimApprovedFiance: DetailClaimFinance | null;
   myClaim: Claim[];
@@ -57,7 +62,7 @@ export const claimSlice = createSlice({
         state.status = "success";
         state.data = action.payload;
       })
-      //fetch all approved claim with role is Approver
+      //---------------------------------------------- Approved Claims for Appover -----------------------------------------------------
       .addCase(fetchApprovedClaimsApproverAsync.rejected, (state, action) => {
         state.status = "failed";
         state.error = String(action.error.message);

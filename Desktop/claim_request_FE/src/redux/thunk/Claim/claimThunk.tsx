@@ -2,6 +2,7 @@ import httpClient from "@constant/apiInstance";
 import { ApiResponse } from "@/types/ApiResponse";
 import {
   Claim,
+  ClaimApprover,
   ClaimFinance,
   DetailClaimFinance,
   PaymentResponse,
@@ -26,19 +27,18 @@ export const fetchAllClaimAsync = createAsyncThunk<Claim[]>(
 );
 
 export const fetchApprovedClaimsApproverAsync = createAsyncThunk<
-  { data: Claim[]; totalPages: number },
+  { data: ClaimApprover[]; totalPages: number },
   { page: string; limit: string }
 >("claim/approver/fetchApprovedClaim", async ({ page, limit }) => {
   try {
     await delay(1000);
-    const response = await httpClient.get<ApiResponse<Claim[]>>(
+    const response = await httpClient.get<ApiResponse<ClaimApprover[]>>(
       "/approvers/approved-claim",
       { page: page, limit: limit }
     );
-    console.log("data: ", response.data);
     return {
       data: response.data.data,
-      totalPages: response.data.pagination.totalPages,
+      totalPages: response.data.totalPages,
     };
   } catch (error) {
     console.error("Fetch Approverd Claims for Approver error " + error);
