@@ -1,7 +1,7 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Project } from "@/types/Project";
 import httpClient from "@/constant/apiInstance";
 import { ApiResponse } from "@/types/ApiResponse";
+import { Project } from "@/types/Project";
 import styles from "./UpdateProject.module.css";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -12,12 +12,17 @@ const UpdateProject: React.FC = () => {
   const projectId = searchParams.get("id");
 
   const [loading, setLoading] = useState(true);
-  const [errors, setErrors] = useState<{ end_date?: string; project_status?: string }>({});
   const [formData, setFormData] = useState({
     project_name: "",
     start_date: "",
     end_date: "",
     project_status: 0,
+  });
+
+  const [errors, setErrors] = useState({
+    project_name: "",
+    start_date: "",
+    end_date: "",
   });
 
   useEffect(() => {
@@ -27,7 +32,7 @@ const UpdateProject: React.FC = () => {
         const response = await httpClient.get<ApiResponse<Project>>(
           `/projects/${projectId}`
         );
-        
+
         const projectData = response.data;
         if (projectData) {
           setFormData({
@@ -39,6 +44,7 @@ const UpdateProject: React.FC = () => {
         }
       } catch (error) {
         console.error("Error fetching project:", error);
+        toast.error("Failed to load project data.");
       } finally {
         setLoading(false);
       }
@@ -47,26 +53,43 @@ const UpdateProject: React.FC = () => {
     fetchProject();
   }, [projectId]);
 
-  const validate = () => {
-    let newErrors: { end_date?: string; project_status?: string } = {};
-    
-    if (formData.end_date && formData.start_date && formData.end_date < formData.start_date) {
-      newErrors.end_date = "End date must be after start date.";
+  const validateForm = () => {
+    let valid = true;
+    const newErrors = { project_name: "", start_date: "", end_date: "" };
+
+    if (!formData.project_name.trim()) {
+      newErrors.project_name = "Project name is required.";
+      valid = false;
     }
-    
-    if (![1, 2].includes(Number(formData.project_status))) {
-      newErrors.project_status = "Project status must be 1 or 2.";
+
+    if (!formData.start_date) {
+      newErrors.start_date = "Start date is required.";
+      valid = false;
+    }
+
+    if (!formData.end_date) {
+      newErrors.end_date = "End date is required.";
+      valid = false;
+    }
+
+    if (formData.start_date && formData.end_date) {
+      const start = new Date(formData.start_date);
+      const end = new Date(formData.end_date);
+      if (start > end) {
+        newErrors.end_date = "End date cannot be before start date.";
+        valid = false;
+      }
     }
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    return valid;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!projectId) return;
-    
-    if (!validate()) return;
+
+    if (!validateForm()) return;
 
     try {
       const apiData = {
@@ -75,32 +98,27 @@ const UpdateProject: React.FC = () => {
         end_date: new Date(formData.end_date).toISOString(),
         project_status: Number(formData.project_status),
       };
-    
+
       const response = await httpClient.put<ApiResponse<Project>>(
         `/projects/${projectId}`,
         apiData
-      );      
+      );
 
       if (response.data.httpStatus === 200) {
         toast.success("Project updated successfully!");
         navigate("/project-information");
       } else {
-        console.error("Update failed:", response.data);
+        toast.error("Failed to update project.");
       }
     } catch (error: any) {
-      if (error.response) {
-        console.error("API Error:", error.response.data);
-      } else if (error.request) {
-        console.error("No response received:", error.request);
-      } else {
-        console.error("Request setup error:", error.message);
-      }
-    }    
+      console.error("Error updating project:", error);
+      toast.error("An error occurred while updating the project.");
+    }
   };
 
   const handleCancel = () => {
-    toast.info("Update canceled."); 
-    navigate("/project-information"); 
+    toast.info("Update canceled.");
+    navigate("/project-information");
   };
 
   const handleChange = (
@@ -111,6 +129,17 @@ const UpdateProject: React.FC = () => {
       ...prev,
       [name]: value,
     }));
+
+    // Kiểm tra lỗi khi nhập
+    if (name === "project_name" && !value.trim()) {
+      setErrors((prev) => ({ ...prev, project_name: "Project name is required." }));
+    } else if (name === "start_date" && !value) {
+      setErrors((prev) => ({ ...prev, start_date: "Start date is required." }));
+    } else if (name === "end_date" && !value) {
+      setErrors((prev) => ({ ...prev, end_date: "End date is required." }));
+    } else {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
   };
 
   if (loading) return <div>Loading...</div>;
@@ -127,6 +156,7 @@ const UpdateProject: React.FC = () => {
             value={formData.project_name}
             onChange={handleChange}
           />
+          {errors.project_name && <p className={styles.error}>{errors.project_name}</p>}
         </div>
         <div>
           <label>Start Date:</label>
@@ -136,6 +166,7 @@ const UpdateProject: React.FC = () => {
             value={formData.start_date}
             onChange={handleChange}
           />
+          {errors.start_date && <p className={styles.error}>{errors.start_date}</p>}
         </div>
         <div>
           <label>End Date:</label>
@@ -145,7 +176,7 @@ const UpdateProject: React.FC = () => {
             value={formData.end_date}
             onChange={handleChange}
           />
-          {errors.end_date && <p style={{ color: "red" }}>{errors.end_date}</p>}
+          {errors.end_date && <p className={styles.error}>{errors.end_date}</p>}
         </div>
         <div>
           <label>Status:</label>
@@ -154,10 +185,9 @@ const UpdateProject: React.FC = () => {
             value={formData.project_status}
             onChange={handleChange}
           >
+            <option value={0}>Inactive</option>
             <option value={1}>Active</option>
-            <option value={2}>Completed</option>
           </select>
-          {errors.project_status && <p style={{ color: "red" }}>{errors.project_status}</p>}
         </div>
         <button type="submit">Update Project</button>
         <button type="button" onClick={handleCancel}>

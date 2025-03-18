@@ -1,45 +1,66 @@
+.error {
+  color: red;
+  font-size: 16px; /* Tăng kích thước chữ lỗi */
+  margin-top: 6px;
+}
+
 .update-project-container {
-  padding: 20px;
-  max-width: 600px;
-  margin: 0 auto;
+  width: 500px; /* Tăng kích thước form */
+  margin: 20px auto;
+  padding: 25px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background: #f9f9f9;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Thêm bóng để đẹp hơn */
 }
 
-.update-project-container form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+.update-project-container h2 {
+  text-align: center;
+  font-size: 24px; /* Tăng kích thước tiêu đề */
 }
 
-.update-project-container div {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+.update-project-container form div {
+  margin-bottom: 16px; /* Tăng khoảng cách */
 }
 
 .update-project-container label {
+  display: block;
   font-weight: bold;
+  margin-bottom: 6px;
+  font-size: 16px; /* Tăng kích thước chữ label */
 }
 
 .update-project-container input,
 .update-project-container select {
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  width: 100%;
+  padding: 10px; /* Tăng padding để input lớn hơn */
+  border: 1px solid #aaa;
+  border-radius: 6px;
+  font-size: 16px; /* Tăng kích thước chữ */
 }
 
 .update-project-container button {
-  padding: 10px;
+  width: 48%;
+  padding: 12px; /* Tăng chiều cao nút */
+  margin: 8px 1%;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
+  font-size: 16px; /* Tăng kích thước chữ */
 }
 
 .update-project-container button[type="submit"] {
-  background-color: #4CAF50;
+  background-color: #28a745;
   color: white;
+  font-weight: bold;
 }
 
 .update-project-container button[type="button"] {
-  background-color: #f44336;
+  background-color: #dc3545;
   color: white;
-} 
+  font-weight: bold;
+}
+
+.update-project-container button:hover {
+  opacity: 0.9;
+}

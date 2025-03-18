@@ -11,15 +11,16 @@ import {
   fetchTotalPage,
 } from "@redux/thunk/Project/projectThunk";
 import { Column, DataRecord } from "@components/ui/Table/Table";
-import styles from "./AllUserInformation.module.css";
+import styles from "./ProjectInformation.module.css";
 import httpClient from "@/constant/apiInstance";
 import { useNavigate } from "react-router-dom";
 import { PATH } from "@constant/config";
 import { ApiResponseNoGeneric } from "@/types/ApiResponse";
 import { Project } from "@/types/Project";
-import { Trash2, FilePen } from "lucide-react";
+import { Trash2, FilePen, ClipboardList, Clock } from "lucide-react";
 import { confirmModal } from "@/components/ui/modal/Modal";
 import { toast } from "react-toastify";
+import SummaryCard from "@/components/card/SummaryCard";
 
 const ProjectInformation: React.FC = () => {
   const navigate = useNavigate();
@@ -28,6 +29,7 @@ const ProjectInformation: React.FC = () => {
   const totalPage = useSelector(selectTotalPageOfAllProject) || 1;
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalProjects, setTotalProjects] = useState<number | null>(null);
   console.log("Dữ liệu lấy từ Redux:", project);
   const [limit] = useState(7);
 
@@ -52,8 +54,25 @@ const ProjectInformation: React.FC = () => {
 
   useEffect(() => {
     console.log("Current project state:", project);
-    
   }, [project]);
+
+  useEffect(() => {
+    const fetchSummaryData = async () => {
+      setLoading(true);
+      try {
+        const response = await httpClient.get("/admin/total-projects");
+        console.log("Total projects: ",response);
+        
+        setTotalProjects(response.data.total); // Giả sử API trả về { total: 105 }
+      } catch (error) {
+        console.error("Error fetching total projects:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    fetchSummaryData();
+  }, []);
 
   const handleCreateProject = async () => {
     navigate(PATH.createProject);
@@ -160,6 +179,23 @@ const ProjectInformation: React.FC = () => {
 
   return (
     <div>
+      <h1>Project Information</h1>
+
+      <div className={styles.summaryContainer}>
+        <SummaryCard 
+          title="Total Projects" 
+          value={loading ? "Loading..." : totalProjects ?? "N/A"} 
+          icon={<ClipboardList />} 
+          percentage={10} 
+        />
+        <SummaryCard 
+          title="New Project this month" 
+          value={30}  // Nếu có API cho new projects, thay bằng API tương tự
+          icon={<Clock />} 
+          percentage={-5} 
+        />
+      </div>
+
       <TableComponent
         // ref={tableRef}
         // isHaveCheckbox={true}
