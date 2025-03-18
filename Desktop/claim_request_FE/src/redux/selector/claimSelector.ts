@@ -1,10 +1,14 @@
 import { RootState } from "..";
 export const selectAllClaim = (state: RootState) => state.claim.data;
-export const selectAppovedClaim = (state: RootState) =>
-  state.claim.listClaimApproved;
+export const selectAppovedClaimApprover = (state: RootState) =>
+  state.claim.listClaimApprovedApprover;
 export const selectMyClaim = (state: RootState) => state.claim.myClaim;
 export const selectApprovedClaimTotalPages = (state: RootState) =>
   state.claim.totalPages;
+export const selectApprovedClaimFinance = (state: RootState) =>
+  state.claim.listClaimApprovedFiance;
+export const selectApprovedDetailFinance = (state: RootState) =>
+  state.claim.detailClaimApprovedFiance;
 export const selectApprovedClaimByUserID = (state: RootState) =>
   state.claim.listClaimUserApproved;
 export const selectPendingClaimByUserID = (state: RootState) =>

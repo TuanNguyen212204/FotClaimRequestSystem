@@ -7,24 +7,22 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchApprovedClaimsApproverAsync } from "@redux/thunk/Claim/claimThunk";
 import { AppDispatch } from "@redux";
 import {
-  selectAppovedClaim,
+  selectAppovedClaimApprover,
   selectApprovedClaimTotalPages,
 } from "@redux/selector/claimSelector";
 
-// interface claimList {
-//   claim_id?: string;
-//   user_id?: string;
-//   project_id?: string;
-//   total_working_hours?: number;
-//   submitted_date?: Date;
-//   claim_status?: string;
-//   project_name?: string;
-// }
+const formatDateToDDMMYYYY = (date: string) => {
+  const dateObj = new Date(date);
+  const day = dateObj.getDate();
+  const month = dateObj.getMonth() + 1;
+  const year = dateObj.getFullYear();
+  return `${day}/${month}/${year}`;
+};
 
 export const ApprovedApproverComponent: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const claimList = useSelector(selectAppovedClaim);
+  const claimList = useSelector(selectAppovedClaimApprover);
   const totalPages = useSelector(selectApprovedClaimTotalPages);
   const [loading, setLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -44,14 +42,6 @@ export const ApprovedApproverComponent: React.FC = () => {
     navigate(`/approve-details?id=${id}`);
   };
 
-  const formatDateToDDMMYYYY = (date: string) => {
-    const dateObj = new Date(date);
-    const day = dateObj.getDate();
-    const month = dateObj.getMonth() + 1;
-    const year = dateObj.getFullYear();
-    return `${day}/${month}/${year}`;
-  };
-
   const handlePageChange = (newPage: number) => {
     console.log("Trang mới: ", newPage);
     setCurrentPage(newPage);
@@ -69,21 +59,25 @@ export const ApprovedApproverComponent: React.FC = () => {
     //   title: "User ID",
     // },
     {
+      key: "full_name",
+      dataIndex: "full_name",
+      title: "User Name",
+    },
+    {
       key: "project_name",
       dataIndex: "project_name",
       title: "Project Name",
     },
     {
-      key: "total_working_hours",
-      dataIndex: "total_working_hours",
-      title: "Total Working Hours",
-      cell: ({ value }) => `${value} hours`,
+      key: "time_duration",
+      dataIndex: "time_duration",
+      title: "Time Duration",
     },
     {
-      key: "submitted_date",
-      dataIndex: "submitted_date",
-      title: "Submitted Date",
-      cell: ({ value }) => formatDateToDDMMYYYY(value as string),
+      key: "total_hours",
+      dataIndex: "total_hours",
+      title: "Total Working Hours",
+      cell: ({ value }) => `${value} hours`,
     },
     {
       key: "action",
@@ -100,20 +94,30 @@ export const ApprovedApproverComponent: React.FC = () => {
   const dataSource: DataRecord[] = claimList.map((claim, index) => ({
     ...claim,
     key: index,
-    id: claim.claim_id ? claim.claim_id.toString() : "",
-    status: claim.claim_id ? claim.claim_id : "",
+    full_name: claim.user ? claim.user.full_name.toString() : "",
+    time_duration:
+      claim.start_date && claim.end_date
+        ? `${formatDateToDDMMYYYY(claim.start_date)} - ${formatDateToDDMMYYYY(
+            claim.end_date
+          )}`
+        : "N/A",
   }));
   return (
     <div>
-      <TableComponent
-        columns={columns}
-        dataSource={dataSource}
-        loading={loading}
-        totalPage={totalPages}
-        pagination={true}
-        name="Claims"
-        onPageChange={handlePageChange}
-      />
+      <div>
+        <h1>Approved Claims</h1>
+      </div>
+      <div>
+        <TableComponent
+          columns={columns}
+          dataSource={dataSource}
+          loading={loading}
+          totalPage={totalPages}
+          pagination={true}
+          name="Claims"
+          onPageChange={handlePageChange}
+        />
+      </div>
     </div>
   );
 };

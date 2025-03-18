@@ -16,10 +16,10 @@ function Test() {
       />
       <InputNumber label="Nhập số dey" min={1} max={500} value={50} />
       <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-        <StatusTag status="pending" />
-        <StatusTag status="approved" />
-        <StatusTag status="rejected" />
-        <StatusTag status="paid" />
+        <StatusTag status="PENDING" />
+        <StatusTag status="APPROVED" />
+        <StatusTag status="REJECTED" />
+        <StatusTag status="PAID" />
       </div>
     </div>
   );
