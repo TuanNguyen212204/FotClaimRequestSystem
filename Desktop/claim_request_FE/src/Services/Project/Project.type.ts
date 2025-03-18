@@ -29,9 +29,10 @@ export interface ProjectsResponse {
 export interface CreateClaimData {
   userID: string;
   projectID: string;
-  startDate: string;
-  endDate: string;
-  totalWorkingHours: number;
+  claims: {
+    date: string;
+    working_hours: number;
+  }[];
 }
 
 export interface projectsParamOptions {

@@ -4,10 +4,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@redux/index";
 import { fetchUserByIdAsync } from "@redux/thunk/User/userThunk";
 import { User } from "@/types/User";
-import { useNotification } from "@/components/ui/Notification/NotificationContext";
 import { selectUserById } from "@redux/selector/userSelector";
 import httpClient from "@constant/apiInstance";
-import LoadingOverlay from "@components/ui/Loading/LoadingOverlay";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 
 export const UserInfoComponent: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -15,7 +16,8 @@ export const UserInfoComponent: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedUser, setEditedUser] = useState<Partial<User>>({});
   const [confirmPassword, setConfirmPassword] = useState("");
-  const notification = useNotification();
+  const [isSalaryVisible, setIsSalaryVisible] = useState(false);
+  const navigate = useNavigate();
 
   const accessToken = localStorage.getItem("access_token");
   const userId = localStorage.getItem("user_id");
@@ -29,39 +31,127 @@ export const UserInfoComponent: React.FC = () => {
   useEffect(() => {
     if (selectedUser) {
       setEditedUser(selectedUser);
+      if (selectedUser.user_status === 2) {
+        toast.warning("Please change your password for the first time.");
+        setTimeout(() => {
+          navigate("/change-password");
+        }, 2000);
+      }
     } else {
       setEditedUser({});
     }
-  }, [selectedUser]);
+  }, [selectedUser, navigate]);
 
-  const handleSave = async () => {
-    if (!userId || !editedUser) {
-      notification.show({
-        message: "Cannot save, missing user information.",
-        type: "error",
-      });
-      return;
+  const getRoleName = (roleId: number | undefined): string => {
+    switch (roleId) {
+      case 1:
+        return "Admin";
+      case 2:
+        return "Approver";
+      case 3:
+        return "Finance";
+      case 4:
+        return "Claimer";
+      default:
+        return "N/A";
+    }
+  };
+
+  const getUserStatusLabel = (status: number | undefined): string => {
+    switch (status) {
+      case 1:
+        return "Active";
+      case 0:
+        return "Disabled";
+      case 2:
+        return "Need First-Time Login";
+      default:
+        return "Unknown";
+    }
+  };
+
+  const validateFields = async () => {
+    if (!editedUser.email || editedUser.email.trim() === "") {
+      toast.error("Email is required!");
+      return false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(editedUser.email || "")) {
+      toast.error("Please enter a valid email address!");
+      return false;
+    }
+
+    try {
+      const response = await httpClient.get<any>("/admin/staffs");
+      const users = response.data.data;
+      const emailExists = users.some(
+        (user: User) =>
+          user.email === editedUser.email && user.user_id !== userId
+      );
+      if (emailExists) {
+        toast.error("This email is already in use!");
+        return false;
+      }
+    } catch (error) {
+      toast.error("Failed to validate email. Please try again.");
+      return false;
+    }
+
+    if (!editedUser.department || editedUser.department.trim() === "") {
+      toast.error("Department is required!");
+      return false;
+    }
+
+    const deptRegex = /^[A-Za-z\s]+$/;
+    if (!deptRegex.test(editedUser.department)) {
+      toast.error("Department can only contain letters and spaces!");
+      return false;
+    }
+
+    if (!editedUser.job_rank || editedUser.job_rank.trim() === "") {
+      toast.error("Job Rank is required!");
+      return false;
+    }
+
+    const jobRankRegex = /^[A-Za-z\s]+$/;
+    if (!jobRankRegex.test(editedUser.job_rank)) {
+      toast.error("Job Rank can only contain letters and spaces!");
+      return false;
     }
 
     if (editedUser.password && editedUser.password.trim() !== "") {
       if (editedUser.password !== confirmPassword) {
-        notification.show({
-          message: "New password and confirm password do not match.",
-          type: "error",
-        });
-        return;
+        toast.error("New password and confirm password do not match!");
+        return false;
       }
+      if (editedUser.password.length < 6) {
+        toast.error("Password must be at least 6 characters long!");
+        return false;
+      }
+    }
+
+    return true;
+  };
+
+  const handleSave = async () => {
+    if (!userId || !editedUser) {
+      toast.error("Cannot save, missing user information.");
+      return;
+    }
+
+    const isValid = await validateFields();
+    if (!isValid) {
+      return;
     }
 
     try {
       const requestBody: {
-        full_name: string;
         email: string;
         department: string;
         job_rank: string;
         password?: string;
       } = {
-        full_name: editedUser.full_name || "",
         email: editedUser.email || "",
         department: editedUser.department || "",
         job_rank: editedUser.job_rank || "",
@@ -71,20 +161,23 @@ export const UserInfoComponent: React.FC = () => {
         requestBody.password = editedUser.password;
       }
 
-      await httpClient.put(`/admin/staff/${userId}`, requestBody);
+      const response = await httpClient.put(
+        `/admin/staff/${userId}`,
+        requestBody
+      );
 
       dispatch(fetchUserByIdAsync());
       setIsEditing(false);
-      notification.show({
-        message: "Update user successfully.",
-        type: "success",
-      });
+      toast.success("Update user successfully.");
+      if (editedUser.password && editedUser.user_status === 2) {
+        await httpClient.put(`/admin/staff/${userId}`, {
+          user_status: 1,
+        });
+        dispatch(fetchUserByIdAsync());
+      }
     } catch (error) {
-      console.error("Update User error: " + error);
-      notification.show({
-        message: "Update user failed: " + (error as any).message,
-        type: "error",
-      });
+      console.error("Update User error: ", error);
+      toast.error("Update user failed: " + (error as any).message);
     }
   };
 
@@ -95,7 +188,7 @@ export const UserInfoComponent: React.FC = () => {
           You need to login to view personal information.
         </h2>
         <button
-          onClick={() => (window.location.href = "/login")}
+          onClick={() => navigate("/login")}
           className={styles.saveButton}
           style={{ display: "block", margin: "1rem auto" }}
         >
@@ -106,7 +199,12 @@ export const UserInfoComponent: React.FC = () => {
   }
 
   if (!selectedUser) {
-    return <LoadingOverlay />;
+    return (
+      <div className={styles.loadingContainer}>
+        <div className={styles.spinner}></div>
+        <p>Loading...</p>
+      </div>
+    );
   }
 
   return (
@@ -118,30 +216,40 @@ export const UserInfoComponent: React.FC = () => {
             alt="Avatar"
             className={styles.profileAvatar}
           />
-          <button
-            onClick={() => setIsEditing(true)}
-            className={styles.editButton}
-          >
-            ✏️
-          </button>
+          <div className={styles.updateButtonWrapper}>
+            <button
+              onClick={() => setIsEditing(true)}
+              className={styles.editButton}
+            >
+              UPDATE
+            </button>
+          </div>
         </div>
 
         <div className={styles.profileInfo}>
           <h1>{selectedUser.full_name || "Full Name"}</h1>
           <p className={styles.position}>
-            {selectedUser.job_rank || "No position"}
-          </p>
-          <p className={styles.company}>
-            Department: {selectedUser.department || "Undetermined"}
+            <span>Job Rank:</span> {selectedUser.job_rank || "No Job Rank"},{" "}
+            <span>Department:</span> {selectedUser.department || "Undetermined"}
           </p>
 
           <div className={styles.statsContainer}>
             <div className={styles.statItem}>
-              <h3>{`${selectedUser.salary || "N/A"} $`}</h3>
+              <span className={styles.statIcon}>💰</span>
+              <h3>
+                {isSalaryVisible ? `${selectedUser.salary || "N/A"} $` : "****"}
+              </h3>
+              <button
+                onClick={() => setIsSalaryVisible(!isSalaryVisible)}
+                className={styles.eyeButton}
+              >
+                {isSalaryVisible ? "👁️" : "👁️‍🗨️"}
+              </button>
               <span>Salary</span>
             </div>
             <div className={styles.statItem}>
-              <h3>{selectedUser.user_status === 1 ? "Online" : "Offline"}</h3>
+              <span className={styles.statIcon}>📡</span>
+              <h3>{getUserStatusLabel(selectedUser.user_status)}</h3>
               <span>Status</span>
             </div>
           </div>
@@ -149,119 +257,121 @@ export const UserInfoComponent: React.FC = () => {
       </div>
 
       <div className={styles.profileContent}>
-        <div className={styles.section}>
-          <h2 className={styles.sectionTitle}>User Information</h2>
-          {!isEditing ? (
-            <>
-              <p>
-                <strong>Username:</strong> {selectedUser.username || "N/A"}
-              </p>
-              <p>
-                <strong>Fullname:</strong> {selectedUser.full_name || "N/A"}
-              </p>
-              <p>
-                <strong>Email:</strong> {selectedUser.email || "N/A"}
-              </p>
-              <p>
-                <strong>Department:</strong> {selectedUser.department || "N/A"}
-              </p>
-              <p>
-                <strong>Position:</strong> {selectedUser.job_rank || "N/A"}
-              </p>
-              <p>
-                <strong>Salary:</strong> {selectedUser.salary || "N/A"}
-              </p>
-              <p>
-                <strong>Role:</strong> {selectedUser.role_name || "N/A"}
-              </p>
-              <p>
-                <strong>Status:</strong>{" "}
-                {selectedUser.user_status === 1 ? "Online" : "Offline"}
-              </p>
-            </>
-          ) : (
-            <div className={styles.editModal}>
-              <div className={styles.modalContent}>
-                <h2>Edit Information</h2>
-                <div className={styles.formSection}>
-                  <label>Full Name:</label>
-                  <input
-                    value={editedUser.full_name || ""}
-                    onChange={(e) =>
-                      setEditedUser({
-                        ...editedUser,
-                        full_name: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-                <div className={styles.formSection}>
-                  <label>Email:</label>
-                  <input
-                    type="email"
-                    value={editedUser.email || ""}
-                    onChange={(e) =>
-                      setEditedUser({ ...editedUser, email: e.target.value })
-                    }
-                  />
-                </div>
-                <div className={styles.formSection}>
-                  <label>New Password:</label>
-                  <input
-                    type="password"
-                    value={editedUser.password || ""}
-                    onChange={(e) =>
-                      setEditedUser({ ...editedUser, password: e.target.value })
-                    }
-                    placeholder="password"
-                  />
-                </div>
-                <div className={styles.formSection}>
-                  <label>Verify New Password:</label>
-                  <input
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="verify password"
-                  />
-                </div>
-                <div className={styles.formSection}>
-                  <label>Department:</label>
-                  <input
-                    value={editedUser.department || ""}
-                    onChange={(e) =>
-                      setEditedUser({
-                        ...editedUser,
-                        department: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-                <div className={styles.formSection}>
-                  <label>Position:</label>
-                  <input
-                    value={editedUser.job_rank || ""}
-                    onChange={(e) =>
-                      setEditedUser({ ...editedUser, job_rank: e.target.value })
-                    }
-                  />
-                </div>
-                <div className={styles.buttonGroup}>
-                  <button className={styles.saveButton} onClick={handleSave}>
-                    Save
-                  </button>
-                  <button
-                    className={styles.cancelButton}
-                    onClick={() => setIsEditing(false)}
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
+        <div className={styles.infoSection}>
+          <h2 className={styles.sectionTitle}>INFORMATION</h2>
+          <div className={styles.infoDetails}>
+            <p>
+              <strong>Username:</strong> {selectedUser.username || "N/A"}
+            </p>
+            <p>
+              <strong>Email:</strong> {selectedUser.email || "N/A"}
+            </p>
+            <p>
+              <strong>Role:</strong>{" "}
+              {getRoleName(selectedUser.role_id) || "N/A"}
+            </p>
+            <p>
+              <strong>Department:</strong> {selectedUser.department || "N/A"}
+            </p>
+            <p>
+              <strong>Job Rank:</strong> {selectedUser.job_rank || "N/A"}
+            </p>
+            <p>
+              <strong>Status:</strong>{" "}
+              {getUserStatusLabel(selectedUser.user_status)}
+            </p>
+          </div>
         </div>
       </div>
+
+      {isEditing && (
+        <div className={styles.editModal}>
+          <div className={styles.modalContent}>
+            <h2>Edit Information</h2>
+            <div className={styles.formSection}>
+              <label>
+                <span className={styles.required}>*</span> Full Name:
+              </label>
+              <input
+                value={editedUser.full_name || ""}
+                disabled
+                style={{
+                  backgroundColor: "#f0f0f0",
+                  cursor: "not-allowed",
+                }}
+              />
+            </div>
+            <div className={styles.formSection}>
+              <label>
+                <span className={styles.required}>*</span> Email:
+              </label>
+              <input
+                type="email"
+                value={editedUser.email || ""}
+                onChange={(e) =>
+                  setEditedUser({ ...editedUser, email: e.target.value })
+                }
+              />
+            </div>
+            <div className={styles.formSection}>
+              <label>New Password:</label>
+              <input
+                type="password"
+                value={editedUser.password || ""}
+                onChange={(e) =>
+                  setEditedUser({ ...editedUser, password: e.target.value })
+                }
+                placeholder="password"
+              />
+            </div>
+            <div className={styles.formSection}>
+              <label>Verify New Password:</label>
+              <input
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="verify password"
+              />
+            </div>
+            <div className={styles.formSection}>
+              <label>
+                <span className={styles.required}>*</span> Department:
+              </label>
+              <input
+                value={editedUser.department || ""}
+                onChange={(e) =>
+                  setEditedUser({
+                    ...editedUser,
+                    department: e.target.value,
+                  })
+                }
+              />
+            </div>
+            <div className={styles.formSection}>
+              <label>
+                <span className={styles.required}>*</span> Job Rank:
+              </label>
+              <input
+                value={editedUser.job_rank || ""}
+                onChange={(e) =>
+                  setEditedUser({ ...editedUser, job_rank: e.target.value })
+                }
+              />
+            </div>
+            <div className={styles.buttonGroup}>
+              <button className={styles.saveButton} onClick={handleSave}>
+                Save
+              </button>
+              <button
+                className={styles.cancelButton}
+                onClick={() => setIsEditing(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

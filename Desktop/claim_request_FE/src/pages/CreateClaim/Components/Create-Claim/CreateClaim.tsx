@@ -6,7 +6,6 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@/redux";
 import { createClaim } from "@/redux/thunk/CreateClaim";
-import { getAllProjects } from "@/redux/thunk/CreateClaim";
 import { selectProject } from "@/redux/slices/Project/projectSlice";
 import { selectUserById } from "@/redux/selector/userSelector";
 import { fetchUserByIdAsync } from "@/redux/thunk/User/userThunk";
@@ -15,22 +14,21 @@ import { toast } from "react-toastify";
 import { fetchProjectByID } from "@/redux/thunk/CreateClaim";
 import { ApiError } from "@/api";
 export default function CreateClaim() {
-  const { register, setValue, control, errors, handleSubmit, reset } =
-    useCreateClaimForm();
+  const {
+    register,
+    setValue,
+    control,
+    errors,
+    handleSubmit,
+    reset,
+    formState,
+  } = useCreateClaimForm();
 
   const dispatch = useDispatch<AppDispatch>();
   const projectList = useSelector(selectProject);
   const user = useSelector(selectUserById);
 
   useEffect(() => {
-    dispatch(
-      getAllProjects({
-        page: 1,
-        limit: 10,
-        order: "ASC",
-        sortBy: "project_id",
-      }),
-    );
     dispatch(fetchUserByIdAsync())
       .unwrap()
       .then(() => dispatch(fetchProjectByID()))
@@ -43,17 +41,29 @@ export default function CreateClaim() {
   return user ? (
     <form
       onSubmit={handleSubmit(async (data) => {
+        console.log(data);
+        console.log(errors);
         if (!data.currentSelectedProject.projectID) {
           toast.error("Please select a project.");
           return;
         }
+        if (Object.keys(formState.errors).length > 0) {
+          toast.error("Please fix all validation errors before submitting");
+          return;
+        }
+        if (data.claims.length === 0) {
+          toast.error("Please add at least one claim.");
+          return;
+        }
 
+        if (!data.currentSelectedProject.projectID) {
+          toast.error("Please select a project.");
+          return;
+        }
         const DataToSend: CreateClaimData = {
           userID: user.user_id,
           projectID: data.currentSelectedProject.projectID,
-          startDate: data.startDate,
-          endDate: data.endDate,
-          totalWorkingHours: data.totalWorkingHours,
+          claims: data.claims,
         };
 
         try {
