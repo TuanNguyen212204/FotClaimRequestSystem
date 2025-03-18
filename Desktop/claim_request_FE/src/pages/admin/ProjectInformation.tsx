@@ -62,10 +62,10 @@ const ProjectInformation: React.FC = () => {
       try {
         const response = await httpClient.get("/admin/total-projects");
         console.log("API Response:", response.data);
-        setTotalProjects(response.data.data); // Chỉnh lại để lấy `data` từ response
+        setTotalProjects(response.data.data); 
       } catch (error) {
         console.error("Error fetching total projects:", error);
-        setTotalProjects(null); // Để tránh lỗi khi render
+        setTotalProjects(null); 
       } finally {
         setLoading(false);
       }
@@ -80,7 +80,7 @@ const ProjectInformation: React.FC = () => {
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString("en-GB"); // "dd/mm/yyyy"
+    return date.toLocaleDateString("en-GB"); 
   };
 
   const dataSource: DataRecord[] = Array.isArray(project)
