@@ -32,6 +32,7 @@ const ProjectInformation: React.FC = () => {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [openUpdate, setOpenUpdateModal] = useState<boolean>(false);
   const [updateProjectId, setUpdateProjectId] = useState<string | null>(null);
+
   console.log("Dữ liệu lấy từ Redux:", project);
   const [limit] = useState(7);
 
@@ -122,6 +123,7 @@ const ProjectInformation: React.FC = () => {
   const handleUpdate = (id?: string) => {
     if (!id) return;
     console.log("Update project with ID:", id);
+    setUpdateProjectId(id ? id : "");
     setOpenUpdateModal(true);
     // navigate(`/update-project?id=${id}`);
   };
