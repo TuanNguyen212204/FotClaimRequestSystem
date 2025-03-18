@@ -1,66 +1,78 @@
 .error {
   color: red;
-  font-size: 16px; /* Tăng kích thước chữ lỗi */
-  margin-top: 6px;
+  font-size: 18px; /* Tăng kích thước chữ lỗi */
+  margin-top: 8px;
 }
 
 .update-project-container {
-  width: 500px; /* Tăng kích thước form */
-  margin: 20px auto;
-  padding: 25px;
+  width: 600px; /* Tăng kích thước form */
+  margin: 50px auto;
+  padding: 30px;
   border: 1px solid #ccc;
-  border-radius: 10px;
+  border-radius: 12px;
   background: #f9f9f9;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Thêm bóng để đẹp hơn */
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15); /* Tăng bóng để đẹp hơn */
+  position: relative;
 }
 
 .update-project-container h2 {
   text-align: center;
-  font-size: 24px; /* Tăng kích thước tiêu đề */
+  font-size: 28px; /* Tăng kích thước tiêu đề */
+  font-weight: bold;
+}
+
+.update-project-container .close-btn {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #dc3545;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.update-project-container .close-btn:hover {
+  color: #a71d2a; /* Màu tối hơn khi hover */
+  transform: scale(1.2); /* Phóng to nhẹ */
 }
 
 .update-project-container form div {
-  margin-bottom: 16px; /* Tăng khoảng cách */
+  margin-bottom: 20px; /* Tăng khoảng cách */
 }
 
 .update-project-container label {
   display: block;
   font-weight: bold;
-  margin-bottom: 6px;
-  font-size: 16px; /* Tăng kích thước chữ label */
+  margin-bottom: 8px;
+  font-size: 18px; /* Tăng kích thước chữ label */
 }
 
 .update-project-container input,
 .update-project-container select {
   width: 100%;
-  padding: 10px; /* Tăng padding để input lớn hơn */
+  padding: 12px; /* Tăng padding để input lớn hơn */
   border: 1px solid #aaa;
-  border-radius: 6px;
-  font-size: 16px; /* Tăng kích thước chữ */
+  border-radius: 8px;
+  font-size: 18px; /* Tăng kích thước chữ */
 }
 
 .update-project-container button {
-  width: 48%;
-  padding: 12px; /* Tăng chiều cao nút */
-  margin: 8px 1%;
+  width: 100%;
+  padding: 14px; /* Tăng chiều cao nút */
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 16px; /* Tăng kích thước chữ */
+  font-size: 18px; /* Tăng kích thước chữ */
+  font-weight: bold;
 }
 
 .update-project-container button[type="submit"] {
   background-color: #28a745;
   color: white;
-  font-weight: bold;
-}
-
-.update-project-container button[type="button"] {
-  background-color: #dc3545;
-  color: white;
-  font-weight: bold;
 }
 
 .update-project-container button:hover {
-  opacity: 0.9;
+  opacity: 0.85;
 }

@@ -5,6 +5,7 @@ import { Project } from "@/types/Project";
 import styles from "./UpdateProject.module.css";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { AiOutlineClose } from "react-icons/ai";
 
 const UpdateProject: React.FC = () => {
   const navigate = useNavigate();
@@ -146,7 +147,13 @@ const UpdateProject: React.FC = () => {
 
   return (
     <div className={styles["update-project-container"]}>
-      <h2>Update Project</h2>
+      <div className={styles["header"]}>
+        <AiOutlineClose
+          className={styles["close-icon"]}
+          onClick={handleCancel}
+        />
+        <h2>Update Project</h2>
+      </div>
       <form onSubmit={handleSubmit}>
         <div>
           <label>Project Name:</label>
@@ -190,9 +197,6 @@ const UpdateProject: React.FC = () => {
           </select>
         </div>
         <button type="submit">Update Project</button>
-        <button type="button" onClick={handleCancel}>
-          Cancel
-        </button>
       </form>
     </div>
   );
