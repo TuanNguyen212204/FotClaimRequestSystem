@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import SummaryCard from "@/components/card/SummaryCard";
 import DashboardHeader from "@/components/card/DashboardHeader";
 import { Chart } from "react-google-charts";
-import { TrendingUp, CheckCircle, XCircle, Wallet, Briefcase, Users, Clock, ClipboardList } from "lucide-react";
+import { CheckCircle, XCircle, Clock, ClipboardList, Briefcase, Users } from "lucide-react";
 import styles from "./Dashboard.module.css";
 import httpClient from "@/constant/apiInstance";
 
@@ -10,166 +10,100 @@ const Dashboard = () => {
   const [timeframe, setTimeframe] = useState("monthly");
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [totalProjects, setTotalProjects] = useState<number | null>(null);
-  const [totalUsers, setTotalUsers] = useState<number | null>(null);
-  const [totalClaims, setTotalClaims] = useState<number | null>(null);
-  const [pendingClaims, setPendingClaims] = useState<number | null>(null);
-  const [approvedClaims, setApprovedClaims] = useState<number | null>(null);
-  const [rejectedClaims, setRejectedClaims] = useState<number | null>(null);
 
-  const fetchData = async () => {
-    setLoading(true);
-    let url = `https://67b847da699a8a7baef3677f.mockapi.io/${timeframe}`;
-    
-    try {
-      const response = await fetch(url);
-      const result = await response.json();
-      setData(result);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      setData([]);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [summary, setSummary] = useState({
+    totalProjects: null,
+    totalUsers: null,
+    totalClaims: null,
+    pendingClaims: null,
+    approvedClaims: null,
+    rejectedClaims: null,
+  });
 
+  // Fetch dữ liệu biểu đồ
   useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(`https://67b847da699a8a7baef3677f.mockapi.io/${timeframe}`);
+        const result = await response.json();
+        setData(result);
+      } catch (error) {
+        console.error("Error fetching chart data:", error);
+        setData([]);
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchData();
   }, [timeframe]);
 
+  // Fetch tất cả dữ liệu tổng hợp một lần
+  useEffect(() => {
+    const fetchSummaryData = async () => {
+      setLoading(true);
+      try {
+        const endpoints = [
+          "/admin/total-projects",
+          "/admin/total-users",
+          "/admin/total-claims",
+          "/admin/pending-claims",
+          "/admin/approved-claims",
+          "/admin/rejected-claims",
+        ];
+
+        const responses = await Promise.all(endpoints.map((endpoint) => httpClient.get(endpoint)));
+        const [totalProjects, totalUsers, totalClaims, pendingClaims, approvedClaims, rejectedClaims] = responses.map(
+          (res) => res?.data?.data ?? null
+        );
+
+        setSummary({
+          totalProjects,
+          totalUsers,
+          totalClaims,
+          pendingClaims,
+          approvedClaims,
+          rejectedClaims,
+        });
+      } catch (error) {
+        console.error("Error fetching summary data:", error);
+        setSummary({
+          totalProjects: null,
+          totalUsers: null,
+          totalClaims: null,
+          pendingClaims: null,
+          approvedClaims: null,
+          rejectedClaims: null,
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSummaryData();
+  }, []);
+
+  // Chuẩn bị dữ liệu cho biểu đồ
   const chartData = [
-    ["Time", "Pending", "Approved", "Rejected"],
-    ...data.map(item => [item.name, item.pending, item.approved, item.rejected])
+    ["Time", "Pending", "Approved", "Rejected", "Paid"],
+    ...data.map((item) => [item.name, item.pending, item.approved, item.rejected, item.paid]),
   ];
 
-  useEffect(() => {
-    const fetchSummaryData = async () => {
-      setLoading(true);
-      try {
-        const response = await httpClient.get("/admin/total-projects");
-        console.log("API Response:", response.data);
-        setTotalProjects(response.data.data); // Chỉnh lại để lấy `data` từ response
-      } catch (error) {
-        console.error("Error fetching total projects:", error);
-        setTotalProjects(null); // Để tránh lỗi khi render
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchSummaryData();
-  }, []);
-
-  useEffect(() => {
-    const fetchSummaryData = async () => {
-      setLoading(true);
-      try {
-        const response = await httpClient.get("/admin/total-users");
-        console.log("API Response:", response.data);
-        setTotalUsers(response.data.data); // Chỉnh lại để lấy `data` từ response
-      } catch (error) {
-        console.error("Error fetching total users:", error);
-        setTotalUsers(null); // Để tránh lỗi khi render
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchSummaryData();
-  }, []);
-
-  useEffect(() => {
-    const fetchSummaryData = async () => {
-      setLoading(true);
-      try {
-        const response = await httpClient.get("/admin/total-claims");
-        console.log("API Response:", response.data);
-        setTotalClaims(response.data.data); // Chỉnh lại để lấy `data` từ response
-      } catch (error) {
-        console.error("Error fetching total claims:", error);
-        setTotalClaims(null); // Để tránh lỗi khi render
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchSummaryData();
-  }, []);
-
-  useEffect(() => {
-    const fetchSummaryData = async () => {
-      setLoading(true);
-      try {
-        const response = await httpClient.get("/admin/pending-claims");
-        console.log("API Response:", response.data);
-        setPendingClaims(response.data.data); // Chỉnh lại để lấy `data` từ response
-      } catch (error) {
-        console.error("Error fetching Pending claims:", error);
-        setPendingClaims(null); // Để tránh lỗi khi render
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchSummaryData();
-  }, []);
-
-
-  useEffect(() => {
-    const fetchSummaryData = async () => {
-      setLoading(true);
-      try {
-        const response = await httpClient.get("/admin/approved-claims");
-        console.log("API Response:", response.data);
-        setApprovedClaims(response.data.data); // Chỉnh lại để lấy `data` từ response
-      } catch (error) {
-        console.error("Error fetching Approved claims:", error);
-        setApprovedClaims(null); // Để tránh lỗi khi render
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchSummaryData();
-  }, []);
-
-
-  useEffect(() => {
-    const fetchSummaryData = async () => {
-      setLoading(true);
-      try {
-        const response = await httpClient.get("/admin/rejected-claims");
-        console.log("API Response:", response.data);
-        setRejectedClaims(response.data.data); // Chỉnh lại để lấy `data` từ response
-      } catch (error) {
-        console.error("Error fetching Reject claims:", error);
-        setRejectedClaims(null); // Để tránh lỗi khi render
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchSummaryData();
-  }, []);
-
-
-
-  console.log("Total projects:", totalProjects);
-  console.log("Total users:", totalUsers);
-  console.log("Total claims:", totalClaims);
-  console.log("Pending claims:", pendingClaims);
-  console.log("Approved claims:", approvedClaims);
-  console.log("Rejected claims:", rejectedClaims);
-  
   return (
     <div className={styles.container}>
       <DashboardHeader />
 
-      {/* Thống kê tổng quan */}
+      {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-12">
-        <SummaryCard title="Total Claims" value={loading ? "Loading..." : totalClaims ?? "N/A"} icon={<ClipboardList />} percentage={10} />
-        <SummaryCard title="Pending Claims" value={loading ? "Loading..." : pendingClaims ?? "N/A"} icon={<Clock />} percentage={-5} />
-        <SummaryCard title="Approved Claims" value={loading ? "Loading..." : approvedClaims ?? "N/A"} icon={<CheckCircle />} percentage={20} />
-        <SummaryCard title="Rejected Claims" value={loading ? "Loading..." : rejectedClaims ?? "N/A"} icon={<XCircle />} percentage={-12} />
-        <SummaryCard title="Total Users" value={loading ? "Loading..." : totalUsers ?? "N/A"} icon={<Users />} percentage={8} />
-        <SummaryCard title="Total Projects" value={loading ? "Loading..." : totalProjects ?? "N/A"}  icon={<Briefcase />} percentage={15} />
+        <SummaryCard title="Total Claims" value={loading ? "Loading..." : summary.totalClaims ?? "N/A"} icon={<ClipboardList />} percentage={10} />
+        <SummaryCard title="Pending Claims" value={loading ? "Loading..." : summary.pendingClaims ?? "N/A"} icon={<Clock />} percentage={-5} />
+        <SummaryCard title="Approved Claims" value={loading ? "Loading..." : summary.approvedClaims ?? "N/A"} icon={<CheckCircle />} percentage={20} />
+        <SummaryCard title="Rejected Claims" value={loading ? "Loading..." : summary.rejectedClaims ?? "N/A"} icon={<XCircle />} percentage={-12} />
+        <SummaryCard title="Total Users" value={loading ? "Loading..." : summary.totalUsers ?? "N/A"} icon={<Users />} percentage={8} />
+        <SummaryCard title="Total Projects" value={loading ? "Loading..." : summary.totalProjects ?? "N/A"} icon={<Briefcase />} percentage={15} />
       </div>
 
-      {/* Biểu đồ */}
+      {/* Chart */}
       <div className={styles.chartContainer}>
         <div className={styles.header}>
           <h2 className={styles.title}>📊 Claim Status Overview</h2>
@@ -178,7 +112,6 @@ const Dashboard = () => {
             value={timeframe}
             onChange={(e) => setTimeframe(e.target.value)}
           >
-            <option value="weekly">Weekly</option>
             <option value="monthly">Monthly</option>
             <option value="yearly">Yearly</option>
           </select>
@@ -198,9 +131,10 @@ const Dashboard = () => {
               series: {
                 0: { color: "#FFA500" }, // Pending (Orange)
                 1: { color: "#00C853" }, // Approved (Green)
-                2: { color: "#D50000" }  // Rejected (Red)
+                2: { color: "#D50000" }, // Rejected (Red)
+                3: { color: "#00b7ff" }, // Paid (Yellow)
               },
-              legend: { position: "bottom" }
+              legend: { position: "bottom" },
             }}
           />
         )}
