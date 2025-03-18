@@ -16,10 +16,7 @@ import {
   Undo2,
 } from "lucide-react";
 import styles from "@/pages/Approver/PendingApproval.module.css";
-// import { Link, Navigate } from "react-router-dom";
-// import { useNavigate } from "react-router-dom";
 import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
-import { DetailComponents } from "./DetailsApproval"
 import { AppDispatch } from "@/redux";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllPendingClaimAsync } from "@/redux/thunk/Claim/claimThunk";
@@ -29,7 +26,6 @@ import StatusTag, { StatusType } from "@/components/ui/StatusTag/StatusTag";
 import { DetailsApproval } from "./DetailsApproval";
 
 export const PendingComponent: React.FC = () => {
-  // const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const claimList = useSelector(selectAllPending);
   const totalPages = useSelector(selectAllPendingTotalPages);
@@ -276,14 +272,14 @@ export const PendingComponent: React.FC = () => {
     key: claim.request_id,
     ...claim,
     user_full_name: claim.user.full_name,
-    user_salary: claim.user.salary,
+    user_salary: claim.user.salary, 
     user_ot_rate: claim.user.ot_rate,
     claim_status: "pending",
   }));
 
   return (
     <div>
-      <h1 className={styles.title}>Pending Approval Claims</h1>
+      <h1 className={styles.title}>Pending Claims</h1>
       {/* <nav className={styles.breadcrumb}>
         <Link to="/">My Claims</Link> &gt;{" "}
         <Link to="/pending-claim">Pending Approval</Link>

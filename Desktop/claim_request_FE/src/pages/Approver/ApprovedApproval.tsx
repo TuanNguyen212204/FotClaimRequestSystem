@@ -1,25 +1,17 @@
 import React, { useEffect, useState } from "react";
-import styles from "./ApproverdApprover.module.css";
+import styles from "./ApprovadApproval.module.css";
 import { EyeIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import TableComponent, { Column, DataRecord } from "@ui/Table/Table";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchApprovedClaimsApproverAsync } from "@redux/thunk/Claim/claimThunk";
-import { AppDispatch } from "@redux";
+import { AppDispatch } from "@/redux";
+import StatusTag, { StatusType } from "@/components/ui/StatusTag/StatusTag";
 import {
   selectAppovedClaim,
   selectApprovedClaimTotalPages,
 } from "@redux/selector/claimSelector";
 
-// interface claimList {
-//   claim_id?: string;
-//   user_id?: string;
-//   project_id?: string;
-//   total_working_hours?: number;
-//   submitted_date?: Date;
-//   claim_status?: string;
-//   project_name?: string;
-// }
 
 export const ApprovedApproverComponent: React.FC = () => {
   const navigate = useNavigate();
@@ -28,7 +20,7 @@ export const ApprovedApproverComponent: React.FC = () => {
   const totalPages = useSelector(selectApprovedClaimTotalPages);
   const [loading, setLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [limit] = useState(7);
+  const [limit] = useState(5);
 
   useEffect(() => {
     setLoading(true);
@@ -58,27 +50,33 @@ export const ApprovedApproverComponent: React.FC = () => {
     setCurrentPage(newPage);
   };
 
-  const columns: Column[] = [
-    // {
-    //   key: "claim_id",
-    //   dataIndex: "claim_id",
-    //   title: "Claim ID",
-    // },
-    // {
-    //   key: "user_id",
-    //   dataIndex: "user_id",
-    //   title: "User ID",
-    // },
+  const columns: Column<DataRecord>[] = [
     {
-      key: "project_name",
-      dataIndex: "project_name",
-      title: "Project Name",
+      key: "user_name",
+      dataIndex: "user_full_name",
+      title: "Full Name",
     },
     {
-      key: "total_working_hours",
-      dataIndex: "total_working_hours",
-      title: "Total Working Hours",
-      cell: ({ value }) => `${value} hours`,
+      key: "start_date",
+      dataIndex: "start_date",
+      title: "Start Date",
+      cell: ({ value }) => formatDateToDDMMYYYY(value as string),
+    },
+    {
+      key: "end_date",
+      dataIndex: "end_date",
+      title: "End Date",
+      cell: ({ value }) => formatDateToDDMMYYYY(value as string),
+    },
+    {
+      key: "total_hours",
+      dataIndex: "total_hours",
+      title: "Total Hours",
+    },
+    {
+      key: "project_id",
+      dataIndex: "project_id",
+      title: "Project ID",
     },
     {
       key: "submitted_date",
@@ -87,9 +85,30 @@ export const ApprovedApproverComponent: React.FC = () => {
       cell: ({ value }) => formatDateToDDMMYYYY(value as string),
     },
     {
+      key: "salary",
+      dataIndex: "user_salary",
+      title: "Salary",
+    },
+    {
+      key: "ot_rate",
+      dataIndex: "user_ot_rate",
+      title: "OT Rate",
+    },
+    {
+      key: "salary_overtime",
+      dataIndex: "salary_overtime",
+      title: "Salary Overtime",
+    },
+    {
+      key: "claim_status",
+      dataIndex: "claim_status",
+      title: "Claim Status",
+      cell: ({ value }) => <StatusTag status={value as StatusType} />,
+    },
+    {
       key: "action",
       dataIndex: "claim_id",
-      title: "Action",
+      title: "",
       cell: ({ value }) => (
         <EyeIcon
           className={styles.icon}
@@ -98,14 +117,17 @@ export const ApprovedApproverComponent: React.FC = () => {
       ),
     },
   ];
-  const dataSource: DataRecord[] = claimList.map((claim, index) => ({
+  const dataSource: DataRecord[] = claimList.map((claim) => ({
+    key: claim.request_id,
     ...claim,
-    key: index,
-    id: claim.claim_id ? claim.claim_id.toString() : "",
-    status: claim.claim_id ? claim.claim_id : "",
+    user_full_name: claim.user.full_name,
+    user_salary: claim.user.salary,
+    user_ot_rate: claim.user.ot_rate,
+    claim_status: "approved",
   }));
   return (
     <div>
+      <h1 className={styles.title}>Approved Claims</h1>
       <TableComponent
         columns={columns}
         dataSource={dataSource}
