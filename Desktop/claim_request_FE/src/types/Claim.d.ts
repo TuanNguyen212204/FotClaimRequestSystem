@@ -19,6 +19,7 @@ export interface PendingClaim {
   project_id: string;
   submitted_date: string;
   claim_status: string;
+  project_name: string;
   user: {
     full_name: string;
     salary: string;
@@ -40,6 +41,7 @@ export interface ApprovedClaim {
   project_id: string;
   submitted_date: string;
   claim_status: string;
+  project_name: string;
   user: {
     full_name: string;
     salary: string;
@@ -61,6 +63,7 @@ export interface RejectedClaim {
   project_id: string;
   submitted_date: string;
   claim_status: string;
+  project_name: string;
   user: {
     full_name: string;
     salary: string;

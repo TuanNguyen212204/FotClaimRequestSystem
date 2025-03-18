@@ -35,4 +35,4 @@ const projectSlice = createSlice({
   },
 });
 export default projectSlice.reducer;
-export const allProject = (state: RootState) => state.projects;
+export const allProject = (state: RootState) => state.vy.ProjectList;

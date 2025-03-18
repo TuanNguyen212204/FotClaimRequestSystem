@@ -79,6 +79,11 @@ export const ApprovedApproverComponent: React.FC = () => {
       title: "Project ID",
     },
     {
+      key: "project_name",
+      dataIndex: "project_name",
+      title: "Project Name",
+    },
+    {
       key: "submitted_date",
       dataIndex: "submitted_date",
       title: "Submitted Date",

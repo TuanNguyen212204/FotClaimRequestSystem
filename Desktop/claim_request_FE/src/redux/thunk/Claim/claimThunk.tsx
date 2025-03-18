@@ -38,7 +38,7 @@ export const fetchApprovedClaimsApproverAsync = createAsyncThunk<
     console.log("data: ", response.data);
     return {
       data: response.data.data,
-      totalPages: response.data.pagination?.totalPages,
+      totalPages: response.data.pagination?.totalPages || 1,
     };
   } catch (error) {
     console.error("Fetch Approverd Claims for Approver error " + error);
@@ -53,27 +53,6 @@ export const fetchAllPendingClaimAsync = createAsyncThunk<
   try {
     await delay(1000);
     const response = await httpClient.get<ApiResponse<PendingClaim[]>>(
-      "/approvers/pending-claim",
-      { page: page, limit: limit }
-    );
-    console.log("data: ", response.data);
-    return {
-      data: response.data.data || [],
-      totalPages: response.data.pagination?.totalPages,
-    };
-  } catch (error) {
-    console.error("Fetch Pending Claims for Approver error " + error);
-    throw error;
-  }
-});
-//------------------------------------------------- GET PENDING CLAIM FOR APPROVAL ----------------------------------------------------------------------
-export const fetchAllPendingClaimDetailsAsync = createAsyncThunk<
-  { data: PendingClaimDetails[]; totalPages: number },
-  { page: string; limit: string }
->("claim/approver/fetchPendingClaim", async ({ page, limit }) => {
-  try {
-    await delay(1000);
-    const response = await httpClient.get<ApiResponse<PendingClaimDetails[]>>(
       "/approvers/pending-claim",
       { page: page, limit: limit }
     );

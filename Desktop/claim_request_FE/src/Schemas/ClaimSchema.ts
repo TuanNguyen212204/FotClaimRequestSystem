@@ -10,27 +10,16 @@ export const ProjectInfoSchema = z.object({
   }),
 });
 
+const claimSchema = z.object({
+  date: z.string().nonempty("Date is required"),
+  working_hours: z.number().positive("Working hours must be positive"),
+});
+
 export const formSchema = z
   .object({
     currentSelectedProject: ProjectInfoSchema,
-    startDate: z.string().nonempty("Start date is required"),
-    endDate: z.string().nonempty("End date is required"),
-    totalWorkingHours: z
-      .number()
-      .nonnegative("Must be a positive number")
-      .min(1, "Must be at least 1"),
+    claims: z.array(claimSchema).min(1, "At least one claim is required"),
   })
-  .refine(
-    (data) => {
-      const start = new Date(data.startDate);
-      const end = new Date(data.endDate);
-      return end >= start;
-    },
-    {
-      message: "End date must be on or after start date",
-      path: ["endDate"],
-    },
-  )
   .refine(
     (data) => {
       const projectStart = new Date(
@@ -39,14 +28,30 @@ export const formSchema = z
       const projectEnd = new Date(
         data.currentSelectedProject.ProjectDuration.to,
       );
-      const start = new Date(data.startDate);
-      const end = new Date(data.endDate);
-      return start >= projectStart && end <= projectEnd;
+      return data.claims.every((claim) => {
+        const claimDate = new Date(claim.date);
+        //console.log(claimDate, projectStart, projectEnd);
+        return claimDate >= projectStart && claimDate <= projectEnd;
+      });
     },
     {
-      message: "Claim period must be within the project's duration",
-      path: ["startDate"],
+      message: "All claim dates must be within the project's duration",
+      path: ["claims"],
     },
-  );
+  )
+  .superRefine((claims, ctx) => {
+    const dateSet = new Set();
+    claims.claims.forEach((claim, index) => {
+      if (dateSet.has(claim.date)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "This date is already chosen",
+          path: [`claims.${index}.date`],
+        });
+      } else {
+        dateSet.add(claim.date);
+      }
+    });
+  });
 
 export type FormData = z.infer<typeof formSchema>;
