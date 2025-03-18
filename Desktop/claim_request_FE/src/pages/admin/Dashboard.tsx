@@ -67,7 +67,7 @@ const Dashboard = () => {
         console.log("API Response:", response.data);
         setTotalUsers(response.data.data); // Chỉnh lại để lấy `data` từ response
       } catch (error) {
-        console.error("Error fetching total projects:", error);
+        console.error("Error fetching total users:", error);
         setTotalUsers(null); // Để tránh lỗi khi render
       } finally {
         setLoading(false);
@@ -76,19 +76,95 @@ const Dashboard = () => {
     fetchSummaryData();
   }, []);
 
+  useEffect(() => {
+    const fetchSummaryData = async () => {
+      setLoading(true);
+      try {
+        const response = await httpClient.get("/admin/total-claims");
+        console.log("API Response:", response.data);
+        setTotalClaims(response.data.data); // Chỉnh lại để lấy `data` từ response
+      } catch (error) {
+        console.error("Error fetching total claims:", error);
+        setTotalClaims(null); // Để tránh lỗi khi render
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchSummaryData();
+  }, []);
+
+  useEffect(() => {
+    const fetchSummaryData = async () => {
+      setLoading(true);
+      try {
+        const response = await httpClient.get("/admin/pending-claims");
+        console.log("API Response:", response.data);
+        setPendingClaims(response.data.data); // Chỉnh lại để lấy `data` từ response
+      } catch (error) {
+        console.error("Error fetching Pending claims:", error);
+        setPendingClaims(null); // Để tránh lỗi khi render
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchSummaryData();
+  }, []);
+
+
+  useEffect(() => {
+    const fetchSummaryData = async () => {
+      setLoading(true);
+      try {
+        const response = await httpClient.get("/admin/approved-claims");
+        console.log("API Response:", response.data);
+        setApprovedClaims(response.data.data); // Chỉnh lại để lấy `data` từ response
+      } catch (error) {
+        console.error("Error fetching Approved claims:", error);
+        setApprovedClaims(null); // Để tránh lỗi khi render
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchSummaryData();
+  }, []);
+
+
+  useEffect(() => {
+    const fetchSummaryData = async () => {
+      setLoading(true);
+      try {
+        const response = await httpClient.get("/admin/rejected-claims");
+        console.log("API Response:", response.data);
+        setRejectedClaims(response.data.data); // Chỉnh lại để lấy `data` từ response
+      } catch (error) {
+        console.error("Error fetching Reject claims:", error);
+        setRejectedClaims(null); // Để tránh lỗi khi render
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchSummaryData();
+  }, []);
+
+
 
   console.log("Total projects:", totalProjects);
   console.log("Total users:", totalUsers);
+  console.log("Total claims:", totalClaims);
+  console.log("Pending claims:", pendingClaims);
+  console.log("Approved claims:", approvedClaims);
+  console.log("Rejected claims:", rejectedClaims);
+  
   return (
     <div className={styles.container}>
       <DashboardHeader />
 
       {/* Thống kê tổng quan */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-12">
-        <SummaryCard title="Total Claims" value={105} icon={<ClipboardList />} percentage={10} />
-        <SummaryCard title="Pending Claims" value={30} icon={<Clock />} percentage={-5} />
-        <SummaryCard title="Approved Claims" value={50} icon={<CheckCircle />} percentage={20} />
-        <SummaryCard title="Rejected Claims" value={10} icon={<XCircle />} percentage={-12} />
+        <SummaryCard title="Total Claims" value={loading ? "Loading..." : totalClaims ?? "N/A"} icon={<ClipboardList />} percentage={10} />
+        <SummaryCard title="Pending Claims" value={loading ? "Loading..." : pendingClaims ?? "N/A"} icon={<Clock />} percentage={-5} />
+        <SummaryCard title="Approved Claims" value={loading ? "Loading..." : approvedClaims ?? "N/A"} icon={<CheckCircle />} percentage={20} />
+        <SummaryCard title="Rejected Claims" value={loading ? "Loading..." : rejectedClaims ?? "N/A"} icon={<XCircle />} percentage={-12} />
         <SummaryCard title="Total Users" value={loading ? "Loading..." : totalUsers ?? "N/A"} icon={<Users />} percentage={8} />
         <SummaryCard title="Total Projects" value={loading ? "Loading..." : totalProjects ?? "N/A"}  icon={<Briefcase />} percentage={15} />
       </div>
