@@ -6,7 +6,7 @@ import LoginForm from "@ui/login/LoginForm";
 import ResetPassword from "@ui/login/ResetPassword";
 import CreateClaimPage from "@pages/CreateClaim";
 import { PendingComponent } from "@pages/Approver/PendingApproval";
-import AllUserInformation from "@/pages/admin/AllUserInformation";
+import AllUserInformationPage from "@/pages/admin/AllUserInformationPage";
 import ApproveDetail from "@pages/ClaimRequest/ApproveDetail";
 import ClaimStatus from "@pages/Finance/ClaimStatus";
 import PaidClaims from "@pages/Finance/PaidClaims";
@@ -22,14 +22,21 @@ import Authentication from "@auth/Authentication.tsx";
 import Authorization from "@auth/Authorization";
 import Unauthenticated from "@auth/Unauthenticated";
 import { ROLE } from "@constant/role";
+import UserClaims from "@/components/ui/claimer/UserClaims";
+import ApprovedDetailFinancePage from "@/pages/Finance/ApprovedDetailFinancePage";
 import UserClaimsPage from "@pages/User/UserClaimsPage";
 import UserClaimDetailsPage from "@pages/User/UserClaimDetailsPage";
 import { UpdateUser } from "@pages/User/UpdateUser";
 import { CreateUser } from "@pages/User/CreateUser";
 import ClaimDetail from "@pages/ClaimDetail";
+import PengdingClaimForUserPage from "@/pages/PendingClaimPage";
+import ApprovedClaimForUserPage from "@/pages/ApprovedClaimPage";
+import RejectedClaimByUserPage from "@/pages/RejectedClaimPage";
+import DraftClaimPage from "@/pages/DraftClaimPage";
 import { ApprovedClaimByUserID } from "@/pages/User/ApprovedClaimByUserID";
 import { RejectedClaimByUserID } from "@/pages/User/RejectedClaimByUserID";
 import { PendingClaimByUserID } from "@/pages/User/PendingClaimByUserID";
+import Test from "@/pages/Test";
 const router: RouteObject[] = [
   // {
   //   element: <CheckBoxTest />,
@@ -78,7 +85,7 @@ const router: RouteObject[] = [
         path: PATH.approvedClaimWithUserID,
         element: (
           <Authorization role_id={[ROLE.CLAIMER]}>
-            <ApprovedClaimByUserID />
+            <ApprovedClaimForUserPage />
           </Authorization>
         ),
       },
@@ -86,7 +93,7 @@ const router: RouteObject[] = [
         path: PATH.rejectedClaimWithUserID,
         element: (
           <Authorization role_id={[ROLE.CLAIMER]}>
-            <RejectedClaimByUserID />
+            <RejectedClaimByUserPage />
           </Authorization>
         ),
       },
@@ -94,7 +101,15 @@ const router: RouteObject[] = [
         path: PATH.pendingClaimByUserID,
         element: (
           <Authorization role_id={[ROLE.CLAIMER]}>
-            <PendingClaimByUserID />
+            <PengdingClaimForUserPage />
+          </Authorization>
+        ),
+      },
+      {
+        path: PATH.draftClaimByUserID,
+        element: (
+          <Authorization role_id={[ROLE.CLAIMER]}>
+            <DraftClaimPage />
           </Authorization>
         ),
       },
@@ -188,7 +203,7 @@ const router: RouteObject[] = [
         path: PATH.allUserInformation,
         element: (
           <Authorization role_id={[ROLE.ADMIN]}>
-            <AllUserInformation />
+            <AllUserInformationPage />
           </Authorization>
         ),
       },
@@ -240,10 +255,14 @@ const router: RouteObject[] = [
           </Authorization>
         ),
       },
-      // {
-      //   path: PATH.test,
-      //   element: <Test />,
-      // },
+      {
+        path: PATH.approvedDetailFinance,
+        element: <ApprovedDetailFinancePage />,
+      },
+      {
+        path: PATH.test,
+        element: <Test />,
+      },
     ],
   },
 ];
