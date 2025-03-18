@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./StatusTag.module.css";
 
-type StatusType = "pending" | "approved" | "rejected" | "paid";
+type StatusType = "PENDING" | "APPROVED" | "REJECTED" | "PAID";
 
 interface StatusTagProps {
   status: StatusType;
@@ -9,15 +9,15 @@ interface StatusTagProps {
 
 const StatusTag: React.FC<StatusTagProps> = ({ status }) => {
   const statusClasses = {
-    pending: styles.pending,
-    approved: styles.approved,
-    rejected: styles.rejected,
-    paid: styles.paid,
+    PENDING: styles.pending,
+    APPROVED: styles.approved,
+    REJECTED: styles.rejected,
+    PAID: styles.paid,
   };
 
   return (
     <span className={`${styles.statusTagContainer} ${statusClasses[status]}`}>
-      {status.charAt(0).toUpperCase() + status.slice(1)}
+      {status}
     </span>
   );
 };

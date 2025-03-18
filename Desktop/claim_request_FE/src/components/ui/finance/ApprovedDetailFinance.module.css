@@ -1,8 +1,120 @@
-.info {
-  display: flex;
-  justify-content: start;
+.container {
+  font-weight: normal;
 }
 
-.info2 {
-  padding-left: 50%;
+.avatar {
+  height: 50px;
+  width: 50px;
+  border-radius: 80%;
+  background-color: gray;
+}
+
+.containerUser {
+  display: flex;
+  justify-content: start;
+  flex-direction: column;
+  margin: 20px 0 0 30px;
+}
+
+.infoUser1 {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.infoUser2 {
+  display: flex;
+  flex-direction: row;
+  gap: 50px;
+  margin: 0 0 0 5px;
+}
+
+.containerProject {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  width: 70%;
+  padding: 8px;
+  margin: 2rem 0;
+}
+
+.containerProject p {
+  margin: 5px 0 0 1rem;
+}
+
+.containerRequest {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 8px;
+  width: 75%;
+}
+
+.containerRequest p {
+  margin: 5px 0 0 1rem;
+  padding: 5px;
+}
+
+.iconMoveRight {
+  vertical-align: middle;
+  position: relative;
+  top: 2px;
+  margin: 0 5px;
+  display: inline-block;
+}
+
+.timeDuration {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+
+.timeDuration h4 {
+  display: flex;
+  align-self: center;
+  justify-content: center;
+  width: 100%;
+  margin: 5px 0 0 90%;
+}
+
+.boldText {
+  font-weight: bold;
+  margin: 0 0 0 5px;
+}
+
+.history {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 8px;
+  width: 75%;
+  margin: 2rem 0;
+}
+
+.history h4 {
+  align-self: center;
+}
+
+.historyItem {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 5px 15px;
+  width: 93%;
+  border-top: 1px solid #ddd;
+  gap: 5px;
+}
+
+.historyItem p {
+  margin: 0;
+}
+
+.historyItem span {
+  margin-bottom: 0;
 }

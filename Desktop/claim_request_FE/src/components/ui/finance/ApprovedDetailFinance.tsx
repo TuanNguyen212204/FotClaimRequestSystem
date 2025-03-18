@@ -7,94 +7,97 @@ import { AppDispatch } from "@/redux";
 import { fetchApprovedDetailFinanceAsync } from "@/redux/thunk/Claim/claimThunk";
 import { selectApprovedDetailFinance } from "@/redux/selector/claimSelector";
 import { Button } from "../button/Button";
+import StatusTag from "../StatusTag/StatusTag";
+
+const formatDateToDDMMYYYY = (date: string) => {
+  const dateObj = new Date(date);
+  const day = dateObj.getDate();
+  const month = dateObj.getMonth() + 1;
+  const year = dateObj.getFullYear();
+  return `${day}/${month}/${year}`;
+};
 
 function ApprovedDetailFinance() {
-  const { user_id } = useParams();
+  const { request_id } = useParams();
   const dispatch = useDispatch<AppDispatch>();
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [limit] = useState(7);
+  const claimDetail = useSelector(selectApprovedDetailFinance);
 
   useEffect(() => {
-    fetchApprovedDetailFinance();
-  }, [user_id, currentPage, dispatch]);
+    fetchDetailClaimFinance();
+  }, [request_id, dispatch]);
 
-  const claimList = useSelector(selectApprovedDetailFinance);
-
-  const fetchApprovedDetailFinance = () => {
-    if (user_id) {
-      dispatch(
-        fetchApprovedDetailFinanceAsync({
-          user_id: user_id,
-          page: currentPage.toString(),
-          limit: limit.toString(),
-        })
-      );
+  const fetchDetailClaimFinance = () => {
+    if (request_id) {
+      dispatch(fetchApprovedDetailFinanceAsync({ request_id }));
     }
   };
 
   const columns: Column[] = [
     {
-      key: "claim_id",
-      dataIndex: "claim_id",
-      title: "Claim ID",
+      key: "date",
+      dataIndex: "date",
+      title: "Date Overtime",
+      cell: ({ value }: { value: string }) => {
+        return formatDateToDDMMYYYY(`${value}`);
+      },
     },
     {
-      key: "project_name",
-      dataIndex: "project_name",
-      title: "Project Name",
-    },
-    {
-      key: "time_durations",
-      dataIndex: "time_durations",
-      title: "Project Durations",
-    },
-    {
-      key: "",
-      dataIndex: "",
-      title: "Time Duration",
-    },
-    {
-      key: "total_working_hours",
-      dataIndex: "total_working_hours",
-      title: "Total Woriking Hours",
-    },
-    {
-      key: "",
-      dataIndex: "",
-      title: "OverTime Paid",
-    },
-    {
-      key: "claim_status",
-      dataIndex: "claim_status",
-      title: "Status",
-    },
-    {
-      key: "action",
-      dataIndex: "user_id",
-      title: "Action",
-      cell: ({ value }) => (
-        <div className={styles.actionButtons}>
-          <Button onClick={() => handlePay(value as string)}>Pay</Button>
-          <Button onClick={() => handlePrint(value as string)}>Print</Button>
-        </div>
-      ),
+      key: "working_hours",
+      dataIndex: "working_hours",
+      title: "Working hours",
     },
   ];
 
-  const dataSource: DataRecord[] = claimList.map((claim, index) => ({
-    ...claim,
-    key: index,
-    id: claim.claim_id ? claim.claim_id.toString() : "",
-    status: claim.claim_id ? claim.claim_id : "",
-    project_name: claim.project ? claim.project.project_name : "",
-    time_durations: claim.project ? claim.project.time_durations : "",
-  }));
+  const dataSource: DataRecord[] =
+    claimDetail?.claim_details?.map((detail, index) => ({
+      ...detail,
+      key: index,
+    })) || [];
 
   return (
     <div>
-      <h1> Claim Status</h1>
-      <div className={styles.info}>
-        <h2>User ID: {user_id}</h2>
+      <h1>Claim Status</h1>
+      <div className={styles.container}>
+        <div className={styles.infoUserProject}>
+          <h3>User ID: {claimDetail?.user_id}</h3>
+          <h3>Full Name: {claimDetail?.full_name}</h3>
+          <h3>Salary Overtime: {claimDetail?.salary_overtime}</h3>
+          <hr />
+          <h3>Project ID: {claimDetail?.project_id}</h3>
+          <h3>Project Name: {claimDetail?.project_name}</h3>
+        </div>
+        <div className={styles.infoClaim}>
+          <h3>Request ID: {request_id}</h3>
+          <h3>
+            Time Duration: {formatDateToDDMMYYYY(`${claimDetail?.start_date}`)}{" "}
+            - {formatDateToDDMMYYYY(`${claimDetail?.end_date}`)}
+          </h3>
+          <h3>
+            Submitted Date:{" "}
+            {formatDateToDDMMYYYY(`${claimDetail?.submitted_date}`)}
+          </h3>
+          <h3>
+            Approved Date:{" "}
+            {formatDateToDDMMYYYY(`${claimDetail?.approved_date}`)}
+          </h3>
+          <h3>Total Working Hours: {claimDetail?.total_hours}</h3>
+          <h3>
+            Status:{" "}
+            {claimDetail?.claim_status ? (
+              <StatusTag
+                status={
+                  claimDetail.claim_status as
+                    | "PENDING"
+                    | "APPROVED"
+                    | "REJECTED"
+                    | "PAID"
+                }
+              />
+            ) : (
+              "-"
+            )}
+          </h3>
+        </div>
       </div>
       <TableComponent columns={columns} dataSource={dataSource} />
     </div>

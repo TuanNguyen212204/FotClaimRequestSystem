@@ -10,6 +10,7 @@ import {
   selectApprovedClaimFinance,
   selectApprovedClaimTotalPages,
 } from "@/redux/selector/claimSelector";
+import ApprovedDetailFinanceModal from "@ui/finance/ApprovedDetailFinanceModal";
 
 // interface claimList {
 //   claim_id?: string;
@@ -36,6 +37,8 @@ export const ApprovedFinanceComponent: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [limit] = useState(7);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedRequestId, setSelectedRequestId] = useState<string>("");
 
   useEffect(() => {
     setLoading(true);
@@ -47,8 +50,9 @@ export const ApprovedFinanceComponent: React.FC = () => {
     ).finally(() => setLoading(false));
   }, [currentPage]);
 
-  const handleViewDetail = (user_id: string) => {
-    navigate(`/finance/approved/detail/${user_id}`); //sửa lại url ở đây để truyềnS
+  const handleViewDetail = (value: string) => {
+    setSelectedRequestId(value);
+    setIsModalOpen(true);
   };
 
   const handlePageChange = (newPage: number) => {
@@ -87,18 +91,27 @@ export const ApprovedFinanceComponent: React.FC = () => {
     },
     {
       key: "action",
-      dataIndex: "user_id",
+      dataIndex: "request_id",
       title: "Action",
       cell: ({ value }) => (
-        <EyeIcon
-          className={styles.icon}
-          onClick={() => handleViewDetail(value as string)}
-        />
+        <>
+          <EyeIcon
+            className={styles.icon}
+            onClick={() => handleViewDetail(value as string)}
+          />
+
+          <ApprovedDetailFinanceModal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            requestId={selectedRequestId}
+            currentPage={currentPage.toString()}
+            limit={limit.toString()}
+          />
+        </>
       ),
     },
   ];
   const dataSource: DataRecord[] = claimList.map((claim, index) => {
-    console.log("claim:", claim);
     return {
       ...claim,
       key: index,

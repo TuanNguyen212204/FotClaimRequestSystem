@@ -8,7 +8,7 @@ export const selectApprovedClaimTotalPages = (state: RootState) =>
 export const selectApprovedClaimFinance = (state: RootState) =>
   state.claim.listClaimApprovedFiance;
 export const selectApprovedDetailFinance = (state: RootState) =>
-  state.claim.listDetailClaimApprovedFiance;
+  state.claim.detailClaimApprovedFiance;
 export const selectApprovedClaimByUserID = (state: RootState) =>
   state.claim.listClaimUserApproved;
 export const selectPendingClaimByUserID = (state: RootState) =>

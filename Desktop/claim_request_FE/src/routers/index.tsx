@@ -31,6 +31,7 @@ import ClaimDetail from "@pages/ClaimDetail";
 import { ApprovedClaimByUserID } from "@/pages/User/ApprovedClaimByUserID";
 import { RejectedClaimByUserID } from "@/pages/User/RejectedClaimByUserID";
 import { PendingClaimByUserID } from "@/pages/User/PendingClaimByUserID";
+import Test from "@/pages/Test";
 const router: RouteObject[] = [
   // {
   //   element: <CheckBoxTest />,
@@ -237,10 +238,10 @@ const router: RouteObject[] = [
         path: PATH.approvedDetailFinance,
         element: <ApprovedDetailFinancePage />,
       },
-      // {
-      //   path: PATH.test,
-      //   element: <Test />,
-      // },
+      {
+        path: PATH.test,
+        element: <Test />,
+      },
     ],
   },
 ];

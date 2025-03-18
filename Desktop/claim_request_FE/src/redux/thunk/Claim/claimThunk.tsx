@@ -1,6 +1,11 @@
 import httpClient from "@constant/apiInstance";
 import { ApiResponse } from "@/types/ApiResponse";
-import { Claim, ClaimFinance, DetailClaimFinance } from "@/types/Claim";
+import {
+  Claim,
+  ClaimFinance,
+  DetailClaimFinance,
+  PaymentResponse,
+} from "@/types/Claim";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { delay } from "@utils/delay";
 
@@ -40,7 +45,7 @@ export const fetchApprovedClaimsApproverAsync = createAsyncThunk<
     throw error;
   }
 });
-
+//------------------------------------------------- GET APPROVED CLAIMS FOR FINANCE ----------------------------------------------------------------------
 export const fetchApprovedClaimsFinanceAsync = createAsyncThunk<
   { data: ClaimFinance[]; totalPages: number },
   { page: string; limit: string }
@@ -60,20 +65,21 @@ export const fetchApprovedClaimsFinanceAsync = createAsyncThunk<
     throw error;
   }
 });
-
+//------------------------------------------------- GET APPROVED DETAIL CLAIM FOR FINANCE ----------------------------------------------------------------------
 export const fetchApprovedDetailFinanceAsync = createAsyncThunk<
-  { data: DetailClaimFinance[]; totalPages: number },
-  { user_id: string; page: string; limit: string }
->("claim/finance/fetchApprovedDetail", async ({ user_id, page, limit }) => {
+  { data: DetailClaimFinance },
+  { request_id: string }
+  // ,{ request_id: string; page: string; limit: string }
+>("claim/finance/fetchApprovedDetail", async ({ request_id }) => {
   try {
     await delay(1000);
-    const response = await httpClient.get<ApiResponse<DetailClaimFinance[]>>(
-      `/finance/claims/approved/${user_id}`,
-      { page: page, limit: limit }
+    const response = await httpClient.get<ApiResponse<DetailClaimFinance>>(
+      `/finance/claims/approved/request/${request_id}`
+      // ,{ page: page, limit: limit }
     );
     return {
       data: response.data.data,
-      totalPages: response.data.totalPages,
+      // totalPages: response.data.totalPages,
     };
   } catch (error) {
     console.error("Fetch Approved Detail for Finance error " + error);

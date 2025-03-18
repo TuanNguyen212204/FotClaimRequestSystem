@@ -17,7 +17,7 @@ const initialState: {
   data: Claim[];
   listClaimApprovedApprover: Claim[];
   listClaimApprovedFiance: ClaimFinance[];
-  listDetailClaimApprovedFiance: DetailClaimFinance[];
+  detailClaimApprovedFiance: DetailClaimFinance | null;
   myClaim: Claim[];
   listClaimPending: Claim[];
   totalPages: number;
@@ -30,7 +30,7 @@ const initialState: {
   data: [],
   listClaimApprovedApprover: [],
   listClaimApprovedFiance: [],
-  listDetailClaimApprovedFiance: [],
+  detailClaimApprovedFiance: null as DetailClaimFinance | null,
   listClaimPending: [],
   listClaimUserApproved: [],
   listClaimUserPending: [],
@@ -90,8 +90,9 @@ export const claimSlice = createSlice({
       })
       .addCase(fetchApprovedDetailFinanceAsync.fulfilled, (state, action) => {
         state.status = "success";
-        state.listDetailClaimApprovedFiance = action.payload.data;
-        state.totalPages = action.payload.totalPages;
+        state.detailClaimApprovedFiance = Array.isArray(action.payload.data)
+          ? action.payload.data[0]
+          : action.payload.data;
       })
       .addCase(fetchApprovedDetailFinanceAsync.pending, (state) => {
         state.status = "loading";

@@ -21,7 +21,7 @@ export interface ClaimFinance {
   total_hours: number;
   submitted_date: string;
   approved_date: string;
-  claim_status: "APPROVED" | "PENDING" | "REJECTED";
+  claim_status: string;
   full_name: string;
   project_name: string;
   salary_overtime: string;
@@ -31,16 +31,20 @@ export interface ClaimFinance {
   }[];
 }
 export interface DetailClaimFinance {
-  claim_id: string;
+  request_id: string;
   user_id: string;
-  full_name: string;
+  project_id: string;
+  start_date: string;
+  end_date: string;
+  total_hours: number;
   submitted_date: string;
   approved_date: string;
-  total_working_hours: string;
   claim_status: string;
-  project: {
-    project_id: string;
-    project_name: string;
-    time_durations: string;
-  };
+  full_name: string;
+  project_name: string;
+  salary_overtime: string;
+  claim_details: {
+    date: string;
+    working_hours: number;
+  }[];
 }
