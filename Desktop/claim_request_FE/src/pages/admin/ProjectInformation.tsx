@@ -61,11 +61,11 @@ const ProjectInformation: React.FC = () => {
       setLoading(true);
       try {
         const response = await httpClient.get("/admin/total-projects");
-        console.log("Total projects: ",response);
-        
-        setTotalProjects(response.data.total); // Giả sử API trả về { total: 105 }
+        console.log("API Response:", response.data);
+        setTotalProjects(response.data.data); // Chỉnh lại để lấy `data` từ response
       } catch (error) {
         console.error("Error fetching total projects:", error);
+        setTotalProjects(null); // Để tránh lỗi khi render
       } finally {
         setLoading(false);
       }
@@ -73,25 +73,26 @@ const ProjectInformation: React.FC = () => {
   
     fetchSummaryData();
   }, []);
-
+  
   const handleCreateProject = async () => {
     navigate(PATH.createProject);
   };
 
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-GB"); // "dd/mm/yyyy"
+  };
+
   const dataSource: DataRecord[] = Array.isArray(project)
-    ? project.map((project: Project, index: number) => ({
-        key: index,
-        projectID: project.project_id,
-        projectName: project.project_name,
-        startDate: new Date(
-          project.start_date
-        ).toLocaleDateString(),
-        endDate: new Date(
-          project.end_date || project.end_date
-        ).toLocaleDateString(),
-        projectStatus:project.project_status,
-      }))
-    : [];
+  ? project.map((project: Project, index: number) => ({
+      key: index,
+      projectID: project.project_id,
+      projectName: project.project_name,
+      startDate: formatDate(project.start_date),
+      endDate: formatDate(project.end_date || project.end_date),
+      projectStatus: project.project_status,
+    }))
+  : [];
 
   const handlePageChange = (newPage: number) => {
     console.log("Trang mới:", newPage);
@@ -148,8 +149,16 @@ const ProjectInformation: React.FC = () => {
       key: "projectStatus", 
       dataIndex: "projectStatus", 
       title: "Status",
-      cell: ({ value }) => (value === 1 ? "Active" : "Inactive") 
-    },
+      cell: ({ value }) => (
+        <span 
+          className={`${styles.statusBadge} ${
+            value === 1 ? styles.statusActive : styles.statusInactive
+          }`}
+        >
+          {value === 1 ? "Active" : "Inactive"}
+        </span>
+      ) 
+    },    
     {
       key: "projectID",
       dataIndex: "projectID",
@@ -158,14 +167,14 @@ const ProjectInformation: React.FC = () => {
         return (
           <div className={styles.button_container}>
             <button
-              className={styles.icon_button}
+              className={`${styles.icon_button} ${styles.editButton}`}
               onClick={() => handleUpdate(value as string)}
               title="Update"
             >
               <FilePen size={20} />
             </button>
             <button
-              className={styles.icon_button}
+              className={`${styles.icon_button} ${styles.deleteButton}`}
               onClick={() => handleDelete(value as string)}
               title="Delete"
             >
@@ -174,7 +183,7 @@ const ProjectInformation: React.FC = () => {
           </div>
         );
       },
-    },
+    },    
   ];
 
   return (

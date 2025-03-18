@@ -4,11 +4,18 @@ import DashboardHeader from "@/components/card/DashboardHeader";
 import { Chart } from "react-google-charts";
 import { TrendingUp, CheckCircle, XCircle, Wallet, Briefcase, Users, Clock, ClipboardList } from "lucide-react";
 import styles from "./Dashboard.module.css";
+import httpClient from "@/constant/apiInstance";
 
 const Dashboard = () => {
   const [timeframe, setTimeframe] = useState("monthly");
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [totalProjects, setTotalProjects] = useState<number | null>(null);
+  const [totalUsers, setTotalUsers] = useState<number | null>(null);
+  const [totalClaims, setTotalClaims] = useState<number | null>(null);
+  const [pendingClaims, setPendingClaims] = useState<number | null>(null);
+  const [approvedClaims, setApprovedClaims] = useState<number | null>(null);
+  const [rejectedClaims, setRejectedClaims] = useState<number | null>(null);
 
   const fetchData = async () => {
     setLoading(true);
@@ -35,6 +42,43 @@ const Dashboard = () => {
     ...data.map(item => [item.name, item.pending, item.approved, item.rejected])
   ];
 
+  useEffect(() => {
+    const fetchSummaryData = async () => {
+      setLoading(true);
+      try {
+        const response = await httpClient.get("/admin/total-projects");
+        console.log("API Response:", response.data);
+        setTotalProjects(response.data.data); // Chỉnh lại để lấy `data` từ response
+      } catch (error) {
+        console.error("Error fetching total projects:", error);
+        setTotalProjects(null); // Để tránh lỗi khi render
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchSummaryData();
+  }, []);
+
+  useEffect(() => {
+    const fetchSummaryData = async () => {
+      setLoading(true);
+      try {
+        const response = await httpClient.get("/admin/total-users");
+        console.log("API Response:", response.data);
+        setTotalUsers(response.data.data); // Chỉnh lại để lấy `data` từ response
+      } catch (error) {
+        console.error("Error fetching total projects:", error);
+        setTotalUsers(null); // Để tránh lỗi khi render
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchSummaryData();
+  }, []);
+
+
+  console.log("Total projects:", totalProjects);
+  console.log("Total users:", totalUsers);
   return (
     <div className={styles.container}>
       <DashboardHeader />
@@ -45,8 +89,8 @@ const Dashboard = () => {
         <SummaryCard title="Pending Claims" value={30} icon={<Clock />} percentage={-5} />
         <SummaryCard title="Approved Claims" value={50} icon={<CheckCircle />} percentage={20} />
         <SummaryCard title="Rejected Claims" value={10} icon={<XCircle />} percentage={-12} />
-        <SummaryCard title="Total Users" value={500} icon={<Users />} percentage={8} />
-        <SummaryCard title="Total Projects" value={20} icon={<Briefcase />} percentage={15} />
+        <SummaryCard title="Total Users" value={loading ? "Loading..." : totalUsers ?? "N/A"} icon={<Users />} percentage={8} />
+        <SummaryCard title="Total Projects" value={loading ? "Loading..." : totalProjects ?? "N/A"}  icon={<Briefcase />} percentage={15} />
       </div>
 
       {/* Biểu đồ */}
