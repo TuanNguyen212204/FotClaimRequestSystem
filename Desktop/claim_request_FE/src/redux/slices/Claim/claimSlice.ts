@@ -1,7 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
   Claim,
-  ClaimApprover,
+  PendingClaim,
+  ApprovedClaim,
+  RejectedClaim,
   ClaimFinance,
   DetailClaimFinance,
 } from "@/types/Claim";
@@ -11,23 +13,23 @@ import {
   fetchApprovedClaimsApproverAsync,
   fetchAllPendingClaimAsync,
   fetchClaimByUserAsync,
-  fetchApprovedClaimsFinanceAsync,
-  fetchApprovedDetailFinanceAsync,
-  fetchClaimByUserWithRejectStatusAsync,
-  fetchClaimByUserWithPendingStatusAsync,
   fetchClaimByUserWithApprovedStatusAsync,
   fetchClaimByUserWithPendingStatusAsync,
   fetchClaimByUserWithRejectStatusAsync,
+  fetchAllRejectedClaimAsync,
+  fetchApprovedClaimsFinanceAsync,
+  fetchApprovedDetailFinanceAsync,
   fetchClaimByUserWithDraftStatusAsync,
 } from "@redux/thunk/Claim/claimThunk";
 
 const initialState: {
   data: Claim[];
-  listClaimApprovedApprover: ClaimApprover[];
+  myClaim: Claim[];
+  listClaimApproved: ApprovedClaim[];
+  listClaimPending: PendingClaim[];
+  listClaimRejected: RejectedClaim[];
   listClaimApprovedFiance: ClaimFinance[];
   detailClaimApprovedFiance: DetailClaimFinance | null;
-  myClaim: Claim[];
-  listClaimPending: Claim[];
   totalPages: number;
   listClaimUserApproved: Claim[];
   listClaimUserPending: Claim[];
@@ -37,12 +39,13 @@ const initialState: {
   error: string | null;
 } = {
   data: [],
-  listClaimApprovedApprover: [],
+  listClaimApproved: [],
+  listClaimPending: [],
   listClaimApprovedFiance: [],
   detailClaimApprovedFiance: null as DetailClaimFinance | null,
-  listClaimPending: [],
   listClaimUserApproved: [],
   listClaimUserPending: [],
+  listClaimRejected: [],
   listClaimUserRejected: [],
   listClaimUserDraft: [],
   totalPages: 1,
@@ -67,14 +70,14 @@ export const claimSlice = createSlice({
         state.status = "success";
         state.data = action.payload;
       })
-      //---------------------------------------------- Approved Claims for Appover -----------------------------------------------------
+      //fetch all approved claim with role is Approver
       .addCase(fetchApprovedClaimsApproverAsync.rejected, (state, action) => {
         state.status = "failed";
         state.error = String(action.error.message);
       })
       .addCase(fetchApprovedClaimsApproverAsync.fulfilled, (state, action) => {
         state.status = "success";
-        state.listClaimApprovedApprover = action.payload.data;
+        state.listClaimApproved = action.payload.data;
         state.totalPages = action.payload.totalPages;
       })
       .addCase(fetchApprovedClaimsApproverAsync.pending, (state) => {
@@ -107,7 +110,6 @@ export const claimSlice = createSlice({
       .addCase(fetchApprovedDetailFinanceAsync.pending, (state) => {
         state.status = "loading";
       })
-      //---------------------------------------------- My Claims -----------------------------------------------------
       //fetch all claim by user_id
       .addCase(fetchClaimByUserAsync.rejected, (state, action) => {
         state.status = "failed";
@@ -132,6 +134,19 @@ export const claimSlice = createSlice({
         state.totalPages = action.payload.totalPages;
       })
       .addCase(fetchAllPendingClaimAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      //fetch all rejected claim with role is Approver
+      .addCase(fetchAllRejectedClaimAsync.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = String(action.error.message);
+      })
+      .addCase(fetchAllRejectedClaimAsync.fulfilled, (state, action) => {
+        state.status = "success";
+        state.listClaimRejected = action.payload.data;
+        state.totalPages = action.payload.totalPages;
+      })
+      .addCase(fetchAllRejectedClaimAsync.pending, (state) => {
         state.status = "loading";
       })
       //my claim is with approved status

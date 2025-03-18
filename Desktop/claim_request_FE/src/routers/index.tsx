@@ -34,10 +34,11 @@ import ClaimDetail from "@pages/ClaimDetail";
 import PengdingClaimForUserPage from "@/pages/PendingClaimPage";
 import ApprovedClaimForUserPage from "@/pages/ApprovedClaimPage";
 import RejectedClaimByUserPage from "@/pages/RejectedClaimPage";
+import RejectedComponent from "@/pages/Approver/RejectedApproval";
 import DraftClaimPage from "@/pages/DraftClaimPage";
-import { ApprovedClaimByUserID } from "@/pages/User/ApprovedClaimByUserID";
-import { RejectedClaimByUserID } from "@/pages/User/RejectedClaimByUserID";
-import { PendingClaimByUserID } from "@/pages/User/PendingClaimByUserID";
+// import { ApprovedClaimByUserID } from "@/pages/User/ApprovedClaimByUserID";
+// import { RejectedClaimByUserID } from "@/pages/User/RejectedClaimByUserID";
+// import { PendingClaimByUserID } from "@/pages/User/PendingClaimByUserID";
 import Test from "@/pages/Test";
 const router: RouteObject[] = [
   // {
@@ -194,6 +195,14 @@ const router: RouteObject[] = [
         element: (
           <Authorization role_id={[ROLE.APPROVER]}>
             <PendingComponent />
+          </Authorization>
+        ),
+      },
+      {
+        path: PATH.rejectedClaim,
+        element: (
+          <Authorization role_id={[ROLE.APPROVER]}>
+            <RejectedComponent />
           </Authorization>
         ),
       },
