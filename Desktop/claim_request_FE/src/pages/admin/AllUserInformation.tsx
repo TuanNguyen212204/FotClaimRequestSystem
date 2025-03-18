@@ -16,7 +16,7 @@ import { PATH } from "@constant/config";
 import { ApiResponse, ApiResponseNoGeneric } from "@/types/ApiResponse";
 import { toast } from "react-toastify";
 import Modal from "@/components/ui/modal/Modal";
-import { X } from "lucide-react";
+import { CloudCog, X } from "lucide-react";
 import { SquarePen } from "lucide-react";
 import { User } from "@/types/User";
 import { GiCogLock } from "react-icons/gi";
@@ -26,6 +26,7 @@ import ToggleButton from "@/components/ui/ToggleButton/ToggleButton";
 import { CreateUser } from "../User/CreateUser";
 import { CircleCheck } from "lucide-react";
 import { h } from "node_modules/framer-motion/dist/types.d-B50aGbjN";
+import { AssignProject } from "../AssignProject";
 
 const AllUserInformation: React.FC = () => {
   const tableRef = useRef<{
@@ -63,6 +64,7 @@ const AllUserInformation: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [openUpdate, setOpenUpdate] = useState<boolean>(false);
+  const [openAssign, setOpenAssign] = useState<boolean>(false);
   const [userID, setUserID] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -70,7 +72,10 @@ const AllUserInformation: React.FC = () => {
   const [initialToggleStates, setInitialToggleStates] = useState<{
     [key: string]: boolean;
   }>({});
-  const [toggleState, setToggleState] = useState<boolean>(true);
+  const [assignID, setAssignID] = useState<string>("");
+  const [toggleState, setToggleState] = useState<{ [key: string]: boolean }>(
+    {}
+  );
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -125,7 +130,6 @@ const AllUserInformation: React.FC = () => {
     setUserID(id ? id : "");
     setOpenUpdate(true);
   };
-
   const sortConfig: SortConfig = {
     columnKey: "full_name",
     order: "asc",
@@ -141,7 +145,36 @@ const AllUserInformation: React.FC = () => {
       console.error("Error toggle status:", error);
     }
   };
-
+  const handleUpdateConfirm = (
+    name: string,
+    email: string,
+    id: string,
+    value: boolean
+  ) => {
+    setName(name);
+    setEmail(email);
+    Modal.confirm({
+      title: value ? "Disable User" : "Enable User",
+      children: `Are you sure you want to ${
+        value ? "disable" : "enable"
+      } user ${name} with email ${email}?`,
+      onOk: () => {
+        handleToggleStatus(id);
+        toast.success("Update status successful!");
+      },
+      onCancel: () => {
+        toast.error("Update status failed!");
+        setToggleState((prev) => ({
+          ...prev,
+          [id]: !value,
+        }));
+      },
+    });
+  };
+  const handleAssignUser = (id: string) => {
+    setOpenAssign(true);
+    setAssignID(id);
+  };
   const columns: Column<User>[] = [
     { key: "full_name", dataIndex: "full_name", title: "Full Name" },
     { key: "username", dataIndex: "username", title: "Username" },
@@ -155,28 +188,26 @@ const AllUserInformation: React.FC = () => {
       cell: ({ value, record }: { value: number; record: User }) => {
         return (
           <div>
-            {value === 1 && (
-              <div>
+            <div>
               <ToggleButton
                 userId={record.user_id}
-                checked={true}
-                onChange={() => {
-                  handleToggleStatus(record.user_id as string);
+                checked={
+                  toggleState[record.user_id] ?? record.user_status === 1
+                }
+                onChange={(newChecked) => {
+                  setToggleState((prev) => ({
+                    ...prev,
+                    [record.user_id]: newChecked,
+                  }));
+                  handleUpdateConfirm(
+                    record.username,
+                    record.email,
+                    record.user_id,
+                    newChecked
+                  );
                 }}
               />
             </div>
-            )}
-             {value === 0 && (
-              <div>
-              <ToggleButton
-                userId={record.user_id}
-                checked={false}
-                onChange={() => {
-                  handleToggleStatus(record.user_id as string);
-                }}
-              />
-            </div>
-            )}
           </div>
         );
       },
@@ -188,11 +219,30 @@ const AllUserInformation: React.FC = () => {
       cell: ({ value, record }: { value: string; record: User }) => {
         return (
           <div>
-            <button>
+            {/* <button onClick={() => handleAssignUser(record.user_id as string)}>
               <div>
                 <CircleCheck />
               </div>
-            </button>
+            </button> */}
+            {record.user_status === 1 && (
+              <button
+                onClick={() => handleAssignUser(record.user_id as string)}
+              >
+                <div>
+                  <CircleCheck />
+                </div>
+              </button>
+            )}
+            {record.user_status === 0 && (
+              <button
+                disabled
+                onClick={() => handleAssignUser(record.user_id as string)}
+              >
+                <div>
+                  <X />
+                </div>
+              </button>
+            )}
           </div>
         );
       },
@@ -249,6 +299,14 @@ const AllUserInformation: React.FC = () => {
         <div className={styles.editModal}>
           <div>
             <UpdateUser id={userID} setOpenModal={setOpenUpdate} />
+          </div>
+        </div>
+      )}
+      {openAssign && (
+        <div className={styles.editModal}>
+          <div>
+            {" "}
+            <AssignProject id={assignID} setOpen={setOpenAssign} />
           </div>
         </div>
       )}

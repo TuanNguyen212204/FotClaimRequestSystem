@@ -1,11 +1,13 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { IoArrowBack } from "react-icons/io5"; 
 import styles from "./ClaimStatus.module.css";
 import TableComponent, { Column } from "../../components/ui/Table/Table";
 import { AppDispatch } from "@/redux";
 import { fetchPaidClaimsAsync } from "../../redux/slices/Claim/paidClaimsSlice";
-import { useNavigate } from "react-router-dom"; // Add this import at the top
+ 
 
 interface ClaimDetail {
   date: string;
@@ -16,7 +18,7 @@ const ClaimStatus: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const dispatch = useDispatch<AppDispatch>();
   const { data: claims, loading } = useSelector((state: any) => state.paidClaims);
-  const navigate = useNavigate(); // Add this hook
+  const navigate = useNavigate(); 
   useEffect(() => {
     dispatch(fetchPaidClaimsAsync("1"));
   }, [dispatch]);
@@ -90,34 +92,75 @@ const ClaimStatus: React.FC = () => {
           className={styles.backButton}
           onClick={() => navigate(-1)}
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-            <path fillRule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
-          </svg>
+          <IoArrowBack size={20} />
         </button>
+        <h1 className={styles.title}>Claim Status</h1>
       </div>
+      <div className={styles.userInfo}>
+        <p>User ID: {selectedClaim?.user_id}</p>
+        <p>User Name: {selectedClaim?.full_name}</p>
+      </div>
+
       <div className={styles.tableContainer}>
         <TableComponent
-          columns={columns}
-          dataSource={selectedClaim.claim_details.map((detail: ClaimDetail, index: number) => ({
-            ...detail,
-            key: `${selectedClaim.request_id}-${index}`
-          }))}
+          columns={[
+            { 
+              key: 'claim_id', 
+              dataIndex: 'claim_id', 
+              title: 'Claim ID',
+              cell: () => `C${String(selectedClaim?.request_id).padStart(3, '0')}`
+            },
+            { key: 'project_name', dataIndex: 'project_name', title: 'Project Name' },
+            { 
+              key: 'overtime_duration', 
+              dataIndex: 'overtime_duration', 
+              title: 'Overtime Duration',
+              cell: () => (
+                <div>
+                  <div>From: {formatDate(selectedClaim?.start_date)}</div>
+                  <div>To: {formatDate(selectedClaim?.end_date)}</div>
+                </div>
+              )
+            },
+            { 
+              key: 'total_hours', 
+              dataIndex: 'total_hours', 
+              title: 'Total Working Hours',
+              cell: () => `${selectedClaim?.total_hours} hours`
+            },
+            {
+              key: 'overtime_paid',
+              dataIndex: 'salary_overtime',
+              title: 'Overtime Paid',
+              cell: () => `${Number(selectedClaim?.salary_overtime).toLocaleString('vi-VN')} USD`
+            },
+            {
+              key: 'status',
+              dataIndex: 'claim_status',
+              title: 'Status',
+              cell: () => (
+                <div className={styles.statusPaid}>
+                  Paid
+                </div>
+              )
+            },
+            {
+              key: 'action',
+              title: 'Action',
+              cell: () => (
+                <button 
+                  className={styles.printButton}
+                  onClick={() => window.print()}
+                >
+                  Print
+                </button>
+              )
+            }
+          ]}
+          dataSource={[{ ...selectedClaim, key: selectedClaim?.request_id }]}
           loading={loading}
           pagination={false}
-          name="Claim Details"
         />
-      </div>
-      <div className={styles.actions}>
-        <button 
-          className={styles.printButton}
-          onClick={() => window.print()}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-            <path d="M2.5 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z"/>
-            <path d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2H5zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4V3zm1 5a2 2 0 0 0-2 2v1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v-1a2 2 0 0 0-2-2H5zm7 2v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1z"/>
-          </svg>
-          Print
-        </button>
       </div>
     </div>
   );

@@ -8,6 +8,7 @@ import { selectUserById } from "@redux/selector/userSelector";
 import httpClient from "@constant/apiInstance";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 
 export const UserInfoComponent: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -16,6 +17,7 @@ export const UserInfoComponent: React.FC = () => {
   const [editedUser, setEditedUser] = useState<Partial<User>>({});
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isSalaryVisible, setIsSalaryVisible] = useState(false);
+  const navigate = useNavigate();
 
   const accessToken = localStorage.getItem("access_token");
   const userId = localStorage.getItem("user_id");
@@ -29,10 +31,16 @@ export const UserInfoComponent: React.FC = () => {
   useEffect(() => {
     if (selectedUser) {
       setEditedUser(selectedUser);
+      if (selectedUser.user_status === 2) {
+        toast.warning("Please change your password for the first time.");
+        setTimeout(() => {
+          navigate("/change-password");
+        }, 2000);
+      }
     } else {
       setEditedUser({});
     }
-  }, [selectedUser]);
+  }, [selectedUser, navigate]);
 
   const getRoleName = (roleId: number | undefined): string => {
     switch (roleId) {
@@ -46,6 +54,19 @@ export const UserInfoComponent: React.FC = () => {
         return "Claimer";
       default:
         return "N/A";
+    }
+  };
+
+  const getUserStatusLabel = (status: number | undefined): string => {
+    switch (status) {
+      case 1:
+        return "Active";
+      case 0:
+        return "Disabled";
+      case 2:
+        return "Need First-Time Login";
+      default:
+        return "Unknown";
     }
   };
 
@@ -148,6 +169,12 @@ export const UserInfoComponent: React.FC = () => {
       dispatch(fetchUserByIdAsync());
       setIsEditing(false);
       toast.success("Update user successfully.");
+      if (editedUser.password && editedUser.user_status === 2) {
+        await httpClient.put(`/admin/staff/${userId}`, {
+          user_status: 1,
+        });
+        dispatch(fetchUserByIdAsync());
+      }
     } catch (error) {
       console.error("Update User error: ", error);
       toast.error("Update user failed: " + (error as any).message);
@@ -161,7 +188,7 @@ export const UserInfoComponent: React.FC = () => {
           You need to login to view personal information.
         </h2>
         <button
-          onClick={() => (window.location.href = "/login")}
+          onClick={() => navigate("/login")}
           className={styles.saveButton}
           style={{ display: "block", margin: "1rem auto" }}
         >
@@ -222,7 +249,7 @@ export const UserInfoComponent: React.FC = () => {
             </div>
             <div className={styles.statItem}>
               <span className={styles.statIcon}>📡</span>
-              <h3>{selectedUser.user_status === 1 ? "Online" : "Offline"}</h3>
+              <h3>{getUserStatusLabel(selectedUser.user_status)}</h3>
               <span>Status</span>
             </div>
           </div>
@@ -248,6 +275,10 @@ export const UserInfoComponent: React.FC = () => {
             </p>
             <p>
               <strong>Job Rank:</strong> {selectedUser.job_rank || "N/A"}
+            </p>
+            <p>
+              <strong>Status:</strong>{" "}
+              {getUserStatusLabel(selectedUser.user_status)}
             </p>
           </div>
         </div>
