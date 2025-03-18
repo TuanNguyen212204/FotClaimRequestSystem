@@ -8,6 +8,7 @@ export default function useCreateClaimForm() {
     register,
     control,
     handleSubmit,
+    formState,
     formState: { errors },
     setValue,
     reset,
@@ -20,10 +21,9 @@ export default function useCreateClaimForm() {
         RoleInTheProject: "",
         ProjectDuration: { from: "", to: "" },
       },
-      startDate: "",
-      endDate: "",
-      totalWorkingHours: 1,
+      claims: [{ date: "", working_hours: 0 }],
     },
+    mode: "all",
   });
 
   return {
@@ -33,5 +33,6 @@ export default function useCreateClaimForm() {
     errors,
     setValue,
     reset,
+    formState,
   };
 }

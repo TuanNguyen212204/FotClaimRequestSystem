@@ -27,7 +27,8 @@ interface ClaimData extends DataRecord {
 const PaidClaims: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const { data: claims, loading, totalPages } = useSelector((state: any) => state.paidClaims);
+  const { data: claims, loading, totalPages, currentPage } = useSelector((state: any) => state.paidClaims);
+  const itemsPerPage = 10;
 
   useEffect(() => {
     dispatch(fetchPaidClaimsAsync("1"));
@@ -39,28 +40,30 @@ const PaidClaims: React.FC = () => {
   };
 
   const columns: Column<ClaimData>[] = [
-    { key: 'user_id', dataIndex: 'user_id', title: 'User ID' },
-    { key: 'full_name', dataIndex: 'full_name', title: 'Employee Name' },
+    { 
+      key: 'no', 
+      dataIndex: 'no',
+      title: 'No',
+      width: '80px'
+    },
+    { key: 'full_name', dataIndex: 'full_name', title: 'Staff Name' },
     { key: 'project_name', dataIndex: 'project_name', title: 'Project Name' },
     { 
       key: 'date_range', 
       dataIndex: 'start_date', 
-      title: 'Date Range',
+      title: 'Project Duration',
       cell: ({ record }) => (
-        `${formatDate(record.start_date)} - ${formatDate(record.end_date)}`
+        <div>
+          <div>From: {formatDate(record.start_date)}</div>
+          <div>To: {formatDate(record.end_date)}</div>
+        </div>
       )
     },
     { 
       key: 'total_hours', 
       dataIndex: 'total_hours', 
-      title: 'Total Hours',
+      title: 'Total Hours Working',
       cell: ({ value }) => `${value} hours`
-    },
-    { 
-      key: 'salary_overtime', 
-      dataIndex: 'salary_overtime', 
-      title: 'Overtime Paid',
-      cell: ({ value }) => `${Number(value).toLocaleString('vi-VN')} USD`
     },
     {
       key: 'action',
@@ -86,9 +89,10 @@ const PaidClaims: React.FC = () => {
 
       <TableComponent
         columns={columns as Column<DataRecord>[]}
-        dataSource={claims.map((claim: ClaimData) => ({
+        dataSource={claims.map((claim: ClaimData, idx) => ({
           ...claim,
-          key: claim.request_id // Add unique key for each row
+          key: claim.request_id,
+          no: String(idx + 1).padStart(3, '0')
         }))}
         loading={loading}
         pagination={true}

@@ -188,11 +188,7 @@
     color: #ff5252;
     cursor: pointer;
 }
-.file_remove:hover {
-    width: 1.25rem;
-    border-radius: 50%;
-    background-color: oklch(0.971 0.013 17.38);
-}
+
 .btn {
     padding: 12px 24px;
     border-radius: 6px;
@@ -218,7 +214,10 @@
     color: #777;
     border: 1px solid #ddd;
 }
-
+.btn_danger {
+    background-color: #ff5252;
+    color: white;
+}
 .btn_add {
     background-color: #f0f0f0;
     color: #333;
@@ -234,7 +233,6 @@
     font-size: 16px;
     font-weight: bold;
 }
-
 .actions {
     display: flex;
     justify-content: flex-end;
