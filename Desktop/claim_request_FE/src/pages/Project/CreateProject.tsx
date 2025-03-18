@@ -46,13 +46,13 @@ export const CreateProject: React.FC = () => {
 
   useEffect(() => {
     if (startDate && endDate && endDate < startDate) {
-      setError("end_date", { type: "manual", message: "End Date cannot be before Start Date" });
+      setError("end_date", { type: "manual", message: "End Date must be after Start Date" });
     } else {
       clearErrors("end_date");
     }
   }, [startDate, endDate]);
 
-  const projectId = watch("project_id"); // kiểm tra ID có tồn tại chưa
+  const projectId = watch("project_id"); 
   const [checkingId, setCheckingId] = useState(false);
 
   useEffect(() => {
@@ -77,7 +77,7 @@ export const CreateProject: React.FC = () => {
     return () => clearTimeout(timer);
   }, [projectId]);
 
-  // Kiểm tra Project Name tồn tại
+
   const projectName = watch("project_name");
   const [checkingName, setCheckingName] = useState(false);
 

@@ -76,9 +76,6 @@ const UpdateProject: React.FC = () => {
         navigate("/project-information");
       } else {
         console.error("Update failed:", response.data);
-        console.log("API Response:", response);
-        console.log("Response Status:", response.status);
-        console.log("Response Data:", response.data);
       }
     } catch (error: any) {
       if (error.response) {
