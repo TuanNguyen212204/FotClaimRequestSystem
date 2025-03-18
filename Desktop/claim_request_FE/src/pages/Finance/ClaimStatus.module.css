@@ -1,23 +1,30 @@
 .container {
-  width: 90%;
+  width: 95%;
   margin: 2rem auto;
-  background-color: white;
   padding: 2rem;
-  border-radius: 1rem;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-  position: relative;
 }
 
 .header {
+  display: flex;
+  align-items: center;
   margin-bottom: 2rem;
-  text-align: right;
   position: relative;
+  border-bottom: 2px solid #000;
+  padding-bottom: 1rem;
+}
+
+.title {
+  flex-grow: 1;
+  text-align: right;
+  font-size: 1.75rem;
+  color: #2d3142;
+  margin: 0;
+  font-weight: 600;
 }
 
 .backButton {
   position: absolute;
   left: 0;
-  top: 0;
   padding: 8px;
   background-color: #2D3142;
   color: white;
@@ -27,173 +34,46 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
   width: 36px;
   height: 36px;
 }
 
-.backButton:hover {
-  background-color: #3d4257;
-  transform: translateX(-2px);
+.userInfo {
+  margin: 1.5rem 0;
 }
 
-.title {
-  font-size: 1.75rem;
-  color: #2d3142;
-  margin-bottom: 1rem;
-  font-weight: 600;
-  display: inline-block;
-}
-
-.infoBox {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
-  margin: 2rem 0;
-  padding: 1.5rem;
-  background-color: #f8f9fa;
-  border-radius: 0.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-.infoColumn {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-}
-
-.infoItem {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-}
-
-.infoItem label {
-  font-weight: 600;
-  color: #2d3142;
-  min-width: 130px;
-}
-
-.infoItem span {
-  color: #4a4a4a;
-  font-size: 0.95rem;
+.userInfo p {
+  margin: 0.5rem 0;
+  color: #000;
+  font-size: 1rem;
 }
 
 .tableContainer {
-  margin: 2rem 0;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-.table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.tableHeader, .statusHeader {
-  padding: 1.25rem 1rem;
-  background-color: #2d3142;
-  color: white;
-  text-align: center;
-  font-weight: 500;
-  font-size: 0.95rem;
-}
-
-.tableCell, .statusCell {
-  padding: 1.25rem 1rem;
-  text-align: center;
-  border-bottom: 1px solid #eaeaea;
-  font-size: 0.95rem;
-  color: #4a4a4a;
-}
-
-.statusCell {
-  color: #22a565;
-  font-weight: 600;
-}
-
-.statusPaid {
-  color: #22a565;
-  font-weight: 600;
-  padding: 6px 12px;
-  background-color: rgba(34, 165, 101, 0.1);
-  border-radius: 4px;
-}
-
-.dateRange {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.actions {
-  display: flex;
-  justify-content: flex-end;
   margin-top: 2rem;
 }
 
-.printButton {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem 1.5rem;
-  background-color: #2d3142;
-  color: white;
-  border: none;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  font-size: 0.95rem;
-  transition: all 0.2s ease;
+.statusPaid {
+  display: inline-block;
+  color: #059669;
+  font-weight: 600;
+  padding: 0.375rem 0.75rem;
+  background-color: #ecfdf5;
+  border-radius: 0.375rem;
 }
 
-.printButton:hover {
-  background-color: #3d4257;
-  transform: translateY(-2px);
+.printButton {
+  padding: 0.5rem 1rem;
+  background-color: #f97316;
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  font-size: 0.875rem;
 }
 
 .loading {
   text-align: center;
-  padding: 3rem;
+  padding: 2rem;
   color: #6b7280;
-  font-size: 1rem;
-}
-
-@media print {
-  .container {
-    width: 100%;
-    padding: 1rem;
-    margin: 0;
-    box-shadow: none;
-  }
-
-  .backButton,
-  .actions {
-    display: none;
-  }
-
-  .table {
-    page-break-inside: avoid;
-    box-shadow: none;
-  }
-
-  .tableHeader, 
-  .statusHeader {
-    background-color: #2d3142 !important;
-    color: white !important;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
-
-  .statusPaid {
-    background-color: rgba(34, 165, 101, 0.1) !important;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
-
-  .infoBox {
-    background-color: #f8f9fa !important;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
+  font-size: 0.875rem;
 }

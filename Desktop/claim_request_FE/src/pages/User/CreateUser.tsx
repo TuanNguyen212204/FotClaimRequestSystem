@@ -1,24 +1,72 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { PATH } from "@constant/config";
-
+import { useEffect, useState } from "react";
 import httpClient from "@/constant/apiInstance";
 import { User } from "@/types/User";
 import { useForm } from "react-hook-form";
-import styles from "./UpdateUser.module.css";
+import { fetchAllUserAsync, fetchTotalPage } from "@redux/thunk/User/userThunk";
+import { useSelector, useDispatch } from "react-redux";
+import { AppDispatch } from "@redux/index.ts";
 import { X } from "lucide-react";
 import { toast } from "react-toastify";
-export const CreateUser: React.FC = () => {
+import styles from "./CreateUser.module.css";
+import {
+  selectAllUser,
+  selectTotalPageOfAllUser,
+} from "@/redux/selector/userSelector";
+import { LoadingProvider } from "@/components/ui/Loading/LoadingContext";
+import LoadingOverlay from "@/components/ui/Loading/LoadingOverlay";
+import { ApiResponseNoGeneric } from "@/types/ApiResponse";
+export const CreateUser: React.FC = ({
+  openModal,
+  setOpenModal,
+}: {
+  openModal: boolean;
+  onClick: () => void;
+}) => {
   const navigate = useNavigate();
-
+  const dispatch = useDispatch<AppDispatch>();
+  const users = useSelector(selectAllUser);
+  const totalPage = String(useSelector(selectTotalPageOfAllUser));
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm<User>();
+  const handleCreateUser = async (data: any) => {
+    try {
+      const response = httpClient.post<ApiResponseNoGeneric>(
+        "/admin/create-staff",
+        data
+      );
+      if ((await response).status === 200) {
+        toast.success("Create user successfully!");
+        reset();
+        setLoading(false);
+        navigate(PATH.allUserInformation);
+      }
+    } catch (error: any) {
+      setLoading(false);
+      if (error.response) {
+        const { status, data } = error.response;
+        if (status === 400) {
+          toast.error(data.message);
+        } else {
+          toast.error("Create user failed!");
+        }
+      } else if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("Create user failed!");
+      }
+    }
+  };
 
   const onSubmit = async (data: User) => {
+    setLoading(true);
     const requestBody = {
       full_name: data.full_name,
       department: data.department,
@@ -28,43 +76,53 @@ export const CreateUser: React.FC = () => {
       job_rank: data.job_rank,
     };
     console.log(requestBody);
-    try {
-      await httpClient.post("/admin/create-staff", requestBody);
-      toast("Create user successfully!");
-      navigate(PATH.allUserInformation);
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error("Update user error: " + error.message);
-      } else {
-        console.error("Unexpected error", error);
-      }
-      alert("Failed to create user. Please try again.");
-    }
+    handleCreateUser(requestBody);
   };
   const handleCancel = () => {
-    navigate(PATH.allUserInformation);
+    setOpenModal(false);
   };
+
   return (
     <div>
+      <div>
+        {loading && (
+          <div>
+            <LoadingProvider>
+              <LoadingOverlay />
+            </LoadingProvider>
+          </div>
+        )}
+      </div>
       <div style={{ marginTop: "50px" }}>
-        <div className="max-w-lg mx-auto p-9 bg-white shadow-xl rounded-xl">
-          <button
-            onClick={() => handleCancel()}
-            className={styles.cancel_button}
-          >
-            <X />
-          </button>
-          <h1 className="text-3xl font-bold text-gray-700 mb-6 text-center">
+        <div className=" mx-auto p-8 bg-white shadow-xl rounded-xl">
+          <div>
+            <button
+              onClick={() => handleCancel()}
+              className={styles.cancel_button}
+            >
+              <div>
+                <X />
+              </div>
+            </button>
+          </div>
+          <h1 className="text-3xl font-bold text-green-700 mb-6 text-center">
             Create User
           </h1>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
             {/* Full Name */}
-            <div>
+            <div className={styles.input_container}>
               <label
                 className="block text-sm font-medium text-gray-600"
                 htmlFor="full_name"
               >
-                Full Name
+                <div className={styles.flex}>
+                  <div className={styles.label_container}>
+                    <span>*</span>
+                  </div>
+                  <div>
+                    <span>Full Name</span>
+                  </div>
+                </div>
               </label>
               <input
                 id="full_name"
@@ -79,7 +137,7 @@ export const CreateUser: React.FC = () => {
                     message: "Must be at most 50 characters",
                   },
                 })}
-                className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200"
+                className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
               />
               {errors.full_name && (
                 <p className="text-red-500 text-sm mt-1">
@@ -87,12 +145,19 @@ export const CreateUser: React.FC = () => {
                 </p>
               )}
             </div>
-            <div>
+            <div className={styles.input_container}>
               <label
                 className="block text-sm font-medium text-gray-600"
                 htmlFor="email"
               >
-                Email
+                <div className={styles.flex}>
+                  <div className={styles.label_container}>
+                    <span>*</span>
+                  </div>
+                  <div>
+                    <span>Email</span>
+                  </div>
+                </div>
               </label>
               <input
                 id="email"
@@ -100,7 +165,7 @@ export const CreateUser: React.FC = () => {
                 {...register("email", {
                   required: "Email is required",
                 })}
-                className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200"
+                className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
               />
               {errors.full_name && (
                 <p className="text-red-500 text-sm mt-1">
@@ -108,12 +173,19 @@ export const CreateUser: React.FC = () => {
                 </p>
               )}
             </div>
-            <div>
+            <div className={styles.input_container}>
               <label
                 className="block text-sm font-medium text-gray-600"
                 htmlFor="department"
               >
-                Department
+                <div className={styles.flex}>
+                  <div className={styles.label_container}>
+                    <span>*</span>
+                  </div>
+                  <div>
+                    <span>Department</span>
+                  </div>
+                </div>
               </label>
               <input
                 id="department"
@@ -129,7 +201,7 @@ export const CreateUser: React.FC = () => {
                     message: "Must be at most 50 characters",
                   },
                 })}
-                className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200"
+                className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
               />
               {errors.department && (
                 <p className="text-red-500 text-sm mt-1">
@@ -137,12 +209,19 @@ export const CreateUser: React.FC = () => {
                 </p>
               )}
             </div>
-            <div>
+            <div className={styles.input_container}>
               <label
                 className="block text-sm font-medium text-gray-600"
                 htmlFor="salary"
               >
-                Salary
+                <div className={styles.flex}>
+                  <div className={styles.label_container}>
+                    <span>*</span>
+                  </div>
+                  <div>
+                    <span>Salary</span>
+                  </div>
+                </div>
               </label>
               <input
                 id="salary"
@@ -153,7 +232,7 @@ export const CreateUser: React.FC = () => {
                     message: "Salary must greater than 0",
                   },
                 })}
-                className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200"
+                className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
               />
               {errors.salary && (
                 <p className="text-red-500 text-sm mt-1">
@@ -161,17 +240,24 @@ export const CreateUser: React.FC = () => {
                 </p>
               )}
             </div>
-            <div>
+            <div className={styles.input_container}>
               <label
                 className="block text-sm font-medium text-gray-600"
                 htmlFor="role_id"
               >
-                Role ID
+                <div className={styles.flex}>
+                  <div className={styles.label_container}>
+                    <span>*</span>
+                  </div>
+                  <div>
+                    <span>Role ID</span>
+                  </div>
+                </div>
               </label>
               <select
                 id="role_id"
                 {...register("role_id", { required: "Role ID is required" })}
-                className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200"
+                className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
               >
                 <option value="">Select Role</option>
                 <option value="1">1 - Admin</option>
@@ -186,12 +272,19 @@ export const CreateUser: React.FC = () => {
               )}
             </div>
 
-            <div>
+            <div className={styles.input_container}>
               <label
                 className="block text-sm font-medium text-gray-600"
                 htmlFor="job_rank"
               >
-                Job Rank
+                <div className={styles.flex}>
+                  <div className={styles.label_container}>
+                    <span>*</span>
+                  </div>
+                  <div>
+                    <span>Job Rank</span>
+                  </div>
+                </div>
               </label>
               <input
                 id="job_rank"
@@ -206,7 +299,7 @@ export const CreateUser: React.FC = () => {
                     message: "Must be at most 50 characters",
                   },
                 })}
-                className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200"
+                className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
               />
               {errors.job_rank && (
                 <p className="text-red-500 text-sm mt-1">

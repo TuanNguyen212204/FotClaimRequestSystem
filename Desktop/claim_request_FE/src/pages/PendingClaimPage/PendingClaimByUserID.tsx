@@ -2,22 +2,22 @@ import React from "react";
 import { AppDispatch } from "@/redux";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectApprovedClaimByUserID } from "@/redux/selector/claimSelector";
-import { fetchClaimByUserWithApprovedStatusAsync } from "@/redux/thunk/Claim/claimThunk";
+import { selectPendingClaimByUserID } from "@/redux/selector/claimSelector";
+import { fetchClaimByUserWithPendingStatusAsync } from "@/redux/thunk/Claim/claimThunk";
 import TableComponent, {
   DataRecord,
   Column,
 } from "@/components/ui/Table/Table";
 import { EyeIcon } from "lucide-react";
-import styles from "./UpdateUser.module.css";
-export const ApprovedClaimByUserID: React.FC = () => {
-  const listApprovedClaim = useSelector(selectApprovedClaimByUserID);
+
+export const PendingClaimByUserID: React.FC = () => {
+  const listApprovedClaim = useSelector(selectPendingClaimByUserID);
   const dispatch = useDispatch<AppDispatch>();
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      await dispatch(fetchClaimByUserWithApprovedStatusAsync());
+      await dispatch(fetchClaimByUserWithPendingStatusAsync());
       setLoading(false);
     };
     fetchData();
@@ -39,9 +39,9 @@ export const ApprovedClaimByUserID: React.FC = () => {
       title: "Project ID",
     },
     {
-      key: "total_working_hours",
-      dataIndex: "total_working_hours",
-      title: "Total Working Hours",
+      key: "total_hours",
+      dataIndex: "total_hours",
+      title: "Total Hours",
       cell: ({ value }) => `${value} hours`,
     },
     {
@@ -56,8 +56,8 @@ export const ApprovedClaimByUserID: React.FC = () => {
       title: "Claim Status",
       cell: ({ value }: { value: unknown }) => {
         const stringValue = value as string;
-        return stringValue === "APPROVED" ? (
-          <span style={{ color: "green" }}>{stringValue}</span>
+        return stringValue === "PENDING" ? (
+          <span style={{ color: "orange" }}>{stringValue}</span>
         ) : (
           <span>{stringValue}</span>
         );
@@ -68,10 +68,7 @@ export const ApprovedClaimByUserID: React.FC = () => {
       dataIndex: "claim_id",
       title: "Action",
       cell: ({ value }) => (
-        <EyeIcon
-          className={styles.icon}
-          onClick={() => handleViewDetail(value as string)}
-        />
+        <EyeIcon onClick={() => handleViewDetail(value as string)} />
       ),
     },
   ];

@@ -7,73 +7,72 @@ import TableComponent, { Column, DataRecord } from "../../components/ui/Table/Ta
 import { fetchPaidClaimsAsync } from "../../redux/slices/Claim/paidClaimsSlice";
 import { AppDispatch } from "@/redux";
 
-interface PaidClaimData {
-  claim_id: string;
+interface ClaimData extends DataRecord {
+  request_id: string;
   user_id: string;
-  full_name: string;
-  submitted_date: string;
-  total_working_hours: number;
+  project_id: string;
   project_name: string;
-  project_duration: string;
+  start_date: string;
+  end_date: string;
+  total_hours: number;
+  submitted_date: string;
+  approved_date: string;
+  paid_date: string;
+  claim_status: string;
+  full_name: string;
+  salary_overtime: string;
+  claim_details: { date: string; working_hours: number; }[];
 }
 
 const PaidClaims: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const paidClaims = useSelector((state: any) => state.paidClaims.data);
+  const { data: claims, loading, totalPages, currentPage } = useSelector((state: any) => state.paidClaims);
+  const itemsPerPage = 10;
 
   useEffect(() => {
     dispatch(fetchPaidClaimsAsync("1"));
   }, [dispatch]);
 
-  const handleViewDetail = (claimId: string) => {
-    navigate(`${PATH.claimStatus}/${claimId}`);
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
   };
 
-  const formatDateToDDMMYYYY = (date: string) => {
-    const dateObj = new Date(date);
-    const day = dateObj.getDate();
-    const month = dateObj.getMonth() + 1;
-    const year = dateObj.getFullYear();
-    return `${day}/${month}/${year}`;
-  };
-
-  const columns: Column[] = [
+  const columns: Column<ClaimData>[] = [
     { 
-      key: 'claim_id', 
-      dataIndex: 'claim_id', 
-      title: 'Claim ID',
+      key: 'no', 
+      dataIndex: 'no',
+      title: 'No',
+      width: '80px'
+    },
+    { key: 'full_name', dataIndex: 'full_name', title: 'Staff Name' },
+    { key: 'project_name', dataIndex: 'project_name', title: 'Project Name' },
+    { 
+      key: 'date_range', 
+      dataIndex: 'start_date', 
+      title: 'Project Duration',
+      cell: ({ record }) => (
+        <div>
+          <div>From: {formatDate(record.start_date)}</div>
+          <div>To: {formatDate(record.end_date)}</div>
+        </div>
+      )
     },
     { 
-      key: 'full_name', 
-      dataIndex: 'full_name', 
-      title: 'Employee Name',
-    },
-    { 
-      key: 'project_name', 
-      dataIndex: 'project_name', 
-      title: 'Project Name' 
-    },
-    { 
-      key: 'submitted_date', 
-      dataIndex: 'submitted_date', 
-      title: 'Submitted Date',
-      cell: ({ value }) => formatDateToDDMMYYYY(value as string),
-    },
-    { 
-      key: 'total_working_hours', 
-      dataIndex: 'working_hours', 
-      title: 'Total Hours',
-      cell: ({ value }) => `${value} hours`,
+      key: 'total_hours', 
+      dataIndex: 'total_hours', 
+      title: 'Total Hours Working',
+      cell: ({ value }) => `${value} hours`
     },
     {
       key: 'action',
-      dataIndex: 'claim_id',
+      dataIndex: 'request_id',
       title: 'Action',
       cell: ({ value }) => (
         <button 
           className={styles.detailButton}
-          onClick={() => handleViewDetail(value as string)}
+          onClick={() => navigate(`${PATH.claimStatus}/${value}`)}
         >
           Details
         </button>
@@ -81,33 +80,26 @@ const PaidClaims: React.FC = () => {
     }
   ];
 
-  const dataSource: DataRecord[] = paidClaims.map((claim: PaidClaimData, index: number) => ({
-    ...claim,
-    key: index,
-    id: claim.claim_id,
-    project_name: claim.project_name,
-  }));
-
-  const handlePageChange = (page: number) => {
-    dispatch(fetchPaidClaimsAsync(page.toString()));
-  };
-
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h1 className={styles.claimStatus_h1}>Paid Claims</h1>
+        <h1 className={styles.title}>Paid Claims</h1>
         <hr />
       </div>
 
       <TableComponent
-        columns={columns}
-        dataSource={dataSource}
-        loading={false}
+        columns={columns as Column<DataRecord>[]}
+        dataSource={claims.map((claim: ClaimData, idx) => ({
+          ...claim,
+          key: claim.request_id,
+          no: String(idx + 1).padStart(3, '0')
+        }))}
+        loading={loading}
         pagination={true}
         pageLength={10}
-        totalPage={2}
+        totalPage={totalPages}
         name="Paid Claims"
-        onPageChange={handlePageChange}
+        onPageChange={(page) => dispatch(fetchPaidClaimsAsync(page.toString()))}
       />
     </div>
   );

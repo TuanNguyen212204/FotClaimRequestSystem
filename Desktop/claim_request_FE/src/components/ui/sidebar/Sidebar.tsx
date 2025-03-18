@@ -20,15 +20,13 @@ import { CircleX } from "lucide-react";
 import { Pencil } from "lucide-react";
 import { Plus } from "lucide-react";
 export const Sidebar = ({
-  isCollapsed,
   setIsCollapsed,
 }: {
-  isCollapsed: boolean;
   setIsCollapsed: (value: boolean) => void;
 }) => {
   const [selectedClaim, setSelectedClaim] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  const [isCollapsed1, setIsCollapsed1] = useState<boolean>(false);
+  const [isCollapsed1, setIsCollapsed1] = useState<boolean>(true);
   const [role, setRole] = useState("user");
   const location = useLocation();
   const currentPath = location.pathname;
@@ -63,9 +61,6 @@ export const Sidebar = ({
     switch (claim) {
       case "createClaim":
         navigate(PATH.createRequest);
-        break;
-      case "draft":
-        navigate(PATH.draft);
         break;
       case "approved":
         navigate(PATH.approvedFinance);
@@ -112,6 +107,12 @@ export const Sidebar = ({
       case "rejectedPage":
         navigate(PATH.rejectedClaimWithUserID);
         break;
+      case "rejected":
+        navigate(PATH.rejectedClaim);
+        break;
+      case "draft":
+        navigate(PATH.draftClaimByUserID);
+        break;
       default:
         break;
     }
@@ -126,21 +127,13 @@ export const Sidebar = ({
   };
 
   const toggleSidebar = () => {
-    setIsCollapsed1((prev) => !prev);
-    isCollapsed = !isCollapsed1;
-    console.log("isCollapsed1:", isCollapsed1);
+    setIsCollapsed1(!isCollapsed1);
     setIsCollapsed(!isCollapsed1);
-    console.log("Toggled Sidebar:", !isCollapsed);
-  };
-  const toggleCloseSidebar = () => {
-    setIsCollapsed1(false);
-    setIsCollapsed(false);
-    console.log("Sidebar closed");
+    console.log(isCollapsed1);
   };
 
   return (
     <div className={styles.container}>
-      {/* Sidebar */}
       <div
         className={`${styles.sidebar} ${isCollapsed1 ? styles.collapsed : ""}`}
       >
@@ -149,7 +142,7 @@ export const Sidebar = ({
         >
           <div>
             <button onClick={toggleSidebar} className={styles.toggleButton}>
-              <span style={{ marginLeft: "10px" }}>
+              <span>
                 <Menu />
               </span>
             </button>
@@ -268,7 +261,7 @@ export const Sidebar = ({
                             <BriefcaseBusiness size={20} />
                           </div>{" "}
                           <div className={styles.iconInClaimButton_2}>
-                            <span>Project Information</span>
+                            <span>Project</span>
                           </div>
                         </div>
                       )}
@@ -289,7 +282,7 @@ export const Sidebar = ({
                             <Smile size={20} />
                           </div>{" "}
                           <div className={styles.iconInClaimButton_2}>
-                            <span>Staff Information</span>
+                            <span>Staff </span>
                           </div>
                         </div>
                       )}
@@ -344,6 +337,27 @@ export const Sidebar = ({
                         </div>
                       )}
                       {isCollapsed1 && <FaCheck size={20} />}
+                    </button>
+                  </li>
+                  <li
+                    key="rejected"
+                    className={`${
+                      isCollapsed1 ? styles.claimItemCollapse : styles.claimItem
+                    } ${selectedClaim === "rejected" ? styles.active : ""} `}
+                    onClick={() => handleSelect("rejected")}
+                  >
+                    <button className={styles.claimButton}>
+                      {!isCollapsed1 && (
+                        <div className={styles.claimButtonIngredient}>
+                          <div className={styles.iconInClaimButton_1}>
+                            <CircleX />
+                          </div>
+                          <div className={styles.iconInClaimButton_2}>
+                            <span>Rejected Claim</span>
+                          </div>
+                        </div>
+                      )}
+                      {isCollapsed1 && <CircleX size={20} />}
                     </button>
                   </li>
                   <li
@@ -565,12 +579,39 @@ export const Sidebar = ({
             </ul>
           }
         </div>
-        <button
-          className={`${isCollapsed1 ? styles.logoutCollapse : styles.logout}`}
-          onClick={() => handleLogOut()}
-        >
-          <LogOut size={20} />
-        </button>
+        <div>
+          <div>
+            {isCollapsed1 && (
+              <button
+                className={`${
+                  isCollapsed1 ? styles.logoutCollapse : styles.logout
+                }`}
+                onClick={() => handleLogOut()}
+              >
+                <LogOut size={20} />
+              </button>
+            )}
+            {!isCollapsed1 && (
+              <button
+                className={`${
+                  isCollapsed1 ? styles.logoutCollapse : styles.logout
+                }`}
+                onClick={() => handleLogOut()}
+              >
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <div>
+                    <span>Log Out</span>
+                  </div>
+                  <div style={{ marginLeft: "10px", marginTop: "2px" }}>
+                    <span>
+                      <LogOut size={20} />
+                    </span>
+                  </div>
+                </div>
+              </button>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
