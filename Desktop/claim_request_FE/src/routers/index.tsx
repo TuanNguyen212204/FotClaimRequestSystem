@@ -6,7 +6,7 @@ import LoginForm from "@ui/login/LoginForm";
 import ResetPassword from "@ui/login/ResetPassword";
 import CreateClaimPage from "@pages/CreateClaim";
 import { PendingComponent } from "@pages/Approver/PendingApproval";
-import AllUserInformation from "@/pages/admin/AllUserInformation";
+import AllUserInformationPage from "@/pages/admin/AllUserInformationPage";
 import ApproveDetail from "@pages/ClaimRequest/ApproveDetail";
 import ClaimStatus from "@pages/Finance/ClaimStatus";
 import PaidClaims from "@pages/Finance/PaidClaims";
@@ -187,7 +187,7 @@ const router: RouteObject[] = [
         path: PATH.allUserInformation,
         element: (
           <Authorization role_id={[ROLE.ADMIN]}>
-            <AllUserInformation />
+            <AllUserInformationPage />
           </Authorization>
         ),
       },
