@@ -37,6 +37,7 @@ import DraftClaimPage from "@/pages/DraftClaimPage";
 // import { RejectedClaimByUserID } from "@/pages/User/RejectedClaimByUserID";
 // import { PendingClaimByUserID } from "@/pages/User/PendingClaimByUserID";
 import Test from "@/pages/Test";
+import ChangePassword from "@/components/ui/login/ChangePassword";
 const router: RouteObject[] = [
   // {
   //   element: <CheckBoxTest />,
@@ -57,6 +58,10 @@ const router: RouteObject[] = [
   {
     element: <CreateNewPassword />,
     path: PATH.createNewPassword,
+  },
+  {
+    element: <ChangePassword />,
+    path: PATH.changePassword,
   },
   {
     path: "/unauthorized",

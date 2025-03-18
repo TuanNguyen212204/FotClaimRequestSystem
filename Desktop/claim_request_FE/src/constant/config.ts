@@ -33,4 +33,5 @@ export const PATH = {
   test: "/test",
   draftClaimByUserID: "/draft-claim-by-user-id",
   rejectedClaim: "/rejected-claim",
+  changePassword: "/change-password"
 };
