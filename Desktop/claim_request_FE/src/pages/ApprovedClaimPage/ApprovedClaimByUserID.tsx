@@ -9,7 +9,7 @@ import TableComponent, {
   Column,
 } from "@/components/ui/Table/Table";
 import { EyeIcon } from "lucide-react";
-import styles from "./UpdateUser.module.css";
+
 export const ApprovedClaimByUserID: React.FC = () => {
   const listApprovedClaim = useSelector(selectApprovedClaimByUserID);
   const dispatch = useDispatch<AppDispatch>();
@@ -68,10 +68,7 @@ export const ApprovedClaimByUserID: React.FC = () => {
       dataIndex: "claim_id",
       title: "Action",
       cell: ({ value }) => (
-        <EyeIcon
-          className={styles.icon}
-          onClick={() => handleViewDetail(value as string)}
-        />
+        <EyeIcon onClick={() => handleViewDetail(value as string)} />
       ),
     },
   ];
