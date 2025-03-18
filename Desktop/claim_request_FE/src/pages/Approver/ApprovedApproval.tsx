@@ -12,7 +12,6 @@ import {
   selectApprovedClaimTotalPages,
 } from "@redux/selector/claimSelector";
 
-
 export const ApprovedApproverComponent: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
@@ -21,6 +20,7 @@ export const ApprovedApproverComponent: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [limit] = useState(10);
+  const [isSalaryVisible, setIsSalaryVisible] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -33,8 +33,7 @@ export const ApprovedApproverComponent: React.FC = () => {
   }, [currentPage]);
 
   const handleViewDetail = (id: string) => {
-    navigate(`/approve-details?id=${id
-      }`);
+    navigate(`/approve-details?id=${id}`);
   };
 
   const formatDateToDDMMYYYY = (date: string) => {
@@ -93,6 +92,7 @@ export const ApprovedApproverComponent: React.FC = () => {
       key: "salary",
       dataIndex: "user_salary",
       title: "Salary",
+      cell: ({ value }) => <div>{isSalaryVisible ? value : "******"}</div>,
     },
     {
       key: "ot_rate",
@@ -103,6 +103,7 @@ export const ApprovedApproverComponent: React.FC = () => {
       key: "salary_overtime",
       dataIndex: "salary_overtime",
       title: "Salary Overtime",
+      cell: ({ value }) => <div>{isSalaryVisible ? value : "******"}</div>,
     },
     {
       key: "claim_status",

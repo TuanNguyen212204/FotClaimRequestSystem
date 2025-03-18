@@ -99,12 +99,6 @@ export const RejectedComponent: React.FC = () => {
       cell: ({ value }) => (
         <div>
           {isSalaryVisible ? value : "******"}
-          <button
-            onClick={toggleSalaryVisibility}
-            className={styles.iconButton}
-          >
-            {isSalaryVisible ? <EyeOffIcon /> : <EyeIcon />}
-          </button>
         </div>
       ),
     },
@@ -120,12 +114,6 @@ export const RejectedComponent: React.FC = () => {
       cell: ({ value }) => (
         <div>
           {isSalaryVisible ? value : "******"}
-          <button
-            onClick={toggleSalaryVisibility}
-            className={styles.iconButton}
-          >
-            {isSalaryVisible ? <EyeOffIcon /> : <EyeIcon />}
-          </button>
         </div>
       ),
     },

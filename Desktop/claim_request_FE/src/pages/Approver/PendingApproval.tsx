@@ -39,6 +39,7 @@ export const PendingComponent: React.FC = () => {
   } | null>(null);
   const [openModal, setOpenModal] = useState<boolean>(false); 
   const [selectedRequestId, setSelectedRequestId] = useState<string | null>(null);
+  const [isSalaryVisible, setIsSalaryVisible] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -215,6 +216,7 @@ export const PendingComponent: React.FC = () => {
       key: "salary",
       dataIndex: "user_salary",
       title: "Salary",
+      cell: ({ value }) => <div>{isSalaryVisible ? value : "******"}</div>,
     },
     {
       key: "ot_rate",
@@ -225,6 +227,7 @@ export const PendingComponent: React.FC = () => {
       key: "salary_overtime",
       dataIndex: "salary_overtime",
       title: "Salary Overtime",
+      cell: ({ value }) => <div>{isSalaryVisible ? value : "******"}</div>,
     },
     {
       key: "claim_status",
