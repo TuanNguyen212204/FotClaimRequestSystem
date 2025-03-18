@@ -324,7 +324,7 @@ const AllUserInformation: React.FC = () => {
         <TableComponent<User>
           // sortConfig={sortConfig}
           ref={tableRef}
-          isHaveCheckbox={true}
+          isHaveCheckbox={false}
           columns={columns}
           dataSource={dataSource}
           loading={loading}
