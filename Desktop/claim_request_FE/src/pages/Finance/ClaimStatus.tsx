@@ -96,10 +96,6 @@ const ClaimStatus: React.FC = () => {
         </button>
         <h1 className={styles.title}>Claim Status</h1>
       </div>
-      <div className={styles.userInfo}>
-        <p>User ID: {selectedClaim?.user_id}</p>
-        <p>User Name: {selectedClaim?.full_name}</p>
-      </div>
 
       <div className={styles.tableContainer}>
         <TableComponent
