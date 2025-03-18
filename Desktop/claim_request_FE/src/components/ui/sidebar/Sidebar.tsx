@@ -300,7 +300,7 @@ export const Sidebar = ({
                       {!isCollapsed1 && (
                         <div className={styles.claimButtonIngredient}>
                           <div className={styles.iconInClaimButton_1}>
-                            <MdOutlinePendingActions />z
+                            <MdOutlinePendingActions />
                           </div>{" "}
                           <div className={styles.iconInClaimButton_2}>
                             <span>Pending Claim</span>

@@ -28,7 +28,7 @@
 
 
 .tooltipTop {
-  bottom: calc(100% + 5px); 
+  bottom: calc(100% + 10px); 
   left: 50%;
   transform: translateX(-50%) translateY(-10px) scale(0.8);
 }
@@ -46,7 +46,7 @@
 
 
 .tooltipBottom {
-  top: calc(100% + 5px);
+  top: calc(100% + 10px);
   left: 50%;
   transform: translateX(-50%);
 }
