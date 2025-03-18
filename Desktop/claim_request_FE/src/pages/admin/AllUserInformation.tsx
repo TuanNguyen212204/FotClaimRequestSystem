@@ -72,10 +72,20 @@ const AllUserInformation: React.FC = () => {
   const [initialToggleStates, setInitialToggleStates] = useState<{
     [key: string]: boolean;
   }>({});
+  const [userStatuses, setUserStatuses] = useState<{ [key: string]: number }>({});
+  useEffect(() => {
+    const statuses = users.reduce((acc, user) => {
+      acc[user.user_id] = user.user_status ?? 0;
+      return acc;
+    }, {} as { [key: string]: number });
+    setUserStatuses(statuses);
+  }, [users]);
+
   const [assignID, setAssignID] = useState<string>("");
   const [toggleState, setToggleState] = useState<{ [key: string]: boolean }>(
     {}
   );
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -141,6 +151,10 @@ const AllUserInformation: React.FC = () => {
         `/admin/staff/${userId}/status`
       );
       console.log(response);
+      setUserStatuses((prev) => ({
+        ...prev,
+        [userId]: prev[userId] === 1 ? 0 : 1,
+      }));
     } catch (error) {
       console.error("Error toggle status:", error);
     }
@@ -154,9 +168,9 @@ const AllUserInformation: React.FC = () => {
     setName(name);
     setEmail(email);
     Modal.confirm({
-      title: value ? "Disable User" : "Enable User",
+      title: value ? "Enable User" : "Disable User",
       children: `Are you sure you want to ${
-        value ? "disable" : "enable"
+        value ? "Enable" : "Disable"
       } user ${name} with email ${email}?`,
       onOk: () => {
         handleToggleStatus(id);
@@ -219,12 +233,7 @@ const AllUserInformation: React.FC = () => {
       cell: ({ value, record }: { value: string; record: User }) => {
         return (
           <div>
-            {/* <button onClick={() => handleAssignUser(record.user_id as string)}>
-              <div>
-                <CircleCheck />
-              </div>
-            </button> */}
-            {record.user_status === 1 && (
+             {userStatuses[record.user_id] === 1 && (
               <button
                 onClick={() => handleAssignUser(record.user_id as string)}
               >
@@ -233,7 +242,7 @@ const AllUserInformation: React.FC = () => {
                 </div>
               </button>
             )}
-            {record.user_status === 0 && (
+            {userStatuses[record.user_id] === 0 && (
               <button
                 disabled
                 onClick={() => handleAssignUser(record.user_id as string)}
