@@ -76,12 +76,12 @@ export const fetchAllRejectedClaimAsync = createAsyncThunk<
     await delay(1000);
     const response = await httpClient.get<ApiResponse<RejectedClaim[]>>(
       "/approvers/rejected-claim",
-      { page: page, limit: limit }
+      { page: page, limit: limit }  
     );
     console.log("data: ", response.data);
     return {
       data: response.data.data || [],
-      totalPages: response.data.pagination?.totalPages,
+      totalPages: response.data.pagination?.totalPages || 1,
     };
   } catch (error) {
     console.error("Fetch Rejected Claims for Approver error " + error);

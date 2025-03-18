@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./RejectedApproval.module.css";
 import { EyeIcon } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import TableComponent, { Column, DataRecord } from "@ui/Table/Table";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllRejectedClaimAsync } from "@redux/thunk/Claim/claimThunk";
@@ -112,7 +112,7 @@ export const RejectedComponent: React.FC = () => {
       cell: ({ value }) => (
         <EyeIcon
           className={styles.icon}
-          onClick={() => handleViewDetail(value as string)}
+          // onClick={() => handleViewDetail(value as string)}
         />
       ),
     },
@@ -124,7 +124,7 @@ export const RejectedComponent: React.FC = () => {
     user_full_name: claim.user.full_name,
     user_salary: claim.user.salary,
     user_ot_rate: claim.user.ot_rate,
-    claim_status: "rejected",
+    claim_status: "rejected", // Ensure this is correctly set
   }));
 
   return (
