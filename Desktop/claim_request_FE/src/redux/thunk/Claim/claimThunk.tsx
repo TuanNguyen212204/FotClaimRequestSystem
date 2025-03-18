@@ -149,3 +149,25 @@ export const fetchClaimByUserWithRejectStatusAsync = createAsyncThunk<Claim[]>(
     }
   }
 );
+
+export const fetchClaimByUserWithDraftStatusAsync = createAsyncThunk<Claim[]>(
+  "claim/fetchClaimByUserWithDraftStatusAsync",
+  async (): Promise<Claim[]> => {
+    try {
+      await delay(1000);
+      const userId = localStorage.getItem("user_id");
+      if (!userId) {
+        throw new Error("User id not found");
+      }
+      const response = await httpClient.get<ApiResponse<Claim[]>>("/claims", {
+        userID: userId,
+      });
+      return response.data.data.filter(
+        (claim) => claim.claim_status === "DRAFT"
+      );
+    } catch (error) {
+      console.error("Fetch Claims error " + error);
+      throw error;
+    }
+  }
+);

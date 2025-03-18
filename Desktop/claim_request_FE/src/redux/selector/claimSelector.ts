@@ -11,3 +11,5 @@ export const selectPendingClaimByUserID = (state: RootState) =>
   state.claim.listClaimUserPending;
 export const selectRejectedClaimByUserID = (state: RootState) =>
   state.claim.listClaimUserRejected;
+export const selectDraftClaimByUserID = (state: RootState) =>
+  state.claim.listClaimUserDraft;

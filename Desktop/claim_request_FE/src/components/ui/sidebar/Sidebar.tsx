@@ -62,9 +62,6 @@ export const Sidebar = ({
       case "createClaim":
         navigate(PATH.createRequest);
         break;
-      case "draft":
-        navigate(PATH.draft);
-        break;
       case "approved":
         navigate(PATH.approvedFinance);
         break;
@@ -106,6 +103,9 @@ export const Sidebar = ({
         break;
       case "rejected":
         navigate(PATH.rejectedClaim);
+        break;
+      case "draft":
+        navigate(PATH.draftClaimByUserID);
         break;
       default:
         break;

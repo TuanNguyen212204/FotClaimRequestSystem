@@ -29,6 +29,7 @@ import ClaimDetail from "@pages/ClaimDetail";
 import PengdingClaimForUserPage from "@/pages/PendingClaimPage";
 import ApprovedClaimForUserPage from "@/pages/ApprovedClaimPage";
 import RejectedClaimByUserPage from "@/pages/RejectedClaimPage";
+import DraftClaimPage from "@/pages/DraftClaimPage";
 const router: RouteObject[] = [
   // {
   //   element: <CheckBoxTest />,
@@ -94,6 +95,14 @@ const router: RouteObject[] = [
         element: (
           <Authorization role_id={[ROLE.CLAIMER]}>
             <PengdingClaimForUserPage />
+          </Authorization>
+        ),
+      },
+      {
+        path: PATH.draftClaimByUserID,
+        element: (
+          <Authorization role_id={[ROLE.CLAIMER]}>
+            <DraftClaimPage />
           </Authorization>
         ),
       },

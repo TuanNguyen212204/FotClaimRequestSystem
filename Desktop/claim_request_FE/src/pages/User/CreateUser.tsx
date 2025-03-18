@@ -17,6 +17,7 @@ import {
 } from "@/redux/selector/userSelector";
 import { LoadingProvider } from "@/components/ui/Loading/LoadingContext";
 import LoadingOverlay from "@/components/ui/Loading/LoadingOverlay";
+import { ApiResponseNoGeneric } from "@/types/ApiResponse";
 export const CreateUser: React.FC = ({
   openModal,
   setOpenModal,
@@ -35,6 +36,34 @@ export const CreateUser: React.FC = ({
     reset,
     formState: { errors },
   } = useForm<User>();
+  const handleCreateUser = async (data: any) => {
+    try {
+      const response = httpClient.post<ApiResponseNoGeneric>(
+        "/admin/create-staff",
+        data
+      );
+      if ((await response).status === 200) {
+        toast.success("Create user successfully!");
+        reset();
+        setLoading(false);
+        navigate(PATH.allUserInformation);
+      }
+    } catch (error: any) {
+      setLoading(false);
+      if (error.response) {
+        const { status, data } = error.response;
+        if (status === 400) {
+          toast.error(data.message);
+        } else {
+          toast.error("Create user failed!");
+        }
+      } else if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("Create user failed!");
+      }
+    }
+  };
 
   const onSubmit = async (data: User) => {
     setLoading(true);
@@ -47,25 +76,7 @@ export const CreateUser: React.FC = ({
       job_rank: data.job_rank,
     };
     console.log(requestBody);
-    try {
-      const response = await httpClient.post(
-        "/admin/create-staff",
-        requestBody
-      );
-      if (response.status === 200) {
-        toast.success("Create user successfully!");
-        reset();
-        setLoading(false);
-        navigate(PATH.allUserInformation);
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        toast.error("Update user error: " + error.message);
-      } else {
-        toast.error("Unexpected error", error);
-      }
-      alert("Failed to create user. Please try again.");
-    }
+    handleCreateUser(requestBody);
   };
   const handleCancel = () => {
     setOpenModal(false);

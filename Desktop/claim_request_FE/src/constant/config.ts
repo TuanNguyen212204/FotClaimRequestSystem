@@ -29,5 +29,6 @@ export const PATH = {
   approvedClaimWithUserID: "/approved-claim-by-user-id",
   rejectedClaimWithUserID: "/rejected-claim-by-user-id",
   pendingClaimByUserID: "/pending-claim-by-user-id",
+  draftClaimByUserID: "/draft-claim-by-user-id",
   rejectedClaim: "/rejected-claim",
 };

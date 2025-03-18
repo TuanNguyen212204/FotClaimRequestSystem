@@ -58,7 +58,7 @@ export class HttpClient {
     params?: AxiosRequestConfig["params"]
   ): Promise<AxiosResponse<T>> {
     return this.createAxios.get(url, {
-      params: params ?? {}, // Đảm bảo params luôn là object
+      params: params ?? {},
     });
   }
   //axios.post(url[, data[, config]])
