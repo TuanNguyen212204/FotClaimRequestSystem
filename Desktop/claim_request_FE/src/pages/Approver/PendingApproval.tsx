@@ -12,13 +12,14 @@ import {
   FileSearchIcon,
   CheckCircle2,
   XCircle,
-  ArrowLeftCircle,
+  // ArrowLeftCircle,
   Undo2,
 } from "lucide-react";
 import styles from "@/pages/Approver/PendingApproval.module.css";
 // import { Link, Navigate } from "react-router-dom";
 // import { useNavigate } from "react-router-dom";
 import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
+import { DetailsComponents } from "./DetailsApproval.tsx";
 import { AppDispatch } from "@/redux";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllPendingClaimAsync } from "@/redux/thunk/Claim/claimThunk";
@@ -40,8 +41,7 @@ export const PendingComponent: React.FC = () => {
     title: string;
     onOk: () => void;
   } | null>(null);
-  const [detailModalVisible, setDetailModalVisible] = useState(false);
-  const [detailData, setDetailData] = useState<DataRecord | null>(null);
+  const [openModal, setOpenModal] = useState<boolean>(false); 
 
   useEffect(() => {
     setLoading(true);
@@ -135,21 +135,21 @@ export const PendingComponent: React.FC = () => {
     console.log("Selected data:", selectedData);
   };
 
-  const handleMultipleApprove = async () => {
-
-  }
-
-  const handleViewDetail = (request_id: string) => {
-    const selectedClaim = claimList.find(claim => claim.request_id === request_id);
-    if (selectedClaim) {
-      setDetailData(selectedClaim);
-      setDetailModalVisible(true);
-    }
+  const handleOpenModal = () => {
+    setOpenModal(true);
   };
 
-  const closeDetailModal = () => {
-    setDetailModalVisible(false);
-  };
+  // const handleViewDetail = (request_id: string) => {
+  //   const selectedClaim = claimList.find(claim => claim.request_id === request_id);
+  //   if (selectedClaim) {
+  //     setDetailData(selectedClaim);
+  //     setDetailModalVisible(true);
+  //   }
+  // };
+
+  // const closeDetailModal = () => {
+  //   setDetailModalVisible(false);
+  // };
 
   const handlePageChange = (newPage: number) => {
     console.log("Trang mới: ", newPage);
@@ -238,7 +238,7 @@ export const PendingComponent: React.FC = () => {
           <Tooltip text="View Details" position="top">
             <FileSearchIcon
               className={styles.iconSearch}
-              onClick={() => handleViewDetail(value as string)}
+              onClick={() => handleOpenModal()}
             />
           </Tooltip>
           <Tooltip text="Approve" position="top">
