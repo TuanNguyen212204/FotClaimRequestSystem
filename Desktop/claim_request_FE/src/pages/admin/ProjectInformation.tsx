@@ -114,7 +114,12 @@ const ProjectInformation: React.FC = () => {
 
   const handleOpenModal = () => {
     setOpenModal(true);
+    console.log("Modal Opened: ", openModal);
   };
+
+  useEffect(() => {
+    console.log("Modal state changed:", openModal);
+  }, [openModal]);
 
   const handleCloseModal = () => {
     setOpenModal(false);
@@ -123,11 +128,11 @@ const ProjectInformation: React.FC = () => {
   const handleUpdate = (id?: string) => {
     if (!id) return;
     console.log("Update project with ID:", id);
-    setUpdateProjectId(id ? id : "");
+    setUpdateProjectId(id);
     setOpenUpdateModal(true);
-    // navigate(`/update-project?id=${id}`);
+    console.log("Update Modal Opened: ", openUpdate);
   };
-
+// navigate(`/update-project?id=${id}`);
   const columns: Column[] = [
     { key: "projectID", dataIndex: "projectID", title: "Project ID" },
     { key: "projectName", dataIndex: "projectName", title: "Project Name" },
