@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import styles from "@ui/approver/ApproverdApprover.module.css";
+import styles from "./ApproverdApprover.module.css";
 import { EyeIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import TableComponent, { Column, DataRecord } from "@ui/Table/Table";
@@ -41,7 +41,8 @@ export const ApprovedApproverComponent: React.FC = () => {
   }, [currentPage]);
 
   const handleViewDetail = (id: string) => {
-    navigate(`/approve-details?id=${id}`);
+    navigate(`/approve-details?id=${id
+      }`);
   };
 
   const formatDateToDDMMYYYY = (date: string) => {

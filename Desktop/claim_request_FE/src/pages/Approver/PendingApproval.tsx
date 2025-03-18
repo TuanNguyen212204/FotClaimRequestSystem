@@ -19,14 +19,14 @@ import styles from "@/pages/Approver/PendingApproval.module.css";
 // import { Link, Navigate } from "react-router-dom";
 // import { useNavigate } from "react-router-dom";
 import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
-import { DetailsComponents } from "./DetailsApproval.tsx";
+import { DetailComponents } from "./DetailsApproval"
 import { AppDispatch } from "@/redux";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllPendingClaimAsync } from "@/redux/thunk/Claim/claimThunk";
 import { toast } from "react-toastify";
 import Modal from "@/components/ui/modal/Modal";
 import StatusTag, { StatusType } from "@/components/ui/StatusTag/StatusTag";
-// import { Claim } from "../../types/Claim";
+import { DetailsApproval } from "./DetailsApproval";
 
 export const PendingComponent: React.FC = () => {
   // const navigate = useNavigate();
@@ -35,13 +35,14 @@ export const PendingComponent: React.FC = () => {
   const totalPages = useSelector(selectAllPendingTotalPages);
   const [loading, setLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [limit] = useState(10);
+  const [limit] = useState(5);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalContent, setModalContent] = useState<{
     title: string;
     onOk: () => void;
   } | null>(null);
   const [openModal, setOpenModal] = useState<boolean>(false); 
+  const [selectedRequestId, setSelectedRequestId] = useState<string | null>(null);
 
   useEffect(() => {
     setLoading(true);
@@ -135,7 +136,8 @@ export const PendingComponent: React.FC = () => {
     console.log("Selected data:", selectedData);
   };
 
-  const handleOpenModal = () => {
+  const handleOpenModal = (request_id: string) => {
+    setSelectedRequestId(request_id);
     setOpenModal(true);
   };
 
@@ -170,11 +172,11 @@ export const PendingComponent: React.FC = () => {
     //   dataIndex: "request_id",
     //   title: "Request ID",
     // },
-    {
-      key: "user_id",
-      dataIndex: "user_id",
-      title: "User ID",
-    },
+    // {
+    //   key: "user_id",
+    //   dataIndex: "user_id",
+    //   title: "User ID",
+    // },
     {
       key: "user_name",
       dataIndex: "user_full_name",
@@ -238,7 +240,7 @@ export const PendingComponent: React.FC = () => {
           <Tooltip text="View Details" position="top">
             <FileSearchIcon
               className={styles.iconSearch}
-              onClick={() => handleOpenModal()}
+              onClick={() => handleOpenModal(value as string)}
             />
           </Tooltip>
           <Tooltip text="Approve" position="top">
@@ -296,25 +298,6 @@ export const PendingComponent: React.FC = () => {
         onPageChange={handlePageChange}
         isHaveCheckbox={true}
       />
-      {/* {detailModalVisible && (
-        <div className={styles.editModal}>
-          <div className={styles.modalContent}>
-            <h2>Claim Details</h2>
-            <p><strong>User ID:</strong> {detailData?.user_id}</p>
-            <p><strong>Full Name:</strong> {detailData?.full_name}</p>
-            <p><strong>Start Date:</strong> {formatDateToDDMMYYYY(detailData?.start_date || '')}</p>
-            <p><strong>End Date:</strong> {formatDateToDDMMYYYY(detailData?.end_date || '')}</p>
-            <p><strong>Total Hours:</strong> {detailData?.total_hours}</p>
-            <p><strong>Project ID:</strong> {detailData?.project_id}</p>
-            <p><strong>Submitted Date:</strong> {formatDateToDDMMYYYY(detailData?.submitted_date || '')}</p>
-            <p><strong>Salary:</strong> {detailData?.user_salary}</p>
-            <p><strong>OT Rate:</strong> {detailData?.user_ot_rate}</p>
-            <p><strong>Salary Overtime:</strong> {detailData?.salary_overtime}</p>
-            <p><strong>Claim Status:</strong> {detailData?.claim_status}</p>
-            <button onClick={closeDetailModal}>Close</button>
-          </div>
-        </div>
-      )} */}
       <Modal
         open={modalVisible}
         title={modalContent?.title}
@@ -326,7 +309,18 @@ export const PendingComponent: React.FC = () => {
       >
         <p>Do you want to proceed?</p>
       </Modal>
-
+      <Modal
+        open={openModal}
+        onCancel={() => setOpenModal(false)}
+        footer={null}
+      >
+        {selectedRequestId && (
+          <DetailsApproval
+            request_id={selectedRequestId}
+            setOpenModal={setOpenModal}
+          />
+        )}
+      </Modal>
     </div>
   );
 };

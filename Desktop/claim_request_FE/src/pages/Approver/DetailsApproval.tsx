@@ -51,9 +51,9 @@ export const DetailsApproval: React.FC = ({
             </div>
           </button>
         </div>
-        <h1 className="text-3xl font-bold text-blue-700 mb-6 text-center">
+        {/* <h1 className="text-3xl font-bold text-blue-700 mb-6 text-center">
           Claim Details
-        </h1>
+        </h1> */}
         <div className={styles.input_container}>
           <label className="block text-sm font-medium text-gray-600">
             Claim ID

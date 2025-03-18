@@ -54,7 +54,7 @@ export const fetchAllPendingClaimAsync = createAsyncThunk<
     console.log("data: ", response.data);
     return {
       data: response.data.data || [],
-      totalPages: response.data.pagination?.totalPages || 1,
+      totalPages: response.data.pagination?.totalPages,
     };
   } catch (error) {
     console.error("Fetch Pending Claims for Approver error " + error);
