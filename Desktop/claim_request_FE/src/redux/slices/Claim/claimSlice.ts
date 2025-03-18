@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Claim } from "@/types/Claim";
+import { Claim, PendingClaim } from "@/types/Claim";
 
 import {
   fetchAllClaimAsync,
@@ -15,7 +15,7 @@ const initialState: {
   data: Claim[];
   listClaimApproved: Claim[];
   myClaim: Claim[];
-  listClaimPending: Claim[];
+  listClaimPending: PendingClaim[];
   totalPages: number;
   listClaimUserApproved: Claim[];
   listClaimUserPending: Claim[];
