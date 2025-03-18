@@ -84,8 +84,8 @@ const ProjectInformation: React.FC = () => {
   };
 
   const dataSource: DataRecord[] = Array.isArray(project)
-  ? project.map((project: Project, index: number) => ({
-      key: index,
+  ? project.map((project: Project) => ({
+      key: project.project_id,
       projectID: project.project_id,
       projectName: project.project_name,
       startDate: formatDate(project.start_date),
@@ -140,15 +140,13 @@ const ProjectInformation: React.FC = () => {
     navigate(`/update-project?id=${id}`);
   };
 
-  const columns: Column[] = [
+  const columns: Column<Project>[] = [
     { key: "projectID", dataIndex: "projectID", title: "Project ID" },
     { key: "projectName", dataIndex: "projectName", title: "Project Name" },
     { key: "startDate", dataIndex: "startDate", title: "Start Date" },
     { key: "endDate", dataIndex: "endDate", title: "End Date" },
     { 
-      key: "projectStatus", 
-      dataIndex: "projectStatus", 
-      title: "Status",
+      key: "projectStatus", dataIndex: "projectStatus", title: "Status",
       cell: ({ value }) => (
         <span 
           className={`${styles.statusBadge} ${
@@ -160,9 +158,7 @@ const ProjectInformation: React.FC = () => {
       ) 
     },    
     {
-      key: "projectID",
-      dataIndex: "projectID",
-      title: "Action",
+      key: "action", dataIndex: "projectID", title: "Action",
       cell: ({ value }) => {
         return (
           <div className={styles.button_container}>
