@@ -1,5 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Claim, PendingClaim, ApprovedClaim, RejectedClaim } from "@/types/Claim";
+import {
+  Claim,
+  PendingClaim,
+  ApprovedClaim,
+  RejectedClaim,
+} from "@/types/Claim";
 
 import {
   fetchAllClaimAsync,
@@ -100,7 +105,7 @@ export const claimSlice = createSlice({
       })
       .addCase(fetchAllRejectedClaimAsync.fulfilled, (state, action) => {
         state.status = "success";
-        state.listClaimRejected = action.payload.data; 
+        state.listClaimRejected = action.payload.data;
         state.totalPages = action.payload.totalPages;
       })
       .addCase(fetchAllRejectedClaimAsync.pending, (state) => {

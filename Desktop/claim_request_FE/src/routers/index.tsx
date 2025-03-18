@@ -21,6 +21,8 @@ import Authentication from "@auth/Authentication.tsx";
 import Authorization from "@auth/Authorization";
 import Unauthenticated from "@auth/Unauthenticated";
 import { ROLE } from "@constant/role";
+import UserClaims from "@/components/ui/claimer/UserClaims";
+import ApprovedDetailFinancePage from "@/pages/Finance/ApprovedDetailFinancePage";
 import UserClaimsPage from "@pages/User/UserClaimsPage";
 import UserClaimDetailsPage from "@pages/User/UserClaimDetailsPage";
 import { UpdateUser } from "@pages/User/UpdateUser";
@@ -30,6 +32,11 @@ import PengdingClaimForUserPage from "@/pages/PendingClaimPage";
 import ApprovedClaimForUserPage from "@/pages/ApprovedClaimPage";
 import RejectedClaimByUserPage from "@/pages/RejectedClaimPage";
 import RejectedComponent from "@/pages/Approver/RejectedApproval";
+import DraftClaimPage from "@/pages/DraftClaimPage";
+// import { ApprovedClaimByUserID } from "@/pages/User/ApprovedClaimByUserID";
+// import { RejectedClaimByUserID } from "@/pages/User/RejectedClaimByUserID";
+// import { PendingClaimByUserID } from "@/pages/User/PendingClaimByUserID";
+import Test from "@/pages/Test";
 const router: RouteObject[] = [
   // {
   //   element: <CheckBoxTest />,
@@ -95,6 +102,14 @@ const router: RouteObject[] = [
         element: (
           <Authorization role_id={[ROLE.CLAIMER]}>
             <PengdingClaimForUserPage />
+          </Authorization>
+        ),
+      },
+      {
+        path: PATH.draftClaimByUserID,
+        element: (
+          <Authorization role_id={[ROLE.CLAIMER]}>
+            <DraftClaimPage />
           </Authorization>
         ),
       },
@@ -240,10 +255,14 @@ const router: RouteObject[] = [
           </Authorization>
         ),
       },
-      // {
-      //   path: PATH.test,
-      //   element: <Test />,
-      // },
+      {
+        path: PATH.approvedDetailFinance,
+        element: <ApprovedDetailFinancePage />,
+      },
+      {
+        path: PATH.test,
+        element: <Test />,
+      },
     ],
   },
 ];

@@ -1,3 +1,5 @@
+// import { S } from "node_modules/framer-motion/dist/types.d-B50aGbjN";
+
 export interface Claim {
   claim_id: string;
   user_id: string;
@@ -10,7 +12,29 @@ export interface Claim {
   end_date: string;
 }
 
-export interface PendingClaim {
+export interface PendingClaim { 
+  request_id: string;
+  user_id: string;
+  start_date: string;
+  end_date: string;
+  total_hours: number;
+  project_id: string;
+  submitted_date: string;
+  claim_status: string;
+  project_name: string;
+  user: {
+    full_name: string;
+    salary: string;
+    ot_rate: string;
+  };
+  salary_overtime: string;
+  claim_details: {
+    date: string;
+    working_hours: number;
+  }[];
+}
+
+export interface ClaimApprover {
   request_id: string;
   user_id: string;
   start_date: string;
@@ -54,6 +78,25 @@ export interface ApprovedClaim {
   }[];
 }
 
+export interface ClaimFinance {
+  request_id: string;
+  user_id: string;
+  project_id: string;
+  start_date: string;
+  end_date: string;
+  total_hours: number;
+  submitted_date: string;
+  approved_date: string;
+  claim_status: string;
+  full_name: string;
+  project_name: string;
+  salary_overtime: string;
+  claim_details: {
+    date: string;
+    working_hours: number;
+  }[];
+}
+
 export interface RejectedClaim {
   request_id: string;
   user_id: string;
@@ -69,6 +112,24 @@ export interface RejectedClaim {
     salary: string;
     ot_rate: string;
   };
+  salary_overtime: string;
+  claim_details: {
+    date: string;
+    working_hours: number;
+  }[];
+}
+export interface DetailClaimFinance {
+  request_id: string;
+  user_id: string;
+  project_id: string;
+  start_date: string;
+  end_date: string;
+  total_hours: number;
+  submitted_date: string;
+  approved_date: string;
+  claim_status: string;
+  full_name: string;
+  project_name: string;
   salary_overtime: string;
   claim_details: {
     date: string;
