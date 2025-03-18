@@ -1,7 +1,7 @@
 import TableComponent from "@components/ui/Table/Table";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch } from "@redux/index.ts";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import {
   selectAllProject,
   selectTotalPageOfAllProject,
@@ -20,6 +20,7 @@ import { Project } from "@/types/Project";
 import { Trash2, FilePen } from "lucide-react";
 import { confirmModal } from "@/components/ui/modal/Modal";
 import { toast } from "react-toastify";
+import UpdateProject from "./UpdateProject";
 
 const ProjectInformation: React.FC = () => {
   const navigate = useNavigate();
@@ -28,6 +29,9 @@ const ProjectInformation: React.FC = () => {
   const totalPage = useSelector(selectTotalPageOfAllProject) || 1;
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [openUpdate, setOpenUpdateModal] = useState<boolean>(false);
+  const [updateProjectId, setUpdateProjectId] = useState<string | null>(null);
   console.log("Dữ liệu lấy từ Redux:", project);
   const [limit] = useState(7);
 
@@ -36,10 +40,7 @@ const ProjectInformation: React.FC = () => {
       setLoading(true);
       try {
         console.log("Fetching projects for page:", currentPage);
-        const result = await dispatch(
-          fetchAllProjectAsync(currentPage.toString())
-        );
-        console.log("Fetch result:", result);
+        await dispatch(fetchAllProjectAsync(currentPage.toString()));
         await dispatch(fetchTotalPage({ page: currentPage.toString() }));
       } catch (error) {
         console.error("Error fetching projects:", error);
@@ -52,7 +53,6 @@ const ProjectInformation: React.FC = () => {
 
   useEffect(() => {
     console.log("Current project state:", project);
-    
   }, [project]);
 
   const handleCreateProject = async () => {
@@ -64,13 +64,11 @@ const ProjectInformation: React.FC = () => {
         key: index,
         projectID: project.project_id,
         projectName: project.project_name,
-        startDate: new Date(
-          project.start_date
-        ).toLocaleDateString(),
-        endDate: new Date(
-          project.end_date || project.end_date
-        ).toLocaleDateString(),
-        projectStatus:project.project_status,
+        startDate: new Date(project.start_date).toLocaleDateString(),
+        endDate: project.end_date
+          ? new Date(project.end_date).toLocaleDateString()
+          : "N/A",
+        projectStatus: project.project_status,
       }))
     : [];
 
@@ -112,12 +110,20 @@ const ProjectInformation: React.FC = () => {
       },
     });
   };
-  
+
+  const handleOpenModal = () => {
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
 
   const handleUpdate = (id?: string) => {
     if (!id) return;
     console.log("Update project with ID:", id);
-    navigate(`/update-project?id=${id}`);
+    setOpenUpdateModal(true);
+    // navigate(`/update-project?id=${id}`);
   };
 
   const columns: Column[] = [
@@ -125,11 +131,11 @@ const ProjectInformation: React.FC = () => {
     { key: "projectName", dataIndex: "projectName", title: "Project Name" },
     { key: "startDate", dataIndex: "startDate", title: "Start Date" },
     { key: "endDate", dataIndex: "endDate", title: "End Date" },
-    { 
-      key: "projectStatus", 
-      dataIndex: "projectStatus", 
+    {
+      key: "projectStatus",
+      dataIndex: "projectStatus",
       title: "Status",
-      cell: ({ value }) => (value === 1 ? "Active" : "Inactive") 
+      cell: ({ value }) => (value === 1 ? "Active" : "Inactive"),
     },
     {
       key: "projectID",
@@ -159,12 +165,23 @@ const ProjectInformation: React.FC = () => {
   ];
 
   return (
-
-    
     <div>
+      {openModal && (
+        <div className={styles.editModal}>
+          <div>
+            <UpdateProject openModal={openModal} setOpenmodal={setOpenModal} />
+          </div>
+        </div>
+      )}
+      {openUpdate && updateProjectId && (
+        <div className={styles.editModal}>
+          <div>
+            <UpdateProject id={updateProjectId} setOpenmodal={setOpenUpdateModal} />
+          </div>
+        </div>
+      )}
       <TableComponent
         // ref={tableRef}
-        // isHaveCheckbox={true}
         // isHaveCheckbox={true}
         columns={columns}
         dataSource={dataSource}
