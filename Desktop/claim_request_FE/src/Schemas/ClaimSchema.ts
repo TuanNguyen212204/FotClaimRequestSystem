@@ -12,7 +12,10 @@ export const ProjectInfoSchema = z.object({
 
 const claimSchema = z.object({
   date: z.string().nonempty("Date is required"),
-  working_hours: z.number().positive("Working hours must be positive"),
+  working_hours: z
+    .number()
+    .positive("Working hours must be positive")
+    .max(24, "Working hours must be less than 24 hours"),
 });
 
 export const formSchema = z
