@@ -8,7 +8,8 @@ import { combineReducers } from "@reduxjs/toolkit";
 // import claimsReducer from "./slice/claimsSlice";
 // import { approverSlice } from "./Approver/claimsSlice";
 
-import projectReducer from './slice/projectSlice';
+import projectReducer from "./slice/projectSlice";
+import projectSlide from "@redux/slices/Project/projectSlice.ts";
 import { userSlice } from "./slices/User/userSlice.ts";
 import { claimSlice } from "./slices/Claim/claimSlice";
 import vyReducer from "./slices/VySlice";
@@ -20,6 +21,7 @@ export const rootReducer = combineReducers({
   // finance: financeSlice.reducer,
   //
   paidClaims: paidClaimsReducer,
+  project_An: projectSlide,
   user: userSlice.reducer,
   claim: claimSlice.reducer,
   projects: projectReducer,
