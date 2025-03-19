@@ -244,8 +244,13 @@ export const PendingComponent: React.FC = () => {
           <Tooltip text="View Details" position="top">
             <FileSearchIcon
               className={styles.iconSearch}
-              onClick={() => handleOpenModal(value as string)}
+              // onClick={() => handleOpenModal(value as string)}
             />
+            {/* <DetailsApproval
+              isOpen={openModal}
+              onClose={() => setOpenModal(false)}
+              requestId={selectedRequestId}
+            /> */}
           </Tooltip>
           <Tooltip text="Approve" position="top">
             <CheckCircle2
@@ -313,7 +318,7 @@ export const PendingComponent: React.FC = () => {
       >
         <p>Do you want to proceed?</p>
       </Modal>
-      <Modal
+      {/* <Modal
         open={openModal}
         onCancel={() => setOpenModal(false)}
         footer={null}
@@ -324,7 +329,7 @@ export const PendingComponent: React.FC = () => {
             setOpenModal={setOpenModal}
           />
         )}
-      </Modal>
+      </Modal> */}
     </div>
   );
 };

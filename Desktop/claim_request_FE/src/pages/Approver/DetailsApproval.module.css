@@ -1,30 +1,120 @@
-.cancel_button {
-  margin-left: 418px;
-  margin-top: -18px;
-  color: red;
+.container {
+  font-weight: normal;
 }
-.update_button_container {
+
+.avatar {
+  height: 50px;
+  width: 50px;
+  border-radius: 80%;
+  background-color: gray;
+}
+
+.containerUser {
   display: flex;
+  justify-content: start;
+  flex-direction: column;
+  margin: 20px 0 0 30px;
+}
+
+.infoUser1 {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.infoUser2 {
+  display: flex;
+  flex-direction: row;
+  gap: 50px;
+  margin: 0 0 0 5px;
+}
+
+.containerProject {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  width: 70%;
+  padding: 8px;
+  margin: 2rem 0;
+}
+
+.containerProject p {
+  margin: 5px 0 0 1rem;
+}
+
+.containerRequest {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 8px;
+  width: 75%;
+}
+
+.containerRequest p {
+  margin: 5px 0 0 1rem;
+  padding: 5px;
+}
+
+.iconMoveRight {
+  vertical-align: middle;
+  position: relative;
+  top: 2px;
+  margin: 0 5px;
+  display: inline-block;
+}
+
+.timeDuration {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+
+.timeDuration h4 {
+  display: flex;
+  align-self: center;
   justify-content: center;
-  text-align: center;
+  width: 100%;
+  margin: 5px 0 0 90%;
 }
-.update_button {
-  margin-top: 20px;
-  margin-left: 10px;
-  background-color: #89cff0;
-  border-radius: 10px;
-  padding: 10px;
+
+.boldText {
+  font-weight: bold;
+  margin: 0 0 0 5px;
 }
-.input_container {
-  margin-left: 50px;
-}
-.flex {
+
+.history {
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 8px;
+  width: 75%;
+  margin: 2rem 0;
 }
-.label_container {
-  padding-top: 2px;
-  color: red;
+
+.history h4 {
+  align-self: center;
 }
-.label_container div {
-  color: red;
+
+.historyItem {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 5px 15px;
+  width: 93%;
+  border-top: 1px solid #ddd;
+  gap: 5px;
+}
+
+.historyItem p {
+  margin: 0;
+}
+
+.historyItem span {
+  margin-bottom: 0;
 }
