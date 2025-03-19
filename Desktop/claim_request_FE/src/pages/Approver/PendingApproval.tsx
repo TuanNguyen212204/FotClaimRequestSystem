@@ -109,6 +109,10 @@ export const PendingComponent: React.FC = () => {
     console.log("Selected data:", selectedData);
   };
 
+  const handleApproveMultipleClaims = async (request_id) => {
+    
+  };
+
   const handleReturnClaim = async (request_id: string) => {
     handleGetSelectedData();
     setModalContent({
