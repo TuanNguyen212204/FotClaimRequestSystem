@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
   Claim,
+  DetailPendingClaim,
   PendingClaim,
   ApprovedClaim,
   RejectedClaim,
@@ -12,6 +13,7 @@ import {
   fetchAllClaimAsync,
   fetchApprovedClaimsApproverAsync,
   fetchAllPendingClaimAsync,
+  fetchPendingClaimDetailAsync,
   fetchClaimByUserAsync,
   fetchClaimByUserWithApprovedStatusAsync,
   fetchClaimByUserWithPendingStatusAsync,
@@ -26,6 +28,7 @@ const initialState: {
   data: Claim[];
   myClaim: Claim[];
   listClaimApproved: ApprovedClaim[];
+  detailClaimPending: DetailPendingClaim | null;
   listClaimPending: PendingClaim[];
   listClaimRejected: RejectedClaim[];
   listClaimApprovedFiance: ClaimFinance[];
@@ -41,6 +44,7 @@ const initialState: {
   data: [],
   listClaimApproved: [],
   listClaimPending: [],
+  detailClaimPending: null as DetailPendingClaim | null,
   listClaimApprovedFiance: [],
   detailClaimApprovedFiance: null as DetailClaimFinance | null,
   listClaimUserApproved: [],
@@ -136,6 +140,21 @@ export const claimSlice = createSlice({
       .addCase(fetchAllPendingClaimAsync.pending, (state) => {
         state.status = "loading";
       })
+      //fetch all detail pending claim with role is Approver
+      .addCase(fetchPendingClaimDetailAsync.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = String(action.error.message);
+      })
+      .addCase(fetchPendingClaimDetailAsync.fulfilled, (state, action) => {
+        state.status = "success";
+        state.detailClaimPending = Array.isArray(action.payload.data)
+          ? action.payload.data[0]
+          : action.payload.data;
+      })
+      .addCase(fetchPendingClaimDetailAsync.pending, (state) => {
+        state.status = "loading";
+      })
+
       //fetch all rejected claim with role is Approver
       .addCase(fetchAllRejectedClaimAsync.rejected, (state, action) => {
         state.status = "failed";
