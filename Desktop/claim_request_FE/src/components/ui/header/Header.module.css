@@ -43,3 +43,44 @@
   object-fit: contain;
   margin-top: -20px;
 }
+
+
+.dropdown {
+  position: absolute;
+  right: 20px;
+  top: 60px;
+  width: 250px;
+  background: white;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.markAll {
+  text-align: center;
+  padding: 10px;
+  cursor: pointer;
+  background: #f0f0f0;
+  font-weight: bold;
+}
+
+.notificationItem {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+}
+
+.unread {
+  background-color: #f0f8ff;
+  font-weight: bold;
+}
+
+.read {
+  background-color: #ffffff;
+  font-weight: normal;
+}
+
+.timestamp {
+  font-size: 12px;
+  color: gray;
+}

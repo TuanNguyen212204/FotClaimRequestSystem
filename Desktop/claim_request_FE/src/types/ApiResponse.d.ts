@@ -1,4 +1,6 @@
 export interface ApiResponse<T> {
+  notificaitons(notificaitons: any): unknown;
+  notìications(notìications: any): unknown;
   httpStatus: number;
   errorCode: number;
   totalItems: number;
