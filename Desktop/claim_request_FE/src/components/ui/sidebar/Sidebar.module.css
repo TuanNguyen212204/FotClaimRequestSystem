@@ -6,7 +6,7 @@
 
 /* Sidebar */
 .sidebar {
-  width: 250px;
+  width: 60px;
   background-color: #213555;
   color: white;
   padding: 10px;
@@ -14,11 +14,14 @@
   position: fixed;
   left: 0;
   top: 0;
-  transition: width 0.3s ease;
+  transition: all 0.5s linear;
   overflow: hidden;
 }
-
-.collapsed {
+.sidebar:hover {
+  width: 300px;
+  transition: all 0.5s linear;
+}
+/* .collapsed {
   width: 50px;
   padding: 10px;
   transition: 0.3s ease;
@@ -26,7 +29,7 @@
 }
 .collapsed.claimItem {
   width: 10px;
-}
+} */
 
 .header {
   margin-left: 77px;
@@ -79,9 +82,9 @@
   width: 100%;
 }
 
-/* .menu {
-  margin-bottom: 20px;
-} */
+.menu {
+  margin-top: 200px;
+}
 
 .claimHeader {
   color: white;
@@ -117,6 +120,16 @@
   padding: 4px;
   cursor: pointer;
   background-color: #34495e;
+  margin: 15px 0;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  transition: none !important;
+}
+.claimItemCreateClaim {
+  padding: 4px;
+  cursor: pointer;
+  background-color: #4caf50;
   margin: 15px 0;
   border-radius: 5px;
   display: flex;
@@ -184,29 +197,29 @@
   background-color: #e74c3c;
   color: white;
   border: none;
-  padding: 10px;
   cursor: pointer;
-  width: 50%;
+  max-width: 100%;
+  width: 100%;
   position: absolute;
-  bottom: 70px;
-  left: 50%;
+  left: 40%;
   transform: translateX(-50%);
   text-align: center;
-  border-radius: 5px;
+  top: 94%;
+  transition: all 0.5s linear;
+  margin-left: 30px;
 }
 .logoutCollapse {
   background-color: #e74c3c;
   color: white;
   border: none;
-  padding: 10px;
   cursor: pointer;
-  width: 70%;
+  width: 100%;
   position: absolute;
-  bottom: 70px;
+  top: 94.5%;
+  padding: 0;
   left: 43%;
   transform: translateX(-50%);
   text-align: center;
-  border-radius: 5px;
 }
 
 /* Arrow styles */
@@ -234,6 +247,9 @@
   transition: none !important;
   padding-top: 5px;
 }
+.claimButton:hover {
+  text-decoration: none;
+}
 .claimButtonCollapse {
 }
 .claimButtonIngredient {
@@ -243,9 +259,18 @@
 }
 .iconInClaimButton_1 {
   margin-top: 2px;
+  margin-left: 5px;
   transition: none !important;
 }
 .iconInClaimButton_2 {
   margin-left: 5px;
+  transition: none !important;
+}
+.showText {
+  visibility: visible;
+  transition: none !important;
+}
+.hideText {
+  visibility: hidden;
   transition: none !important;
 }

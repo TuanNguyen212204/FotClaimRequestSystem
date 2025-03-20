@@ -62,37 +62,37 @@ const ProjectInformation: React.FC = () => {
       try {
         const response = await httpClient.get("/admin/total-projects");
         console.log("API Response:", response.data);
-        setTotalProjects(response.data.data); 
+        setTotalProjects(response.data.data);
       } catch (error) {
         console.error("Error fetching total projects:", error);
-        setTotalProjects(null); 
+        setTotalProjects(null);
       } finally {
         setLoading(false);
       }
     };
-  
+
     fetchSummaryData();
   }, []);
-  
+
   const handleCreateProject = async () => {
     navigate(PATH.createProject);
   };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString("en-GB"); 
+    return date.toLocaleDateString("en-GB");
   };
-//test
+  //test
   const dataSource: DataRecord[] = Array.isArray(project)
-  ? project.map((project: Project) => ({
-      key: project.project_id,
-      projectID: project.project_id,
-      projectName: project.project_name,
-      startDate: formatDate(project.start_date),
-      endDate: formatDate(project.end_date || project.end_date),
-      projectStatus: project.project_status,
-    }))
-  : [];
+    ? project.map((project: Project) => ({
+        key: project.project_id,
+        projectID: project.project_id,
+        projectName: project.project_name,
+        startDate: formatDate(project.start_date),
+        endDate: formatDate(project.end_date || project.end_date),
+        projectStatus: project.project_status,
+      }))
+    : [];
 
   const handlePageChange = (newPage: number) => {
     console.log("Trang mới:", newPage);
@@ -132,7 +132,6 @@ const ProjectInformation: React.FC = () => {
       },
     });
   };
-  
 
   const handleUpdate = (id?: string) => {
     if (!id) return;
@@ -145,20 +144,24 @@ const ProjectInformation: React.FC = () => {
     { key: "projectName", dataIndex: "projectName", title: "Project Name" },
     { key: "startDate", dataIndex: "startDate", title: "Start Date" },
     { key: "endDate", dataIndex: "endDate", title: "End Date" },
-    { 
-      key: "projectStatus", dataIndex: "projectStatus", title: "Status",
+    {
+      key: "projectStatus",
+      dataIndex: "projectStatus",
+      title: "Status",
       cell: ({ value }) => (
-        <span 
+        <span
           className={`${styles.statusBadge} ${
             value === 1 ? styles.statusActive : styles.statusInactive
           }`}
         >
           {value === 1 ? "Active" : "Inactive"}
         </span>
-      ) 
-    },    
+      ),
+    },
     {
-      key: "action", dataIndex: "projectID", title: "Action",
+      key: "action",
+      dataIndex: "projectID",
+      title: "Action",
       cell: ({ value }) => {
         return (
           <div className={styles.button_container}>
@@ -179,7 +182,7 @@ const ProjectInformation: React.FC = () => {
           </div>
         );
       },
-    },    
+    },
   ];
 
   return (
@@ -187,17 +190,17 @@ const ProjectInformation: React.FC = () => {
       <h1>Project Information</h1>
 
       <div className={styles.summaryContainer}>
-        <SummaryCard 
-          title="Total Projects" 
-          value={loading ? "Loading..." : totalProjects ?? "N/A"} 
-          icon={<ClipboardList />} 
-          percentage={10} 
+        <SummaryCard
+          title="Total Projects"
+          value={loading ? "Loading..." : totalProjects ?? "N/A"}
+          icon={<ClipboardList />}
+          percentage={10}
         />
-        <SummaryCard 
-          title="New Project this month" 
-          value={30}  // Nếu có API cho new projects, thay bằng API tương tự
-          icon={<Clock />} 
-          percentage={-5} 
+        <SummaryCard
+          title="New Project this month"
+          value={30} // Nếu có API cho new projects, thay bằng API tương tự
+          icon={<Clock />}
+          percentage={-5}
         />
       </div>
 
@@ -207,7 +210,7 @@ const ProjectInformation: React.FC = () => {
         // isHaveCheckbox={true}
         columns={columns}
         dataSource={dataSource}
-        loading={loading}
+        loading={true}
         pagination={true}
         name="Status"
         createButton={true}
