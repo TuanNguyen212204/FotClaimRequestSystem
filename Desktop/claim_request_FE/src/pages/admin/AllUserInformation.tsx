@@ -2,7 +2,6 @@ import TableComponent, { SortConfig } from "@components/ui/Table/Table";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch } from "@redux/index.ts";
 import React, { useEffect, useState, useRef } from "react";
-import ConfirmModal from "@/components/ui/modal/ConfirmModal";
 import {
   selectAllUser,
   selectTotalPageOfAllUser,
@@ -12,22 +11,17 @@ import { Column, DataRecord } from "@components/ui/Table/Table";
 import styles from "./AllUserInformation.module.css";
 import httpClient from "@/constant/apiInstance";
 import { useNavigate } from "react-router-dom";
-import { PATH } from "@constant/config";
-import { ApiResponse, ApiResponseNoGeneric } from "@/types/ApiResponse";
+import { ApiResponseNoGeneric } from "@/types/ApiResponse";
 import { toast } from "react-toastify";
 import Modal from "@/components/ui/modal/Modal";
-import { CloudCog, X } from "lucide-react";
+import { X } from "lucide-react";
 import { SquarePen } from "lucide-react";
 import { User } from "@/types/User";
-import { GiCogLock } from "react-icons/gi";
-import { set } from "date-fns";
 import { UpdateUser } from "../User/UpdateUser";
 import ToggleButton from "@/components/ui/ToggleButton/ToggleButton";
 import { CreateUser } from "../User/CreateUser";
 import { CircleCheck } from "lucide-react";
-import { h } from "node_modules/framer-motion/dist/types.d-B50aGbjN";
 import { AssignProject } from "../AssignProject";
-
 const AllUserInformation: React.FC = () => {
   const tableRef = useRef<{
     getSelectedData: () => DataRecord[];
@@ -72,7 +66,9 @@ const AllUserInformation: React.FC = () => {
   const [initialToggleStates, setInitialToggleStates] = useState<{
     [key: string]: boolean;
   }>({});
-  const [userStatuses, setUserStatuses] = useState<{ [key: string]: number }>({});
+  const [userStatuses, setUserStatuses] = useState<{ [key: string]: number }>(
+    {}
+  );
   useEffect(() => {
     const statuses = users.reduce((acc, user) => {
       acc[user.user_id] = user.user_status ?? 0;
@@ -159,32 +155,7 @@ const AllUserInformation: React.FC = () => {
       console.error("Error toggle status:", error);
     }
   };
-  const handleUpdateConfirm = (
-    name: string,
-    email: string,
-    id: string,
-    value: boolean
-  ) => {
-    setName(name);
-    setEmail(email);
-    Modal.confirm({
-      title: value ? "Enable User" : "Disable User",
-      children: `Are you sure you want to ${
-        value ? "Enable" : "Disable"
-      } user ${name} with email ${email}?`,
-      onOk: () => {
-        handleToggleStatus(id);
-        toast.success("Update status successful!");
-      },
-      onCancel: () => {
-        toast.error("Update status failed!");
-        setToggleState((prev) => ({
-          ...prev,
-          [id]: !value,
-        }));
-      },
-    });
-  };
+
   const handleAssignUser = (id: string) => {
     setOpenAssign(true);
     setAssignID(id);
@@ -199,7 +170,7 @@ const AllUserInformation: React.FC = () => {
       key: "user_status",
       dataIndex: "user_status",
       title: "Status",
-      cell: ({ value, record }: { value: number; record: User }) => {
+      cell: ({ record }: { record: User }) => {
         return (
           <div>
             <div>
@@ -213,12 +184,7 @@ const AllUserInformation: React.FC = () => {
                     ...prev,
                     [record.user_id]: newChecked,
                   }));
-                  handleUpdateConfirm(
-                    record.username,
-                    record.email,
-                    record.user_id,
-                    newChecked
-                  );
+                  handleToggleStatus(record.user_id as string);
                 }}
               />
             </div>
@@ -230,10 +196,10 @@ const AllUserInformation: React.FC = () => {
       key: "assign",
       dataIndex: "assign",
       title: "Assign",
-      cell: ({ value, record }: { value: string; record: User }) => {
+      cell: ({ record }: { record: User }) => {
         return (
           <div>
-             {userStatuses[record.user_id] === 1 && (
+            {userStatuses[record.user_id] === 1 && (
               <button
                 onClick={() => handleAssignUser(record.user_id as string)}
               >
@@ -260,7 +226,7 @@ const AllUserInformation: React.FC = () => {
       key: "user_id",
       dataIndex: "user_id",
       title: "Action",
-      cell: ({ value, record }: { value: string; record: User }) => {
+      cell: ({ value }: { value: string }) => {
         return (
           <div style={{ display: "flex" }}>
             <div>
@@ -321,11 +287,11 @@ const AllUserInformation: React.FC = () => {
       )}
 
       <div>
-        <TableComponent<User>
+        <TableComponent
           // sortConfig={sortConfig}
-          ref={tableRef}
+          ref={tableRef as any}
           isHaveCheckbox={false}
-          columns={columns}
+          columns={columns as Column<DataRecord>[]}
           dataSource={dataSource}
           loading={loading}
           pagination={true}
