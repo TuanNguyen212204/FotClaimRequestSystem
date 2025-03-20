@@ -9,12 +9,14 @@ import {
   fetchClaimByUserWithApprovedStatusAsync,
   fetchClaimByUserWithPendingStatusAsync,
   fetchClaimByUserWithRejectStatusAsync,
+  fetchMyClaimDetailAsync,
 } from "@redux/thunk/Claim/claimThunk";
 
 const initialState: {
   data: Claim[];
   listClaimApproved: Claim[];
   myClaim: Claim[];
+  claimDetail: MyClaimDetail | null;
   listClaimPending: Claim[];
   totalPages: number;
   listClaimUserApproved: Claim[];
@@ -31,6 +33,7 @@ const initialState: {
   listClaimUserRejected: [],
   totalPages: 1,
   myClaim: [],
+  claimDetail: null as MyClaimDetail | null,
   status: "",
   error: null,
 };
@@ -143,7 +146,23 @@ export const claimSlice = createSlice({
           state.status = "success";
           state.listClaimUserRejected = action.payload;
         }
-      );
+      )
+    // my claim detail
+      .addCase(fetchMyClaimDetailAsync.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = String(action.error.message);
+      })
+      .addCase(fetchMyClaimDetailAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchMyClaimDetailAsync.fulfilled, (state, action) => {
+        state.status = "success";
+        state.claimDetail = Array.isArray(action.payload)
+          ? action.payload[0]
+          : action.payload;
+
+      }
+    );
   },
 });
 export default claimSlice.reducer;

@@ -5,8 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@redux/index";
 import { fetchClaimByUserAsync } from "@redux/thunk/Claim/claimThunk";
-import { EyeIcon } from "lucide-react";
+import { EyeIcon, User } from "lucide-react";
 import TableComponent, { Column, DataRecord } from "../Table/Table";
+import UserClaimDetailsModal from "./UserClaimDetails";
 
 interface userClaims {
   claim_id?: string;
@@ -22,6 +23,9 @@ const UserClaims = () => {
   const userClaim = useSelector(selectMyClaim);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedClaim, setSelectedClaim] = useState<string>("");
+  const [limit] = useState(5);
 
   useEffect(() => {
     // dispatch(fetchClaimByUserAsync());
@@ -36,7 +40,9 @@ const UserClaims = () => {
   }, [userClaim]);
 
   const handleViewDetail = (id: string) => {
-    navigate(`/claim-detail?id=${id}`);
+    // navigate(`/claim-detail?id=${id}`);
+    setSelectedClaim(id);
+    setIsModalOpen(true);
   };
   const handlePageChange = (newPage: number) => {
     console.log("Trang mới: ", newPage);
@@ -95,13 +101,22 @@ const UserClaims = () => {
     },
     {
       key: "action",
-      dataIndex: "claim_id",
+      dataIndex: "request_id",
       title: "Action",
       cell: ({ value }) => (
-        <EyeIcon
-          className={styles.icon}
-          onClick={() => handleViewDetail(value as string)}
-        />
+        <>
+          <EyeIcon
+            className={styles.icon}
+            onClick={() => handleViewDetail(value as string)}
+          />
+          <UserClaimDetailsModal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            requestID={selectedClaim}
+            currentPage={currentPage.toString()}
+            limit={limit.toString()}
+          />
+        </>
       ),
     },
   ];
