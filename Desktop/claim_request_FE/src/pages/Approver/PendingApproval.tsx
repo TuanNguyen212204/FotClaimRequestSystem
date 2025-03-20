@@ -37,8 +37,8 @@ export const PendingComponent: React.FC = () => {
     title: string;
     onOk: () => void;
   } | null>(null);
-  const [openModal, setOpenModal] = useState<boolean>(false); 
-  const [selectedRequestId, setSelectedRequestId] = useState<string | null>(null);
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedRequestId, setSelectedRequestId] = useState<string>("");
   const [isSalaryVisible, setIsSalaryVisible] = useState(false);
 
   useEffect(() => {
@@ -109,10 +109,6 @@ export const PendingComponent: React.FC = () => {
     console.log("Selected data:", selectedData);
   };
 
-  const handleApproveMultipleClaims = async (request_id) => {
-    
-  };
-
   const handleReturnClaim = async (request_id: string) => {
     handleGetSelectedData();
     setModalContent({
@@ -137,8 +133,8 @@ export const PendingComponent: React.FC = () => {
     console.log("Selected data:", selectedData);
   };
 
-  const handleOpenModal = (request_id: string) => {
-    setSelectedRequestId(request_id);
+  const handleViewDetail = (value: string) => {
+    setSelectedRequestId(value);
     setOpenModal(true);
   };
 
@@ -248,13 +244,15 @@ export const PendingComponent: React.FC = () => {
           <Tooltip text="View Details" position="top">
             <FileSearchIcon
               className={styles.iconSearch}
-              // onClick={() => handleOpenModal(value as string)}
+              onClick={() => handleViewDetail(value as string)}
             />
-            {/* <DetailsApproval
+            <DetailsApproval
               isOpen={openModal}
               onClose={() => setOpenModal(false)}
               requestId={selectedRequestId}
-            /> */}
+              currentPage={currentPage.toString()}
+              limit={limit.toString()}
+            />
           </Tooltip>
           <Tooltip text="Approve" position="top">
             <CheckCircle2
@@ -289,7 +287,7 @@ export const PendingComponent: React.FC = () => {
     key: claim.request_id,
     ...claim,
     user_full_name: claim.user.full_name,
-    user_salary: claim.user.salary, 
+    user_salary: claim.user.salary,
     user_ot_rate: claim.user.ot_rate,
     claim_status: "pending",
   }));
@@ -309,7 +307,7 @@ export const PendingComponent: React.FC = () => {
         pagination={true}
         name="Claims"
         onPageChange={handlePageChange}
-        isHaveCheckbox={true}
+        isHaveCheckbox={false}
       />
       <Modal
         open={modalVisible}

@@ -1,13 +1,17 @@
-import React, { useEffect, useState } from "react";
-import httpClient from "@constant/apiInstance";
-import { ApiResponse } from "@/types/ApiResponse";
-import { PendingClaim } from "@/types/Claim";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "@/redux";
+import {
+  fetchPendingClaimDetailAsync,
+  fetchAllPendingClaimAsync,
+} from "@/redux/thunk/Claim/claimThunk";
+import { selectAllDetailPending } from "@/redux/selector/pendingSelector";
+import Modal from "@ui/modal/Modal";
 import { MoveRight } from "lucide-react";
 import styles from "./DetailsApproval.module.css";
-import { ToastContainer, toast } from "react-toastify";
-import Modal from "@ui/modal/Modal";
-import StatusTag from "@ui/StatusTag/StatusTag";
-
+import StatusTag from "@/components/ui/StatusTag/StatusTag";
+import { toast } from "react-toastify";
+import httpClient from "@/constant/apiInstance.ts";
 
 const formatDateToMonthDay = (date: string) => {
   const dateObj = new Date(date);
@@ -31,43 +35,58 @@ const formatDateToMonthDay = (date: string) => {
   return `${month} ${getDayWithSuffix(day)}`;
 };
 
-export const DetailsApproval: React.FC = ({
-  request_id,
-  setOpenModal,
-}: {
-  request_id: string;
-  setOpenModal: (open: boolean) => void;
-}) => {
-  const [claimData, setClaimData] = useState<PendingClaim | null>(null);
+interface PendingDetailModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  requestId: string;
+  currentPage: string;
+  limit: string;
+}
 
-  const fetchRequestById = async (request_id: string) => {
-    try {
-      const response = await httpClient.get<ApiResponse<PendingClaim[]>>(
-        `/approvers/pending-claim/${request_id}`
-      );
-      const claimData = response.data.data[0];
-      console.log(claimData);
-      setClaimData(claimData);
-    } catch (error) {
-      console.error("Error fetching claim data:", error);
-    }
-  };
+export const DetailsApproval: React.FC<PendingDetailModalProps> = ({
+  isOpen,
+  onClose,
+  requestId,
+  currentPage,
+  limit,
+}) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const claimDetail = useSelector(selectAllDetailPending);
 
   useEffect(() => {
-    if (request_id) {
-      fetchRequestById(request_id);
+    if (isOpen && requestId) {
+      dispatch(
+        fetchPendingClaimDetailAsync({
+          page: currentPage,
+          limit,
+          request_id: requestId,
+        })
+      );
     }
-  }, [request_id]);
+  }, [isOpen, requestId, currentPage, limit, dispatch]);
 
-  const handleCancel = () => {
-    setOpenModal(false);
+  const handleApproveClaimDetention = async (request_id: string) => {
+    try {
+      await httpClient.post(`/approvers/${request_id}/approve-claim`, {});
+      dispatch(
+        fetchAllPendingClaimAsync({
+          page: currentPage.toString(),
+          limit: limit.toString(),
+        })
+      );
+      toast.success("Claim approved successfully!");
+      onClose(); 
+    } catch (error) {
+      console.log("Error approving claim: ", error);
+      toast.error("Failed to approve claim.");
+    }
   };
 
   return (
     <Modal
-      open={true}
-      onCancel={handleCancel}
-      onOk={handleCancel}
+      open={isOpen}
+      onCancel={onClose}
+      onOk={() => handleApproveClaimDetention(requestId)}
       buttonCancel="Close"
       buttonOk="Approve"
       title="Claim Detail"
@@ -86,22 +105,21 @@ export const DetailsApproval: React.FC = ({
               title="avatar"
               className={styles.avatar}
             />
-            <p>{claimData?.full_name}</p>
+            <p>{claimDetail?.user.full_name}</p>
           </div>
           <div className={styles.infoUser2}>
-            <p>User ID: {claimData?.user_id}</p>
-            <p>Salary Overtime: {claimData?.salary_overtime}</p>
+            <p>User ID: {claimDetail?.user_id}</p>
           </div>
         </div>
         <hr />
         <div className={styles.containerProject}>
           <p>
             Project ID:{" "}
-            <span className={styles.boldText}> {claimData?.project_id}</span>{" "}
+            <span className={styles.boldText}> {claimDetail?.project_id}</span>{" "}
           </p>
           <p>
             Project Name:{" "}
-            <span className={styles.boldText}>{claimData?.project_name}</span>
+            <span className={styles.boldText}>{claimDetail?.project_name}</span>
           </p>
         </div>
         <div className={styles.containerRequest}>
@@ -109,38 +127,32 @@ export const DetailsApproval: React.FC = ({
             <p>Time Duration:</p>
             <h4>
               <span className={styles.boldText}>
-                {formatDateToMonthDay(`${claimData?.start_date}`)}
+                {formatDateToMonthDay(`${claimDetail?.start_date}`)}
               </span>{" "}
               <MoveRight size={20} className={styles.iconMoveRight} />{" "}
               <span className={styles.boldText}>
-                {formatDateToMonthDay(`${claimData?.end_date}`)}
+                {formatDateToMonthDay(`${claimDetail?.end_date}`)}
               </span>
             </h4>
           </div>
           <p>
             Submitted Date:{"   "}
             <span className={styles.boldText}>
-              {formatDateToMonthDay(`${claimData?.submitted_date}`)}
-            </span>
-          </p>
-          <p>
-            Approved Date:{"   "}
-            <span className={styles.boldText}>
-              {formatDateToMonthDay(`${claimData?.approved_date}`)}
+              {formatDateToMonthDay(`${claimDetail?.submitted_date}`)}
             </span>
           </p>
           <p>
             Total Working Hours:{" "}
             <span className={styles.boldText}>
-              {claimData?.total_hours} hours
+              {claimDetail?.total_hours} hours
             </span>
           </p>
           <p>
             Status:{" "}
-            {claimData?.claim_status ? (
+            {claimDetail?.claim_status ? (
               <StatusTag
                 status={
-                  claimData.claim_status as
+                  claimDetail.claim_status as
                     | "PENDING"
                     | "APPROVED"
                     | "REJECTED"
@@ -153,14 +165,18 @@ export const DetailsApproval: React.FC = ({
           </p>
         </div>
         <div>
-          {claimData?.claim_details && claimData.claim_details.length > 0 ? (
+          {claimDetail?.claim_details &&
+          claimDetail.claim_details.length > 0 ? (
             <div className={styles.history}>
               <h4>Claim History</h4>
-              {claimData.claim_details.map((detail, index) => (
+              {claimDetail.claim_details.map((detail, index) => (
                 <div key={index} className={styles.historyItem}>
-                  <span className={styles.boldText}>
-                    {formatDateToMonthDay(detail.date)}
-                  </span>
+                  <p>
+                    Date:{""}
+                    <span className={styles.boldText}>
+                      {formatDateToMonthDay(detail.date)}
+                    </span>
+                  </p>
                   <p>
                     Working Hours:{" "}
                     <span className={styles.boldText}>
