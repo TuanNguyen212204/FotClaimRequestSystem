@@ -1,70 +1,74 @@
-import { Router } from "../../routers";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import styles from "./UserSetting.module.css";
+import TableComponent, { Column, DataRecord } from "../../components/ui/Table/Table";
+import { fetchStaffAsync } from "@/redux/slices/User/userSlice"; 
+import { AppDispatch } from "@/redux";
 import { FilePen, Trash2 } from "lucide-react";
 
-const StaffInformation = () => {
-  return (
-    <div>
-      <Router />
-      <div>
-        <div className={styles.container}>
-          <div>
-            <h1>User Settings</h1>
-            <hr />
-          </div>
-          <div
-            style={{
-              overflow: "hidden",
-              marginTop: "20px",
-              boxShadow:
-                "rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px",
-            }}
-          >
-            <table className={styles.table}>
-              <tr>
-                <th className={styles.style_th}>#</th>
-                <th className={styles.style_th}>Name</th>
-                <th className={styles.style_th}>Department</th>
-                <th className={styles.style_th}>Job Rank</th>
-                <th className={styles.style_th}>Salary</th>
-                <th className={styles.style_th}>Action</th>
-              </tr>
-              <tr>
-                <td className={styles.style_td}>01</td>
-                <td className={styles.style_td}>Josh</td>
-                <td className={styles.style_td}>Text</td>
-                <td className={styles.style_td}>Text</td>
-                <td className={styles.style_td}>Number</td>
-                <td className={styles.style_td}>
-                  <FilePen /> <Trash2 />
-                </td>
-              </tr>
-              <tr>
-                <td className={styles.style_td}>01</td>
-                <td className={styles.style_td}>Josh</td>
-                <td className={styles.style_td}>Text</td>
-                <td className={styles.style_td}>Text</td>
-                <td className={styles.style_td}>Number</td>
-                <td className={styles.style_td}>
-                  <FilePen /> <Trash2 />
-                </td>
-              </tr>
-            </table>
-          </div>
-          <div
-            style={{
-              marginTop: "20px",
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-            <button className={styles.button2}>Previous</button>
-            <button className={styles.button3} style={{ marginLeft: "10px" }}>
-              Next
-            </button>
-          </div>
+interface StaffData {
+  id: string;
+  name: string;
+  department: string;
+  jobRank: string;
+  salary: number;
+}
+
+const StaffInformation: React.FC = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+  const staffList = useSelector((state: any) => state.staff.data);
+
+  useEffect(() => {
+    dispatch(fetchStaffAsync());
+  }, [dispatch]);
+
+  const handleEdit = (staffId: string) => {
+    navigate(`/staff/edit/${staffId}`);
+  };
+
+  const handleDelete = (staffId: string) => {
+    console.log(`Deleting staff ID: ${staffId}`);
+  };
+
+  const columns: Column[] = [
+    { key: "id", dataIndex: "id", title: "#" },
+    { key: "name", dataIndex: "name", title: "Name" },
+    { key: "department", dataIndex: "department", title: "Department" },
+    { key: "jobRank", dataIndex: "jobRank", title: "Job Rank" },
+    { key: "salary", dataIndex: "salary", title: "Salary", cell: ({ value }) => `$${value}` },
+    {
+      key: "action",
+      dataIndex: "id",
+      title: "Action",
+      cell: ({ value }) => (
+        <div className={styles.actionIcons}>
+          <FilePen className={styles.icon} onClick={() => handleEdit(value as string)} />
+          <Trash2 className={styles.icon} onClick={() => handleDelete(value as string)} />
         </div>
+      ),
+    },
+  ];
+
+  const dataSource: DataRecord[] = staffList.map((staff: StaffData, index: number) => ({
+    ...staff,
+    key: index,
+  }));
+
+  return (
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <h1>User Settings</h1>
+        <hr />
       </div>
+
+      <TableComponent 
+        columns={columns} 
+        dataSource={dataSource} 
+        pagination={true} 
+        pageLength={7} 
+        name="Staff List" />
     </div>
   );
 };

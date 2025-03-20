@@ -1,11 +1,11 @@
 .container {
   width: 1087px;
-  height: 487px;
-  position: absolute;
-  top: 50px;
-  left: 319px;
+  min-height: 487px;
+  position: relative;
   padding: 30px;
   background-color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
 }
 
 .claimStatus_h1 {
@@ -36,32 +36,29 @@
 
 .style_th {
   padding: 15px;
-  background-color: #a09e9e;
-  border-right: 1px solid #ccc;
+  background-color: #2D3142;
+  border-right: 1px solid #cccccc;
   border-bottom: 1px solid #ccc;
   font-weight: normal;
-  color: #333;
-}
+  color: #f6f6f6;
+} 
 
 .style_td {
   padding: 15px;
-  border-right: 1px solid #ccc;
+  border-right: 1px solid #cccccc;
   border-bottom: 1px solid #ccc;
   background-color: #FFFFFF;
 }
 
-/* Loại bỏ border bên phải của cột cuối cùng */
 .style_th:last-child,
 .style_td:last-child {
   border-right: none;
 }
 
-/* Loại bỏ border dưới của hàng cuối cùng */
 tr:last-child .style_td {
   border-bottom: none;
 }
 
-/* Chiều rộng cột */
 .col_claim_id { width: 8%; }
 .col_staff_name { width: 12%; }
 .col_project_name { width: 20%; }
@@ -70,7 +67,6 @@ tr:last-child .style_td {
 .col_approver_name { width: 12%; }
 .col_action { width: 8%; }
 
-/* Style cho nút action */
 .action_column {
   text-align: center;
 }
@@ -82,61 +78,52 @@ tr:last-child .style_td {
   padding: 5px;
 }
 
-/* Pagination */
 .pagination {
+  position: fixed;
+  bottom: 20px;
+  right: 350px;
+  transform: translateX(-50%); 
   display: flex;
   justify-content: center;
-  margin-top: 20px;
-  gap: 10px;
+  align-items: center;
+  gap: 1rem;
+  padding: 15px;
+  width: auto;
+  
 }
 
-.items_count {
-  text-align: center;
-  margin-top: 10px;
-  color: #BFC0C0;
+.pageNumbers {
+  display: flex;
+  gap: 0.5rem;
+  align-self: center;
 }
 
-/* Thêm hover effect cho hàng */
-.table tr:hover td {
-  background-color: #f8f9fa;
+.pageNumber {
+  padding: 0.25rem 0.75rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #666;
 }
 
-/* Style cho Project Duration */
-.project_duration {
-  color: #BFC0C0;
-  font-size: 0.85em;
+.activePage {
+  color: #2D3142;
+  font-weight: bold;
 }
 
-/* Style cho Total Hours */
-.total_hours {
-  font-weight: 500;
-  color: #28A745;
+.pageButton {
+  padding: 0.25rem 0.75rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #666;
 }
 
-/* Style cho Approver Name */
-.approver_name {
-  color: #495057;
-  font-weight: 500;
+.pageButton:disabled {
+  color: #d9d9d9;
+  cursor: not-allowed;
 }
 
-/* Style cho style_td_Status */
-.style_td_Status {
-  width: 6em;
-  height: 13em;
-  border: 3px solid #000000;
-  text-align: center;
-  color: green;
-  font-style: bold;
-  font-weight: 600;
-  background-color: #FFFFFF;
-}
-
-/* Style cho style_th_Status */
-.style_th_Status {
-  border: 3px solid #000000;
-  border-radius: 0px;
-  width: 8em;
-  height: 4em;
-  background-color: #FFFFFF;
-  text-align: center;
+.style_tr:hover {
+  background-color: #f5f5f5;
 }

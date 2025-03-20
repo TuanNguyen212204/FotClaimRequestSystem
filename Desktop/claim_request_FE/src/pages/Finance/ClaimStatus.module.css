@@ -1,28 +1,31 @@
 .container {
   width: 1087px;
-  height: 487px;
-  position: absolute;
-  top: 50px;
-  left: 319px;
+  min-height: 487px;
+  position: relative;
   padding: 30px;
   background-color: #FFFFFF;
 }
 
 .claimStatus_h1 {
   font-size: 24px;
-  color: #333;
+  color: #000000;
   margin-bottom: 20px;
+  border-bottom: 1px solid #000;
   text-align: right;
   padding-right: 20px;
-  border-bottom: 1px solid #000;
-  padding-bottom: 10px;
+  
 }
 
 .box {
   display: flex;
   justify-content: space-between;
-  font-size: 1.5em;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+}
+
+.box p {
+  margin: 8px 0;
+  font-size: 16px;
+  color: #333;
 }
 
 .table {
@@ -32,87 +35,77 @@
   border: 2px solid #000;
   border-radius: 8px;
   overflow: hidden;
+  margin-bottom: 20px;
 }
-
-.style_th {
+.style_th_Status {
   padding: 15px;
-  background-color: #a09e9e;
+  background-color: #2D3142;
   border-right: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
   font-weight: normal;
-  color: #333;
+  color: #ffffff;
+  text-align: center;
 }
-
+.style_th {
+  padding: 15px;
+  background-color: #2D3142;
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  font-weight: normal;
+  color: #ffffff;
+  text-align: center;
+}
 .style_td {
   padding: 15px;
   border-right: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
   background-color: #FFFFFF;
+  text-align: center;
 }
-
-/* Loại bỏ border bên phải của cột cuối cùng */
+.style_td_Status {
+  padding: 15px;
+  border-right: 1px  #ccc;
+  border-bottom: 1px solid #ccc;
+  background-color: #FFFFFF;
+  color: #E94F4F;
+  font-weight: 600;
+  text-align: center;
+}
 .style_th:last-child,
 .style_td:last-child {
   border-right: none;
 }
-
-/* Loại bỏ border dưới của hàng cuối cùng */
-tr:last-child .style_td {
-  border-bottom: none;
-}
-
-/* Style cho header Status */
-.style_th_Status {
-  padding: 15px;
-  background-color: #a09e9e;
-  border-right: 1px solid #ccc;
-  border-bottom: 1px solid #ccc;
-  font-weight: normal;
-  color: #333;
-}
-
-/* Style cho cell Status */
-.style_td_Status {
-  padding: 15px;
-  border-right: 1px solid #ccc;
-  border-bottom: 1px solid #ccc;
-  background-color: #FFFFFF;
-  color: rgb(188,75,81);
-  font-weight: 600;
-  text-align: center;
-}
-
-/* Pagination */
 .pagination_container {
-  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 20px;
-  padding: 0 20px;
+  position: relative;
 }
-
 .pagination {
   display: flex;
-  justify-content: center;
-  gap: 10px;
+  align-items: center;
+  gap: 8px;
 }
-
-.items_count {
-  text-align: center;
-  margin-top: 10px;
-  color: #525353;
+.pageNumber,
+.pageButton {
+  padding: 5px 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #666;
 }
-
-/* Thêm hover effect cho hàng */
-.table tr:hover td {
-  background-color: #f8f9fa;
+.pageButton:disabled {
+  color: #ccc;
+  cursor: not-allowed;
 }
-
-/* Style cho nút Print */
+.activePage {
+  color: #2D3142;
+  font-weight: bold;
+}
 .print_button {
   position: absolute;
-  right: 20px;
+  right: 0;
   padding: 10px 30px;
   background-color: #EF8354;
   color: white;
@@ -120,23 +113,32 @@ tr:last-child .style_td {
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
-  transition: background-color 0.3s ease;
 }
-
 .print_button:hover {
-  background-color: #EF8354;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-
-/* Style cho table container */
-.table-container {
-  margin-bottom: 40px;
-  overflow-x: auto;
-}
-
-/* Style cho phần thông tin claim */
-.box p {
-  margin: 10px 0;
-  font-size: 16px;
-  color: #333;
+@media print {
+  .container {
+    width: 100%;
+    padding: 20px;
+    margin: 0;
+  }
+.pagination_container,
+  .print_button {
+    display: none;
+  }
+.table {
+    page-break-inside: avoid;
+  }
+.style_th {
+    background-color: #2D3142 !important;
+    color: white !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+.style_td_Status {
+    color: #E94F4F !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
 }

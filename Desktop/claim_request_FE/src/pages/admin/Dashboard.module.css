@@ -1,0 +1,30 @@
+.chartContainer, .lastClaimCard, .statsContainer {
+  background-color: white; /* Giữ nền trắng để nổi bật */
+  padding: 1.5rem; /* Tăng padding giúp nội dung thoáng hơn */
+  border-radius: 0.75rem; /* Bo góc mềm mại */
+  border: 1px solid #ddd; /* Viền nhẹ giúp phân biệt với nền */
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1); /* Tăng độ nổi bật */
+}
+
+.flex-container {
+  padding: 1.5rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem; /* Tăng khoảng cách giữa các box */
+}
+
+@media (min-width: 768px) {
+  .container {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem; /* Tăng khoảng cách giữa các box trên màn hình lớn */
+  }
+}
+
+.lastClaimTable th {
+  background-color: #f8f9fa; /* Nền nhạt cho tiêu đề bảng */
+  border-bottom: 2px solid #ddd; /* Tạo sự tách biệt */
+}
+
+.lastClaimTable th, .lastClaimTable td {
+  border: 1px solid #ddd; /* Viền từng ô giúp bảng dễ nhìn hơn */
+}

@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 
 interface Claim {
   claimId: string;
@@ -61,4 +61,11 @@ const claimsSlice = createSlice({
 });
 
 export const selectClaims = (state: { claims: ClaimsState }) => state.claims.claims;
+
+
+export const fetchClaims = createAsyncThunk('claims/fetchClaims', async (filter: any) => {
+  
+  return initialState.claims; 
+});
+
 export default claimsSlice.reducer;
