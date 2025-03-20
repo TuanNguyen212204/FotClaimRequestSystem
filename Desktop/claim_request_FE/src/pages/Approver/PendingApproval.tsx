@@ -8,13 +8,7 @@ import {
   selectAllPendingTotalPages,
 } from "@/redux/selector/pendingSelector";
 import httpClient from "@/constant/apiInstance.ts";
-import {
-  FileSearchIcon,
-  CheckCircle2,
-  XCircle,
-  // ArrowLeftCircle,
-  Undo2,
-} from "lucide-react";
+import { FileSearchIcon, CheckCircle2, XCircle, Undo2 } from "lucide-react";
 import styles from "@/pages/Approver/PendingApproval.module.css";
 import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
 import { AppDispatch } from "@/redux";
@@ -51,13 +45,13 @@ export const PendingComponent: React.FC = () => {
     ).finally(() => setLoading(false));
   }, [currentPage]);
 
-  const tableRef = useRef<{ getSelectionData: () => DataRecord[] }>(null);
+  const tableRef = useRef<{ getSelectionData: () => DataRecord[]; getSelectedData: () => DataRecord[]; getSortedData: () => DataRecord[] }>(null);
   const [selectedData, setSelectedData] = useState<DataRecord[]>([]);
 
   const handleGetSelectedData = () => {
     if (tableRef.current) {
-      const a = tableRef.current.getSelectionData();
-      setSelectedData(a);
+      const selected = tableRef.current.getSelectionData();
+      setSelectedData(selected);
     }
   };
 
@@ -133,25 +127,70 @@ export const PendingComponent: React.FC = () => {
     console.log("Selected data:", selectedData);
   };
 
+  const handleSelectMultipleApprove = async () => {
+    handleGetSelectedData();
+    try {
+      await httpClient.post("/approvers/approve-multiple-claims", {
+        request_ids: selectedData.map((data) => data.request_id),
+      });
+      dispatch(
+        fetchAllPendingClaimAsync({
+          page: currentPage.toString(),
+          limit: limit.toString(),
+        })
+      );
+      toast.success("Claims approved successfully!");
+    } catch (error) {
+      console.log("Error approving multiple claims: ", error);
+      toast.error("Failed to approve multiple claims.");
+    }
+  };
+
+  const handleSelectMultipleReject = async () => {
+    handleGetSelectedData();
+    try {
+      await httpClient.post("/approvers/reject-multiple-claims", {
+        request_ids: selectedData.map((data) => data.request_id),
+      });
+      dispatch(
+        fetchAllPendingClaimAsync({
+          page: currentPage.toString(),
+          limit: limit.toString(),
+        })
+      );
+      toast.success("Claims rejected successfully!");
+    } catch (error) {
+      console.log("Error rejecting multiple claims: ", error);
+      toast.error("Failed to reject multiple claims.");
+    }
+  };
+
+  const handleSelectMultipleReturn = async () => {
+    handleGetSelectedData();
+    try {
+      await httpClient.post("/approvers/return-multiple-claims", {
+        request_ids: selectedData.map((data) => data.request_id),
+      });
+      dispatch(
+        fetchAllPendingClaimAsync({
+          page: currentPage.toString(),
+          limit: limit.toString(),
+        })
+      );
+      toast.success("Claims returned successfully!");
+    } catch (error) {
+      console.log("Error returning multiple claims: ", error);
+      toast.error("Failed to return multiple claims.");
+    }
+  };
+
   const handleViewDetail = (value: string) => {
     setSelectedRequestId(value);
     setOpenModal(true);
   };
 
-  // const handleViewDetail = (request_id: string) => {
-  //   const selectedClaim = claimList.find(claim => claim.request_id === request_id);
-  //   if (selectedClaim) {
-  //     setDetailData(selectedClaim);
-  //     setDetailModalVisible(true);
-  //   }
-  // };
-
-  // const closeDetailModal = () => {
-  //   setDetailModalVisible(false);
-  // };
-
   const handlePageChange = (newPage: number) => {
-    console.log("Trang mới: ", newPage);
+    console.log("New page: ", newPage);
     setCurrentPage(newPage);
   };
 
@@ -164,16 +203,6 @@ export const PendingComponent: React.FC = () => {
   };
 
   const columns: Column<DataRecord>[] = [
-    // {
-    //   key: "request_id",
-    //   dataIndex: "request_id",
-    //   title: "Request ID",
-    // },
-    // {
-    //   key: "user_id",
-    //   dataIndex: "user_id",
-    //   title: "User ID",
-    // },
     {
       key: "user_name",
       dataIndex: "user_full_name",
@@ -272,12 +301,6 @@ export const PendingComponent: React.FC = () => {
               onClick={() => handleReturnClaim(value as string)}
             />
           </Tooltip>
-          {/* <button
-            className={styles.deleteButton}
-            onClick={() => handleReturnClaim(value as string)}
-          >
-            Return
-          </button> */}
         </div>
       ),
     },
@@ -295,11 +318,8 @@ export const PendingComponent: React.FC = () => {
   return (
     <div>
       <h1 className={styles.title}>Pending Claims</h1>
-      {/* <nav className={styles.breadcrumb}>
-        <Link to="/">My Claims</Link> &gt;{" "}
-        <Link to="/pending-claim">Pending Approval</Link>
-      </nav> */}
       <TableComponent
+        ref={tableRef}
         columns={columns}
         dataSource={dataSource}
         loading={loading}
@@ -307,7 +327,7 @@ export const PendingComponent: React.FC = () => {
         pagination={true}
         name="Claims"
         onPageChange={handlePageChange}
-        isHaveCheckbox={false}
+        isHaveCheckbox={true}
       />
       <Modal
         open={modalVisible}
@@ -320,18 +340,6 @@ export const PendingComponent: React.FC = () => {
       >
         <p>Do you want to proceed?</p>
       </Modal>
-      {/* <Modal
-        open={openModal}
-        onCancel={() => setOpenModal(false)}
-        footer={null}
-      >
-        {selectedRequestId && (
-          <DetailsApproval
-            request_id={selectedRequestId}
-            setOpenModal={setOpenModal}
-          />
-        )}
-      </Modal> */}
     </div>
   );
 };
