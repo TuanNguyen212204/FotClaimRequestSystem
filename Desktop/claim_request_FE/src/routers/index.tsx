@@ -13,7 +13,6 @@ import PaidClaims from "@pages/Finance/PaidClaims";
 import ProjectInformation from "@/pages/admin/ProjectInformation";
 import UpdateProject from "@/pages/admin/UpdateProject";
 import { CreateProject } from "@pages/Project/CreateProject";
-import StaffInformation from "@/pages/admin/StaffInformation";
 import Dashboard from "@/pages/admin/Dashboard";
 import CheckMail from "@components/ui/login/CheckMail";
 import CreateNewPassword from "@components/ui/login/CreateNewPassword";
@@ -279,14 +278,7 @@ const router: RouteObject[] = [
           </Authorization>
         ),
       },
-      {
-        path: PATH.staffInformation,
-        element: (
-          <Authorization role_id={[ROLE.ADMIN]}>
-            <StaffInformation />
-          </Authorization>
-        ),
-      },
+
       {
         path: PATH.approvedDetailFinance,
         element: <ApprovedDetailFinancePage />,
