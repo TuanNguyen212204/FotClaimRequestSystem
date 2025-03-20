@@ -12,7 +12,7 @@ import styles from "./AllUserInformation.module.css";
 import httpClient from "@/constant/apiInstance";
 import { useNavigate } from "react-router-dom";
 import { ApiResponseNoGeneric } from "@/types/ApiResponse";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import Modal from "@/components/ui/modal/Modal";
 import { X } from "lucide-react";
 import { SquarePen } from "lucide-react";
