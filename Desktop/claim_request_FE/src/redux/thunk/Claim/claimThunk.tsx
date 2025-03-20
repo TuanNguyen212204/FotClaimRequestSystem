@@ -2,6 +2,7 @@ import httpClient from "@constant/apiInstance";
 import { ApiResponse } from "@/types/ApiResponse";
 import {
   Claim,
+  DetailPendingClaim,
   PendingClaim,
   ApprovedClaim,
   RejectedClaim,
@@ -112,6 +113,32 @@ export const fetchAllPendingClaimAsync = createAsyncThunk<
   }
 });
 
+//------------------------------------------------- GET DETAILS PENDING CLAIM FOR APPROVAL ----------------------------------------------------------------------
+
+export const fetchPendingClaimDetailAsync = createAsyncThunk<
+  { data: DetailPendingClaim[]; totalPages: number },
+  { page: string; limit: string; request_id: string }
+>(
+  "claim/approver/fetchPendingClaimDetail",
+  async ({ page, limit, request_id }) => {
+    try {
+      await delay(1000);
+      const response = await httpClient.get<ApiResponse<DetailPendingClaim[]>>(
+        `/approvers/pending-claim/${request_id}`,
+        { page: page, limit: limit }
+      );
+      console.log("data: ", response.data);
+      return {
+        data: response.data.data,
+        totalPages: response.data.totalPages,
+      };
+    } catch (error) {
+      console.error("Fetch Pending Claims for Approver error " + error);
+      throw error;
+    }
+  }
+);
+
 //------------------------------------------------- GET REJECTED CLAIM FOR APPROVAL ----------------------------------------------------------------------
 export const fetchAllRejectedClaimAsync = createAsyncThunk<
   { data: RejectedClaim[]; totalPages: number },
@@ -121,7 +148,7 @@ export const fetchAllRejectedClaimAsync = createAsyncThunk<
     await delay(1000);
     const response = await httpClient.get<ApiResponse<RejectedClaim[]>>(
       "/approvers/rejected-claim",
-      { page: page, limit: limit }  
+      { page: page, limit: limit }
     );
     console.log("data: ", response.data);
     return {
