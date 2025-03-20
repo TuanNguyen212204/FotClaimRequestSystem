@@ -17,7 +17,6 @@ const formatDateToMonthDay = (date: string) => {
   const day = dateObj.getDate();
   const month = dateObj.toLocaleString("en-US", { month: "long" });
 
-  // Thêm th, st, nd, rd cho ngày
   const getDayWithSuffix = (day: number) => {
     if (day > 3 && day < 21) return `${day}th`;
     switch (day % 10) {

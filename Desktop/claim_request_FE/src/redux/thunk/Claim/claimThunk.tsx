@@ -4,6 +4,7 @@ import {
   Claim,
   ClaimApprover,
   ClaimFinance,
+  DetailClaimApprover,
   DetailClaimFinance,
   PaymentResponse,
 } from "@/types/Claim";
@@ -25,7 +26,7 @@ export const fetchAllClaimAsync = createAsyncThunk<Claim[]>(
     }
   }
 );
-
+//------------------------------------------------- GET APPROVED CLAIMS FOR APPROVER ----------------------------------------------------------------------
 export const fetchApprovedClaimsApproverAsync = createAsyncThunk<
   { data: ClaimApprover[]; totalPages: number },
   { page: string; limit: string }
@@ -42,6 +43,24 @@ export const fetchApprovedClaimsApproverAsync = createAsyncThunk<
     };
   } catch (error) {
     console.error("Fetch Approverd Claims for Approver error " + error);
+    throw error;
+  }
+});
+//------------------------------------------------- GET APPROVED DETAIL CLAIM FOR APPROVER ----------------------------------------------------------------------
+export const fetchApprovedDetailApproverAsync = createAsyncThunk<
+  { data: DetailClaimApprover },
+  { request_id: string }
+>("claim/approver/fetchApprovedDetail", async ({ request_id }) => {
+  try {
+    await delay(1000);
+    const response = await httpClient.get<ApiResponse<DetailClaimApprover>>(
+      `/claims/${request_id}`
+    );
+    return {
+      data: response.data.data,
+    };
+  } catch (error) {
+    console.error("Fetch Approved Detail for Finance error " + error);
     throw error;
   }
 });
@@ -69,17 +88,14 @@ export const fetchApprovedClaimsFinanceAsync = createAsyncThunk<
 export const fetchApprovedDetailFinanceAsync = createAsyncThunk<
   { data: DetailClaimFinance },
   { request_id: string }
-  // ,{ request_id: string; page: string; limit: string }
 >("claim/finance/fetchApprovedDetail", async ({ request_id }) => {
   try {
     await delay(1000);
     const response = await httpClient.get<ApiResponse<DetailClaimFinance>>(
       `/finance/claims/approved/request/${request_id}`
-      // ,{ page: page, limit: limit }
     );
     return {
       data: response.data.data,
-      // totalPages: response.data.totalPages,
     };
   } catch (error) {
     console.error("Fetch Approved Detail for Finance error " + error);

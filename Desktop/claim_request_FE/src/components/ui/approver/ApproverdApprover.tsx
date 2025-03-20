@@ -10,6 +10,7 @@ import {
   selectAppovedClaimApprover,
   selectApprovedClaimTotalPages,
 } from "@redux/selector/claimSelector";
+import ApprovedDetailApproverModal from "./ApprovedDetailApproverModal";
 
 const formatDateToDDMMYYYY = (date: string) => {
   const dateObj = new Date(date);
@@ -27,6 +28,8 @@ export const ApprovedApproverComponent: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [limit] = useState(7);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedRequestId, setSelectedRequestId] = useState<string>("");
 
   useEffect(() => {
     setLoading(true);
@@ -38,8 +41,14 @@ export const ApprovedApproverComponent: React.FC = () => {
     ).finally(() => setLoading(false));
   }, [currentPage]);
 
-  const handleViewDetail = (id: string) => {
-    navigate(`/approve-details?id=${id}`);
+  // const handleViewDetail = (id: string) => {
+  //   navigate(`/approve-details?id=${id}`);
+  // };
+
+  const handleViewDetail = (value: string) => {
+    console.log("Opening modal with requestId:", value);
+    setSelectedRequestId(value);
+    setIsModalOpen(true);
   };
 
   const handlePageChange = (newPage: number) => {
@@ -81,13 +90,21 @@ export const ApprovedApproverComponent: React.FC = () => {
     },
     {
       key: "action",
-      dataIndex: "claim_id",
+      dataIndex: "request_id",
       title: "Action",
       cell: ({ value }) => (
-        <EyeIcon
-          className={styles.icon}
-          onClick={() => handleViewDetail(value as string)}
-        />
+        <>
+          <EyeIcon
+            className={styles.icon}
+            onClick={() => handleViewDetail(value as string)}
+          />
+
+          <ApprovedDetailApproverModal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            requestId={selectedRequestId}
+          />
+        </>
       ),
     },
   ];

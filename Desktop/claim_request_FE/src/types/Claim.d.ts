@@ -69,3 +69,26 @@ export interface DetailClaimFinance {
     working_hours: number;
   }[];
 }
+
+export interface DetailClaimApprover {
+  request_id: string;
+  user_id: string;
+  start_date: string;
+  end_date: string;
+  total_hours: number;
+  project_id: string;
+  submitted_date: string;
+  approved_date: string;
+  paid_date: string | null;
+  claim_status: string;
+  claimDetails: {
+    claim_id: string;
+    request_id: string;
+    date: string;
+    working_hours: number;
+  }[];
+  project: {
+    project_id: string;
+    project_name: string;
+  };
+}

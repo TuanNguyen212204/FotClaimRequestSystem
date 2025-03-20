@@ -3,6 +3,7 @@ import {
   Claim,
   ClaimApprover,
   ClaimFinance,
+  DetailClaimApprover,
   DetailClaimFinance,
 } from "@/types/Claim";
 
@@ -16,11 +17,13 @@ import {
   fetchClaimByUserWithRejectStatusAsync,
   fetchClaimByUserWithPendingStatusAsync,
   fetchClaimByUserWithApprovedStatusAsync,
+  fetchApprovedDetailApproverAsync,
 } from "@/redux/thunk/Claim/claimThunk";
 
 const initialState: {
   data: Claim[];
   listClaimApprovedApprover: ClaimApprover[];
+  detailClaimApprovedApprover: DetailClaimApprover | null;
   listClaimApprovedFiance: ClaimFinance[];
   detailClaimApprovedFiance: DetailClaimFinance | null;
   myClaim: Claim[];
@@ -34,6 +37,7 @@ const initialState: {
 } = {
   data: [],
   listClaimApprovedApprover: [],
+  detailClaimApprovedApprover: null as DetailClaimApprover | null,
   listClaimApprovedFiance: [],
   detailClaimApprovedFiance: null as DetailClaimFinance | null,
   listClaimPending: [],
@@ -73,6 +77,20 @@ export const claimSlice = createSlice({
         state.totalPages = action.payload.totalPages;
       })
       .addCase(fetchApprovedClaimsApproverAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      //---------------------------------------------- Approved Detail for Approver -----------------------------------------------------
+      .addCase(fetchApprovedDetailApproverAsync.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = String(action.error.message);
+      })
+      .addCase(fetchApprovedDetailApproverAsync.fulfilled, (state, action) => {
+        state.status = "success";
+        state.detailClaimApprovedApprover = Array.isArray(action.payload.data)
+          ? action.payload.data[0]
+          : action.payload.data;
+      })
+      .addCase(fetchApprovedDetailApproverAsync.pending, (state) => {
         state.status = "loading";
       })
       //---------------------------------------------- Approved Claims for Finance -----------------------------------------------------

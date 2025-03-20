@@ -2,6 +2,8 @@ import { RootState } from "..";
 export const selectAllClaim = (state: RootState) => state.claim.data;
 export const selectAppovedClaimApprover = (state: RootState) =>
   state.claim.listClaimApprovedApprover;
+export const selectApprovedDetailApprover = (state: RootState) =>
+  state.claim.detailClaimApprovedApprover;
 export const selectMyClaim = (state: RootState) => state.claim.myClaim;
 export const selectApprovedClaimTotalPages = (state: RootState) =>
   state.claim.totalPages;
