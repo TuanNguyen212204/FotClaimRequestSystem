@@ -12,7 +12,10 @@ export const ProjectInfoSchema = z.object({
 
 const claimSchema = z.object({
   date: z.string().nonempty("Date is required"),
-  working_hours: z.number().positive("Working hours must be positive"),
+  working_hours: z
+    .number()
+    .positive("Working hours must be positive")
+    .max(24, "Working hours must be less than 24 hours"),
 });
 
 export const formSchema = z
@@ -30,7 +33,7 @@ export const formSchema = z
       );
       return data.claims.every((claim) => {
         const claimDate = new Date(claim.date);
-        //  console.log(claimDate, projectStart, projectEnd);
+        //console.log(claimDate, projectStart, projectEnd);
         return claimDate >= projectStart && claimDate <= projectEnd;
       });
     },
@@ -38,6 +41,20 @@ export const formSchema = z
       message: "All claim dates must be within the project's duration",
       path: ["claims"],
     },
-  );
+  )
+  .superRefine((claims, ctx) => {
+    const dateSet = new Set();
+    claims.claims.forEach((claim, index) => {
+      if (dateSet.has(claim.date)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "This date is already chosen",
+          path: [`claims.${index}.date`],
+        });
+      } else {
+        dateSet.add(claim.date);
+      }
+    });
+  });
 
 export type FormData = z.infer<typeof formSchema>;

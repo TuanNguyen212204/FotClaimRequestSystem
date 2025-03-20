@@ -1,49 +1,63 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
   Claim,
-  ClaimApprover,
-  ClaimFinance,
+  DetailPendingClaim,
+  PendingClaim,
+  RejectedClaim,
   DetailClaimApprover,
   DetailClaimFinance,
+  ClaimApprovedApprover,
+  ClaimApprovedFinance,
 } from "@/types/Claim";
 
 import {
   fetchAllClaimAsync,
   fetchApprovedClaimsApproverAsync,
   fetchAllPendingClaimAsync,
+  fetchPendingClaimDetailAsync,
   fetchClaimByUserAsync,
+  fetchClaimByUserWithApprovedStatusAsync,
+  fetchClaimByUserWithPendingStatusAsync,
+  fetchClaimByUserWithRejectStatusAsync,
+  fetchAllRejectedClaimAsync,
   fetchApprovedClaimsFinanceAsync,
   fetchApprovedDetailFinanceAsync,
-  fetchClaimByUserWithRejectStatusAsync,
-  fetchClaimByUserWithPendingStatusAsync,
-  fetchClaimByUserWithApprovedStatusAsync,
   fetchApprovedDetailApproverAsync,
+  fetchClaimByUserWithDraftStatusAsync,
 } from "@/redux/thunk/Claim/claimThunk";
 
 const initialState: {
   data: Claim[];
-  listClaimApprovedApprover: ClaimApprover[];
-  detailClaimApprovedApprover: DetailClaimApprover | null;
-  listClaimApprovedFiance: ClaimFinance[];
-  detailClaimApprovedFiance: DetailClaimFinance | null;
   myClaim: Claim[];
-  listClaimPending: Claim[];
+  listClaimApprovedApprover: ClaimApprovedApprover[];
+  detailClaimApprovedApprover: DetailClaimApprover | null;
+  // listClaimApproved: ApprovedClaim[]; cái này dùng mà sai tên
+  detailClaimPending: DetailPendingClaim | null;
+  listClaimPending: PendingClaim[];
+  listClaimRejected: RejectedClaim[];
+  listClaimApprovedFiance: ClaimApprovedFinance[];
+  detailClaimApprovedFiance: DetailClaimFinance | null;
   totalPages: number;
   listClaimUserApproved: Claim[];
   listClaimUserPending: Claim[];
   listClaimUserRejected: Claim[];
+  listClaimUserDraft: Claim[];
   status: string;
   error: string | null;
 } = {
   data: [],
   listClaimApprovedApprover: [],
   detailClaimApprovedApprover: null as DetailClaimApprover | null,
+  // listClaimApproved: [],
+  listClaimPending: [],
+  detailClaimPending: null as DetailPendingClaim | null,
   listClaimApprovedFiance: [],
   detailClaimApprovedFiance: null as DetailClaimFinance | null,
-  listClaimPending: [],
   listClaimUserApproved: [],
   listClaimUserPending: [],
+  listClaimRejected: [],
   listClaimUserRejected: [],
+  listClaimUserDraft: [],
   totalPages: 1,
   myClaim: [],
   status: "",
@@ -66,7 +80,7 @@ export const claimSlice = createSlice({
         state.status = "success";
         state.data = action.payload;
       })
-      //---------------------------------------------- Approved Claims for Appover -----------------------------------------------------
+      //fetch all approved claim with role is Approver
       .addCase(fetchApprovedClaimsApproverAsync.rejected, (state, action) => {
         state.status = "failed";
         state.error = String(action.error.message);
@@ -120,7 +134,6 @@ export const claimSlice = createSlice({
       .addCase(fetchApprovedDetailFinanceAsync.pending, (state) => {
         state.status = "loading";
       })
-      //---------------------------------------------- My Claims -----------------------------------------------------
       //fetch all claim by user_id
       .addCase(fetchClaimByUserAsync.rejected, (state, action) => {
         state.status = "failed";
@@ -145,6 +158,34 @@ export const claimSlice = createSlice({
         state.totalPages = action.payload.totalPages;
       })
       .addCase(fetchAllPendingClaimAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      //fetch all detail pending claim with role is Approver
+      .addCase(fetchPendingClaimDetailAsync.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = String(action.error.message);
+      })
+      .addCase(fetchPendingClaimDetailAsync.fulfilled, (state, action) => {
+        state.status = "success";
+        state.detailClaimPending = Array.isArray(action.payload.data)
+          ? action.payload.data[0]
+          : action.payload.data;
+      })
+      .addCase(fetchPendingClaimDetailAsync.pending, (state) => {
+        state.status = "loading";
+      })
+
+      //fetch all rejected claim with role is Approver
+      .addCase(fetchAllRejectedClaimAsync.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = String(action.error.message);
+      })
+      .addCase(fetchAllRejectedClaimAsync.fulfilled, (state, action) => {
+        state.status = "success";
+        state.listClaimRejected = action.payload.data;
+        state.totalPages = action.payload.totalPages;
+      })
+      .addCase(fetchAllRejectedClaimAsync.pending, (state) => {
         state.status = "loading";
       })
       //my claim is with approved status
@@ -199,6 +240,24 @@ export const claimSlice = createSlice({
         (state, action) => {
           state.status = "success";
           state.listClaimUserRejected = action.payload;
+        }
+      )
+      //my claim is with draft status
+      .addCase(
+        fetchClaimByUserWithDraftStatusAsync.rejected,
+        (state, action) => {
+          state.status = "failed";
+          state.error = String(action.error.message);
+        }
+      )
+      .addCase(fetchClaimByUserWithDraftStatusAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(
+        fetchClaimByUserWithDraftStatusAsync.fulfilled,
+        (state, action) => {
+          state.status = "success";
+          state.listClaimUserDraft = action.payload;
         }
       );
   },

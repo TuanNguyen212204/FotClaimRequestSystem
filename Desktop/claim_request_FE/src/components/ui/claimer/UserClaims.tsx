@@ -58,8 +58,8 @@ const UserClaims = () => {
       title: "Project ID",
     },
     {
-      key: "total_working_hours",
-      dataIndex: "total_working_hours",
+      key: "total_hours",
+      dataIndex: "total_hours",
       title: "Total Working Hours",
       cell: ({ value }) => `${value} hours`,
     },

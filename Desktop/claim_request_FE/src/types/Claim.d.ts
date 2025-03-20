@@ -1,4 +1,4 @@
-import { S } from "node_modules/framer-motion/dist/types.d-B50aGbjN";
+// import { S } from "node_modules/framer-motion/dist/types.d-B50aGbjN";
 
 export interface Claim {
   claim_id: string;
@@ -12,7 +12,7 @@ export interface Claim {
   end_date: string;
 }
 
-export interface ClaimApprover {
+export interface PendingClaim {
   request_id: string;
   user_id: string;
   start_date: string;
@@ -21,19 +21,64 @@ export interface ClaimApprover {
   project_id: string;
   submitted_date: string;
   claim_status: string;
-  salary_overtime: string;
+  project_name: string;
   user: {
     full_name: string;
     salary: string;
     ot_rate: string;
   };
+  salary_overtime: string;
   claim_details: {
     date: string;
     working_hours: number;
   }[];
 }
 
-export interface ClaimFinance {
+// export interface ClaimApprover {
+//   request_id: string;
+//   user_id: string;
+//   start_date: string;
+//   end_date: string;
+//   total_hours: number;
+//   project_id: string;
+//   submitted_date: string;
+//   claim_status: string;
+//   project_name: string;
+//   user: {
+//     full_name: string;
+//     salary: string;
+//     ot_rate: string;
+//   };
+//   salary_overtime: string;
+//   claim_details: {
+//     date: string;
+//     working_hours: number;
+//   }[];
+// }
+
+export interface ClaimApprovedApprover {
+  request_id: string;
+  user_id: string;
+  start_date: string;
+  end_date: string;
+  total_hours: number;
+  project_id: string;
+  submitted_date: string;
+  claim_status: string;
+  project_name: string;
+  user: {
+    full_name: string;
+    salary: string;
+    ot_rate: string;
+  };
+  salary_overtime: string;
+  claim_details: {
+    date: string;
+    working_hours: number;
+  }[];
+}
+
+export interface ClaimApprovedFinance {
   request_id: string;
   user_id: string;
   project_id: string;
@@ -45,6 +90,28 @@ export interface ClaimFinance {
   claim_status: string;
   full_name: string;
   project_name: string;
+  salary_overtime: string;
+  claim_details: {
+    date: string;
+    working_hours: number;
+  }[];
+}
+
+export interface RejectedClaim {
+  request_id: string;
+  user_id: string;
+  start_date: string;
+  end_date: string;
+  total_hours: number;
+  project_id: string;
+  submitted_date: string;
+  claim_status: string;
+  project_name: string;
+  user: {
+    full_name: string;
+    salary: string;
+    ot_rate: string;
+  };
   salary_overtime: string;
   claim_details: {
     date: string;
@@ -70,6 +137,27 @@ export interface DetailClaimFinance {
   }[];
 }
 
+// export interface ClaimApprovedApprover {
+//   request_id: string;
+//   user_id: string;
+//   start_date: string;
+//   end_date: string;
+//   total_hours: number;
+//   project_id: string;
+//   submitted_date: string;
+//   claim_status: string;
+//   salary_overtime: string;
+//   user: {
+//     full_name: string;
+//     salary: string;
+//     ot_rate: string;
+//   };
+//   claim_details: {
+//     date: string;
+//     working_hours: number;
+//   }[];
+// }
+
 export interface DetailClaimApprover {
   request_id: string;
   user_id: string;
@@ -91,4 +179,26 @@ export interface DetailClaimApprover {
     project_id: string;
     project_name: string;
   };
+}
+
+export interface DetailPendingClaim {
+  request_id: string;
+  user_id: string;
+  start_date: string;
+  end_date: string;
+  total_hours: number;
+  project_id: string;
+  submitted_date: string;
+  claim_status: string;
+  project_name: string;
+  user: {
+    full_name: string;
+    salary: string;
+    ot_rate: string;
+  };
+  salary_overtime: string;
+  claim_details: {
+    date: string;
+    working_hours: number;
+  }[];
 }

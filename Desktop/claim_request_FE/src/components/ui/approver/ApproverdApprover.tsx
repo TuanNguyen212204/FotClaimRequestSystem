@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import styles from "@ui/approver/ApproverdApprover.module.css";
+import styles from "@ui/approver/ApprovedApprover.module.css";
 import { EyeIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import TableComponent, { Column, DataRecord } from "@ui/Table/Table";
@@ -57,16 +57,6 @@ export const ApprovedApproverComponent: React.FC = () => {
   };
 
   const columns: Column[] = [
-    // {
-    //   key: "claim_id",
-    //   dataIndex: "claim_id",
-    //   title: "Claim ID",
-    // },
-    // {
-    //   key: "user_id",
-    //   dataIndex: "user_id",
-    //   title: "User ID",
-    // },
     {
       key: "full_name",
       dataIndex: "full_name",

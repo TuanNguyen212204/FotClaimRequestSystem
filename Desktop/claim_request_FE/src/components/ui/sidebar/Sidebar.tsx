@@ -62,9 +62,6 @@ export const Sidebar = ({
       case "createClaim":
         navigate(PATH.createRequest);
         break;
-      case "draft":
-        navigate(PATH.draft);
-        break;
       case "approved":
         navigate(PATH.approvedFinance);
         break;
@@ -76,6 +73,12 @@ export const Sidebar = ({
         break;
       case "userinfo":
         navigate(PATH.userInfo);
+        break;
+      case "projectInformation":
+        navigate(PATH.projectInformation);
+        break;
+      case "dashboard":
+        navigate(PATH.dashboard);
         break;
       case "approvedApprover":
         navigate(PATH.approvedApprover);
@@ -103,6 +106,12 @@ export const Sidebar = ({
         break;
       case "rejectedPage":
         navigate(PATH.rejectedClaimWithUserID);
+        break;
+      case "rejected":
+        navigate(PATH.rejectedClaim);
+        break;
+      case "draft":
+        navigate(PATH.draftClaimByUserID);
         break;
       default:
         break;
@@ -297,7 +306,7 @@ export const Sidebar = ({
                       {!isCollapsed1 && (
                         <div className={styles.claimButtonIngredient}>
                           <div className={styles.iconInClaimButton_1}>
-                            <MdOutlinePendingActions />z
+                            <MdOutlinePendingActions />
                           </div>{" "}
                           <div className={styles.iconInClaimButton_2}>
                             <span>Pending Claim</span>
@@ -328,6 +337,27 @@ export const Sidebar = ({
                         </div>
                       )}
                       {isCollapsed1 && <FaCheck size={20} />}
+                    </button>
+                  </li>
+                  <li
+                    key="rejected"
+                    className={`${
+                      isCollapsed1 ? styles.claimItemCollapse : styles.claimItem
+                    } ${selectedClaim === "rejected" ? styles.active : ""} `}
+                    onClick={() => handleSelect("rejected")}
+                  >
+                    <button className={styles.claimButton}>
+                      {!isCollapsed1 && (
+                        <div className={styles.claimButtonIngredient}>
+                          <div className={styles.iconInClaimButton_1}>
+                            <CircleX />
+                          </div>
+                          <div className={styles.iconInClaimButton_2}>
+                            <span>Rejected Claim</span>
+                          </div>
+                        </div>
+                      )}
+                      {isCollapsed1 && <CircleX size={20} />}
                     </button>
                   </li>
                   <li

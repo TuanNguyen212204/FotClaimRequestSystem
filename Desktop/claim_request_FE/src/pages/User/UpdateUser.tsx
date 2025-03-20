@@ -10,13 +10,11 @@ import { PATH } from "@constant/config";
 import { X } from "lucide-react";
 import styles from "./UpdateUser.module.css";
 import { ToastContainer, toast } from "react-toastify";
-export const UpdateUser: React.FC = ({
-  id,
-  setOpenModal,
-}: {
+interface UpdateUserProps {
   id: string;
-  setOpenModal: () => string;
-}) => {
+  setOpenModal: (value: boolean) => void;
+}
+export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
   const {
     register,
     handleSubmit,

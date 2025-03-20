@@ -7,7 +7,6 @@ import { selectApprovedDetailApprover } from "@/redux/selector/claimSelector";
 import StatusTag from "@ui/StatusTag/StatusTag";
 import styles from "@ui/finance/ApprovedDetailFinance.module.css";
 import { MoveRight } from "lucide-react";
-import httpClient from "@/constant/apiInstance";
 
 const formatDateToMonthDay = (date: string) => {
   const dateObj = new Date(date);
@@ -73,11 +72,11 @@ const ApprovedDetailApproverModal = ({
               title="avatar"
               className={styles.avatar}
             />
-            <p>{claimDetail?.full_name}</p>
+            {/* <p>{claimDetail?.full_name}</p> */}
           </div>
           <div className={styles.infoUser2}>
             <p>User ID: {claimDetail?.user_id}</p>
-            <p>Salary Overtime: {claimDetail?.salary_overtime}</p>
+            {/* <p>Salary Overtime: {claimDetail?.salary_overtime}</p> */}
           </div>
         </div>
         <hr />

@@ -1,0 +1,31 @@
+.chartContainer, .lastClaimCard, .statsContainer {
+    background-color: white; 
+    padding: 1.5rem; 
+    border-radius: 0.75rem; 
+    border: 1px solid #ddd; 
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1); 
+  }
+  
+  .flex-container {
+    padding: 1.5rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem; 
+  }
+  
+  @media (min-width: 768px) {
+    .container {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem; 
+    }
+  }
+  
+  .lastClaimTable th {
+    background-color: #f8f9fa; 
+    border-bottom: 2px solid #ddd; 
+  }
+  
+  .lastClaimTable th, .lastClaimTable td {
+    border: 1px solid #ddd; 
+  }
+  

@@ -1,161 +1,120 @@
 .container {
-    padding: 20px;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    /* background-color: #f9fafb; */
-    border-radius: 10px;
-    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+  font-weight: normal;
 }
 
-.title {
-    font-size: 1.8em;
-    margin-bottom: 15px;
-    font-weight: 600;
-    color: #333;
-    text-align: left;
+.avatar {
+  height: 50px;
+  width: 50px;
+  border-radius: 80%;
+  background-color: gray;
 }
 
-.claimsTable {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.claimsTable th,
-.claimsTable td {
-    padding: 12px 15px;
-    text-align: center;
-}
-
-.claimsTable th {
-    background-color: #f1f5f9;
-    font-weight: 700;
-    color: #374151;
-    border-bottom: 2px solid #e5e7eb;
-}
-
-.claimsTable td {
-    color: #4b5563;
-    border-bottom: 1px solid #e5e7eb;
-}
-
-.claimsTable tr:hover {
-    background-color: #f9fafb;
-}
-
-.actions {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-}
-
-.icon {
-    cursor: pointer;
-    color: #6b7280;
-    transition: color 0.2s ease;
-}
-
-.icon:hover {
-    color: #2563eb;
-}
-
-.pagination {
-    display: flex;
-    justify-content: end;
-    gap: 10px;
-    margin-top: 20px;
-    margin-right: 20px;
-}
-
-.pageNumber {
-    padding: 8px 12px;
-    border: 1px solid #d1d5db;
-    border-radius: 5px;
-    cursor: pointer;
-    background-color: #fff;
-    color: #374151;
-    transition:
-        background-color 0.2s ease,
-        color 0.2s ease;
-}
-
-/* .pageNumber:hover {
-    background-color: #2563eb;
-    color: #fff;
-} */
-
-.pageIcon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #6b7280;
-    cursor: pointer;
-    transition: color 0.2s ease;
-    transform: scale(0.9);
-}
-
-.pageIcon:hover {
-    color: #2563eb;
-}
-
-.activePage {
-    background-color: #2563eb;
-    color: #fff;
-}
-
-.detailsContainer {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-}
-
-.detailsLeft {
-    flex: 1;
-}
-
-.detailsRight {
-    flex: 1;
-    text-align: right;
-}
-
-.buttonContainer {
+.containerUser {
   display: flex;
-  justify-content: end;
-  margin-top: 20px;
-  margin-right: 40px;
+  justify-content: start;
+  flex-direction: column;
+  margin: 20px 0 0 30px;
 }
 
-.buttonStyle {
+.infoUser1 {
   display: flex;
+  flex-direction: row;
   gap: 10px;
 }
 
-.rejectedButton, .approvedButton {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+.infoUser2 {
+  display: flex;
+  flex-direction: row;
+  gap: 50px;
+  margin: 0 0 0 5px;
 }
 
-/* .rejectedButton {
-  background-color: #ff4d4d;
-  color: white;
+.containerProject {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  width: 70%;
+  padding: 8px;
+  margin: 2rem 0;
 }
 
-.rejectedButton:hover {
-  background-color: #ff1a1a;
-} */
-
-.approvedButton {
-  background-color: #4caf50;
-  color: white;
+.containerProject p {
+  margin: 5px 0 0 1rem;
 }
 
-.approvedButton:hover {
-  background-color: #45a049;
+.containerRequest {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 8px;
+  width: 75%;
+}
+
+.containerRequest p {
+  margin: 5px 0 0 1rem;
+  padding: 5px;
+}
+
+.iconMoveRight {
+  vertical-align: middle;
+  position: relative;
+  top: 2px;
+  margin: 0 5px;
+  display: inline-block;
+}
+
+.timeDuration {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+
+.timeDuration h4 {
+  display: flex;
+  align-self: center;
+  justify-content: center;
+  width: 100%;
+  margin: 5px 0 0 90%;
+}
+
+.boldText {
+  font-weight: bold;
+  margin: 0 0 0 5px;
+}
+
+.history {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 8px;
+  width: 75%;
+  margin: 2rem 0;
+}
+
+.history h4 {
+  align-self: center;
+}
+
+.historyItem {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 5px 15px;
+  width: 93%;
+  border-top: 1px solid #ddd;
+  gap: 5px;
+}
+
+.historyItem p {
+  margin: 0;
+}
+
+.historyItem span {
+  margin-bottom: 0;
 }

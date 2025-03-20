@@ -2,11 +2,13 @@ import httpClient from "@constant/apiInstance";
 import { ApiResponse } from "@/types/ApiResponse";
 import {
   Claim,
-  ClaimApprover,
-  ClaimFinance,
+  DetailPendingClaim,
+  PendingClaim,
+  RejectedClaim,
   DetailClaimApprover,
   DetailClaimFinance,
-  PaymentResponse,
+  ClaimApprovedApprover,
+  ClaimApprovedFinance,
 } from "@/types/Claim";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { delay } from "@utils/delay";
@@ -26,26 +28,26 @@ export const fetchAllClaimAsync = createAsyncThunk<Claim[]>(
     }
   }
 );
-//------------------------------------------------- GET APPROVED CLAIMS FOR APPROVER ----------------------------------------------------------------------
-export const fetchApprovedClaimsApproverAsync = createAsyncThunk<
-  { data: ClaimApprover[]; totalPages: number },
-  { page: string; limit: string }
->("claim/approver/fetchApprovedClaim", async ({ page, limit }) => {
-  try {
-    await delay(1000);
-    const response = await httpClient.get<ApiResponse<ClaimApprover[]>>(
-      "/approvers/approved-claim",
-      { page: page, limit: limit }
-    );
-    return {
-      data: response.data.data,
-      totalPages: response.data.totalPages,
-    };
-  } catch (error) {
-    console.error("Fetch Approverd Claims for Approver error " + error);
-    throw error;
-  }
-});
+// //------------------------------------------------- GET APPROVED CLAIMS FOR APPROVER ----------------------------------------------------------------------
+// export const fetchApprovedClaimsApproverAsync = createAsyncThunk<
+//   { data: ClaimApprover[]; totalPages: number },
+//   { page: string; limit: string }
+// >("claim/approver/fetchApprovedClaim", async ({ page, limit }) => {
+//   try {
+//     await delay(1000);
+//     const response = await httpClient.get<ApiResponse<ClaimApprover[]>>(
+//       "/approvers/approved-claim",
+//       { page: page, limit: limit }
+//     );
+//     return {
+//       data: response.data.data,
+//       totalPages: response.data.totalPages,
+//     };
+//   } catch (error) {
+//     console.error("Fetch Approverd Claims for Approver error " + error);
+//     throw error;
+//   }
+// });
 //------------------------------------------------- GET APPROVED DETAIL CLAIM FOR APPROVER ----------------------------------------------------------------------
 export const fetchApprovedDetailApproverAsync = createAsyncThunk<
   { data: DetailClaimApprover },
@@ -64,14 +66,15 @@ export const fetchApprovedDetailApproverAsync = createAsyncThunk<
     throw error;
   }
 });
+
 //------------------------------------------------- GET APPROVED CLAIMS FOR FINANCE ----------------------------------------------------------------------
 export const fetchApprovedClaimsFinanceAsync = createAsyncThunk<
-  { data: ClaimFinance[]; totalPages: number },
+  { data: ClaimApprovedFinance[]; totalPages: number },
   { page: string; limit: string }
 >("claim/finance/fetchApprovedClaim", async ({ page, limit }) => {
   try {
     await delay(1000);
-    const response = await httpClient.get<ApiResponse<ClaimFinance[]>>(
+    const response = await httpClient.get<ApiResponse<ClaimApprovedFinance[]>>(
       "/finance/claims/approved",
       { page: page, limit: limit }
     );
@@ -103,24 +106,92 @@ export const fetchApprovedDetailFinanceAsync = createAsyncThunk<
   }
 });
 
-// Pending fetching api
+//------------------------------------------------- GET APPROVED CLAIMS FOR APPROVER  ----------------------------------------------------------------------
+export const fetchApprovedClaimsApproverAsync = createAsyncThunk<
+  { data: ClaimApprovedApprover[]; totalPages: number },
+  { page: string; limit: string }
+>("claim/approver/fetchApprovedClaim", async ({ page, limit }) => {
+  try {
+    await delay(1000);
+    const response = await httpClient.get<ApiResponse<ClaimApprovedApprover[]>>(
+      "/approvers/approved-claim",
+      { page: page, limit: limit }
+    );
+    return {
+      data: response.data.data,
+      totalPages: response.data.totalPages,
+    };
+  } catch (error) {
+    console.error("Fetch Approverd Claims for Approver error " + error);
+    throw error;
+  }
+});
+//------------------------------------------------- GET PENDING CLAIM FOR APPROVAL ----------------------------------------------------------------------
 export const fetchAllPendingClaimAsync = createAsyncThunk<
-  { data: Claim[]; totalPages: number },
+  { data: PendingClaim[]; totalPages: number },
   { page: string; limit: string }
 >("claim/approver/fetchPendingClaim", async ({ page, limit }) => {
   try {
     await delay(1000);
-    const response = await httpClient.get<ApiResponse<Claim[]>>(
+    const response = await httpClient.get<ApiResponse<PendingClaim[]>>(
       "/approvers/pending-claim",
       { page: page, limit: limit }
     );
     console.log("data: ", response.data);
     return {
       data: response.data.data,
-      totalPages: response.data.pagination.totalPages,
+      totalPages: response.data.totalPages,
     };
   } catch (error) {
     console.error("Fetch Pending Claims for Approver error " + error);
+    throw error;
+  }
+});
+
+//------------------------------------------------- GET DETAILS PENDING CLAIM FOR APPROVAL ----------------------------------------------------------------------
+
+export const fetchPendingClaimDetailAsync = createAsyncThunk<
+  { data: DetailPendingClaim[]; totalPages: number },
+  { page: string; limit: string; request_id: string }
+>(
+  "claim/approver/fetchPendingClaimDetail",
+  async ({ page, limit, request_id }) => {
+    try {
+      await delay(1000);
+      const response = await httpClient.get<ApiResponse<DetailPendingClaim[]>>(
+        `/approvers/pending-claim/${request_id}`,
+        { page: page, limit: limit }
+      );
+      console.log("data: ", response.data);
+      return {
+        data: response.data.data,
+        totalPages: response.data.totalPages,
+      };
+    } catch (error) {
+      console.error("Fetch Pending Claims for Approver error " + error);
+      throw error;
+    }
+  }
+);
+
+//------------------------------------------------- GET REJECTED CLAIM FOR APPROVAL ----------------------------------------------------------------------
+export const fetchAllRejectedClaimAsync = createAsyncThunk<
+  { data: RejectedClaim[]; totalPages: number },
+  { page: string; limit: string }
+>("claim/approver/fetchRejectedClaim", async ({ page, limit }) => {
+  try {
+    await delay(1000);
+    const response = await httpClient.get<ApiResponse<RejectedClaim[]>>(
+      "/approvers/rejected-claim",
+      { page: page, limit: limit }
+    );
+    console.log("data: ", response.data);
+    return {
+      data: response.data.data || [],
+      totalPages: response.data.totalPages,
+    };
+  } catch (error) {
+    console.error("Fetch Rejected Claims for Approver error " + error);
     throw error;
   }
 });
@@ -205,6 +276,28 @@ export const fetchClaimByUserWithRejectStatusAsync = createAsyncThunk<Claim[]>(
       });
       return response.data.data.filter(
         (claim) => claim.claim_status === "REJECTED"
+      );
+    } catch (error) {
+      console.error("Fetch Claims error " + error);
+      throw error;
+    }
+  }
+);
+
+export const fetchClaimByUserWithDraftStatusAsync = createAsyncThunk<Claim[]>(
+  "claim/fetchClaimByUserWithDraftStatusAsync",
+  async (): Promise<Claim[]> => {
+    try {
+      await delay(1000);
+      const userId = localStorage.getItem("user_id");
+      if (!userId) {
+        throw new Error("User id not found");
+      }
+      const response = await httpClient.get<ApiResponse<Claim[]>>("/claims", {
+        userID: userId,
+      });
+      return response.data.data.filter(
+        (claim) => claim.claim_status === "DRAFT"
       );
     } catch (error) {
       console.error("Fetch Claims error " + error);
