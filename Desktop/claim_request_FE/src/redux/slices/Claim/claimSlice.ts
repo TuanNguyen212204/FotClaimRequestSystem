@@ -3,10 +3,11 @@ import {
   Claim,
   DetailPendingClaim,
   PendingClaim,
-  ApprovedClaim,
   RejectedClaim,
-  ClaimFinance,
+  DetailClaimApprover,
   DetailClaimFinance,
+  ClaimApprovedApprover,
+  ClaimApprovedFinance,
 } from "@/types/Claim";
 
 import {
@@ -21,17 +22,20 @@ import {
   fetchAllRejectedClaimAsync,
   fetchApprovedClaimsFinanceAsync,
   fetchApprovedDetailFinanceAsync,
+  fetchApprovedDetailApproverAsync,
   fetchClaimByUserWithDraftStatusAsync,
-} from "@redux/thunk/Claim/claimThunk";
+} from "@/redux/thunk/Claim/claimThunk";
 
 const initialState: {
   data: Claim[];
   myClaim: Claim[];
-  listClaimApproved: ApprovedClaim[];
+  listClaimApprovedApprover: ClaimApprovedApprover[];
+  detailClaimApprovedApprover: DetailClaimApprover | null;
+  // listClaimApproved: ApprovedClaim[]; cái này dùng mà sai tên
   detailClaimPending: DetailPendingClaim | null;
   listClaimPending: PendingClaim[];
   listClaimRejected: RejectedClaim[];
-  listClaimApprovedFiance: ClaimFinance[];
+  listClaimApprovedFiance: ClaimApprovedFinance[];
   detailClaimApprovedFiance: DetailClaimFinance | null;
   totalPages: number;
   listClaimUserApproved: Claim[];
@@ -42,7 +46,9 @@ const initialState: {
   error: string | null;
 } = {
   data: [],
-  listClaimApproved: [],
+  listClaimApprovedApprover: [],
+  detailClaimApprovedApprover: null as DetailClaimApprover | null,
+  // listClaimApproved: [],
   listClaimPending: [],
   detailClaimPending: null as DetailPendingClaim | null,
   listClaimApprovedFiance: [],
@@ -81,10 +87,24 @@ export const claimSlice = createSlice({
       })
       .addCase(fetchApprovedClaimsApproverAsync.fulfilled, (state, action) => {
         state.status = "success";
-        state.listClaimApproved = action.payload.data;
+        state.listClaimApprovedApprover = action.payload.data;
         state.totalPages = action.payload.totalPages;
       })
       .addCase(fetchApprovedClaimsApproverAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      //---------------------------------------------- Approved Detail for Approver -----------------------------------------------------
+      .addCase(fetchApprovedDetailApproverAsync.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = String(action.error.message);
+      })
+      .addCase(fetchApprovedDetailApproverAsync.fulfilled, (state, action) => {
+        state.status = "success";
+        state.detailClaimApprovedApprover = Array.isArray(action.payload.data)
+          ? action.payload.data[0]
+          : action.payload.data;
+      })
+      .addCase(fetchApprovedDetailApproverAsync.pending, (state) => {
         state.status = "loading";
       })
       //---------------------------------------------- Approved Claims for Finance -----------------------------------------------------
