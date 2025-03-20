@@ -198,15 +198,20 @@
   color: white;
   border: none;
   cursor: pointer;
-  max-width: 100%;
+
   width: 100%;
   position: absolute;
   left: 40%;
+  right: 40%;
   transform: translateX(-50%);
   text-align: center;
   top: 94%;
   transition: all 0.5s linear;
   margin-left: 30px;
+}
+.logout:hover {
+  background-color: #c0392b;
+  width: 100%;
 }
 .logoutCollapse {
   background-color: #e74c3c;
