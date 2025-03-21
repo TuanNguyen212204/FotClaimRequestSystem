@@ -1,9 +1,13 @@
 .modalContent {
   padding: 20px;
+  background-color: #f8f8f8;
+  border-radius: 15px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .container {
   text-align: left;
+  margin-bottom: 20px;
 }
 
 .avatar {
@@ -16,22 +20,28 @@
   display: flex;
   align-items: center;
   margin: 20px 0;
+  gap: 15px;
 }
 
 .infoUser1 {
   display: flex;
-  gap: 10px;
-  align-items: center;
+  flex-direction: column;
+  gap: 5px;
 }
 
 .containerProject,
 .containerRequest {
   margin: 1rem 0;
+  padding: 15px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.08);
 }
 
 .containerProject p,
 .containerRequest p {
   margin: 0.5rem 0;
+  font-size: 16px;
 }
 
 .iconMoveRight {
@@ -40,24 +50,37 @@
 }
 
 .timeDuration {
+  display: flex;
+  align-items: center;
   margin-bottom: 1rem;
 }
 
 .history {
   margin-top: 1.5rem;
+  padding: 15px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.08);
 }
 
-.historyItem {
+.history h4 {
+  font-size: 18px;
   margin-bottom: 1rem;
 }
 
+.historyItem {
+  padding: 10px 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
 strong {
-  font-weight: normal;
+  font-weight: bold;
 }
 
 span {
   display: inline-block;
   margin-left: 10px;
+  font-size: 15px;
 }
 
 .divider {
@@ -69,5 +92,16 @@ span {
 }
 
 .username {
-  font-weight: normal;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.statusApproved {
+  display: inline-block;
+  padding: 5px 10px;
+  background-color: #00c853;
+  color: white;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 14px;
 }

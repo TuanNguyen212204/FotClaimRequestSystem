@@ -264,3 +264,19 @@
   border-top: 1px solid #eee;
   text-align: center;
 }
+
+.footer {
+  display: flex;
+}
+
+.footerLeft {
+  justify-content: flex-start;
+}
+
+.footerCenter {
+  justify-content: center;
+}
+
+.footerRight {
+  justify-content: flex-end;
+}

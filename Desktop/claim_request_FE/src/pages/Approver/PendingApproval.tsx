@@ -133,32 +133,62 @@ export const PendingComponent: React.FC = () => {
     console.log("Selected data:", selectedData);
   };
 
-  const handleSelectMultipleApprove = async () => {
-
+  const handleSelectMultipleApprove = async (request_id: string) => {
+    try {
+      handleGetSelectedData();
+      await httpClient.post(`/approvers/approve-multiple-claims`, {});
+      dispatch(
+        fetchAllPendingClaimAsync({
+          page: currentPage.toString(),
+          limit: limit.toString(),
+        })
+      );
+      toast.success("Claim approved successfully!");
+    } catch (error) {
+      console.log("Error approving claim: ", error);
+      toast.error("Failed to approve claim.");
+    }
   };
 
-  const handleSelectMultipleReject = async () => {
+  const handleSelectMultipleReject = async (request_id: string) => {
+    try {
+      handleGetSelectedData();
+      await httpClient.post(`/approvers/reject-multiple-claims`, {});
+      dispatch(
+        fetchAllPendingClaimAsync({
+          page: currentPage.toString(),
+          limit: limit.toString(),
+        })
+      );
+      toast.success("Claim rejected successfully!");
+    } catch (error) {
+      console.log("Error rejecting claim: ", error);
+      toast.error("Failed to reject claim.");
+    }
+  };
 
-  }
-
-  const handleSelectMultipleReturn = async () => {}  
+  const handleSelectMultipleReturn = async (request_id: string) => {
+    try {
+      handleGetSelectedData();
+      await httpClient.post(`/approvers/return-multiple-claims`, {});
+      dispatch(
+        fetchAllPendingClaimAsync({
+          page: currentPage.toString(),
+          limit: limit.toString(),
+        })
+      );
+      toast.success("Claim returned successfully!");
+    } catch (error) {
+      console.log("Error returning claim: ", error);
+      toast.error("Failed to return claim.");
+    }
+  };
 
   const handleViewDetail = (value: string) => {
     setSelectedRequestId(value);
     setOpenModal(true);
   };
 
-  // const handleViewDetail = (request_id: string) => {
-  //   const selectedClaim = claimList.find(claim => claim.request_id === request_id);
-  //   if (selectedClaim) {
-  //     setDetailData(selectedClaim);
-  //     setDetailModalVisible(true);
-  //   }
-  // };
-
-  // const closeDetailModal = () => {
-  //   setDetailModalVisible(false);
-  // };
 
   const handlePageChange = (newPage: number) => {
     console.log("Trang mới: ", newPage);
@@ -282,12 +312,6 @@ export const PendingComponent: React.FC = () => {
               onClick={() => handleReturnClaim(value as string)}
             />
           </Tooltip>
-          {/* <button
-            className={styles.deleteButton}
-            onClick={() => handleReturnClaim(value as string)}
-          >
-            Return
-          </button> */}
         </div>
       ),
     },
@@ -305,11 +329,8 @@ export const PendingComponent: React.FC = () => {
   return (
     <div>
       <h1 className={styles.title}>Pending Claims</h1>
-      {/* <nav className={styles.breadcrumb}>
-        <Link to="/">My Claims</Link> &gt;{" "}
-        <Link to="/pending-claim">Pending Approval</Link>
-      </nav> */}
       <TableComponent
+        ref={tableRef as any}
         columns={columns}
         dataSource={dataSource}
         loading={loading}
@@ -317,7 +338,7 @@ export const PendingComponent: React.FC = () => {
         pagination={true}
         name="Claims"
         onPageChange={handlePageChange}
-        isHaveCheckbox={false}
+        isHaveCheckbox={true}
       />
       <Modal
         open={modalVisible}
@@ -329,19 +350,7 @@ export const PendingComponent: React.FC = () => {
         }}
       >
         <p>Do you want to proceed?</p>
-      </Modal>
-      {/* <Modal
-        open={openModal}
-        onCancel={() => setOpenModal(false)}
-        footer={null}
-      >
-        {selectedRequestId && (
-          <DetailsApproval
-            request_id={selectedRequestId}
-            setOpenModal={setOpenModal}
-          />
-        )}
-      </Modal> */}
+      </Modal>  
     </div>
   );
 };
