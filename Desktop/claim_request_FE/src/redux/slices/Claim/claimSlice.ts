@@ -224,7 +224,41 @@ export const claimSlice = createSlice({
           state.status = "success";
           state.listClaimUserRejected = action.payload;
         }
-      );
+      )
+    // my claim detail
+      .addCase(fetchMyClaimDetailAsync.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = String(action.error.message);
+      })
+      .addCase(fetchMyClaimDetailAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchMyClaimDetailAsync.fulfilled, (state, action) => {
+        state.status = "success";
+        state.claimDetail = Array.isArray(action.payload)
+          ? action.payload[0]
+          : action.payload;
+
+      }
+      )
+      //my claim is with draft status
+      .addCase(
+        fetchClaimByUserWithDraftStatusAsync.rejected,
+        (state, action) => {
+          state.status = "failed";
+          state.error = String(action.error.message);
+        }
+      )
+      .addCase(fetchClaimByUserWithDraftStatusAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(
+        fetchClaimByUserWithDraftStatusAsync.fulfilled,
+        (state, action) => {
+          state.status = "success";
+          state.listClaimUserDraft = action.payload;
+        }
+    );
   },
 });
 export default claimSlice.reducer;
