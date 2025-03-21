@@ -5,8 +5,9 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import { Typewriter } from "react-simple-typewriter";
 import httpClient from "@/constant/apiInstance";
-import { useState } from "react";
 import { PATH } from "@/constant/config";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 async function loginUser(values: {
   username: string;
@@ -16,13 +17,19 @@ async function loginUser(values: {
   if (response.status === 200) {
     const data = response.data as {
       tokens: { access: { token: string } };
-      user: { user_id: string; role_id: number; username: string };
+      user: {
+        user_id: string;
+        role_id: number;
+        username: string;
+        user_status: number;
+      };
     };
     localStorage.setItem("access_token", data.tokens.access.token);
     localStorage.setItem("username", data.user.username);
     localStorage.setItem("user_id", data.user.user_id);
     localStorage.setItem("count", "0");
     localStorage.setItem("role_id", data.user.role_id.toString());
+    localStorage.setItem("user_status", data.user.user_status.toString());
   }
 }
 
@@ -33,7 +40,6 @@ const adminFirstPage = PATH.allUserInformation;
 
 function LoginForm() {
   const navigate = useNavigate();
-  const [loginError, setLoginError] = useState("");
 
   const initialValues = {
     username: "",
@@ -50,8 +56,12 @@ function LoginForm() {
     validationSchema: loginSchema,
     onSubmit: async (values, { setFieldError, setSubmitting }) => {
       try {
-        setLoginError("");
         await loginUser(values);
+        const user_status = localStorage.getItem("user_status");
+        if (user_status === "2") {
+          navigate("/change-password");
+          return;
+        }
         const role_id = localStorage.getItem("role_id");
         if (role_id === "1") {
           localStorage.setItem("selectedClaim", "usersetting");
@@ -66,8 +76,7 @@ function LoginForm() {
           localStorage.setItem("selectedClaim", "all");
           navigate(`${claimerFirstPage}`);
         } else {
-          // alert("Login failed"); // chưa điều hướng
-          setLoginError("Login failed: Unknown role");
+          toast.error("Login failed");
         }
       } catch (error: any) {
         const errMsg =
@@ -79,7 +88,7 @@ function LoginForm() {
         } else if (errMsg.toLowerCase().includes("password")) {
           setFieldError("password", errMsg);
         } else {
-          alert(errMsg);
+          toast.error(errMsg);
         }
       } finally {
         setSubmitting(false);

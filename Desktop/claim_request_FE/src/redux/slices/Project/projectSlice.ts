@@ -49,10 +49,10 @@ const projectSlice = createSlice({
         fetchProjectByID.fulfilled,
         (state, action: PayloadAction<ProjectListResponse>) => {
           state.projectList = action.payload.ProjectList.sort((a, b) =>
-            a.projectName.localeCompare(b.projectName),
+            a.projectName.localeCompare(b.projectName)
           );
           state.loading = "succeeded";
-        },
+        }
       )
       .addCase(fetchProjectByID.rejected, (state) => {
         state.loading = "failed";
@@ -69,10 +69,10 @@ const projectSlice = createSlice({
   },
 });
 
-export const selectProject = (state: RootState) => state.projects;
+export const selectProject = (state: RootState) => state.project_An;
 export const isProjectLoading = (state: RootState) =>
-  state.projects.loading === "pending";
+  state.project_An.loading === "pending";
 export const isClaimCreationLoading = (state: RootState) =>
-  state.projects.claimCreationStatus === "pending";
+  state.project_An.loading === "pending";
 export const { selectedProject, setLoading } = projectSlice.actions;
 export default projectSlice.reducer;
