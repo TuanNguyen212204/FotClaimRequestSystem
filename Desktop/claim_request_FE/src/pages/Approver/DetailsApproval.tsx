@@ -107,47 +107,43 @@ export const DetailsApproval: React.FC<PendingDetailModalProps> = ({
             />
             <p>{claimDetail?.user.full_name}</p>
           </div>
-          <div className={styles.infoUser2}>
-            <p>User ID: {claimDetail?.user_id}</p>
-          </div>
         </div>
         <hr />
         <div className={styles.containerProject}>
-          <p>
-            Project ID:{" "}
-            <span className={styles.boldText}> {claimDetail?.project_id}</span>{" "}
+          <p className={styles.leftAlignText}>
+            Project ID: 
+            <span className={styles.rightAlignText}> {claimDetail?.project_id}</span>
           </p>
-          <p>
-            Project Name:{" "}
-            <span className={styles.boldText}>{claimDetail?.project_name}</span>
+          <p className={styles.leftAlignText}>
+            Project Name: <span>{claimDetail?.project_name}</span>
           </p>
         </div>
         <div className={styles.containerRequest}>
           <div className={styles.timeDuration}>
-            <p>Time Duration:</p>
+            <p className={styles.leftAlignText}>Time Duration:</p>
             <h4>
-              <span className={styles.boldText}>
+              <span>
                 {formatDateToMonthDay(`${claimDetail?.start_date}`)}
               </span>{" "}
               <MoveRight size={20} className={styles.iconMoveRight} />{" "}
-              <span className={styles.boldText}>
+              <span>
                 {formatDateToMonthDay(`${claimDetail?.end_date}`)}
               </span>
             </h4>
           </div>
-          <p>
+          <p className={styles.leftAlignText}>
             Submitted Date:{"   "}
-            <span className={styles.boldText}>
+            <span>
               {formatDateToMonthDay(`${claimDetail?.submitted_date}`)}
             </span>
           </p>
-          <p>
+          <p className={styles.leftAlignText}>
             Total Working Hours:{" "}
-            <span className={styles.boldText}>
+            <span>
               {claimDetail?.total_hours} hours
             </span>
           </p>
-          <p>
+          <p className={styles.leftAlignText}>
             Status:{" "}
             {claimDetail?.claim_status ? (
               <StatusTag
@@ -173,13 +169,13 @@ export const DetailsApproval: React.FC<PendingDetailModalProps> = ({
                 <div key={index} className={styles.historyItem}>
                   <p>
                     Date:{""}
-                    <span className={styles.boldText}>
+                    <span>
                       {formatDateToMonthDay(detail.date)}
                     </span>
                   </p>
                   <p>
                     Working Hours:{" "}
-                    <span className={styles.boldText}>
+                    <span>
                       {detail.working_hours} hours
                     </span>
                   </p>

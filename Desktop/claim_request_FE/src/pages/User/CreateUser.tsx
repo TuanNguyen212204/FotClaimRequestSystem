@@ -18,12 +18,13 @@ import {
 import { LoadingProvider } from "@/components/ui/Loading/LoadingContext";
 import LoadingOverlay from "@/components/ui/Loading/LoadingOverlay";
 import { ApiResponseNoGeneric } from "@/types/ApiResponse";
-export const CreateUser: React.FC = ({
+interface CreateUserProps {
+  openModal: boolean;
+  setOpenModal: (value: boolean) => void;
+}
+export const CreateUser: React.FC<CreateUserProps> = ({
   openModal,
   setOpenModal,
-}: {
-  openModal: boolean;
-  onClick: () => void;
 }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();

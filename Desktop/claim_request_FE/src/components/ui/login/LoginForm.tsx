@@ -188,7 +188,6 @@ function LoginForm() {
           </div>
         </div>
       </div>
-      <ToastContainer />
     </div>
   );
 }
