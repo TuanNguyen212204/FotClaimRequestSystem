@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import SummaryCard from "@/components/card/SummaryCard";
 import DashboardHeader from "@/components/card/DashboardHeader";
+import OTChart from "@/components/card/OTChart";
 import { Chart } from "react-google-charts";
 import {
   CheckCircle,
@@ -32,6 +33,13 @@ const Dashboard = () => {
     approvedClaims: null,
     rejectedClaims: null,
   });
+
+  const projectData = [
+    { name: "Project A", otHours: 120 },
+    { name: "Project B", otHours: 95 },
+    { name: "Project C", otHours: 85 },
+    { name: "Project D", otHours: 60 },
+  ];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -113,47 +121,26 @@ const Dashboard = () => {
     ]),
   ];
 
+  const isValidData = filteredData.length > 1 && filteredData[0].length > 1;
+  const chartData = isValidData ? filteredData : [["Time", "No Data"], ["", 0]];
+
   return (
     <div className={styles.container}>
       <DashboardHeader />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-12">
-        <SummaryCard
-          title="Total Claims"
-          value={loading ? "Loading..." : summary.totalClaims ?? "N/A"}
-          icon={<ClipboardList />}
-          percentage={10}
-        />
-        <SummaryCard
-          title="Pending Claims"
-          value={loading ? "Loading..." : summary.pendingClaims ?? "N/A"}
-          icon={<Clock />}
-          percentage={-5}
-        />
-        <SummaryCard
-          title="Approved Claims"
-          value={loading ? "Loading..." : summary.approvedClaims ?? "N/A"}
-          icon={<CheckCircle />}
-          percentage={20}
-        />
-        <SummaryCard
-          title="Rejected Claims"
-          value={loading ? "Loading..." : summary.rejectedClaims ?? "N/A"}
-          icon={<XCircle />}
-          percentage={-12}
-        />
-        <SummaryCard
-          title="Total Users"
-          value={loading ? "Loading..." : summary.totalUsers ?? "N/A"}
-          icon={<Users />}
-          percentage={8}
-        />
-        <SummaryCard
-          title="Total Projects"
-          value={loading ? "Loading..." : summary.totalProjects ?? "N/A"}
-          icon={<Briefcase />}
-          percentage={15}
-        />
+      <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-8 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 col-span-3">
+          <SummaryCard title="Total Claims" value={summary.totalClaims ?? "N/A"} icon={<ClipboardList />} percentage={10} />
+          <SummaryCard title="Pending Claims" value={summary.pendingClaims ?? "N/A"} icon={<Clock />} percentage={-5} />
+          <SummaryCard title="Approved Claims" value={summary.approvedClaims ?? "N/A"} icon={<CheckCircle />} percentage={20} />
+          <SummaryCard title="Rejected Claims" value={summary.rejectedClaims ?? "N/A"} icon={<XCircle />} percentage={-12} />
+          <SummaryCard title="Total Users" value={summary.totalUsers ?? "N/A"} icon={<Users />} percentage={8} />
+          <SummaryCard title="Total Projects" value={summary.totalProjects ?? "N/A"} icon={<Briefcase />} percentage={15} />
+        </div>
+
+        <div className={`${styles.chartOT} col-span-2`}>
+          <OTChart data={projectData} />
+        </div>
       </div>
 
       <div className={styles.chartContainer}>
@@ -188,16 +175,21 @@ const Dashboard = () => {
           <p className="text-center text-gray-500">Loading data...</p>
         ) : (
           <Chart
-            chartType="ColumnChart"
+            chartType="LineChart"
             width="100%"
-            height="400px"
-            data={filteredData}
+            height="300px"
+            data={chartData}
             options={{
-              title: "Claims Status Over Time",
-              hAxis: { title: "Time" },
+              // hAxis: { title: "Time" },
               vAxis: { title: "Claims" },
-              colors: ["#FFA500", "#00C853", "#D50000", "#00b7ff"],
               legend: { position: "bottom" },
+              curveType: "function",
+              series: {
+                0: { color: "#FFA500" }, 
+                1: { color: "#00C853" }, 
+                2: { color: "#D50000" }, 
+                3: { color: "#00b7ff" }, 
+              },
             }}
           />
         )}

@@ -1,31 +1,61 @@
 .card {
-    padding: 1rem;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    border: 1px solid #d1d5db; 
-  }
-  
-  .header {
-    display: flex;
-    align-items: center;
-    gap: 8px; 
-  }
-  
-  .icon {
-    font-size: 24px; 
-    display: flex;
-    align-items: center;
-  }
-  
-  .title {
-    font-size: 1.25rem; 
-    font-weight: bold;
-  }
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #d1d5db;
+  background-color: white;
+  width: 240px;
+  margin: -2px;
+}
 
-  .value {
-    font-size: 2.5rem;
-    font-weight: bold;
-    margin-bottom: 2px;
-  }  
+:hover.card{
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
 
-  
+.header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.icon {
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+}
+
+.title {
+  font-size: 1.25rem;
+  /* font-weight: bold; */
+}
+
+.value {
+  font-size: 2.5rem;
+  margin-bottom: 2px;
+  font-weight: lighter;
+}
+
+.percentage {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.percentageValue {
+  font-size: 1rem;
+}
+
+.comparison {
+  color: #6b7280; 
+  font-size: 0.875rem;
+}
+
+.positive {
+  color: #00c853;
+}
+
+.negative {
+  color: #d50000; 
+}

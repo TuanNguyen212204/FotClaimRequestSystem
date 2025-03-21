@@ -14,20 +14,22 @@ const SummaryCard = ({
   percentage: number;
 }) => {
   return (
-    <div className={`card ${styles.card}`}>
+    <div className={styles.card}>
       <div className={styles.header}>
         <div className={styles.icon}>{icon}</div>
         <h2 className={styles.title}>{title}</h2>
       </div>
-      <p className={`${styles.value}`}>{value}</p>
-      <div className={`flex items-center ${percentage >= 0 ? "text-green-600" : "text-red-600"} ${styles.percentage}`}>
+      <p className={styles.value}>{value}</p>
+      <div
+        className={`${styles.percentage} ${
+          percentage >= 0 ? styles.positive : styles.negative
+        }`}
+      >
         {percentage >= 0 ? <ArrowUp size={16} /> : <ArrowDown size={16} />}
-      <span className="ml-1 font-semibold">{Math.abs(percentage)}%</span>
-      <span className="text-gray-500 ml-1 text-sm">vs last month</span>
+        <span className={styles.percentageValue}>{Math.abs(percentage)}%</span>
+        <span className={styles.comparison}>vs last month</span>
       </div>
     </div>
-
-
   );
 };
 

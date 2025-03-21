@@ -82,7 +82,7 @@ const ProjectInformation: React.FC = () => {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-GB");
   };
-  //test
+
   const dataSource: DataRecord[] = Array.isArray(project)
     ? project.map((project: Project) => ({
         key: project.project_id,

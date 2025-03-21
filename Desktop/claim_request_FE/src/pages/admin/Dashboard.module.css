@@ -29,3 +29,11 @@
     border: 1px solid #ddd; 
   }
   
+  .chartOT{
+    background-color: white; 
+    border-radius: 12px; 
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
+    border: 1px solid #e0e0e0; 
+    margin-top: 16px; 
+  }
