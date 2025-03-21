@@ -123,31 +123,32 @@ function ChangePassword() {
             position: "top-right",
             autoClose: 2000,
           });
+          setTimeout(() => {
+            const role_id = localStorage.getItem("role_id");
+            if (role_id === "1") {
+              localStorage.setItem("selectedClaim", "usersetting");
+              navigate(`${adminFirstPage}`);
+            } else if (role_id === "2") {
+              localStorage.setItem("selectedClaim", "pendingClaim");
+              navigate(`${approverFirstPage}`);
+            } else if (role_id === "3") {
+              localStorage.setItem("selectedClaim", "approvedFinance");
+              navigate(`${financeFirstPage}`);
+            } else if (role_id === "4") {
+              localStorage.setItem("selectedClaim", "all");
+              navigate(`${claimerFirstPage}`);
+            } else {
+              toast.error("Không biết role là gì");
+              navigate("/");
+            }
+          }, 3000);
         } else {
           toast.error("Không có token nhen", {
             position: "top-right",
             autoClose: 2000,
           });
+          navigate("/");
         }
-
-        setTimeout(() => {
-          const role_id = localStorage.getItem("role_id");
-          if (role_id === "1") {
-            localStorage.setItem("selectedClaim", "usersetting");
-            navigate(`${adminFirstPage}`);
-          } else if (role_id === "2") {
-            localStorage.setItem("selectedClaim", "pendingClaim");
-            navigate(`${approverFirstPage}`);
-          } else if (role_id === "3") {
-            localStorage.setItem("selectedClaim", "approvedFinance");
-            navigate(`${financeFirstPage}`);
-          } else if (role_id === "4") {
-            localStorage.setItem("selectedClaim", "all");
-            navigate(`${claimerFirstPage}`);
-          } else {
-            toast.error("Không biết role là gì");
-          }
-        }, 3000);
       } catch (error: any) {
         if (
           error.errorCode === 1 ||

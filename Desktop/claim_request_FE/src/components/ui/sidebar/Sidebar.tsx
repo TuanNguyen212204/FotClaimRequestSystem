@@ -19,6 +19,7 @@ import { Compass } from "lucide-react";
 import { CircleX } from "lucide-react";
 import { Pencil } from "lucide-react";
 import { Plus } from "lucide-react";
+import { set } from "date-fns";
 export const Sidebar = ({
   setIsCollapsed,
 }: {
@@ -27,6 +28,7 @@ export const Sidebar = ({
   const [selectedClaim, setSelectedClaim] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [isCollapsed1, setIsCollapsed1] = useState<boolean>(true);
+  const [hover, setHover] = useState<boolean>(false);
   const [role, setRole] = useState("user");
   const location = useLocation();
   const currentPath = location.pathname;
@@ -129,61 +131,71 @@ export const Sidebar = ({
   const toggleSidebar = () => {
     setIsCollapsed1(!isCollapsed1);
     setIsCollapsed(!isCollapsed1);
+    setHover(true);
     console.log(isCollapsed1);
   };
-
+  const closeToggleSideBar = () => {
+    setIsCollapsed1(isCollapsed1);
+    setIsCollapsed(isCollapsed1);
+  };
+  const handleHover = () => {
+    setHover(true);
+    setIsCollapsed1(false);
+    setIsCollapsed(false);
+  };
+  const handleOutHover = () => {
+    setHover(false);
+    setIsCollapsed1(true);
+    setIsCollapsed(true);
+  };
   return (
-    <div className={styles.container}>
+    <div
+      className={styles.container}
+      onMouseOver={() => handleHover()}
+      onMouseOut={() => handleOutHover()}
+      // onMouseEnter={() => setHover(true)}
+      // onMouseLeave={() => setHover(false)}
+    >
       <div
         className={`${styles.sidebar} ${isCollapsed1 ? styles.collapsed : ""}`}
       >
-        <div
-          className={`${isCollapsed1 ? styles.headerCollapse : styles.header}`}
-        >
-          <div>
-            <button onClick={toggleSidebar} className={styles.toggleButton}>
-              <span>
-                <Menu />
-              </span>
+        {/* {role !== "approve" && role !== "finance" && role !== "admin" && (
+          <div style={{ marginTop: "px" }}>
+            <button
+              onClick={() => {
+                handleSelect("createClaim");
+              }}
+              className={`${
+                isCollapsed1 ? styles.createClaimCollapse : styles.createClaim
+              }`}
+            >
+              {!isCollapsed1 && (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    padding: "2px",
+                    marginTop: "2px",
+                  }}
+                >
+                  <div>
+                    <span className={styles.iconInClaimButton_1}>
+                      <Plus />
+                    </span>
+                  </div>
+                  <div className={styles.iconInClaimButton_2}>
+                    <span> Create Claims</span>
+                  </div>
+                </div>
+              )}
+              {isCollapsed1 && (
+                <div>
+                  <Plus size={20} />
+                </div>
+              )}
             </button>
           </div>
-        </div>
-
-        {role !== "approve" && role !== "finance" && role !== "admin" && (
-          <button
-            onClick={() => {
-              handleSelect("createClaim");
-            }}
-            className={`${
-              isCollapsed1 ? styles.createClaimCollapse : styles.createClaim
-            }`}
-          >
-            {!isCollapsed1 && (
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  padding: "2px",
-                  marginTop: "2px",
-                }}
-              >
-                <div>
-                  <span className={styles.iconInClaimButton_1}>
-                    <Plus />
-                  </span>
-                </div>
-                <div className={styles.iconInClaimButton_2}>
-                  <span> Create Claims</span>
-                </div>
-              </div>
-            )}
-            {isCollapsed1 && (
-              <div>
-                <Plus size={20} />
-              </div>
-            )}
-          </button>
-        )}
+        )} */}
 
         <div className={styles.menu}>
           {/* {!isCollapsed1 && (
@@ -207,11 +219,7 @@ export const Sidebar = ({
             </button>
           )} */}
           {
-            <ul
-              className={`${styles.claimList} ${
-                isCollapsed1 ? styles.claimListCollapse : ""
-              }`}
-            >
+            <ul className={`${styles.claimList} `}>
               {role === "admin" && (
                 <div>
                   <li
@@ -221,24 +229,27 @@ export const Sidebar = ({
                     } ${selectedClaim === "dashboard" ? styles.active : ""} `}
                     onClick={() => handleSelect("dashboard")}
                   >
-                    <button
-                      className={`${styles.claimButton} ${
-                        isCollapsed1 ? styles.claimButtonCollapse : ""
-                      }`}
-                    >
-                      {!isCollapsed1 && (
+                    <button className={styles.claimButton}>
+                      {hover && (
+                        <div className={styles.claimButtonIngredient}>
+                          <div className={styles.iconInClaimButton_1}>
+                            <House size={20} />
+                          </div>{" "}
+                          <div
+                            className={`${styles.iconInClaimButton_2} ${styles.showText}`}
+                          >
+                            <span>Dashboard</span>
+                          </div>
+                        </div>
+                      )}
+                      {!hover && (
                         <div className={styles.claimButtonIngredient}>
                           <div className={styles.iconInClaimButton_1}>
                             <House size={20} />
                           </div>{" "}
                           <div className={styles.iconInClaimButton_2}>
-                            <span>Dashboard</span>
+                            <span className={styles.hideText}>Dashboard</span>
                           </div>
-                        </div>
-                      )}
-                      {isCollapsed1 && (
-                        <div>
-                          <House size={20} />
                         </div>
                       )}
                     </button>
@@ -251,21 +262,32 @@ export const Sidebar = ({
                       selectedClaim === "projectInformation"
                         ? styles.active
                         : ""
-                    }`}
+                    } `}
                     onClick={() => handleSelect("projectInformation")}
                   >
                     <button className={styles.claimButton}>
-                      {!isCollapsed1 && (
+                      {hover && (
+                        <div className={styles.claimButtonIngredient}>
+                          <div className={styles.iconInClaimButton_1}>
+                            <BriefcaseBusiness size={20} />
+                          </div>{" "}
+                          <div
+                            className={`${styles.iconInClaimButton_2} ${styles.showText}`}
+                          >
+                            <span>Project</span>
+                          </div>
+                        </div>
+                      )}
+                      {!hover && (
                         <div className={styles.claimButtonIngredient}>
                           <div className={styles.iconInClaimButton_1}>
                             <BriefcaseBusiness size={20} />
                           </div>{" "}
                           <div className={styles.iconInClaimButton_2}>
-                            <span>Project</span>
+                            <span className={styles.hideText}>Project</span>
                           </div>
                         </div>
                       )}
-                      {isCollapsed1 && <BriefcaseBusiness size={20} />}
                     </button>
                   </li>
                   <li
@@ -276,44 +298,64 @@ export const Sidebar = ({
                     onClick={() => handleSelect("usersetting")}
                   >
                     <button className={styles.claimButton}>
-                      {!isCollapsed1 && (
+                      {hover && (
+                        <div className={styles.claimButtonIngredient}>
+                          <div className={styles.iconInClaimButton_1}>
+                            <Smile size={20} />
+                          </div>{" "}
+                          <div
+                            className={`${styles.iconInClaimButton_2} ${styles.showText}`}
+                          >
+                            <span>Staff</span>
+                          </div>
+                        </div>
+                      )}
+                      {!hover && (
                         <div className={styles.claimButtonIngredient}>
                           <div className={styles.iconInClaimButton_1}>
                             <Smile size={20} />
                           </div>{" "}
                           <div className={styles.iconInClaimButton_2}>
-                            <span>Staff </span>
+                            <span className={styles.hideText}>Staff</span>
                           </div>
                         </div>
                       )}
-                      {isCollapsed1 && <Smile size={20} />}
                     </button>
                   </li>
                 </div>
               )}
               {role === "approve" && (
-                <>
+                <div>
                   <li
                     key="pendingClaim"
                     className={`${
                       isCollapsed1 ? styles.claimItemCollapse : styles.claimItem
-                    } ${
-                      selectedClaim === "pendingClaim" ? styles.active : ""
-                    } `}
-                    onClick={() => handleSelect("pendingClaim")}
+                    } ${selectedClaim === "usersetting" ? styles.active : ""} `}
+                    onClick={() => handleSelect("usersetting")}
                   >
                     <button className={styles.claimButton}>
-                      {!isCollapsed1 && (
+                      {hover && (
                         <div className={styles.claimButtonIngredient}>
                           <div className={styles.iconInClaimButton_1}>
-                            <MdOutlinePendingActions />
+                            <MdOutlinePendingActions size={20} />
                           </div>{" "}
-                          <div className={styles.iconInClaimButton_2}>
-                            <span>Pending Claim</span>
+                          <div
+                            className={`${styles.iconInClaimButton_2} ${styles.showText}`}
+                          >
+                            <span>Pending </span>
                           </div>
                         </div>
                       )}
-                      {isCollapsed1 && <MdOutlinePendingActions size={20} />}
+                      {!hover && (
+                        <div className={styles.claimButtonIngredient}>
+                          <div className={styles.iconInClaimButton_1}>
+                            <MdOutlinePendingActions size={20} />
+                          </div>{" "}
+                          <div className={styles.iconInClaimButton_2}>
+                            <span className={styles.hideText}>Pending</span>
+                          </div>
+                        </div>
+                      )}
                     </button>
                   </li>
                   <li
@@ -326,17 +368,28 @@ export const Sidebar = ({
                     onClick={() => handleSelect("approvedApprover")}
                   >
                     <button className={styles.claimButton}>
-                      {!isCollapsed1 && (
+                      {hover && (
                         <div className={styles.claimButtonIngredient}>
                           <div className={styles.iconInClaimButton_1}>
-                            <FaCheck />
-                          </div>
-                          <div className={styles.iconInClaimButton_2}>
-                            <span>Approved Claim</span>
+                            <FaCheck size={20} />
+                          </div>{" "}
+                          <div
+                            className={`${styles.iconInClaimButton_2} ${styles.showText}`}
+                          >
+                            <span>Approved </span>
                           </div>
                         </div>
                       )}
-                      {isCollapsed1 && <FaCheck size={20} />}
+                      {!hover && (
+                        <div className={styles.claimButtonIngredient}>
+                          <div className={styles.iconInClaimButton_1}>
+                            <FaCheck size={20} />
+                          </div>{" "}
+                          <div className={styles.iconInClaimButton_2}>
+                            <span className={styles.hideText}>Approved</span>
+                          </div>
+                        </div>
+                      )}
                     </button>
                   </li>
                   <li
@@ -347,17 +400,28 @@ export const Sidebar = ({
                     onClick={() => handleSelect("rejected")}
                   >
                     <button className={styles.claimButton}>
-                      {!isCollapsed1 && (
+                      {hover && (
                         <div className={styles.claimButtonIngredient}>
                           <div className={styles.iconInClaimButton_1}>
-                            <CircleX />
-                          </div>
-                          <div className={styles.iconInClaimButton_2}>
-                            <span>Rejected Claim</span>
+                            <CircleX size={20} />
+                          </div>{" "}
+                          <div
+                            className={`${styles.iconInClaimButton_2} ${styles.showText}`}
+                          >
+                            <span>Rejected </span>
                           </div>
                         </div>
                       )}
-                      {isCollapsed1 && <CircleX size={20} />}
+                      {!hover && (
+                        <div className={styles.claimButtonIngredient}>
+                          <div className={styles.iconInClaimButton_1}>
+                            <CircleX size={20} />
+                          </div>{" "}
+                          <div className={styles.iconInClaimButton_2}>
+                            <span className={styles.hideText}>Rejected</span>
+                          </div>
+                        </div>
+                      )}
                     </button>
                   </li>
                   <li
@@ -368,20 +432,31 @@ export const Sidebar = ({
                     onClick={() => handleSelect("profile")}
                   >
                     <button className={styles.claimButton}>
-                      {!isCollapsed1 && (
+                      {hover && (
                         <div className={styles.claimButtonIngredient}>
                           <div className={styles.iconInClaimButton_1}>
                             <UserPen size={20} />
-                          </div>
-                          <div className={styles.iconInClaimButton_2}>
-                            <span>Profile</span>
+                          </div>{" "}
+                          <div
+                            className={`${styles.iconInClaimButton_2} ${styles.showText}`}
+                          >
+                            <span>Profile </span>
                           </div>
                         </div>
                       )}
-                      {isCollapsed1 && <UserPen />}
+                      {!hover && (
+                        <div className={styles.claimButtonIngredient}>
+                          <div className={styles.iconInClaimButton_1}>
+                            <UserPen size={20} />
+                          </div>{" "}
+                          <div className={styles.iconInClaimButton_2}>
+                            <span className={styles.hideText}>Profile</span>
+                          </div>
+                        </div>
+                      )}
                     </button>
                   </li>
-                </>
+                </div>
               )}
               {role === "finance" && (
                 <>
@@ -395,17 +470,28 @@ export const Sidebar = ({
                     onClick={() => handleSelect("approvedFinance")}
                   >
                     <button className={styles.claimButton}>
-                      {!isCollapsed1 && (
+                      {hover && (
                         <div className={styles.claimButtonIngredient}>
                           <div className={styles.iconInClaimButton_1}>
                             <FaCheck size={20} />
-                          </div>
-                          <div className={styles.iconInClaimButton_2}>
-                            <span>Approved Claim</span>
+                          </div>{" "}
+                          <div
+                            className={`${styles.iconInClaimButton_2} ${styles.showText}`}
+                          >
+                            <span>Approved </span>
                           </div>
                         </div>
                       )}
-                      {isCollapsed1 && <FaCheck size={20} />}
+                      {!hover && (
+                        <div className={styles.claimButtonIngredient}>
+                          <div className={styles.iconInClaimButton_1}>
+                            <FaCheck size={20} />
+                          </div>{" "}
+                          <div className={styles.iconInClaimButton_2}>
+                            <span className={styles.hideText}>Approved</span>
+                          </div>
+                        </div>
+                      )}
                     </button>
                   </li>
                   <li
@@ -416,23 +502,68 @@ export const Sidebar = ({
                     onClick={() => handleSelect("paid")}
                   >
                     <button className={styles.claimButton}>
-                      {!isCollapsed1 && (
+                      {hover && (
                         <div className={styles.claimButtonIngredient}>
                           <div className={styles.iconInClaimButton_1}>
                             <MdPaid size={20} />
-                          </div>
-                          <div className={styles.iconInClaimButton_2}>
-                            <span>Paid Claim</span>
+                          </div>{" "}
+                          <div
+                            className={`${styles.iconInClaimButton_2} ${styles.showText}`}
+                          >
+                            <span>Paid </span>
                           </div>
                         </div>
                       )}
-                      {isCollapsed1 && <MdPaid size={20} />}
+                      {!hover && (
+                        <div className={styles.claimButtonIngredient}>
+                          <div className={styles.iconInClaimButton_1}>
+                            <MdPaid size={20} />
+                          </div>{" "}
+                          <div className={styles.iconInClaimButton_2}>
+                            <span className={styles.hideText}>Approved</span>
+                          </div>
+                        </div>
+                      )}
                     </button>
                   </li>
                 </>
               )}
               {role === "user" && (
                 <>
+                  <li
+                    key="createClaim"
+                    className={`${
+                      isCollapsed1
+                        ? styles.claimItemCreateClaim
+                        : styles.claimItemCreateClaim
+                    } ${selectedClaim === "createClaim" ? styles.active : ""} `}
+                    onClick={() => handleSelect("createClaim")}
+                  >
+                    <button className={styles.claimButton}>
+                      {hover && (
+                        <div className={styles.claimButtonIngredient}>
+                          <div className={styles.iconInClaimButton_1}>
+                            <Plus size={20} />
+                          </div>{" "}
+                          <div
+                            className={`${styles.iconInClaimButton_2} ${styles.showText}`}
+                          >
+                            <span>Create </span>
+                          </div>
+                        </div>
+                      )}
+                      {!hover && (
+                        <div className={styles.claimButtonIngredient}>
+                          <div className={styles.iconInClaimButton_1}>
+                            <Plus size={20} />
+                          </div>{" "}
+                          <div className={styles.iconInClaimButton_2}>
+                            <span className={styles.hideText}>Profile</span>
+                          </div>
+                        </div>
+                      )}
+                    </button>
+                  </li>
                   <li
                     key="draft"
                     className={`${
@@ -441,17 +572,28 @@ export const Sidebar = ({
                     onClick={() => handleSelect("draft")}
                   >
                     <button className={styles.claimButton}>
-                      {!isCollapsed1 && (
+                      {hover && (
                         <div className={styles.claimButtonIngredient}>
                           <div className={styles.iconInClaimButton_1}>
-                            <Pencil />
+                            <Pencil size={20} />
                           </div>{" "}
-                          <div className={styles.iconInClaimButton_2}>
-                            <span>Draft Claim</span>
+                          <div
+                            className={`${styles.iconInClaimButton_2} ${styles.showText}`}
+                          >
+                            <span>Draft </span>
                           </div>
                         </div>
                       )}
-                      {isCollapsed1 && <Pencil size={20} />}
+                      {!hover && (
+                        <div className={styles.claimButtonIngredient}>
+                          <div className={styles.iconInClaimButton_1}>
+                            <Pencil size={20} />
+                          </div>{" "}
+                          <div className={styles.iconInClaimButton_2}>
+                            <span className={styles.hideText}>Profile</span>
+                          </div>
+                        </div>
+                      )}
                     </button>
                   </li>
                   <li
@@ -462,17 +604,28 @@ export const Sidebar = ({
                     onClick={() => handleSelect("all")}
                   >
                     <button className={styles.claimButton}>
-                      {!isCollapsed1 && (
+                      {hover && (
                         <div className={styles.claimButtonIngredient}>
                           <div className={styles.iconInClaimButton_1}>
-                            <Compass />
+                            <Compass size={20} />
                           </div>{" "}
-                          <div className={styles.iconInClaimButton_2}>
-                            <span>All Claim</span>
+                          <div
+                            className={`${styles.iconInClaimButton_2} ${styles.showText}`}
+                          >
+                            <span>All </span>
                           </div>
                         </div>
                       )}
-                      {isCollapsed1 && <Compass size={20} />}
+                      {!hover && (
+                        <div className={styles.claimButtonIngredient}>
+                          <div className={styles.iconInClaimButton_1}>
+                            <Compass size={20} />
+                          </div>{" "}
+                          <div className={styles.iconInClaimButton_2}>
+                            <span className={styles.hideText}>All</span>
+                          </div>
+                        </div>
+                      )}
                     </button>
                   </li>
                   <li
@@ -483,17 +636,28 @@ export const Sidebar = ({
                     onClick={() => handleSelect("pendingPage")}
                   >
                     <button className={styles.claimButton}>
-                      {!isCollapsed1 && (
+                      {hover && (
                         <div className={styles.claimButtonIngredient}>
                           <div className={styles.iconInClaimButton_1}>
-                            <MdOutlinePendingActions />
+                            <MdOutlinePendingActions size={20} />
                           </div>{" "}
-                          <div className={styles.iconInClaimButton_2}>
-                            <span>Pending Claim</span>
+                          <div
+                            className={`${styles.iconInClaimButton_2} ${styles.showText}`}
+                          >
+                            <span>Pending </span>
                           </div>
                         </div>
                       )}
-                      {isCollapsed1 && <MdOutlinePendingActions size={20} />}
+                      {!hover && (
+                        <div className={styles.claimButtonIngredient}>
+                          <div className={styles.iconInClaimButton_1}>
+                            <MdOutlinePendingActions size={20} />
+                          </div>{" "}
+                          <div className={styles.iconInClaimButton_2}>
+                            <span className={styles.hideText}>Pending</span>
+                          </div>
+                        </div>
+                      )}
                     </button>
                   </li>
                   <li
@@ -506,30 +670,31 @@ export const Sidebar = ({
                     onClick={() => handleSelect("approvedPage")}
                   >
                     <button className={styles.claimButton}>
-                      {!isCollapsed1 && (
+                      {hover && (
                         <div className={styles.claimButtonIngredient}>
                           <div className={styles.iconInClaimButton_1}>
-                            <FaCheck />
-                          </div>
-                          <div className={styles.iconInClaimButton_2}>
-                            <span>Approved Claim</span>
+                            <FaCheck size={20} />
+                          </div>{" "}
+                          <div
+                            className={`${styles.iconInClaimButton_2} ${styles.showText}`}
+                          >
+                            <span>Approved </span>
                           </div>
                         </div>
                       )}
-                      {isCollapsed1 && <FaCheck size={20} />}
+                      {!hover && (
+                        <div className={styles.claimButtonIngredient}>
+                          <div className={styles.iconInClaimButton_1}>
+                            <FaCheck size={20} />
+                          </div>{" "}
+                          <div className={styles.iconInClaimButton_2}>
+                            <span className={styles.hideText}>Approved</span>
+                          </div>
+                        </div>
+                      )}
                     </button>
                   </li>
-                  {/* <li
-                    key="paid"
-                    className={`${styles.claimItem} ${
-                      selectedClaim === "paid" ? styles.active : ""
-                    }`}
-                    onClick={() => handleSelect("paid")}
-                  >
-                    <button className={styles.claimButton}>
-                      {!isCollapsed && "Paid Claim"}
-                    </button>
-                  </li> */}
+
                   <li
                     key="rejectedPage"
                     className={`${
@@ -540,17 +705,28 @@ export const Sidebar = ({
                     onClick={() => handleSelect("rejectedPage")}
                   >
                     <button className={styles.claimButton}>
-                      {!isCollapsed1 && (
+                      {hover && (
                         <div className={styles.claimButtonIngredient}>
                           <div className={styles.iconInClaimButton_1}>
-                            <CircleX />
-                          </div>
-                          <div className={styles.iconInClaimButton_2}>
-                            <span>Rejected Claim</span>
+                            <CircleX size={20} />
+                          </div>{" "}
+                          <div
+                            className={`${styles.iconInClaimButton_2} ${styles.showText}`}
+                          >
+                            <span>Rejected </span>
                           </div>
                         </div>
                       )}
-                      {isCollapsed1 && <CircleX size={20} />}
+                      {!hover && (
+                        <div className={styles.claimButtonIngredient}>
+                          <div className={styles.iconInClaimButton_1}>
+                            <CircleX size={20} />
+                          </div>{" "}
+                          <div className={styles.iconInClaimButton_2}>
+                            <span className={styles.hideText}>Rejected</span>
+                          </div>
+                        </div>
+                      )}
                     </button>
                   </li>
                   <li
@@ -561,17 +737,28 @@ export const Sidebar = ({
                     onClick={() => handleSelect("profile")}
                   >
                     <button className={styles.claimButton}>
-                      {!isCollapsed1 && (
+                      {hover && (
                         <div className={styles.claimButtonIngredient}>
                           <div className={styles.iconInClaimButton_1}>
                             <UserPen size={20} />
-                          </div>
-                          <div className={styles.iconInClaimButton_2}>
-                            <span>Profile</span>
+                          </div>{" "}
+                          <div
+                            className={`${styles.iconInClaimButton_2} ${styles.showText}`}
+                          >
+                            <span>Profile </span>
                           </div>
                         </div>
                       )}
-                      {isCollapsed1 && <UserPen />}
+                      {!hover && (
+                        <div className={styles.claimButtonIngredient}>
+                          <div className={styles.iconInClaimButton_1}>
+                            <UserPen size={20} />
+                          </div>{" "}
+                          <div className={styles.iconInClaimButton_2}>
+                            <span className={styles.hideText}>Profile</span>
+                          </div>
+                        </div>
+                      )}
                     </button>
                   </li>
                 </>
@@ -602,7 +789,7 @@ export const Sidebar = ({
                   <div>
                     <span>Log Out</span>
                   </div>
-                  <div style={{ marginLeft: "10px", marginTop: "2px" }}>
+                  <div>
                     <span>
                       <LogOut size={20} />
                     </span>
