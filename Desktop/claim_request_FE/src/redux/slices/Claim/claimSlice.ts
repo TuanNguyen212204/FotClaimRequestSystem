@@ -28,7 +28,13 @@ import {
 const initialState: {
   data: Claim[];
   myClaim: Claim[];
-  listClaimPending: Claim[];
+  claimDetail: MyClaimDetail | null;
+  listClaimApproved: ApprovedClaim[];
+  detailClaimPending: DetailPendingClaim | null;
+  listClaimPending: PendingClaim[];
+  listClaimRejected: RejectedClaim[];
+  listClaimApprovedFiance: ClaimFinance[];
+  detailClaimApprovedFiance: DetailClaimFinance | null;
   totalPages: number;
   listClaimUserApproved: Claim[];
   listClaimUserPending: Claim[];
