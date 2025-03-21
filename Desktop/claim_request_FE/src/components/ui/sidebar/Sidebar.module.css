@@ -14,12 +14,12 @@
   position: fixed;
   left: 0;
   top: 0;
-  transition: all 0.5s linear;
+  transition: all 0.3s ease-in;
   overflow: hidden;
 }
 .sidebar:hover {
   width: 300px;
-  transition: all 0.5s linear;
+  transition: all 0.3s ease-in;
 }
 /* .collapsed {
   width: 50px;
@@ -198,7 +198,6 @@
   color: white;
   border: none;
   cursor: pointer;
-
   width: 100%;
   position: absolute;
   left: 40%;

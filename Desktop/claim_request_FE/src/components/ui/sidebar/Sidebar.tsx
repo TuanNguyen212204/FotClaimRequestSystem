@@ -740,7 +740,7 @@ export const Sidebar = ({
                       {hover && (
                         <div className={styles.claimButtonIngredient}>
                           <div className={styles.iconInClaimButton_1}>
-                            <CircleX size={20} />
+                            <UserPen size={20} />
                           </div>{" "}
                           <div
                             className={`${styles.iconInClaimButton_2} ${styles.showText}`}

@@ -14,7 +14,7 @@ export const MainLayout = () => {
           className={styles.outletContainer}
           style={{
             marginLeft: isCollapse ? "80px" : "320px",
-            transition: "margin-left 0.5s linear",
+            transition: "margin-left 0.3s ease-in-out",
           }}
         >
           <Outlet />
