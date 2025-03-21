@@ -1,122 +1,73 @@
+.modalContent {
+  padding: 20px;
+}
+
 .container {
-  font-weight: normal;
-  text-align: right;
+  text-align: left;
 }
 
 .avatar {
   height: 50px;
   width: 50px;
-  border-radius: 80%;
-  background-color: gray;
+  border-radius: 50%;
 }
 
 .containerUser {
   display: flex;
-  justify-content: start;
-  flex-direction: column;
-  margin: 20px 0 0 30px;
+  align-items: center;
+  margin: 20px 0;
 }
 
 .infoUser1 {
   display: flex;
-  flex-direction: row;
   gap: 10px;
+  align-items: center;
 }
 
-.infoUser2 {
-  display: flex;
-  flex-direction: row;
-  gap: 50px;
-  margin: 0 0 0 5px;
-}
-
-.containerProject {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  width: 70%;
-  padding: 8px;
-  margin: 2rem 0;
-}
-
-.containerProject p {
-  margin: 5px 0 0 1rem;
-}
-
+.containerProject,
 .containerRequest {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 8px;
-  width: 75%;
+  margin: 1rem 0;
 }
 
+.containerProject p,
 .containerRequest p {
-  margin: 5px 0 0 1rem;
-  padding: 5px;
+  margin: 0.5rem 0;
 }
 
 .iconMoveRight {
   vertical-align: middle;
-  position: relative;
-  top: 2px;
   margin: 0 5px;
-  display: inline-block;
 }
 
 .timeDuration {
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-}
-
-.timeDuration h4 {
-  display: flex;
-  align-self: center;
-  justify-content: center;
-  width: 100%;
-  margin: 5px 0 0 90%;
-}
-
-.boldText {
-  font-weight: bold;
-  margin: 0 0 0 5px;
+  margin-bottom: 1rem;
 }
 
 .history {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 8px;
-  width: 75%;
-  margin: 2px;
-}
-
-.history h4 {
-  align-self: center;
+  margin-top: 1.5rem;
 }
 
 .historyItem {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 5px 15px;
-  width: 93%;
-  gap: 5px;
+  margin-bottom: 1rem;
 }
 
-.historyItem p {
-  margin: 0;
+strong {
+  font-weight: normal;
 }
 
-.historyItem span {
-  margin-bottom: 0;
+span {
+  display: inline-block;
+  margin-left: 10px;
 }
 
-.leftAlignText {
-  text-align: left;
+.divider {
+  width: 100%;
+  height: 1px;
+  background-color: #e0e0e0;
+  border: none;
+  margin: 20px 0;
 }
 
-.rightAlignText {
-  text-align: right;
+.username {
+  font-weight: normal;
 }

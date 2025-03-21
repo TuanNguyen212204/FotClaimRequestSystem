@@ -142,7 +142,7 @@ export const RejectedComponent: React.FC = () => {
     user_full_name: claim.user.full_name,
     user_salary: claim.user.salary,
     user_ot_rate: claim.user.ot_rate,
-    claim_status: "rejected", // Ensure this is correctly set
+    claim_status: "REJECTED", // Ensure this is correctly set
   }));
 
   return (

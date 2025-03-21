@@ -299,7 +299,7 @@ export const PendingComponent: React.FC = () => {
     user_full_name: claim.user.full_name,
     user_salary: claim.user.salary,
     user_ot_rate: claim.user.ot_rate,
-    claim_status: "pending",
+    claim_status: "PENDING",
   }));
 
   return (

@@ -75,7 +75,7 @@ export const DetailsApproval: React.FC<PendingDetailModalProps> = ({
         })
       );
       toast.success("Claim approved successfully!");
-      onClose(); 
+      onClose();
     } catch (error) {
       console.log("Error approving claim: ", error);
       toast.error("Failed to approve claim.");
@@ -96,93 +96,87 @@ export const DetailsApproval: React.FC<PendingDetailModalProps> = ({
       height="95%"
       className={styles.modal}
     >
-      <hr />
-      <div className={styles.container}>
-        <div className={styles.containerUser}>
-          <div className={styles.infoUser1}>
-            <img
-              src="https://i1.wp.com/upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"
-              title="avatar"
-              className={styles.avatar}
-            />
-            <p>{claimDetail?.user.full_name}</p>
-          </div>
-        </div>
-        <hr />
-        <div className={styles.containerProject}>
-          <p className={styles.leftAlignText}>
-            Project ID: 
-            <span className={styles.rightAlignText}> {claimDetail?.project_id}</span>
-          </p>
-          <p className={styles.leftAlignText}>
-            Project Name: <span>{claimDetail?.project_name}</span>
-          </p>
-        </div>
-        <div className={styles.containerRequest}>
-          <div className={styles.timeDuration}>
-            <p className={styles.leftAlignText}>Time Duration:</p>
-            <h4>
-              <span>
-                {formatDateToMonthDay(`${claimDetail?.start_date}`)}
-              </span>{" "}
-              <MoveRight size={20} className={styles.iconMoveRight} />{" "}
-              <span>
-                {formatDateToMonthDay(`${claimDetail?.end_date}`)}
-              </span>
-            </h4>
-          </div>
-          <p className={styles.leftAlignText}>
-            Submitted Date:{"   "}
-            <span>
-              {formatDateToMonthDay(`${claimDetail?.submitted_date}`)}
-            </span>
-          </p>
-          <p className={styles.leftAlignText}>
-            Total Working Hours:{" "}
-            <span>
-              {claimDetail?.total_hours} hours
-            </span>
-          </p>
-          <p className={styles.leftAlignText}>
-            Status:{" "}
-            {claimDetail?.claim_status ? (
-              <StatusTag
-                status={
-                  claimDetail.claim_status as
-                    | "PENDING"
-                    | "APPROVED"
-                    | "REJECTED"
-                    | "PAID"
-                }
+      <div className={styles.modalContent}>
+        <div className={styles.container}>
+          <div className={styles.containerUser}>
+            <div className={styles.infoUser1}>
+              <img
+                src="https://i1.wp.com/upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"
+                alt="User avatar"
+                className={styles.avatar}
               />
-            ) : (
-              "-"
-            )}
-          </p>
-        </div>
-        <div>
-          {claimDetail?.claim_details &&
-          claimDetail.claim_details.length > 0 ? (
-            <div className={styles.history}>
-              <h4>Claim History</h4>
-              {claimDetail.claim_details.map((detail, index) => (
-                <div key={index} className={styles.historyItem}>
-                  <p>
-                    Date:{""}
-                    <span>
-                      {formatDateToMonthDay(detail.date)}
-                    </span>
-                  </p>
-                  <p>
-                    Working Hours:{" "}
-                    <span>
-                      {detail.working_hours} hours
-                    </span>
-                  </p>
-                </div>
-              ))}
+              <p className={styles.username}>{claimDetail?.user.full_name}</p>
             </div>
-          ) : null}
+          </div>
+          <hr className={styles.divider} />
+          <div className={styles.containerProject}>
+            <p>
+              <strong>Project ID:</strong>
+              <span>{claimDetail?.project_id}</span>
+            </p>
+            <p>
+              <strong>Project Name:</strong>
+              <span>{claimDetail?.project_name}</span>
+            </p>
+          </div>
+          <div className={styles.containerRequest}>
+            <div className={styles.timeDuration}>
+              <p>
+                <strong>Time Duration:</strong>
+              </p>
+              <h4>
+                <span>
+                  {formatDateToMonthDay(`${claimDetail?.start_date}`)}
+                </span>
+                <MoveRight size={20} className={styles.iconMoveRight} />
+                <span>{formatDateToMonthDay(`${claimDetail?.end_date}`)}</span>
+              </h4>
+            </div>
+            <p>
+              <strong>Submitted Date:</strong>
+              <span>
+                {formatDateToMonthDay(`${claimDetail?.submitted_date}`)}
+              </span>
+            </p>
+            <p>
+              <strong>Total Working Hours:</strong>
+              <span>{claimDetail?.total_hours} hours</span>
+            </p>
+            <p>
+              <strong>Status:</strong>
+              {claimDetail?.claim_status ? (
+                <StatusTag
+                  status={
+                    claimDetail.claim_status as
+                      | "PENDING"
+                      | "APPROVED"
+                      | "REJECTED"
+                      | "PAID"
+                  }
+                />
+              ) : (
+                "-"
+              )}
+            </p>
+          </div>
+          {claimDetail?.claim_details &&
+            claimDetail.claim_details.length > 0 && (
+              <div className={styles.history}>
+                <h4>Claim History</h4>
+                {claimDetail.claim_details.map((detail, index) => (
+                  <div key={index} className={styles.historyItem}>
+                    <p>
+                      <strong>Date:</strong>
+                      <span>{formatDateToMonthDay(detail.date)}</span>
+                    </p>
+                    <p>
+                      <strong>Working Hours:</strong>
+                      <span>{detail.working_hours} hours</span>
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
         </div>
       </div>
     </Modal>
