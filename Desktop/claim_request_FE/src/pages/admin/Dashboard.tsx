@@ -103,7 +103,6 @@ const Dashboard = () => {
     fetchSummaryData();
   }, []);
 
-  // Xử lý lọc dữ liệu dựa vào checkbox
   const filteredData = [
     ["Time", ...Object.keys(selected).filter((key) => selected[key])],
     ...data.map((item) => [
