@@ -31,10 +31,10 @@ const OTChart = ({ data }) => {
     ["Project", "OT Percentage"],
     ...data
       .map((project) => [
-        projectMap[project.project_id] || project.project_id, // Dùng tên project nếu có
+        projectMap[project.project_id] || project.project_id, 
         (project.otHours / totalOT) * 100,
       ])
-      .sort((a, b) => b[1] - a[1]), // Sắp xếp theo % OT giảm dần
+      .sort((a, b) => b[1] - a[1]), 
   ];
 
   const options = {
