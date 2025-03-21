@@ -17,6 +17,12 @@ const Dashboard = () => {
   const [timeframe, setTimeframe] = useState("monthly");
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selected, setSelected] = useState({
+    Pending: true,
+    Approved: true,
+    Rejected: true,
+    Paid: true,
+  });
 
   const [summary, setSummary] = useState({
     totalProjects: null,
@@ -27,7 +33,6 @@ const Dashboard = () => {
     rejectedClaims: null,
   });
 
-  // Fetch dữ liệu biểu đồ
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -47,7 +52,6 @@ const Dashboard = () => {
     fetchData();
   }, [timeframe]);
 
-  // Fetch tất cả dữ liệu tổng hợp một lần
   useEffect(() => {
     const fetchSummaryData = async () => {
       setLoading(true);
@@ -99,15 +103,14 @@ const Dashboard = () => {
     fetchSummaryData();
   }, []);
 
-  // Chuẩn bị dữ liệu cho biểu đồ
-  const chartData = [
-    ["Time", "Pending", "Approved", "Rejected", "Paid"],
+  // Xử lý lọc dữ liệu dựa vào checkbox
+  const filteredData = [
+    ["Time", ...Object.keys(selected).filter((key) => selected[key])],
     ...data.map((item) => [
       item.name,
-      item.pending,
-      item.approved,
-      item.rejected,
-      item.paid,
+      ...Object.keys(selected)
+        .filter((key) => selected[key])
+        .map((key) => item[key.toLowerCase()]),
     ]),
   ];
 
@@ -115,7 +118,6 @@ const Dashboard = () => {
     <div className={styles.container}>
       <DashboardHeader />
 
-      {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-12">
         <SummaryCard
           title="Total Claims"
@@ -155,7 +157,6 @@ const Dashboard = () => {
         />
       </div>
 
-      {/* Chart */}
       <div className={styles.chartContainer}>
         <div className={styles.header}>
           <h2 className={styles.title}>📊 Claim Status Overview</h2>
@@ -169,23 +170,34 @@ const Dashboard = () => {
           </select>
         </div>
 
+        <div className="flex gap-3 mb-4">
+          {Object.keys(selected).map((key) => (
+            <label key={key} className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                checked={selected[key]}
+                onChange={() =>
+                  setSelected({ ...selected, [key]: !selected[key] })
+                }
+              />
+              <span>{key}</span>
+            </label>
+          ))}
+        </div>
+
         {loading ? (
           <p className="text-center text-gray-500">Loading data...</p>
         ) : (
           <Chart
-            chartType="LineChart"
+            chartType="ColumnChart"
             width="100%"
-            height="300px"
-            data={chartData}
+            height="400px"
+            data={filteredData}
             options={{
+              title: "Claims Status Over Time",
               hAxis: { title: "Time" },
               vAxis: { title: "Claims" },
-              series: {
-                0: { color: "#FFA500" }, // Pending (Orange)
-                1: { color: "#00C853" }, // Approved (Green)
-                2: { color: "#D50000" }, // Rejected (Red)
-                3: { color: "#00b7ff" }, // Paid (Yellow)
-              },
+              colors: ["#FFA500", "#00C853", "#D50000", "#00b7ff"],
               legend: { position: "bottom" },
             }}
           />
