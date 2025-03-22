@@ -9,7 +9,6 @@ import {
   DetailClaimFinance,
   ClaimApprovedApprover,
   ClaimApprovedFinance,
-  Claim,
   MyClaimDetail,
 } from "@/types/Claim";
 import { createAsyncThunk } from "@reduxjs/toolkit";
