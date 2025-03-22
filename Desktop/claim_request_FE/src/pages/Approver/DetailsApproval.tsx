@@ -1,130 +1,194 @@
-import { ArrowLeft, ArrowRight } from "lucide-react";
-import styles from "./DetailsApproval.module.css";
-import { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState, AppDispatch } from "@redux/index";
-import { useParams } from "react-router-dom";
+import { AppDispatch } from "@/redux";
+import {
+  fetchPendingClaimDetailAsync,
+  fetchAllPendingClaimAsync,
+} from "@/redux/thunk/Claim/claimThunk";
+import { selectAllDetailPending } from "@/redux/selector/pendingSelector";
+import Modal from "@ui/modal/Modal";
+import { MoveRight } from "lucide-react";
+import styles from "./DetailsApproval.module.css";
+import StatusTag from "@/components/ui/StatusTag/StatusTag";
+import { toast } from "react-toastify";
+import httpClient from "@/constant/apiInstance.ts";
 
-export const DetailsComponents: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
-  const dispatch = useDispatch<AppDispatch>();
-  const claims = useSelector((state: RootState) => state.claim.data);
-  const pendingClaims = useSelector(
-    (state: RootState) => state.claim.data
-  );
+const formatDateToMonthDay = (date: string) => {
+  const dateObj = new Date(date);
+  const day = dateObj.getDate();
+  const month = dateObj.toLocaleString("en-US", { month: "long" });
 
-  useEffect(() => {
-    if (id) {
-      dispatch(fetchAllDetails());
-      dispatch(fetchAllClaims());
-    }
-  }, [dispatch, id]);
-
-  const selectedClaim = pendingClaims.find((claim) => claim.id === id);
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5; // Adjust this number to change the number of items per page
-
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = claims.slice(indexOfFirstItem, indexOfLastItem);
-
-  const totalPages = Math.ceil(claims.length / itemsPerPage);
-
-  const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
+  const getDayWithSuffix = (day: number) => {
+    if (day > 3 && day < 21) return `${day}th`;
+    switch (day % 10) {
+      case 1:
+        return `${day}st`;
+      case 2:
+        return `${day}nd`;
+      case 3:
+        return `${day}rd`;
+      default:
+        return `${day}th`;
     }
   };
 
-  const handlePreviousPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
+  return `${month} ${getDayWithSuffix(day)}`;
+};
+
+interface PendingDetailModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  requestId: string;
+  currentPage: string;
+  limit: string;
+}
+
+export const DetailsApproval: React.FC<PendingDetailModalProps> = ({
+  isOpen,
+  onClose,
+  requestId,
+  currentPage,
+  limit,
+}) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const claimDetail = useSelector(selectAllDetailPending);
+
+  useEffect(() => {
+    if (isOpen && requestId) {
+      dispatch(
+        fetchPendingClaimDetailAsync({
+          page: currentPage,
+          limit,
+          request_id: requestId,
+        })
+      );
+    }
+  }, [isOpen, requestId, currentPage, limit, dispatch]);
+
+  const handleApproveClaimDetention = async (request_id: string) => {
+    try {
+      await httpClient.post(`/approvers/${request_id}/approve-claim`, {});
+      dispatch(
+        fetchAllPendingClaimAsync({
+          page: currentPage.toString(),
+          limit: limit.toString(),
+        })
+      );
+      toast.success("Claim approved successfully!");
+      onClose(); 
+    } catch (error) {
+      console.log("Error approving claim: ", error);
+      toast.error("Failed to approve claim.");
     }
   };
 
   return (
-    <div className={styles.container}>
-      <h1 className={styles.title}>Claims Status</h1>
+    <Modal
+      open={isOpen}
+      onCancel={onClose}
+      onOk={() => handleApproveClaimDetention(requestId)}
+      buttonCancel="Close"
+      buttonOk="Approve"
+      title="Claim Detail"
+      width={600}
+      centered={false}
+      position={{ right: 20, top: 23 }}
+      height="95%"
+      className={styles.modal}
+    >
       <hr />
-      <div className={styles.detailsContainer}>
-        <div className={styles.detailsLeft}>
-          {selectedClaim && (
-            <>
-              <h3>Claim ID: {selectedClaim.id}</h3>
-              <h3>Project Name: {selectedClaim.projectName}</h3>
-              <h3>Project Duration: {selectedClaim.duration}</h3>
-            </>
-          )}
+      <div className={styles.container}>
+        <div className={styles.containerUser}>
+          <div className={styles.infoUser1}>
+            <img
+              src="https://i1.wp.com/upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"
+              title="avatar"
+              className={styles.avatar}
+            />
+            <p>{claimDetail?.user.full_name}</p>
+          </div>
+          <div className={styles.infoUser2}>
+            <p>User ID: {claimDetail?.user_id}</p>
+          </div>
         </div>
-        <div className={styles.detailsRight}>
-          {selectedClaim && (
-            <>
-              <h3>Staff Name: {selectedClaim.staffName}</h3>
-              <h3>Project ID: {selectedClaim.id}</h3>
-            </>
-          )}
+        <hr />
+        <div className={styles.containerProject}>
+          <p>
+            Project ID:{" "}
+            <span className={styles.boldText}> {claimDetail?.project_id}</span>{" "}
+          </p>
+          <p>
+            Project Name:{" "}
+            <span className={styles.boldText}>{claimDetail?.project_name}</span>
+          </p>
+        </div>
+        <div className={styles.containerRequest}>
+          <div className={styles.timeDuration}>
+            <p>Time Duration:</p>
+            <h4>
+              <span className={styles.boldText}>
+                {formatDateToMonthDay(`${claimDetail?.start_date}`)}
+              </span>{" "}
+              <MoveRight size={20} className={styles.iconMoveRight} />{" "}
+              <span className={styles.boldText}>
+                {formatDateToMonthDay(`${claimDetail?.end_date}`)}
+              </span>
+            </h4>
+          </div>
+          <p>
+            Submitted Date:{"   "}
+            <span className={styles.boldText}>
+              {formatDateToMonthDay(`${claimDetail?.submitted_date}`)}
+            </span>
+          </p>
+          <p>
+            Total Working Hours:{" "}
+            <span className={styles.boldText}>
+              {claimDetail?.total_hours} hours
+            </span>
+          </p>
+          <p>
+            Status:{" "}
+            {claimDetail?.claim_status ? (
+              <StatusTag
+                status={
+                  claimDetail.claim_status as
+                    | "PENDING"
+                    | "APPROVED"
+                    | "REJECTED"
+                    | "PAID"
+                }
+              />
+            ) : (
+              "-"
+            )}
+          </p>
+        </div>
+        <div>
+          {claimDetail?.claim_details &&
+          claimDetail.claim_details.length > 0 ? (
+            <div className={styles.history}>
+              <h4>Claim History</h4>
+              {claimDetail.claim_details.map((detail, index) => (
+                <div key={index} className={styles.historyItem}>
+                  <p>
+                    Date:{""}
+                    <span className={styles.boldText}>
+                      {formatDateToMonthDay(detail.date)}
+                    </span>
+                  </p>
+                  <p>
+                    Working Hours:{" "}
+                    <span className={styles.boldText}>
+                      {detail.working_hours} hours
+                    </span>
+                  </p>
+                </div>
+              ))}
+            </div>
+          ) : null}
         </div>
       </div>
-
-      <table className={styles.claimsTable}>
-        <thead>
-          <tr>
-            <th>No.</th>
-            <th>Overtime Duration</th>
-            <th>Overtime Date</th>
-            <th>Total No. Hours</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentItems.map((claim) => (
-            <tr key={claim.id}>
-              <td>{claim.id}</td>
-              <td>{claim.otDuration}</td>
-              <td>{claim.otDate}</td>
-              <td>{claim.hours} hours</td>
-              <td
-                style={{
-                  color:
-                    claim.status === "Done"
-                      ? "green"
-                      : claim.status === "Rejected"
-                      ? "red"
-                      : "#B8D576",
-                }}
-              >
-                {claim.status}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <div className={styles.pagination}>
-        <span className={styles.pageIcon} onClick={handlePreviousPage}>
-          <ArrowLeft />
-        </span>
-        {[...Array(totalPages)].map((_, index) => (
-          <span
-            key={index}
-            className={`${styles.pageNumber} ${
-              currentPage === index + 1 ? styles.activePage : ""
-            }`}
-            onClick={() => setCurrentPage(index + 1)}
-          >
-            {index + 1}
-          </span>
-        ))}
-        <span className={styles.pageIcon} onClick={handleNextPage}>
-          <ArrowRight />
-        </span>
-      </div>
-      <div className={styles.buttonContainer}>
-        <div className={styles.buttonStyle}>
-          {/* <button className={styles.rejectedButton}>Confirm</button> */}
-          {/* <button className={styles.approvedButton}>Confirm</button> */}
-        </div>
-      </div>
-    </div>
+    </Modal>
   );
 };

@@ -4,7 +4,7 @@ import { rootReducer } from "./rootReducer";
 import { thunk } from "redux-thunk";
 
 export const store = configureStore({
-  reducer: rootReducer,
+  reducer :  rootReducer ,
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk),
 });
 

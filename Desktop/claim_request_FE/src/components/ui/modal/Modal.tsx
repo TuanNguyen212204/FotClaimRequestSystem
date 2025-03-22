@@ -50,6 +50,7 @@ export interface ModalProps {
   }>;
   buttonOk?: string;
   buttonCancel?: string;
+  footerPosition?: "left" | "center" | "right";
 }
 
 export interface ModalComponent extends React.FC<ModalProps> {
@@ -84,6 +85,7 @@ const Modal_: React.FC<ModalProps> = ({
   switches,
   buttonOk,
   buttonCancel,
+  footerPosition = "center", // Default value if not provided
 }) => {
   const [visible, setVisible] = useState(open);
   const modalRef = useRef<HTMLDivElement>(null);
@@ -217,7 +219,15 @@ const Modal_: React.FC<ModalProps> = ({
   const renderFooter = footer ? (
     footer
   ) : (
-    <div className={styles.footer}>
+    <div
+      className={`${styles.footer} ${
+        footerPosition === "left"
+          ? styles.footerLeft
+          : footerPosition === "center"
+          ? styles.footerCenter
+          : styles.footerRight
+      }`}
+    >
       <button
         {...(cancelButtonProps || {})}
         onClick={onCancel}
@@ -230,7 +240,7 @@ const Modal_: React.FC<ModalProps> = ({
         onClick={onOk}
         className={styles.buttonOk}
       >
-        {buttonOk ? buttonOk : "OK"}
+        {buttonOk ? buttonOk : "Confirm"}
       </button>
     </div>
   );

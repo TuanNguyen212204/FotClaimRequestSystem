@@ -4,7 +4,9 @@ import fot from "@assets/fot.png";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import httpClient from "@/constant/apiInstance";
-import { useLoading } from "@/components/ui/Loading/LoadingContext";
+import LoadingOverlay from "@/components/ui/Loading/LoadingOverlay";
+import { useEffect, useState } from "react";
+import { LoadingProvider } from "../Loading/LoadingContext";
 
 async function sendResetEmail(values: { email: string }): Promise<void> {
   try {
@@ -21,7 +23,15 @@ async function sendResetEmail(values: { email: string }): Promise<void> {
 }
 function ResetPassword() {
   const navigate = useNavigate();
-  const { showLoading, hideLoading } = useLoading();
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    setIsLoading(true);
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 4000);
+    return () => clearTimeout(timer);
+  }, []);
 
   const initialValues = {
     email: "",
@@ -40,7 +50,7 @@ function ResetPassword() {
     validationSchema: resetPasswordSchema,
     onSubmit: async (values, { setSubmitting, setFieldError }) => {
       try {
-        showLoading();
+        setIsLoading(true);
         await sendResetEmail(values);
         navigate("/check-to-mail");
       } catch (error: any) {
@@ -48,12 +58,21 @@ function ResetPassword() {
           "email",
           error.message || "Error trong catch chỗ onSubmit của useFormil"
         );
-        hideLoading();
       } finally {
         setSubmitting(false);
       }
     },
   });
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-[300px]">
+        <LoadingProvider>
+          <LoadingOverlay></LoadingOverlay>
+        </LoadingProvider>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.container}>

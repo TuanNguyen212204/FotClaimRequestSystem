@@ -15,7 +15,7 @@ import httpClient from "@/constant/apiInstance";
 import { ApiResponseNoGeneric } from "@/types/ApiResponse";
 interface AssignProjectProps {
   id: string;
-  setOpen: () => void;
+  setOpen: (value: boolean) => void;
 }
 export const AssignProject: React.FC<AssignProjectProps> = ({
   id,
