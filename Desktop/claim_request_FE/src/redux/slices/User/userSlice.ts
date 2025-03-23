@@ -1,62 +1,70 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { message } from "antd";
-import httpClient from "@/constant/apiInstance";
+import { createSlice } from "@reduxjs/toolkit";
+import type { User } from "@/types/User";
+import {
+  fetchAllUserAsync,
+  fetchUserByIdAsync,
+  fetchTotalPage,
+} from "@redux/thunk/User/userThunk";
 
-interface Staff {
-  id: string; // Đổi từ user_id thành id
-  name: string; // Đổi từ full_name thành name
-  email: string;
-  department: string;
-  jobRank: string; // Đổi từ job_rank thành jobRank để phù hợp với component Table
-}
-
-interface StaffState {
-  data: Staff[];
-  loading: boolean;
-}
-
-const initialState: StaffState = {
+const initialState: {
+  data: User[];
+  user: User | null;
+  totalPageOfAllUser: number;
+  status: string;
+  error?: string;
+} = {
   data: [],
-  loading: false,
+  user: null,
+  totalPageOfAllUser: 0,
+  status: "",
+  error: "null",
 };
-
-export const fetchStaffAsync = createAsyncThunk("staff/fetchStaffAsync", async (_, { rejectWithValue }) => {
-  try {
-    const response = await httpClient.get<{ httpStatus: number; data: Staff[] }>("/admin/staffs");
-    if (response.data.httpStatus === 200) {
-      return response.data.data.map((staff) => ({
-        ...staff,
-        id: staff.user_id, // Chuyển user_id thành id
-        name: staff.full_name, // Chuyển full_name thành name
-        jobRank: staff.job_rank, // Chuyển job_rank thành jobRank
-      }));
-    } else {
-      message.error("Failed to fetch staff data.");
-      return rejectWithValue("Failed to fetch staff data.");
-    }
-  } catch (error) {
-    message.error("An error occurred while fetching staff data.");
-    return rejectWithValue(error);
-  }
-});
-
-const staffSlice = createSlice({
-  name: "staff",
+export const userSlice = createSlice({
+  name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    setUser(state, action) {
+      state.user = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchStaffAsync.pending, (state) => {
-        state.loading = true;
+
+      .addCase(fetchAllUserAsync.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = String(action.error.message);
       })
-      .addCase(fetchStaffAsync.fulfilled, (state, action) => {
-        state.loading = false;
+      .addCase(fetchAllUserAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchAllUserAsync.fulfilled, (state, action) => {
+        state.status = "success";
         state.data = action.payload;
       })
-      .addCase(fetchStaffAsync.rejected, (state) => {
-        state.loading = false;
+      .addCase(fetchUserByIdAsync.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = String(action.error.message);
+      })
+      .addCase(fetchUserByIdAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchUserByIdAsync.fulfilled, (state, action) => {
+        state.status = "success";
+        console.log(action.payload[0]);
+        state.user = action.payload[0];
+      })
+      .addCase(fetchTotalPage.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = String(action.error.message);
+      })
+      .addCase(fetchTotalPage.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchTotalPage.fulfilled, (state, action) => {
+        state.status = "success";
+        state.totalPageOfAllUser = action.payload;
       });
   },
 });
-
-export default staffSlice.reducer;
+export default userSlice.reducer;
+export const { setUser } = userSlice.actions;

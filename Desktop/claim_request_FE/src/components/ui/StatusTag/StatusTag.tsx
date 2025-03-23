@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./StatusTag.module.css";
 
-type StatusType = "pending" | "approved" | "rejected" | "paid";
+export type StatusType = "pending" | "approved" | "rejected" | "paid";
 
 interface StatusTagProps {
   status: StatusType;

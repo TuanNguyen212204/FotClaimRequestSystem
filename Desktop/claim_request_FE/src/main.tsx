@@ -6,13 +6,23 @@ import { Provider } from "react-redux";
 import { store } from "./redux/index.ts";
 import { BrowserRouter } from "react-router-dom";
 import { ReactToastifyProvider } from "./context/ReactToastifyProvider.tsx";
-
+import { NotificationProvider } from "./components/ui/Notification/NotificationContext.tsx";
+import LoadingOverlay from "./components/ui/Loading/LoadingOverlay.tsx";
+import { LoadingProvider } from "./components/ui/Loading/LoadingContext.tsx";
+import { ToastContainer } from "react-toastify";
 createRoot(document.getElementById("root")!).render(
   <ReactToastifyProvider>
     <BrowserRouter>
       <Provider store={store}>
         <ReactQueryProvider>
-          <App />
+          {/* <LoadingProvider> */}
+          <NotificationProvider>
+            {/* <LoadingOverlay /> */}
+
+            <App />
+            <ToastContainer />
+          </NotificationProvider>
+          {/* </LoadingProvider> */}
         </ReactQueryProvider>
       </Provider>
     </BrowserRouter>

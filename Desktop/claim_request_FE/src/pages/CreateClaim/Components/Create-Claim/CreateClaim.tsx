@@ -1,0 +1,84 @@
+import { useEffect } from "react";
+import { useWatch } from "react-hook-form";
+import Header from "../Header";
+import StaffInfo from "../Body/StaffInfo";
+import useCreateClaimForm from "@/Hooks/useCreateClaimForm";
+import ClaimBody from "../Body/ClaimBody";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "@/redux";
+import { selectProject } from "@/redux/slices/Project/projectSlice";
+import { fetchUserByIdAsync } from "@/redux/thunk/User/userThunk";
+import { toast } from "react-toastify";
+import { fetchProjectByID } from "@/redux/thunk/CreateClaim";
+
+export default function CreateClaim() {
+  const {
+    register,
+    setValue,
+    control,
+    errors,
+    handleSubmit,
+    onSubmit,
+    setError,
+    clearErrors,
+    user,
+  } = useCreateClaimForm();
+
+  const dispatch = useDispatch<AppDispatch>();
+  const projectList = useSelector(selectProject);
+
+  const claims = useWatch({ control, name: "claims" });
+
+  useEffect(() => {
+    const seenDates = new Set();
+    claims.forEach((claim, index) => {
+      const date = claim.date;
+      if (date) {
+        if (seenDates.has(date)) {
+          setError(`claims.${index}.date`, {
+            type: "manual",
+            message: "This date is already chosen",
+          });
+        } else {
+          console.log("clearing error");
+          seenDates.add(date);
+          clearErrors(`claims.${index}.date`);
+        }
+      }
+    });
+  }, [claims, setError, clearErrors]);
+
+  useEffect(() => {
+    dispatch(fetchUserByIdAsync())
+      .unwrap()
+      .then(() => dispatch(fetchProjectByID()))
+      .catch((error) => {
+        console.error("Failed to fetch data:", error);
+        toast.error("Failed to load data. Please refresh the page.");
+      });
+  }, [dispatch]);
+
+  return user ? (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Header
+        prepareBy={user?.full_name}
+        status="Draft"
+        title="New Claim Request"
+      />
+      <StaffInfo
+        department={user?.job_rank}
+        name={user?.full_name}
+        staffID={user?.user_id}
+      />
+      <ClaimBody
+        ProjectList={projectList.projectList}
+        control={control}
+        errors={errors}
+        register={register}
+        setValue={setValue}
+      />
+    </form>
+  ) : (
+    <div>Loading...</div>
+  );
+}

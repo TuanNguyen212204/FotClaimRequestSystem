@@ -1,4 +1,4 @@
-import ApprovedApproverComponent from "@/components/ui/approver/ApproverdApproverComponent";
+import ApprovedApproverComponent from "@/pages/Approver/ApprovedApproval";
 
 export const ApprovedApproverPage: React.FC = () => {
   return (

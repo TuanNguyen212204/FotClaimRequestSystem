@@ -1,78 +1,110 @@
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { formSchema } from "@/Schemas/ClaimSchema";
+import { FormData } from "@/types/claimForm.type";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "@/redux";
+import { createClaim } from "@/redux/thunk/CreateClaim";
+import { selectUserById } from "@/redux/selector/userSelector";
+import { CreateClaimData } from "@/Services/Project/Project.type";
+import { toast } from "react-toastify";
+import { ApiError } from "@/api";
 
-const createRequestFormSchema = (minDate: string, maxDate: string) =>
-  z.object({
-    from: z
-      .string()
-      .nonempty("From date is required")
-      .refine((val) => new Date(val) >= new Date(minDate), {
-        message: `From date must be after ${minDate}`,
-      }),
-    to: z
-      .string()
-      .nonempty("To date is required")
-      .refine((val) => new Date(val) <= new Date(maxDate), {
-        message: `To date must be before ${maxDate}`,
-      }),
-    workingHoursFrom: z.string().nonempty("Working Hours From is required"),
-    workingHoursTo: z.string().nonempty("Working Hours To is required"),
-  });
-
-export type RequestFormValues = z.infer<ReturnType<typeof createRequestFormSchema>>;
-export const useCreateClaimForm = () => {
-  const [minDate] = useState("2025-01-01");
-  const [maxDate] = useState("2025-12-31");
-
-  const schema = createRequestFormSchema(minDate, maxDate);
-
-  const methods = useForm<RequestFormValues>({
-    resolver: zodResolver(schema),
-    mode: "all",
-    defaultValues: {
-      from: "",
-      to: "",
-      workingHoursFrom: "17:00",
-      workingHoursTo: "23:59",
-    },
-  });
-
+export default function useCreateClaimForm() {
   const {
-    watch,
+    register,
+    control,
+    handleSubmit,
+    formState,
     formState: { errors },
-  } = methods;
+    setValue,
+    reset,
+    setError,
+    clearErrors,
+    trigger,
+  } = useForm<FormData>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      currentSelectedProject: {
+        projectID: "",
+        projectName: "",
+        RoleInTheProject: "",
+        ProjectDuration: { from: "", to: "" },
+      },
+      claims: [{ date: "", working_hours: 0 }],
+    },
+    mode: "all",
+  });
 
-  const fromDate = watch("from");
-  const toDate = watch("to");
-  const workingHoursFrom = watch("workingHoursFrom");
-  const workingHoursTo = watch("workingHoursTo");
+  const dispatch = useDispatch<AppDispatch>();
+  const user = useSelector(selectUserById);
 
-  
-  const computedOvertimeDuration = (() => {
-    if (!fromDate || !toDate) return "";
-    const date1 = new Date(fromDate);
-    const date2 = new Date(toDate);
-    const diffTime = Math.abs(date2.getTime() - date1.getTime());
-    return (diffTime / (1000 * 60 * 60 * 24)).toFixed(0);
-  })();
+  const onSubmit = async (data: FormData) => {
+    console.log(data);
+    console.log(errors);
 
-  
-  const computedTotalHours = (() => {
-    if (!workingHoursFrom || !workingHoursTo) return "";
-    const [startHour, startMinute] = workingHoursFrom.split(":").map(Number);
-    const [endHour, endMinute] = workingHoursTo.split(":").map(Number);
-    const startTotal = startHour * 60 + startMinute;
-    let endTotal = endHour * 60 + endMinute;
-    if (endTotal < startTotal) endTotal += 24 * 60;
-    return Math.round((endTotal - startTotal) / 60).toString();
-  })();
+    const isValid = await trigger();
+
+    if (!data.currentSelectedProject.projectID) {
+      toast.error("Please select a project.");
+      return;
+    }
+
+    if (!isValid || Object.keys(formState.errors).length > 0) {
+      toast.error("Please fix all validation errors before submitting");
+      return;
+    }
+
+    if (data.claims.length === 0) {
+      toast.error("Please add at least one claim.");
+      return;
+    }
+
+    if (!user) {
+      toast.error("User information not available.");
+      return;
+    }
+
+    const DataToSend: CreateClaimData = {
+      userID: user.user_id,
+      projectID: data.currentSelectedProject.projectID,
+      claims: data.claims,
+    };
+
+    try {
+      const resultAction = await dispatch(createClaim(DataToSend));
+      if (createClaim.fulfilled.match(resultAction)) {
+        toast.success("Claim request created successfully");
+        reset();
+      } else {
+        const payloadError = resultAction.payload as any;
+        const errorMessage = payloadError?.message || "Unknown error occurred";
+        toast.error(`Failed to create claim: ${errorMessage}`);
+      }
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.log("API Error:", error.message, error.status, error.data);
+      } else if (error instanceof Error) {
+        console.log("Standard Error:", error.message);
+      } else {
+        console.log("Unknown Error:", error);
+      }
+      toast.error("Failed to create claim request");
+    }
+  };
 
   return {
-    methods,
+    register,
+    control,
+    handleSubmit,
+    onSubmit,
     errors,
-    computedOvertimeDuration,
-    computedTotalHours,
+    setValue,
+    reset,
+    formState,
+    setError,
+    clearErrors,
+    user,
+    trigger,
   };
-};
+}

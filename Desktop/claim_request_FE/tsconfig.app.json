@@ -19,7 +19,9 @@
       "@redux/*": ["./src/redux/*"],
       "@pages/*": ["./src/pages/*"],
       "@Hooks/*": ["./src/Hooks/*"],
-      "@ui/*": ["./src/components/ui/*"]
+      "@ui/*": ["./src/components/ui/*"],
+      "@auth/*": ["./src/auth/*"],
+      "@assets/*": ["./src/assets/*"]
     },
     /* Bundler mode */
     "moduleResolution": "bundler",

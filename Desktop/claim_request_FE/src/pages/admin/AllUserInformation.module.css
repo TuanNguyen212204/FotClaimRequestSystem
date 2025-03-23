@@ -1,0 +1,23 @@
+.update_button {
+  color: #3674b5;
+  padding: 0.5rem;
+  border-radius: 5px;
+}
+.delete_button {
+  color: red;
+  padding: 0.5rem;
+  border-radius: 5px;
+}
+.editModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+}

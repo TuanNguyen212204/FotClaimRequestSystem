@@ -1,171 +1,106 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import styles from "./PaidClaims.module.css";
 import { PATH } from "../../constant/config";
-import { useTable } from "../../Hooks/useTable";
-import { Column } from "../../components/ui/Table/Table";
-import httpClient from "../../constant/apiInstance";
+import TableComponent, { Column, DataRecord } from "../../components/ui/Table/Table";
+import { fetchPaidClaimsAsync } from "../../redux/slices/Claim/paidClaimsSlice";
+import { AppDispatch } from "@/redux";
 
-interface ClaimData {
-  id: string;
-  claimId: string;
-  staffName: string;
-  projectName: string;
-  duration: string;
-  totalHours: number;
-  approverName: string;
-  status: string;
+interface ClaimData extends DataRecord {
+  request_id: string;
+  user_id: string;
+  project_id: string;
+  project_name: string;
+  start_date: string;
+  end_date: string;
+  total_hours: number;
+  submitted_date: string;
+  approved_date: string;
+  paid_date: string;
+  claim_status: string;
+  full_name: string;
+  salary_overtime: string;
+  claim_details: { date: string; working_hours: number; }[];
 }
 
 const PaidClaims: React.FC = () => {
   const navigate = useNavigate();
-
-  const fetchPaidClaims = async () => {
-    try {
-      const response = await httpClient.get<ClaimData[]>('/paidclaims');
-      return response.data;
-    } catch (error) {
-      console.error('Failed to fetch paid claims:', error);
-      return [];
-    }
-  };
-
-  const {
-    data: claims,
-    loading,
-    pagination,
-    setPage,
-    fetchData
-  } = useTable<ClaimData>({
-    initialPageSize: 5
-  });
+  const dispatch = useDispatch<AppDispatch>();
+  const { data: claims, loading, totalPages, currentPage } = useSelector((state: any) => state.paidClaims);
+  const itemsPerPage = 10;
 
   useEffect(() => {
-    void fetchData('/paidclaims');
-  }, []);
+    dispatch(fetchPaidClaimsAsync("1"));
+  }, [dispatch]);
 
-  const columns: Column[] = [
-    { key: 'claimId', dataIndex: 'claimId', title: 'Claim ID' },
-    { key: 'staffName', dataIndex: 'staffName', title: 'Staff Name' },
-    { key: 'projectName', dataIndex: 'projectName', title: 'Project Name' },
-    { key: 'duration', dataIndex: 'duration', title: 'Project Duration' },
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+  };
+
+  const columns: Column<ClaimData>[] = [
     { 
-      key: 'totalHours', 
-      dataIndex: 'totalHours', 
-      title: 'Total Hours Working',
-      cell: () => <span>100 hours</span>
+      key: 'no', 
+      dataIndex: 'no',
+      title: 'No',
+      width: '80px'
+    },
+    { key: 'full_name', dataIndex: 'full_name', title: 'Staff Name' },
+    { key: 'project_name', dataIndex: 'project_name', title: 'Project Name' },
+    { 
+      key: 'date_range', 
+      dataIndex: 'start_date', 
+      title: 'Project Duration',
+      cell: ({ record }) => (
+        <div>
+          <div>From: {formatDate(record.start_date)}</div>
+          <div>To: {formatDate(record.end_date)}</div>
+        </div>
+      )
     },
     { 
-      key: 'approverName', 
-      dataIndex: 'approverName', 
-      title: 'Approver Name',
-      cell: () => <span>Marco</span>
+      key: 'total_hours', 
+      dataIndex: 'total_hours', 
+      title: 'Total Hours Working',
+      cell: ({ value }) => `${value} hours`
     },
     {
       key: 'action',
-      dataIndex: 'claimId',
+      dataIndex: 'request_id',
       title: 'Action',
       cell: ({ value }) => (
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <button 
-            onClick={() => navigate(`${PATH.claimStatus}/${value}`)}
-            style={{ background: 'none', border: 'none', cursor: 'pointer' }}
-          >
-            👁
-          </button>
-        </div>
+        <button 
+          className={styles.detailButton}
+          onClick={() => navigate(`${PATH.claimStatus}/${value}`)}
+        >
+          Details
+        </button>
       )
     }
   ];
 
   return (
     <div className={styles.container}>
-      <div>
-        <h1 className={styles.claimStatus_h1}>Paid Claims</h1>
-        <hr style={{ width: "100%" }} />
+      <div className={styles.header}>
+        <h1 className={styles.title}>Paid Claims</h1>
+        <hr />
       </div>
-      
-      <div
-        style={{
-          overflow: "hidden",
-          borderRadius: "10px",
-          border: "2px solid black",
-          marginBottom: "20px"
-        }}
-      >
-        <table className={styles.table}>
-          <thead>
-            <tr className={styles.style_tr}>
-              {columns.map((column) => (
-                <th 
-                  key={column.key} 
-                  className={styles.style_th}
-                >
-                  {column.title}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {loading ? (
-              <tr>
-                <td colSpan={columns.length} className={styles.style_td}>
-                  Loading...
-                </td>
-              </tr>
-            ) : claims.length === 0 ? (
-              <tr>
-                <td colSpan={columns.length} className={styles.style_td}>
-                  No data available
-                </td>
-              </tr>
-            ) : (
-              claims.map((claim) => (
-                <tr key={claim.claimId}>
-                  {columns.map((column) => (
-                    <td key={`${claim.claimId}-${column.key}`} className={styles.style_td}>
-                      {column.cell ? 
-                        column.cell({ 
-                          value: claim[column.dataIndex as keyof typeof claim], 
-                          record: claim 
-                        }) 
-                        : claim[column.dataIndex as keyof typeof claim]}
-                    </td>
-                  ))}
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
-      
-      <div className={styles.pagination}>
-        <button 
-          onClick={() => setPage(pagination.currentPage - 1)}
-          disabled={pagination.currentPage === 1}
-          className={styles.pageButton}
-        >
-          Previous
-        </button>
-        <div className={styles.pageNumbers}>
-          {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map((page) => (
-            <button
-              key={page}
-              onClick={() => setPage(page)}
-              className={`${styles.pageNumber} ${pagination.currentPage === page ? styles.activePage : ''}`}
-            >
-              {page}
-            </button>
-          ))}
-        </div>
-        <button 
-          onClick={() => setPage(pagination.currentPage + 1)}
-          disabled={pagination.currentPage === pagination.totalPages}
-          className={styles.pageButton}
-        >
-          Next
-        </button>
-      </div>
+
+      <TableComponent
+        columns={columns as Column<DataRecord>[]}
+        dataSource={claims.map((claim: ClaimData, idx) => ({
+          ...claim,
+          key: claim.request_id,
+          no: String(idx + 1).padStart(3, '0')
+        }))}
+        loading={loading}
+        pagination={true}
+        pageLength={10}
+        totalPage={totalPages}
+        name="Paid Claims"
+        onPageChange={(page) => dispatch(fetchPaidClaimsAsync(page.toString()))}
+      />
     </div>
   );
 };

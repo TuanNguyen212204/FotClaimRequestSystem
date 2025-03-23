@@ -9,11 +9,15 @@ import {
 import styles from "./Table.module.css";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import PaginationForTable from "./PaginationForTable";
-export type Column = {
+import React from "react";
+import { LoadingProvider } from "../Loading/LoadingContext";
+import LoadingOverlay from "../Loading/LoadingOverlay";
+import { Plus } from "lucide-react";
+export type Column<T> = {
   key?: string;
-  dataIndex: string;
+  dataIndex?: keyof T | string;
   title: string;
-  cell?: ({ value, record }: { value: unknown; record: unknown }) => ReactNode;
+  cell?: ({ value, record }: { value: any; record: T }) => ReactNode;
 };
 
 export type DataRecord = {
@@ -29,13 +33,18 @@ export type SortConfig = {
 };
 
 export type TableComponentProps<T extends DataRecord> = {
-  columns: Column[];
+  columns: Column<T>[];
   dataSource: T[];
   loading?: boolean;
   pagination?: boolean;
   name?: string;
   sortConfig?: SortConfig;
-  pageLength?: number;
+  // pageLength?: number;
+  totalPage?: number;
+  isHaveCheckbox?: boolean;
+  createButton?: boolean;
+  onCreateButtonClick?: () => void;
+  onPageChange?: (newPage: number) => void;
 };
 
 const Cell = ({ children }: { children: ReactNode }) => {
@@ -60,23 +69,18 @@ const TableComponent = forwardRef(
       name,
       pagination = false,
       sortConfig,
-      pageLength = 5,
+      isHaveCheckbox,
+      createButton,
+      totalPage = 3,
+      // pageLength = 10,
+      onCreateButtonClick,
+      onPageChange,
     }: TableComponentProps<T>,
     ref: React.Ref<{
       getSelectedData: () => T[];
       getSortedData: () => T[];
     }>
   ) => {
-    console.log("TableComponent Props:", {
-      columns,
-      dataSource,
-      loading,
-      name,
-      ref,
-      pagination,
-      sortConfig,
-    });
-
     const [currentPage, setCurrentPage] = useState(1);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [selectedStatus, setSelectedStatus] = useState<string>("All");
@@ -87,6 +91,7 @@ const TableComponent = forwardRef(
     const [sortColumn, setSortColumn] = useState<string | null>(
       sortConfig?.columnKey || null
     );
+    const [isLoading, setIsLoading] = useState(loading);
 
     const uniqueStatuses = [
       "All",
@@ -108,25 +113,21 @@ const TableComponent = forwardRef(
         })
       : filteredData;
 
-    const totalPages = Math.ceil(sortedData.length / pageLength);
+    const totalPages = totalPage;
 
-    const paginatedData = pagination
-      ? sortedData.slice(
-          (currentPage - 1) * pageLength,
-          currentPage * pageLength
-        )
-      : sortedData;
-
+    const paginatedData = sortedData;
     useEffect(() => {
       setCurrentPage(1);
     }, [selectedStatus]);
 
     const handlePageChange = (newPage: number) => {
-      if (newPage >= 1 && newPage <= totalPages) {
+      if (newPage >= 1 && newPage <= totalPage) {
         setCurrentPage(newPage);
+        if (onPageChange) {
+          onPageChange(newPage);
+        }
       }
     };
-
     const toggleDropdown = () => {
       setIsDropdownOpen(!isDropdownOpen);
     };
@@ -172,6 +173,7 @@ const TableComponent = forwardRef(
         checkboxRef.current.indeterminate = someChecked && !allChecked;
       }
     }, [checkedItems, dataSource.length]);
+
     useImperativeHandle(ref, () => ({
       getSelectedData: () => {
         return dataSource.filter((record) => checkedItems.has(record.id || ""));
@@ -187,56 +189,93 @@ const TableComponent = forwardRef(
         });
       },
     }));
+    useEffect(() => {
+      if (loading) {
+        setIsLoading(true);
+        const timer = setTimeout(() => {
+          setIsLoading(false);
+        }, 2000);
+        return () => clearTimeout(timer);
+      } else {
+        setIsLoading(false);
+      }
+    }, [loading]);
+
+    if (isLoading) {
+      return (
+        <div className="flex justify-center items-center min-h-[300px]">
+          <LoadingProvider>
+            <LoadingOverlay></LoadingOverlay>
+          </LoadingProvider>
+        </div>
+      );
+    }
 
     return (
       <div className={styles.container}>
-        <section className={styles.filter_section}>
-          <div className={styles.filterStatusP}>
-            <p>Filter By {name}:</p>
-          </div>
-          <div
-            className="relative inline-block text-left"
-            style={{ marginTop: "12px", marginLeft: "15px" }}
-          >
-            <button
-              onClick={toggleDropdown}
-              className="flex items-center justify-between px-4 py-2 text-sm font-medium text-gray-700 bg-white border rounded-md shadow-sm hover:bg-gray-100 focus:outline-none"
+        <div style={{ display: "flex" }}>
+          <section className={styles.filter_section}>
+            <div className={styles.filterStatusP}>
+              <p>Filter By {name}:</p>
+            </div>
+            <div
+              className="relative inline-block text-left"
+              style={{ marginTop: "15px", marginLeft: "15px" }}
             >
-              <span>{selectedStatus}</span>
-              <ArrowDown className="w-4 h-4 ml-2" />
-            </button>
+              <button
+                onClick={toggleDropdown}
+                className="flex items-center justify-between px-4 py-2 text-sm font-medium text-gray-700 bg-white border rounded-md shadow-sm hover:bg-gray-100 focus:outline-none"
+              >
+                <span>{selectedStatus}</span>
+                <ArrowDown className="w-4 h-4 ml-2" />
+              </button>
 
-            {isDropdownOpen && (
-              <div className="absolute right-0 z-10 mt-2 origin-top-right bg-white border border-gray-300 rounded-md shadow-lg w-48">
-                <div className="py-1">
-                  {uniqueStatuses.map((status) => (
-                    <button
-                      key={status}
-                      onClick={() => handleStatusSelect(status)}
-                      className="block px-4 py-2 text-sm text-gray-700 w-full text-left hover:bg-gray-100"
-                    >
-                      {status}
-                    </button>
-                  ))}
+              {isDropdownOpen && (
+                <div className="absolute right-0 z-10 mt-2 origin-top-right bg-white border border-gray-300 rounded-md shadow-lg w-48">
+                  <div className="py-1">
+                    {uniqueStatuses.map((status) => (
+                      <button
+                        key={status}
+                        onClick={() => handleStatusSelect(status)}
+                        className="block px-4 py-2 text-sm text-gray-700 w-full text-left hover:bg-gray-100"
+                      >
+                        {status}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
-        </section>
+              )}
+            </div>
+          </section>
+          {createButton && (
+            <div
+              style={{
+                paddingTop: "20px",
+                marginLeft: "auto",
+              }}
+            >
+              <button
+                className={styles.create_button}
+                onClick={() => onCreateButtonClick && onCreateButtonClick()}
+              >
+                <div style={{ marginTop: "5px" }}>
+                  <span>
+                    <Plus />
+                  </span>
+                </div>
+              </button>
+            </div>
+          )}
+        </div>
 
         <div>
-          {loading && <div className="loading">Loading...</div>}
-          {filteredData.length.toString() !== "0" ? (
-            <section className={styles.table_body}>
-              <table className={styles.table}>
-                <thead className={styles.thead}>
-                  <tr>
-                    <th className={styles.th}>
-                      {/* {checkedItems.size === dataSource.length
-                          ? "Deselect All"
-                          : "Select All"} */}
-
-                      <div className="">
+          <section className={styles.table_body}>
+            <table className={styles.table}>
+              <thead className={styles.thead}>
+                <tr>
+                  <th className={styles.th}>
+                    {isHaveCheckbox && (
+                      <div>
                         <input
                           ref={checkboxRef}
                           onClick={handleSelectAll}
@@ -244,68 +283,80 @@ const TableComponent = forwardRef(
                           type="checkbox"
                           checked={checkedItems.size === dataSource.length}
                           value=""
+                          onChange={handleSelectAll}
                           className=" text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 "
                         />
                       </div>
+                    )}
+                  </th>
+                  {columns.map((col) => (
+                    <th
+                      key={String(col.key || col.dataIndex)}
+                      onClick={
+                        sortConfig?.columnKey === col.dataIndex
+                          ? () => handleSort(String(col.dataIndex))
+                          : undefined
+                      }
+                    >
+                      {col.title}
+                      {sortColumn === col.dataIndex && (
+                        <span>
+                          {sortOrder === "asc" ? (
+                            <ArrowUp className="w-4 h-4 ml-2" />
+                          ) : (
+                            <ArrowDown className="w-4 h-4 ml-2" />
+                          )}
+                        </span>
+                      )}
                     </th>
-
-                    {columns.map((col) => (
-                      <th
-                        key={col.key || col.dataIndex}
-                        className="thead_style"
-                        onClick={
-                          sortConfig?.columnKey === col.dataIndex
-                            ? () => handleSort(col.dataIndex)
-                            : undefined
-                        }
-                      >
-                        {col.title}
-                        {sortColumn === col.dataIndex && (
-                          <span>
-                            {sortOrder === "asc" ? (
-                              <ArrowUp className="w-4 h-4 ml-2" />
-                            ) : (
-                              <ArrowDown className="w-4 h-4 ml-2" />
-                            )}
-                          </span>
-                        )}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody className={styles.tbody}>
-                  {paginatedData.map((record) => (
+                  ))}
+                </tr>
+              </thead>
+              <tbody className={styles.tbody}>
+                {filteredData.length > 0 ? (
+                  paginatedData.map((record) => (
                     <tr key={record.key || record.id}>
-                      <td style={{ paddingTop: "1.8rem" }}>
-                        <input
-                          style={{ marginBottom: "2rem" }}
-                          type="checkbox"
-                          checked={checkedItems.has(record.id || "")}
-                          onChange={() => handleCheck(record.id || "")}
-                        />
+                      <td style={{ paddingTop: "3rem" }}>
+                        {isHaveCheckbox && (
+                          <div className={styles.checkbox}>
+                            <input
+                              type="checkbox"
+                              checked={checkedItems.has(record.id || "")}
+                              onChange={() => handleCheck(record.id || "")}
+                            />
+                          </div>
+                        )}
                       </td>
                       {columns.map((col) => (
-                        <td key={col.key || col.dataIndex}>
+                        <td key={String(col.key || col.dataIndex)}>
                           <Cell>
                             {col.cell
                               ? col.cell({
                                   value: record[col.dataIndex as keyof T],
-                                  record: record[col.dataIndex as keyof T],
+                                  record: record,
                                 })
                               : String(record[col.dataIndex as keyof T])}
                           </Cell>
                         </td>
                       ))}
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </section>
-          ) : (
-            <h1>No data</h1>
-          )}
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan={columns.length + (isHaveCheckbox ? 1 : 0)}
+                      style={{ textAlign: "center", paddingLeft: "200px" }}
+                    >
+                      <h1>No Data</h1>
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </section>
+
           <div>
-            {pagination && totalPages >= 1 && (
+            {pagination && totalPages >= 1 && filteredData.length > 0 && (
               <PaginationForTable
                 currentPage={currentPage}
                 totalPages={totalPages}
