@@ -1,7 +1,7 @@
 import { PopOverProps } from "./PopOver.types";
 import styles from "./Placement.module.css";
 import { usePopOver } from "@Hooks/usePopper";
-const PopOverComponent: React.FC<PopOverProps> = ({
+const PopOver: React.FC<PopOverProps> = ({
   placement,
   trigger,
   open,
@@ -43,4 +43,4 @@ const PopOverComponent: React.FC<PopOverProps> = ({
   );
 };
 
-export default PopOverComponent;
+export default PopOver;
