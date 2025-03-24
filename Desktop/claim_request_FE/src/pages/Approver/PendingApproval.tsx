@@ -40,6 +40,7 @@ export const PendingComponent: React.FC = () => {
   const [openModal, setOpenModal] = useState(false);
   const [selectedRequestId, setSelectedRequestId] = useState<string>("");
   const [isSalaryVisible, setIsSalaryVisible] = useState(false);
+  const [checkedItems, setCheckedItems] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     setLoading(true);
@@ -51,16 +52,37 @@ export const PendingComponent: React.FC = () => {
     ).finally(() => setLoading(false));
   }, [currentPage]);
 
-  const tableRef = useRef<{ getSelectionData: () => DataRecord[] }>(null);
+  const checkboxRef = useRef<{
+    getSelectedData: () => DataRecord[];
+    getSortedData: () => DataRecord[];
+    indeterminate?: boolean;
+  }>(null);
   const [selectedData, setSelectedData] = useState<DataRecord[]>([]);
 
+  const handleSelectAll = () => {
+    const allChecked = checkedItems.size === dataSource.length;
+    if (allChecked) {
+      setCheckedItems(new Set());
+    } else {
+      setCheckedItems(new Set(dataSource.map((record) => record.id || "")));
+    }
+  };
+
   const handleGetSelectedData = () => {
-    if (tableRef.current) {
-      const a = tableRef.current.getSelectionData();
+    if (checkboxRef.current) {
+      const a = checkboxRef.current.getSelectedData();
       setSelectedData(a);
     }
   };
 
+  useEffect(() => {
+    if (checkboxRef.current) {
+      const someChecked = checkedItems.size > 0;
+      const allChecked = checkedItems.size === dataSource.length;
+      checkboxRef.current.indeterminate = someChecked && !allChecked;
+    }
+  }, [checkedItems]);
+  
   const handleApproveClaim = async (request_id: string) => {
     handleGetSelectedData();
     setModalContent({
@@ -133,62 +155,10 @@ export const PendingComponent: React.FC = () => {
     console.log("Selected data:", selectedData);
   };
 
-  const handleSelectMultipleApprove = async (request_id: string) => {
-    try {
-      handleGetSelectedData();
-      await httpClient.post(`/approvers/approve-multiple-claims`, {});
-      dispatch(
-        fetchAllPendingClaimAsync({
-          page: currentPage.toString(),
-          limit: limit.toString(),
-        })
-      );
-      toast.success("Claim approved successfully!");
-    } catch (error) {
-      console.log("Error approving claim: ", error);
-      toast.error("Failed to approve claim.");
-    }
-  };
-
-  const handleSelectMultipleReject = async (request_id: string) => {
-    try {
-      handleGetSelectedData();
-      await httpClient.post(`/approvers/reject-multiple-claims`, {});
-      dispatch(
-        fetchAllPendingClaimAsync({
-          page: currentPage.toString(),
-          limit: limit.toString(),
-        })
-      );
-      toast.success("Claim rejected successfully!");
-    } catch (error) {
-      console.log("Error rejecting claim: ", error);
-      toast.error("Failed to reject claim.");
-    }
-  };
-
-  const handleSelectMultipleReturn = async (request_id: string) => {
-    try {
-      handleGetSelectedData();
-      await httpClient.post(`/approvers/return-multiple-claims`, {});
-      dispatch(
-        fetchAllPendingClaimAsync({
-          page: currentPage.toString(),
-          limit: limit.toString(),
-        })
-      );
-      toast.success("Claim returned successfully!");
-    } catch (error) {
-      console.log("Error returning claim: ", error);
-      toast.error("Failed to return claim.");
-    }
-  };
-
   const handleViewDetail = (value: string) => {
     setSelectedRequestId(value);
     setOpenModal(true);
   };
-
 
   const handlePageChange = (newPage: number) => {
     console.log("Trang mới: ", newPage);
@@ -204,16 +174,6 @@ export const PendingComponent: React.FC = () => {
   };
 
   const columns: Column<DataRecord>[] = [
-    // {
-    //   key: "request_id",
-    //   dataIndex: "request_id",
-    //   title: "Request ID",
-    // },
-    // {
-    //   key: "user_id",
-    //   dataIndex: "user_id",
-    //   title: "User ID",
-    // },
     {
       key: "user_name",
       dataIndex: "user_full_name",
@@ -330,7 +290,7 @@ export const PendingComponent: React.FC = () => {
     <div>
       <h1 className={styles.title}>Pending Claims</h1>
       <TableComponent
-        ref={tableRef as any}
+        ref={checkboxRef}
         columns={columns}
         dataSource={dataSource}
         loading={loading}
@@ -350,7 +310,7 @@ export const PendingComponent: React.FC = () => {
         }}
       >
         <p>Do you want to proceed?</p>
-      </Modal>  
+      </Modal>
     </div>
   );
 };

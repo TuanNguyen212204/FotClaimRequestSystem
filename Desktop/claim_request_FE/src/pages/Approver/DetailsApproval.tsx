@@ -99,16 +99,14 @@ export const DetailsApproval: React.FC<PendingDetailModalProps> = ({
       <div className={styles.modalContent}>
         <div className={styles.container}>
           <div className={styles.containerUser}>
-            <div className={styles.infoUser1}>
-              <img
-                src="https://i1.wp.com/upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"
-                alt="User avatar"
-                className={styles.avatar}
-              />
-              <p className={styles.username}>{claimDetail?.user.full_name}</p>
-            </div>
+            <img
+              src="https://i1.wp.com/upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"
+              alt="User avatar"
+              className={styles.avatar}
+            />
+            <p className={styles.username}>{claimDetail?.user.full_name}</p>
           </div>
-          <hr className={styles.divider} />
+          {/* <hr className={styles.divider} /> */}
           <div className={styles.containerProject}>
             <p>
               <strong>Project ID:</strong>
@@ -162,7 +160,7 @@ export const DetailsApproval: React.FC<PendingDetailModalProps> = ({
           {claimDetail?.claim_details &&
             claimDetail.claim_details.length > 0 && (
               <div className={styles.history}>
-                <h4>Claim History</h4>
+                <span style={{fontWeight: "500", fontSize: "20px"}}>Claim History</span>
                 {claimDetail.claim_details.map((detail, index) => (
                   <div key={index} className={styles.historyItem}>
                     <p>
