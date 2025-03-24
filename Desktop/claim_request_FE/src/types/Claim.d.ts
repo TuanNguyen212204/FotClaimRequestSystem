@@ -27,7 +27,9 @@ export interface PendingClaim {
     salary: string;
     ot_rate: string;
   };
-  salary_overtime: string;
+  salary_overtime: {
+    salaryOvertimePerDay: number;
+  };
   claim_details: {
     date: string;
     working_hours: number;
