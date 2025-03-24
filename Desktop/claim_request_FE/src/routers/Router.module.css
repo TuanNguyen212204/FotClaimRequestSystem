@@ -1,0 +1,9 @@
+.main_layout_wrapper {
+  /* Add any necessary styles to isolate MainLayout */
+  /* For example: */
+  overflow: hidden;
+  position: relative;
+}
+.main_layout_wrapper svg {
+  border: none !important;
+}
