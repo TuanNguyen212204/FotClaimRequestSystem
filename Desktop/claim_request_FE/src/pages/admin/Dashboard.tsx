@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import SummaryCard from "@/components/card/SummaryCard";
 import DashboardHeader from "@/components/card/DashboardHeader";
-// import { Chart } from "react-google-charts";
+import { Chart } from "react-google-charts";
 import {
   CheckCircle,
   XCircle,

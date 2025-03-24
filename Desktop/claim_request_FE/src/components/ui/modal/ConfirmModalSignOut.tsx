@@ -30,6 +30,7 @@ const ConfirmModal = () => {
         }}
         buttonCancel="Cancel"
         buttonOk="Sign out"
+        footerPosition="right"
       >
         <p>Are you sure you would like to sign out of your account?</p>
       </Modal>
