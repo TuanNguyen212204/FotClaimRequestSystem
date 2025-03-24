@@ -1,5 +1,4 @@
 export enum ROLES {
-  USER = "USER",
   CLAIMER = "CLAIMER",
   FINANCE = "FINANCE",
   APPROVER = "APPROVER",

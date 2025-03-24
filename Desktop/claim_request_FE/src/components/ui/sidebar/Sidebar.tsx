@@ -22,7 +22,7 @@ import { Plus } from "lucide-react";
 import { set } from "date-fns";
 import { RouteConfig, useRoute } from "@/Hooks/useRoute";
 import { ROLES } from "@/enums/ROLES";
-
+import ROLE from "@/constant/role";
 export const Sidebar = ({
   setIsCollapsed,
 }: {
@@ -32,11 +32,11 @@ export const Sidebar = ({
   const [isOpen, setIsOpen] = useState(false);
   const [isCollapsed1, setIsCollapsed1] = useState<boolean>(true);
   const [hover, setHover] = useState<boolean>(false);
-  const [role, setRole] = useState<ROLES | undefined>();
+  const [role, setRole] = useState<typeof ROLE | number>();
 
   const filterRoutesByRole = (
     routes: RouteConfig[],
-    role: ROLES
+    role: number
   ): RouteConfig[] => {
     return routes.reduce((acc: RouteConfig[], route: RouteConfig) => {
       if (route.role?.includes(role)) {
@@ -58,7 +58,7 @@ export const Sidebar = ({
   // );
   const routeByRole: RouteConfig[] = filterRoutesByRole(
     useRoute(),
-    role as ROLES
+    role as number
   );
   console.log(routeByRole);
   const navigate = useNavigate();
@@ -72,13 +72,13 @@ export const Sidebar = ({
   useEffect(() => {
     const record = Number(localStorage.getItem("role_id"));
     if (record === 1) {
-      setRole(ROLES.ADMIN);
+      setRole(ROLE.ADMIN);
     } else if (record === 2) {
-      setRole(ROLES.APPROVER);
+      setRole(ROLE.APPROVER);
     } else if (record === 3) {
-      setRole(ROLES.FINANCE);
+      setRole(ROLE.FINANCE);
     } else if (record === 4) {
-      setRole(ROLES.USER);
+      setRole(ROLE.CLAIMER);
     }
   }, []);
 
@@ -134,7 +134,10 @@ export const Sidebar = ({
               >
                 <button className={styles.claimButton}>
                   <div className={styles.claimButtonIngredient}>
-                    <div className={`${styles.tooltip}`}>
+                    <div
+                      className={`${styles.tooltip}`}
+                      style={{ cursor: "pointer" }}
+                    >
                       {route.icon}
                       <div className={` ${styles.tooltipText} `}>
                         <span>{route.label}</span>

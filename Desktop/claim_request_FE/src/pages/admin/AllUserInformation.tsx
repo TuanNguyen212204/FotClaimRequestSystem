@@ -232,6 +232,7 @@ const AllUserInformation: React.FC = () => {
             <div>
               <button
                 className={styles.update_button}
+                style={{ cursor: "pointer" }}
                 onClick={() => handleUpdate(value as string)}
               >
                 <span>

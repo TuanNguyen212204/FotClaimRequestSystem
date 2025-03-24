@@ -24,7 +24,6 @@ import UnauthorizedPage from "@auth/Unauthorized.tsx";
 import Authentication from "@auth/Authentication.tsx";
 import Authorization from "@auth/Authorization";
 import Unauthenticated from "@auth/Unauthenticated";
-import { ROLE } from "@constant/role";
 import UserClaimsPage from "@pages/User/UserClaimsPage";
 import UserClaimDetailsPage from "@pages/User/UserClaimDetailsPage";
 import { UpdateUser } from "@pages/User/UpdateUser";
@@ -49,10 +48,13 @@ import {
   UserPen,
   EyeClosed,
   EyeIcon,
+  Plus,
+  Pencil,
+  Compass,
 } from "lucide-react";
-import { MdOutlinePendingActions } from "react-icons/md";
+import { MdOutlinePendingActions, MdPaid } from "react-icons/md";
 import { FaCheck } from "react-icons/fa";
-
+import ROLE from "@constant/role";
 export interface RouteConfig {
   icon?: React.ReactNode;
   children?: RouteConfig[];
@@ -60,18 +62,11 @@ export interface RouteConfig {
   label?: string;
   component?: React.LazyExoticComponent<React.FC>;
   protected?: boolean;
-  role?: ROLES[];
+  role?: (typeof ROLE)[keyof typeof ROLE][];
   element?: React.ReactNode;
 }
-
 export const useRoute = (): RouteConfig[] => {
   return [
-    {
-      element: <Unauthenticated />,
-      protected: false,
-      label: "Unauthenticated",
-      path: PATH.unauthenticated,
-    },
     {
       component: lazy(() => import("@ui/login/LoginForm")),
       path: PATH.login,
@@ -119,21 +114,22 @@ export const useRoute = (): RouteConfig[] => {
       path: PATH.approvedClaimWithUserID,
       component: lazy(() => import("@pages/ApprovedClaimPage")),
       label: "Approved Claim",
-      role: [ROLES.USER],
+      role: [ROLE.CLAIMER],
       protected: true,
     },
     {
       path: PATH.rejectedClaimWithUserID,
       component: lazy(() => import("@pages/RejectedClaimPage")),
       label: "Rejected Claim",
-      role: [ROLES.USER],
+      role: [ROLE.CLAIMER],
       protected: true,
     },
     {
       path: PATH.pendingClaimByUserID,
       component: lazy(() => import("@pages/PendingClaimPage")),
       label: "Pending Claim",
-      role: [ROLES.USER],
+      icon: <MdOutlinePendingActions size={20} />,
+      role: [ROLE.CLAIMER],
       protected: true,
     },
     {
@@ -141,34 +137,37 @@ export const useRoute = (): RouteConfig[] => {
       protected: true,
       component: lazy(() => import("@pages/DraftClaimPage")),
       label: "Draft Claim",
-      role: [ROLES.USER],
+      icon: <Pencil size={20} />,
+      role: [ROLE.CLAIMER],
     },
     {
       path: PATH.createRequest,
       protected: true,
       component: lazy(() => import("@pages/CreateClaim")),
+      icon: <Plus size={20} />,
       label: "Create Request",
-      role: [ROLES.USER],
+      role: [ROLE.CLAIMER],
     },
     {
       path: PATH.claimDetail,
       component: lazy(() => import("@pages/ClaimDetail")),
       label: "Claim Detail",
-      role: [ROLES.USER],
+      role: [ROLE.CLAIMER],
       protected: true,
     },
     {
       path: PATH.myClaims,
       component: lazy(() => import("@pages/User/UserClaimsPage")),
       label: "My Claims",
-      role: [ROLES.USER],
+      icon: <Compass size={20} />,
+      role: [ROLE.CLAIMER],
       protected: true,
     },
     {
       path: PATH.userClaimDetails,
       component: lazy(() => import("@pages/User/UserClaimDetailsPage")),
       label: "Claim Details",
-      role: [ROLES.USER],
+      // role: [ROLE.CLAIMER],
       protected: true,
     },
     {
@@ -177,7 +176,7 @@ export const useRoute = (): RouteConfig[] => {
       icon: <UserPen />,
       protected: true,
       label: "User Information",
-      role: [ROLES.USER, ROLES.FINANCE, ROLES.APPROVER, ROLES.ADMIN],
+      role: [ROLE.CLAIMER, ROLE.FINANCE, ROLE.APPROVER, ROLE.ADMIN],
     },
     {
       path: PATH.approvedFinance,
@@ -185,50 +184,55 @@ export const useRoute = (): RouteConfig[] => {
       icon: <FaCheck />,
       protected: true,
       label: "Approved Finance",
-      role: [ROLES.FINANCE],
+      role: [ROLE.FINANCE],
     },
     {
       path: PATH.approvedApprover,
       component: lazy(() => import("@pages/Approver/ApprovedApproverPage")),
       protected: true,
+      icon: <FaCheck />,
       label: "Approved Approver",
-      role: [ROLES.APPROVER],
+      role: [ROLE.APPROVER],
     },
     {
       path: PATH.pending,
-      component: lazy(() => import("@pages/Approver/PendingApproval")),
+      component: lazy(() => import("@pages/Approver/ApprovedApproval")),
       protected: true,
       label: "Pending",
-      role: [ROLES.APPROVER],
+      icon: <MdOutlinePendingActions size={20} />,
+      role: [ROLE.APPROVER],
     },
     {
       path: PATH.rejectedClaim,
       component: lazy(() => import("@pages/Approver/RejectedApproval")),
       protected: true,
       label: "Rejected",
-      role: [ROLES.APPROVER],
+      icon: <CircleX size={20} />,
+      role: [ROLE.APPROVER],
     },
     {
       path: PATH.allUserInformation,
       component: lazy(() => import("@pages/admin/AllUserInformationPage")),
       protected: true,
-      icon: <EyeIcon />,
+      icon: <EyeClosed />,
       label: "All User Information",
-      role: [ROLES.ADMIN],
+      role: [ROLE.ADMIN],
     },
     {
       path: PATH.dashboard,
       component: lazy(() => import("@pages/admin/Dashboard")),
       protected: true,
+      icon: <House size={20} />,
       label: "Dashboard",
-      role: [ROLES.ADMIN],
+      role: [ROLE.ADMIN],
     },
     {
       path: PATH.projectInformation,
       component: lazy(() => import("@pages/admin/ProjectInformation")),
       protected: true,
+      icon: <BriefcaseBusiness size={20} />,
       label: "Project Information",
-      role: [ROLES.ADMIN],
+      role: [ROLE.ADMIN],
     },
     // {
     //   path: PATH.updateProject,
@@ -242,22 +246,17 @@ export const useRoute = (): RouteConfig[] => {
       path: PATH.paidClaim,
       component: lazy(() => import("@pages/Finance/PaidClaims")),
       protected: true,
+      icon: <MdPaid size={20} />,
       label: "Paid Claims",
-      role: [ROLES.FINANCE],
-    },
-    {
-      path: PATH.staffInformation,
-      component: lazy(() => import("@pages/admin/StaffInformation")),
-      protected: true,
-      label: "Staff Information",
-      role: [ROLES.ADMIN],
+      role: [ROLE.FINANCE],
     },
     {
       path: PATH.approvedDetailFinance,
       component: lazy(() => import("@pages/Finance/ApprovedDetailFinancePage")),
       protected: true,
       label: "Approved Detail",
-      role: [ROLES.FINANCE],
+      role: [ROLE.FINANCE],
     },
   ];
 };
+export default useRoute;

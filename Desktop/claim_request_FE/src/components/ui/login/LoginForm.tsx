@@ -36,7 +36,7 @@ async function loginUser(values: {
 const approverFirstPage = PATH.pending;
 const financeFirstPage = PATH.approvedFinance;
 const claimerFirstPage = PATH.myClaims;
-const adminFirstPage = PATH.allUserInformation;
+const adminFirstPage = PATH.projectInformation;
 
 function LoginForm() {
   const navigate = useNavigate();
