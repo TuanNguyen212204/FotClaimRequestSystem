@@ -115,7 +115,7 @@
   padding: 8px;
   cursor: pointer;
   background-color: #34495e;
-  margin: 10px 0;
+  margin-top: 1rem;
   border-radius: 5px;
   display: flex;
   align-items: center;
@@ -132,7 +132,7 @@
   transition: none !important;
 }
 .claimItem {
-  padding: 8px;
+  /* padding: 8px; */
   cursor: pointer;
   background-color: #34495e;
   margin: 20px 0;
@@ -222,6 +222,7 @@
   color: white;
   transition: none !important;
   padding-top: 5px;
+  width: 100%;
   background-color: transparent;
 }
 .claimButton:hover {
@@ -253,6 +254,7 @@
 }
 .tooltip {
   position: relative;
+  width: 73%;
   display: inline-block;
 }
 
@@ -268,8 +270,8 @@
   border-radius: 6px;
   position: absolute;
   z-index: 1;
-  margin-left: 3rem;
-  bottom: -25%;
+  margin-left: 3.5rem;
+  bottom: -20%;
 }
 
 .tooltip:hover .tooltipText {

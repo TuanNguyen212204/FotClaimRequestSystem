@@ -20,8 +20,10 @@ import { CircleX } from "lucide-react";
 import { Pencil } from "lucide-react";
 import { Plus } from "lucide-react";
 import { set } from "date-fns";
-import { RouteConfig, useRoute } from "@/Hooks/useRoute";
+// import { RouteConfig, useRoute } from "@/Hooks/useRoute";
 import { ROLES } from "@/enums/ROLES";
+import RouteConfig from "@/types/Route";
+import { PRIVATE_ROUTE } from "@/constant/routeConfig";
 import ROLE from "@/constant/role";
 export const Sidebar = ({
   setIsCollapsed,
@@ -52,12 +54,12 @@ export const Sidebar = ({
 
   const location = useLocation();
   const currentPath = location.pathname;
-  const routes: RouteConfig[] = useRoute();
+
   // const routeByRole: RouteConfig[] = useRoute().filter((route) =>
   //   route.role?.includes(ROLES.ADMIN)
   // );
   const routeByRole: RouteConfig[] = filterRoutesByRole(
-    useRoute(),
+    PRIVATE_ROUTE,
     role as number
   );
   console.log(routeByRole);
@@ -87,33 +89,6 @@ export const Sidebar = ({
     navigate(PATH.login);
   };
 
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
-
-  const toggleSidebar = () => {
-    setIsCollapsed1(!isCollapsed1);
-    setIsCollapsed(!isCollapsed1);
-    setHover(true);
-    console.log(isCollapsed1);
-  };
-
-  const closeToggleSideBar = () => {
-    setIsCollapsed1(isCollapsed1);
-    setIsCollapsed(isCollapsed1);
-  };
-
-  const handleHover = () => {
-    setHover(true);
-    setIsCollapsed1(false);
-    setIsCollapsed(false);
-  };
-
-  const handleOutHover = () => {
-    setHover(false);
-    setIsCollapsed1(true);
-    setIsCollapsed(true);
-  };
   const handleNavigate = (path: string) => {
     navigate(path);
   };
@@ -129,10 +104,10 @@ export const Sidebar = ({
                 key={route.path}
                 className={`${styles.claimItemCollapse} ${
                   selectedClaim === route.path ? styles.active : ""
-                } `}
+                } ${styles.tooltip}`}
                 onClick={() => handleNavigate(route.path as string)}
               >
-                <button className={styles.claimButton}>
+                <button className={` ${styles.claimButton}`}>
                   <div className={styles.claimButtonIngredient}>
                     <div
                       className={`${styles.tooltip}`}

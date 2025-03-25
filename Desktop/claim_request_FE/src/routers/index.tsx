@@ -1,6 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Suspense } from "react";
-import { useRoute } from "@Hooks/useRoute";
 import Authentication from "@/auth/Authentication";
 import Authorization from "@/auth/Authorization";
 import MainLayout from "@/components/layouts/MainLayout";
@@ -11,23 +10,17 @@ import Unauthenticated from "@/auth/Unauthenticated";
 import Unauthorized from "@/auth/Unauthorized";
 import { LoadingProvider } from "@/components/ui/Loading/LoadingContext";
 import LoadingOverlay from "@/components/ui/Loading/LoadingOverlay";
-
+import { PUBLIC_ROUTE, PRIVATE_ROUTE } from "@/constant/routeConfig";
 export const AppRoute = () => {
-  const routes = useRoute();
-  const publicRoutes = routes.filter((route) => !route.protected);
-  const privateRoutes = routes.filter((route) => route.protected);
-
   const router = createBrowserRouter([
-    ...publicRoutes.map((route) => ({
+    ...PUBLIC_ROUTE.map((route) => ({
       path: route.path,
       element: (
         <Suspense
           fallback={
-            <div>
-              <LoadingProvider>
-                <LoadingOverlay />
-              </LoadingProvider>
-            </div>
+            <LoadingProvider>
+              <LoadingOverlay />
+            </LoadingProvider>
           }
         >
           {React.createElement(route.component || "div")}
@@ -42,26 +35,22 @@ export const AppRoute = () => {
           </div>
         </Authentication>
       ),
-      children: [
-        ...privateRoutes.map((route) => ({
-          path: route.path,
-          element: (
-            <Suspense
-              fallback={
-                <div>
-                  <LoadingProvider>
-                    <LoadingOverlay />
-                  </LoadingProvider>
-                </div>
-              }
-            >
-              <Authorization role_id={route.role || [ROLE.CLAIMER]}>
-                {React.createElement(route.component || "div")}
-              </Authorization>
-            </Suspense>
-          ),
-        })),
-      ],
+      children: PRIVATE_ROUTE.map((route) => ({
+        path: route.path,
+        element: (
+          <Suspense
+            fallback={
+              <LoadingProvider>
+                <LoadingOverlay />
+              </LoadingProvider>
+            }
+          >
+            <Authorization role_id={route.role || 0}>
+              {React.createElement(route.component || "div")}
+            </Authorization>
+          </Suspense>
+        ),
+      })),
     },
     // { path: "/unauthorized", element: <Unauthorized /> },
     // { path: "/unauthenticated", element: <Unauthenticated /> },
