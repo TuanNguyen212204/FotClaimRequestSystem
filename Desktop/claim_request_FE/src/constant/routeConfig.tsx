@@ -62,9 +62,26 @@ export const PUBLIC_ROUTE: RouteConfig[] = [
 ];
 export const PRIVATE_ROUTE: RouteConfig[] = [
   {
+    path: PATH.createRequest,
+    protected: true,
+    component: lazy(() => import("@pages/CreateClaim")),
+    icon: <Plus size={20} />,
+    label: "Create Request",
+    role: [ROLE.CLAIMER],
+  },
+  {
+    path: PATH.myClaims,
+    component: lazy(() => import("@pages/User/UserClaimsPage")),
+    label: "My Claims",
+    icon: <Compass size={20} />,
+    role: [ROLE.CLAIMER],
+    protected: true,
+  },
+  {
     path: PATH.approvedClaimWithUserID,
     component: lazy(() => import("@pages/ApprovedClaimPage")),
     label: "Approved Claim",
+    icon: <FaCheck size={20} />,
     role: [ROLE.CLAIMER],
     protected: true,
   },
@@ -72,6 +89,7 @@ export const PRIVATE_ROUTE: RouteConfig[] = [
     path: PATH.rejectedClaimWithUserID,
     component: lazy(() => import("@pages/RejectedClaimPage")),
     label: "Rejected Claim",
+    icon: <CircleX size={20} />,
     role: [ROLE.CLAIMER],
     protected: true,
   },
@@ -91,29 +109,14 @@ export const PRIVATE_ROUTE: RouteConfig[] = [
     icon: <Pencil size={20} />,
     role: [ROLE.CLAIMER],
   },
-  {
-    path: PATH.createRequest,
-    protected: true,
-    component: lazy(() => import("@pages/CreateClaim")),
-    icon: <Plus size={20} />,
-    label: "Create Request",
-    role: [ROLE.CLAIMER],
-  },
+
   {
     path: PATH.claimDetail,
     component: lazy(() => import("@pages/ClaimDetail")),
     label: "Claim Detail",
-    role: [ROLE.CLAIMER],
     protected: true,
   },
-  {
-    path: PATH.myClaims,
-    component: lazy(() => import("@pages/User/UserClaimsPage")),
-    label: "My Claims",
-    icon: <Compass size={20} />,
-    role: [ROLE.CLAIMER],
-    protected: true,
-  },
+
   {
     path: PATH.userClaimDetails,
     component: lazy(() => import("@pages/User/UserClaimDetailsPage")),
@@ -199,5 +202,12 @@ export const PRIVATE_ROUTE: RouteConfig[] = [
     component: lazy(() => import("@pages/Finance/ApprovedDetailFinancePage")),
     protected: true,
     label: "Approved Detail",
+  },
+  {
+    path: `${PATH.claimStatus}/:id`,
+    component: lazy(() => import("@pages/Finance/ClaimStatus")),
+    protected: false,
+    label: "Claim Status",
+    role: [ROLE.FINANCE],
   },
 ];
