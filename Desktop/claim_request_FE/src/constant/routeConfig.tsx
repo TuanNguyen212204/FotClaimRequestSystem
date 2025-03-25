@@ -1,0 +1,213 @@
+import RouteConfig from "@/types/Route";
+import { lazy } from "react";
+import { PATH } from "./config";
+import ROLE from "./role";
+import {
+  House,
+  Smile,
+  BriefcaseBusiness,
+  CircleX,
+  UserPen,
+  EyeClosed,
+  EyeIcon,
+  Plus,
+  Pencil,
+  Compass,
+} from "lucide-react";
+import { MdOutlinePendingActions, MdPaid } from "react-icons/md";
+import { FaCheck } from "react-icons/fa";
+export const PUBLIC_ROUTE: RouteConfig[] = [
+  {
+    component: lazy(() => import("@ui/login/LoginForm")),
+    path: PATH.login,
+    label: "Login",
+    protected: false,
+  },
+  {
+    component: lazy(() => import("@ui/login/ResetPassword")),
+    path: PATH.resetPassword,
+    label: "Reset Password",
+    protected: false,
+  },
+  {
+    component: lazy(() => import("@ui/login/CheckMail")),
+    path: PATH.checkToMail,
+    label: "Check Mail",
+    protected: false,
+  },
+  {
+    component: lazy(() => import("@ui/login/CreateNewPassword")),
+    path: PATH.createNewPassword,
+    label: "Create New Password",
+    protected: false,
+  },
+  {
+    component: lazy(() => import("@ui/login/ChangePassword")),
+    path: PATH.changePassword,
+    label: "Change Password",
+    protected: false,
+  },
+  {
+    path: "/unauthorized",
+    component: lazy(() => import("@auth/Unauthorized.tsx")),
+    label: "Unauthorized",
+    protected: false,
+  },
+  {
+    path: "/unauthenticated",
+    component: lazy(() => import("@auth/Unauthenticated")),
+    label: "Unauthenticated",
+    protected: false,
+  },
+];
+export const PRIVATE_ROUTE: RouteConfig[] = [
+  {
+    path: PATH.createRequest,
+    protected: true,
+    component: lazy(() => import("@pages/CreateClaim")),
+    icon: <Plus size={20} />,
+    label: "Create Request",
+    role: [ROLE.CLAIMER],
+  },
+  {
+    path: PATH.myClaims,
+    component: lazy(() => import("@pages/User/UserClaimsPage")),
+    label: "My Claims",
+    icon: <Compass size={20} />,
+    role: [ROLE.CLAIMER],
+    protected: true,
+  },
+  {
+    path: PATH.approvedClaimWithUserID,
+    component: lazy(() => import("@pages/ApprovedClaimPage")),
+    label: "Approved Claim",
+    icon: <FaCheck size={20} />,
+    role: [ROLE.CLAIMER],
+    protected: true,
+  },
+  {
+    path: PATH.rejectedClaimWithUserID,
+    component: lazy(() => import("@pages/RejectedClaimPage")),
+    label: "Rejected Claim",
+    icon: <CircleX size={20} />,
+    role: [ROLE.CLAIMER],
+    protected: true,
+  },
+  {
+    path: PATH.pendingClaimByUserID,
+    component: lazy(() => import("@pages/PendingClaimPage")),
+    label: "Pending Claim",
+    icon: <MdOutlinePendingActions size={20} />,
+    role: [ROLE.CLAIMER],
+    protected: true,
+  },
+  {
+    path: PATH.draftClaimByUserID,
+    protected: true,
+    component: lazy(() => import("@pages/DraftClaimPage")),
+    label: "Draft Claim",
+    icon: <Pencil size={20} />,
+    role: [ROLE.CLAIMER],
+  },
+
+  {
+    path: PATH.claimDetail,
+    component: lazy(() => import("@pages/ClaimDetail")),
+    label: "Claim Detail",
+    protected: true,
+  },
+
+  {
+    path: PATH.userClaimDetails,
+    component: lazy(() => import("@pages/User/UserClaimDetailsPage")),
+    label: "Claim Details",
+    // role: [ROLE.CLAIMER],
+    protected: true,
+  },
+  {
+    path: PATH.userInfo,
+    component: lazy(() => import("@ui/user/UserInfoComponent")),
+    icon: <UserPen />,
+    protected: true,
+    label: "User Information",
+    role: [ROLE.CLAIMER, ROLE.FINANCE, ROLE.APPROVER, ROLE.ADMIN],
+  },
+  {
+    path: PATH.approvedFinance,
+    component: lazy(() => import("@pages/Finance/ApprovedFinancePage")),
+    icon: <FaCheck />,
+    protected: true,
+    label: "Approved Finance",
+    role: [ROLE.FINANCE],
+  },
+  {
+    path: PATH.approvedApprover,
+    component: lazy(() => import("@pages/Approver/ApprovedApproverPage")),
+    protected: true,
+    icon: <FaCheck size={20} />,
+    label: "Approved Approver",
+    role: [ROLE.APPROVER],
+  },
+  {
+    path: PATH.pending,
+    component: lazy(() => import("@pages/Approver/PendingApproval")),
+    protected: true,
+    label: "Pending",
+    icon: <MdOutlinePendingActions size={20} />,
+    role: [ROLE.APPROVER],
+  },
+  {
+    path: PATH.rejectedClaim,
+    component: lazy(() => import("@pages/Approver/RejectedApproval")),
+    protected: true,
+    label: "Rejected",
+    icon: <CircleX size={20} />,
+    role: [ROLE.APPROVER],
+  },
+  {
+    path: PATH.allUserInformation,
+    component: lazy(() => import("@pages/admin/AllUserInformationPage")),
+    protected: true,
+    icon: <Smile />,
+    label: "Staff Information",
+    role: [ROLE.ADMIN],
+  },
+  {
+    path: PATH.dashboard,
+    component: lazy(() => import("@pages/admin/Dashboard")),
+    protected: true,
+    icon: <House />,
+    label: "Dashboard",
+    role: [ROLE.ADMIN],
+  },
+  {
+    path: PATH.projectInformation,
+    component: lazy(() => import("@pages/admin/ProjectInformation")),
+    protected: true,
+    icon: <BriefcaseBusiness />,
+    label: "Project",
+    role: [ROLE.ADMIN],
+  },
+
+  {
+    path: PATH.paidClaim,
+    component: lazy(() => import("@pages/Finance/PaidClaims")),
+    protected: true,
+    icon: <MdPaid size={20} />,
+    label: "Paid Claims",
+    role: [ROLE.FINANCE],
+  },
+  {
+    path: PATH.approvedDetailFinance,
+    component: lazy(() => import("@pages/Finance/ApprovedDetailFinancePage")),
+    protected: true,
+    label: "Approved Detail",
+  },
+  {
+    path: `${PATH.claimStatus}/:id`,
+    component: lazy(() => import("@pages/Finance/ClaimStatus")),
+    protected: false,
+    label: "Claim Status",
+    role: [ROLE.FINANCE],
+  },
+];
