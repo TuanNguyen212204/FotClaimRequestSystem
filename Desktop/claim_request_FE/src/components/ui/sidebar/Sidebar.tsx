@@ -91,9 +91,7 @@ export const Sidebar = ({
   };
   return (
     <div className={styles.container}>
-      <div
-        className={`${styles.sidebar} ${isCollapsed1 ? styles.collapsed : ""}`}
-      >
+      <div className={`${styles.sidebar} `}>
         <div className={styles.menu}>
           <ul className={`${styles.claimList} `}>
             {routeByRole.map((route) => (
@@ -101,16 +99,13 @@ export const Sidebar = ({
                 key={route.path}
                 className={`${styles.claimItemCollapse} ${
                   selectedClaim === route.path ? styles.active : ""
-                } ${styles.tooltip}`}
+                } `}
                 onClick={() => handleNavigate(route.path as string)}
               >
-                <button className={` ${styles.claimButton}`}>
+                <button className={` ${styles.claimButton} ${styles.tooltip}`}>
                   <div className={styles.claimButtonIngredient}>
-                    <div
-                      className={`${styles.tooltip}`}
-                      style={{ cursor: "pointer" }}
-                    >
-                      <div className={"ml-"}>
+                    <div style={{ cursor: "pointer" }}>
+                      <div className={""}>
                         <span>{route.icon}</span>
                       </div>
                       <div className={` ${styles.tooltipText}  `}>
@@ -136,7 +131,7 @@ export const Sidebar = ({
               className={`${styles.logoutCollapse}`}
               onClick={() => handleLogOut()}
             >
-              <div className="ml-1">
+              <div className="ml-1.5">
                 <LogOut size={20} />
               </div>
             </button>
