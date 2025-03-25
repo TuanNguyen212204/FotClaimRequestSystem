@@ -1,49 +1,61 @@
-.modalContent {
-  padding: 20px;
-  /* background-color: #f8f8f8;
-  border-radius: 15px; */
-  /* box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); */
-  font-weight: normal;
-}
-
 .container {
-  text-align: left;
-  /* margin-bottom: 5px; */
+  font-weight: 50;
   justify-items: center;
 }
 
 .avatar {
   height: 50px;
   width: 50px;
-  border-radius: 50%;
-  border: 1px solid #ccc;
+  border-radius: 80%;
+  background-color: gray;
 }
 
 .containerUser {
   display: flex;
-  align-items: center;
-  /* justify-content: ;  */
-  margin: 10px 0;
+  justify-content: flex-start;
+  flex-direction: column;
+  margin: 20px 0 0 30px;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.infoUser1Row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  height: 100%;
+  width: 100%;
+}
+
+.separator {
+  font-size: 24px;
+  color: gray;
+  vertical-align: middle;
+  position: relative;
+  bottom: 5px;
+}
+
+.infoUser1Row2 {
+  display: flex;
+  flex-direction: row;
   gap: 10px;
 }
 
+
 .infoUser1 {
   display: flex;
-  flex-direction: column;
-  gap: 5px;
+  flex-direction: row;
+  gap: 10px;
 }
 
-.containerUser p {
-  font-weight: normal;
+.infoUser2 {
+  display: flex;
+  flex-direction: row;
+  gap: 50px;
+  margin: 0 0 0 5px;
 }
 
-.containerProject,
-.containerRequest {
-  /* margin: 1rem 0;
-  padding: 15px;
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.08); */
+.containerProject {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -73,101 +85,74 @@
   font-weight: 500;
 }
 
-/* .containerProject p,
-.containerRequest p {
-  display: flex;
-  justify-content: space-between;
-  margin: 0.5rem 0;
-  font-size: 16px;
-} */
-
-strong {
-  font-weight: 500;
-}
 .iconMoveRight {
   vertical-align: middle;
+  position: relative;
+  top: 0px;
   margin: 0 5px;
+  display: inline-block;
 }
 
-.timeDuration {
-  display: flex;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-
-.history p {
-  display: flex;
-  justify-content: space-between;
+.containerHistory {
+  width: 98.7%;
+  background-color: #ffffff;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  margin: 0 0 0 0.6rem;
 }
 
 .history {
-  margin-top: 1.5rem;
-  padding: 15px;
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  width: 75%;
+  margin: 2rem 0;
+  width: 100%;
 }
 
-.history h4 {
-  font-size: 18px;
-  margin-bottom: 1rem;
+.history p {
+  align-self: flex-start;
+  margin: 20px 10px 20px 1rem;
 }
 
 .historyItem {
-  padding: 10px 0;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-span {
-  display: inline-block;
-  margin-left: 10px;
-  font-size: 15px;
-}
-
-.divider {
-  width: 100%;
-  height: 1px;
-  background-color: #e0e0e0;
-  border: none;
-  margin: 20px 0;
-}
-
-.username {
-  font-size: 18px;
-  /* font-weight: bold; */
-}
-
-.statusApproved {
-  display: inline-block;
-  padding: 5px 10px;
-  background-color: #00c853;
-  color: white;
-  border-radius: 5px;
-  font-weight: bold;
-  font-size: 14px;
-}
-
-.emailContainer {
   display: flex;
-  align-items: center;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 20px 15px 20px 15px;
+  width: 93%;
+  border-top: 1px solid #ddd;
   gap: 5px;
-  /* border: 1px solid #ccc;
-  padding: 5px 10px; 
-  border-radius: 5px;
-  background-color: #fff; */
 }
 
-.emailIcon {
-  /* margin-left: 5px; */
-  /* padding: 5px; */
+.historyItemDate {
+  width: 85%;
+  text-align: left;
+  margin: auto auto auto 5px;
+  font-weight: 500;
 }
 
-.email {
-  padding: 5px;
-  border: 1px solid #ccc;
-  padding: 5px 10px;
-  border-radius: 5px;
-  background-color: #fff;
+.historyItemInfo {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  width: 100%;
+}
+
+.historyItemRow {
+  display: flex;
+  width: 100%;
+}
+
+.historyItemLabel {
+  width: 100%;
+  text-align: left;
+  font-weight: 500;
+}
+
+.historyItemValue {
+  width: 70%;
+  text-align: left;
 }
