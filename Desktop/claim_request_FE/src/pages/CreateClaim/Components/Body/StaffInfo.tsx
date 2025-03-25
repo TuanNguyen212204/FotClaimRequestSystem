@@ -1,7 +1,9 @@
-import { JSX, ReactNode } from "react";
+import React, { JSX, ReactNode } from "react";
 import staffInfoCss from "../../Claim.module.css";
 import Card from "../Card";
-
+import PopOver from "@/components/ui/PopOver";
+import { Check } from "lucide-react";
+import { useState } from "react";
 interface IStaffInfoProps {
   name: string | undefined;
   department: string | undefined;
@@ -13,19 +15,39 @@ export default function StaffInfo({
   department = "",
   staffID,
 }: IStaffInfoProps): JSX.Element {
+  const [copied, setCopied] = useState(false);
+  const handleCopy = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    event.stopPropagation();
+    navigator.clipboard.writeText(staffID);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 4000);
+  };
   return (
     <Card>
       <StaffContainer>
         <StaffSection title="Staff Name">
-          <StaffValue isName>{name}</StaffValue>
+          <StaffValue isName value={name} />
         </StaffSection>
 
         <StaffSection title="Department">
-          <StaffValue>{department}</StaffValue>
+          <StaffValue value={department} />
         </StaffSection>
 
         <StaffSection title="Staff ID">
-          <StaffValue>{staffID}</StaffValue>
+          <PopOver
+            placement="top"
+            trigger="hover"
+            content={
+              copied ? (
+                <Check className="transform delay-75" size={16} color="green" />
+              ) : (
+                "Click to copy"
+              )
+            }
+            style={{ padding: "0.5rem" }}
+          >
+            <StaffValue cursor="pointer" onClick={handleCopy} value={staffID} />
+          </PopOver>
         </StaffSection>
       </StaffContainer>
     </Card>
@@ -56,19 +78,25 @@ const StaffLabel = ({ children }: { children: ReactNode }): JSX.Element => {
 };
 
 const StaffValue = ({
-  children,
   isName = false,
+  value,
+  onClick,
+  cursor,
 }: {
-  children: ReactNode;
   isName?: boolean;
+  value?: string;
+  onClick?: React.MouseEventHandler<HTMLDivElement>;
+  cursor?: React.CSSProperties["cursor"];
 }): JSX.Element => {
   return (
     <div
+      onClick={onClick}
       className={`${staffInfoCss.staff_value} ${
         isName ? staffInfoCss.staff_name : ""
       }`}
+      style={{ cursor }}
     >
-      {children}
+      {value}
     </div>
   );
 };
