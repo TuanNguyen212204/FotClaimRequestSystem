@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { X } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { Project } from "@/types/Project";
 import styles from "./UpdateProject.module.css";
 import Modal from "react-modal";
 import httpClient from "@/constant/apiInstance";
 import { toast } from "react-toastify";
+
 Modal.setAppElement("#root");
 interface UpdateProjectProps {
   projectid: string;
@@ -16,11 +20,25 @@ export const UpdateProject: React.FC<UpdateProjectProps> = ({ projectid, setOpen
     end_date: "",
     project_status: 1,
   });
+  const { register, watch, setError, clearErrors, formState: { errors } } = useForm<Project>();
   const [loading, setLoading] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
 
   const formatDateForInput = (dateString: string) => {
     return dateString ? dateString.split("T")[0] : "";
   };
+
+  useEffect(() => {
+    const startDate = watch("start_date");
+    const endDate = watch("end_date");
+  
+    if (startDate && endDate && endDate < startDate) {
+      setError("end_date", { type: "manual", message: "End Date must be after Start Date" });
+    } else {
+      clearErrors("end_date");
+    }
+  }, [watch("start_date"), watch("end_date")]);
+  
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -44,6 +62,11 @@ export const UpdateProject: React.FC<UpdateProjectProps> = ({ projectid, setOpen
     fetchProject();
   }, [projectid]);
 
+  const handleClose = () => {
+    setIsClosing(true); 
+    setTimeout(() => setOpenModal(false), 300); 
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setProjectData((prev) => ({ ...prev, [name]: value }));
@@ -64,7 +87,6 @@ export const UpdateProject: React.FC<UpdateProjectProps> = ({ projectid, setOpen
     }
   };
 
-  
   return (
     <Modal
       isOpen={true} 
@@ -73,12 +95,16 @@ export const UpdateProject: React.FC<UpdateProjectProps> = ({ projectid, setOpen
       overlayClassName={styles.overlay}
     >
       <div className="p-6 bg-white rounded-lg shadow-lg max-w-lg mx-auto relative">
-        <button 
-          onClick={() => setOpenModal(false)} 
+      <button 
+          onClick={() => {
+            toast.info("Cancel Update");
+            setOpenModal(false);
+          }} 
           className={`${styles.close_button} absolute top-4 right-4`}
         >
-          X
-        </button>
+          <X />
+      </button>
+
         <h2 className="text-2xl font-bold text-gray-700 mb-4 text-center">Update Project</h2>
 
         {loading ? (
@@ -98,28 +124,24 @@ export const UpdateProject: React.FC<UpdateProjectProps> = ({ projectid, setOpen
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700">Start Date</label>
-              <input 
-                type="date"
-                name="start_date"
-                value={projectData.start_date}
-                onChange={handleChange}
-                required
-                className="w-full p-2 border border-gray-300 rounded-md"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700">End Date</label>
-              <input 
-                type="date"
-                name="end_date"
-                value={projectData.end_date}
-                onChange={handleChange}
-                required
-                className="w-full p-2 border border-gray-300 rounded-md"
-              />
-            </div>
+            <label className="block text-sm font-medium text-gray-700">Start Date</label>
+            <input 
+              type="date" 
+              {...register("start_date", { required: "Start Date is required" })} 
+              className="w-full p-2 border border-gray-300 rounded-md" 
+            />
+            {errors.start_date && <p className="text-red-500 text-sm">{errors.start_date.message}</p>}
+          </div>
+  
+          <div>
+            <label className="block text-sm font-medium text-gray-700">End Date</label>
+            <input 
+              type="date" 
+              {...register("end_date", { required: "End Date is required" })} 
+              className="w-full p-2 border border-gray-300 rounded-md" 
+            />
+            {errors.end_date && <p className="text-red-500 text-sm">{errors.end_date.message}</p>}
+          </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700">Project Status</label>
@@ -145,3 +167,11 @@ export const UpdateProject: React.FC<UpdateProjectProps> = ({ projectid, setOpen
     </Modal>
   );
 };
+function setError(arg0: string, arg1: { type: string; message: string; }) {
+  throw new Error("Function not implemented.");
+}
+
+function clearErrors(arg0: string) {
+  throw new Error("Function not implemented.");
+}
+

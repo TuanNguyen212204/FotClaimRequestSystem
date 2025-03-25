@@ -116,11 +116,15 @@ export const CreateProject: React.FC<CreateProjectProps> = ({ openModal, setOpen
     <Modal isOpen={openModal} onRequestClose={() => setOpenModal(false)} className={styles.modal} overlayClassName={styles.overlay}>
       <div className="p-6 bg-white rounded-lg shadow-lg max-w-lg mx-auto relative">
       <button 
-        onClick={handleClose} 
+        onClick={() => {
+          toast.info("Cancel Create");
+          setOpenModal(false);
+        }} 
         className={`${styles.close_button} absolute top-4 right-4`}
       >
         <X />
       </button>
+
         <h1 className="text-2xl font-bold text-gray-700 mb-4 text-center">Create Project</h1>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
