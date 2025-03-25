@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { PATH } from "@constant/config";
 import Modal from "react-modal";
 import { useForm } from "react-hook-form";
 import { X } from "lucide-react";
@@ -7,7 +8,7 @@ import httpClient from "@/constant/apiInstance";
 import { Project } from "@/types/Project";
 import { toast } from "react-toastify";
 import styles from "./CreateProject.module.css";
-
+Modal.setAppElement("#root");
 interface CreateProjectProps {
   openModal: boolean;
   setOpenModal: (value: boolean) => void;
@@ -36,7 +37,8 @@ export const CreateProject: React.FC<CreateProjectProps> = ({ openModal, setOpen
     try {
       await httpClient.post("/projects/create-project", requestBody);
       toast.success("Create project successfully!");
-      navigate("/project-information");
+      setOpenModal(false);
+      navigate(PATH.projectInformation);
     } catch (error) {
       console.error("Create project error:", error);
       toast.error("Failed to create project. Please try again.");
@@ -45,6 +47,12 @@ export const CreateProject: React.FC<CreateProjectProps> = ({ openModal, setOpen
 
   const startDate = watch("start_date");
   const endDate = watch("end_date");
+  const [isClosing, setIsClosing] = useState(false);
+
+  const handleClose = () => {
+    setIsClosing(true); 
+    setTimeout(() => setOpenModal(false), 300); 
+  };
 
   useEffect(() => {
     if (startDate && endDate && endDate < startDate) {
@@ -107,11 +115,12 @@ export const CreateProject: React.FC<CreateProjectProps> = ({ openModal, setOpen
   return (
     <Modal isOpen={openModal} onRequestClose={() => setOpenModal(false)} className={styles.modal} overlayClassName={styles.overlay}>
       <div className="p-6 bg-white rounded-lg shadow-lg max-w-lg mx-auto relative">
-        <button 
-          onClick={() => setOpenModal(false)} 
-          className={`${styles.close_button} absolute top-4 right-4`}
-        > <X />
-        </button>
+      <button 
+        onClick={handleClose} 
+        className={`${styles.close_button} absolute top-4 right-4`}
+      >
+        <X />
+      </button>
         <h1 className="text-2xl font-bold text-gray-700 mb-4 text-center">Create Project</h1>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
@@ -171,8 +180,8 @@ export const CreateProject: React.FC<CreateProjectProps> = ({ openModal, setOpen
           </div>
   
           <div className="flex justify-end space-x-2">
-            <button type="submit" className={styles.update_button} disabled={checkingId || checkingName}>
-              {checkingId || checkingName ? "Validating..." : "Create"}
+            <button type="submit" className={styles.update_button} disabled={checkingId}>
+              {checkingId ? "Validating..." : "Create"}
             </button>
           </div>
         </form>

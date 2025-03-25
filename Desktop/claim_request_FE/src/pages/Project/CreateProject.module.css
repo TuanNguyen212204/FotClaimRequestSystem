@@ -1,3 +1,53 @@
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); 
+  backdrop-filter: blur(8px); 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal {
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  width: 500px;
+  height: 565px;
+  overflow: auto;
+  opacity: 0; /* Bắt đầu ở trạng thái ẩn */
+  animation: fadeIn 0.3s forwards; /* Mặc định chạy hiệu ứng fadeIn */
+}
+
+.modal.fade-out {
+  animation: fadeOut 0.3s forwards; /* Khi có class fade-out thì chạy hiệu ứng fadeOut */
+}
+
 .cancel_button {
   margin-left: 418px;
   margin-top: -18px;

@@ -11,7 +11,7 @@ import ApproveDetail from "@pages/ClaimRequest/ApproveDetail";
 import ClaimStatus from "@pages/Finance/ClaimStatus";
 import PaidClaims from "@pages/Finance/PaidClaims";
 import ProjectInformation from "@/pages/admin/ProjectInformation";
-import UpdateProject from "@/pages/Project/UpdateProject";
+import { UpdateProject } from "@/pages/Project/UpdateProject";
 import { CreateProject } from "@pages/Project/CreateProject";
 import StaffInformation from "@/pages/admin/StaffInformation";
 import Dashboard from "@/pages/admin/Dashboard";

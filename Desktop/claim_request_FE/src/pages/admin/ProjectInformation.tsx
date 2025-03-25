@@ -12,6 +12,7 @@ import {
 } from "@redux/thunk/Project/projectThunk";
 import { Column, DataRecord } from "@components/ui/Table/Table";
 import { CreateProject } from "../Project/CreateProject";
+import { UpdateProject } from "../Project/UpdateProject";
 import styles from "./ProjectInformation.module.css";
 import httpClient from "@/constant/apiInstance";
 import { useNavigate } from "react-router-dom";
@@ -31,7 +32,9 @@ const ProjectInformation: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalProjects, setTotalProjects] = useState<number | null>(null);
+  const [projectID, setProjectID] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [UpdateOpen, setUpdateOpen] = useState(false);
   console.log("Dữ liệu lấy từ Redux:", project);
   // const [limit] = useState(7);
 
@@ -147,7 +150,9 @@ const ProjectInformation: React.FC = () => {
   const handleUpdate = (id?: string) => {
     if (!id) return;
     console.log("Update project with ID:", id);
-    navigate(`/update-project?id=${id}`);
+    setProjectID(id ? id : "");
+    setUpdateOpen(true);
+    console.log(UpdateOpen);
   };
 
   const columns: Column<Project>[] = [
@@ -207,7 +212,13 @@ const ProjectInformation: React.FC = () => {
           </div>
         </div>
       )}
-
+      {UpdateOpen && (
+        <div className={styles.editModal}>
+          <div>
+            <UpdateProject projectid={projectID} setOpenModal={setUpdateOpen} />
+          </div>
+        </div>
+      )}
       <div className={styles.summaryContainer}>
         <SummaryCard
           title="Total Projects"

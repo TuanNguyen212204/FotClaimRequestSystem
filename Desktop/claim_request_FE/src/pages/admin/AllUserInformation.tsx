@@ -94,7 +94,6 @@ const AllUserInformation: React.FC = () => {
 
   const handleCreateUser = async () => {
     handleOpenModal();
-    console.log("Create user clicked", setOpenModal);
   };
   
   const dataSource: DataRecord[] = users.map((user, index) => ({
