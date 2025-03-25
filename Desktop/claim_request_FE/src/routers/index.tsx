@@ -9,6 +9,8 @@ import React from "react";
 import ROLE from "@/constant/role";
 import Unauthenticated from "@/auth/Unauthenticated";
 import Unauthorized from "@/auth/Unauthorized";
+import { LoadingProvider } from "@/components/ui/Loading/LoadingContext";
+import LoadingOverlay from "@/components/ui/Loading/LoadingOverlay";
 
 export const AppRoute = () => {
   const routes = useRoute();
@@ -19,7 +21,15 @@ export const AppRoute = () => {
     ...publicRoutes.map((route) => ({
       path: route.path,
       element: (
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense
+          fallback={
+            <div>
+              <LoadingProvider>
+                <LoadingOverlay />
+              </LoadingProvider>
+            </div>
+          }
+        >
           {React.createElement(route.component || "div")}
         </Suspense>
       ),
@@ -36,7 +46,15 @@ export const AppRoute = () => {
         ...privateRoutes.map((route) => ({
           path: route.path,
           element: (
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense
+              fallback={
+                <div>
+                  <LoadingProvider>
+                    <LoadingOverlay />
+                  </LoadingProvider>
+                </div>
+              }
+            >
               <Authorization role_id={route.role || [ROLE.CLAIMER]}>
                 {React.createElement(route.component || "div")}
               </Authorization>
