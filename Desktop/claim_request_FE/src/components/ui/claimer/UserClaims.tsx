@@ -5,17 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@redux/index";
 import { fetchClaimByUserAsync } from "@redux/thunk/Claim/claimThunk";
-import { EyeIcon, User } from "lucide-react";
+import { EyeIcon } from "lucide-react";
 import TableComponent, { Column, DataRecord } from "../Table/Table";
 import UserClaimDetailsModal from "./UserClaimDetails";
-
-interface userClaims {
-  claim_id?: string;
-  project_name?: string;
-  total_working_hours?: number;
-  submitted_date?: Date;
-  claim_status?: string;
-}
 
 const UserClaims = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -30,7 +22,7 @@ const UserClaims = () => {
   useEffect(() => {
     // dispatch(fetchClaimByUserAsync());
     const fetchData = async () => {
-      await dispatch(fetchClaimByUserAsync(currentPage.toString()));
+      await dispatch(fetchClaimByUserAsync());
       setLoading(false);
     };
     fetchData();
@@ -40,7 +32,6 @@ const UserClaims = () => {
   }, [userClaim]);
 
   const handleViewDetail = (id: string) => {
-    // navigate(`/claim-detail?id=${id}`);
     setSelectedClaim(id);
     setIsModalOpen(true);
   };

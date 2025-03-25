@@ -7,6 +7,7 @@ import {
   RejectedClaim,
   ClaimFinance,
   DetailClaimFinance,
+  MyClaimDetail,
 } from "@/types/Claim";
 
 import {
