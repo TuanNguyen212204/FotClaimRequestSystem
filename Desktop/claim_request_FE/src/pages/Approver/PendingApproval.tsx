@@ -194,26 +194,26 @@ export const PendingComponent: React.FC = () => {
   };
 
   const columns: Column<DataRecord>[] = [
-    {
-      key: "checkbox",
-      dataIndex: "checkbox",
-      title: "",
-      cell: ({ value }) => (
-        <input
-          type="checkbox"
-          checked={checkedItems.has(value as string)}
-          onChange={() => {
-            if (checkedItems.has(value as string)) {
-              checkedItems.delete(value as string);
-              setCheckedItems(new Set(checkedItems));
-            } else {
-              checkedItems.add(value as string);
-              setCheckedItems(new Set(checkedItems));
-            }
-          }}
-        />
-      ),
-     },
+    // {
+    //   key: "checkbox",
+    //   dataIndex: "checkbox",
+    //   title: "",
+    //   cell: ({ value }) => (
+    //     <input
+    //       type="checkbox"
+    //       checked={checkedItems.has(value as string)}
+    //       onChange={() => {
+    //         if (checkedItems.has(value as string)) {
+    //           checkedItems.delete(value as string);
+    //           setCheckedItems(new Set(checkedItems));
+    //         } else {
+    //           checkedItems.add(value as string);
+    //           setCheckedItems(new Set(checkedItems));
+    //         }
+    //       }}
+    //     />
+    //   ),
+    //  },
     {
       key: "user_name",
       dataIndex: "user_full_name",
