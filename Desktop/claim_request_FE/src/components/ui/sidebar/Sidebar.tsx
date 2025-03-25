@@ -44,10 +44,7 @@ export const Sidebar = ({
       if (route.role?.includes(role)) {
         acc.push(route);
       }
-      if (route.children) {
-        const filteredChildren = filterRoutesByRole(route.children, role);
-        acc.push(...filteredChildren);
-      }
+
       return acc;
     }, []);
   };
@@ -58,10 +55,10 @@ export const Sidebar = ({
   // const routeByRole: RouteConfig[] = useRoute().filter((route) =>
   //   route.role?.includes(ROLES.ADMIN)
   // );
-  const routeByRole: RouteConfig[] = filterRoutesByRole(
-    PRIVATE_ROUTE,
-    role as number
+  const route: RouteConfig[] = PRIVATE_ROUTE.filter(
+    (route) => route.protected === true
   );
+  const routeByRole: RouteConfig[] = filterRoutesByRole(route, role as number);
   console.log(routeByRole);
   const navigate = useNavigate();
   useEffect(() => {
@@ -113,7 +110,7 @@ export const Sidebar = ({
                       className={`${styles.tooltip}`}
                       style={{ cursor: "pointer" }}
                     >
-                      <div className={"ml-1"}>
+                      <div className={""}>
                         <span>{route.icon}</span>
                       </div>
                       <div className={` ${styles.tooltipText}  `}>
@@ -139,7 +136,9 @@ export const Sidebar = ({
               className={`${styles.logoutCollapse}`}
               onClick={() => handleLogOut()}
             >
-              <LogOut size={20} />
+              <div className="mr-1.5">
+                <LogOut size={20} />
+              </div>
             </button>
           </div>
         </div>

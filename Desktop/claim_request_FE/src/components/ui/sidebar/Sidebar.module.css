@@ -78,7 +78,7 @@
 }
 
 .menu {
-  margin-top: 70px;
+  padding-top: 30px;
 }
 
 .claimHeader {
@@ -271,7 +271,8 @@
   position: absolute;
   z-index: 1;
   margin-left: 3.5rem;
-  bottom: -20%;
+  bottom: -40%;
+  font-size: 12px;
 }
 
 .tooltip:hover .tooltipText {
