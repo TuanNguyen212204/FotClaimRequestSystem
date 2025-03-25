@@ -375,3 +375,4 @@ export const UserInfoComponent: React.FC = () => {
     </div>
   );
 };
+export default UserInfoComponent;
