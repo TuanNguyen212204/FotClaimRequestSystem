@@ -1,16 +1,12 @@
-import Modal, { confirmModal } from "@ui/modal/Modal";
+import Modal from "@ui/modal/Modal";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@/redux";
-import {
-  fetchApprovedDetailFinanceAsync,
-  fetchApprovedClaimsFinanceAsync,
-} from "@/redux/thunk/Claim/claimThunk";
-import { selectApprovedDetailFinance } from "@/redux/selector/claimSelector";
+import { fetchApprovedDetailApproverAsync } from "@/redux/thunk/Claim/claimThunk";
+import { selectApprovedDetailApprover } from "@/redux/selector/claimSelector";
 import StatusTag from "@ui/StatusTag/StatusTag";
 import styles from "@ui/finance/ApprovedDetailFinance.module.css";
 import { MoveRight } from "lucide-react";
-import httpClient from "@/constant/apiInstance";
 
 const formatDateToMonthDay = (date: string) => {
   const dateObj = new Date(date);
@@ -34,72 +30,37 @@ const formatDateToMonthDay = (date: string) => {
   return `${month} ${getDayWithSuffix(day)}`;
 };
 
-interface ApprovedDetailFinanceModalProps {
+interface ApprovedDetailApproverModalProps {
   isOpen: boolean;
   onClose: () => void;
   requestId: string;
-  currentPage: string;
-  limit: string;
 }
 
-const ApprovedDetailFinanceModal = ({
+const ApprovedDetailApproverModal = ({
   isOpen,
   onClose,
   requestId,
-  currentPage,
-  limit,
-}: ApprovedDetailFinanceModalProps) => {
+}: ApprovedDetailApproverModalProps) => {
   const dispatch = useDispatch<AppDispatch>();
-  const claimDetail = useSelector(selectApprovedDetailFinance);
+  const claimDetail = useSelector(selectApprovedDetailApprover);
 
   useEffect(() => {
     if (isOpen && requestId) {
-      dispatch(fetchApprovedDetailFinanceAsync({ request_id: requestId }));
+      console.log("Dispatching fetchApprovedDetailApproverAsync", requestId);
+      dispatch(fetchApprovedDetailApproverAsync({ request_id: requestId }));
     }
   }, [isOpen, requestId]);
-
-  const handleOnPrint = () => {
-    // Xử lý logic in ở đây
-    onClose();
-  };
-
-  const handleOnPay = async () => {
-    try {
-      const result = await confirmModal({
-        title: "Confirm?",
-        children: "Are you sure you want to proceed with the payment?",
-        onOk() {
-          return httpClient.put(`/finance/claims/paid/${requestId}`);
-        },
-        onCancel() {
-          console.log("Payment cancelled");
-        },
-      });
-
-      if (result) {
-        await dispatch(
-          fetchApprovedClaimsFinanceAsync({ page: currentPage, limit })
-        );
-        console.log("Payment successful");
-        onClose();
-      }
-    } catch (error) {
-      console.error("Payment failed:", error);
-    }
-  };
 
   return (
     <Modal
       open={isOpen}
-      onCancel={handleOnPrint}
-      onOk={handleOnPay}
-      buttonCancel="Print"
-      buttonOk="Pay"
-      title="Claim Detail"
+      onCancel={onClose}
+      title="Claim Detail 123"
       width={600}
       centered={false}
       position={{ right: 20, top: 23 }}
       height="95%"
+      footer={null}
       className={styles.modal}
     >
       <hr />
@@ -111,11 +72,11 @@ const ApprovedDetailFinanceModal = ({
               title="avatar"
               className={styles.avatar}
             />
-            <p>{claimDetail?.full_name}</p>
+            {/* <p>{claimDetail?.full_name}</p> */}
           </div>
           <div className={styles.infoUser2}>
             <p>User ID: {claimDetail?.user_id}</p>
-            <p>Salary Overtime: {claimDetail?.salary_overtime}</p>
+            {/* <p>Salary Overtime: {claimDetail?.salary_overtime}</p> */}
           </div>
         </div>
         <hr />
@@ -126,7 +87,9 @@ const ApprovedDetailFinanceModal = ({
           </p>
           <p>
             Project Name:{" "}
-            <span className={styles.boldText}>{claimDetail?.project_name}</span>
+            <span className={styles.boldText}>
+              {claimDetail?.project.project_name}
+            </span>
           </p>
         </div>
         <div className={styles.containerRequest}>
@@ -178,11 +141,10 @@ const ApprovedDetailFinanceModal = ({
           </p>
         </div>
         <div>
-          {claimDetail?.claim_details &&
-          claimDetail.claim_details.length > 0 ? (
+          {claimDetail?.claimDetails && claimDetail.claimDetails.length > 0 ? (
             <div className={styles.history}>
               <h4>Claim History</h4>
-              {claimDetail.claim_details.map((detail, index) => (
+              {claimDetail.claimDetails.map((detail, index) => (
                 <div key={index} className={styles.historyItem}>
                   <span className={styles.boldText}>
                     {formatDateToMonthDay(detail.date)}
@@ -203,4 +165,4 @@ const ApprovedDetailFinanceModal = ({
   );
 };
 
-export default ApprovedDetailFinanceModal;
+export default ApprovedDetailApproverModal;

@@ -9,17 +9,16 @@
   width: 60px;
   background-color: #213555;
   color: white;
-  padding: 10px;
   height: 100vh;
   position: fixed;
   left: 0;
   top: 0;
-  transition: all 0.5s linear;
+  transition: all 0.3s ease-in;
   overflow: hidden;
 }
 .sidebar:hover {
   width: 300px;
-  transition: all 0.5s linear;
+  transition: all 0.3s ease-in;
 }
 /* .collapsed {
   width: 50px;
@@ -120,7 +119,7 @@
   padding: 4px;
   cursor: pointer;
   background-color: #34495e;
-  margin: 15px 0;
+  margin: 10px 0;
   border-radius: 5px;
   display: flex;
   align-items: center;
@@ -194,37 +193,20 @@
 }
 
 .logout {
-  background-color: #e74c3c;
+  /* background-color: #e74c3c;
   color: white;
   border: none;
   cursor: pointer;
-
   width: 100%;
-  position: absolute;
-  left: 40%;
-  right: 40%;
-  transform: translateX(-50%);
-  text-align: center;
-  top: 94%;
-  transition: all 0.5s linear;
-  margin-left: 30px;
+  position: absolute; */
 }
 .logout:hover {
   background-color: #c0392b;
   width: 100%;
 }
 .logoutCollapse {
-  background-color: #e74c3c;
   color: white;
-  border: none;
-  cursor: pointer;
   width: 100%;
-  position: absolute;
-  top: 94.5%;
-  padding: 0;
-  left: 43%;
-  transform: translateX(-50%);
-  text-align: center;
 }
 
 /* Arrow styles */

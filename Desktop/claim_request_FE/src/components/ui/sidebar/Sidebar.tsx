@@ -330,8 +330,10 @@ export const Sidebar = ({
                     key="pendingClaim"
                     className={`${
                       isCollapsed1 ? styles.claimItemCollapse : styles.claimItem
-                    } ${selectedClaim === "usersetting" ? styles.active : ""} `}
-                    onClick={() => handleSelect("usersetting")}
+                    } ${
+                      selectedClaim === "pendingClaim" ? styles.active : ""
+                    } `}
+                    onClick={() => handleSelect("pendingClaim")}
                   >
                     <button className={styles.claimButton}>
                       {hover && (
@@ -740,7 +742,7 @@ export const Sidebar = ({
                       {hover && (
                         <div className={styles.claimButtonIngredient}>
                           <div className={styles.iconInClaimButton_1}>
-                            <CircleX size={20} />
+                            <UserPen size={20} />
                           </div>{" "}
                           <div
                             className={`${styles.iconInClaimButton_2} ${styles.showText}`}
@@ -766,8 +768,15 @@ export const Sidebar = ({
             </ul>
           }
         </div>
-        <div>
-          <div>
+        <div
+          style={{
+            width: "100%",
+            backgroundColor: "red",
+            position: "absolute",
+            bottom: "0",
+          }}
+        >
+          <div style={{ width: "100%", backgroundColor: "red", bottom: "0" }}>
             {isCollapsed1 && (
               <button
                 className={`${
