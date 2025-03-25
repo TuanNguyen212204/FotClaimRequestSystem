@@ -7,7 +7,7 @@ import {
 } from "@/redux/thunk/Claim/claimThunk";
 import { selectAllDetailPending } from "@/redux/selector/pendingSelector";
 import Modal from "@ui/modal/Modal";
-import { MoveRight } from "lucide-react";
+import { MoveRight, Mail } from "lucide-react";
 import styles from "./DetailsApproval.module.css";
 import StatusTag from "@/components/ui/StatusTag/StatusTag";
 import { toast } from "react-toastify";
@@ -93,9 +93,12 @@ export const DetailsApproval: React.FC<PendingDetailModalProps> = ({
       width={600}
       centered={false}
       position={{ right: 20, top: 23 }}
+      backgroundColor="#f5f5f5"
+      footerPosition="center"
       height="95%"
       className={styles.modal}
     >
+      <hr className={styles.divider} />
       <div className={styles.modalContent}>
         <div className={styles.container}>
           <div className={styles.containerUser}>
@@ -106,61 +109,73 @@ export const DetailsApproval: React.FC<PendingDetailModalProps> = ({
             />
             <p className={styles.username}>{claimDetail?.user.full_name}</p>
           </div>
-          {/* <hr className={styles.divider} /> */}
-          <div className={styles.containerProject}>
-            <p>
-              <strong>Project ID:</strong>
-              <span>{claimDetail?.project_id}</span>
-            </p>
-            <p>
-              <strong>Project Name:</strong>
-              <span>{claimDetail?.project_name}</span>
-            </p>
+          <div className={styles.emailContainer}>
+            <Mail className={styles.emailIcon} />|
+            <p className={styles.email}>{claimDetail?.user.email}</p>
           </div>
-          <div className={styles.containerRequest}>
-            <div className={styles.timeDuration}>
-              <p>
-                <strong>Time Duration:</strong>
-              </p>
-              <h4>
-                <span>
-                  {formatDateToMonthDay(`${claimDetail?.start_date}`)}
-                </span>
-                <MoveRight size={20} className={styles.iconMoveRight} />
-                <span>{formatDateToMonthDay(`${claimDetail?.end_date}`)}</span>
-              </h4>
-            </div>
-            <p>
-              <strong>Submitted Date:</strong>
-              <span>
-                {formatDateToMonthDay(`${claimDetail?.submitted_date}`)}
+          <hr className={styles.divider} />
+          <div className={styles.containerProject}>
+            <div className={styles.projectRow}>
+              <span className={styles.projectLabel}>Project ID:</span>
+              <span className={styles.projectValue}>
+                {claimDetail?.project_id}
               </span>
-            </p>
-            <p>
-              <strong>Total Working Hours:</strong>
-              <span>{claimDetail?.total_hours} hours</span>
-            </p>
-            <p>
-              <strong>Status:</strong>
-              {claimDetail?.claim_status ? (
-                <StatusTag
-                  status={
-                    claimDetail.claim_status as
-                      | "PENDING"
-                      | "APPROVED"
-                      | "REJECTED"
-                      | "PAID"
-                  }
-                />
-              ) : (
-                "-"
-              )}
-            </p>
+            </div>
+            <div className={styles.projectRow}>
+              <span className={styles.projectLabel}>Project Name:</span>
+              <span className={styles.projectValue}>
+                {claimDetail?.project_name}
+              </span>
+            </div>
+            <div>
+              <div className={styles.timeDuration}>
+                <p>
+                  <strong>Time Duration:</strong>
+                </p>
+                <h4>
+                  <span>
+                    {formatDateToMonthDay(`${claimDetail?.start_date}`)}
+                  </span>
+                  <MoveRight size={20} className={styles.iconMoveRight} />
+                  <span>
+                    {formatDateToMonthDay(`${claimDetail?.end_date}`)}
+                  </span>
+                </h4>
+              </div>
+              <p>
+                <strong>Submitted Date:</strong>
+                <span>
+                  {formatDateToMonthDay(`${claimDetail?.submitted_date}`)}
+                </span>
+              </p>
+              <p>
+                <strong>Total Working Hours:</strong>
+                <span>{claimDetail?.total_hours} hours</span>
+              </p>
+              <p>
+                <strong>Status:</strong>
+                {claimDetail?.claim_status ? (
+                  <StatusTag
+                    status={
+                      claimDetail.claim_status as
+                        | "PENDING"
+                        | "APPROVED"
+                        | "REJECTED"
+                        | "PAID"
+                    }
+                  />
+                ) : (
+                  "-"
+                )}
+              </p>
+            </div>
           </div>
           {claimDetail?.claim_details &&
             claimDetail.claim_details.length > 0 && (
               <div className={styles.history}>
-                <span style={{fontWeight: "500", fontSize: "20px"}}>Claim History</span>
+                <span style={{ fontWeight: "500", fontSize: "20px" }}>
+                  Claim History
+                </span>
                 {claimDetail.claim_details.map((detail, index) => (
                   <div key={index} className={styles.historyItem}>
                     <p>

@@ -344,7 +344,7 @@ export const PendingComponent: React.FC = () => {
         pagination={true}
         name="Claims"
         onPageChange={handlePageChange}
-        // isHaveCheckbox={true}
+        isHaveCheckbox={true}
       />
       <Modal
         open={modalVisible}
