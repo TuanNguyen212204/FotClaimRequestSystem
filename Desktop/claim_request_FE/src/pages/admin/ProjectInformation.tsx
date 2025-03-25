@@ -11,6 +11,7 @@ import {
   fetchTotalPage,
 } from "@redux/thunk/Project/projectThunk";
 import { Column, DataRecord } from "@components/ui/Table/Table";
+import { CreateProject } from "../Project/CreateProject";
 import styles from "./ProjectInformation.module.css";
 import httpClient from "@/constant/apiInstance";
 import { useNavigate } from "react-router-dom";
@@ -30,8 +31,9 @@ const ProjectInformation: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalProjects, setTotalProjects] = useState<number | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   console.log("Dữ liệu lấy từ Redux:", project);
-  const [limit] = useState(7);
+  // const [limit] = useState(7);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -74,9 +76,18 @@ const ProjectInformation: React.FC = () => {
     fetchSummaryData();
   }, []);
 
-  const handleCreateProject = async () => {
-    navigate(PATH.createProject);
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
   };
+
+  const handleCreateProject = () => {
+    handleOpenModal();
+    console.log("Create project clicked", setIsModalOpen);
+  };
+
+  // const handleCreateProject = async () => {
+  //   navigate(PATH.createProject);
+  // };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -188,6 +199,14 @@ const ProjectInformation: React.FC = () => {
   return (
     <div>
       <h1>Project Information</h1>
+
+      {isModalOpen && (
+        <div className={styles.editModal}>
+          <div>
+            <CreateProject openModal={isModalOpen} setOpenModal={setIsModalOpen} />
+          </div>
+        </div>
+      )}
 
       <div className={styles.summaryContainer}>
         <SummaryCard
