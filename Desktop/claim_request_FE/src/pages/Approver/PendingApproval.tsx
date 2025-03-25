@@ -59,21 +59,41 @@ export const PendingComponent: React.FC = () => {
   }>(null);
   const [selectedData, setSelectedData] = useState<DataRecord[]>([]);
 
-  const handleSelectAll = () => {
-    const allChecked = checkedItems.size === dataSource.length;
-    if (allChecked) {
-      setCheckedItems(new Set());
-    } else {
-      setCheckedItems(new Set(dataSource.map((record) => record.id || "")));
-    }
+  // const handleSelectAll = () => {
+  //   const allChecked = checkedItems.size === dataSource.length;
+  //   if (allChecked) {
+  //     setCheckedItems(new Set());
+  //   } else {
+  //     setCheckedItems(new Set(dataSource.map((record) => record.id || "")));
+  //   }
+  // };
+
+  const handleCheckboxChange = (requestId: string, checked: boolean) => {
+    setCheckedItems((prev) => {
+      const newCheckedItems = new Set(prev);
+      if (checked) {
+        newCheckedItems.add(requestId);
+      } else {
+        newCheckedItems.delete(requestId);
+      }
+      return newCheckedItems;
+    });
   };
 
   const handleGetSelectedData = () => {
-    if (checkboxRef.current) {
-      const a = checkboxRef.current.getSelectedData();
-      setSelectedData(a);
-    }
+    const selectedClaims = dataSource.filter((record) =>
+      checkedItems.has(record.request_id)
+    );
+    setSelectedData(selectedClaims);
+    console.log("Selected claims:", selectedClaims);
   };
+
+  // const handleGetSelectedData = () => {
+  //   if (checkboxRef.current) {
+  //     const a = checkboxRef.current.getSelectedData();
+  //     setSelectedData(a);
+  //   }
+  // };
 
   useEffect(() => {
     if (checkboxRef.current) {
@@ -175,9 +195,34 @@ export const PendingComponent: React.FC = () => {
 
   const columns: Column<DataRecord>[] = [
     {
+      key: "checkbox",
+      dataIndex: "checkbox",
+      title: "",
+      cell: ({ value }) => (
+        <input
+          type="checkbox"
+          checked={checkedItems.has(value as string)}
+          onChange={() => {
+            if (checkedItems.has(value as string)) {
+              checkedItems.delete(value as string);
+              setCheckedItems(new Set(checkedItems));
+            } else {
+              checkedItems.add(value as string);
+              setCheckedItems(new Set(checkedItems));
+            }
+          }}
+        />
+      ),
+     },
+    {
       key: "user_name",
       dataIndex: "user_full_name",
       title: "Full Name",
+    },
+    {
+      key: "email",
+      dataIndex: "email",
+      title: "Email",
     },
     {
       key: "start_date",
@@ -281,6 +326,7 @@ export const PendingComponent: React.FC = () => {
     key: claim.request_id,
     ...claim,
     user_full_name: claim.user.full_name,
+    email: claim.user.email,
     user_salary: claim.user.salary,
     user_ot_rate: claim.user.ot_rate,
     claim_status: "PENDING",
@@ -298,7 +344,7 @@ export const PendingComponent: React.FC = () => {
         pagination={true}
         name="Claims"
         onPageChange={handlePageChange}
-        isHaveCheckbox={true}
+        // isHaveCheckbox={true}
       />
       <Modal
         open={modalVisible}

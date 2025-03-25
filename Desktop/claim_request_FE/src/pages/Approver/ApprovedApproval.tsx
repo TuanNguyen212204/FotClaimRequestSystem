@@ -56,6 +56,11 @@ export const ApprovedApproval: React.FC = () => {
       title: "Full Name",
     },
     {
+      key: "email",
+      dataIndex: "user_email",
+      title: "Email",
+    },
+    {
       key: "start_date",
       dataIndex: "start_date",
       title: "Start Date",
@@ -127,10 +132,12 @@ export const ApprovedApproval: React.FC = () => {
     key: claim.request_id,
     ...claim,
     user_full_name: claim.user.full_name,
+    user_email: claim.user.email,
     user_salary: claim.user.salary,
     user_ot_rate: claim.user.ot_rate,
     claim_status: "APPROVED",
   }));
+
   return (
     <div>
       <h1 className={styles.title}>Approved Claims</h1>

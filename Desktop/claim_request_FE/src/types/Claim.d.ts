@@ -26,6 +26,7 @@ export interface PendingClaim {
     full_name: string;
     salary: string;
     ot_rate: string;
+    email: string;
   };
   salary_overtime: {
     salaryOvertimePerDay: number;
@@ -50,6 +51,7 @@ export interface ClaimApprover {
     full_name: string;
     salary: string;
     ot_rate: string;
+    email: string;
   };
   salary_overtime: string;
   claim_details: {
@@ -72,6 +74,7 @@ export interface ClaimApprovedApprover {
     full_name: string;
     salary: string;
     ot_rate: string;
+    email: string;
   };
   salary_overtime: string;
   claim_details: {
@@ -113,6 +116,7 @@ export interface RejectedClaim {
     full_name: string;
     salary: string;
     ot_rate: string;
+    email: string;
   };
   salary_overtime: string;
   claim_details: {
@@ -197,6 +201,7 @@ export interface DetailPendingClaim {
     full_name: string;
     salary: string;
     ot_rate: string;
+    email: string;
   };
   salary_overtime: string;
   claim_details: {
