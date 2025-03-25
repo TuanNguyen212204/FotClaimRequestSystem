@@ -46,6 +46,9 @@ export default function useCreateClaimForm({
     mode: "all",
   });
   const formValues = watch("claims");
+  if (mode === "update" && !requestID) {
+    throw new Error("requestID is required for update mode");
+  }
   useEffect(() => {
     console.log("Form Values:", formValues);
     console.log("Errors:", errors);
@@ -93,56 +96,41 @@ export default function useCreateClaimForm({
       projectID: data.currentSelectedProject.projectID,
       claims: data.claims,
     };
+    const handleSubmissionResult = (
+      resultAction: any,
+      successMessage: string,
+      errorPrefix: string
+    ) => {
+      if (resultAction.type.endsWith("/fulfilled")) {
+        toast.success(successMessage);
+        reset();
+      } else {
+        const payloadError = resultAction.payload as any;
+        const errorMessage = payloadError?.message || "Unknown error occurred";
+        toast.error(`${errorPrefix}: ${errorMessage}`);
+      }
+    };
+
     if (mode === "create") {
-      try {
-        const resultAction = await dispatch(createClaim(DataToSend));
-        if (createClaim.fulfilled.match(resultAction)) {
-          toast.success("Claim request created successfully");
-          reset();
-        } else {
-          const payloadError = resultAction.payload as any;
-          const errorMessage =
-            payloadError?.message || "Unknown error occurred";
-          toast.error(`Failed to create claim: ${errorMessage}`);
-        }
-      } catch (error) {
-        if (error instanceof ApiError) {
-          console.log("API Error:", error.message, error.status, error.data);
-        } else if (error instanceof Error) {
-          console.log("Standard Error:", error.message);
-        } else {
-          console.log("Unknown Error:", error);
-        }
-        toast.error("Failed to create claim request");
-      }
+      const resultAction = await dispatch(createClaim(DataToSend));
+      handleSubmissionResult(
+        resultAction,
+        "Claim request created successfully",
+        "Failed to create claim"
+      );
     } else if (mode === "update") {
-      try {
-        if (!requestID) {
-          toast.error("No requestID");
-          return;
-        }
-        const resultAction = await dispatch(
-          updateClaim({ claimData: DataToSend, requestID: requestID })
-        );
-        if (updateClaim.fulfilled.match(resultAction)) {
-          toast.success("Claim request updated successfully");
-          reset();
-        } else {
-          const payloadError = resultAction.payload as any;
-          const errorMessage =
-            payloadError?.message || "Unknown error occurred";
-          toast.error(`Failed to update claim: ${errorMessage}`);
-        }
-      } catch (error) {
-        if (error instanceof ApiError) {
-          console.log("API Error:", error.message, error.status, error.data);
-        } else if (error instanceof Error) {
-          console.log("Standard Error:", error.message);
-        } else {
-          console.log("Unknown Error:", error);
-        }
-        toast.error("Failed to update claim request");
+      if (!requestID) {
+        toast.error("Request ID is required for update");
+        return;
       }
+      const resultAction = await dispatch(
+        updateClaim({ claimData: DataToSend, requestID })
+      );
+      handleSubmissionResult(
+        resultAction,
+        "Claim request updated successfully",
+        "Failed to update claim"
+      );
     }
   };
 
