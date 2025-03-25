@@ -49,7 +49,6 @@ export const userSlice = createSlice({
       })
       .addCase(fetchUserByIdAsync.fulfilled, (state, action) => {
         state.status = "success";
-        console.log(action.payload[0]);
         state.user = action.payload[0];
       })
       .addCase(fetchTotalPage.rejected, (state, action) => {

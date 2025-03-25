@@ -31,9 +31,8 @@ const UserClaims = () => {
     };
     fetchData();
   }, [dispatch, currentPage]);
-  useEffect(() => {
-    console.log(userClaim);
-  }, [userClaim]);
+  // useEffect(() => {
+  // }, [userClaim]);
 
   const handleViewDetail = (id: string) => {
     navigate(`/claim-detail?id=${id}`);
