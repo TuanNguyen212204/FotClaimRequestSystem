@@ -134,7 +134,10 @@ export interface DetailClaimFinance {
   claim_details: {
     date: string;
     working_hours: number;
+    salaryOvertimePerDay: number;
   }[];
+  job_rank_name: string;
+  department_name: string;
 }
 
 // export interface ClaimApprovedApprover {
