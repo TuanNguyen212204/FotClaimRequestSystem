@@ -110,7 +110,7 @@ export const DetailsApproval: React.FC<PendingDetailModalProps> = ({
             <p className={styles.username}>{claimDetail?.user.full_name}</p>
           </div>
           <div className={styles.emailContainer}>
-            <Mail className={styles.emailIcon} />
+            <Mail className={styles.emailIcon} />|
             <p className={styles.email}>{claimDetail?.user.email}</p>
           </div>
           <hr className={styles.divider} />
