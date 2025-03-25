@@ -8,7 +8,7 @@ import { createClaim, updateClaim } from "@/redux/thunk/CreateClaim";
 import { selectUserById } from "@/redux/selector/userSelector";
 import { CreateClaimData } from "@/Services/Project/Project.type";
 import { toast } from "react-toastify";
-import { ApiError } from "@/api";
+import { useWatch } from "react-hook-form";
 import { useEffect } from "react";
 interface CreateClaimFormProps {
   initialValues?: FormData;
@@ -29,7 +29,6 @@ export default function useCreateClaimForm({
     setValue,
     reset,
     setError,
-    watch,
     clearErrors,
     trigger,
   } = useForm<FormData>({
@@ -45,7 +44,7 @@ export default function useCreateClaimForm({
     },
     mode: "all",
   });
-  const formValues = watch("claims");
+  const formValues = useWatch({ control, name: "claims" });
   if (mode === "update" && !requestID) {
     throw new Error("requestID is required for update mode");
   }
