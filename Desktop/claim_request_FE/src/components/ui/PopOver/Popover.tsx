@@ -27,7 +27,7 @@ const PopOver: React.FC<PopOverProps> = ({
       {isOpen && (
         <div
           ref={popperRef}
-          className={`min-w-44 box-border ${placementClass}`}
+          className={` box-border ${placementClass}`}
           style={{ zIndex: Number(z_index) }}
         >
           <div
