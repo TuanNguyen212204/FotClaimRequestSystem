@@ -335,3 +335,4 @@ export const PendingComponent: React.FC = () => {
     </div>
   );
 };
+export default PendingComponent;
