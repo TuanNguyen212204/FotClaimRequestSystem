@@ -45,8 +45,8 @@ export const AppRoute = () => {
         })),
       ],
     },
-    { path: "/unauthorized", element: <Unauthorized /> },
-    { path: "/unauthenticated", element: <Unauthenticated /> },
+    // { path: "/unauthorized", element: <Unauthorized /> },
+    // { path: "/unauthenticated", element: <Unauthenticated /> },
   ]);
 
   return <RouterProvider router={router} />;

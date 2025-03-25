@@ -97,18 +97,18 @@ export const useRoute = (): RouteConfig[] => {
       label: "Change Password",
       protected: false,
     },
-    // {
-    //   path: "/unauthorized",
-    //   component: lazy(() => import("@auth/Unauthorized.tsx")),
-    //   label: "Unauthorized",
-    //   role: [ROLES.USER],
-    // },
-    // {
-    //   path: "/unauthenticated",
-    //   component: lazy(() => import("@auth/Unauthenticated")),
-    //   label: "Unauthenticated",
-    //   role: [ROLES.USER],
-    // },
+    {
+      path: "/unauthorized",
+      component: lazy(() => import("@auth/Unauthorized.tsx")),
+      label: "Unauthorized",
+      protected: false,
+    },
+    {
+      path: "/unauthenticated",
+      component: lazy(() => import("@auth/Unauthenticated")),
+      label: "Unauthenticated",
+      protected: false,
+    },
 
     {
       path: PATH.approvedClaimWithUserID,
@@ -196,7 +196,7 @@ export const useRoute = (): RouteConfig[] => {
     },
     {
       path: PATH.pending,
-      component: lazy(() => import("@pages/Approver/ApprovedApproval")),
+      component: lazy(() => import("@pages/Approver/PendingApproval")),
       protected: true,
       label: "Pending",
       icon: <MdOutlinePendingActions size={20} />,
@@ -214,15 +214,15 @@ export const useRoute = (): RouteConfig[] => {
       path: PATH.allUserInformation,
       component: lazy(() => import("@pages/admin/AllUserInformationPage")),
       protected: true,
-      icon: <EyeClosed />,
-      label: "All User Information",
+      icon: <Smile />,
+      label: "Staff Information",
       role: [ROLE.ADMIN],
     },
     {
       path: PATH.dashboard,
       component: lazy(() => import("@pages/admin/Dashboard")),
       protected: true,
-      icon: <House size={20} />,
+      icon: <House />,
       label: "Dashboard",
       role: [ROLE.ADMIN],
     },
@@ -230,8 +230,8 @@ export const useRoute = (): RouteConfig[] => {
       path: PATH.projectInformation,
       component: lazy(() => import("@pages/admin/ProjectInformation")),
       protected: true,
-      icon: <BriefcaseBusiness size={20} />,
-      label: "Project Information",
+      icon: <BriefcaseBusiness />,
+      label: "Project",
       role: [ROLE.ADMIN],
     },
     // {
@@ -240,7 +240,10 @@ export const useRoute = (): RouteConfig[] => {
     // },
     // {
     //   path: PATH.createProject,
-    //   component: lazy(() => import("@pages/admin/")),
+    //   component: lazy(() => import("@pages/Project/CreateProject")),
+    //   protected: true,
+    //   icon: <BriefcaseBusiness size={20} />,
+    //   label: "Project Information",
     // },
     {
       path: PATH.paidClaim,

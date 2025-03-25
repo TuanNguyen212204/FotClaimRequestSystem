@@ -138,8 +138,10 @@ export const Sidebar = ({
                       className={`${styles.tooltip}`}
                       style={{ cursor: "pointer" }}
                     >
-                      {route.icon}
-                      <div className={` ${styles.tooltipText} `}>
+                      <div className={"ml-1"}>
+                        <span>{route.icon}</span>
+                      </div>
+                      <div className={` ${styles.tooltipText}  `}>
                         <span>{route.label}</span>
                       </div>
                     </div>{" "}
@@ -158,35 +160,12 @@ export const Sidebar = ({
           }}
         >
           <div style={{ width: "100%", backgroundColor: "red", bottom: "0" }}>
-            {isCollapsed1 && (
-              <button
-                className={`${
-                  isCollapsed1 ? styles.logoutCollapse : styles.logout
-                }`}
-                onClick={() => handleLogOut()}
-              >
-                <LogOut size={20} />
-              </button>
-            )}
-            {!isCollapsed1 && (
-              <button
-                className={`${
-                  isCollapsed1 ? styles.logoutCollapse : styles.logout
-                }`}
-                onClick={() => handleLogOut()}
-              >
-                <div style={{ display: "flex", justifyContent: "center" }}>
-                  <div>
-                    <span>Log Out</span>
-                  </div>
-                  <div>
-                    <span>
-                      <LogOut size={20} />
-                    </span>
-                  </div>
-                </div>
-              </button>
-            )}
+            <button
+              className={`${styles.logoutCollapse}`}
+              onClick={() => handleLogOut()}
+            >
+              <LogOut size={20} />
+            </button>
           </div>
         </div>
       </div>

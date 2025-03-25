@@ -195,6 +195,7 @@
 .logoutCollapse {
   color: white;
   width: 100%;
+  background-color: transparent;
 }
 
 /* Arrow styles */
@@ -221,6 +222,7 @@
   color: white;
   transition: none !important;
   padding-top: 5px;
+  background-color: transparent;
 }
 .claimButton:hover {
   text-decoration: none;
@@ -261,13 +263,13 @@
   background-color: #34495e;
   color: #fff;
   text-align: center;
-  padding: 16px 10px;
+  padding: 13px 0px;
   margin-left: 10px;
   border-radius: 6px;
   position: absolute;
   z-index: 1;
   margin-left: 3rem;
-  margin-top: -3rem;
+  bottom: -25%;
 }
 
 .tooltip:hover .tooltipText {

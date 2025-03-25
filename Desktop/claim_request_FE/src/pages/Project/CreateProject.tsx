@@ -46,13 +46,16 @@ export const CreateProject: React.FC = () => {
 
   useEffect(() => {
     if (startDate && endDate && endDate < startDate) {
-      setError("end_date", { type: "manual", message: "End Date must be after Start Date" });
+      setError("end_date", {
+        type: "manual",
+        message: "End Date must be after Start Date",
+      });
     } else {
       clearErrors("end_date");
     }
   }, [startDate, endDate]);
 
-  const projectId = watch("project_id"); 
+  const projectId = watch("project_id");
   const [checkingId, setCheckingId] = useState(false);
 
   useEffect(() => {
@@ -62,7 +65,10 @@ export const CreateProject: React.FC = () => {
       setCheckingId(true);
       try {
         await httpClient.get<any>(`/projects/${projectId}`);
-        setError("project_id", { type: "manual", message: "Project ID already exists!" });
+        setError("project_id", {
+          type: "manual",
+          message: "Project ID already exists!",
+        });
       } catch (error: any) {
         if (error.response?.status === 404) {
           clearErrors("project_id");
@@ -77,7 +83,6 @@ export const CreateProject: React.FC = () => {
     return () => clearTimeout(timer);
   }, [projectId]);
 
-
   const projectName = watch("project_name");
   const [checkingName, setCheckingName] = useState(false);
 
@@ -88,7 +93,10 @@ export const CreateProject: React.FC = () => {
       setCheckingName(true);
       try {
         await httpClient.get<any>(`/projects/${projectName}`);
-        setError("project_name", { type: "manual", message: "Project Name already exists!" });
+        setError("project_name", {
+          type: "manual",
+          message: "Project Name already exists!",
+        });
       } catch (error: any) {
         if (error.response?.status === 404) {
           clearErrors("project_name");
@@ -130,8 +138,14 @@ export const CreateProject: React.FC = () => {
               })}
               className="w-full p-2 border border-gray-300 rounded-md"
             />
-            {checkingId && <p className="text-blue-500 text-sm">Checking Project ID...</p>}
-            {errors.project_id && <p className="text-red-500 text-sm">{errors.project_id.message}</p>}
+            {checkingId && (
+              <p className="text-blue-500 text-sm">Checking Project ID...</p>
+            )}
+            {errors.project_id && (
+              <p className="text-red-500 text-sm">
+                {errors.project_id.message}
+              </p>
+            )}
           </div>
 
           {/* Project Name */}
@@ -141,11 +155,19 @@ export const CreateProject: React.FC = () => {
             </label>
             <input
               type="text"
-              {...register("project_name", { required: "Project Name is required" })}
+              {...register("project_name", {
+                required: "Project Name is required",
+              })}
               className="w-full p-2 border border-gray-300 rounded-md"
             />
-            {checkingName && <p className="text-blue-500 text-sm">Checking Project Name...</p>}
-            {errors.project_name && <p className="text-red-500 text-sm">{errors.project_name.message}</p>}
+            {checkingName && (
+              <p className="text-blue-500 text-sm">Checking Project Name...</p>
+            )}
+            {errors.project_name && (
+              <p className="text-red-500 text-sm">
+                {errors.project_name.message}
+              </p>
+            )}
           </div>
 
           {/* Start Date */}
@@ -155,10 +177,16 @@ export const CreateProject: React.FC = () => {
             </label>
             <input
               type="date"
-              {...register("start_date", { required: "Start Date is required" })}
+              {...register("start_date", {
+                required: "Start Date is required",
+              })}
               className="w-full p-2 border border-gray-300 rounded-md"
             />
-            {errors.start_date && <p className="text-red-500 text-sm">{errors.start_date.message}</p>}
+            {errors.start_date && (
+              <p className="text-red-500 text-sm">
+                {errors.start_date.message}
+              </p>
+            )}
           </div>
 
           {/* End Date */}
@@ -171,22 +199,26 @@ export const CreateProject: React.FC = () => {
               {...register("end_date", { required: "End Date is required" })}
               className="w-full p-2 border border-gray-300 rounded-md"
             />
-            {errors.end_date && <p className="text-red-500 text-sm">{errors.end_date.message}</p>}
+            {errors.end_date && (
+              <p className="text-red-500 text-sm">{errors.end_date.message}</p>
+            )}
           </div>
 
           {/* Project Status */}
           <div>
-          <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-gray-700">
               Project Status
-          </label>
-          <select
-              {...register("project_status", { required: "Project Status is required" })}
+            </label>
+            <select
+              {...register("project_status", {
+                required: "Project Status is required",
+              })}
               className="w-full p-2 border border-gray-300 rounded-md"
-          >
+            >
               <option value="">Select Status</option>
               <option value="1">In Progress</option>
               <option value="2">Completed</option>
-          </select>
+            </select>
           </div>
 
           {/* Buttons */}
@@ -200,3 +232,4 @@ export const CreateProject: React.FC = () => {
     </div>
   );
 };
+export default CreateProject;

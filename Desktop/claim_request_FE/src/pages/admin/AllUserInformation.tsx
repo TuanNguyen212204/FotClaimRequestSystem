@@ -201,6 +201,7 @@ const AllUserInformation: React.FC = () => {
           <div>
             {userStatuses[record.user_id] === 1 && (
               <button
+                className={styles.circleCheckButton}
                 onClick={() => handleAssignUser(record.user_id as string)}
               >
                 <div>
@@ -211,6 +212,7 @@ const AllUserInformation: React.FC = () => {
             {userStatuses[record.user_id] === 0 && (
               <button
                 disabled
+                className={styles.circleCheckButton}
                 onClick={() => handleAssignUser(record.user_id as string)}
               >
                 <div>
