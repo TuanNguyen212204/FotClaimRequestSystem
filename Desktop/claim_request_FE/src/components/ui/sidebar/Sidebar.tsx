@@ -110,7 +110,7 @@ export const Sidebar = ({
                       className={`${styles.tooltip}`}
                       style={{ cursor: "pointer" }}
                     >
-                      <div className={"ml-"}>
+                      <div className={""}>
                         <span>{route.icon}</span>
                       </div>
                       <div className={` ${styles.tooltipText}  `}>
@@ -136,7 +136,7 @@ export const Sidebar = ({
               className={`${styles.logoutCollapse}`}
               onClick={() => handleLogOut()}
             >
-              <div className="ml-1">
+              <div className="mr-1.5">
                 <LogOut size={20} />
               </div>
             </button>
