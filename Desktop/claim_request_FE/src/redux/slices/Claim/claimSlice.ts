@@ -8,6 +8,7 @@ import {
   DetailClaimFinance,
   ClaimApprovedApprover,
   ClaimApprovedFinance,
+  MyClaimDetail,
 } from "@/types/Claim";
 
 import {
@@ -24,11 +25,13 @@ import {
   fetchApprovedDetailFinanceAsync,
   fetchApprovedDetailApproverAsync,
   fetchClaimByUserWithDraftStatusAsync,
+  fetchMyClaimDetailAsync,
 } from "@/redux/thunk/Claim/claimThunk";
 
 const initialState: {
   data: Claim[];
   myClaim: Claim[];
+  claimDetail: MyClaimDetail | null;
   listClaimApprovedApprover: ClaimApprovedApprover[];
   detailClaimApprovedApprover: DetailClaimApprover | null;
   // listClaimApproved: ApprovedClaim[]; cái này dùng mà sai tên
@@ -60,6 +63,7 @@ const initialState: {
   listClaimUserDraft: [],
   totalPages: 1,
   myClaim: [],
+  claimDetail: null as MyClaimDetail | null,
   status: "",
   error: null,
 };
@@ -242,24 +246,20 @@ export const claimSlice = createSlice({
           state.listClaimUserRejected = action.payload;
         }
       )
-      //my claim is with draft status
-      .addCase(
-        fetchClaimByUserWithDraftStatusAsync.rejected,
-        (state, action) => {
-          state.status = "failed";
-          state.error = String(action.error.message);
-        }
-      )
-      .addCase(fetchClaimByUserWithDraftStatusAsync.pending, (state) => {
+      // my claim detail
+      .addCase(fetchMyClaimDetailAsync.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = String(action.error.message);
+      })
+      .addCase(fetchMyClaimDetailAsync.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(
-        fetchClaimByUserWithDraftStatusAsync.fulfilled,
-        (state, action) => {
-          state.status = "success";
-          state.listClaimUserDraft = action.payload;
-        }
-      );
+      .addCase(fetchMyClaimDetailAsync.fulfilled, (state, action) => {
+        state.status = "success";
+        state.claimDetail = Array.isArray(action.payload)
+          ? action.payload[0]
+          : action.payload;
+      });
   },
 });
 export default claimSlice.reducer;
