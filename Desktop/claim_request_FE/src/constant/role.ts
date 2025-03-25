@@ -4,3 +4,4 @@ export const ROLE = {
   FINANCE: 3,
   CLAIMER: 4,
 };
+export default ROLE;

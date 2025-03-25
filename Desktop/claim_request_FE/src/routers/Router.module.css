@@ -1,0 +1,14 @@
+.main_layout_wrapper {
+  position: relative;
+}
+.main_layout_wrapper button {
+  border: none;
+  background-color: none;
+}
+.main_layout_wrapper svg {
+  border: none;
+  background-color: none;
+}
+.main_layout_wrapper svg {
+  border: none !important;
+}
