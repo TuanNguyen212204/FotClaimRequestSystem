@@ -23,7 +23,7 @@ export interface ModalProps {
   onOk?: (e?: MouseEvent) => void | Promise<unknown>;
   footer?: React.ReactNode;
   width?: number;
-  height?: number;
+  height?: number | string;
   maskClosable?: boolean;
   closeIcon?: React.ReactNode;
   children?: React.ReactNode;
@@ -51,6 +51,7 @@ export interface ModalProps {
   buttonOk?: string;
   buttonCancel?: string;
   footerPosition?: "left" | "center" | "right";
+  backgroundColor?: string;
 }
 
 export interface ModalComponent extends React.FC<ModalProps> {
@@ -86,6 +87,7 @@ const Modal_: React.FC<ModalProps> = ({
   buttonOk,
   buttonCancel,
   footerPosition = "center", // Default value if not provided
+  backgroundColor = "#fff",
 }) => {
   const [visible, setVisible] = useState(open);
   const modalRef = useRef<HTMLDivElement>(null);
@@ -123,11 +125,11 @@ const Modal_: React.FC<ModalProps> = ({
     ...(centered
       ? { top: "50%", left: "50%", transform: "translate(-50%, -50%)" }
       : {}),
-    background: "#fff",
+    background: backgroundColor,
     borderRadius: 8,
     boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
     //scroll
-    overflow: "auto", //hidden vì bên dưới đang còn có phần tử overflowY
+    // overflow: "auto", //hidden vì bên dưới đang còn có phần tử overflowY
     display: "flex",
     flexDirection: "column",
     textAlign: "center",

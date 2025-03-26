@@ -9,6 +9,7 @@ import {
   DetailClaimFinance,
   ClaimApprovedApprover,
   ClaimApprovedFinance,
+  MyClaimDetail,
 } from "@/types/Claim";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { delay } from "@utils/delay";
@@ -279,6 +280,24 @@ export const fetchClaimByUserWithRejectStatusAsync = createAsyncThunk<Claim[]>(
       );
     } catch (error) {
       console.error("Fetch Claims error " + error);
+      throw error;
+    }
+  }
+);
+
+// fetch claim detail by claim_id
+export const fetchMyClaimDetailAsync = createAsyncThunk<MyClaimDetail, string>(
+  "claim/fetchClaimDetail",
+  async (request_id: string): Promise<MyClaimDetail> => {
+    try {
+      await delay(1000);
+      const response = await httpClient.get<ApiResponse<MyClaimDetail>>(
+        `/claims/${request_id}`
+      );
+      console.log(response.data.data);
+      return response.data.data;
+    } catch (error) {
+      console.error("Fetch Claim Detail error " + error);
       throw error;
     }
   }

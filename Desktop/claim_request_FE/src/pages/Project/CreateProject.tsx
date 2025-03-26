@@ -56,13 +56,16 @@ export const CreateProject: React.FC<CreateProjectProps> = ({ openModal, setOpen
 
   useEffect(() => {
     if (startDate && endDate && endDate < startDate) {
-      setError("end_date", { type: "manual", message: "End Date must be after Start Date" });
+      setError("end_date", {
+        type: "manual",
+        message: "End Date must be after Start Date",
+      });
     } else {
       clearErrors("end_date");
     }
   }, [startDate, endDate, setError, clearErrors]);
 
-  const projectId = watch("project_id"); 
+  const projectId = watch("project_id");
   const [checkingId, setCheckingId] = useState(false);
 
   useEffect(() => {
@@ -72,7 +75,10 @@ export const CreateProject: React.FC<CreateProjectProps> = ({ openModal, setOpen
       setCheckingId(true);
       try {
         await httpClient.get<any>(`/projects/${projectId}`);
-        setError("project_id", { type: "manual", message: "Project ID already exists!" });
+        setError("project_id", {
+          type: "manual",
+          message: "Project ID already exists!",
+        });
       } catch (error: any) {
         if (error.response?.status === 404) {
           clearErrors("project_id");
@@ -97,7 +103,10 @@ export const CreateProject: React.FC<CreateProjectProps> = ({ openModal, setOpen
       setCheckingName(true);
       try {
         await httpClient.get<any>(`/projects/${projectName}`);
-        setError("project_name", { type: "manual", message: "Project Name already exists!" });
+        setError("project_name", {
+          type: "manual",
+          message: "Project Name already exists!",
+        });
       } catch (error: any) {
         if (error.response?.status === 404) {
           clearErrors("project_name");
@@ -135,8 +144,14 @@ export const CreateProject: React.FC<CreateProjectProps> = ({ openModal, setOpen
               {...register("project_id", { required: "Project ID is required", pattern: { value: /^P\d{3}$/, message: "Invalid format (Pxxx)" }})} 
               className="w-full p-2 border border-gray-300 rounded-md" 
             />
-            {checkingId && <p className="text-blue-500 text-sm">Checking Project ID...</p>}
-            {errors.project_id && <p className="text-red-500 text-sm">{errors.project_id.message}</p>}
+            {checkingId && (
+              <p className="text-blue-500 text-sm">Checking Project ID...</p>
+            )}
+            {errors.project_id && (
+              <p className="text-red-500 text-sm">
+                {errors.project_id.message}
+              </p>
+            )}
           </div>
   
           <div>
@@ -146,8 +161,14 @@ export const CreateProject: React.FC<CreateProjectProps> = ({ openModal, setOpen
               {...register("project_name", { required: "Project Name is required" })} 
               className="w-full p-2 border border-gray-300 rounded-md" 
             />
-            {checkingName && <p className="text-blue-500 text-sm">Checking Project Name...</p>}
-            {errors.project_name && <p className="text-red-500 text-sm">{errors.project_name.message}</p>}
+            {checkingName && (
+              <p className="text-blue-500 text-sm">Checking Project Name...</p>
+            )}
+            {errors.project_name && (
+              <p className="text-red-500 text-sm">
+                {errors.project_name.message}
+              </p>
+            )}
           </div>
   
           <div>
@@ -157,7 +178,11 @@ export const CreateProject: React.FC<CreateProjectProps> = ({ openModal, setOpen
               {...register("start_date", { required: "Start Date is required" })} 
               className="w-full p-2 border border-gray-300 rounded-md" 
             />
-            {errors.start_date && <p className="text-red-500 text-sm">{errors.start_date.message}</p>}
+            {errors.start_date && (
+              <p className="text-red-500 text-sm">
+                {errors.start_date.message}
+              </p>
+            )}
           </div>
   
           <div>
@@ -167,7 +192,9 @@ export const CreateProject: React.FC<CreateProjectProps> = ({ openModal, setOpen
               {...register("end_date", { required: "End Date is required" })} 
               className="w-full p-2 border border-gray-300 rounded-md" 
             />
-            {errors.end_date && <p className="text-red-500 text-sm">{errors.end_date.message}</p>}
+            {errors.end_date && (
+              <p className="text-red-500 text-sm">{errors.end_date.message}</p>
+            )}
           </div>
   
           <div>
@@ -193,3 +220,4 @@ export const CreateProject: React.FC<CreateProjectProps> = ({ openModal, setOpen
     </Modal>
   );
 };
+export default CreateProject;

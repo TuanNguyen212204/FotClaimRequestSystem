@@ -28,7 +28,7 @@ export default function ClaimTable({
   const claims = useWatch({ control, name: "claims" });
   const totalHours = claims.reduce(
     (sum, claim) => sum + (claim.working_hours || 0),
-    0,
+    0
   );
   return (
     <div className="mb-5 box-border overflow-x-auto">

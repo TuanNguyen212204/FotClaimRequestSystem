@@ -69,6 +69,18 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
   const handleCancel = () => {
     setOpenModal(false);
   };
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        handleCancel(); // Gọi hàm cancel khi nhấn Escape
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   return (
     <div style={{ marginTop: "50px" }}>

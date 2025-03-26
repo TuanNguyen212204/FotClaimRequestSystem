@@ -166,8 +166,12 @@ const AllUserInformation: React.FC = () => {
     { key: "full_name", dataIndex: "full_name", title: "Full Name" },
     { key: "username", dataIndex: "username", title: "Username" },
     { key: "email", dataIndex: "email", title: "Email" },
-    { key: "department", dataIndex: "department", title: "Department" },
-    { key: "job_rank", dataIndex: "job_rank", title: "Job Rank" },
+    {
+      key: "department_name",
+      dataIndex: "department_name",
+      title: "Department",
+    },
+    { key: "job_rank_name", dataIndex: "job_rank_name", title: "Job Rank" },
     {
       key: "user_status",
       dataIndex: "user_status",
@@ -175,7 +179,7 @@ const AllUserInformation: React.FC = () => {
       cell: ({ record }: { record: User }) => {
         return (
           <div>
-            <div>
+            <div tabIndex={-1}>
               <ToggleButton
                 userId={record.user_id}
                 checked={
@@ -200,26 +204,17 @@ const AllUserInformation: React.FC = () => {
       title: "Assign",
       cell: ({ record }: { record: User }) => {
         return (
-          <div>
-            {userStatuses[record.user_id] === 1 && (
-              <button
-                onClick={() => handleAssignUser(record.user_id as string)}
-              >
-                <div>
-                  <CircleCheck />
-                </div>
-              </button>
-            )}
-            {userStatuses[record.user_id] === 0 && (
-              <button
-                disabled
-                onClick={() => handleAssignUser(record.user_id as string)}
-              >
-                <div>
-                  <X />
-                </div>
-              </button>
-            )}
+          <div tabIndex={-1}>
+            <button
+              tabIndex={-1}
+              className={styles.circleCheckButton}
+              onClick={() => handleAssignUser(record.user_id as string)}
+              disabled={userStatuses[record.user_id] === 0}
+            >
+              <div>
+                {userStatuses[record.user_id] === 1 ? <CircleCheck /> : <X />}
+              </div>
+            </button>
           </div>
         );
       },
@@ -233,7 +228,9 @@ const AllUserInformation: React.FC = () => {
           <div style={{ display: "flex" }}>
             <div>
               <button
+                tabIndex={-1}
                 className={styles.update_button}
+                style={{ cursor: "pointer" }}
                 onClick={() => handleUpdate(value as string)}
               >
                 <span>
