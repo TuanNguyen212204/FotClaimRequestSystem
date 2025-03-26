@@ -38,15 +38,15 @@ const OTChart = ({ data }) => {
   ];
 
   const options = {
-    title: "OT Percentage by Project",
+    title: "Top 4 claim of Project",
     chartArea: { width: "60%" },
     hAxis: { title: "Percentage (%)", minValue: 0, maxValue: 100 },
     vAxis: { title: "Project" },
     legend: { position: "none" },
-    colors: ["#34A853"],
+    colors: ["#233754"],
   };
 
-  return <Chart chartType="BarChart" width="100%" height="400px" data={chartData} options={options} />;
+  return <Chart chartType="ColumnChart" width="100%" height="400px" data={chartData} options={options} />;
 };
 
 export default OTChart;

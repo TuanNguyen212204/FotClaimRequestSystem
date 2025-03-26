@@ -9,7 +9,7 @@
 }
 
 :hover.card{
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 2px #233754;
 }
 
 .header {
@@ -33,6 +33,12 @@
   font-size: 2.5rem;
   margin-bottom: 2px;
   font-weight: lighter;
+}
+
+.detail{
+  font-size: 1.3rem;
+  padding-top: 10px;
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .percentage {

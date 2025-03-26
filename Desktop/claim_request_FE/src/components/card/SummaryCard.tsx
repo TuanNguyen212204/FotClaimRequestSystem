@@ -20,6 +20,7 @@ const SummaryCard = ({
         <h2 className={styles.title}>{title}</h2>
       </div>
       <p className={styles.value}>{value}</p>
+      <p className={styles.detail}>This Month: </p>
       <div
         className={`${styles.percentage} ${
           percentage >= 0 ? styles.positive : styles.negative

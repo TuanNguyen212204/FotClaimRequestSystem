@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import SummaryCard from "@/components/card/SummaryCard";
 import DashboardHeader from "@/components/card/DashboardHeader";
+import { Button } from "@/components/ui/button/Button";
 import OTChart from "@/components/card/OTChart";
 import { Chart } from "react-google-charts";
 import {
@@ -32,6 +33,12 @@ const Dashboard = () => {
     pendingClaims: null,
     approvedClaims: null,
     rejectedClaims: null,
+    // monthProject: null,
+    // monthUsers: null,
+    // monthClaims: null,
+    // monthPendingClaims: null,
+    // monthApprovedClaims: null,
+    // monthRejectedClaims: null,
   });
 
   const projectData = [
@@ -71,6 +78,12 @@ const Dashboard = () => {
           "/admin/pending-claims",
           "/admin/approved-claims",
           "/admin/rejected-claims",
+          // "/admin/monthly-projects",
+          // "/admin/monthly-users",
+          // "/admin/monthly-claims",
+          // "/admin/monthly-pending-claims",
+          // "/admin/monthly-approved-claims",
+          // "/admin/monthly-rejected-claims",
         ];
 
         const responses = await Promise.all(
@@ -83,6 +96,12 @@ const Dashboard = () => {
           pendingClaims,
           approvedClaims,
           rejectedClaims,
+          // monthProject,
+          // monthUsers,
+          // monthClaims,
+          // monthPendingClaims,
+          // monthApprovedClaims,
+          // monthRejectedClaims,
         ] = responses.map((res) => res?.data?.data ?? null);
 
         setSummary({
@@ -92,6 +111,12 @@ const Dashboard = () => {
           pendingClaims,
           approvedClaims,
           rejectedClaims,
+          // monthProject,
+          // monthUsers,
+          // monthClaims,
+          // monthPendingClaims,
+          // monthApprovedClaims,
+          // monthRejectedClaims,
         });
       } catch (error) {
         console.error("Error fetching summary data:", error);
@@ -102,6 +127,12 @@ const Dashboard = () => {
           pendingClaims: null,
           approvedClaims: null,
           rejectedClaims: null,
+          // monthProject: null,
+          // monthUsers: null,
+          // monthClaims: null,
+          // monthPendingClaims: null,
+          // monthApprovedClaims: null,
+          // monthRejectedClaims: null,
         });
       } finally {
         setLoading(false);
@@ -130,12 +161,42 @@ const Dashboard = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-8 mb-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 col-span-3">
-          <SummaryCard title="Total Claims" value={summary.totalClaims ?? "N/A"} icon={<ClipboardList />} percentage={10} />
-          <SummaryCard title="Pending Claims" value={summary.pendingClaims ?? "N/A"} icon={<Clock />} percentage={-5} />
-          <SummaryCard title="Approved Claims" value={summary.approvedClaims ?? "N/A"} icon={<CheckCircle />} percentage={20} />
-          <SummaryCard title="Rejected Claims" value={summary.rejectedClaims ?? "N/A"} icon={<XCircle />} percentage={-12} />
-          <SummaryCard title="Total Users" value={summary.totalUsers ?? "N/A"} icon={<Users />} percentage={8} />
-          <SummaryCard title="Total Projects" value={summary.totalProjects ?? "N/A"} icon={<Briefcase />} percentage={15} />
+            <SummaryCard 
+              title="Total Claims" 
+              value={summary.totalClaims ?? "N/A"} 
+              icon={<ClipboardList />} 
+              percentage={10} 
+            />
+            <SummaryCard 
+              title="Pending Claims" 
+              value={summary.pendingClaims ?? "N/A"} 
+              icon={<Clock />} 
+              percentage={-5} 
+            />
+            <SummaryCard 
+              title="Approved Claims" 
+              value={summary.approvedClaims ?? "N/A"} 
+              icon={<CheckCircle />} 
+              percentage={20} 
+            />
+            <SummaryCard
+              title="Rejected Claims" 
+              value={summary.rejectedClaims ?? "N/A"} 
+              icon={<XCircle />} 
+              percentage={-12} 
+            />
+            <SummaryCard 
+              title="Total Users" 
+              value={summary.totalUsers ?? "N/A"} 
+              icon={<Users />} 
+              percentage={8} 
+            />
+            <SummaryCard 
+              title="Total Projects" 
+              value={summary.totalProjects ?? "N/A"} 
+              icon={<Briefcase />} 
+              percentage={15} 
+            />
         </div>
 
         <div className={`${styles.chartOT} col-span-2`}>
