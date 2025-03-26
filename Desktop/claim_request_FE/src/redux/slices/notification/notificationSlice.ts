@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { fetchNotificationsAsync, markNotificationAsRead } from "@/redux/thunk/notification/notificationThunk";
 
 interface Notification {
