@@ -170,7 +170,7 @@
 .btnSubmitForm {
   width: 100%;
   padding: 12px 20px;
-  background-color: #535666;
+  background-color: #3a3b3f;
   color: white;
   border: none;
   border-radius: 8px;
@@ -178,8 +178,16 @@
   cursor: pointer;
   transition: background-color 0.3s;
 }
-
+/* .btnSubmitForm:disabled {
+  cursor: not-allowed;
+} */
+.btnSubmitForm:disabled {
+  cursor: not-allowed;
+  color: grey;
+  background-color: #535666;
+}
 .btnSubmitForm:hover {
+  text-decoration: underline;
   background-color: #3a3b3f;
 }
 
