@@ -109,7 +109,7 @@ const Dashboard = () => {
       item.approved,
       item.rejected,
       item.paid,
-    ]),
+    ])
   ];
 
   return (
