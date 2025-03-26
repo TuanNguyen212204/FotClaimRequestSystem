@@ -45,9 +45,6 @@ const Dashboard = () => {
         const response = await fetch(
           `https://67b847da699a8a7baef3677f.mockapi.io/${timeframe}`
         );
-        const response = await fetch(
-          `https://67b847da699a8a7baef3677f.mockapi.io/${timeframe}`
-        );
         const result = await response.json();
         setData(result);
       } catch (error) {
@@ -178,17 +175,6 @@ const Dashboard = () => {
           totalProjects,
           totalUsers,
         ] = responses.map((res) => res?.data?.data ?? null);
-        const responses = await Promise.all(
-          endpoints.map((endpoint) => httpClient.get(endpoint))
-        );
-        const [
-          totalProjects,
-          totalUsers,
-          totalClaims,
-          pendingClaims,
-          approvedClaims,
-          rejectedClaims,
-        ] = responses.map((res) => res?.data?.data ?? null);
 
         setSummary({
           totalProjects,
@@ -216,13 +202,6 @@ const Dashboard = () => {
         .filter((key) => selected[key])
         .map((key) => item[key.toLowerCase()]),
     ]),
-    ...data.map((item) => [
-      item.name,
-      item.pending,
-      item.approved,
-      item.rejected,
-      item.paid,
-    ]),
   ];
 
   const isValidData = filteredData.length > 1 && filteredData[0].length > 1;
@@ -231,89 +210,60 @@ const Dashboard = () => {
   return (
     <div className={styles.container}>
       <DashboardHeader />
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
-        {/* Dòng 1: 4 cột */}
-        <SummaryCard 
-          title="Total Claims" 
-          totalvalue={totalClaim?.totalClaims ?? 0}
-          monthvalue={totalClaim?.currentMonthClaims ?? 0}
-          icon={<ClipboardList />} 
-          percentage={totalClaim?.changePercentage ?? 0} 
-        />
-        <SummaryCard 
-          title="Pending Claims" 
-          totalvalue={totalPending?.pendingClaims ?? 0}
-          monthvalue={totalPending?.currentMonthPending ?? 0}
-          icon={<Clock />} 
-          percentage={totalPending?.changePercentage ?? 0} 
-        />
-        <SummaryCard 
-          title="Approved Claims" 
-          totalvalue={totalApproved?.approvedClaims ?? 0}
-          monthvalue={totalApproved?.currentMonthClaims ?? 0}
-          icon={<CheckCircle />} 
-          percentage={totalApproved?.changePercentage ?? 0} 
-        />
-        <SummaryCard
-          title="Rejected Claims" 
-          totalvalue={totalRejected?.rejectedClaims ?? 0}
-          monthvalue={totalRejected?.currentMonthClaims ?? 0}
-          icon={<XCircle />} 
-          percentage={totalRejected?.changePercentage ?? 0} 
-        />
-        <SummaryCard
-          title="Total Claims"
-          value={loading ? "Loading..." : summary.totalClaims ?? "N/A"}
-          icon={<ClipboardList />}
-          percentage={10}
-        />
-        <SummaryCard
-          title="Pending Claims"
-          value={loading ? "Loading..." : summary.pendingClaims ?? "N/A"}
-          icon={<Clock />}
-          percentage={-5}
-        />
-        <SummaryCard
-          title="Approved Claims"
-          value={loading ? "Loading..." : summary.approvedClaims ?? "N/A"}
-          icon={<CheckCircle />}
-          percentage={20}
-        />
-        <SummaryCard
-          title="Rejected Claims"
-          value={loading ? "Loading..." : summary.rejectedClaims ?? "N/A"}
-          icon={<XCircle />}
-          percentage={-12}
-        />
-        <SummaryCard
-          title="Total Users"
-          value={loading ? "Loading..." : summary.totalUsers ?? "N/A"}
-          icon={<Users />}
-          percentage={8}
-        />
-        <SummaryCard
-          title="Total Projects"
-          value={loading ? "Loading..." : summary.totalProjects ?? "N/A"}
-          icon={<Briefcase />}
-          percentage={15}
-        />
+      <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 grid-rows-2 gap-3">
+          <SummaryCard 
+            title="Total Claims" 
+            totalvalue={totalClaim?.totalClaims ?? 0}
+            monthvalue={totalClaim?.currentMonthClaims ?? 0}
+            icon={<ClipboardList />} 
+            percentage={totalClaim?.changePercentage ?? 0} 
+          />
+          <SummaryCard 
+            title="Pending Claims" 
+            totalvalue={totalPending?.pendingClaims ?? 0}
+            monthvalue={totalPending?.currentMonthPending ?? 0}
+            icon={<Clock />} 
+            percentage={totalPending?.changePercentage ?? 0} 
+          />
+          <SummaryCard 
+            title="Approved Claims" 
+            totalvalue={totalApproved?.approvedClaims ?? 0}
+            monthvalue={totalApproved?.currentMonthClaims ?? 0}
+            icon={<CheckCircle />} 
+            percentage={totalApproved?.changePercentage ?? 0} 
+          />
+          <SummaryCard
+            title="Rejected Claims" 
+            totalvalue={totalRejected?.rejectedClaims ?? 0}
+            monthvalue={totalRejected?.currentMonthClaims ?? 0}
+            icon={<XCircle />} 
+            percentage={totalRejected?.changePercentage ?? 0} 
+          />
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <SummaryCard 
+            title="Total Projects" 
+            totalvalue={summary.totalProjects ?? 0}
+            icon={<Briefcase />} 
+            chartData={[
+              ["Completed", 80],
+              ["In Progress", 20]
+            ]}
+            colors={["#ffdb70", "#FFC107"]}
+          />
+          <SummaryCard 
+            title="Total Users" 
+            totalvalue={summary.totalUsers ?? 0}
+            icon={<Users />} 
+            chartData={[
+              ["Active", 62],
+              ["Inactive", 38]
+            ]}
+            colors={["#ff855e", "#FF5722"]}
+          />
+        </div>
       </div>
-
- 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <SummaryCard 
-          title="Total Projects" 
-          totalvalue={summary.totalProjects ?? 0}
-          icon={<Briefcase />} 
-        />
-        <SummaryCard 
-          title="Total Users" 
-          totalvalue={summary.totalUsers ?? 0}
-          icon={<Users />} 
-        />
-      </div>
-
       <div className={styles.chartOT} >
           <OTChart data={projectData} />
       </div>

@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { Chart } from "react-google-charts";
 import styles from "./SummaryCard.module.css";
 import { ArrowUp, ArrowDown } from "lucide-react";
 
@@ -8,12 +9,16 @@ const SummaryCard = ({
   monthvalue,
   icon,
   percentage,
+  chartData,
+  colors = [], // Thêm prop colors, mặc định là mảng rỗng
 }: {
   title: string;
   totalvalue: number;
   monthvalue?: number;
   icon: ReactNode;
   percentage?: number;
+  chartData?: [string, number][];
+  colors?: string[]; // Prop mới để nhận danh sách màu
 }) => {
   return (
     <div className={styles.card}>
@@ -23,19 +28,63 @@ const SummaryCard = ({
       </div>
       <p className={styles.value}>{totalvalue}</p>
       {monthvalue !== undefined && <p className={styles.detail}>This Month: {monthvalue}</p>}
-      {percentage !== undefined && (
-        <div
-          className={`${styles.percentage} ${
-            percentage >= 0 ? styles.positive : styles.negative
-          }`}
-        >
-          {percentage >= 0 ? <ArrowUp size={16} /> : <ArrowDown size={16} />}
-          <span className={styles.percentageValue}>{Math.abs(percentage)}%</span>
-          <span className={styles.comparison}>vs last month</span>
+
+      <div className={`${styles.percentage} ${percentage !== undefined && percentage >= 0 ? styles.positive : styles.negative}`}>
+        {percentage !== undefined ? (
+          <>
+            {percentage >= 0 ? <ArrowUp size={16} /> : <ArrowDown size={16} />}
+            <span className={styles.percentageValue}>{Math.abs(percentage)}%</span>
+          </>
+        ) : (
+          <span className={styles.percentagePlaceholder}></span>
+        )}
+        <span className={styles.comparison}> since last month</span>
+      </div>
+
+      {chartData && chartData.length > 0 && (
+        <div className={styles.chartWrapper}>
+          <div className={styles.legend}>
+            {chartData.map(([label, value], index) => (
+              <div key={index} className={styles.legendItem}>
+                <span
+                  className={styles.legendColor}
+                  style={{ backgroundColor: colors[index] || getColor(index) }} // Dùng màu truyền vào hoặc màu mặc định
+                ></span>
+                {value}% {label}
+              </div>
+            ))}
+          </div>
+
+          <div className={styles.chartContainer}>
+            <Chart
+              chartType="PieChart"
+              width="100%"
+              height="100%"
+              data={[["Label", "Value"], ...chartData]}
+              options={{
+                pieHole: 0.4,
+                legend: "none",
+                backgroundColor: "transparent",
+                chartArea: { width: "100%", height: "100%" },
+                tooltip: { trigger: "focus" },
+                pieSliceText: "none",
+                slices: chartData.reduce((acc, _, index) => {
+                  acc[index] = { color: colors[index] || getColor(index) }; // Dùng màu từ prop colors hoặc màu mặc định
+                  return acc;
+                }, {} as Record<number, { color: string }>),
+              }}
+            />
+          </div>
         </div>
       )}
     </div>
   );
+};
+
+// Hàm tạo màu mặc định nếu không truyền vào
+const getColor = (index: number) => {
+  const defaultColors = ["#4caf50", "#fbc02d", "#e57373", "#64b5f6", "#ba68c8"];
+  return defaultColors[index % defaultColors.length];
 };
 
 export default SummaryCard;
