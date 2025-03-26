@@ -1,7 +1,9 @@
 export interface ButtonProps {
   type?: "primary" | "default" | "dashed" | "text" | "link";
+  buttonType?: "submit" | "button" | "reset";
   size?: "small" | "middle" | "large";
   shape?: "circle" | "round";
+  className?: string;
   danger?: boolean;
   ghost?: boolean;
   loading?: boolean;

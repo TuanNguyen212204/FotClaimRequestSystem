@@ -10,17 +10,21 @@ import ButtonGroup from "./ButtonGroup";
 interface IClaimBodyProps
   extends ClaimTableProps,
     IProjectInfoProps,
-    AdditionalInfoProps {}
+    AdditionalInfoProps {
+  mode: "create" | "view" | "update";
+}
 export default function ClaimBody({
   ProjectList,
   control,
   errors,
   register,
   setValue,
+  mode,
 }: IClaimBodyProps): JSX.Element {
   return (
     <Card>
       <ProjectInfo
+        mode={mode}
         control={control}
         register={register}
         setValue={setValue}
@@ -33,7 +37,7 @@ export default function ClaimBody({
         setValue={setValue}
       />
       {/* <AdditionalInfo register={register} /> */}
-      <ButtonGroup />
+      <ButtonGroup mode={mode} />
     </Card>
   );
 }
