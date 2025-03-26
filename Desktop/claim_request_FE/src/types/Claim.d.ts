@@ -4,6 +4,7 @@ export interface Claim {
   claim_id: string;
   user_id: string;
   project_id: string;
+  project_name: string;
   total_working_hours: string;
   submitted_date: string;
   claim_status: string;
@@ -27,7 +28,7 @@ export interface MyClaimDetail {
     salary: number;
     ot_rate: number;
   };
-  claim_details: {
+  claimDetailsWithSalaryOvertimePerDay: {
     date: string;
     working_hours: number;
   }[];
@@ -159,7 +160,10 @@ export interface DetailClaimFinance {
   claim_details: {
     date: string;
     working_hours: number;
+    salaryOvertimePerDay: number;
   }[];
+  job_rank_name: string;
+  department_name: string;
 }
 
 // export interface ClaimApprovedApprover {
@@ -192,14 +196,17 @@ export interface DetailClaimApprover {
   project_id: string;
   submitted_date: string;
   approved_date: string;
-  paid_date: string | null;
+  paid_date: string;
   claim_status: string;
-  claimDetails: {
+  claimDetailsWithSalaryOvertimePerDay: {
     claim_id: string;
     request_id: string;
     date: string;
     working_hours: number;
+    status: number;
+    salaryOvertimePerDay: number;
   }[];
+  totalOvertimeSalary: number;
   project: {
     project_id: string;
     project_name: string;

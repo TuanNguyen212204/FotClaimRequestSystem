@@ -12,6 +12,7 @@ import {
   CreateClaimResponseBody,
   projectsParamOptions,
   allProjectsreponse,
+  UpdateClaimData,
 } from "./Project.type";
 export const config: HttpClientConfig = {
   baseURL: "https://claimsystem.info.vn/api/v1/",
@@ -27,7 +28,7 @@ class ProjectService {
     this.httpClient = httpClient;
   }
   async getAllProjects(
-    options: projectsParamOptions,
+    options: projectsParamOptions
   ): Promise<allProjectsreponse> {
     try {
       const response: ApiResponse<allProjectsreponse> =
@@ -53,7 +54,23 @@ class ProjectService {
   async createClaim(data: CreateClaimData): Promise<ClaimResponse> {
     const response = await this.httpClient.post<CreateClaimResponseBody>(
       "claims",
-      data,
+      data
+    );
+    if (response.data.errorCode !== 0) {
+      throw new Error(`API error: ${response.data.errorCode}`);
+    }
+    return response.data.data[0];
+  }
+  async updateClaim(
+    data: CreateClaimData,
+    requestID: string
+  ): Promise<ClaimResponse> {
+    if (!requestID) {
+      throw new Error("Request ID is required");
+    }
+    const response = await this.httpClient.put<CreateClaimResponseBody>(
+      `claims/${requestID}`,
+      data
     );
     if (response.data.errorCode !== 0) {
       throw new Error(`API error: ${response.data.errorCode}`);

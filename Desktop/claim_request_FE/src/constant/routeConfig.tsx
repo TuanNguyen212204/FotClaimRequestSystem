@@ -18,6 +18,7 @@ import {
   Clock,
   FileCheck,
   FileX,
+  UserRound,
 } from "lucide-react";
 import { MdOutlinePendingActions, MdPaid } from "react-icons/md";
 import { FaCheck } from "react-icons/fa";
@@ -134,7 +135,7 @@ export const PRIVATE_ROUTE: RouteConfig[] = [
     path: PATH.userInfo,
     component: lazy(() => import("@ui/user/UserInfoComponent")),
     icon: <UserPen size={24} />,
-    protected: true,
+    protected: false,
     label: "User Information",
     role: [ROLE.CLAIMER, ROLE.FINANCE, ROLE.APPROVER, ROLE.ADMIN],
   },
@@ -174,7 +175,7 @@ export const PRIVATE_ROUTE: RouteConfig[] = [
     path: PATH.allUserInformation,
     component: lazy(() => import("@pages/admin/AllUserInformationPage")),
     protected: true,
-    icon: <Smile size={24} />,
+    icon: <UserRound size={24} />,
     label: "Staff Information",
     role: [ROLE.ADMIN],
   },

@@ -1,6 +1,7 @@
 .container {
   width: 95%;
-  margin: 2rem auto;
+  margin: auto;
+  margin-top: 0.5rem;
   background-color: white;
   padding: 2rem;
   border-radius: 0.75rem;
@@ -8,13 +9,15 @@
 }
 
 .header {
-  margin-bottom: 2rem;
+  margin-bottom: auto;
 }
 
 .title {
-  font-size: 1.75rem;
+  font-size: 2.5rem;
   color: #2d3142;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
 }
 
 .icon {
@@ -38,6 +41,7 @@
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  margin-top: 0.5rem;
 }
 
 .table_body th,

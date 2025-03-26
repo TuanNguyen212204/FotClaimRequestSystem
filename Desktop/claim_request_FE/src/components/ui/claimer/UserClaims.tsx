@@ -54,6 +54,16 @@ const UserClaims = () => {
       title: "Project ID",
     },
     {
+      key: "project_name",
+      dataIndex: "project_name",
+      title: "Project Name",
+    },
+    {
+      key: "time_duration",
+      dataIndex: "time_duration",
+      title: "Time Duration",
+    },
+    {
       key: "total_hours",
       dataIndex: "total_hours",
       title: "Total Working Hours",
@@ -114,7 +124,16 @@ const UserClaims = () => {
     ...claim,
     key: index,
     id: claim.claim_id ? claim.claim_id.toString() : "",
+    project_name: claim.project_name || "",
+    start_date: claim.start_date || null,
+    end_date: claim.end_date || null,
     status: claim.claim_status ? claim.claim_status : "",
+    time_duration:
+      claim.start_date && claim.end_date
+        ? `${formatDateToDDMMYYYY(claim.start_date)} - ${formatDateToDDMMYYYY(
+            claim.end_date
+          )}`
+        : "N/A",
   }));
   return (
     <div className={styles.container}>

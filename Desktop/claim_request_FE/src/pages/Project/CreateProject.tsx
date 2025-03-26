@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import styles from "./CreateProject.module.css";
 import { X } from "lucide-react";
 import { toast } from "react-toastify";
+import { delay } from "@/utils/delay";
 
 export const CreateProject: React.FC = () => {
   const navigate = useNavigate();
