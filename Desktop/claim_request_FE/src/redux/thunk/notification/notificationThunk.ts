@@ -8,9 +8,10 @@ export const fetchNotificationsAsync = createAsyncThunk(
     const response = await httpClient.get<ApiResponse<Notification[]>>(
       "/notifications"
     );
-    return response.data; // Assuming the API returns an array of notifications in the data field
+    return response.data; // Lấy chỉ phần data chứa danh sách thông báo
   }
 );
+
 
 export const markNotificationAsRead = createAsyncThunk(
   "notifications/markAsRead",

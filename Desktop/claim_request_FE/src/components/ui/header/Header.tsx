@@ -13,7 +13,6 @@ import {
   addNotification,
   markAllAsRead,
 } from "@/redux/slices/notification/notificationSlice";
-import { User } from "@/types/User";
 
 const Header: React.FC = () => {
   const [role, setRole] = useState<string>();
@@ -22,17 +21,19 @@ const Header: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const socketRef = useRef<Socket | null>(null);
-
-  const { notifications } = useSelector((state: any) => state.notifications);
-
-  console.log(typeof notifications);
-  console.log(notifications);
-
   const user_id = localStorage.getItem("user_id");
 
-  const unreadCount = Array.isArray(notifications)
-    ? notifications.filter((n: any) => !n.is_read).length
-    : 0;
+  const notifications = useSelector(
+    (state: any) => state.notifications?.notifications?.notifications
+  );
+
+  useEffect(() => {
+    dispatch(fetchNotificationsAsync() as any);
+  }, [dispatch]);
+
+  // const unreadCount = Array.isArray(notifications)
+  //   ? notifications.filter((n: any) => !n.is_read).length
+  //   : 0;
 
   useEffect(() => {
     const record = Number(localStorage.getItem("role_id"));
@@ -63,22 +64,21 @@ const Header: React.FC = () => {
     const socket = socketRef.current;
 
     socket.on("connect", () => {
-      console.log("Socket connected successfully:", socket.id);
+      console.log("Socket connected");
       if (user_id) {
-        console.log("Emitting login event with user_id:", user_id);
         socket.emit("login", user_id);
       }
     });
 
     socket.on("notification", (notification) => {
-      console.log("Received new notification:", notification);
-
-      const notificationWithIsRead = {
-        ...notification,
-        is_read: false,
-      };
-
-      dispatch(addNotification(notificationWithIsRead));
+      try {
+        console.log("Sắp dispatch action addNotification:", notification);
+        dispatch(addNotification(notification));
+        console.log("Đã gửi action addNotification!");
+        console.log(notification);
+      } catch (error) {
+        console.error("Lỗi khi dispatch:", error);
+      }
     });
 
     socket.on("connect_error", (error) => {
@@ -100,21 +100,12 @@ const Header: React.FC = () => {
     }
 
     return () => {
-      console.log("Cleaning up socket connection");
       socket.off("connect");
       socket.off("notification");
       socket.off("connect_error");
       socket.off("disconnect");
       socket.disconnect();
     };
-  }, [dispatch]);
-
-  useEffect(() => {
-    console.log("Notifications updated:", notifications);
-  }, [notifications]);
-
-  useEffect(() => {
-    dispatch(fetchNotificationsAsync() as any);
   }, [dispatch]);
 
   const toggleDropdown = () => {
@@ -134,7 +125,7 @@ const Header: React.FC = () => {
         <div className={styles.rightSection}>
           <SearchBar />
           <div>
-            <Badge count={unreadCount}>
+            <Badge count={notifications?.length}>
               <FaBell className={styles.icon} onClick={toggleDropdown} />
             </Badge>
           </div>
@@ -151,11 +142,11 @@ const Header: React.FC = () => {
             Mark All As Read
           </div>
           {Array.isArray(notifications) && notifications.length > 0 ? (
-            notifications?.map((notification: any) => (
+            notifications.map((notification: any) => (
               <div
                 key={notification.id}
                 className={`${styles.notificationItem} ${
-                  notification.isRead ? styles.read : styles.unread
+                  notification.is_read ? styles.read : styles.unread
                 }`}
               >
                 <strong>{notification.title}</strong>
@@ -166,9 +157,7 @@ const Header: React.FC = () => {
               </div>
             ))
           ) : (
-            <div className={styles.emptyNotification}>
-              No Notification
-            </div>
+            <div className={styles.emptyNotification}>No Notification</div>
           )}
         </div>
       )}
