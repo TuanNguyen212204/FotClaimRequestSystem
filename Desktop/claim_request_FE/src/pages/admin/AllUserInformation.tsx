@@ -199,25 +199,15 @@ const AllUserInformation: React.FC = () => {
       cell: ({ record }: { record: User }) => {
         return (
           <div>
-            {userStatuses[record.user_id] === 1 && (
-              <button
-                onClick={() => handleAssignUser(record.user_id as string)}
-              >
-                <div>
-                  <CircleCheck />
-                </div>
-              </button>
-            )}
-            {userStatuses[record.user_id] === 0 && (
-              <button
-                disabled
-                onClick={() => handleAssignUser(record.user_id as string)}
-              >
-                <div>
-                  <X />
-                </div>
-              </button>
-            )}
+            <button
+              className={styles.circleCheckButton}
+              onClick={() => handleAssignUser(record.user_id as string)}
+              disabled={userStatuses[record.user_id] === 0}
+            >
+              <div>
+                {userStatuses[record.user_id] === 1 ? <CircleCheck /> : <X />}
+              </div>
+            </button>
           </div>
         );
       },
@@ -232,6 +222,7 @@ const AllUserInformation: React.FC = () => {
             <div>
               <button
                 className={styles.update_button}
+                style={{ cursor: "pointer" }}
                 onClick={() => handleUpdate(value as string)}
               >
                 <span>

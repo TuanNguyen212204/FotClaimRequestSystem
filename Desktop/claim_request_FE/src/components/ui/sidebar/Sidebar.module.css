@@ -6,7 +6,7 @@
 
 /* Sidebar */
 .sidebar {
-  width: 60px;
+  width: 50px;
   background-color: #213555;
   color: white;
   height: 100vh;
@@ -14,12 +14,8 @@
   left: 0;
   top: 0;
   transition: all 0.3s ease-in;
-  overflow: hidden;
 }
-.sidebar:hover {
-  width: 300px;
-  transition: all 0.3s ease-in;
-}
+
 /* .collapsed {
   width: 50px;
   padding: 10px;
@@ -82,7 +78,7 @@
 }
 
 .menu {
-  margin-top: 200px;
+  padding-top: 50px;
 }
 
 .claimHeader {
@@ -110,16 +106,16 @@
 }
 .claimList {
   transition: max-height 0.3s ease;
-  overflow: hidden;
+
   list-style: none;
   padding: 0;
 }
 
 .claimItemCollapse {
-  padding: 4px;
+  padding: 8px;
   cursor: pointer;
   background-color: #34495e;
-  margin: 10px 0;
+  margin-top: 1rem;
   border-radius: 5px;
   display: flex;
   align-items: center;
@@ -136,7 +132,7 @@
   transition: none !important;
 }
 .claimItem {
-  padding: 8px;
+  /* padding: 8px; */
   cursor: pointer;
   background-color: #34495e;
   margin: 20px 0;
@@ -192,14 +188,6 @@
   color: #2c3e50;
 }
 
-.logout {
-  /* background-color: #e74c3c;
-  color: white;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-  position: absolute; */
-}
 .logout:hover {
   background-color: #c0392b;
   width: 100%;
@@ -207,6 +195,7 @@
 .logoutCollapse {
   color: white;
   width: 100%;
+  background-color: transparent;
 }
 
 /* Arrow styles */
@@ -233,6 +222,8 @@
   color: white;
   transition: none !important;
   padding-top: 5px;
+  width: 100%;
+  background-color: transparent;
 }
 .claimButton:hover {
   text-decoration: none;
@@ -260,4 +251,30 @@
 .hideText {
   visibility: hidden;
   transition: none !important;
+}
+.tooltip {
+  position: relative;
+  width: 73%;
+  display: inline-block;
+}
+
+/* Tooltip text */
+.tooltip .tooltipText {
+  visibility: hidden;
+  width: 120px;
+  background-color: #34495e;
+  color: #fff;
+  text-align: center;
+  padding: 13px 0px;
+  margin-left: 10px;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+  margin-left: 3.5rem;
+  bottom: -10%;
+  font-size: 12px;
+}
+
+.tooltip:hover .tooltipText {
+  visibility: visible;
 }

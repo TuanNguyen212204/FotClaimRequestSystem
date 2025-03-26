@@ -1,85 +1,27 @@
-import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { IoArrowBack } from "react-icons/io5"; 
+import React from "react";
+import { useSelector } from "react-redux";
+import { MoveRight } from "lucide-react";
 import styles from "./ClaimStatus.module.css";
-import TableComponent, { Column } from "../../components/ui/Table/Table";
-import { AppDispatch } from "@/redux";
-import { fetchPaidClaimsAsync } from "../../redux/slices/Claim/paidClaimsSlice";
- 
 
-interface ClaimDetail {
-  date: string;
-  working_hours: number;
+interface ClaimStatusProps {
+  requestId: string;
 }
 
-const ClaimStatus: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
-  const dispatch = useDispatch<AppDispatch>();
+const formatDateToMonthDay = (date: string) => {
+  const dateObj = new Date(date);
+  const day = dateObj.getDate();
+  const month = dateObj.toLocaleString("en-US", { month: "long" });
+  return `${month} ${day}`;
+};
+
+const ClaimStatus: React.FC<ClaimStatusProps> = ({ requestId }) => {
   const { data: claims, loading } = useSelector((state: any) => state.paidClaims);
-  const navigate = useNavigate(); 
-  useEffect(() => {
-    dispatch(fetchPaidClaimsAsync("1"));
-  }, [dispatch]);
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    const day = date.getDate();
-    const month = date.getMonth() + 1;
-    const year = date.getFullYear();
-    return `${day}/${month}/${year}`;
-  };
-
-  const columns: Column<ClaimDetail>[] = [
-    { 
-      key: 'date', 
-      dataIndex: 'date', 
-      title: 'Date',
-      cell: ({ value }) => formatDate(value)
-    },
-    { 
-      key: 'working_hours', 
-      dataIndex: 'working_hours', 
-      title: 'Working Hours',
-      cell: ({ value }) => `${value} hours`
-    },
-    {
-      key: 'hourly_rate',
-      dataIndex: 'working_hours',
-      title: 'Amount',
-      cell: ({ value }) => {
-        const hourlyRate = Number(selectedClaim.salary_overtime) / selectedClaim.total_hours;
-        const amount = hourlyRate * value;
-        return `${amount.toLocaleString('vi-VN')} USD`;
-      }
-    },
-    {
-      key: 'average_rate',
-      dataIndex: 'working_hours',
-      title: 'Hourly Rate',
-      cell: () => {
-        const hourlyRate = Number(selectedClaim.salary_overtime) / selectedClaim.total_hours;
-        return `${hourlyRate.toLocaleString('vi-VN')} USD/hour`;
-      }
-    },
-    {
-      key: 'status',
-      dataIndex: 'working_hours',
-      title: 'Status',
-      cell: () => (
-        <div className={styles.statusPaid}>
-          Paid
-        </div>
-      )
-    }
-  ];
 
   if (loading || !claims?.length) {
     return <div className={styles.loading}>Loading claim details...</div>;
   }
 
-  const selectedClaim = claims.find((claim: any) => claim.request_id === id);
+  const selectedClaim = claims.find((claim: any) => claim.request_id === requestId);
   
   if (!selectedClaim?.claim_details?.length) {
     return <div className={styles.loading}>No overtime details found</div>;
@@ -87,71 +29,66 @@ const ClaimStatus: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <button 
-          className={styles.backButton}
-          onClick={() => navigate(-1)}
-        >
-          <IoArrowBack size={20} />
-        </button>
-        <h1 className={styles.title}>Claim Status</h1>
+      <div className={styles.containerUser}>
+        <div className={styles.infoUser1}>
+          <img
+            src="https://i1.wp.com/upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"
+            alt="avatar"
+            className={styles.avatar}
+          />
+          <div>
+            <p>{selectedClaim.full_name}</p>
+            <p className={styles.department}>Department | {selectedClaim.department_name}</p>
+            <p className={styles.department}>{selectedClaim.job_rank_name}</p>
+          </div>
+        </div>
       </div>
 
-      <div className={styles.tableContainer}>
-        <TableComponent
-          columns={[
-            
-            { key: 'project_name', dataIndex: 'project_name', title: 'Project Name' },
-            { 
-              key: 'overtime_duration', 
-              dataIndex: 'overtime_duration', 
-              title: 'Overtime Duration',
-              cell: () => (
-                <div>
-                  <div>From: {formatDate(selectedClaim?.start_date)}</div>
-                  <div>To: {formatDate(selectedClaim?.end_date)}</div>
-                </div>
-              )
-            },
-            { 
-              key: 'total_hours', 
-              dataIndex: 'total_hours', 
-              title: 'Total Working Hours',
-              cell: () => `${selectedClaim?.total_hours} hours`
-            },
-            {
-              key: 'overtime_paid',
-              dataIndex: 'salary_overtime',
-              title: 'Overtime Paid',
-              cell: () => `${Number(selectedClaim?.salary_overtime).toLocaleString('vi-VN')} USD`
-            },
-            {
-              key: 'status',
-              dataIndex: 'claim_status',
-              title: 'Status',
-              cell: () => (
-                <div className={styles.statusPaid}>
-                  Paid
-                </div>
-              )
-            },
-            {
-              key: 'action',
-              title: 'Action',
-              cell: () => (
-                <button 
-                  className={styles.printButton}
-                  onClick={() => window.print()}
-                >
-                  Print
-                </button>
-              )
-            }
-          ]}
-          dataSource={[{ ...selectedClaim, key: selectedClaim?.request_id }]}
-          loading={loading}
-          pagination={false}
-        />
+      <div className={styles.claimInfo}>
+        <div className={styles.infoRow}>
+          <p>Project Name:</p>
+          <p>{selectedClaim.project_name}</p>
+        </div>
+        <div className={styles.infoRow}>
+          <p>Project ID:</p>
+          <p>{selectedClaim.project_id}</p>
+        </div>
+        <div className={styles.infoRow}>
+          <p>Over Time Duration:</p>
+          <p>{formatDateToMonthDay(selectedClaim.start_date)} - {formatDateToMonthDay(selectedClaim.end_date)} ({selectedClaim.total_days} days)</p>
+        </div>
+        <div className={styles.infoRow}>
+          <p>Submitted Date:</p>
+          <p>{formatDateToMonthDay(selectedClaim.submitted_date)}</p>
+        </div>
+        <div className={styles.infoRow}>
+          <p>Approved Date:</p>
+          <p>{formatDateToMonthDay(selectedClaim.approved_date)}</p>
+        </div>
+        <div className={styles.infoRow}>
+          <p>Status:</p>
+          <div className={styles.statusPaid}>Paid</div>
+        </div>
+        <div className={styles.infoRow}>
+          <p>Total Overtime Salary:</p>
+          <p>${selectedClaim.salary_overtime}</p>
+        </div>
+      </div>
+
+      <div className={styles.history}>
+        <div className={styles.historyHeader}>
+          <h4>History</h4>
+          <MoveRight size={16} />
+        </div>
+        {selectedClaim.claim_details.map((detail: any, index: number) => (
+          <div key={index} className={styles.historyItem}>
+            <p>{formatDateToMonthDay(detail.date)}</p>
+            <div className={styles.historyDetails}>
+              <p>Working Hours: <span>{detail.working_hours} hours</span></p>
+              <p>Overtime Salary: <span>${detail.salaryOvertimePerDay}</span></p>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

@@ -15,7 +15,7 @@ export const PATH = {
   userClaimDetails: "/user-claim/:id",
   allUserInformation: "/user-information", //admin first page
   approveDetails: "/approve-details",
-  claimStatus: "/claim-status/:id",
+  claimStatus: "/paid-claim/detail",
   paidClaim: "/paid-claim",
   dashboard: "/dashboard",
   approvedFinance: "/finance/approved", //finance first page
@@ -36,5 +36,5 @@ export const PATH = {
   test: "/test",
   draftClaimByUserID: "/draft-claim-by-user-id",
   rejectedClaim: "/rejected-claim",
-  changePassword: "/change-password"
+  changePassword: "/change-password",
 };

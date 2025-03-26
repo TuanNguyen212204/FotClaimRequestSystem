@@ -12,19 +12,17 @@ import { LoadingProvider } from "./components/ui/Loading/LoadingContext.tsx";
 import { ToastContainer } from "react-toastify";
 createRoot(document.getElementById("root")!).render(
   <ReactToastifyProvider>
-    <BrowserRouter>
-      <Provider store={store}>
-        <ReactQueryProvider>
-          {/* <LoadingProvider> */}
-          <NotificationProvider>
-            {/* <LoadingOverlay /> */}
+    <Provider store={store}>
+      <ReactQueryProvider>
+        {/* <LoadingProvider> */}
+        <NotificationProvider>
+          {/* <LoadingOverlay /> */}
 
-            <App />
-            <ToastContainer />
-          </NotificationProvider>
-          {/* </LoadingProvider> */}
-        </ReactQueryProvider>
-      </Provider>
-    </BrowserRouter>
+          <App />
+          <ToastContainer />
+        </NotificationProvider>
+        {/* </LoadingProvider> */}
+      </ReactQueryProvider>
+    </Provider>
   </ReactToastifyProvider>
 );
