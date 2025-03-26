@@ -34,18 +34,6 @@ export const notificationSlice = createSlice({
       };
       state.notifications = newList as unknown as Notification[];
     },
-
-    markAllAsRead: (state) => {
-      const notificationLst = JSON.parse(
-        JSON.stringify(state.notifications)
-      ).notifications;
-      const newList = notificationLst.map((notification: Notification) => ({
-        ...notification,
-        is_read: true,
-      }));
-      console.log(newList)
-      state.notifications = newList as unknown as Notification[];
-    },
   },
   extraReducers: (builder) => {
     builder
@@ -61,12 +49,22 @@ export const notificationSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || "Failed to fetch notifications";
       })
+      .addCase(markNotificationAllAsRead.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
       .addCase(markNotificationAllAsRead.fulfilled, (state, action) => {
-        state.notifications = action.payload  as unknown as Notification[];
-        
+        state.loading = false;
+        console.log(state.notifications)
+        console.log(action.payload)
+        state.notifications = action.payload as unknown as Notification[];; // Updated notifications from API
+      })
+      .addCase(markNotificationAllAsRead.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || "Failed to mark notifications as read";
       });
   },
 });
 
-export const { addNotification, markAllAsRead } = notificationSlice.actions;
+export const { addNotification } = notificationSlice.actions;
 export default notificationSlice.reducer;

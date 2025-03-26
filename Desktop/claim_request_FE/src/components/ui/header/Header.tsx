@@ -7,11 +7,11 @@ import { PATH } from "../../../constant/config";
 import Badge from "@components/ui/Badge";
 import fptlogo from "@assets/fot.png";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchNotificationsAsync } from "@/redux/thunk/notification/notificationThunk";
+import { fetchNotificationsAsync, markNotificationAllAsRead } from "@/redux/thunk/notification/notificationThunk";
 import { io, Socket } from "socket.io-client";
 import {
   addNotification,
-  markAllAsRead,
+  
 } from "@/redux/slices/notification/notificationSlice";
 
 interface Notification {
@@ -139,10 +139,9 @@ const Header: React.FC = () => {
   const toggleDropdown = () => {
     setDropdownVisible(!dropdownVisible);
   };
-
-  // const handleMarkAllAsRead = (notifications: Notification) => {
-  //   dispatch(markAllAsRead(_));
-  // };
+  const handleMarkAllAsRead = () => {
+    dispatch(markNotificationAllAsRead() as any);
+  };
 
   return (
     <>
@@ -166,9 +165,7 @@ const Header: React.FC = () => {
       </header>
       {dropdownVisible && (
         <div className={styles.dropdown}>
-          <div className={styles.markAll} onClick={() => {
-            // handleMarkAllAsRead()
-          }}>
+          <div className={styles.markAll} onClick={handleMarkAllAsRead}>
             Mark All As Read
           </div>
           {Array.isArray(notifications) && notifications.length > 0 ? (

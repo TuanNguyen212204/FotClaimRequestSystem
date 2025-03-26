@@ -12,11 +12,12 @@ export const fetchNotificationsAsync = createAsyncThunk(
   }
 );
 
-
 export const markNotificationAllAsRead = createAsyncThunk(
   "notifications/markAllAsRead",
-  async () => {
-    const response = await httpClient.post<ApiResponse<Notification[]>>(`/notifications/mark-all-read`);
+  async () => { 
+    const response = await httpClient.post<ApiResponse<Notification[]>>(
+      "/notifications/mark-all-read"
+    );
     console.log(response)
     return response.data;
   }
