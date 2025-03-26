@@ -1,5 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchNotificationsAsync, markNotificationAsRead } from "@/redux/thunk/notification/notificationThunk";
+import {
+  fetchNotificationsAsync,
+  markNotificationAsRead,
+} from "@/redux/thunk/notification/notificationThunk";
 
 interface Notification {
   id: string;
@@ -9,28 +12,29 @@ interface Notification {
   is_read: boolean;
 }
 
-interface NotificationState {
+const initialState: {
   notifications: Notification[];
-  loading: boolean;
-  error: string | null;
-}
-
-const initialState: NotificationState = {
+  loading?: boolean;
+  error?: string | null;
+} = {
   notifications: [],
   loading: false,
   error: null,
 };
-
 export const notificationSlice = createSlice({
   name: "notifications",
   initialState,
   reducers: {
     addNotification: (state, action) => {
-      const notificationLst =  JSON.parse(JSON.stringify(state.notifications)).notifications
-      notificationLst.unshift(action.payload); 
-      console.log("Sau khi cập nhật:", notificationLst);
+      const notificationLst = JSON.parse(
+        JSON.stringify(state.notifications)
+      ).notifications;
+      const newList = {
+        notifications: [...notificationLst, action.payload]
+      };
+      state.notifications = newList as unknown as Notification[];
     },
-    
+
     markAllAsRead: (state) => {
       state.notifications = state.notifications.map((notification) => ({
         ...notification,

@@ -55,9 +55,14 @@ const Header: React.FC = () => {
 
   useEffect(() => {
     if (!socketRef.current) {
-      socketRef.current = io("http://localhost:3001", {
+      socketRef.current = io("https://claimsystem.info.vn:3002", {
         autoConnect: true,
         withCredentials: true,
+        transports: ["websocket", "polling"],
+        path: "/socket.io/",
+        reconnectionAttempts: 5,
+        reconnectionDelay: 1000,
+        timeout: 20000,
       });
     }
 
@@ -67,6 +72,7 @@ const Header: React.FC = () => {
       console.log("Socket connected");
       if (user_id) {
         socket.emit("login", user_id);
+        console.log("a");
       }
     });
 
