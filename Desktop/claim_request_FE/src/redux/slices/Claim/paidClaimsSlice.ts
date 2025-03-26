@@ -6,6 +6,7 @@ import { AxiosResponse } from "axios";
 interface ClaimDetail {
   date: string;
   working_hours: number;
+  salaryOvertimePerDay: number;
 }
 
 interface ClaimData {
@@ -23,6 +24,8 @@ interface ClaimData {
   full_name: string;
   salary_overtime: string;
   claim_details: ClaimDetail[];
+  job_rank_name: string;
+  department_name: string;
 }
 
 interface PaidClaimsState {
