@@ -108,9 +108,9 @@ const ApprovedDetailFinanceModal = ({
   return (
     <Modal
       open={isOpen}
-      onCancel={handleOnPrint}
-      onOk={handleOnPay}
-      buttonCancel="Print"
+      onCancel={onClose}
+      // onOk={handleOnPay}
+      // buttonCancel="Print"
       buttonOk="Pay"
       title="Claim Detail"
       width={600}
@@ -119,6 +119,11 @@ const ApprovedDetailFinanceModal = ({
       height="95%"
       backgroundColor="#E9ECEF"
       footerPosition="right"
+      footer={
+        <div className={styles.payButton}>
+          <button onClick={handleOnPay}>Pay</button>
+        </div>
+      }
     >
       <hr />
       <div className={styles.container}>

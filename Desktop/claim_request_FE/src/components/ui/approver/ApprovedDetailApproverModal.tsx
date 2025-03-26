@@ -121,7 +121,7 @@ const ApprovedDetailApproverModal = ({
           <div className={styles.projectRow}>
             <span className={styles.projectLabel}>Project Name:</span>
             <span className={styles.projectValue}>
-              {claimDetail?.project_name}
+              {claimDetail?.project.project_name}
             </span>
           </div>
           <div className={styles.projectRow}>

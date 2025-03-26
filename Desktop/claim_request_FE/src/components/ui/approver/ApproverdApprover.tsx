@@ -53,7 +53,7 @@ export const ApprovedApproverComponent: React.FC = () => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-    }, 1500);
+    }, 1700);
     setSelectedRequestId(value);
     setSelectedUserId(user_id);
     setIsModalOpen(true);
