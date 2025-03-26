@@ -164,8 +164,12 @@ const AllUserInformation: React.FC = () => {
     { key: "full_name", dataIndex: "full_name", title: "Full Name" },
     { key: "username", dataIndex: "username", title: "Username" },
     { key: "email", dataIndex: "email", title: "Email" },
-    { key: "department", dataIndex: "department", title: "Department" },
-    { key: "job_rank", dataIndex: "job_rank", title: "Job Rank" },
+    {
+      key: "department_name",
+      dataIndex: "department_name",
+      title: "Department",
+    },
+    { key: "job_rank_name", dataIndex: "job_rank_name", title: "Job Rank" },
     {
       key: "user_status",
       dataIndex: "user_status",

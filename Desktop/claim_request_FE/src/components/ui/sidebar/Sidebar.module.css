@@ -6,7 +6,7 @@
 
 /* Sidebar */
 .sidebar {
-  width: 50px;
+  width: 60px;
   background-color: #213555;
   color: white;
   height: 100vh;
@@ -78,6 +78,7 @@
 }
 
 .menu {
+  width: 100%;
   padding-top: 50px;
 }
 
@@ -106,21 +107,32 @@
 }
 .claimList {
   transition: max-height 0.3s ease;
-
+  width: 100%;
   list-style: none;
   padding: 0;
 }
 
 .claimItemCollapse {
-  padding: 8px;
   cursor: pointer;
-  background-color: #34495e;
+  max-width: auto;
   margin-top: 1rem;
+  width: 100%;
+  margin-left: 0.5rem;
   border-radius: 5px;
   display: flex;
+  background-color: #34495e;
   align-items: center;
   transition: none !important;
 }
+.claimItemCollapse:hover {
+  background-color: #16a085;
+}
+/* .selectedItem{
+  top: 0;
+  left: 0;
+  translate: (-50%, -50%);
+  position: absolute;
+} */
 .claimItemCreateClaim {
   padding: 4px;
   cursor: pointer;
@@ -141,12 +153,13 @@
   align-items: center;
   transition: none !important;
 }
-.claimItem:hover {
+
+.selectedItem:hover {
   background-color: #16a085;
 }
-.claimItemCollapse:hover {
-  background-color: #16a085;
-}
+/* .selectedItem{
+  
+} */
 .claimItem .icon {
   margin-right: 10px;
 }
