@@ -32,6 +32,65 @@ type JobRank = {
   name: string;
   ot_rate: string;
 };
+interface Option {
+  label: string;
+  value: string | number;
+}
+
+interface SelectProps {
+  options: Option[];
+  value?: string | number;
+  onChange: (value: string | number) => void;
+  placeholder?: string;
+  isDisabled?: boolean;
+  multiple?: boolean;
+  register?: any;
+  className?: string;
+}
+const options: Option[] = [
+  { label: "Admin", value: "1" },
+  { label: "Approver", value: "2" },
+  { label: "Finance", value: "3" },
+  { label: "Claimer", value: "4" },
+];
+const Select: React.FC<SelectProps> = ({
+  options,
+  value,
+  onChange,
+  register,
+  placeholder = "Select an option",
+  isDisabled = false,
+  multiple = false,
+  className = "",
+}) => {
+  return (
+    <select
+      className={`p-2 border rounded ${className}`}
+      value={value}
+      {...register}
+      onChange={(e) =>
+        multiple
+          ? onChange(
+              Array.from(
+                e.target.selectedOptions,
+                (option) => option.value
+              ).join(",")
+            )
+          : onChange(e.target.value)
+      }
+      disabled={isDisabled}
+      multiple={multiple}
+    >
+      {!multiple && <option value="">{placeholder}</option>}
+      {options.map((option) => (
+        <option key={option.value} value={option.value}>
+          {option.label}
+        </option>
+      ))}
+    </select>
+  );
+};
+
 type DepartmentList = Department[];
 type JobRankList = JobRank[];
 export const CreateUser: React.FC<CreateUserProps> = ({
@@ -235,7 +294,7 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                   </div>
                 </div>
               </label>
-              <select
+              {/* <select
                 id="department"
                 {...register("department", {
                   required: "Department is required",
@@ -249,7 +308,32 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                       {a.name}
                     </option>
                   ))}
-              </select>
+              </select> */}
+              <Select
+                register={{
+                  ...register("department", {
+                    required: "Department is required",
+                  }),
+                }}
+                options={department.map((a) => ({
+                  label: a.name,
+                  value: a.id,
+                }))}
+                // register={{
+                //   ...register("department", {
+                //     required: "Department is required",
+                //   }),
+                // }}
+                placeholder="Select Department"
+                onChange={(value) => console.log(value)}
+                className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+              />
+
+              {errors.department && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.department.message}
+                </p>
+              )}
             </div>
             <div className={styles.input_container}>
               <label
@@ -296,7 +380,7 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                   </div>
                 </div>
               </label>
-              <select
+              {/* <select
                 id="role_id"
                 {...register("role_id", { required: "Role ID is required" })}
                 className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
@@ -306,7 +390,14 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                 <option value="2">2 - Approver</option>
                 <option value="3">3 - Finance</option>
                 <option value="4">4 - Claimer</option>
-              </select>
+              </select> */}
+              <Select
+                options={options}
+                register={register("role_id")}
+                onChange={(value) => console.log(value)}
+                placeholder="Select Role ID"
+                className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+              />
               {errors.role_id && (
                 <p className="text-red-500 text-sm mt-1">
                   {errors.role_id.message}
@@ -328,7 +419,7 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                   </div>
                 </div>
               </label>
-              <select
+              {/* <select
                 id="job_rank"
                 {...register("job_rank", {
                   required: "Department is required",
@@ -342,7 +433,18 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                       {a.name} - {a.ot_rate}
                     </option>
                   ))}
-              </select>
+              </select> */}
+              <Select
+                options={jobRank.map((a) => ({ label: a.name, value: a.id }))}
+                register={{
+                  ...register("job_rank", {
+                    required: "Job Rank is required",
+                  }),
+                }}
+                placeholder="Select Job Rank"
+                onChange={(value) => console.log(value)}
+                className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+              />
 
               {errors.job_rank && (
                 <p className="text-red-500 text-sm mt-1">

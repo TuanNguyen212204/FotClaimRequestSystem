@@ -93,28 +93,37 @@ export const Sidebar = ({
   return (
     <div>
       <div className={`${styles.sidebar} `}>
-        <div className={styles.menu}>
+        <div className={styles.claimItemCollapse}>
           <ul className={`${styles.claimList} `}>
             {routeByRole.map((route) => (
               <li
                 key={route.path}
-                className={`${styles.claimItemCollapse} ${styles.tooltip}`}
+                // className={`${styles.claimItemCollapse} ${styles.tooltip} ${
+                //   selectedClaim === route.path ? styles.active : ""
+                // } mt-2`}
+                className={`${styles.tooltip} my-4`}
+                style={{ backgroundColor: "#34495e" }}
                 onClick={() => handleNavigate(route.path as string)}
               >
                 <button className={` ${styles.claimButton} `}>
-                  <div className={styles.claimButtonIngredient}>
-                    <div style={{ cursor: "pointer" }}>
-                      <div
-                        className={`${
-                          selectedClaim === route.path ? styles.active : ""
-                        } ${styles.selectedItem} ml-1 `}
-                      >
-                        <span>{route.icon}</span>
-                      </div>
-                      <div className={` ${styles.tooltipText}  `}>
-                        <span>{route.label}</span>
-                      </div>
-                    </div>{" "}
+                  <div
+                    className={styles.claimButtonIngredient}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <div
+                      className={`${
+                        selectedClaim === route.path ? styles.active : ""
+                      }`}
+                    >
+                      <span>{route.icon}</span>
+                    </div>
+                    <div className={` ${styles.tooltipText}  `}>
+                      <span>{route.label}</span>
+                    </div>
                   </div>
                 </button>
               </li>

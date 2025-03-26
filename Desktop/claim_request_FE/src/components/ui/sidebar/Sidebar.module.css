@@ -6,13 +6,12 @@
 
 /* Sidebar */
 .sidebar {
-  width: 60px;
+  width: 3%;
   background-color: #213555;
   color: white;
   height: 100vh;
   position: fixed;
-  left: 0;
-  top: 0;
+  text-align: center;
   transition: all 0.3s ease-in;
 }
 
@@ -107,32 +106,22 @@
 }
 .claimList {
   transition: max-height 0.3s ease;
-  width: 100%;
   list-style: none;
   padding: 0;
+  width: 100%;
 }
 
 .claimItemCollapse {
   cursor: pointer;
-  max-width: auto;
-  margin-top: 1rem;
-  width: 100%;
-  margin-left: 0.5rem;
+  max-width: 100%;
+  margin-top: 3rem;
   border-radius: 5px;
   display: flex;
-  background-color: #34495e;
   align-items: center;
   transition: none !important;
 }
-.claimItemCollapse:hover {
-  background-color: #16a085;
-}
-/* .selectedItem{
-  top: 0;
-  left: 0;
-  translate: (-50%, -50%);
-  position: absolute;
-} */
+
+/* ac */
 .claimItemCreateClaim {
   padding: 4px;
   cursor: pointer;
@@ -160,16 +149,9 @@
 /* .selectedItem{
   
 } */
-.claimItem .icon {
-  margin-right: 10px;
-}
-
-.collapsed .claimItem .icon {
-  margin-right: 0;
-}
 
 .active {
-  background-color: #16a085;
+  color: #16a085;
 }
 .noActive {
   background-color: none;
@@ -212,25 +194,7 @@
 }
 
 /* Arrow styles */
-.arrowUp {
-  display: inline-block;
-  width: 0;
-  height: 0;
-  margin-left: 5px; /* Space between text and arrow */
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-bottom: 5px solid white; /* Change color as needed */
-}
 
-.arrowDown {
-  display: inline-block;
-  width: 0;
-  height: 0;
-  margin-left: 5px; /* Space between text and arrow */
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-top: 5px solid white; /* Change color as needed */
-}
 .claimButton {
   color: white;
   transition: none !important;
@@ -247,6 +211,7 @@
   display: flex;
   flex-direction: row;
   transition: none !important;
+  background-color: ;
 }
 .iconInClaimButton_1 {
   margin-top: 2px;
@@ -267,7 +232,7 @@
 }
 .tooltip {
   position: relative;
-  width: 73%;
+  width: 100%;
   display: inline-block;
 }
 
