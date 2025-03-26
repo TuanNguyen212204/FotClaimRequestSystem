@@ -84,12 +84,14 @@ const AllUserInformation: React.FC = () => {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [checkedDisable, setCheckedDisable] = useState<boolean>(true);
+  const [page, setPage] = useState<number>(1);
   const [initialToggleStates, setInitialToggleStates] = useState<{
     [key: string]: boolean;
   }>({});
   const [userStatuses, setUserStatuses] = useState<{ [key: string]: number }>(
     {}
   );
+  const [departmentID, setDepartmentID] = useState<number>(0);
   useEffect(() => {
     const statuses = users.reduce((acc, user) => {
       acc[user.user_id] = user.user_status ?? 0;
@@ -97,7 +99,10 @@ const AllUserInformation: React.FC = () => {
     }, {} as { [key: string]: number });
     setUserStatuses(statuses);
   }, [users]);
-
+  useEffect(() => {
+    console.log("Total PAge" + totalPage);
+    setPage(totalPage);
+  }, [totalPage, currentPage]);
   const [assignID, setAssignID] = useState<string>("");
   const [toggleState, setToggleState] = useState<{ [key: string]: boolean }>(
     {}
@@ -125,12 +130,24 @@ const AllUserInformation: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      await dispatch(fetchAllUserAsync(currentPage.toString()));
-      await dispatch(fetchTotalPage({ page: currentPage.toString() }));
+      await dispatch(
+        fetchAllUserAsync({
+          page: currentPage.toString(),
+          department_id: departmentID,
+        })
+      );
+      await dispatch(
+        fetchTotalPage({
+          page: currentPage.toString(),
+          department_id: departmentID,
+        })
+      );
+
       setLoading(false);
     };
     fetchData();
   }, [dispatch, currentPage]);
+
   const handleCreateUser = async () => {
     handleOpenModal();
   };
@@ -154,7 +171,7 @@ const AllUserInformation: React.FC = () => {
       await deleteUser(id);
       toast("Delete user successfully!");
       console.log("Deleted user with ID:", id);
-      dispatch(fetchAllUserAsync(currentPage.toString()));
+      // dispatch(fetchAllUserAsync(currentPage.toString()));
     } catch (error) {
       console.error("Error deleting user:", error);
     }
@@ -303,6 +320,7 @@ const AllUserInformation: React.FC = () => {
   const fetchStaffByDepartmentID = async (department_name: string) => {
     const a = department.find((item) => item.name === department_name);
     const department_id = a?.id;
+    setDepartmentID(department_id as number | undefined);
     try {
       const response = await httpClient.get<ApiResponseNoGeneric>(
         "/admin/staffs",
@@ -314,6 +332,7 @@ const AllUserInformation: React.FC = () => {
       );
       console.log(response.data.data);
       setDataSource(response.data.data);
+      setPage(response.data.totalPages);
     } catch (error) {
       console.error("Fetch staff by department error:", error);
     }
@@ -321,11 +340,13 @@ const AllUserInformation: React.FC = () => {
   const handleStatusSelect = (status: string) => {
     setSelectedStatus(status);
     fetchStaffByDepartmentID(status);
+    setCurrentPage(1);
     setIsDropdownOpen(false);
   };
   useEffect(() => {
     console.log(dataSource);
-  }, [dataSource]);
+    console.log(page);
+  }, [dataSource, page]);
   return (
     <div>
       {openModal && (
@@ -397,7 +418,7 @@ const AllUserInformation: React.FC = () => {
           sortConfig={sortConfig}
           name="Role"
           createButton={true}
-          totalPage={totalPage}
+          totalPage={page}
           onPageChange={handlePageChange}
           onCreateButtonClick={handleCreateUser}
         />
