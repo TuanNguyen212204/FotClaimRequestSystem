@@ -23,7 +23,7 @@ export interface ModalProps {
   onOk?: (e?: MouseEvent) => void | Promise<unknown>;
   footer?: React.ReactNode;
   width?: number;
-  height?: number;
+  height?: number | string;
   maskClosable?: boolean;
   closeIcon?: React.ReactNode;
   children?: React.ReactNode;
@@ -129,7 +129,7 @@ const Modal_: React.FC<ModalProps> = ({
     borderRadius: 8,
     boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
     //scroll
-    overflow: "auto", //hidden vì bên dưới đang còn có phần tử overflowY
+    // overflow: "auto", //hidden vì bên dưới đang còn có phần tử overflowY
     display: "flex",
     flexDirection: "column",
     textAlign: "center",

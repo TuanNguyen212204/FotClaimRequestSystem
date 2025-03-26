@@ -1,5 +1,5 @@
 import Modal, { confirmModal } from "@ui/modal/Modal";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@/redux";
 import {
@@ -9,7 +9,7 @@ import {
 import { selectApprovedDetailFinance } from "@/redux/selector/claimSelector";
 import StatusTag from "@ui/StatusTag/StatusTag";
 import styles from "@ui/finance/ApprovedDetailFinance.module.css";
-import { MoveRight } from "lucide-react";
+import { MoveRight, ChevronDown } from "lucide-react";
 import httpClient from "@/constant/apiInstance";
 
 const formatDateToMonthDay = (date: string) => {
@@ -51,16 +51,28 @@ const ApprovedDetailFinanceModal = ({
 }: ApprovedDetailFinanceModalProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const claimDetail = useSelector(selectApprovedDetailFinance);
+  const [isChevronDown, setIsChevronDown] = useState<boolean>(false);
 
   useEffect(() => {
-    if (isOpen && requestId) {
-      dispatch(fetchApprovedDetailFinanceAsync({ request_id: requestId }));
-      console.log("req", requestId);
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+
+      if (requestId) {
+        dispatch(fetchApprovedDetailFinanceAsync({ request_id: requestId }));
+        console.log("req", requestId);
+      }
+    } else {
+      document.body.style.overflow = "";
     }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [isOpen, requestId]);
 
-  const handleOnPrint = () => {
-    // Xử lý logic in ở đây
+  const handleOnPrint = async () => {
+    const res = await httpClient.get(`/claims/export`);
+    console.log("data nekkk: ", res.data);
     onClose();
   };
 
@@ -89,12 +101,16 @@ const ApprovedDetailFinanceModal = ({
     }
   };
 
+  const handleHistoryItems = () => {
+    setIsChevronDown(!isChevronDown);
+  };
+
   return (
     <Modal
       open={isOpen}
-      onCancel={handleOnPrint}
-      onOk={handleOnPay}
-      buttonCancel="Print"
+      onCancel={onClose}
+      // onOk={handleOnPay}
+      // buttonCancel="Print"
       buttonOk="Pay"
       title="Claim Detail"
       width={600}
@@ -103,7 +119,11 @@ const ApprovedDetailFinanceModal = ({
       height="95%"
       backgroundColor="#E9ECEF"
       footerPosition="right"
-      className={styles.modal}
+      footer={
+        <div className={styles.payButton}>
+          <button onClick={handleOnPay}>Pay</button>
+        </div>
+      }
     >
       <hr />
       <div className={styles.container}>
@@ -196,33 +216,41 @@ const ApprovedDetailFinanceModal = ({
           {claimDetail?.claim_details &&
           claimDetail.claim_details.length > 0 ? (
             <div className={styles.history}>
-              <p>History</p>
-              {claimDetail.claim_details.map((detail, index) => (
-                <div key={index} className={styles.historyItem}>
-                  <span className={styles.historyItemDate}>
-                    {formatDateToMonthDay(detail.date)}
-                  </span>
+              <div className={styles.historyHeader}>
+                <p>History</p>
+                <ChevronDown
+                  className={styles.historyIcon}
+                  onClick={handleHistoryItems}
+                />
+              </div>
+              {isChevronDown
+                ? claimDetail.claim_details.map((detail, index) => (
+                    <div key={index} className={styles.historyItem}>
+                      <span className={styles.historyItemDate}>
+                        {formatDateToMonthDay(detail.date)}
+                      </span>
 
-                  <div className={styles.historyItemInfo}>
-                    <div className={styles.historyItemRow}>
-                      <span className={styles.historyItemLabel}>
-                        Working Hours:
-                      </span>
-                      <span className={styles.historyItemValue}>
-                        {detail.working_hours} hours
-                      </span>
+                      <div className={styles.historyItemInfo}>
+                        <div className={styles.historyItemRow}>
+                          <span className={styles.historyItemLabel}>
+                            Working Hours:
+                          </span>
+                          <span className={styles.historyItemValue}>
+                            {detail.working_hours} hours
+                          </span>
+                        </div>
+                        <div className={styles.historyItemRow}>
+                          <span className={styles.historyItemLabel}>
+                            Overtime Salary:
+                          </span>
+                          <span className={styles.historyItemValue}>
+                            ${detail.salaryOvertimePerDay}
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                    <div className={styles.historyItemRow}>
-                      <span className={styles.historyItemLabel}>
-                        Overtime Salary:
-                      </span>
-                      <span className={styles.historyItemValue}>
-                        ${detail.salaryOvertimePerDay}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              ))}
+                  ))
+                : null}
             </div>
           ) : null}
         </div>
