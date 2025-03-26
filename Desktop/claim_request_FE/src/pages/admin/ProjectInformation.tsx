@@ -1,7 +1,7 @@
 import TableComponent from "@components/ui/Table/Table";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch } from "@redux/index.ts";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import {
   selectAllProject,
   selectTotalPageOfAllProject,
@@ -16,7 +16,6 @@ import { UpdateProject } from "../Project/UpdateProject";
 import styles from "./ProjectInformation.module.css";
 import httpClient from "@/constant/apiInstance";
 import { useNavigate } from "react-router-dom";
-import { PATH } from "@constant/config";
 import { ApiResponseNoGeneric } from "@/types/ApiResponse";
 import { Project } from "@/types/Project";
 import { Trash2, FilePen, ClipboardList, Clock } from "lucide-react";
@@ -25,7 +24,6 @@ import { toast } from "react-toastify";
 import SummaryCard from "@/components/card/SummaryCard";
 
 const ProjectInformation: React.FC = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const project = useSelector(selectAllProject) || [];
   const totalPage = useSelector(selectTotalPageOfAllProject) || 1;

@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import SummaryCard from "@/components/card/SummaryCard";
 import DashboardHeader from "@/components/card/DashboardHeader";
-import { Button } from "@/components/ui/button/Button";
 import OTChart from "@/components/card/OTChart";
 import { Chart } from "react-google-charts";
 import {
@@ -19,26 +18,17 @@ const Dashboard = () => {
   const [timeframe, setTimeframe] = useState("monthly");
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [totalClaim, setTotalClaim] = useState({ totalClaims: null, currentMonthClaims: null, changePercentage: null });
+  const [totalPending, setTotalPending] = useState({ pendingClaims: null, currentMonthPending: null, changePercentage: null });
+  const [totalApproved, setTotalApproved] = useState({ approvedClaims: null, currentMonthClaims: null, changePercentage: null });
+  const [totalRejected, setTotalRejected] = useState({ rejectedClaims: null, currentMonthClaims: null, changePercentage: null });
+  const [summary, setSummary] = useState({ totalProjects: null, totalUsers: null, });
+
   const [selected, setSelected] = useState({
     Pending: true,
     Approved: true,
     Rejected: true,
     Paid: true,
-  });
-
-  const [summary, setSummary] = useState({
-    totalProjects: null,
-    totalUsers: null,
-    totalClaims: null,
-    pendingClaims: null,
-    approvedClaims: null,
-    rejectedClaims: null,
-    // monthProject: null,
-    // monthUsers: null,
-    // monthClaims: null,
-    // monthPendingClaims: null,
-    // monthApprovedClaims: null,
-    // monthRejectedClaims: null,
   });
 
   const projectData = [
@@ -68,22 +58,114 @@ const Dashboard = () => {
   }, [timeframe]);
 
   useEffect(() => {
+    const fetchTotalClaim = async () => {
+      setLoading(true);
+      try {
+        const response = await httpClient.get("/admin/total-claims");
+        const data = response?.data?.data ?? {};
+  
+        setTotalClaim({
+          totalClaims: data.totalClaims ?? null,
+          currentMonthClaims: data.currentMonthClaims ?? null,
+          changePercentage: data.changePercentage ?? null,
+        });
+      } catch (error) {
+        console.error("Error fetching summary data:", error);
+        setTotalClaim({
+          totalClaims: null,
+          currentMonthClaims: null,
+          changePercentage: null,
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTotalClaim();
+  }, []);
+
+  useEffect(() => {
+    const fetchSummaryData = async () => {
+      setLoading(true);
+      try {
+        const response = await httpClient.get("/admin/pending-claims");
+        const data = response?.data?.data ?? {};
+        setTotalPending({
+          pendingClaims: data.pendingClaims ?? null,
+          currentMonthPending: data.currentMonthClaims ?? null,
+          changePercentage: data.changePercentage ?? null,
+        });
+      } catch (error) {
+        console.error("Error fetching summary data:", error);
+        setTotalPending({
+          pendingClaims: null,
+          currentMonthPending: null,
+          changePercentage: null,
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchSummaryData();
+  }, []);
+  
+  useEffect(() => {
+    const fetchTotalApproved = async () => {
+      setLoading(true);
+      try {
+        const response = await httpClient.get("/admin/approved-claims");
+        const data = response?.data?.data ?? {};
+  
+        setTotalApproved({
+          approvedClaims: data.approvedClaims ?? null,
+          currentMonthClaims: data.currentMonthClaims ?? null,
+          changePercentage: data.changePercentage ?? null,
+        });
+      } catch (error) {
+        console.error("Error fetching summary data:", error);
+        setTotalApproved({
+          approvedClaims: null,
+          currentMonthClaims: null,
+          changePercentage: null,
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTotalApproved();
+  }, []);
+
+  useEffect(() => {
+    const fetchTotalRejected = async () => {
+      setLoading(true);
+      try {
+        const response = await httpClient.get("/admin/rejected-claims");
+        const data = response?.data?.data ?? {};
+        setTotalRejected({
+          rejectedClaims: data.rejectedClaims ?? null,
+          currentMonthClaims: data.currentMonthClaims ?? null,
+          changePercentage: data.changePercentage ?? null,
+        });
+      } catch (error) {
+        console.error("Error fetching summary data:", error);
+        setTotalRejected({
+          rejectedClaims: null,
+          currentMonthClaims: null,
+          changePercentage: null,
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTotalRejected();
+  }, []);
+
+  useEffect(() => {
     const fetchSummaryData = async () => {
       setLoading(true);
       try {
         const endpoints = [
           "/admin/total-projects",
           "/admin/total-users",
-          "/admin/total-claims",
-          "/admin/pending-claims",
-          "/admin/approved-claims",
-          "/admin/rejected-claims",
-          // "/admin/monthly-projects",
-          // "/admin/monthly-users",
-          // "/admin/monthly-claims",
-          // "/admin/monthly-pending-claims",
-          // "/admin/monthly-approved-claims",
-          // "/admin/monthly-rejected-claims",
         ];
 
         const responses = await Promise.all(
@@ -92,47 +174,17 @@ const Dashboard = () => {
         const [
           totalProjects,
           totalUsers,
-          totalClaims,
-          pendingClaims,
-          approvedClaims,
-          rejectedClaims,
-          // monthProject,
-          // monthUsers,
-          // monthClaims,
-          // monthPendingClaims,
-          // monthApprovedClaims,
-          // monthRejectedClaims,
         ] = responses.map((res) => res?.data?.data ?? null);
 
         setSummary({
           totalProjects,
           totalUsers,
-          totalClaims,
-          pendingClaims,
-          approvedClaims,
-          rejectedClaims,
-          // monthProject,
-          // monthUsers,
-          // monthClaims,
-          // monthPendingClaims,
-          // monthApprovedClaims,
-          // monthRejectedClaims,
         });
       } catch (error) {
         console.error("Error fetching summary data:", error);
         setSummary({
           totalProjects: null,
           totalUsers: null,
-          totalClaims: null,
-          pendingClaims: null,
-          approvedClaims: null,
-          rejectedClaims: null,
-          // monthProject: null,
-          // monthUsers: null,
-          // monthClaims: null,
-          // monthPendingClaims: null,
-          // monthApprovedClaims: null,
-          // monthRejectedClaims: null,
         });
       } finally {
         setLoading(false);
@@ -163,39 +215,41 @@ const Dashboard = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 col-span-3">
             <SummaryCard 
               title="Total Claims" 
-              value={summary.totalClaims ?? "N/A"} 
+              totalvalue={totalClaim?.totalClaims ?? 0}
+              monthvalue={totalClaim?.currentMonthClaims ?? 0}
               icon={<ClipboardList />} 
-              percentage={10} 
+              percentage={totalClaim?.changePercentage ?? 0} 
             />
             <SummaryCard 
               title="Pending Claims" 
-              value={summary.pendingClaims ?? "N/A"} 
+              totalvalue={totalPending?.pendingClaims ?? 0}
+              monthvalue={totalPending?.currentMonthPending ?? 0}
               icon={<Clock />} 
-              percentage={-5} 
-            />
-            <SummaryCard 
-              title="Approved Claims" 
-              value={summary.approvedClaims ?? "N/A"} 
-              icon={<CheckCircle />} 
-              percentage={20} 
-            />
-            <SummaryCard
-              title="Rejected Claims" 
-              value={summary.rejectedClaims ?? "N/A"} 
-              icon={<XCircle />} 
-              percentage={-12} 
-            />
-            <SummaryCard 
-              title="Total Users" 
-              value={summary.totalUsers ?? "N/A"} 
-              icon={<Users />} 
-              percentage={8} 
+              percentage={totalPending?.changePercentage ?? 0} 
             />
             <SummaryCard 
               title="Total Projects" 
-              value={summary.totalProjects ?? "N/A"} 
+              totalvalue={summary.totalProjects ?? 0}
               icon={<Briefcase />} 
-              percentage={15} 
+            />
+            <SummaryCard 
+              title="Approved Claims" 
+              totalvalue={totalApproved?.approvedClaims ?? 0}
+              monthvalue={totalApproved?.currentMonthClaims ?? 0}
+              icon={<CheckCircle />} 
+              percentage={totalApproved?.changePercentage ?? 0} 
+            />
+            <SummaryCard
+              title="Rejected Claims" 
+              totalvalue={totalRejected?.rejectedClaims ?? 0}
+              monthvalue={totalRejected?.currentMonthClaims ?? 0}
+              icon={<XCircle />} 
+              percentage={totalRejected?.changePercentage ?? 0} 
+            />
+            <SummaryCard 
+              title="Total Users" 
+              totalvalue={summary.totalUsers ?? 0}
+              icon={<Users />} 
             />
         </div>
 
@@ -255,6 +309,7 @@ const Dashboard = () => {
           />
         )}
       </div>
+
     </div>
   );
 };

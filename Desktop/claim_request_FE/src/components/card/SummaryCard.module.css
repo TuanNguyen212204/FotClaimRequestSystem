@@ -25,12 +25,12 @@
 }
 
 .title {
-  font-size: 1.25rem;
+  font-size: 1rem;
   /* font-weight: bold; */
 }
 
 .value {
-  font-size: 2.5rem;
+  font-size: 1.5rem;
   margin-bottom: 2px;
   font-weight: lighter;
 }
@@ -45,7 +45,7 @@
   display: flex;
   align-items: center;
   gap: 5px;
-  font-size: 1rem;
+  font-size: 1.3rem;
   font-weight: 600;
 }
 
@@ -65,3 +65,4 @@
 .negative {
   color: #d50000; 
 }
+
