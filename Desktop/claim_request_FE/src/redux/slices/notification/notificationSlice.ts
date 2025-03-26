@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
   fetchNotificationsAsync,
-  markNotificationAsRead,
+  markNotificationAllAsRead,
 } from "@/redux/thunk/notification/notificationThunk";
 
 interface Notification {
@@ -30,16 +30,21 @@ export const notificationSlice = createSlice({
         JSON.stringify(state.notifications)
       ).notifications;
       const newList = {
-        notifications: [...notificationLst, action.payload]
+        notifications: [action.payload, ...notificationLst ]
       };
       state.notifications = newList as unknown as Notification[];
     },
 
     markAllAsRead: (state) => {
-      state.notifications = state.notifications.map((notification) => ({
+      const notificationLst = JSON.parse(
+        JSON.stringify(state.notifications)
+      ).notifications;
+      const newList = notificationLst.map((notification: Notification) => ({
         ...notification,
         is_read: true,
       }));
+      console.log(newList)
+      state.notifications = newList as unknown as Notification[];
     },
   },
   extraReducers: (builder) => {
@@ -56,12 +61,9 @@ export const notificationSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || "Failed to fetch notifications";
       })
-      .addCase(markNotificationAsRead.fulfilled, (state, action) => {
-        state.notifications = state.notifications.map((notification) =>
-          notification.id === action.meta.arg
-            ? { ...notification, is_read: true }
-            : notification
-        );
+      .addCase(markNotificationAllAsRead.fulfilled, (state, action) => {
+        state.notifications = action.payload  as unknown as Notification[];
+        
       });
   },
 });

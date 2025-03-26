@@ -14,6 +14,14 @@ import {
   markAllAsRead,
 } from "@/redux/slices/notification/notificationSlice";
 
+interface Notification {
+  id: string;
+  title: string;
+  message: string;
+  created_at: string;
+  is_read: boolean;
+}
+
 const Header: React.FC = () => {
   const [_, setRole] = useState<string>();
   const [dropdownVisible, setDropdownVisible] = useState<boolean>(false);
@@ -27,13 +35,16 @@ const Header: React.FC = () => {
     (state: any) => state.notifications?.notifications?.notifications
   );
 
+  console.log(notifications)
+
   useEffect(() => {
     dispatch(fetchNotificationsAsync() as any);
   }, [dispatch]);
 
-  // const unreadCount = Array.isArray(notifications)
-  //   ? notifications.filter((n: any) => !n.is_read).length
-  //   : 0;
+  const unreadCount = Array.isArray(notifications)
+    ? notifications.filter((n: any) => !n.is_read).length
+    : 0;
+    
 
   useEffect(() => {
     const record = Number(localStorage.getItem("role_id"));
@@ -87,6 +98,17 @@ const Header: React.FC = () => {
       }
     });
 
+    socket.on("broadcast", (notification) => {
+      try {
+        console.log("Sắp dispatch action addNotification:", notification);
+        dispatch(addNotification(notification));
+        console.log("Đã gửi action addNotification!");
+        console.log(notification);
+      } catch (error) {
+        console.error("Lỗi khi dispatch:", error);
+      }
+    });
+
     socket.on("connect_error", (error) => {
       console.error("Socket connection error:", error);
     });
@@ -118,9 +140,9 @@ const Header: React.FC = () => {
     setDropdownVisible(!dropdownVisible);
   };
 
-  const handleMarkAllAsRead = () => {
-    dispatch(markAllAsRead());
-  };
+  // const handleMarkAllAsRead = (notifications: Notification) => {
+  //   dispatch(markAllAsRead(_));
+  // };
 
   return (
     <>
@@ -131,7 +153,7 @@ const Header: React.FC = () => {
         <div className={styles.rightSection}>
           <SearchBar />
           <div>
-            <Badge count={notifications?.length}>
+            <Badge count={unreadCount}>
               <FaBell className={styles.icon} onClick={toggleDropdown} />
             </Badge>
           </div>
@@ -144,7 +166,9 @@ const Header: React.FC = () => {
       </header>
       {dropdownVisible && (
         <div className={styles.dropdown}>
-          <div className={styles.markAll} onClick={handleMarkAllAsRead}>
+          <div className={styles.markAll} onClick={() => {
+            // handleMarkAllAsRead()
+          }}>
             Mark All As Read
           </div>
           {Array.isArray(notifications) && notifications.length > 0 ? (
