@@ -154,7 +154,7 @@
 } */
 
 .active {
-  color: #16a085;
+  background-color: #16a085;
 }
 .noActive {
   background-color: none;
@@ -236,10 +236,10 @@
 .tooltip {
   position: relative;
   width: 100%;
+  margin: 1rem 0rem;
+  padding: 0.75rem 0rem;
 }
-.claimButtonIngredient:hover {
-  background-color: #16a085;
-}
+
 /* Tooltip text */
 .tooltip .tooltipText {
   visibility: hidden;
@@ -247,16 +247,19 @@
   background-color: #34495e;
   color: #fff;
   text-align: center;
-  padding: 10px 0px;
+  padding: 1rem 0rem;
   margin-left: 10px;
   border-radius: 6px;
   position: absolute;
   z-index: 1;
-  margin-left: 12rem;
-  bottom: -10%;
-  font-size: 12px;
+  margin-bottom: 0rem;
+  margin-left: 13rem;
+  font-size: 0.75rem;
 }
 
 .tooltip:hover .tooltipText {
   visibility: visible;
+}
+.vy {
+  background-color: #16a085;
 }
