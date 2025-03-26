@@ -18,10 +18,22 @@ import {
 import { LoadingProvider } from "@/components/ui/Loading/LoadingContext";
 import LoadingOverlay from "@/components/ui/Loading/LoadingOverlay";
 import { ApiResponseNoGeneric } from "@/types/ApiResponse";
+import { delay } from "@/utils/delay";
 interface CreateUserProps {
   openModal: boolean;
   setOpenModal: (value: boolean) => void;
 }
+type Department = {
+  id: string;
+  name: string;
+};
+type JobRank = {
+  id: number;
+  name: string;
+  ot_rate: string;
+};
+type DepartmentList = Department[];
+type JobRankList = JobRank[];
 export const CreateUser: React.FC<CreateUserProps> = ({
   openModal,
   setOpenModal,
@@ -37,6 +49,41 @@ export const CreateUser: React.FC<CreateUserProps> = ({
     reset,
     formState: { errors },
   } = useForm<User>();
+  const [department, setDepartment] = useState<DepartmentList>([]);
+  const [jobRank, setJobRank] = useState<JobRankList>([]);
+  // Chỗ này để fetch api lấy list department từ BE về
+  const fetchDepartment = async () => {
+    try {
+      delay(1000);
+      const response = await httpClient.get<ApiResponseNoGeneric>(
+        `/admin/departments`
+      );
+      setDepartment(response.data.data);
+    } catch (error) {
+      console.error("Fetch department error:", error);
+    }
+  };
+  // Chỗ này fetch api lấy list job rank từ BE về
+  const fetchJobRank = async () => {
+    try {
+      delay(1000);
+      const response = await httpClient.get<ApiResponseNoGeneric>(
+        `/admin/job-ranks`
+      );
+      setJobRank(response.data.data);
+    } catch (error) {
+      console.error("Fetch job rank error:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDepartment();
+    fetchJobRank();
+  }, []);
+  useEffect(() => {
+    console.log(jobRank);
+    console.log(department);
+  }, [jobRank, department]);
   const handleCreateUser = async (data: any) => {
     try {
       const response = httpClient.post<ApiResponseNoGeneric>(
@@ -70,11 +117,11 @@ export const CreateUser: React.FC<CreateUserProps> = ({
     setLoading(true);
     const requestBody = {
       full_name: data.full_name,
-      department: data.department,
+      department_id: data.department,
       email: data.email,
       salary: data.salary,
       role: data.role_id,
-      job_rank: data.job_rank,
+      job_rank_id: data.job_rank,
     };
     console.log(requestBody);
     handleCreateUser(requestBody);
@@ -188,27 +235,21 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                   </div>
                 </div>
               </label>
-              <input
+              <select
                 id="department"
-                type="text"
                 {...register("department", {
                   required: "Department is required",
-                  minLength: {
-                    value: 2,
-                    message: "Must be at least 2 characters",
-                  },
-                  maxLength: {
-                    value: 50,
-                    message: "Must be at most 50 characters",
-                  },
                 })}
                 className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
-              />
-              {errors.department && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.department.message}
-                </p>
-              )}
+              >
+                <option value="">Select Department</option>
+                {department &&
+                  department.map((a) => (
+                    <option key={a.id} value={a.id}>
+                      {a.name}
+                    </option>
+                  ))}
+              </select>
             </div>
             <div className={styles.input_container}>
               <label
@@ -287,21 +328,22 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                   </div>
                 </div>
               </label>
-              <input
+              <select
                 id="job_rank"
                 {...register("job_rank", {
-                  required: "Job Rank is required",
-                  minLength: {
-                    value: 2,
-                    message: "Must be at least 2 characters",
-                  },
-                  maxLength: {
-                    value: 50,
-                    message: "Must be at most 50 characters",
-                  },
+                  required: "Department is required",
                 })}
                 className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
-              />
+              >
+                <option value="">Select Job Rank</option>
+                {jobRank &&
+                  jobRank.map((a) => (
+                    <option key={a.id} value={a.id}>
+                      {a.name} - {a.ot_rate}
+                    </option>
+                  ))}
+              </select>
+
               {errors.job_rank && (
                 <p className="text-red-500 text-sm mt-1">
                   {errors.job_rank.message}
