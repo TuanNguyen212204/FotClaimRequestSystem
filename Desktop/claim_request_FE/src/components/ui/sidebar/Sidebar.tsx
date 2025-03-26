@@ -93,21 +93,21 @@ export const Sidebar = ({
   return (
     <div>
       <div className={`${styles.sidebar} `}>
-        <div className={styles.claimItemCollapse}>
-          <ul className={`${styles.claimList} `}>
+        <div className={`${styles.claimItemCollapse} `}>
+          <ul className={`${styles.claimList}`}>
             {routeByRole.map((route) => (
               <li
                 key={route.path}
                 // className={`${styles.claimItemCollapse} ${styles.tooltip} ${
                 //   selectedClaim === route.path ? styles.active : ""
                 // } mt-2`}
-                className={`${styles.tooltip} my-4`}
+                className={`${styles.tooltip} py-2 my-4`}
                 style={{ backgroundColor: "#34495e" }}
                 onClick={() => handleNavigate(route.path as string)}
               >
-                <button className={` ${styles.claimButton} `}>
+                <div className={` ${styles.claimButton}  `}>
                   <div
-                    className={styles.claimButtonIngredient}
+                    className={`${styles.claimButtonIngredient} `}
                     style={{
                       display: "flex",
                       alignItems: "center",
@@ -115,7 +115,7 @@ export const Sidebar = ({
                     }}
                   >
                     <div
-                      className={`${
+                      className={` ${
                         selectedClaim === route.path ? styles.active : ""
                       }`}
                     >
@@ -125,7 +125,7 @@ export const Sidebar = ({
                       <span>{route.label}</span>
                     </div>
                   </div>
-                </button>
+                </div>
               </li>
             ))}
           </ul>
