@@ -35,6 +35,9 @@ const Dashboard = () => {
         const response = await fetch(
           `https://67b847da699a8a7baef3677f.mockapi.io/${timeframe}`
         );
+        const response = await fetch(
+          `https://67b847da699a8a7baef3677f.mockapi.io/${timeframe}`
+        );
         const result = await response.json();
         setData(result);
       } catch (error) {
@@ -61,6 +64,17 @@ const Dashboard = () => {
           "/admin/rejected-claims",
         ];
 
+        const responses = await Promise.all(
+          endpoints.map((endpoint) => httpClient.get(endpoint))
+        );
+        const [
+          totalProjects,
+          totalUsers,
+          totalClaims,
+          pendingClaims,
+          approvedClaims,
+          rejectedClaims,
+        ] = responses.map((res) => res?.data?.data ?? null);
         const responses = await Promise.all(
           endpoints.map((endpoint) => httpClient.get(endpoint))
         );
@@ -109,6 +123,13 @@ const Dashboard = () => {
       item.rejected,
       item.paid,
     ]),
+    ...data.map((item) => [
+      item.name,
+      item.pending,
+      item.approved,
+      item.rejected,
+      item.paid,
+    ]),
   ];
 
   return (
@@ -117,6 +138,42 @@ const Dashboard = () => {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-12">
+        <SummaryCard
+          title="Total Claims"
+          value={loading ? "Loading..." : summary.totalClaims ?? "N/A"}
+          icon={<ClipboardList />}
+          percentage={10}
+        />
+        <SummaryCard
+          title="Pending Claims"
+          value={loading ? "Loading..." : summary.pendingClaims ?? "N/A"}
+          icon={<Clock />}
+          percentage={-5}
+        />
+        <SummaryCard
+          title="Approved Claims"
+          value={loading ? "Loading..." : summary.approvedClaims ?? "N/A"}
+          icon={<CheckCircle />}
+          percentage={20}
+        />
+        <SummaryCard
+          title="Rejected Claims"
+          value={loading ? "Loading..." : summary.rejectedClaims ?? "N/A"}
+          icon={<XCircle />}
+          percentage={-12}
+        />
+        <SummaryCard
+          title="Total Users"
+          value={loading ? "Loading..." : summary.totalUsers ?? "N/A"}
+          icon={<Users />}
+          percentage={8}
+        />
+        <SummaryCard
+          title="Total Projects"
+          value={loading ? "Loading..." : summary.totalProjects ?? "N/A"}
+          icon={<Briefcase />}
+          percentage={15}
+        />
         <SummaryCard
           title="Total Claims"
           value={loading ? "Loading..." : summary.totalClaims ?? "N/A"}
