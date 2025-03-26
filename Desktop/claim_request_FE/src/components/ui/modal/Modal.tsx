@@ -51,7 +51,7 @@ export interface ModalProps {
   buttonOk?: string;
   buttonCancel?: string;
   footerPosition?: "left" | "center" | "right";
-  backgroundColor ?: string;
+  backgroundColor?: string;
 }
 
 export interface ModalComponent extends React.FC<ModalProps> {
