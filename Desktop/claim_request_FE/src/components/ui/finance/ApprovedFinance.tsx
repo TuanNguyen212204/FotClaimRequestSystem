@@ -51,6 +51,10 @@ export const ApprovedFinanceComponent: React.FC = () => {
   }, [currentPage]);
 
   const handleViewDetail = (value: string) => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 1500);
     setSelectedRequestId(value);
     setIsModalOpen(true);
   };

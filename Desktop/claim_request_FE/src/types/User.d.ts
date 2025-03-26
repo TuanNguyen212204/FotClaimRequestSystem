@@ -16,3 +16,19 @@ export interface User {
 export interface NewUser extends User {
   role: string; // (e.g., "Dev", "BA", "PM")
 }
+
+export interface UserInformation {
+  user_id: string;
+  username: string;
+  email: string;
+  full_name: string;
+  department_id: string;
+  job_rank_id: string;
+  salary: string;
+  role_id: number;
+  avatar: string | null;
+  user_status: number;
+  role_name: string;
+  department: string;
+  job_rank: string;
+}
