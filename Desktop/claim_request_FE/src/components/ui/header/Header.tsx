@@ -15,7 +15,7 @@ import {
 } from "@/redux/slices/notification/notificationSlice";
 
 const Header: React.FC = () => {
-  const [role, setRole] = useState<string>();
+  const [_, setRole] = useState<string>();
   const [dropdownVisible, setDropdownVisible] = useState<boolean>(false);
   const username = localStorage.getItem("username");
   const navigate = useNavigate();
