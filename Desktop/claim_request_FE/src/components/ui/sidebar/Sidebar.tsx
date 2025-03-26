@@ -67,7 +67,6 @@ export const Sidebar = ({
       setSelectedClaim(record);
     }
   }, []);
-
   useEffect(() => {
     const record = Number(localStorage.getItem("role_id"));
     if (record === 1) {
@@ -87,25 +86,29 @@ export const Sidebar = ({
   };
 
   const handleNavigate = (path: string) => {
+    setSelectedClaim(path);
+    localStorage.setItem("selectedClaim", path);
     navigate(path);
   };
   return (
-    <div className={styles.container}>
+    <div>
       <div className={`${styles.sidebar} `}>
         <div className={styles.menu}>
           <ul className={`${styles.claimList} `}>
             {routeByRole.map((route) => (
               <li
                 key={route.path}
-                className={`${styles.claimItemCollapse} ${
-                  selectedClaim === route.path ? styles.active : ""
-                } `}
+                className={`${styles.claimItemCollapse} ${styles.tooltip}`}
                 onClick={() => handleNavigate(route.path as string)}
               >
-                <button className={` ${styles.claimButton} ${styles.tooltip}`}>
+                <button className={` ${styles.claimButton} `}>
                   <div className={styles.claimButtonIngredient}>
                     <div style={{ cursor: "pointer" }}>
-                      <div className={""}>
+                      <div
+                        className={`${
+                          selectedClaim === route.path ? styles.active : ""
+                        } ${styles.selectedItem} ml-1 `}
+                      >
                         <span>{route.icon}</span>
                       </div>
                       <div className={` ${styles.tooltipText}  `}>
@@ -131,7 +134,7 @@ export const Sidebar = ({
               className={`${styles.logoutCollapse}`}
               onClick={() => handleLogOut()}
             >
-              <div className="ml-1.5">
+              <div className="mr-2">
                 <LogOut size={20} />
               </div>
             </button>
