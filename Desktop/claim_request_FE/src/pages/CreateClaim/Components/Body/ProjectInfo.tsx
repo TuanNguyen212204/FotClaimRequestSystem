@@ -14,6 +14,7 @@ export interface IProjectInfoProps {
   setValue: UseFormSetValue<FormData>;
   register: UseFormRegister<FormData>;
   control: Control<FormData>;
+  mode: "create" | "view" | "update";
 }
 
 export default function ProjectInfo({
@@ -21,6 +22,7 @@ export default function ProjectInfo({
   setValue,
   register,
   control,
+  mode,
 }: IProjectInfoProps): JSX.Element {
   const currentProject = useWatch({ control, name: "currentSelectedProject" });
   // console.log(currentProject);
@@ -43,7 +45,12 @@ export default function ProjectInfo({
             <select
               title="Projects"
               className="w-full p-3.5! mb-2.5 text-base border-2 border-gray-200 box-border rounded-sm"
-              defaultValue={""}
+              defaultValue={
+                mode === "update" || mode === "view"
+                  ? currentProject?.projectName
+                  : ""
+              }
+              disabled={mode === "view" || mode === "update"}
               onChange={(e) => {
                 const selectedProject = ProjectList.find(
                   (p) => p.projectName === e.target.value

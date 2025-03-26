@@ -18,7 +18,7 @@ export type trigger = "hover" | "click" | "focus";
 export interface PopOverProps {
   placement: placement;
   z_index?: z_index;
-  title: string;
+  title?: string;
   content: React.ReactNode | string;
   bgColour?: color;
   trigger: trigger;

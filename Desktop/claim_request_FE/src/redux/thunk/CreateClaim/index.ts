@@ -1,7 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "@/redux";
 import projectService from "@/Services/Project";
-import { CreateClaimData } from "@/Services/Project/Project.type";
+import {
+  CreateClaimData,
+  UpdateClaimData,
+} from "@/Services/Project/Project.type";
 import { TProjectInfo } from "@/redux/slices/Project/projectSlice";
 import { ApiError } from "@/api";
 import { projectsParamOptions } from "@/Services/Project/Project.type";
@@ -22,7 +25,29 @@ export const createClaim = createAsyncThunk(
       }
       return rejectWithValue(error);
     }
-  },
+  }
+);
+export const updateClaim = createAsyncThunk(
+  "project/updateClaim",
+  async (
+    payload: { claimData: CreateClaimData; requestID: string },
+    { rejectWithValue }
+  ) => {
+    try {
+      const response = await projectService.updateClaim(payload.claimData, payload.requestID);
+      return response;
+    } catch (error) {
+      if (error instanceof ApiError) {
+        return rejectWithValue({
+          message: error.message,
+          code: error.status,
+          errorCode: error.data.errorCode,
+          status: error.status,
+        });
+      }
+      return rejectWithValue(error);
+    }
+  }
 );
 export const fetchProjectByID = createAsyncThunk(
   "project/fetchProject",
@@ -57,7 +82,7 @@ export const fetchProjectByID = createAsyncThunk(
       }
       return rejectWithValue(error);
     }
-  },
+  }
 );
 export const getAllProjects = createAsyncThunk(
   "project/getAllProjects",
@@ -76,5 +101,5 @@ export const getAllProjects = createAsyncThunk(
       }
       return rejectWithValue(error);
     }
-  },
+  }
 );

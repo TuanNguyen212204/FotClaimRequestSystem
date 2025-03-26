@@ -34,7 +34,9 @@ export interface CreateClaimData {
     working_hours: number;
   }[];
 }
-
+export interface UpdateClaimData extends CreateClaimData {
+  requestID: string;
+}
 export interface projectsParamOptions {
   page: number;
   limit: number;
