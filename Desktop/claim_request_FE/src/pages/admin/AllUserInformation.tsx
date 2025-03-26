@@ -22,12 +22,30 @@ import ToggleButton from "@/components/ui/ToggleButton/ToggleButton";
 import { CreateUser } from "../User/CreateUser";
 import { CircleCheck } from "lucide-react";
 import { AssignProject } from "../AssignProject";
+import { ArrowDown, ArrowUp } from "lucide-react";
+import { ApiError } from "@/api";
+import { set } from "date-fns";
+type Department = {
+  id: string;
+  name: string;
+};
+type DepartmentList = Department[];
 const AllUserInformation: React.FC = () => {
+  const fetchDepartment = async () => {
+    try {
+      const response = await httpClient.get<ApiResponseNoGeneric>(
+        `/admin/departments`
+      );
+      setDepartment(response.data.data);
+    } catch (error) {
+      console.error("Fetch department error:", error);
+    }
+  };
   const tableRef = useRef<{
     getSelectedData: () => DataRecord[];
   }>(null);
   const [selectedData, setSelectedData] = useState<DataRecord[]>([]);
-
+  const [department, setDepartment] = useState<DepartmentList>([]);
   const handleGetSelectedData = () => {
     if (tableRef.current) {
       const a = tableRef.current.getSelectedData();
@@ -35,7 +53,7 @@ const AllUserInformation: React.FC = () => {
     }
   };
 
-  const listUserIDisDeleted: string[] = selectedData.map((data) => data.id);
+  // const listUserIDisDeleted: string[] = selectedData.map((data) => data.id);
 
   const deleteAllOFSelectedData = () => {
     handleGetSelectedData();
@@ -50,6 +68,9 @@ const AllUserInformation: React.FC = () => {
       localStorage.setItem("count", "1");
     }
   }, [username]);
+  useEffect(() => {
+    fetchDepartment();
+  }, []);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const users = useSelector(selectAllUser);
@@ -81,6 +102,25 @@ const AllUserInformation: React.FC = () => {
   const [toggleState, setToggleState] = useState<{ [key: string]: boolean }>(
     {}
   );
+  const [dataSource, setDataSource] = useState<DataRecord[]>([]);
+
+  useEffect(() => {
+    const fetchDataSource = async () => {
+      try {
+        const data = users.map((user: User, index: number) => ({
+          ...user,
+          key: index,
+          id: user.user_id ? user.user_id.toString() : "",
+          status: user.department ? user.department : "",
+        }));
+        setDataSource(data);
+      } catch (error) {
+        console.error("Error fetching data source:", error);
+      }
+    };
+
+    fetchDataSource();
+  }, [users]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -94,12 +134,6 @@ const AllUserInformation: React.FC = () => {
   const handleCreateUser = async () => {
     handleOpenModal();
   };
-  const dataSource: DataRecord[] = users.map((user, index) => ({
-    ...user,
-    key: index,
-    id: user.user_id ? user.user_id.toString() : "",
-    status: user.department ? user.department : "",
-  }));
 
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
@@ -257,7 +291,41 @@ const AllUserInformation: React.FC = () => {
       },
     },
   ];
-
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+  const [selectedStatus, setSelectedStatus] = useState<string>("All");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const uniqueStatuses = [
+    "All",
+    ...new Set(department.map((item) => item.name)),
+  ];
+  const fetchStaffByDepartmentID = async (department_name: string) => {
+    const a = department.find((item) => item.name === department_name);
+    const department_id = a?.id;
+    try {
+      const response = await httpClient.get<ApiResponseNoGeneric>(
+        "/admin/staffs",
+        {
+          page: currentPage.toString(),
+          department_id: department_id,
+          limit: 10,
+        }
+      );
+      console.log(response.data.data);
+      setDataSource(response.data.data);
+    } catch (error) {
+      console.error("Fetch staff by department error:", error);
+    }
+  };
+  const handleStatusSelect = (status: string) => {
+    setSelectedStatus(status);
+    fetchStaffByDepartmentID(status);
+    setIsDropdownOpen(false);
+  };
+  useEffect(() => {
+    console.log(dataSource);
+  }, [dataSource]);
   return (
     <div>
       {openModal && (
@@ -282,7 +350,41 @@ const AllUserInformation: React.FC = () => {
           </div>
         </div>
       )}
+      <div className="flex ">
+        <div className={`${styles.filter_section} `}>
+          <div className={styles.filterStatusP}>
+            <p>Filter By {name}:</p>
+          </div>
+          <div
+            className="relative inline-block text-left mt-5.5 ml-3"
+            // style={{ marginTop: "15px", marginLeft: "15px" }}
+          >
+            <div
+              onClick={toggleDropdown}
+              className="flex items-center justify-between px-4 py-2 text-sm font-medium text-gray-700 bg-white border rounded-md shadow-sm hover:bg-gray-100 focus:outline-none"
+            >
+              <span>{selectedStatus}</span>
+              <ArrowDown className="w-4 h-4 ml-2" />
+            </div>
 
+            {isDropdownOpen && (
+              <div className="absolute right-0 z-10 mt-2 origin-top-right bg-white border border-gray-300 rounded-md shadow-lg w-48">
+                <div className="py-1">
+                  {uniqueStatuses.map((status) => (
+                    <div
+                      key={status}
+                      onClick={() => handleStatusSelect(status)}
+                      className="block px-4 py-2 text-sm text-gray-700 w-4/5 text-left hover:bg-gray-200"
+                    >
+                      {status}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
       <div>
         <TableComponent
           // sortConfig={sortConfig}
