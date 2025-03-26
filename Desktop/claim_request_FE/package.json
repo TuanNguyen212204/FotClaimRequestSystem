@@ -33,11 +33,8 @@
     "react-router-dom": "^7.3.0",
     "react-simple-typewriter": "^5.0.1",
     "react-toastify": "^11.0.5",
-<<<<<<< HEAD
     "socket.io-client": "^4.8.1",
-=======
     "recharts": "^2.15.1",
->>>>>>> 27a8d268e7c4bb736ab027a9da6cc44c08226f1d
     "tailwindcss": "^4.0.6",
     "typewriter-effect": "^2.21.0",
     "yup": "^1.6.1",
