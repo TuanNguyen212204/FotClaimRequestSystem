@@ -6,19 +6,17 @@
 
 /* Sidebar */
 .sidebar {
-  width: 250px;
+  width: 50px;
   background-color: #213555;
   color: white;
-  padding: 10px;
   height: 100vh;
   position: fixed;
   left: 0;
   top: 0;
-  transition: width 0.3s ease;
-  overflow: hidden;
+  transition: all 0.3s ease-in;
 }
 
-.collapsed {
+/* .collapsed {
   width: 50px;
   padding: 10px;
   transition: 0.3s ease;
@@ -26,7 +24,7 @@
 }
 .collapsed.claimItem {
   width: 10px;
-}
+} */
 
 .header {
   margin-left: 77px;
@@ -79,9 +77,9 @@
   width: 100%;
 }
 
-/* .menu {
-  margin-bottom: 20px;
-} */
+.menu {
+  padding-top: 50px;
+}
 
 .claimHeader {
   color: white;
@@ -108,15 +106,25 @@
 }
 .claimList {
   transition: max-height 0.3s ease;
-  overflow: hidden;
+
   list-style: none;
   padding: 0;
 }
 
 .claimItemCollapse {
-  padding: 4px;
+  padding: 8px;
   cursor: pointer;
   background-color: #34495e;
+  margin-top: 1rem;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  transition: none !important;
+}
+.claimItemCreateClaim {
+  padding: 4px;
+  cursor: pointer;
+  background-color: #4caf50;
   margin: 15px 0;
   border-radius: 5px;
   display: flex;
@@ -124,7 +132,7 @@
   transition: none !important;
 }
 .claimItem {
-  padding: 8px;
+  /* padding: 8px; */
   cursor: pointer;
   background-color: #34495e;
   margin: 20px 0;
@@ -180,33 +188,14 @@
   color: #2c3e50;
 }
 
-.logout {
-  background-color: #e74c3c;
-  color: white;
-  border: none;
-  padding: 10px;
-  cursor: pointer;
-  width: 50%;
-  position: absolute;
-  bottom: 70px;
-  left: 50%;
-  transform: translateX(-50%);
-  text-align: center;
-  border-radius: 5px;
+.logout:hover {
+  background-color: #c0392b;
+  width: 100%;
 }
 .logoutCollapse {
-  background-color: #e74c3c;
   color: white;
-  border: none;
-  padding: 10px;
-  cursor: pointer;
-  width: 70%;
-  position: absolute;
-  bottom: 70px;
-  left: 43%;
-  transform: translateX(-50%);
-  text-align: center;
-  border-radius: 5px;
+  width: 100%;
+  background-color: transparent;
 }
 
 /* Arrow styles */
@@ -233,6 +222,11 @@
   color: white;
   transition: none !important;
   padding-top: 5px;
+  width: 100%;
+  background-color: transparent;
+}
+.claimButton:hover {
+  text-decoration: none;
 }
 .claimButtonCollapse {
 }
@@ -243,9 +237,44 @@
 }
 .iconInClaimButton_1 {
   margin-top: 2px;
+  margin-left: 5px;
   transition: none !important;
 }
 .iconInClaimButton_2 {
   margin-left: 5px;
   transition: none !important;
+}
+.showText {
+  visibility: visible;
+  transition: none !important;
+}
+.hideText {
+  visibility: hidden;
+  transition: none !important;
+}
+.tooltip {
+  position: relative;
+  width: 73%;
+  display: inline-block;
+}
+
+/* Tooltip text */
+.tooltip .tooltipText {
+  visibility: hidden;
+  width: 120px;
+  background-color: #34495e;
+  color: #fff;
+  text-align: center;
+  padding: 13px 0px;
+  margin-left: 10px;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+  margin-left: 3.5rem;
+  bottom: -10%;
+  font-size: 12px;
+}
+
+.tooltip:hover .tooltipText {
+  visibility: visible;
 }

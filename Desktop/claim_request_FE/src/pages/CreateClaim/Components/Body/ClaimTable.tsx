@@ -1,4 +1,4 @@
-import { useWatch, useFieldArray } from "react-hook-form";
+import { useWatch, useFieldArray, UseFormSetValue } from "react-hook-form";
 import { Control, UseFormRegister, FieldErrors } from "react-hook-form";
 import styles from "@pages/CreateClaim/Claim.module.css";
 import { FormData } from "@/types/claimForm.type";
@@ -7,12 +7,14 @@ export interface ClaimTableProps {
   control: Control<FormData>;
   register: UseFormRegister<FormData>;
   errors: FieldErrors<FormData>;
+  setValue: UseFormSetValue<FormData>;
 }
 
 export default function ClaimTable({
   register,
   control,
   errors,
+  setValue,
 }: ClaimTableProps) {
   const { fields, append, remove } = useFieldArray({
     control,
@@ -28,7 +30,6 @@ export default function ClaimTable({
     (sum, claim) => sum + (claim.working_hours || 0),
     0,
   );
-
   return (
     <div className="mb-5 box-border overflow-x-auto">
       <h2 className="text-lg pb-1.5! mb-4!">Claim Details</h2>
@@ -46,21 +47,7 @@ export default function ClaimTable({
                 <input
                   type="date"
                   className={styles.form_control}
-                  {...register(`claims.${index}.date`, {
-                    validate: (value, formValues) => {
-                      const allDates = formValues.claims.map(
-                        (claim) => claim.date,
-                      );
-                      console.log(allDates + "dater");
-                      const duplicateCount = allDates.filter(
-                        (date) => date === value,
-                      ).length;
-                      console.log(duplicateCount + "dup count");
-                      return (
-                        duplicateCount <= 1 || "This date is already selected"
-                      );
-                    },
-                  })}
+                  {...register(`claims.${index}.date`)}
                   min={minDate}
                   max={maxDate}
                 />
@@ -71,10 +58,28 @@ export default function ClaimTable({
                 <input
                   type="number"
                   step="0.1"
-                  min="0"
                   className={styles.form_control}
                   {...register(`claims.${index}.working_hours`, {
                     valueAsNumber: true,
+
+                    min: {
+                      value: 0,
+                      message: "Working hours must be positive",
+                    },
+
+                    max: {
+                      value: 24,
+                      message: "Working hours must be less than 24 hours",
+                    },
+
+                    onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+                      const value = Number(e.currentTarget.value);
+                      if (value > 24) {
+                        e.preventDefault();
+                        e.currentTarget.value = "24";
+                        setValue(`claims.${index}.working_hours`, 24);
+                      }
+                    },
                   })}
                 />
               </TdWithError>

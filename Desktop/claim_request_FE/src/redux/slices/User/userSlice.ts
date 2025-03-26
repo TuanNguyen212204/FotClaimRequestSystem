@@ -5,6 +5,7 @@ import {
   fetchUserByIdAsync,
   fetchTotalPage,
 } from "@redux/thunk/User/userThunk";
+
 const initialState: {
   data: User[];
   user: User | null;

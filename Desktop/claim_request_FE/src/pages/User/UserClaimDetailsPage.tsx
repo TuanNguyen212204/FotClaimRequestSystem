@@ -1,12 +1,12 @@
-import { UserClaimDetails } from '@/components/ui/claimer/UserClaimDetails'
-import React from 'react'
+import UserClaimDetails from "@/components/ui/claimer/UserClaimDetails";
+import React from "react";
 
-export const UserClaimDetailsPage:React.FC = () => {
+export const UserClaimDetailsPage: React.FC = () => {
   return (
-      <div>
-          <UserClaimDetails/>
+    <div>
+      <UserClaimDetails />
     </div>
-  )
-}
+  );
+};
 
-export default UserClaimDetailsPage
+export default UserClaimDetailsPage;

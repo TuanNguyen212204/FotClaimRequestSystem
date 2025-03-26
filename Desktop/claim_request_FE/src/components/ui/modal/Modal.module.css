@@ -238,7 +238,8 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(2px);
   z-index: 1000;
 }
 
@@ -262,4 +263,20 @@
 .footerNode {
   border-top: 1px solid #eee;
   text-align: center;
+}
+
+.footer {
+  display: flex;
+}
+
+.footerLeft {
+  justify-content: flex-start;
+}
+
+.footerCenter {
+  justify-content: center;
+}
+
+.footerRight {
+  justify-content: flex-end;
 }

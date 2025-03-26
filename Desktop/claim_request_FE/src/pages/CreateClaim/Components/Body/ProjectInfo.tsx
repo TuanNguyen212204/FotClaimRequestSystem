@@ -7,7 +7,7 @@ import {
 } from "react-hook-form";
 import { JSX, ReactNode } from "react";
 import { FormData } from "@/types/claimForm.type";
-import { TProjectInfo } from "@/redux/slices/Project/projectSlice";
+import { TProjectInfo } from "@redux/slices/Project/projectSlice";
 import styles from "@pages/CreateClaim/Claim.module.css";
 export interface IProjectInfoProps {
   ProjectList: TProjectInfo[];
@@ -46,7 +46,7 @@ export default function ProjectInfo({
               defaultValue={""}
               onChange={(e) => {
                 const selectedProject = ProjectList.find(
-                  (p) => p.projectName === e.target.value,
+                  (p) => p.projectName === e.target.value
                 );
                 if (selectedProject) {
                   setValue("currentSelectedProject", selectedProject, {
@@ -105,7 +105,7 @@ export default function ProjectInfo({
                 currentProject?.ProjectDuration?.to
                   ? formatDateRange(
                       currentProject.ProjectDuration.from,
-                      currentProject.ProjectDuration.to,
+                      currentProject.ProjectDuration.to
                     )
                   : ""
               }
