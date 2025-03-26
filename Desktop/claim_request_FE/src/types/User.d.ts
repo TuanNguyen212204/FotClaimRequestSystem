@@ -11,6 +11,8 @@ export interface User {
   role_id?: number;
   user_status?: number;
   role_name?: string;
+  avatar?: string;
+  ot_rate?: number;
 }
 
 export interface NewUser extends User {

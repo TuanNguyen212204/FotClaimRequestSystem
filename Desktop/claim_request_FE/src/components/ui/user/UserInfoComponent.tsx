@@ -17,6 +17,8 @@ export const UserInfoComponent: React.FC = () => {
   const [editedUser, setEditedUser] = useState<Partial<User>>({});
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isSalaryVisible, setIsSalaryVisible] = useState(false);
+  const [isOtRateVisible, setIsOtRateVisible] = useState(false);
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const navigate = useNavigate();
 
   const accessToken = localStorage.getItem("access_token");
@@ -35,6 +37,13 @@ export const UserInfoComponent: React.FC = () => {
         toast.warning("Please change your password for the first time.");
         setTimeout(() => {
           navigate("/change-password");
+        }, 2000);
+      } else if (selectedUser.user_status === 0) {
+        toast.error(
+          "Your account is currently inactive. Please contact the admin."
+        );
+        setTimeout(() => {
+          navigate("/login");
         }, 2000);
       }
     } else {
@@ -67,6 +76,25 @@ export const UserInfoComponent: React.FC = () => {
         return "Need First-Time Login";
       default:
         return "Unknown";
+    }
+  };
+
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const validImageTypes = ["image/jpeg", "image/png", "image/gif"];
+      if (!validImageTypes.includes(file.type)) {
+        toast.error("Please select a valid image file (JPEG, PNG, or GIF)!");
+        return;
+      }
+      const maxSizeInMB = 5;
+      if (file.size > maxSizeInMB * 1024 * 1024) {
+        toast.error(`File size must be less than ${maxSizeInMB}MB!`);
+        return;
+      }
+      setAvatarFile(file);
+      const previewUrl = URL.createObjectURL(file);
+      setEditedUser({ ...editedUser, avatar: previewUrl });
     }
   };
 
@@ -146,28 +174,30 @@ export const UserInfoComponent: React.FC = () => {
     }
 
     try {
-      const requestBody: {
-        email: string;
-        department: string;
-        job_rank: string;
-        password?: string;
-      } = {
-        email: editedUser.email || "",
-        department: editedUser.department || "",
-        job_rank: editedUser.job_rank || "",
-      };
-
+      const formData = new FormData();
+      formData.append("email", editedUser.email || "");
+      formData.append("department", editedUser.department || "");
+      formData.append("job_rank", editedUser.job_rank || "");
       if (editedUser.password && editedUser.password.trim() !== "") {
-        requestBody.password = editedUser.password;
+        formData.append("password", editedUser.password);
+      }
+      if (avatarFile) {
+        formData.append("avatar", avatarFile);
       }
 
       const response = await httpClient.put(
         `/admin/staff/${userId}`,
-        requestBody
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
 
       dispatch(fetchUserByIdAsync());
       setIsEditing(false);
+      setAvatarFile(null);
       toast.success("Update user successfully.");
       if (editedUser.password && editedUser.user_status === 2) {
         await httpClient.put(`/admin/staff/${userId}`, {
@@ -212,7 +242,10 @@ export const UserInfoComponent: React.FC = () => {
       <div className={styles.profileHeader}>
         <div className={styles.avatarSection}>
           <img
-            src="https://i.pinimg.com/736x/63/f0/0d/63f00d6ebe2c93b945be3c39135503c2.jpg"
+            src={
+              selectedUser.avatar ||
+              "https://i.pinimg.com/736x/63/f0/0d/63f00d6ebe2c93b945be3c39135503c2.jpg"
+            }
             alt="Avatar"
             className={styles.profileAvatar}
           />
@@ -229,7 +262,7 @@ export const UserInfoComponent: React.FC = () => {
         <div className={styles.profileInfo}>
           <h1>{selectedUser.full_name || "Full Name"}</h1>
           <p className={styles.position}>
-            <span>Job Rank:</span> {selectedUser.job_rank || "No Job Rank"},{" "}
+            <span>Job Rank:</span> {selectedUser.job_rank || "No Job Rank"}
             <span>Department:</span> {selectedUser.department || "Undetermined"}
           </p>
 
@@ -246,6 +279,21 @@ export const UserInfoComponent: React.FC = () => {
                 {isSalaryVisible ? "👁️" : "👁️‍🗨️"}
               </button>
               <span>Salary</span>
+            </div>
+            <div className={styles.statItem}>
+              <span className={styles.statIcon}>⏰</span>
+              <h3>
+                {isOtRateVisible
+                  ? `${selectedUser.ot_rate || "N/A"} %`
+                  : "****"}
+              </h3>
+              <button
+                onClick={() => setIsOtRateVisible(!isOtRateVisible)}
+                className={styles.eyeButton}
+              >
+                {isOtRateVisible ? "👁️" : "👁️‍🗨️"}
+              </button>
+              <span>OT Rate</span>
             </div>
             <div className={styles.statItem}>
               <span className={styles.statIcon}>📡</span>
@@ -267,7 +315,7 @@ export const UserInfoComponent: React.FC = () => {
               <strong>Email:</strong> {selectedUser.email || "N/A"}
             </p>
             <p>
-              <strong>Role:</strong>{" "}
+              <strong>Role:</strong>
               {getRoleName(selectedUser.role_id) || "N/A"}
             </p>
             <p>
@@ -277,7 +325,7 @@ export const UserInfoComponent: React.FC = () => {
               <strong>Job Rank:</strong> {selectedUser.job_rank || "N/A"}
             </p>
             <p>
-              <strong>Status:</strong>{" "}
+              <strong>Status:</strong>
               {getUserStatusLabel(selectedUser.user_status)}
             </p>
           </div>
@@ -312,6 +360,21 @@ export const UserInfoComponent: React.FC = () => {
                   setEditedUser({ ...editedUser, email: e.target.value })
                 }
               />
+            </div>
+            <div className={styles.formSection}>
+              <label>Avatar:</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleAvatarChange}
+              />
+              {editedUser.avatar && (
+                <img
+                  src={editedUser.avatar}
+                  alt="Avatar Preview"
+                  style={{ width: "100px", height: "100px", marginTop: "10px" }}
+                />
+              )}
             </div>
             <div className={styles.formSection}>
               <label>New Password:</label>
