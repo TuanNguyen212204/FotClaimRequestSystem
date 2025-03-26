@@ -50,6 +50,8 @@ export interface ModalProps {
   }>;
   buttonOk?: string;
   buttonCancel?: string;
+  footerPosition?: "left" | "center" | "right";
+  backgroundColor?: string;
 }
 
 export interface ModalComponent extends React.FC<ModalProps> {
@@ -84,6 +86,8 @@ const Modal_: React.FC<ModalProps> = ({
   switches,
   buttonOk,
   buttonCancel,
+  footerPosition = "center", // Default value if not provided
+  backgroundColor = "#fff",
 }) => {
   const [visible, setVisible] = useState(open);
   const modalRef = useRef<HTMLDivElement>(null);
@@ -121,7 +125,7 @@ const Modal_: React.FC<ModalProps> = ({
     ...(centered
       ? { top: "50%", left: "50%", transform: "translate(-50%, -50%)" }
       : {}),
-    background: "#fff",
+    background: backgroundColor,
     borderRadius: 8,
     boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
     //scroll
@@ -217,7 +221,15 @@ const Modal_: React.FC<ModalProps> = ({
   const renderFooter = footer ? (
     footer
   ) : (
-    <div className={styles.footer}>
+    <div
+      className={`${styles.footer} ${
+        footerPosition === "left"
+          ? styles.footerLeft
+          : footerPosition === "center"
+          ? styles.footerCenter
+          : styles.footerRight
+      }`}
+    >
       <button
         {...(cancelButtonProps || {})}
         onClick={onCancel}

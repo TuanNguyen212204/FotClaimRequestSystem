@@ -1,38 +1,10 @@
-.container {
-  width: 95%;
+.container_table {
+  width: 90%;
   margin: auto;
-  margin-top: 0.5rem;
   background-color: white;
   padding: 2rem;
-  border-radius: 0.75rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.header {
-  margin-bottom: auto;
-}
-
-.title {
-  font-size: 2.5rem;
-  color: #2d3142;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  margin-bottom: 0.5rem;
-}
-
-.icon {
-  cursor: pointer;
-  color: #2d3142;
-  transition: all 0.2s;
-}
-
-.icon:hover {
-  color: #007bff;
-  transform: scale(1.1);
-}
-
-.modal {
-  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
 .table_body {
@@ -41,7 +13,6 @@
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  margin-top: 0.5rem;
 }
 
 .table_body th,
