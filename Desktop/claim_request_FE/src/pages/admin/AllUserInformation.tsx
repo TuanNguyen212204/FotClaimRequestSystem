@@ -177,7 +177,7 @@ const AllUserInformation: React.FC = () => {
       cell: ({ record }: { record: User }) => {
         return (
           <div>
-            <div>
+            <div tabIndex={-1}>
               <ToggleButton
                 userId={record.user_id}
                 checked={
@@ -202,8 +202,9 @@ const AllUserInformation: React.FC = () => {
       title: "Assign",
       cell: ({ record }: { record: User }) => {
         return (
-          <div>
+          <div tabIndex={-1}>
             <button
+              tabIndex={-1}
               className={styles.circleCheckButton}
               onClick={() => handleAssignUser(record.user_id as string)}
               disabled={userStatuses[record.user_id] === 0}
@@ -225,6 +226,7 @@ const AllUserInformation: React.FC = () => {
           <div style={{ display: "flex" }}>
             <div>
               <button
+                tabIndex={-1}
                 className={styles.update_button}
                 style={{ cursor: "pointer" }}
                 onClick={() => handleUpdate(value as string)}

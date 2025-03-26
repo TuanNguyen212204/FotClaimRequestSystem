@@ -80,6 +80,19 @@ export const AssignProject: React.FC<AssignProjectProps> = ({
   const handleCancel = () => {
     setOpen(false);
   };
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        handleCancel(); // Gọi hàm cancel khi nhấn Escape
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
   return (
     <div>
       <div style={{ marginTop: "50px" }}>

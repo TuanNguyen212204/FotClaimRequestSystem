@@ -50,6 +50,7 @@ export type TableComponentProps<T extends DataRecord> = {
 const Cell = ({ children }: { children: ReactNode }) => {
   return (
     <div
+      tabIndex={-1}
       style={{
         display: "flex",
         justifyContent: "center",
@@ -214,7 +215,7 @@ const TableComponent = forwardRef(
     return (
       <div className={styles.container}>
         <div style={{ display: "flex" }}>
-          <section className={styles.filter_section}>
+          {/* <section className={styles.filter_section}>
             <div className={styles.filterStatusP}>
               <p>Filter By {name}:</p>
             </div>
@@ -246,29 +247,23 @@ const TableComponent = forwardRef(
                 </div>
               )}
             </div>
-          </section>
+          </section> */}
           {createButton && (
-            <div
-              style={{
-                paddingTop: "20px",
-                marginLeft: "auto",
-              }}
-            >
+            <div style={{ marginLeft: "auto" }}>
               <button
+                tabIndex={-1}
                 className={styles.create_button}
                 onClick={() => onCreateButtonClick && onCreateButtonClick()}
               >
-                <div style={{ marginTop: "5px" }}>
-                  <span>
-                    <Plus />
-                  </span>
-                </div>
+                <span>
+                  <Plus className="w-8 h-7 rounded-2xl" />
+                </span>
               </button>
             </div>
           )}
         </div>
 
-        <div>
+        <div className="mt-2">
           <section className={styles.table_body}>
             <table className={styles.table}>
               <thead className={styles.thead}>
@@ -316,7 +311,7 @@ const TableComponent = forwardRef(
                 {filteredData.length > 0 ? (
                   paginatedData.map((record) => (
                     <tr key={record.key || record.id}>
-                      <td style={{ paddingTop: "3rem" }}>
+                      <td style={{ paddingTop: "3rem" }} tabIndex={-1}>
                         {isHaveCheckbox && (
                           <div className={styles.checkbox}>
                             <input
@@ -328,7 +323,10 @@ const TableComponent = forwardRef(
                         )}
                       </td>
                       {columns.map((col) => (
-                        <td key={String(col.key || col.dataIndex)}>
+                        <td
+                          key={String(col.key || col.dataIndex)}
+                          tabIndex={-1}
+                        >
                           <Cell>
                             {col.cell
                               ? col.cell({

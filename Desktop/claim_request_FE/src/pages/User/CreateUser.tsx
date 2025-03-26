@@ -188,6 +188,18 @@ export const CreateUser: React.FC<CreateUserProps> = ({
   const handleCancel = () => {
     setOpenModal(false);
   };
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        handleCancel(); // Gọi hàm cancel khi nhấn Escape
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   return (
     <div>
