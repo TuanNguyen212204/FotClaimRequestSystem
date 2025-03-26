@@ -28,7 +28,7 @@ export interface MyClaimDetail {
     salary: number;
     ot_rate: number;
   };
-  claim_details: {
+  claimDetailsWithSalaryOvertimePerDay: {
     date: string;
     working_hours: number;
   }[];

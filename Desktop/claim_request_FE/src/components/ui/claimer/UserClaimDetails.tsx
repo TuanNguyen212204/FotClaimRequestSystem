@@ -118,26 +118,29 @@ const UserClaimDetailsModal = ({
         </div>
       </div>
       <div className={styles.containerHistory}>
-        {claimDetail?.claim_details && claimDetail?.claim_details.length > 0 ? (
+        {claimDetail?.claimDetailsWithSalaryOvertimePerDay &&
+        claimDetail?.claimDetailsWithSalaryOvertimePerDay.length > 0 ? (
           <div className={styles.history}>
             <p>History</p>
-            {claimDetail?.claim_details.map((detail, index) => (
-              <div key={index} className={styles.historyItem}>
-                <span className={styles.historyItemDate}>
-                  {formatDateToMonthDay(detail.date)}
-                </span>
-                <div className={styles.historyItemInfo}>
-                  <div className={styles.historyItemRow}>
-                    <span className={styles.historyItemLabel}>
-                      Working Hours:
-                    </span>
-                    <span className={styles.historyItemValue}>
-                      {detail.working_hours} hours
-                    </span>
+            {claimDetail?.claimDetailsWithSalaryOvertimePerDay.map(
+              (detail, index) => (
+                <div key={index} className={styles.historyItem}>
+                  <span className={styles.historyItemDate}>
+                    {formatDateToMonthDay(detail.date)}
+                  </span>
+                  <div className={styles.historyItemInfo}>
+                    <div className={styles.historyItemRow}>
+                      <span className={styles.historyItemLabel}>
+                        Working Hours:
+                      </span>
+                      <span className={styles.historyItemValue}>
+                        {detail.working_hours} hours
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              )
+            )}
           </div>
         ) : null}
       </div>
