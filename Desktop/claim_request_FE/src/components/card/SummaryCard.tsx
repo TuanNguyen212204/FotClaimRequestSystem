@@ -10,7 +10,7 @@ const SummaryCard = ({
   icon,
   percentage,
   chartData,
-  colors = [], // Thêm prop colors, mặc định là mảng rỗng
+  colors = [], 
 }: {
   title: string;
   totalvalue: number;
@@ -18,7 +18,7 @@ const SummaryCard = ({
   icon: ReactNode;
   percentage?: number;
   chartData?: [string, number][];
-  colors?: string[]; // Prop mới để nhận danh sách màu
+  colors?: string[]; 
 }) => {
   return (
     <div className={styles.card}>
@@ -48,7 +48,7 @@ const SummaryCard = ({
               <div key={index} className={styles.legendItem}>
                 <span
                   className={styles.legendColor}
-                  style={{ backgroundColor: colors[index] || getColor(index) }} // Dùng màu truyền vào hoặc màu mặc định
+                  style={{ backgroundColor: colors[index] || getColor(index) }} 
                 ></span>
                 {value}% {label}
               </div>
@@ -69,7 +69,7 @@ const SummaryCard = ({
                 tooltip: { trigger: "focus" },
                 pieSliceText: "none",
                 slices: chartData.reduce((acc, _, index) => {
-                  acc[index] = { color: colors[index] || getColor(index) }; // Dùng màu từ prop colors hoặc màu mặc định
+                  acc[index] = { color: colors[index] || getColor(index) }; 
                   return acc;
                 }, {} as Record<number, { color: string }>),
               }}
@@ -81,7 +81,6 @@ const SummaryCard = ({
   );
 };
 
-// Hàm tạo màu mặc định nếu không truyền vào
 const getColor = (index: number) => {
   const defaultColors = ["#4caf50", "#fbc02d", "#e57373", "#64b5f6", "#ba68c8"];
   return defaultColors[index % defaultColors.length];

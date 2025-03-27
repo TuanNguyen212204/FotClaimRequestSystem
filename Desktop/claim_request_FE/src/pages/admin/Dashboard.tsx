@@ -23,6 +23,7 @@ const Dashboard = () => {
   const [totalApproved, setTotalApproved] = useState({ approvedClaims: null, currentMonthClaims: null, changePercentage: null });
   const [totalRejected, setTotalRejected] = useState({ rejectedClaims: null, currentMonthClaims: null, changePercentage: null });
   const [summary, setSummary] = useState({ totalProjects: null, totalUsers: null, });
+  
 
   const [selected, setSelected] = useState({
     Pending: true,
@@ -300,7 +301,7 @@ const Dashboard = () => {
           <p className="text-center text-gray-500">Loading data...</p>
         ) : (
           <Chart
-            chartType="ColumnChart"  // Đổi thành ColumnChart
+            chartType="ColumnChart"
             width="100%"
             height="300px"
             data={chartData}
@@ -308,7 +309,6 @@ const Dashboard = () => {
               hAxis: { title: "Time" },
               vAxis: { title: "Claims" },
               legend: { position: "bottom" },
-              // Bạn có thể điều chỉnh thêm các tùy chọn cho biểu đồ cột nếu cần
               series: {
                 0: { color: "#FFA500" },
                 1: { color: "#00C853" },
