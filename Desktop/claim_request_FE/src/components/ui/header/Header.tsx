@@ -7,10 +7,11 @@ import { PATH } from "../../../constant/config";
 import Badge from "@components/ui/Badge";
 import fptlogo from "@assets/fot.png";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchNotificationsAsync, markNotificationAllAsRead } from "@/redux/thunk/notification/notificationThunk";
+import { fetchNotificationsAsync, markNotificationAllAsRead, markNotificationAsReadById } from "@/redux/thunk/notification/notificationThunk";
 import { io, Socket } from "socket.io-client";
 import {
   addNotification,
+  updateMarkAsRead,
   
 } from "@/redux/slices/notification/notificationSlice";
 
@@ -143,6 +144,11 @@ const Header: React.FC = () => {
     dispatch(markNotificationAllAsRead() as any);
   };
 
+  const handleMarkAsRead = (id: number) => {
+    dispatch(updateMarkAsRead(id) as any);
+    dispatch(markNotificationAsReadById(id) as any);
+  }
+
   return (
     <>
       <header className={styles.header}>
@@ -171,6 +177,10 @@ const Header: React.FC = () => {
           {Array.isArray(notifications) && notifications.length > 0 ? (
             notifications.map((notification: any) => (
               <div
+              onClick={() => {
+                console.log(notification.id)
+                handleMarkAsRead(notification.id)
+              }}
                 key={notification.id}
                 className={`${styles.notificationItem} ${
                   notification.is_read ? styles.read : styles.unread
