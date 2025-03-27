@@ -14,7 +14,7 @@ import {
   allProjectsreponse,
 } from "./Project.type";
 export const config: HttpClientConfig = {
-  baseURL: "https://claimsystem.info.vn/api/v1/",
+  baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: 60000,
 };
 

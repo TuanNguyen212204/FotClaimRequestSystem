@@ -6,9 +6,8 @@ import {
 } from "../../api/index";
 import { Claim, ClaimResponse } from "./Draft.type";
 export const config: HttpClientConfig = {
-  baseURL: "https://claimsystem.info.vn/api/v1/",
+  baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: 60000,
-  DEBUG: true,
 };
 
 const httpClient = new HttpClient(config);
