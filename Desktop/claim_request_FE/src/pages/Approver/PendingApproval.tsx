@@ -24,6 +24,7 @@ import { toast } from "react-toastify";
 import Modal from "@/components/ui/modal/Modal";
 import StatusTag, { StatusType } from "@/components/ui/StatusTag/StatusTag";
 import { DetailsApproval } from "./DetailsApproval";
+import { Button } from "@/components/ui/button/Button";
 
 export const PendingComponent: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -68,32 +69,32 @@ export const PendingComponent: React.FC = () => {
   //   }
   // };
 
-  const handleCheckboxChange = (requestId: string, checked: boolean) => {
-    setCheckedItems((prev) => {
-      const newCheckedItems = new Set(prev);
-      if (checked) {
-        newCheckedItems.add(requestId);
-      } else {
-        newCheckedItems.delete(requestId);
-      }
-      return newCheckedItems;
-    });
-  };
-
-  const handleGetSelectedData = () => {
-    const selectedClaims = dataSource.filter((record) =>
-      checkedItems.has(record.request_id)
-    );
-    setSelectedData(selectedClaims);
-    console.log("Selected claims:", selectedClaims);
-  };
+  // const handleCheckboxChange = (requestId: string, checked: boolean) => {
+  //   setCheckedItems((prev) => {
+  //     const newCheckedItems = new Set(prev);
+  //     if (checked) {
+  //       newCheckedItems.add(requestId);
+  //     } else {
+  //       newCheckedItems.delete(requestId);
+  //     }
+  //     return newCheckedItems;
+  //   });
+  // };
 
   // const handleGetSelectedData = () => {
-  //   if (checkboxRef.current) {
-  //     const a = checkboxRef.current.getSelectedData();
-  //     setSelectedData(a);
-  //   }
+  //   const selectedClaims = dataSource.filter((record) =>
+  //     checkedItems.has(record.request_id)
+  //   );
+  //   setSelectedData(selectedClaims);
+  //   console.log("Selected claims:", selectedClaims);
   // };
+
+  const handleGetSelectedData = () => {
+    if (checkboxRef.current) {
+      const a = checkboxRef.current.getSelectedData();
+      setSelectedData(a);
+    }
+  };
 
   useEffect(() => {
     if (checkboxRef.current) {
@@ -175,6 +176,10 @@ export const PendingComponent: React.FC = () => {
     console.log("Selected data:", selectedData);
   };
 
+  const handleApproveMutipleClaim = (value: string) => {
+    
+  }
+
   const handleViewDetail = (value: string) => {
     setSelectedRequestId(value);
     setOpenModal(true);
@@ -193,27 +198,9 @@ export const PendingComponent: React.FC = () => {
     return `${day}/${month}/${year}`;
   };
 
+
+
   const columns: Column<DataRecord>[] = [
-    // {
-    //   key: "checkbox",
-    //   dataIndex: "checkbox",
-    //   title: "",
-    //   cell: ({ value }) => (
-    //     <input
-    //       type="checkbox"
-    //       checked={checkedItems.has(value as string)}
-    //       onChange={() => {
-    //         if (checkedItems.has(value as string)) {
-    //           checkedItems.delete(value as string);
-    //           setCheckedItems(new Set(checkedItems));
-    //         } else {
-    //           checkedItems.add(value as string);
-    //           setCheckedItems(new Set(checkedItems));
-    //         }
-    //       }}
-    //     />
-    //   ),
-    //  },
     {
       key: "user_name",
       dataIndex: "user_full_name",
@@ -336,6 +323,13 @@ export const PendingComponent: React.FC = () => {
   return (
     <div>
       <h1 className={styles.title}>Pending Claims</h1>
+      <div className={styles.buttonContainer}>
+      <Button color="white" backgroundColor="#89AC46" size="large">Approve Select Claim</Button>
+      <Button danger size="large">Reject Select Claim</Button>
+      <Button type="primary" size="large">
+        Return Select Claim
+      </Button>
+      </div>
       <TableComponent
         ref={checkboxRef}
         columns={columns}
@@ -343,7 +337,6 @@ export const PendingComponent: React.FC = () => {
         loading={loading}
         totalPage={totalPages}
         pagination={true}
-        name="Claims"
         onPageChange={handlePageChange}
         isHaveCheckbox={true}
       />

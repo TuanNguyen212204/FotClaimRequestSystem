@@ -121,6 +121,14 @@
   transform: scale(1.2);
 }
 
+.buttonContainer {
+  display: flex;
+  align-items: center;
+  /* justify-content: space-between; */
+  gap: 15px;
+  margin-left: 15px;
+}
+
 .pagination {
   display: flex;
   justify-content: end;
