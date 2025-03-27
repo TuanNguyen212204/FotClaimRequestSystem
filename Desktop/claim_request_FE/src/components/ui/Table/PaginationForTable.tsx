@@ -50,6 +50,7 @@ const PaginationForTable: React.FC<PaginationForTableProps> = ({
     return pages.map((page, index) =>
       typeof page === "number" ? (
         <button
+          tabIndex={-1}
           key={index}
           onClick={() => handlePageChange(page)}
           // style={{ backgroundColor: "transparent" }}
@@ -79,6 +80,7 @@ const PaginationForTable: React.FC<PaginationForTableProps> = ({
   return (
     <div className={styles.pagination}>
       <button
+        tabIndex={-1}
         onClick={() => handlePageChange(currentPage - 1)}
         disabled={currentPage === 1}
         className={styles.pagination_button_icon}
@@ -89,6 +91,7 @@ const PaginationForTable: React.FC<PaginationForTableProps> = ({
       {renderPageNumbers()}
 
       <button
+        tabIndex={-1}
         onClick={() => handlePageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
         className={styles.pagination_button_icon_right}

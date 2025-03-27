@@ -1,20 +1,23 @@
 import { createSlice } from "@reduxjs/toolkit";
-import type { User } from "@/types/User";
+import type { User, UserInformation } from "@/types/User";
 import {
   fetchAllUserAsync,
   fetchUserByIdAsync,
   fetchTotalPage,
 } from "@redux/thunk/User/userThunk";
+import { fetchUserInformationAsync } from "@/redux/thunk/UserInfo/userInfoThunks";
 
 const initialState: {
   data: User[];
   user: User | null;
+  userInformation: UserInformation | null;
   totalPageOfAllUser: number;
   status: string;
   error?: string;
 } = {
   data: [],
   user: null,
+  userInformation: null as UserInformation | null,
   totalPageOfAllUser: 0,
   status: "",
   error: "null",
@@ -62,6 +65,20 @@ export const userSlice = createSlice({
       .addCase(fetchTotalPage.fulfilled, (state, action) => {
         state.status = "success";
         state.totalPageOfAllUser = action.payload;
+      })
+      //------------------------------------------------- GET INFO USER Phu  ----------------------------------------------------------------------
+      .addCase(fetchUserInformationAsync.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = String(action.error.message);
+      })
+      .addCase(fetchUserInformationAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchUserInformationAsync.fulfilled, (state, action) => {
+        state.status = "success";
+        state.userInformation = Array.isArray(action.payload.data)
+          ? action.payload.data[0]
+          : action.payload.data;
       });
   },
 });
