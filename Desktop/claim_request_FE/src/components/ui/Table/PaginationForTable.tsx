@@ -53,10 +53,6 @@ const PaginationForTable: React.FC<PaginationForTableProps> = ({
           tabIndex={-1}
           key={index}
           onClick={() => handlePageChange(page)}
-          // style={{ backgroundColor: "transparent" }}
-          // className={`${styles.pagination_button} ${
-          //   page === currentPage ? styles.activePage : ""
-          // }`}
           className={styles.pageButton}
         >
           <div
