@@ -5,10 +5,13 @@ import {
   UseFormSetValue,
   useFormState,
 } from "react-hook-form";
-import { JSX, ReactNode } from "react";
+import { JSX, ReactNode, useEffect } from "react";
 import { FormData } from "@/types/claimForm.type";
 import { TProjectInfo } from "@redux/slices/Project/projectSlice";
 import styles from "@pages/CreateClaim/Claim.module.css";
+import { fetchProjectByID } from "@/redux/thunk/CreateClaim";
+import { AppDispatch } from "@/redux";
+import { useDispatch } from "react-redux";
 export interface IProjectInfoProps {
   ProjectList: TProjectInfo[];
   setValue: UseFormSetValue<FormData>;
@@ -85,7 +88,7 @@ export default function ProjectInfo({
           </p>
         )}
       </FormColumn>
-      <FormColumn>
+      {/* <FormColumn>
         <FormGroup
           label="Role in Project"
           input={
@@ -98,7 +101,7 @@ export default function ProjectInfo({
             />
           }
         />
-      </FormColumn>
+      </FormColumn> */}
       <FormColumn>
         <FormGroup
           label="Project Duration"

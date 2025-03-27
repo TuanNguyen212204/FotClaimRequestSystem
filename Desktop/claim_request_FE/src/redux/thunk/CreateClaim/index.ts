@@ -1,10 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "@/redux";
 import projectService from "@/Services/Project";
-import {
-  CreateClaimData,
-  UpdateClaimData,
-} from "@/Services/Project/Project.type";
+import { CreateClaimData } from "@/Services/Project/Project.type";
 import { TProjectInfo } from "@/redux/slices/Project/projectSlice";
 import { ApiError } from "@/api";
 import { projectsParamOptions } from "@/Services/Project/Project.type";
@@ -34,7 +31,10 @@ export const updateClaim = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const response = await projectService.updateClaim(payload.claimData, payload.requestID);
+      const response = await projectService.updateClaim(
+        payload.claimData,
+        payload.requestID
+      );
       return response;
     } catch (error) {
       if (error instanceof ApiError) {
