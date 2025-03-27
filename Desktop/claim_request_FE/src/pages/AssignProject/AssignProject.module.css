@@ -2,6 +2,7 @@
   margin-left: 418px;
   margin-top: -18px;
   color: red;
+  background-color: transparent;
 }
 .update_button_container {
   display: flex;

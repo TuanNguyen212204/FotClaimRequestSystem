@@ -1,12 +1,14 @@
 import Modal from "@ui/modal/Modal";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@/redux";
 import { fetchApprovedDetailApproverAsync } from "@/redux/thunk/Claim/claimThunk";
 import { selectApprovedDetailApprover } from "@/redux/selector/claimSelector";
 import StatusTag from "@ui/StatusTag/StatusTag";
 import styles from "@ui/finance/ApprovedDetailFinance.module.css";
-import { MoveRight } from "lucide-react";
+import { ChevronDown, MoveRight } from "lucide-react";
+import { fetchUserInformationAsync } from "@/redux/thunk/UserInfo/userInfoThunks";
+import { selectUserInformation } from "@/redux/selector/UserInfoSelector";
 
 const formatDateToMonthDay = (date: string) => {
   const dateObj = new Date(date);
@@ -34,22 +36,44 @@ interface ApprovedDetailApproverModalProps {
   isOpen: boolean;
   onClose: () => void;
   requestId: string;
+  userId: string;
 }
 
 const ApprovedDetailApproverModal = ({
   isOpen,
   onClose,
   requestId,
+  userId,
 }: ApprovedDetailApproverModalProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const claimDetail = useSelector(selectApprovedDetailApprover);
+  const userInfo = useSelector(selectUserInformation);
+  const [isChevronDown, setIsChevronDown] = useState<boolean>(false);
 
   useEffect(() => {
-    if (isOpen && requestId) {
-      console.log("Dispatching fetchApprovedDetailApproverAsync", requestId);
-      dispatch(fetchApprovedDetailApproverAsync({ request_id: requestId }));
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+
+      if (requestId) {
+        dispatch(fetchApprovedDetailApproverAsync({ request_id: requestId }));
+        console.log("req", requestId, userId);
+      }
+
+      if (userId) {
+        dispatch(fetchUserInformationAsync({ user_id: userId }));
+      }
+    } else {
+      document.body.style.overflow = "";
     }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [isOpen, requestId]);
+
+  const handleHistoryItems = () => {
+    setIsChevronDown(!isChevronDown);
+  };
 
   return (
     <Modal
@@ -60,8 +84,9 @@ const ApprovedDetailApproverModal = ({
       centered={false}
       position={{ right: 20, top: 23 }}
       height="95%"
-      footer={null}
-      className={styles.modal}
+      footer={<div></div>}
+      backgroundColor="#E9ECEF"
+      // className={styles.modal}
     >
       <hr />
       <div className={styles.container}>
@@ -72,91 +97,125 @@ const ApprovedDetailApproverModal = ({
               title="avatar"
               className={styles.avatar}
             />
-            {/* <p>{claimDetail?.full_name}</p> */}
+            <div className={styles.infoUser1Row}>
+              <span>{userInfo?.full_name}</span>
+              <div className={styles.infoUser1Row2}>
+                <span>{userInfo?.job_rank}</span>
+                <span className={styles.separator}>|</span>
+                <span>{userInfo?.department}</span>
+              </div>
+            </div>
           </div>
           <div className={styles.infoUser2}>
             <p>User ID: {claimDetail?.user_id}</p>
-            {/* <p>Salary Overtime: {claimDetail?.salary_overtime}</p> */}
           </div>
         </div>
         <hr />
         <div className={styles.containerProject}>
-          <p>
-            Project ID:{" "}
-            <span className={styles.boldText}> {claimDetail?.project_id}</span>{" "}
-          </p>
-          <p>
-            Project Name:{" "}
-            <span className={styles.boldText}>
+          <div className={styles.projectRow}>
+            <span className={styles.projectLabel}>Project ID:</span>
+            <span className={styles.projectValue}>
+              {claimDetail?.project_id}
+            </span>
+          </div>
+          <div className={styles.projectRow}>
+            <span className={styles.projectLabel}>Project Name:</span>
+            <span className={styles.projectValue}>
               {claimDetail?.project.project_name}
             </span>
-          </p>
-        </div>
-        <div className={styles.containerRequest}>
-          <div className={styles.timeDuration}>
-            <p>Time Duration:</p>
-            <h4>
-              <span className={styles.boldText}>
-                {formatDateToMonthDay(`${claimDetail?.start_date}`)}
-              </span>{" "}
-              <MoveRight size={20} className={styles.iconMoveRight} />{" "}
-              <span className={styles.boldText}>
-                {formatDateToMonthDay(`${claimDetail?.end_date}`)}
-              </span>
-            </h4>
           </div>
-          <p>
-            Submitted Date:{"   "}
-            <span className={styles.boldText}>
+          <div className={styles.projectRow}>
+            <span className={styles.projectLabel}>Time Duration:</span>
+            <span className={styles.projectValue}>
+              {formatDateToMonthDay(`${claimDetail?.start_date}`)}
+              <MoveRight size={20} className={styles.iconMoveRight} />
+              {formatDateToMonthDay(`${claimDetail?.end_date}`)}
+            </span>
+          </div>
+          <div className={styles.projectRow}>
+            <span className={styles.projectLabel}>Submitted Date:</span>
+            <span className={styles.projectValue}>
               {formatDateToMonthDay(`${claimDetail?.submitted_date}`)}
             </span>
-          </p>
-          <p>
-            Approved Date:{"   "}
-            <span className={styles.boldText}>
+          </div>
+          <div className={styles.projectRow}>
+            <span className={styles.projectLabel}>Approved Date:</span>
+            <span className={styles.projectValue}>
               {formatDateToMonthDay(`${claimDetail?.approved_date}`)}
             </span>
-          </p>
-          <p>
-            Total Working Hours:{" "}
-            <span className={styles.boldText}>
+          </div>
+          <div className={styles.projectRow}>
+            <span className={styles.projectLabel}>Status:</span>
+            <span className={styles.projectValue}>
+              {claimDetail?.claim_status ? (
+                <StatusTag
+                  status={
+                    claimDetail.claim_status as
+                      | "PENDING"
+                      | "APPROVED"
+                      | "REJECTED"
+                      | "PAID"
+                  }
+                />
+              ) : (
+                "-"
+              )}
+            </span>
+          </div>
+          <div className={styles.projectRow}>
+            <span className={styles.projectLabel}>Total Working Hours:</span>
+            <span className={styles.projectValue}>
               {claimDetail?.total_hours} hours
             </span>
-          </p>
-          <p>
-            Status:{" "}
-            {claimDetail?.claim_status ? (
-              <StatusTag
-                status={
-                  claimDetail.claim_status as
-                    | "PENDING"
-                    | "APPROVED"
-                    | "REJECTED"
-                    | "PAID"
-                }
-              />
-            ) : (
-              "-"
-            )}
-          </p>
+          </div>
+          <div className={styles.projectRow}>
+            <span className={styles.projectLabel}>Salary Overtime:</span>
+            <span className={styles.projectValue}>
+              {claimDetail?.totalOvertimeSalary}
+            </span>
+          </div>
         </div>
-        <div>
-          {claimDetail?.claimDetails && claimDetail.claimDetails.length > 0 ? (
+        <div className={styles.containerHistory}>
+          {claimDetail?.claimDetailsWithSalaryOvertimePerDay &&
+          claimDetail.claimDetailsWithSalaryOvertimePerDay.length > 0 ? (
             <div className={styles.history}>
-              <h4>Claim History</h4>
-              {claimDetail.claimDetails.map((detail, index) => (
-                <div key={index} className={styles.historyItem}>
-                  <span className={styles.boldText}>
-                    {formatDateToMonthDay(detail.date)}
-                  </span>
-                  <p>
-                    Working Hours:{" "}
-                    <span className={styles.boldText}>
-                      {detail.working_hours} hours
-                    </span>
-                  </p>
-                </div>
-              ))}
+              <div className={styles.historyHeader}>
+                <p>History</p>
+                <ChevronDown
+                  className={styles.historyIcon}
+                  onClick={handleHistoryItems}
+                />
+              </div>
+              {isChevronDown
+                ? claimDetail.claimDetailsWithSalaryOvertimePerDay.map(
+                    (detail, index) => (
+                      <div key={index} className={styles.historyItem}>
+                        <span className={styles.historyItemDate}>
+                          {formatDateToMonthDay(detail.date)}
+                        </span>
+
+                        <div className={styles.historyItemInfo}>
+                          <div className={styles.historyItemRow}>
+                            <span className={styles.historyItemLabel}>
+                              Working Hours:
+                            </span>
+                            <span className={styles.historyItemValue}>
+                              {detail.working_hours} hours
+                            </span>
+                          </div>
+                          <div className={styles.historyItemRow}>
+                            <span className={styles.historyItemLabel}>
+                              Overtime Salary:
+                            </span>
+                            <span className={styles.historyItemValue}>
+                              ${detail.salaryOvertimePerDay}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  )
+                : null}
             </div>
           ) : null}
         </div>

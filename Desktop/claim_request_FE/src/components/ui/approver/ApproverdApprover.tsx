@@ -11,6 +11,7 @@ import {
   selectApprovedClaimTotalPages,
 } from "@redux/selector/claimSelector";
 import ApprovedDetailApproverModal from "./ApprovedDetailApproverModal";
+import ClaimDetail from "@/pages/ClaimDetail";
 
 const formatDateToDDMMYYYY = (date: string) => {
   const dateObj = new Date(date);
@@ -30,6 +31,7 @@ export const ApprovedApproverComponent: React.FC = () => {
   const [limit] = useState(7);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRequestId, setSelectedRequestId] = useState<string>("");
+  const [selectedUserId, setSelectedUserId] = useState<string>("");
 
   useEffect(() => {
     setLoading(true);
@@ -45,9 +47,15 @@ export const ApprovedApproverComponent: React.FC = () => {
   //   navigate(`/approve-details?id=${id}`);
   // };
 
-  const handleViewDetail = (value: string) => {
-    console.log("Opening modal with requestId:", value);
+  const handleViewDetail = (value: string, user_id: string) => {
+    console.log("Selected Request ID:", value);
+    console.log("Selected User ID:", user_id);
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 1700);
     setSelectedRequestId(value);
+    setSelectedUserId(user_id);
     setIsModalOpen(true);
   };
 
@@ -82,17 +90,20 @@ export const ApprovedApproverComponent: React.FC = () => {
       key: "action",
       dataIndex: "request_id",
       title: "Action",
-      cell: ({ value }) => (
+      cell: ({ value, record }) => (
         <>
           <EyeIcon
             className={styles.icon}
-            onClick={() => handleViewDetail(value as string)}
+            onClick={() =>
+              handleViewDetail(value as string, record.user_id as string)
+            }
           />
 
           <ApprovedDetailApproverModal
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
             requestId={selectedRequestId}
+            userId={selectedUserId}
           />
         </>
       ),
@@ -108,6 +119,7 @@ export const ApprovedApproverComponent: React.FC = () => {
             claim.end_date
           )}`
         : "N/A",
+    user_id: claim.user_id ? claim.user_id.toString() : "",
   }));
   return (
     <div>

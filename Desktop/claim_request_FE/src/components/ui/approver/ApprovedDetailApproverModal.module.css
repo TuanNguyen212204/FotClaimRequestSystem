@@ -167,19 +167,3 @@
   width: 70%;
   text-align: left;
 }
-
-.payButton {
-  width: 95%;
-  display: flex;
-  justify-content: right;
-  margin: 0 0px 12px 0;
-}
-
-.payButton button {
-  width: 120px;
-  height: 40px;
-  background-color: rgb(62, 228, 237);
-  border: 1px solid transparent;
-  border-radius: 10px;
-  cursor: pointer;
-}

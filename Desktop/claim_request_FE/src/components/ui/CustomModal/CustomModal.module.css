@@ -1,0 +1,79 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.modal {
+  background: #f5f5f5;
+  width: 400px;
+  height: calc(100vh - 40px);
+  display: flex;
+  flex-direction: column;
+  animation: slideIn 0.2s ease-out;
+  border-radius: 8px;
+  margin-right: 20px;
+}
+
+.header {
+  position: relative;
+  padding: 16px 20px;
+  background: white;
+}
+
+.header h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  text-align: left;
+}
+
+.closeButton {
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 4px;
+  color: #999;
+  display: flex;
+  align-items: center;
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  background: #f5f5f5;
+}
+
+.footer {
+  padding: 16px;
+  background: white;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.printButton {
+  padding: 8px 16px;
+  background-color: #f4694c;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

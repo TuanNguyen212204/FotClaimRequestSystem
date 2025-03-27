@@ -2,6 +2,8 @@
   color: #3674b5;
   padding: 0.5rem;
   border-radius: 5px;
+  background-color: transparent;
+  cursor: pointer;
 }
 .delete_button {
   color: red;
@@ -20,4 +22,18 @@
   justify-content: center;
   z-index: 1000;
   backdrop-filter: blur(5px);
+}
+.circleCheckButton {
+  background-color: transparent;
+  cursor: pointer;
+}
+.filter_section {
+  font-weight: 500;
+  font-size: 1.5rem;
+  display: flex;
+  color: white;
+}
+.filterStatusP {
+  font-size: 1.5rem;
+  color: black;
 }
