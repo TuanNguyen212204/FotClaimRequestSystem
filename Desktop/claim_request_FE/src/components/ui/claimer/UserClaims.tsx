@@ -27,9 +27,8 @@ const UserClaims = () => {
     };
     fetchData();
   }, [dispatch, currentPage]);
-  useEffect(() => {
-    console.log(userClaim);
-  }, [userClaim]);
+  // useEffect(() => {
+  // }, [userClaim]);
 
   const handleViewDetail = (id: string) => {
     setSelectedClaim(id);
