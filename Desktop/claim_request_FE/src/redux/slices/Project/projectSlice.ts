@@ -4,7 +4,7 @@ import { fetchProjectByID, createClaim } from "@/redux/thunk/CreateClaim";
 export type TProjectInfo = {
   projectID: string;
   projectName: string;
-  RoleInTheProject: string;
+  RoleInTheProject?: string;
   ProjectDuration: {
     from: string;
     to: string;
