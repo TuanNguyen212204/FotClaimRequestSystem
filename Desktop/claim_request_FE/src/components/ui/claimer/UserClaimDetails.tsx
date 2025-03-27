@@ -43,8 +43,6 @@ const UserClaimDetailsModal = ({
   isOpen,
   onClose,
   requestID,
-  currentPage,
-  limit,
 }: UserClaimDetailsModalProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const claimDetail = useSelector(selectMyClaimDetail);
@@ -64,67 +62,87 @@ const UserClaimDetailsModal = ({
       centered={false}
       position={{ right: 20, top: 23 }}
       height="95%"
+      backgroundColor="#E9ECEF"
     >
       <hr />
       <div className={styles.containerProject}>
-        <p>
-          Project ID:{" "}
-          <span className={styles.boldText}> {claimDetail?.project_id}</span>{" "}
-        </p>
-        <p>
-          Project Name:{" "}
-          <span className={styles.boldText}>
+        <div className={styles.projectRow}>
+          <span className={styles.projectLabel}>Project ID:</span>
+          <span className={styles.projectValue}>
+            {claimDetail?.project?.project_id}
+          </span>
+        </div>
+        <div className={styles.projectRow}>
+          <span className={styles.projectLabel}>Project Name:</span>
+          <span className={styles.projectValue}>
             {claimDetail?.project?.project_name}
           </span>
-        </p>
-      </div>
-      <div className={styles.containerRequest}>
-        <div className={styles.timeDuration}>
-          <p>Time Duration:</p>
-          <h4>
-            <span className={styles.boldText}>
-              {formatDateToMonthDay(`${claimDetail?.start_date}`)}
-            </span>{" "}
-            <MoveRight size={20} className={styles.iconMoveRight} />{" "}
-            <span className={styles.boldText}>
-              {formatDateToMonthDay(`${claimDetail?.end_date}`)}
-            </span>
-          </h4>
         </div>
-        <p>
-          Submitted Date:{"   "}
-          <span className={styles.boldText}>
-            {formatDateToMonthDay(`${claimDetail?.submitted_date}`)}
+        <div className={styles.projectRow}>
+          <span className={styles.projectLabel}>Time Duration:</span>
+          <span className={styles.projectValue}>
+            {formatDateToMonthDay(`${claimDetail?.start_date}`)}
+            <MoveRight size={20} className={styles.iconMoveRight} />
+            {formatDateToMonthDay(`${claimDetail?.end_date}`)}
           </span>
-        </p>
-        {/* <p>
-          Approved Date:{"   "}
-          <span className={styles.boldText}>
-            {formatDateToMonthDay(`${claimDetail?.approved_date}`)}
+        </div>
+        <div className={styles.projectRow}>
+          <span className={styles.projectLabel}>Submitted Date:</span>
+          <span className={styles.projectValue}>
+            {claimDetail?.submitted_date}
           </span>
-        </p> */}
-        <p>
-          Total Working Hours:{" "}
-          <span className={styles.boldText}>
+        </div>
+        <div className={styles.projectRow}>
+          <span className={styles.projectLabel}>Status:</span>
+          <span className={styles.projectValue}>
+            {claimDetail?.claim_status ? (
+              <StatusTag
+                status={
+                  claimDetail.claim_status as
+                    | "PENDING"
+                    | "APPROVED"
+                    | "REJECTED"
+                    | "PAID"
+                }
+              />
+            ) : (
+              "-"
+            )}
+          </span>
+        </div>
+        <div className={styles.projectRow}>
+          <span className={styles.projectLabel}>Total Working Hours:</span>
+          <span className={styles.projectValue}>
             {claimDetail?.total_hours} hours
           </span>
-        </p>
-        <p>
-          Status:{" "}
-          {claimDetail?.claim_status ? (
-            <StatusTag
-              status={
-                claimDetail.claim_status as
-                  | "PENDING"
-                  | "APPROVED"
-                  | "REJECTED"
-                  | "PAID"
-              }
-            />
-          ) : (
-            "-"
-          )}
-        </p>
+        </div>
+      </div>
+      <div className={styles.containerHistory}>
+        {claimDetail?.claimDetailsWithSalaryOvertimePerDay &&
+        claimDetail?.claimDetailsWithSalaryOvertimePerDay.length > 0 ? (
+          <div className={styles.history}>
+            <p>History</p>
+            {claimDetail?.claimDetailsWithSalaryOvertimePerDay.map(
+              (detail, index) => (
+                <div key={index} className={styles.historyItem}>
+                  <span className={styles.historyItemDate}>
+                    {formatDateToMonthDay(detail.date)}
+                  </span>
+                  <div className={styles.historyItemInfo}>
+                    <div className={styles.historyItemRow}>
+                      <span className={styles.historyItemLabel}>
+                        Working Hours:
+                      </span>
+                      <span className={styles.historyItemValue}>
+                        {detail.working_hours} hours
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )
+            )}
+          </div>
+        ) : null}
       </div>
     </Modal>
   );

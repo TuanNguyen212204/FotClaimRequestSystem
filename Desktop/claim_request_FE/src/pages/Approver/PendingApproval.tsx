@@ -103,7 +103,7 @@ export const PendingComponent: React.FC = () => {
       checkboxRef.current.indeterminate = someChecked && !allChecked;
     }
   }, [checkedItems]);
-  
+
   const handleApproveClaim = async (request_id: string) => {
     handleGetSelectedData();
     setModalContent({
@@ -176,11 +176,15 @@ export const PendingComponent: React.FC = () => {
     console.log("Selected data:", selectedData);
   };
 
-  const handleApproveMutipleClaim = (value: string) => {
-    
-  }
+  const handleApproveSelect = async () => {
+
+  };
 
   const handleViewDetail = (value: string) => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 500);
     setSelectedRequestId(value);
     setOpenModal(true);
   };
@@ -324,11 +328,18 @@ export const PendingComponent: React.FC = () => {
     <div>
       <h1 className={styles.title}>Pending Claims</h1>
       <div className={styles.buttonContainer}>
-      <Button color="white" backgroundColor="#89AC46" size="large">Approve Select Claim</Button>
-      <Button danger size="large">Reject Select Claim</Button>
-      <Button type="primary" size="large">
-        Return Select Claim
-      </Button>
+        <Button 
+          color="white" 
+          backgroundColor="#89AC46" 
+          size="large"
+          onClick={handleApproveSelect}
+        >
+          Approve Select Claim
+        </Button>
+        <Button danger size="large">Reject Select Claim</Button>
+        <Button type="primary" size="large">
+          Return Select Claim
+        </Button>
       </div>
       <TableComponent
         ref={checkboxRef}

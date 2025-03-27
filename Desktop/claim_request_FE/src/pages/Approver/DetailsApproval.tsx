@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@/redux";
 import {
@@ -7,7 +7,7 @@ import {
 } from "@/redux/thunk/Claim/claimThunk";
 import { selectAllDetailPending } from "@/redux/selector/pendingSelector";
 import Modal from "@ui/modal/Modal";
-import { MoveRight, Mail } from "lucide-react";
+import { MoveRight, Mail, ChevronDown } from "lucide-react";
 import styles from "./DetailsApproval.module.css";
 import StatusTag from "@/components/ui/StatusTag/StatusTag";
 import { toast } from "react-toastify";
@@ -52,6 +52,7 @@ export const DetailsApproval: React.FC<PendingDetailModalProps> = ({
 }) => {
   const dispatch = useDispatch<AppDispatch>();
   const claimDetail = useSelector(selectAllDetailPending);
+  const [isChevronDown, setIsChevronDown] = useState<boolean>(false);
 
   useEffect(() => {
     if (isOpen && requestId) {
@@ -80,6 +81,10 @@ export const DetailsApproval: React.FC<PendingDetailModalProps> = ({
       console.log("Error approving claim: ", error);
       toast.error("Failed to approve claim.");
     }
+  };
+
+  const handleHistoryItems = () => {
+    setIsChevronDown(!isChevronDown);
   };
 
   return (
@@ -149,10 +154,10 @@ export const DetailsApproval: React.FC<PendingDetailModalProps> = ({
                   <StatusTag
                     status={
                       claimDetail.claim_status as
-                        | "PENDING"
-                        | "APPROVED"
-                        | "REJECTED"
-                        | "PAID"
+                      | "PENDING"
+                      | "APPROVED"
+                      | "REJECTED"
+                      | "PAID"
                     }
                   />
                 ) : (
@@ -169,7 +174,7 @@ export const DetailsApproval: React.FC<PendingDetailModalProps> = ({
           </div>
           <div className={styles.containerHistory}>
             {claimDetail?.claim_details &&
-            claimDetail.claim_details.length > 0 ? (
+              claimDetail.claim_details.length > 0 ? (
               <div className={styles.history}>
                 <p>History</p>
                 {claimDetail.claim_details.map((detail, index) => (

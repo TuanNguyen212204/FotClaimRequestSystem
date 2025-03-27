@@ -67,7 +67,6 @@ export const Sidebar = ({
       setSelectedClaim(record);
     }
   }, []);
-
   useEffect(() => {
     const record = Number(localStorage.getItem("role_id"));
     if (record === 1) {
@@ -87,33 +86,42 @@ export const Sidebar = ({
   };
 
   const handleNavigate = (path: string) => {
+    setSelectedClaim(path);
+    localStorage.setItem("selectedClaim", path);
     navigate(path);
   };
   return (
-    <div className={styles.container}>
+    <div>
       <div className={`${styles.sidebar} `}>
-        <div className={styles.menu}>
+        <div className={`${styles.claimItemCollapse} `}>
           <ul className={`${styles.claimList} `}>
             {routeByRole.map((route) => (
               <li
-                key={route.path}
-                className={`${styles.claimItemCollapse} ${
+                // className={`${styles.claimItemCollapse} ${styles.tooltip} ${
+                //   selectedClaim === route.path ? styles.active : ""
+                // } mt-2`}
+                className={`${styles.tooltip} ${styles.claimItem} ${
                   selectedClaim === route.path ? styles.active : ""
-                } `}
+                }`}
                 onClick={() => handleNavigate(route.path as string)}
               >
-                <button className={` ${styles.claimButton} ${styles.tooltip}`}>
-                  <div className={styles.claimButtonIngredient}>
-                    <div style={{ cursor: "pointer" }}>
-                      <div className={""}>
-                        <span>{route.icon}</span>
-                      </div>
-                      <div className={` ${styles.tooltipText}  `}>
-                        <span>{route.label}</span>
-                      </div>
-                    </div>{" "}
+                <div className={` ${styles.claimButton}  `}>
+                  <div
+                    className={`${styles.claimButtonIngredient} `}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <div>
+                      <span>{route.icon}</span>
+                    </div>
+                    <div className={` ${styles.tooltipText}  `}>
+                      <span>{route.label}</span>
+                    </div>
                   </div>
-                </button>
+                </div>
               </li>
             ))}
           </ul>
@@ -127,14 +135,14 @@ export const Sidebar = ({
           }}
         >
           <div style={{ width: "100%", backgroundColor: "red", bottom: "0" }}>
-            <button
+            <div
               className={`${styles.logoutCollapse}`}
               onClick={() => handleLogOut()}
             >
-              <div className="ml-1.5">
+              <div className="">
                 <LogOut size={20} />
               </div>
-            </button>
+            </div>
           </div>
         </div>
       </div>

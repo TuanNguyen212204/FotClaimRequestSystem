@@ -1,19 +1,21 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { User } from "@/types/User";
 import httpClient from "@/constant/apiInstance";
-
+import { DetailClaimFinance } from "@/types/Claim";
+import { ApiResponse } from "@/types/ApiResponse";
+import { delay } from "@/utils/delay";
 
 export const fetchUserByIdAsync = createAsyncThunk<User, string>(
   "userInfo/fetchUserById",
   async (userId: string): Promise<User> => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000)); 
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       const response = await httpClient.get<{
         httpStatus: number;
         errorCode: number;
         data: User[];
       }>(`/admin/staff/${userId}`);
-      const userData = response.data.data[0]; 
+      const userData = response.data.data[0];
       return {
         user_id: userData.user_id,
         username: userData.username,
@@ -34,13 +36,12 @@ export const fetchUserByIdAsync = createAsyncThunk<User, string>(
   }
 );
 
-
 export const updateUserAsync = createAsyncThunk<
   User,
   { userId: string; userData: Partial<User> }
 >("userInfo/updateUser", async ({ userId, userData }): Promise<User> => {
   try {
-    await new Promise((resolve) => setTimeout(resolve, 1000)); 
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     const requestBody = {
       full_name: userData.full_name || "",
@@ -49,7 +50,7 @@ export const updateUserAsync = createAsyncThunk<
       role_id: userData.role_id || 0,
       job_rank: userData.job_rank || "",
     };
- 
+
     if (userData.password && userData.password.trim() !== "") {
       requestBody.password = userData.password;
     }
@@ -59,7 +60,7 @@ export const updateUserAsync = createAsyncThunk<
       errorCode: number;
       data: User[];
     }>(`/admin/staff/${userId}`, requestBody);
-    const updatedUser = response.data.data[0]; 
+    const updatedUser = response.data.data[0];
     return {
       user_id: updatedUser.user_id,
       username: updatedUser.username,
@@ -75,6 +76,25 @@ export const updateUserAsync = createAsyncThunk<
     };
   } catch (error) {
     console.error("Update User error: " + error);
+    throw error;
+  }
+});
+
+//------------------------------------------------- GET INFO USER Phu  ----------------------------------------------------------------------
+export const fetchUserInformationAsync = createAsyncThunk<
+  { data: User },
+  { user_id: string }
+>("user", async ({ user_id }) => {
+  try {
+    await delay(1000);
+    const response = await httpClient.get<ApiResponse<User>>(
+      `/admin/staff/${user_id}`
+    );
+    return {
+      data: response.data.data,
+    };
+  } catch (error) {
+    console.error("Fetch information user error " + error);
     throw error;
   }
 });
