@@ -1,65 +1,85 @@
 import { useState, useEffect } from "react";
+import { Chart } from "react-google-charts";
 import httpClient from "@/constant/apiInstance";
+import styles from "./ClaimChart.module.css";
 
-interface ClaimData {
-    PENDING: number;
-    APPROVED: number;
-    REJECTED: number;
-    PAID: number;
-    DRAFT?: number;
-    APRROVED?: number; 
-  }
-  
-  interface ApiResponse {
-    data: {
-      httpStatus: number;
-      errorCode: number;
-      result: { month: number; data: ClaimData }[];
-    };
-  }
+const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const statuses = ["PENDING", "APPROVED", "REJECTED", "PAID"];
+const colors = ["#8884d8", "#82ca9d", "#ff7300", "#00c49f"];
 
-  interface ChartData {
-    month: string;
-    PENDING: number;
-    APPROVED: number;
-    REJECTED: number;
-    PAID: number;
-    DRAFT: number;
-  }
-  
-  const ClaimChart: React.FC = () => {
-    const [chartData, setChartData] = useState<ChartData[]>([]);
-  
-    useEffect(() => {
-      const fetchData = async () => {
-        try {
-          const response = await httpClient.get<ApiResponse>("admin/claims-by-status");
-          const apiData = response?.data?.result || [];
-  
-          const formattedData: ChartData[] = apiData.map((item) => ({
-            month: new Date(0, item.month - 1).toLocaleString("en", { month: "short" }),
+const ClaimChart = () => {
+  const [rawData, setRawData] = useState([]);
+  const [visibleSeries, setVisibleSeries] = useState({ PENDING: true, APPROVED: true, REJECTED: true, PAID: true });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await httpClient.get("/admin/claims-by-status");
+        if (response.data?.data?.result) {
+          const formattedData = response.data.data.result.map((item) => ({
+            month: monthNames[item.month - 1],
             PENDING: item.data.PENDING || 0,
-            APPROVED: (item.data.APPROVED || 0) + (item.data.APRROVED || 0), 
+            APPROVED: item.data.APPROVED || 0,
             REJECTED: item.data.REJECTED || 0,
             PAID: item.data.PAID || 0,
-            DRAFT: item.data.DRAFT || 0,
           }));
-  
-          setChartData(formattedData);
-        } catch (error) {
-          console.error("API error:", error);
+          setRawData(formattedData);
         }
-      };
-  
-      fetchData();
-    }, []);
-  
-    return (
-      <div>
-        <h2>Claim Status Overview</h2>
-        <pre>{JSON.stringify(chartData, null, 2)}</pre>
-      </div>
-    );
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const getFilteredData = () => {
+    const header = ["Month", ...statuses.filter((s) => visibleSeries[s])];
+    const body = rawData.map((item) => [item.month, ...statuses.filter((s) => visibleSeries[s]).map((s) => item[s])]);
+    return [header, ...body];
   };
-  
-  export default ClaimChart;
+
+  const toggleSeries = (status) => {
+    setVisibleSeries((prev) => ({
+      ...prev,
+      [status]: !prev[status], 
+    }));
+  };
+
+  if (loading) return <p className={styles.loading}>Loading data...</p>;
+
+  return (
+    <div className={styles.chartContainer}>
+      <p className={styles.chartTitle}>Claim Status Overview</p>
+      <Chart
+        chartType="ColumnChart"
+        width="100%"
+        height="400px"
+        data={getFilteredData()}
+        options={{
+          chartArea: { width: "70%" },
+          // hAxis: { title: "Months", minValue: 0 },
+          vAxis: { title: "Claims", minValue: 0 },
+          legend: { position: "none" }, 
+          colors: colors.filter((_, i) => visibleSeries[statuses[i]]),
+        }}
+      />
+      <div className={styles.legendContainer}>
+        {statuses.map((status, index) => (
+          <span
+            key={status}
+            className={`${styles.legendItem} ${visibleSeries[status] ? "" : styles.inactive}`}
+            onClick={() => toggleSeries(status)}
+            style={{ color: colors[index], cursor: "pointer" }}
+          >
+            ⬤ {status}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default ClaimChart;
