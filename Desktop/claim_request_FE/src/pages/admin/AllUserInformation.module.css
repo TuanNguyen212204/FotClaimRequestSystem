@@ -27,3 +27,13 @@
   background-color: transparent;
   cursor: pointer;
 }
+.filter_section {
+  font-weight: 500;
+  font-size: 1.5rem;
+  display: flex;
+  color: white;
+}
+.filterStatusP {
+  font-size: 1.5rem;
+  color: black;
+}

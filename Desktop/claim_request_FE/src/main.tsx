@@ -10,6 +10,9 @@ import { NotificationProvider } from "./components/ui/Notification/NotificationC
 import LoadingOverlay from "./components/ui/Loading/LoadingOverlay.tsx";
 import { LoadingProvider } from "./components/ui/Loading/LoadingContext.tsx";
 import { ToastContainer } from "react-toastify";
+import "./utils/i18n.ts";
+
+
 createRoot(document.getElementById("root")!).render(
   <ReactToastifyProvider>
     <Provider store={store}>

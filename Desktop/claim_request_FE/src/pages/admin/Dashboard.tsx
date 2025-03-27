@@ -150,7 +150,7 @@ const Dashboard = () => {
           "/admin/total-projects",
           "/admin/total-users",
         ];
-
+       
         const responses = await Promise.all(
           endpoints.map((endpoint) => httpClient.get(endpoint))
         );

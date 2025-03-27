@@ -2,24 +2,38 @@ import React from "react";
 import { AppDispatch } from "@/redux";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectDraftClaimByUserID } from "@/redux/selector/claimSelector";
-import { fetchClaimByUserWithDraftStatusAsync } from "@/redux/thunk/Claim/claimThunk";
+import fetchClaims from "@/redux/thunk/Draft";
+import { selectInitialValues } from "@/redux/slices/UpdateDraft";
+import {
+  selectDraftClaimByUserID,
+  selectRejectedClaimByUserID,
+} from "@/redux/selector/claimSelector";
+import {
+  fetchAllRejectedClaimAsync,
+  fetchClaimByUserWithDraftStatusAsync,
+} from "@/redux/thunk/Claim/claimThunk";
 import TableComponent, {
   DataRecord,
   Column,
 } from "@/components/ui/Table/Table";
 import { EyeIcon } from "lucide-react";
-
+import { SquarePen } from "lucide-react";
+import styles from "./DraftClaimByUserID.module.css";
+import CreateClaimPage from "../CreateClaim";
 export const DraftClaimByUserID: React.FC = () => {
   const listApprovedClaim = useSelector(selectDraftClaimByUserID);
+  const initValue = useSelector(selectInitialValues);
   const dispatch = useDispatch<AppDispatch>();
   const [loading, setLoading] = useState(true);
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [record, setRecord] = useState<any>(null);
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       await dispatch(fetchClaimByUserWithDraftStatusAsync());
       setLoading(false);
     };
+    console.log("listApprovedClaim", listApprovedClaim);
     fetchData();
   }, [dispatch]);
   const formatDateToDDMMYYYY = (date: string) => {
@@ -31,6 +45,14 @@ export const DraftClaimByUserID: React.FC = () => {
   };
   const handleViewDetail = (id: string) => {
     console.log("View detail", id);
+  };
+  const handleUpdate = async (record: any) => {
+    console.log("Update", record);
+    setOpenModal(true);
+    setRecord(record);
+    console.log(record.request_id);
+    console.table(record);
+    dispatch(fetchClaims(record.request_id));
   };
   const columns: Column[] = [
     {
@@ -71,6 +93,14 @@ export const DraftClaimByUserID: React.FC = () => {
         <EyeIcon onClick={() => handleViewDetail(value as string)} />
       ),
     },
+    {
+      key: "update",
+      dataIndex: "update",
+      title: "Update",
+      cell: ({ record }: { record: any }) => (
+        <SquarePen onClick={() => handleUpdate(record)} />
+      ),
+    },
   ];
   const dataSource: DataRecord[] = listApprovedClaim.map((claim, index) => ({
     ...claim,
@@ -80,6 +110,22 @@ export const DraftClaimByUserID: React.FC = () => {
   }));
   return (
     <div>
+      {openModal && (
+        <div className={styles.editModal}>
+          <div>
+            <div className="w-[1080px]">
+              {initValue && (
+                <CreateClaimPage
+                  initialValues={initValue}
+                  mode="update"
+                  formStatus="Draft"
+                  requestID={record.request_id}
+                />
+              )}
+            </div>
+          </div>
+        </div>
+      )}
       <TableComponent
         columns={columns}
         dataSource={dataSource}

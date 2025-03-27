@@ -21,6 +21,7 @@ function Test() {
         <StatusTag status="APPROVED" />
         <StatusTag status="REJECTED" />
         <StatusTag status="PAID" />
+        <StatusTag status="DRAFT" />
         <ApprovedDetailFinanceModal
           isOpen={true}
           onClose={false}

@@ -113,7 +113,6 @@ export const CreateUser: React.FC<CreateUserProps> = ({
   // Chỗ này để fetch api lấy list department từ BE về
   const fetchDepartment = async () => {
     try {
-      delay(1000);
       const response = await httpClient.get<ApiResponseNoGeneric>(
         `/admin/departments`
       );
@@ -125,7 +124,6 @@ export const CreateUser: React.FC<CreateUserProps> = ({
   // Chỗ này fetch api lấy list job rank từ BE về
   const fetchJobRank = async () => {
     try {
-      delay(1000);
       const response = await httpClient.get<ApiResponseNoGeneric>(
         `/admin/job-ranks`
       );
