@@ -91,9 +91,11 @@ export const PendingComponent: React.FC = () => {
 
   const handleGetSelectedData = () => {
     if (checkboxRef.current) {
-      const a = checkboxRef.current.getSelectedData();
-      setSelectedData(a);
+      const selected = checkboxRef.current.getSelectedData();
+      setSelectedData(selected);
+      return selected;
     }
+    return [];
   };
 
   useEffect(() => {
@@ -177,7 +179,93 @@ export const PendingComponent: React.FC = () => {
   };
 
   const handleApproveSelect = async () => {
+    const selectedClaims = handleGetSelectedData();
+    const requestIds = selectedClaims.map((claim) => claim.id as string);
+    if (requestIds.length === 0) {
+      toast.warn("Please select at least one claim to approve.");
+      return;
+    }
+    setModalContent({
+      title: `Are you sure you want to approve ${requestIds.length} claim(s)?`,
+      onOk: async () => {
+        try {
+          await httpClient.post("/approvers/approve-multiple-claims", {
+            request_ids: requestIds,
+          });
+          dispatch(
+            fetchAllPendingClaimAsync({
+              page: currentPage.toString(),
+              limit: limit.toString(),
+            })
+          );
+          toast.success("Selected claims approved successfully!");
+        } catch (error) {
+          console.log("Error approving claims: ", error);
+          toast.error("Failed to approve selected claims.");
+        }
+      },
+    });
+    setModalVisible(true);
+  };
 
+  const handleRejectSelect = async () => {
+    const selectedClaims = handleGetSelectedData();
+    const requestIds = selectedClaims.map((claim) => claim.id as string);
+    if (requestIds.length === 0) {
+      toast.warn("Please select at least one claim to reject.");
+      return;
+    }
+    setModalContent({
+      title: `Are you sure you want to reject ${requestIds.length} claim(s)?`,
+      onOk: async () => {
+        try {
+          await httpClient.post("/approvers/reject-multiple-claims", {
+            request_ids: requestIds,
+          });
+          dispatch(
+            fetchAllPendingClaimAsync({
+              page: currentPage.toString(),
+              limit: limit.toString(),
+            })
+          );
+          toast.success("Selected claims reject successfully!");
+        } catch (error) {
+          console.log("Error approving claims: ", error);
+          toast.error("Failed to reject selected claims.");
+        }
+      },
+    });
+    setModalVisible(true);
+  };
+
+  const handleReturnSelect = async () => {
+    const selectedClaims = handleGetSelectedData();
+    const requestIds = selectedClaims.map((claim) => claim.id as string);
+    if (requestIds.length === 0) {
+      toast.warn("Please select at least one claim to return.");
+      return;
+    }
+    setModalContent({
+      title: `Are you sure you want to return ${requestIds.length} claim(s)?`,
+      onOk: async () => {
+        try {
+          await httpClient.post("/approvers/return-multiple-claims", {
+            request_ids: requestIds,
+          });
+          dispatch(
+            fetchAllPendingClaimAsync({
+              page: currentPage.toString(),
+              limit: limit.toString(),
+            })
+          );
+          toast.success("Selected claims return successfully!");
+        } catch (error) {
+          console.log("Error approving claims: ", error);
+          toast.error("Failed to return selected claims.");
+        }
+      },
+    });
+    setModalVisible(true);
   };
 
   const handleViewDetail = (value: string) => {
@@ -328,16 +416,16 @@ export const PendingComponent: React.FC = () => {
     <div>
       <h1 className={styles.title}>Pending Claims</h1>
       <div className={styles.buttonContainer}>
-        <Button 
-          color="white" 
-          backgroundColor="#89AC46" 
+        <Button
+          color="white"
+          backgroundColor="#89AC46"
           size="large"
           onClick={handleApproveSelect}
         >
           Approve Select Claim
         </Button>
-        <Button danger size="large">Reject Select Claim</Button>
-        <Button type="primary" size="large">
+        <Button danger size="large" onClick={handleRejectSelect}>Reject Select Claim</Button>
+        <Button type="primary" size="large" onClick={handleReturnSelect}>
           Return Select Claim
         </Button>
       </div>
