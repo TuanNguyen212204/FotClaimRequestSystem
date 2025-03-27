@@ -1,20 +1,23 @@
 .container {
   width: 95%;
-  margin: 2rem auto;
+  margin: auto;
+  margin-top: 0.2rem; 
   background-color: white;
-  padding: 2rem;
+  padding: 1.5rem 2rem;  
   border-radius: 0.75rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .header {
-  margin-bottom: 2rem;
+  margin-bottom: 0.5rem;  
 }
 
 .title {
-  font-size: 1.75rem;
+  font-size: 2.5rem;
   color: #2d3142;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.3rem; 
 }
 
 .icon {
@@ -118,4 +121,8 @@
 
 .icon:active {
   transform: scale(0.9);
+}
+
+.container :global([class*="filter"]) {
+  display: none !important;
 }
