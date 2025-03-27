@@ -1,52 +1,57 @@
-import { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Chart } from "react-google-charts";
-import httpClient from "@/constant/apiInstance"; 
+import httpClient from "@/constant/apiInstance";
 
-const OTChart = ({ data }) => {
-  const [projects, setProjects] = useState([]);
+const OTChart: React.FC = () => {
+  const [chartData, setChartData] = useState<[string, number][]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchProjects = async () => {
+    const fetchData = async () => {
       try {
-        const response = await httpClient.get("/projects?page=1&limit=20&sortBy=project_id&order=ASC");
-        setProjects(response.data.data); 
-        console.log("API Response:", response.data.data);
-        
-      } catch (error) {
-        console.error("Error fetching projects:", error);
+        const response = await httpClient.get("admin/top-projects");
+        if (response.data && Array.isArray(response.data.data)) {
+          const formattedData: [string, number][] = response.data.data.map((item) => [
+            item.project_name,
+            item.claim_count,
+          ]);
+          setChartData([["Project", "Claims"], ...formattedData]);
+        } else {
+          setError("Invalid response format");
+        }
+      } catch (err) {
+        setError("Failed to fetch data");
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchProjects();
+    fetchData();
   }, []);
 
-  const totalOT = data.reduce((sum, project) => sum + project.otHours, 0);
-  const projectMap = projects.reduce((map, proj) => {
-    map[proj.project_id] = proj.project_name;
-    return map;
-  }, {});
-  console.log("Project Map:", projectMap);
-  
-  const chartData = [
-    ["Project", "OT Percentage"],
-    ...data
-      .map((project) => [
-        projectMap[project.project_id] || project.project_id, 
-        (project.otHours / totalOT) * 100,
-      ])
-      .sort((a, b) => b[1] - a[1]), 
-  ];
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
 
-  const options = {
-    title: "Top 4 claim of Project",
-    chartArea: { width: "60%" },
-    hAxis: { title: "Percentage (%)", minValue: 0, maxValue: 100 },
-    vAxis: { title: "Project" },
-    legend: { position: "none" },
-    colors: ["#233754"],
-  };
-
-  return <Chart chartType="ColumnChart" width="100%" height="400px" data={chartData} options={options} />;
+  return (
+    <div style={{ width: "100%", height: "400px" }}>
+      <Chart
+        chartType="ColumnChart"
+        width="100%"
+        height="100%"
+        data={chartData}
+        options={{
+          title: "Top Projects by Claim Count",
+          legend: { position: "none" },
+          chartArea: { width: "80%", height: "70%" },
+          backgroundColor: "transparent",
+          hAxis: { title: "Project Name" },
+          vAxis: { title: "Claim Count" },
+          colors: ["#233754"],
+        }}
+      />
+    </div>
+  );
 };
 
 export default OTChart;

@@ -23,7 +23,8 @@ const Dashboard = () => {
   const [totalPending, setTotalPending] = useState({ pendingClaims: null, currentMonthPending: null, changePercentage: null });
   const [totalApproved, setTotalApproved] = useState({ approvedClaims: null, currentMonthClaims: null, changePercentage: null });
   const [totalRejected, setTotalRejected] = useState({ rejectedClaims: null, currentMonthClaims: null, changePercentage: null });
-  const [summary, setSummary] = useState({ totalProjects: null, totalUsers: null, });
+  const [totalUser, setTotalUser] = useState({totalActiveUser : null, totalInactiveUser : null, totalUser : null});
+  const [totalProject, setTotalProject] = useState({totalActiveProjects : null, totalInactiveProjects : null, totalProjects : null});
   
 
   const [selected, setSelected] = useState({
@@ -32,13 +33,6 @@ const Dashboard = () => {
     Rejected: true,
     Paid: true,
   });
-
-  const projectData = [
-    { name: "Project A", otHours: 120 },
-    { name: "Project B", otHours: 95 },
-    { name: "Project C", otHours: 85 },
-    { name: "Project D", otHours: 60 },
-  ];
 
   useEffect(() => {
     const fetchTotalClaim = async () => {
@@ -121,6 +115,31 @@ const Dashboard = () => {
     const fetchTotalRejected = async () => {
       setLoading(true);
       try {
+        const response = await httpClient.get("/admin/total-users");
+        const data = response?.data?.data ?? {};
+        setTotalUser({
+          totalActiveUser: data.totalActiveUser ?? null,
+          totalInactiveUser: data.totalInactiveUser ?? null,
+          totalUser: data.totalUser ?? null,
+        });
+      } catch (error) {
+        console.error("Error fetching summary data:", error);
+        setTotalUser({
+          totalActiveUser: null,
+          totalInactiveUser: null,
+          totalUser: null,
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTotalRejected();
+  }, []);
+
+  useEffect(() => {
+    const fetchTotalUser = async () => {
+      setLoading(true);
+      try {
         const response = await httpClient.get("/admin/rejected-claims");
         const data = response?.data?.data ?? {};
         setTotalRejected({
@@ -139,44 +158,34 @@ const Dashboard = () => {
         setLoading(false);
       }
     };
-    fetchTotalRejected();
+    fetchTotalUser();
   }, []);
 
   useEffect(() => {
-    const fetchSummaryData = async () => {
+    const fetchTotalProjects = async () => {
       setLoading(true);
       try {
-        const endpoints = [
-          "/admin/total-projects",
-          "/admin/total-users",
-        ];
-       
-        const responses = await Promise.all(
-          endpoints.map((endpoint) => httpClient.get(endpoint))
-        );
-        const [
-          totalProjects,
-          totalUsers,
-        ] = responses.map((res) => res?.data?.data ?? null);
-
-        setSummary({
-          totalProjects,
-          totalUsers,
+        const response = await httpClient.get("/admin/total-projects");
+        const data = response?.data?.data ?? {};
+        setTotalProject({
+          totalActiveProjects: data.totalActiveProjects ?? null,
+          totalInactiveProjects: data.totalInactiveProjects ?? null,
+          totalProjects: data.totalProjects ?? null,
         });
       } catch (error) {
         console.error("Error fetching summary data:", error);
-        setSummary({
+        setTotalProject({
+          totalActiveProjects: null,
+          totalInactiveProjects: null,
           totalProjects: null,
-          totalUsers: null,
         });
       } finally {
         setLoading(false);
       }
     };
-
-    fetchSummaryData();
+    fetchTotalProjects();
   }, []);
-
+  
   const filteredData = [
     ["Time", ...Object.keys(selected).filter((key) => selected[key])],
     ...data.map((item) => [
@@ -227,28 +236,28 @@ const Dashboard = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <SummaryCard 
             title="Total Projects" 
-            totalvalue={summary.totalProjects ?? 0}
+            totalvalue={(totalProject.totalActiveProjects ?? 0) + (totalProject.totalInactiveProjects ?? 0)}
             icon={<Briefcase />} 
             chartData={[
-              ["Completed", 80],
-              ["In Progress", 20]
+              ["Active", totalProject.totalActiveProjects ?? 0],
+              ["Inactive", totalProject.totalInactiveProjects ?? 0]
             ]}
             colors={["#ffdb70", "#FFC107"]}
           />
           <SummaryCard 
             title="Total Users" 
-            totalvalue={summary.totalUsers ?? 0}
+            totalvalue={(totalUser.totalActiveUser ?? 0) + (totalUser.totalInactiveUser ?? 0)}
             icon={<Users />} 
             chartData={[
-              ["Active", 62],
-              ["Inactive", 38]
+              ["Active", totalUser.totalActiveUser ?? 0],
+              ["Inactive", totalUser.totalInactiveUser ?? 0]
             ]}
             colors={["#ff855e", "#FF5722"]}
           />
         </div>
       </div>
       <div className={styles.chartOT} >
-          <OTChart data={projectData} />
+          <OTChart />
       </div>
 
       <div>

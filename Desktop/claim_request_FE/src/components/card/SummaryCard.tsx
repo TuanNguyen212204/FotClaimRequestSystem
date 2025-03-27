@@ -50,31 +50,35 @@ const SummaryCard = ({
                   className={styles.legendColor}
                   style={{ backgroundColor: colors[index] || getColor(index) }} 
                 ></span>
-                {value}% {label}
+                {value} {label}
               </div>
             ))}
           </div>
 
-          <div className={styles.chartContainer}>
-            <Chart
-              chartType="PieChart"
-              width="100%"
-              height="100%"
-              data={[["Label", "Value"], ...chartData]}
-              options={{
-                pieHole: 0.4,
-                legend: "none",
-                backgroundColor: "transparent",
-                chartArea: { width: "100%", height: "100%" },
-                tooltip: { trigger: "focus" },
-                pieSliceText: "none",
-                slices: chartData.reduce((acc, _, index) => {
-                  acc[index] = { color: colors[index] || getColor(index) }; 
-                  return acc;
-                }, {} as Record<number, { color: string }>),
-              }}
-            />
-          </div>
+          <Chart
+            chartType="PieChart"
+            width="100%"
+            height="100%"
+            data={[["Label", "Value"], ...chartData]}
+            options={{
+              pieHole: 0.4,
+              legend: "none",
+              backgroundColor: "transparent",
+              chartArea: { width: "100%", height: "100%" },
+              tooltip: { trigger: "focus" },
+              pieSliceText: "none",
+              slices: chartData.reduce((acc, _, index) => {
+                acc[index] = { color: colors[index] || getColor(index) };
+                return acc;
+              }, {} as Record<number, { color: string }>),
+              animation: {
+                startup: true,
+                easing: "out",
+                duration: 1000, 
+              },
+              pieStartAngle: 180,
+            }}
+          />
         </div>
       )}
     </div>
