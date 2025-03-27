@@ -10,6 +10,7 @@ import { PATH } from "@constant/config";
 import { X } from "lucide-react";
 import styles from "./UpdateUser.module.css";
 import { ToastContainer, toast } from "react-toastify";
+
 interface UpdateUserProps {
   id: string;
   setOpenModal: (value: boolean) => void;

@@ -1,7 +1,14 @@
 import { useState, useEffect } from "react";
+import Calendar from "react-calendar";
+import { Clock } from "lucide-react";
+import "react-calendar/dist/Calendar.css";
+import styles from "./DashboardHeader.module.css";
 
-const DashboardHeader = () => {
-  const [dateTime, setDateTime] = useState(new Date());
+const DashboardHeader: React.FC = () => {
+  const [dateTime, setDateTime] = useState<Date>(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [showCalendar, setShowCalendar] = useState<boolean>(false);
+  const [closing, setClosing] = useState<boolean>(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -10,27 +17,68 @@ const DashboardHeader = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // define date
-  const formattedDate = dateTime.toLocaleDateString("en-US", {
-    weekday: "long", 
-    day: "2-digit",  
-    month: "long",   
-    year: "numeric"  
+  useEffect(() => {
+    if (showCalendar) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [showCalendar]);
+
+  const formattedDate: string = dateTime.toLocaleDateString("en-US", {
+    weekday: "long",
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
   });
 
+  const closeModal = () => {
+    setClosing(true);
+    setTimeout(() => {
+      setShowCalendar(false);
+      setClosing(false);
+    }, 300); 
+  };
+
+  const handleOutsideClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if ((e.target as HTMLDivElement).classList.contains(styles.calendarModal)) {
+      closeModal();
+    }
+  };
+
   return (
-    <div className="flex justify-between items-center mb-12">
-      {/* Main header */}
+    <div className={styles.container}>
       <div>
-        <h3 className="text-2xl font-semibold">Welcome Back! </h3>
-        <h4 className="text-gray-600">Track, manage, and forecast your staff and projects.</h4>
+        <h3 className={styles.username}>Welcome Back, User!</h3>
+        <h4 className={styles.subtitle}>
+          Track, manage, and forecast your staff and projects.
+        </h4>
       </div>
 
-      {/* Time and date */}
-      <div className="text-right">
-        <h4 className="text-lg font-bold text-gray-800">{dateTime.toLocaleTimeString()}</h4>
-        <p className="text-sm text-gray-600">{formattedDate}</p>
+      <div className={styles.box} onClick={() => setShowCalendar(true)}>
+        <h4 className={styles.time}>
+          <Clock size={16} className={styles.clockIcon} /> {dateTime.toLocaleTimeString()}
+        </h4>
+        <p className={styles.date}>{formattedDate}</p>
       </div>
+
+      {showCalendar && (
+        <div 
+          className={`${styles.calendarModal} ${closing ? styles.closing : ""}`} 
+          onClick={handleOutsideClick}
+        >
+          <div className={styles.calendarContent}>
+            <Calendar 
+              value={selectedDate} 
+              onChange={(value) => setSelectedDate(value as Date)} 
+            />
+            <h3>Today list: </h3>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,0 +1,32 @@
+.chartContainer {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    border: 1px solid #ddd;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .chartTitle {
+    font-size: 1.25rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  
+  .legendContainer {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem; /* Đẩy xuống dưới chart */
+  }  
+  
+  .legendItem {
+    font-size: 1rem;
+    font-weight: bold;
+    transition: opacity 0.3s;
+  }
+  
+  .legendItem.inactive {
+    opacity: 0.5;
+  }
+  

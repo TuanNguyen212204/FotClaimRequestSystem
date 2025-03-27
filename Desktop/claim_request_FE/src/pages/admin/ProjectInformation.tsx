@@ -1,7 +1,7 @@
 import TableComponent from "@components/ui/Table/Table";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch } from "@redux/index.ts";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import {
   selectAllProject,
   selectTotalPageOfAllProject,
@@ -11,27 +11,29 @@ import {
   fetchTotalPage,
 } from "@redux/thunk/Project/projectThunk";
 import { Column, DataRecord } from "@components/ui/Table/Table";
+import { CreateProject } from "../Project/CreateProject";
+import { UpdateProject } from "../Project/UpdateProject";
 import styles from "./ProjectInformation.module.css";
 import httpClient from "@/constant/apiInstance";
 import { useNavigate } from "react-router-dom";
-import { PATH } from "@constant/config";
 import { ApiResponseNoGeneric } from "@/types/ApiResponse";
 import { Project } from "@/types/Project";
-import { Trash2, FilePen, ClipboardList, Clock } from "lucide-react";
+import { Trash2, FilePen } from "lucide-react";
 import { confirmModal } from "@/components/ui/modal/Modal";
 import { toast } from "react-toastify";
-import SummaryCard from "@/components/card/SummaryCard";
+import { ArrowDown, ArrowUp } from "lucide-react";
 
 const ProjectInformation: React.FC = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const project = useSelector(selectAllProject) || [];
   const totalPage = useSelector(selectTotalPageOfAllProject) || 1;
   const [loading, setLoading] = useState(true);
+  const [statusFilter, setStatusFilter] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [totalProjects, setTotalProjects] = useState<number | null>(null);
+  const [projectID, setProjectID] = useState<string>("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [UpdateOpen, setUpdateOpen] = useState(false);
   console.log("Dữ liệu lấy từ Redux:", project);
-  const [limit] = useState(7);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,33 +58,21 @@ const ProjectInformation: React.FC = () => {
     console.log("Current project state:", project);
   }, [project]);
 
-  useEffect(() => {
-    const fetchSummaryData = async () => {
-      setLoading(true);
-      try {
-        const response = await httpClient.get("/admin/total-projects");
-        console.log("API Response:", response.data);
-        setTotalProjects(response.data.data);
-      } catch (error) {
-        console.error("Error fetching total projects:", error);
-        setTotalProjects(null);
-      } finally {
-        setLoading(false);
-      }
-    };
 
-    fetchSummaryData();
-  }, []);
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
 
-  const handleCreateProject = async () => {
-    navigate(PATH.createProject);
+  const handleCreateProject = () => {
+    handleOpenModal();
+    console.log("Create project clicked", setIsModalOpen);
   };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-GB");
   };
-  //test
+
   const dataSource: DataRecord[] = Array.isArray(project)
     ? project.map((project: Project) => ({
         key: project.project_id,
@@ -136,8 +126,28 @@ const ProjectInformation: React.FC = () => {
   const handleUpdate = (id?: string) => {
     if (!id) return;
     console.log("Update project with ID:", id);
-    navigate(`/update-project?id=${id}`);
+    setProjectID(id ? id : "");
+    setUpdateOpen(true);
+    console.log(UpdateOpen);
   };
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+  const [selectedStatus, setSelectedStatus] = useState<string>("All");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const uniqueStatuses = [
+    "All",
+    ...new Set(project.map((item) => item.project_status)),
+  ];
+
+  const handleStatusSelect = (status: string) => {
+    setSelectedStatus(status);
+    fetchProjectByStatus(status);
+    setCurrentPage(1);
+    setIsDropdownOpen(false);
+  };
+
 
   const columns: Column<Project>[] = [
     { key: "projectID", dataIndex: "projectID", title: "Project ID" },
@@ -189,25 +199,60 @@ const ProjectInformation: React.FC = () => {
     <div>
       <h1>Project Information</h1>
 
-      <div className={styles.summaryContainer}>
-        <SummaryCard
-          title="Total Projects"
-          value={loading ? "Loading..." : totalProjects ?? "N/A"}
-          icon={<ClipboardList />}
-          percentage={10}
-        />
-        <SummaryCard
-          title="New Project this month"
-          value={30} // Nếu có API cho new projects, thay bằng API tương tự
-          icon={<Clock />}
-          percentage={-5}
-        />
+      {isModalOpen && (
+        <div className={styles.editModal}>
+          <div>
+            <CreateProject openModal={isModalOpen} setOpenModal={setIsModalOpen} />
+          </div>
+        </div>
+      )}
+      {UpdateOpen && (
+        <div className={styles.editModal}>
+          <div>
+            <UpdateProject projectid={projectID} setOpenModal={setUpdateOpen} />
+          </div>
+        </div>
+      )}
+
+<div className="flex ">
+        <div className={`${styles.filter_section} `}>
+          <div className={styles.filterStatusP}>
+          <p>Filter By Status:</p>
+          </div>
+          <div
+            className="relative inline-block text-left mt-5.5 ml-3"
+          >
+            <div
+              onClick={toggleDropdown}
+              className="flex items-center justify-between px-4 py-2 text-sm font-medium text-gray-700 bg-white border rounded-md shadow-sm hover:bg-gray-100 focus:outline-none"
+            >
+              <span>{selectedStatus}</span>
+              <ArrowDown className="w-4 h-4 ml-2" />
+            </div>
+
+            {isDropdownOpen && (
+              <div className="absolute right-0 z-10 mt-2 origin-top-right bg-white border border-gray-300 rounded-md shadow-lg w-48">
+                <div className="py-1">
+                  {uniqueStatuses.map((status) => (
+                    <div
+                      key={status}
+                      onClick={() => handleStatusSelect(status)}
+                      className="block px-4 py-2 text-sm text-gray-700 w-4/5 text-left hover:bg-gray-200"
+                    >
+                      {status}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
+
       <TableComponent
-        // ref={tableRef}
-        // isHaveCheckbox={true}
-        // isHaveCheckbox={true}
+        // ref={tableRef as any}
+        isHaveCheckbox={false}
         columns={columns}
         dataSource={dataSource}
         loading={true}
