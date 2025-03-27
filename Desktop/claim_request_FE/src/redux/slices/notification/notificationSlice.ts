@@ -46,7 +46,6 @@ export const notificationSlice = createSlice({
         notificationLst[notificationIndex].is_read = true;
       }
       console.log(notificationLst)
-      
       state.notifications = {notifications: notificationLst} as unknown as Notification[];
     },
   },

@@ -5,9 +5,7 @@ import {
   FaBell,
   FaUserCircle,
   FaEllipsisV,
-  FaCheckCircle,
   FaCheck,
-  FaClosedCaptioning,
   FaTrash,
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -26,6 +24,8 @@ import {
   addNotification,
   updateMarkAsRead,
 } from "@/redux/slices/notification/notificationSlice";
+import { LanguageSwitcher } from "./LanguageSwitcher";
+import { useTranslation } from "react-i18next";
 
 interface Notification {
   id: string;
@@ -44,11 +44,9 @@ const Header: React.FC = () => {
   const dispatch = useDispatch();
   const socketRef = useRef<Socket | null>(null);
   const user_id = localStorage.getItem("user_id");
-
   const notifications = useSelector(
     (state: any) => state.notifications?.notifications?.notifications
   );
-
 
   useEffect(() => {
     dispatch(fetchNotificationsAsync() as any);
@@ -181,6 +179,7 @@ const Header: React.FC = () => {
             onClick={() => navigate(PATH.userInfo)}
           />
           <span className={styles.username}>{username}</span>
+          <LanguageSwitcher />
         </div>
       </header>
       {dropdownVisible && (
