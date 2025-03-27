@@ -47,7 +47,6 @@ export const fetchTotalPage = createAsyncThunk<
         "/admin/staffs",
         { page: page }
       );
-      console.log(response.data.totalPages);
       return response.data.totalPages;
     } catch (error) {
       console.error("Fetch Users error " + error);
@@ -74,11 +73,9 @@ export const fetchUserByIdAsync = createAsyncThunk<User[]>(
   async (): Promise<User[]> => {
     try {
       const id = localStorage.getItem("user_id");
-      console.log("user_id" + id);
       const response = await httpClient.get<ApiResponse<User[]>>(
         "/admin/staff/" + id
       );
-      console.log(response.data.data);
       return response.data.data;
     } catch (error) {
       console.error("Fetch Users error " + error);
