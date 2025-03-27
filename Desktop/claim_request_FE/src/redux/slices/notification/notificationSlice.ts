@@ -36,7 +36,7 @@ export const notificationSlice = createSlice({
       state.notifications = newList as unknown as Notification[];
     },
     updateMarkAsRead: (state, action) => {
-      const id  = action.payload; // Giả sử payload chứa id của thông báo
+      const id  = action.payload; 
       const notificationLst = JSON.parse(
         JSON.stringify(state.notifications)
       ).notifications
@@ -46,6 +46,7 @@ export const notificationSlice = createSlice({
         notificationLst[notificationIndex].is_read = true;
       }
       console.log(notificationLst)
+      
       state.notifications = {notifications: notificationLst} as unknown as Notification[];
     },
   },
@@ -71,7 +72,7 @@ export const notificationSlice = createSlice({
         state.loading = false;
         console.log(state.notifications);
         console.log(action.payload);
-        state.notifications = action.payload as unknown as Notification[]; // Updated notifications from API
+        state.notifications = action.payload as unknown as Notification[];
       })
       .addCase(markNotificationAllAsRead.rejected, (state, action) => {
         state.loading = false;
@@ -79,13 +80,12 @@ export const notificationSlice = createSlice({
           action.error.message || "Failed to mark notifications as read";
       })
       .addCase(markNotificationAsReadById.pending, (state) => {
-        state.loading = true; // Đang xử lý yêu cầu
+        state.loading = true; 
         state.error = null;
       })
       .addCase(markNotificationAsReadById.fulfilled, (state, action) => {
-        state.loading = false; // Hoàn thành yêu cầu
-        // Cập nhật thông báo trong state
-        const updatedNotification = action.payload; // Giả sử payload chứa thông báo đã được cập nhật
+        state.loading = false; 
+        const updatedNotification = action.payload; 
         const index = state.notifications.findIndex(
           (n) => n.id === updatedNotification.id
         );
@@ -93,13 +93,13 @@ export const notificationSlice = createSlice({
           state.notifications[index] = {
             ...state.notifications[index],
             ...updatedNotification,
-          }; // Cập nhật thông báo
+          }; 
         }
       })
       .addCase(markNotificationAsReadById.rejected, (state, action) => {
-        state.loading = false; // Hoàn thành yêu cầu
+        state.loading = false; 
         state.error =
-          action.error.message || "Failed to mark notification as read"; // Xử lý lỗi
+          action.error.message || "Failed to mark notification as read"; 
       });
   },
 });

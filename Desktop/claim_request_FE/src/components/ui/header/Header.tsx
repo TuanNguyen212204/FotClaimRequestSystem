@@ -49,7 +49,6 @@ const Header: React.FC = () => {
     (state: any) => state.notifications?.notifications?.notifications
   );
 
-  // console.log(notifications);
 
   useEffect(() => {
     dispatch(fetchNotificationsAsync() as any);
@@ -105,7 +104,6 @@ const Header: React.FC = () => {
         console.log("Sắp dispatch action addNotification:", notification);
         dispatch(addNotification(notification));
         console.log("Đã gửi action addNotification!");
-        console.log(notification);
       } catch (error) {
         console.error("Lỗi khi dispatch:", error);
       }
@@ -116,7 +114,6 @@ const Header: React.FC = () => {
         console.log("Sắp dispatch action addNotification:", notification);
         dispatch(addNotification(notification));
         console.log("Đã gửi action addNotification!");
-        console.log(notification);
       } catch (error) {
         console.error("Lỗi khi dispatch:", error);
       }
@@ -241,7 +238,6 @@ const Header: React.FC = () => {
                     className={styles.option}
                     style={{ display: "flex", alignItems: "center" }}
                     onClick={() => {
-                      console.log("a");
                       handleDelete(notification.id);
                     }}
                   >
