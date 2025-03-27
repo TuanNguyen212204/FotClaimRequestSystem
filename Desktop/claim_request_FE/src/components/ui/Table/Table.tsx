@@ -201,6 +201,9 @@ const TableComponent = forwardRef(
         setIsLoading(false);
       }
     }, [loading]);
+    useEffect(() => {
+      setCurrentPage(1);
+    }, [totalPages]);
 
     if (isLoading) {
       return (
