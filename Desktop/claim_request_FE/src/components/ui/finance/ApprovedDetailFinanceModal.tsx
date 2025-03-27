@@ -192,6 +192,7 @@ const ApprovedDetailFinanceModal = ({
                       | "APPROVED"
                       | "REJECTED"
                       | "PAID"
+                      | "DRAFT"
                   }
                 />
               ) : (
