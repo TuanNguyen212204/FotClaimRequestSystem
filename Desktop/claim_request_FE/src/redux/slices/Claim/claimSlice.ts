@@ -228,6 +228,24 @@ export const claimSlice = createSlice({
           state.listClaimUserPending = action.payload;
         }
       )
+      //my claim is with draft status
+      .addCase(
+        fetchClaimByUserWithDraftStatusAsync.rejected,
+        (state, action) => {
+          state.status = "failed";
+          state.error = String(action.error.message);
+        }
+      )
+      .addCase(
+        fetchClaimByUserWithDraftStatusAsync.fulfilled,
+        (state, action) => {
+          state.status = "success";
+          state.listClaimUserDraft = action.payload;
+        }
+      )
+      .addCase(fetchClaimByUserWithDraftStatusAsync.pending, (state) => {
+        state.status = "loading";
+      })
       //my claim is with rejected status
       .addCase(
         fetchClaimByUserWithRejectStatusAsync.rejected,
