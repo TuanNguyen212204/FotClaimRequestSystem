@@ -5,9 +5,7 @@ import {
   FaBell,
   FaUserCircle,
   FaEllipsisV,
-  FaCheckCircle,
   FaCheck,
-  FaClosedCaptioning,
   FaTrash,
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
