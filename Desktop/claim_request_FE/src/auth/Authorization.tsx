@@ -17,7 +17,7 @@ const Authorization: React.FC<RoleProps> = ({ children, role_id }) => {
   const allowedRoles = Array.isArray(role_id) ? role_id : [role_id]; 
 
   if (!allowedRoles.includes(roleID)) {
-    return <Navigate to="/unauthorized" />;
+    return <Navigate to="/error/403" />;
   }
   return children;
 };

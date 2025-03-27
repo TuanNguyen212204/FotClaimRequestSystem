@@ -11,7 +11,7 @@ const Authentication: React.FC<AuthenticationProps> = ({ children }) => {
   if (access_token) {
     return children;
   }
-  return <Navigate to="/unauthenticated" />;
+  return <Navigate to="/error/401" />;
 };
 
 export default Authentication;
