@@ -32,9 +32,7 @@ const Dashboard = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await fetch(
-          `https://67b847da699a8a7baef3677f.mockapi.io/${timeframe}`
-        );
+
         const response = await fetch(
           `https://67b847da699a8a7baef3677f.mockapi.io/${timeframe}`
         );
@@ -63,18 +61,7 @@ const Dashboard = () => {
           "/admin/approved-claims",
           "/admin/rejected-claims",
         ];
-
-        const responses = await Promise.all(
-          endpoints.map((endpoint) => httpClient.get(endpoint))
-        );
-        const [
-          totalProjects,
-          totalUsers,
-          totalClaims,
-          pendingClaims,
-          approvedClaims,
-          rejectedClaims,
-        ] = responses.map((res) => res?.data?.data ?? null);
+       
         const responses = await Promise.all(
           endpoints.map((endpoint) => httpClient.get(endpoint))
         );

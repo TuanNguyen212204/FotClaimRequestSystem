@@ -1,27 +1,21 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
-import LanguageDetector from "i18next-browser-languagedetector";
-import Backend from "i18next-http-backend";
 
-i18n
-  .use(Backend)
-  .use(LanguageDetector)
-  .use(initReactI18next)
-  .init({
-    fallbackLng: "en",
-    lng: "en",
-    debug: true,
-    interpolation: {
-      escapeValue: false,
-    },
-    backend: {
-      loadPath: "/locales/{{lng}}/{{ns}}.json",
-    },
-    detection: {
-      order: ["localStorage", "cookie", "navigator"],
-      caches: ["localStorage", "cookie"],
-    },
-  })
-  .catch((error: Error) => console.error("i18n init error:", error));
+// Import JSON
+import headerEn from "../locales/en/header.json";
+import headerVn from "../locales/vi/header.json";
+
+// Khởi tạo i18n
+i18n.use(initReactI18next).init({
+  resources: {
+    en: { header: headerEn },
+    vi: { header: headerVn },
+  },
+  lng: "en", // Ngôn ngữ mặc định
+  fallbackLng: "vi",
+  ns: ["header"], // Chỉ định namespace
+  defaultNS: "header",
+  debug: true,
+});
 
 export default i18n;

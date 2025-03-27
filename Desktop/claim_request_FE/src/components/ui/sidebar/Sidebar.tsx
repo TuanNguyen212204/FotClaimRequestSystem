@@ -25,6 +25,7 @@ import { ROLES } from "@/enums/ROLES";
 import RouteConfig from "@/types/Route";
 import { PRIVATE_ROUTE } from "@/constant/routeConfig";
 import ROLE from "@/constant/role";
+import { useTranslation } from "react-i18next";
 export const Sidebar = ({
   setIsCollapsed,
 }: {
@@ -35,6 +36,7 @@ export const Sidebar = ({
   const [isCollapsed1, setIsCollapsed1] = useState<boolean>(true);
   const [hover, setHover] = useState<boolean>(false);
   const [role, setRole] = useState<typeof ROLE | number>();
+  const { t } = useTranslation()
 
   const filterRoutesByRole = (
     routes: RouteConfig[],
