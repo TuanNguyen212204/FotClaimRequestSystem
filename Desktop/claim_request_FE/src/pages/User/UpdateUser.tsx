@@ -97,7 +97,7 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
         `/admin/staff/${id}`,
         requestBody
       );
-      toast("User updated successfully!");
+      toast.success("User updated successfully!");
       setTimeout(() => {
         window.location.reload();
       }, 1000);
