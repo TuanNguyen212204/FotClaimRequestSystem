@@ -2,6 +2,8 @@ import React from "react";
 import { AppDispatch } from "@/redux";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import fetchClaims from "@/redux/thunk/Draft";
+import { selectInitialValues } from "@/redux/slices/UpdateDraft";
 import {
   selectDraftClaimByUserID,
   selectRejectedClaimByUserID,
@@ -20,6 +22,7 @@ import styles from "./DraftClaimByUserID.module.css";
 import CreateClaimPage from "../CreateClaim";
 export const DraftClaimByUserID: React.FC = () => {
   const listApprovedClaim = useSelector(selectDraftClaimByUserID);
+  const initValue = useSelector(selectInitialValues);
   const dispatch = useDispatch<AppDispatch>();
   const [loading, setLoading] = useState(true);
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -43,11 +46,13 @@ export const DraftClaimByUserID: React.FC = () => {
   const handleViewDetail = (id: string) => {
     console.log("View detail", id);
   };
-  const handleUpdate = (record: any) => {
+  const handleUpdate = async (record: any) => {
     console.log("Update", record);
     setOpenModal(true);
     setRecord(record);
-    console.log(record);
+    console.log(record.request_id);
+    console.table(record);
+    dispatch(fetchClaims(record.request_id));
   };
   const columns: Column[] = [
     {
@@ -108,13 +113,15 @@ export const DraftClaimByUserID: React.FC = () => {
       {openModal && (
         <div className={styles.editModal}>
           <div>
-            <div>
-              {/* <CreateClaimPage
-                formStatus="Draft"
-                mode="update"
-                initialValues={record}
-                requestID={record.request_id}
-              /> */}
+            <div className="w-[1080px]">
+              {initValue && (
+                <CreateClaimPage
+                  initialValues={initValue}
+                  mode="update"
+                  formStatus="Draft"
+                  requestID={record.request_id}
+                />
+              )}
             </div>
           </div>
         </div>

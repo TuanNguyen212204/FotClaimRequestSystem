@@ -15,7 +15,7 @@ import { claimSlice } from "./slices/Claim/claimSlice";
 import {notificationSlice}  from "./slices/notification/notificationSlice.ts"
 import vyReducer from "./slices/VySlice";
 import paidClaimsReducer from "./slices/Claim/paidClaimsSlice";
-
+import draftSlice from "./slices/UpdateDraft/index.ts";
 export const rootReducer = combineReducers({
   // pending: pendingSlice.reducer,
   // details: detailsSlice.reducer,
@@ -30,7 +30,7 @@ export const rootReducer = combineReducers({
   notifications: notificationSlice.reducer,
   // details: detailsSlice.reducer,
   //
-
+  draft: draftSlice,
   // claims: claimsReducer,
   // approver: approverSlice.reducer,
 });
