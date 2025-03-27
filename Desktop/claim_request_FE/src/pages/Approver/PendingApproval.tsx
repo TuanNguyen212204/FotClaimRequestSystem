@@ -420,12 +420,16 @@ export const PendingComponent: React.FC = () => {
           color="white"
           backgroundColor="#89AC46"
           size="large"
+          style={{ borderRadius: "10px" }}
           onClick={handleApproveSelect}
         >
           Approve Select Claim
         </Button>
-        <Button danger size="large" onClick={handleRejectSelect}>Reject Select Claim</Button>
-        <Button type="primary" size="large" onClick={handleReturnSelect}>
+        <Button danger size="large" onClick={handleRejectSelect} style={{ borderRadius: "10px" }}
+        >
+          Reject Select Claim
+        </Button>
+        <Button type="primary" size="large" onClick={handleReturnSelect} style={{ borderRadius: "10px" }}>
           Return Select Claim
         </Button>
       </div>
