@@ -1,18 +1,30 @@
 import React, { useEffect, useState, useRef } from "react";
 import styles from "./Header.module.css";
 import SearchBar from "../searchbar/SearchBar";
-import { FaBell, FaUserCircle } from "react-icons/fa";
+import {
+  FaBell,
+  FaUserCircle,
+  FaEllipsisV,
+  FaCheckCircle,
+  FaCheck,
+  FaClosedCaptioning,
+  FaTrash,
+} from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { PATH } from "../../../constant/config";
 import Badge from "@components/ui/Badge";
 import fptlogo from "@assets/fot.png";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchNotificationsAsync, markNotificationAllAsRead, markNotificationAsReadById } from "@/redux/thunk/notification/notificationThunk";
+import {
+  deleteNotificationById,
+  fetchNotificationsAsync,
+  markNotificationAllAsRead,
+  markNotificationAsReadById,
+} from "@/redux/thunk/notification/notificationThunk";
 import { io, Socket } from "socket.io-client";
 import {
   addNotification,
   updateMarkAsRead,
-  
 } from "@/redux/slices/notification/notificationSlice";
 
 interface Notification {
@@ -26,6 +38,7 @@ interface Notification {
 const Header: React.FC = () => {
   const [_, setRole] = useState<string>();
   const [dropdownVisible, setDropdownVisible] = useState<boolean>(false);
+  const [optionsVisibleId, setOptionsVisibleId] = useState<number | null>(null);
   const username = localStorage.getItem("username");
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -36,7 +49,7 @@ const Header: React.FC = () => {
     (state: any) => state.notifications?.notifications?.notifications
   );
 
-  console.log(notifications)
+  // console.log(notifications);
 
   useEffect(() => {
     dispatch(fetchNotificationsAsync() as any);
@@ -45,7 +58,6 @@ const Header: React.FC = () => {
   const unreadCount = Array.isArray(notifications)
     ? notifications.filter((n: any) => !n.is_read).length
     : 0;
-    
 
   useEffect(() => {
     const record = Number(localStorage.getItem("role_id"));
@@ -140,14 +152,19 @@ const Header: React.FC = () => {
   const toggleDropdown = () => {
     setDropdownVisible(!dropdownVisible);
   };
-  const handleMarkAllAsRead = () => {
-    dispatch(markNotificationAllAsRead() as any);
+  const handleMarkAllAsRead = async () => {
+    await dispatch(markNotificationAllAsRead() as any);
+    await dispatch(fetchNotificationsAsync() as any);
   };
 
   const handleMarkAsRead = (id: number) => {
-    dispatch(updateMarkAsRead(id) as any);
+    dispatch(updateMarkAsRead(id));
     dispatch(markNotificationAsReadById(id) as any);
-  }
+  };
+  const handleDelete = (id: number) => {
+    dispatch(deleteNotificationById(id) as any);
+    dispatch(fetchNotificationsAsync() as any);
+  };
 
   return (
     <>
@@ -177,10 +194,6 @@ const Header: React.FC = () => {
           {Array.isArray(notifications) && notifications.length > 0 ? (
             notifications.map((notification: any) => (
               <div
-              onClick={() => {
-                console.log(notification.id)
-                handleMarkAsRead(notification.id)
-              }}
                 key={notification.id}
                 className={`${styles.notificationItem} ${
                   notification.is_read ? styles.read : styles.unread
@@ -191,6 +204,51 @@ const Header: React.FC = () => {
                 <span className={styles.timestamp}>
                   {new Date(notification.created_at).toLocaleString()}
                 </span>
+                <div
+                  className={styles.circle}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setOptionsVisibleId(
+                      optionsVisibleId === notification.id
+                        ? null
+                        : notification.id
+                    );
+                  }}
+                >
+                  <FaEllipsisV className={styles.threeDots} />
+                </div>
+                <div
+                  className={`${styles.options} ${
+                    optionsVisibleId === notification.id
+                      ? styles.showOptions
+                      : ""
+                  }`}
+                >
+                  <div
+                    className={styles.option}
+                    style={{ display: "flex", alignItems: "center" }}
+                  >
+                    <FaCheck />
+                    <div
+                      style={{ marginLeft: 4 }}
+                      onClick={() => handleMarkAsRead(notification.id)}
+                    >
+                      Mark as Read
+                    </div>
+                  </div>
+
+                  <div
+                    className={styles.option}
+                    style={{ display: "flex", alignItems: "center" }}
+                    onClick={() => {
+                      console.log("a");
+                      handleDelete(notification.id);
+                    }}
+                  >
+                    <FaTrash />
+                    <div style={{ marginLeft: 4 }}>Delete</div>
+                  </div>
+                </div>
               </div>
             ))
           ) : (

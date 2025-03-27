@@ -41,7 +41,7 @@ export const notificationSlice = createSlice({
         JSON.stringify(state.notifications)
       ).notifications
       const notificationIndex = notificationLst.findIndex((n:Notification) => n.id === id);
-      console.log(notificationIndex)
+      console.log(notificationIndex) 
       if (notificationIndex !== -1) {
         notificationLst[notificationIndex].is_read = true;
       }

@@ -53,10 +53,10 @@
   width: 250px;
   background: white;
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
-  border-radius: 5px;
+  border-radius: 8px;
   padding: 10px;
   scroll-behavior: smooth;
-  max-height: 100vh;
+  max-height: 80vh;
   overflow-y: auto;
   border: 1px solid #ccc;
   padding: 10px;
@@ -74,6 +74,7 @@
   padding: 10px;
   border-bottom: 1px solid #ddd;
   cursor: pointer;
+  position: relative;
 }
 
 .unread {
@@ -97,4 +98,64 @@
   border: 1px solid #ccc;
   padding: 10px;
   background-color: white;
+}
+
+.options {
+  display: none;
+  position: absolute;
+  right: 0;
+  padding: 10px 8px;
+  background-color: white;
+  border-radius: 8px;
+  z-index: 10;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  font-weight: normal;  
+}
+
+.showOptions {
+  display: block;
+}
+
+.option {
+  font-weight: normal;
+  margin-left: 4px;
+  font-size: 14px;
+  padding: 5px 5px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.option:hover {
+  background-color: #f0f0f0;
+}
+
+.circle {
+  position: absolute;
+  background-color: #fff;
+  top: 30%;
+  right: 5%;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: none;
+  line-height: 40px;
+  cursor: pointer;
+}
+
+.threeDots {
+  position: absolute; /* Định vị tuyệt đối */
+  right: 0; /* Đặt ở bên phải */
+  top: 0; /* Đặt ở giữa theo chiều dọc */
+  transform: translate(-75%, 75%) rotate(90deg); /* Căn giữa theo chiều dọc */
+  font-size: 16px; /* Kích thước biểu tượng */
+  color: #333; /* Màu sắc biểu tượng */
+  cursor: pointer; /* Con trỏ chuột khi hover */
+}
+
+.notificationItem:hover {
+  background-color: #eeeeee;
+}
+
+.notificationItem:hover .circle {
+  display: flex;
 }
