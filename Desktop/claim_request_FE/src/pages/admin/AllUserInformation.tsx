@@ -415,7 +415,6 @@ const AllUserInformation: React.FC = () => {
           dataSource={dataSource}
           loading={loading}
           pagination={true}
-          sortConfig={sortConfig}
           name="Role"
           createButton={true}
           totalPage={page}

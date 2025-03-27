@@ -10,10 +10,23 @@ import { PATH } from "@constant/config";
 import { X } from "lucide-react";
 import styles from "./UpdateUser.module.css";
 import { ToastContainer, toast } from "react-toastify";
+import { Select } from "./CreateUser";
 interface UpdateUserProps {
   id: string;
   setOpenModal: (value: boolean) => void;
 }
+type Department = {
+  id: string;
+  name: string;
+};
+type JobRank = {
+  id: number;
+  name: string;
+  ot_rate: string;
+};
+
+type DepartmentList = Department[];
+type JobRankList = JobRank[];
 export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
   const {
     register,
@@ -22,7 +35,35 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
     formState: { errors },
   } = useForm<User>();
   const [user, setUser] = useState<User | null>(null);
+  const [department, setDepartment] = useState<DepartmentList>([]);
+  const [jobRank, setJobRank] = useState<JobRankList>([]);
+  const fetchDepartment = async () => {
+    try {
+      const response = await httpClient.get<ApiResponseNoGeneric>(
+        `/admin/departments`
+      );
+      setDepartment(response.data.data);
+    } catch (error) {
+      console.error("Fetch department error:", error);
+    }
+  };
+  // Chỗ này fetch api lấy list job rank từ BE về
+  const fetchJobRank = async () => {
+    try {
+      const response = await httpClient.get<ApiResponseNoGeneric>(
+        `/admin/job-ranks`
+      );
+      setJobRank(response.data.data);
+    } catch (error) {
+      console.error("Fetch job rank error:", error);
+    }
+  };
 
+  useEffect(() => {
+    fetchDepartment();
+    console.log(department);
+    fetchJobRank();
+  }, []);
   const fetchUserById = async (id: string) => {
     try {
       const response = await httpClient.get<ApiResponse<User[]>>(
@@ -46,11 +87,10 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
   const onSubmit = async (data: User) => {
     if (!user) return;
     const requestBody = {
-      department: data.department || user.department,
+      department_id: data.department_id || user.department_id,
       role_id: data.role_id || user.role_id,
-      job_rank: data.job_rank || user.job_rank,
+      job_rank_id: data.job_rank_id || user.job_rank,
     };
-
     console.log(requestBody);
     try {
       await httpClient.put<ApiResponseNoGeneric>(
@@ -60,7 +100,7 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
       toast("User updated successfully!");
       setTimeout(() => {
         window.location.reload();
-      }, 2000);
+      }, 1000);
     } catch (error) {
       console.error("Update user error: " + error);
     }
@@ -80,6 +120,40 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
+  interface CreateUserProps {
+    openModal: boolean;
+    setOpenModal: (value: boolean) => void;
+  }
+  type Department = {
+    id: string;
+    name: string;
+  };
+  type JobRank = {
+    id: number;
+    name: string;
+    ot_rate: string;
+  };
+  interface Option {
+    label: string;
+    value: string | number;
+  }
+
+  interface SelectProps {
+    options: Option[];
+    value?: string | number;
+    onChange: (value: string | number) => void;
+    placeholder?: string;
+    isDisabled?: boolean;
+    multiple?: boolean;
+    register?: any;
+    className?: string;
+  }
+  const options: Option[] = [
+    { label: "Admin", value: "1" },
+    { label: "Approver", value: "2" },
+    { label: "Finance", value: "3" },
+    { label: "Claimer", value: "4" },
+  ];
 
   return (
     <div style={{ marginTop: "50px" }}>
@@ -159,7 +233,7 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
                 </div>
               </div>
             </label>
-            <input
+            {/* <input
               id="department"
               {...register("department", {
                 required: "Department is required",
@@ -173,6 +247,25 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
                 },
               })}
               className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200"
+            /> */}
+            <Select
+              register={{
+                ...register("department_id", {
+                  required: "Department is required",
+                }),
+              }}
+              options={department.map((a) => ({
+                label: a.name,
+                value: a.id,
+              }))}
+              // register={{
+              //   ...register("department", {
+              //     required: "Department is required",
+              //   }),
+              // }}
+              placeholder="Select Department"
+              onChange={(value) => console.log(value)}
+              className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
             />
             {errors.department && (
               <p className="text-red-500 text-sm mt-1">
@@ -195,8 +288,7 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
                 </div>
               </div>
             </label>
-            <select
-              id="role_id"
+            {/* <select
               {...register("role_id", { required: "Role ID is required" })}
               className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200"
             >
@@ -205,7 +297,34 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
               <option value="2">2 - Approver</option>
               <option value="3">3 - Finance</option>
               <option value="4">4 - Claimer</option>
-            </select>
+            </select> */}
+            <Select
+              options={options}
+              register={register("role_id")}
+              onChange={(value) => console.log(value)}
+              placeholder="Select Role ID"
+              className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+            />
+            {/* <Select
+              register={{
+                ...register("department", {
+                  required: "Department is required",
+                }),
+              }}
+              options={department.map((a) => ({
+                label: a.name,
+                value: a.id,
+              }))}
+              // register={{
+              //   ...register("department", {
+              //     required: "Department is required",
+              //   }),
+              // }}
+              placeholder="Select Department"
+              onChange={(value) => console.log(value)}
+              className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+            /> */}
+
             {errors.role_id && (
               <p className="text-red-500 text-sm mt-1">
                 {errors.role_id.message}
@@ -227,7 +346,7 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
                 </div>
               </div>
             </label>
-            <input
+            {/* <input
               id="job_rank"
               {...register("job_rank", {
                 required: "Job Rank is required",
@@ -241,6 +360,17 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
                 },
               })}
               className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200"
+            /> */}
+            <Select
+              options={jobRank.map((a) => ({ label: a.name, value: a.id }))}
+              register={{
+                ...register("job_rank_id", {
+                  required: "Job Rank is required",
+                }),
+              }}
+              placeholder="Select Job Rank"
+              onChange={(value) => console.log(value)}
+              className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
             />
             {errors.job_rank && (
               <p className="text-red-500 text-sm mt-1">

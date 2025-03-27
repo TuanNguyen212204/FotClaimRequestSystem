@@ -1,40 +1,65 @@
-import { selectMyClaim } from "@/redux/selector/claimSelector";
+import { selectMyClaim, selectTotalPage } from "@/redux/selector/claimSelector";
 import { useEffect, useState } from "react";
 import styles from "./UserClaims.module.css";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@redux/index";
-import { fetchClaimByUserAsync } from "@redux/thunk/Claim/claimThunk";
+import {
+  fetchClaimByUserAsync,
+  fetchTotalClaimByUserAsync,
+} from "@redux/thunk/Claim/claimThunk";
 import { EyeIcon } from "lucide-react";
 import TableComponent, { Column, DataRecord } from "../Table/Table";
 import UserClaimDetailsModal from "./UserClaimDetails";
-
+import StatusTag from "../StatusTag/StatusTag";
 const UserClaims = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const userClaim = useSelector(selectMyClaim);
-  const [loading, setLoading] = useState(true);
+  const totalPage = useSelector(selectTotalPage);
+  const [loading, setLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedClaim, setSelectedClaim] = useState<string>("");
   const [limit] = useState(5);
 
+  // useEffect(() => {
+  //   setLoading(true);
+  //   const fetchData = async () => {
+  //     await dispatch(fetchClaimByUserAsync());
+  //     setLoading(false);
+  //   };
+  //   fetchData();
+  // }, [dispatch, currentPage]);
+  // useEffect(() => {
+  //   console.log(userClaim);
+  // }, [userClaim]);
+
+  // const handleViewDetail = (id: string) => {
+  //   setSelectedClaim(id);
+  //   setIsModalOpen(true);
+  // };
+
   useEffect(() => {
-    // dispatch(fetchClaimByUserAsync());
+    setLoading(true);
     const fetchData = async () => {
-      await dispatch(fetchClaimByUserAsync());
-      setLoading(false);
+      dispatch(fetchClaimByUserAsync({ page: currentPage })).finally(() =>
+        setLoading(false)
+      );
+      dispatch(fetchTotalClaimByUserAsync());
     };
     fetchData();
-  }, [dispatch, currentPage]);
-  useEffect(() => {
-    console.log(userClaim);
-  }, [userClaim]);
+  }, [currentPage, dispatch]);
 
   const handleViewDetail = (id: string) => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 1500);
     setSelectedClaim(id);
     setIsModalOpen(true);
   };
+
   const handlePageChange = (newPage: number) => {
     console.log("Trang mới: ", newPage);
     setCurrentPage(newPage);
@@ -83,20 +108,25 @@ const UserClaims = () => {
       cell: ({ value }: { value: unknown }) => {
         const stringValue = value as string;
         return (
-          <span
-            style={{
-              color:
-                stringValue === "APPROVED"
-                  ? "green"
-                  : stringValue === "REJECTED"
-                  ? "red"
-                  : stringValue === "PENDING"
-                  ? "orange"
-                  : "inherit",
-            }}
-          >
-            {stringValue}
-          </span>
+          // <span
+          //   style={{
+          //     color:
+          //       stringValue === "APPROVED"
+          //         ? "green"
+          //         : stringValue === "REJECTED"
+          //         ? "red"
+          //         : stringValue === "PENDING"
+          //         ? "orange"
+          //         : "inherit",
+          //   }}
+          // >
+          //   {stringValue}
+          // </span>
+          <div>
+            <StatusTag
+              status={value as "PENDING" | "APPROVED" | "REJECTED" | "PAID"}
+            />
+          </div>
         );
       },
     },
@@ -141,10 +171,11 @@ const UserClaims = () => {
       <TableComponent
         columns={columns}
         dataSource={dataSource}
-        loading={true}
+        loading={loading}
         pagination={true}
         name="My Claims"
-        totalPage={1}
+        totalPage={totalPage}
+        onPageChange={handlePageChange}
       />
     </div>
   );
