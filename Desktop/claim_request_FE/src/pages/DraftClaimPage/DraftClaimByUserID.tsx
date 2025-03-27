@@ -113,7 +113,15 @@ export const DraftClaimByUserID: React.FC = () => {
       {openModal && (
         <div className={styles.editModal}>
           <div>
-            <div className="w-[1080px]">
+            <div className="w-[1080px] relative">
+              {initValue && (
+                <span
+                  className="absolute top-3 right-5 flex items-center justify-center w-6 h-6 cursor-pointer text-gray-600 hover:text-gray-800 hover:bg-gray-300 rounded-full"
+                  onClick={() => setOpenModal(false)}
+                >
+                  X
+                </span>
+              )}
               {initValue && (
                 <CreateClaimPage
                   initialValues={initValue}
