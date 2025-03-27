@@ -35,6 +35,9 @@ const Dashboard = () => {
         const response = await fetch(
           `https://67b847da699a8a7baef3677f.mockapi.io/${timeframe}`
         );
+        const response = await fetch(
+          `https://67b847da699a8a7baef3677f.mockapi.io/${timeframe}`
+        );
         const result = await response.json();
         setData(result);
       } catch (error) {
@@ -61,7 +64,17 @@ const Dashboard = () => {
           "/admin/rejected-claims",
         ];
 
-        
+        const responses = await Promise.all(
+          endpoints.map((endpoint) => httpClient.get(endpoint))
+        );
+        const [
+          totalProjects,
+          totalUsers,
+          totalClaims,
+          pendingClaims,
+          approvedClaims,
+          rejectedClaims,
+        ] = responses.map((res) => res?.data?.data ?? null);
         const responses = await Promise.all(
           endpoints.map((endpoint) => httpClient.get(endpoint))
         );
@@ -109,7 +122,14 @@ const Dashboard = () => {
       item.approved,
       item.rejected,
       item.paid,
-    ])
+    ]),
+    ...data.map((item) => [
+      item.name,
+      item.pending,
+      item.approved,
+      item.rejected,
+      item.paid,
+    ]),
   ];
 
   return (
