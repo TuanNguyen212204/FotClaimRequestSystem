@@ -7,7 +7,8 @@ export const selectApprovedDetailApprover = (state: RootState) =>
 export const selectAppovedClaim = (state: RootState) =>
   state.claim.listClaimApprovedApprover;
 export const selectMyClaim = (state: RootState) => state.claim.myClaim;
-export const selectMyClaimDetail = (state: RootState) => state.claim.claimDetail;
+export const selectMyClaimDetail = (state: RootState) =>
+  state.claim.claimDetail;
 export const selectApprovedClaimTotalPages = (state: RootState) =>
   state.claim.totalPages;
 export const selectApprovedClaimFinance = (state: RootState) =>
@@ -22,3 +23,4 @@ export const selectRejectedClaimByUserID = (state: RootState) =>
   state.claim.listClaimUserRejected;
 export const selectDraftClaimByUserID = (state: RootState) =>
   state.claim.listClaimUserDraft;
+export const selectTotalPage = (state: RootState) => state.claim.totalPages;
