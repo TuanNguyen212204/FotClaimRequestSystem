@@ -9,8 +9,12 @@ function NavLink({
 }) {
   return (
     <li>
-      <a href={href} className="block px-3 py-2 text-white hover:text-gray-300">
+      <a
+        href={href}
+        className="group block px-3 py-2 text-2xl font-bold text-white no-underline decoration-4 underline-offset-4"
+      >
         {children}
+        <span className="block h-[5px] max-w-0 bg-white transition-all duration-500 group-hover:max-w-full"></span>
       </a>
     </li>
   );
@@ -18,11 +22,9 @@ function NavLink({
 
 export default function TopBar(): JSX.Element {
   return (
-    <header className="container mx-auto flex w-full items-center justify-between p-4">
-      <div className="text-2xl font-bold text-white">FCT</div>
-
+    <header className="container mx-auto flex w-full items-center justify-center p-4">
       <nav>
-        <ul className="flex space-x-2 md:space-x-4">
+        <ul className="flex list-none space-x-2 md:space-x-4">
           <NavLink href="#home">Home</NavLink>
           <NavLink href="#about">About</NavLink>
           <NavLink href="#feature">Feature</NavLink>

@@ -27,7 +27,9 @@ export default function Herro() {
         <TopBar />
 
         <div className="hero-main-content">
-          <h1 className="hero-title"></h1>
+          <h1 className="hero-title">
+            “ClaimEasy: Hassle-Free Claim Requests”
+          </h1>
           <button className="hero-button">GET START NOW!</button>
         </div>
 
