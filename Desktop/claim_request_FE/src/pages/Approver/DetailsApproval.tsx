@@ -7,7 +7,7 @@ import {
 } from "@/redux/thunk/Claim/claimThunk";
 import { selectAllDetailPending } from "@/redux/selector/pendingSelector";
 import Modal from "@ui/modal/Modal";
-import { MoveRight, Mail, ChevronDown } from "lucide-react";
+import { MoveRight, Mail, ChevronDown, ChevronUp } from "lucide-react";
 import styles from "./DetailsApproval.module.css";
 import StatusTag from "@/components/ui/StatusTag/StatusTag";
 import { toast } from "react-toastify";
@@ -91,7 +91,17 @@ export const DetailsApproval: React.FC<PendingDetailModalProps> = ({
 
   const handleHistoryItems = () => {
     setIsChevronDown(!isChevronDown);
+    const historyContainer = document.querySelector(`.${styles.history}`);
+    if (historyContainer) {
+      if (!isChevronDown) {
+        historyContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        historyContainer.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      }
+    }
   };
+
+  
 
   return (
     <Modal
@@ -182,25 +192,40 @@ export const DetailsApproval: React.FC<PendingDetailModalProps> = ({
             {claimDetail?.claim_details &&
               claimDetail.claim_details.length > 0 ? (
               <div className={styles.history}>
-                <p>History</p>
-                {claimDetail.claim_details.map((detail, index) => (
-                  <div key={index} className={styles.historyItem}>
-                    <span className={styles.historyItemDate}>
-                      {formatDateToMonthDay(detail.date)}
-                    </span>
+                <div className={styles.historyHeader}>
+                  <p>History</p>
+                  {isChevronDown ? (
+                    <ChevronUp
+                      className={styles.historyIcon}
+                      onClick={handleHistoryItems}
+                    />
+                  ) : (
+                    <ChevronDown
+                      className={styles.historyIcon}
+                      onClick={handleHistoryItems}
+                    />
+                  )}
+                </div>
+                {isChevronDown ? (
+                  claimDetail.claim_details.map((detail, index) => (
+                    <div key={index} className={styles.historyItem}>
+                      <span className={styles.historyItemDate}>
+                        {formatDateToMonthDay(detail.date)}
+                      </span>
 
-                    <div className={styles.historyItemInfo}>
-                      <div className={styles.historyItemRow}>
-                        <span className={styles.historyItemLabel}>
-                          Working Hours:
-                        </span>
-                        <span className={styles.historyItemValue}>
-                          {detail.working_hours} hours
-                        </span>
+                      <div className={styles.historyItemInfo}>
+                        <div className={styles.historyItemRow}>
+                          <span className={styles.historyItemLabel}>
+                            Working Hours:
+                          </span>
+                          <span className={styles.historyItemValue}>
+                            {detail.working_hours} hours
+                          </span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))
+                ) : null}
               </div>
             ) : null}
           </div>

@@ -136,9 +136,21 @@
   width: 100%;
 }
 
+.historyHeader {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .history p {
   align-self: flex-start;
   margin: 20px 10px 20px 1rem;
+}
+
+.historyIcon {
+  margin-right: 20px;
+  cursor: pointer;
 }
 
 .historyItem {
