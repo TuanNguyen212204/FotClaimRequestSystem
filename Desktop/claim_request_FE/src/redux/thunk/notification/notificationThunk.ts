@@ -41,5 +41,15 @@ export const deleteNotificationById = createAsyncThunk(
     )
     return res.data
   }
+);
+
+export const deleteNotificationAll = createAsyncThunk(
+  "notification/deleteAll",
+  async () => {
+    const res = await httpClient.delete<ApiResponse<Notification[]>>(
+      `/notifications`
+    )
+    return res.data
+  }
 )
 

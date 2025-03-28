@@ -7,6 +7,7 @@ import {
   FaEllipsisV,
   FaCheck,
   FaTrash,
+  FaExclamationTriangle,
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { PATH } from "../../../constant/config";
@@ -14,6 +15,7 @@ import Badge from "@components/ui/Badge";
 import fptlogo from "@assets/fot.png";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  deleteNotificationAll,
   deleteNotificationById,
   fetchNotificationsAsync,
   markNotificationAllAsRead,
@@ -26,6 +28,7 @@ import {
 } from "@/redux/slices/notification/notificationSlice";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
 
 interface Notification {
   id: string;
@@ -101,6 +104,7 @@ const Header: React.FC = () => {
       try {
         console.log("Sắp dispatch action addNotification:", notification);
         dispatch(addNotification(notification));
+        toast.success("You have a new notification!")
         console.log("Đã gửi action addNotification!");
       } catch (error) {
         console.error("Lỗi khi dispatch:", error);
@@ -161,6 +165,11 @@ const Header: React.FC = () => {
     dispatch(fetchNotificationsAsync() as any);
   };
 
+  const handleDeleteAllNoti = async () => {
+    await dispatch(deleteNotificationAll() as any)
+    await dispatch(fetchNotificationsAsync() as any);
+  };
+  
   return (
     <>
       <header className={styles.header}>
@@ -184,8 +193,21 @@ const Header: React.FC = () => {
       </header>
       {dropdownVisible && (
         <div className={styles.dropdown}>
-          <div className={styles.markAll} onClick={handleMarkAllAsRead}>
-            Mark All As Read
+          <div className={styles.top}>
+            <div
+              style={{ display: "flex", alignItems: "center", cursor: "pointer" }}
+              onClick={handleMarkAllAsRead}
+            >
+              <FaCheck style={{ marginRight: 5 }} />
+              Mark All As Read
+            </div>
+            <div
+              style={{ display: "flex", alignItems: "center", cursor: "pointer" }}
+              onClick={handleDeleteAllNoti}
+            >
+              <FaTrash style={{ marginRight: 5 }} />
+              Clear All
+            </div>
           </div>
           {Array.isArray(notifications) && notifications.length > 0 ? (
             notifications.map((notification: any) => (
@@ -196,10 +218,17 @@ const Header: React.FC = () => {
                 }`}
               >
                 <strong>{notification.title}</strong>
+                <div className={styles.headers}>
+                  <div style={{ display: "flex", alignItems: "center" }} >
+                    <FaExclamationTriangle style={{ marginRight: 5, fontSize: 14}} />
+                    <span className={styles.noti}>Notification</span>
+                  </div>
+                  <span className={styles.timestamp}>
+                    {new Date(notification.created_at).toLocaleString()}
+                  </span>
+                </div>
+                <hr style={{ border: "0.3px solid #ccc" }} />
                 <p>{notification.message}</p>
-                <span className={styles.timestamp}>
-                  {new Date(notification.created_at).toLocaleString()}
-                </span>
                 <div
                   className={styles.circle}
                   onClick={(e) => {
@@ -212,32 +241,29 @@ const Header: React.FC = () => {
                   }}
                 >
                   <FaEllipsisV className={styles.threeDots} />
-                </div>
-                <div
+                  <div
                   className={`${styles.options} ${
                     optionsVisibleId === notification.id
                       ? styles.showOptions
                       : ""
                   }`}
                 >
-                  {
-                    !!notification.is_read === false ? (
-                      <div
-                    className={styles.option}
-                    style={{ display: "flex", alignItems: "center" }}
-                  >
-                    <FaCheck />
+                  {!!notification.is_read === false ? (
                     <div
-                      style={{ marginLeft: 4 }}
-                      onClick={() => handleMarkAsRead(notification.id)}
+                      className={styles.option}
+                      style={{ display: "flex", alignItems: "center" }}
                     >
-                      Mark as Read
+                      <FaCheck />
+                      <div
+                        style={{ marginLeft: 4 }}
+                        onClick={() => handleMarkAsRead(notification.id)}
+                      >
+                        Mark as Read
+                      </div>
                     </div>
-                  </div>
-                    ) : (
-                      <></>
-                    )
-                  } 
+                  ) : (
+                    <></>
+                  )}
                   <div
                     className={styles.option}
                     style={{ display: "flex", alignItems: "center" }}
@@ -249,6 +275,8 @@ const Header: React.FC = () => {
                     <div style={{ marginLeft: 4 }}>Delete</div>
                   </div>
                 </div>
+                </div>
+
               </div>
             ))
           ) : (
