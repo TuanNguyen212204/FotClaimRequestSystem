@@ -12,20 +12,17 @@ import { FaCheck } from "react-icons/fa";
 import { UserPen } from "lucide-react";
 import { ChevronLeft } from "lucide-react";
 import { ArrowUp } from "lucide-react";
-import { LogOut } from "lucide-react";
 import { Menu } from "lucide-react";
 import { MdPaid } from "react-icons/md";
 import { Compass } from "lucide-react";
 import { CircleX } from "lucide-react";
 import { Pencil } from "lucide-react";
 import { Plus } from "lucide-react";
-import { set } from "date-fns";
-// import { RouteConfig, useRoute } from "@/Hooks/useRoute";
-import { ROLES } from "@/enums/ROLES";
 import RouteConfig from "@/types/Route";
 import { PRIVATE_ROUTE } from "@/constant/routeConfig";
 import ROLE from "@/constant/role";
 import { useTranslation } from "react-i18next";
+
 export const Sidebar = ({
   setIsCollapsed,
 }: {
@@ -36,7 +33,7 @@ export const Sidebar = ({
   const [isCollapsed1, setIsCollapsed1] = useState<boolean>(true);
   const [hover, setHover] = useState<boolean>(false);
   const [role, setRole] = useState<typeof ROLE | number>();
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
   const filterRoutesByRole = (
     routes: RouteConfig[],
@@ -46,7 +43,6 @@ export const Sidebar = ({
       if (route.role?.includes(role)) {
         acc.push(route);
       }
-
       return acc;
     }, []);
   };
@@ -54,21 +50,20 @@ export const Sidebar = ({
   const location = useLocation();
   const currentPath = location.pathname;
 
-  // const routeByRole: RouteConfig[] = useRoute().filter((route) =>
-  //   route.role?.includes(ROLES.ADMIN)
-  // );
   const route: RouteConfig[] = PRIVATE_ROUTE.filter(
     (route) => route.protected === true
   );
   const routeByRole: RouteConfig[] = filterRoutesByRole(route, role as number);
   console.log(routeByRole);
   const navigate = useNavigate();
+
   useEffect(() => {
     const record = String(localStorage.getItem("selectedClaim"));
     if (record) {
       setSelectedClaim(record);
     }
   }, []);
+
   useEffect(() => {
     const record = Number(localStorage.getItem("role_id"));
     if (record === 1) {
@@ -82,34 +77,27 @@ export const Sidebar = ({
     }
   }, []);
 
-  const handleLogOut = () => {
-    localStorage.clear();
-    navigate(PATH.login);
-  };
-
   const handleNavigate = (path: string) => {
     setSelectedClaim(path);
     localStorage.setItem("selectedClaim", path);
     navigate(path);
   };
+
   return (
     <div>
-      <div className={`${styles.sidebar} `}>
-        <div className={`${styles.claimItemCollapse} `}>
-          <ul className={`${styles.claimList} `}>
+      <div className={`${styles.sidebar}`}>
+        <div className={`${styles.claimItemCollapse}`}>
+          <ul className={`${styles.claimList}`}>
             {routeByRole.map((route) => (
               <li
-                // className={`${styles.claimItemCollapse} ${styles.tooltip} ${
-                //   selectedClaim === route.path ? styles.active : ""
-                // } mt-2`}
                 className={`${styles.tooltip} ${styles.claimItem} ${
                   selectedClaim === route.path ? styles.active : ""
                 }`}
                 onClick={() => handleNavigate(route.path as string)}
               >
-                <div className={` ${styles.claimButton}  `}>
+                <div className={` ${styles.claimButton}`}>
                   <div
-                    className={`${styles.claimButtonIngredient} `}
+                    className={`${styles.claimButtonIngredient}`}
                     style={{
                       display: "flex",
                       alignItems: "center",
@@ -119,7 +107,7 @@ export const Sidebar = ({
                     <div>
                       <span>{route.icon}</span>
                     </div>
-                    <div className={` ${styles.tooltipText}  `}>
+                    <div className={` ${styles.tooltipText}`}>
                       <span>{route.label}</span>
                     </div>
                   </div>
@@ -127,25 +115,6 @@ export const Sidebar = ({
               </li>
             ))}
           </ul>
-        </div>
-        <div
-          style={{
-            width: "100%",
-            backgroundColor: "red",
-            position: "absolute",
-            bottom: "0",
-          }}
-        >
-          <div style={{ width: "100%", backgroundColor: "red", bottom: "0" }}>
-            <div
-              className={`${styles.logoutCollapse}`}
-              onClick={() => handleLogOut()}
-            >
-              <div className="">
-                <LogOut size={20} />
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>

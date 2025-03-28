@@ -44,7 +44,7 @@ export const UserInfoComponent: React.FC = () => {
           "Your account is currently inactive. Please contact the admin."
         );
         setTimeout(() => {
-          navigate("/login");
+          navigate("/");
         }, 2000);
       }
     } else {
@@ -219,7 +219,7 @@ export const UserInfoComponent: React.FC = () => {
           You need to login to view personal information.
         </h2>
         <button
-          onClick={() => navigate("/login")}
+          onClick={() => navigate("/")}
           className={styles.saveButton}
           style={{ display: "block", margin: "1rem auto" }}
         >
@@ -263,8 +263,7 @@ export const UserInfoComponent: React.FC = () => {
         <div className={styles.profileInfo}>
           <h1>{selectedUser.full_name || "Full Name"}</h1>
           <p className={styles.position}>
-            <span>Job Rank:</span>{" "}
-            {selectedUser.job_rank || "No Job Rank"}
+            <span>Job Rank:</span> {selectedUser.job_rank || "No Job Rank"}
             <span>Department:</span> {selectedUser.department || "Undetermined"}
           </p>
 

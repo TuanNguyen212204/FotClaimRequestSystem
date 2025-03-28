@@ -26,6 +26,7 @@ import {
 } from "@/redux/slices/notification/notificationSlice";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useTranslation } from "react-i18next";
+import { User, LogOut } from "lucide-react";
 
 interface Notification {
   id: string;
@@ -38,6 +39,8 @@ interface Notification {
 const Header: React.FC = () => {
   const [_, setRole] = useState<string>();
   const [dropdownVisible, setDropdownVisible] = useState<boolean>(false);
+  const [avatarDropdownVisible, setAvatarDropdownVisible] =
+    useState<boolean>(false);
   const [optionsVisibleId, setOptionsVisibleId] = useState<number | null>(null);
   const username = localStorage.getItem("username");
   const navigate = useNavigate();
@@ -147,6 +150,7 @@ const Header: React.FC = () => {
   const toggleDropdown = () => {
     setDropdownVisible(!dropdownVisible);
   };
+
   const handleMarkAllAsRead = async () => {
     await dispatch(markNotificationAllAsRead() as any);
     await dispatch(fetchNotificationsAsync() as any);
@@ -156,10 +160,26 @@ const Header: React.FC = () => {
     dispatch(updateMarkAsRead(id));
     dispatch(markNotificationAsReadById(id) as any);
   };
+
   const handleDelete = (id: number) => {
     dispatch(deleteNotificationById(id) as any);
     dispatch(fetchNotificationsAsync() as any);
   };
+
+  const handleAvatarDropdownSelect = (value: string) => {
+    if (value === "profile") {
+      navigate(PATH.userInfo);
+    } else if (value === "logout") {
+      localStorage.clear();
+      navigate(PATH.login);
+    }
+    setAvatarDropdownVisible(false);
+  };
+
+  const avatarDropdownOptions = [
+    { value: "profile", label: "Profile", icon: <User size={16} /> },
+    { value: "logout", label: "Logout", icon: <LogOut size={16} /> },
+  ];
 
   return (
     <>
@@ -174,10 +194,31 @@ const Header: React.FC = () => {
               <FaBell className={styles.icon} onClick={toggleDropdown} />
             </Badge>
           </div>
-          <FaUserCircle
-            className={styles.icon}
-            onClick={() => navigate(PATH.userInfo)}
-          />
+          <div
+            className={styles.avatarDropdown}
+            onMouseEnter={() => setAvatarDropdownVisible(true)}
+            onMouseLeave={() => setAvatarDropdownVisible(false)}
+          >
+            <FaUserCircle className={styles.icon} />
+            {avatarDropdownVisible && (
+              <div className={styles.avatarDropdownMenu}>
+                {avatarDropdownOptions.map(({ value, label, icon }) => (
+                  <button
+                    key={value}
+                    onClick={() => handleAvatarDropdownSelect(value)}
+                    className={`${styles.avatarDropdownItem} ${
+                      label.toLowerCase() === "logout" ? styles.logoutItem : ""
+                    }`}
+                  >
+                    {icon && (
+                      <span className={styles.avatarDropdownIcon}>{icon}</span>
+                    )}
+                    {label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
           <span className={styles.username}>{username}</span>
           <LanguageSwitcher />
         </div>
@@ -232,7 +273,6 @@ const Header: React.FC = () => {
                       Mark as Read
                     </div>
                   </div>
-
                   <div
                     className={styles.option}
                     style={{ display: "flex", alignItems: "center" }}
