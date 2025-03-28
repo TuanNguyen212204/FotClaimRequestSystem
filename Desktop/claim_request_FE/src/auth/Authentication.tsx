@@ -1,3 +1,4 @@
+import { HTTP_STATUS } from "@/constant/httpStatus";
 import React, { JSX } from "react";
 import { Navigate } from "react-router-dom";
 
@@ -11,7 +12,7 @@ const Authentication: React.FC<AuthenticationProps> = ({ children }) => {
   if (access_token) {
     return children;
   }
-  return <Navigate to="/error/401" />;
+  return <Navigate to={`/error/${HTTP_STATUS.UNAUTHORIZED}`} />;
 };
 
 export default Authentication;

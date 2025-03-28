@@ -11,4 +11,3 @@ const ProtectedErrorPage: React.FC = () => {
 };
 
 export default ProtectedErrorPage;
- 

@@ -9,7 +9,6 @@ import { LoadingProvider } from "@/components/ui/Loading/LoadingContext";
 import LoadingOverlay from "@/components/ui/Loading/LoadingOverlay";
 import { PUBLIC_ROUTE, PRIVATE_ROUTE } from "@/constant/routeConfig";
 import ErrorPage from "@/pages/Error/ErrorPage";
-import ProtectedErrorPage from "@/pages/Error/ProtectedErrorPage";
 import { HTTP_STATUS, HTTP_STATUS_TEXT } from "@/constant/httpStatus";
 export const AppRoute = () => {
   const router = createBrowserRouter([
@@ -54,7 +53,7 @@ export const AppRoute = () => {
     },
     {
       path: "/error/:code",
-      element: <ProtectedErrorPage />,
+      element: <ErrorPage />,
     },
     {
       path: "*",
