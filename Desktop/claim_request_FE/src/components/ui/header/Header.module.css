@@ -217,8 +217,10 @@
 }
 
 .logoutItem:hover {
-  background-color: #3e5879;
+  background-color: rgba(163, 163, 163, 0.64);
   border-radius: 8px;
+  /* color: rgb(255, 255, 255) */
+  color: #333;
 }
 
 @keyframes dropdownFade {
