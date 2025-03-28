@@ -13,6 +13,8 @@ export interface User {
   role_name?: string;
   avatar?: string;
   ot_rate?: number;
+  department_id?: string;
+  job_rank_id?: string;
 }
 
 export interface NewUser extends User {

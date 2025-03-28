@@ -42,6 +42,7 @@
   align-items: center;
   justify-items: center;
   margin-bottom: 1.875rem; /* 30px */
+  margin-top: 1.875rem; /* 30px */
 }
 .Claim_Status {
   padding: 8px 15px;

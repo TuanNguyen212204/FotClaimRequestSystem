@@ -26,6 +26,7 @@ import {
   fetchApprovedDetailApproverAsync,
   fetchClaimByUserWithDraftStatusAsync,
   fetchMyClaimDetailAsync,
+  fetchTotalClaimByUserAsync,
 } from "@/redux/thunk/Claim/claimThunk";
 
 const initialState: {
@@ -208,6 +209,18 @@ export const claimSlice = createSlice({
         }
       )
       .addCase(fetchClaimByUserWithApprovedStatusAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      //
+      .addCase(fetchTotalClaimByUserAsync.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = String(action.error.message);
+      })
+      .addCase(fetchTotalClaimByUserAsync.fulfilled, (state, action) => {
+        state.status = "success";
+        state.totalPages = action.payload;
+      })
+      .addCase(fetchTotalClaimByUserAsync.pending, (state) => {
         state.status = "loading";
       })
       //my claim is with pending status

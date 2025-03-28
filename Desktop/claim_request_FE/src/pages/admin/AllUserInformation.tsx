@@ -259,6 +259,9 @@ const AllUserInformation: React.FC = () => {
               className={styles.circleCheckButton}
               onClick={() => handleAssignUser(record.user_id as string)}
               disabled={userStatuses[record.user_id] === 0}
+              onPointerDown={() =>
+                toast.error("You can not assign this user at the project now")
+              }
             >
               <div>
                 {userStatuses[record.user_id] === 1 ? <CircleCheck /> : <X />}
@@ -272,7 +275,7 @@ const AllUserInformation: React.FC = () => {
       key: "user_id",
       dataIndex: "user_id",
       title: "Action",
-      cell: ({ value }: { value: string }) => {
+      cell: ({ value, record }: { value: string; record: User }) => {
         return (
           <div style={{ display: "flex" }}>
             <div>
@@ -281,10 +284,14 @@ const AllUserInformation: React.FC = () => {
                 className={styles.update_button}
                 style={{ cursor: "pointer" }}
                 onClick={() => handleUpdate(value as string)}
+                onPointerDown={() =>
+                  toast.error("You can not update this user information now")
+                }
+                disabled={userStatuses[record.user_id] === 0}
               >
-                <span>
-                  <SquarePen />
-                </span>
+                <div>
+                  {userStatuses[record.user_id] === 1 ? <SquarePen /> : <X />}
+                </div>
               </button>
             </div>
             {/* <div>
@@ -415,7 +422,6 @@ const AllUserInformation: React.FC = () => {
           dataSource={dataSource}
           loading={loading}
           pagination={true}
-          sortConfig={sortConfig}
           name="Role"
           createButton={true}
           totalPage={page}

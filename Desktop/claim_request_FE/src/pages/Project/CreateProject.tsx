@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { PATH } from "@constant/config";
+import Modal from "react-modal";
+import { useForm } from "react-hook-form";
+import { X } from "lucide-react";
 import httpClient from "@/constant/apiInstance";
 import { Project } from "@/types/Project";
-import { useForm } from "react-hook-form";
-import styles from "./CreateProject.module.css";
-import { X } from "lucide-react";
 import { toast } from "react-toastify";
-import { delay } from "@/utils/delay";
+import styles from "./CreateProject.module.css";
+Modal.setAppElement("#root");
+interface CreateProjectProps {
+  openModal: boolean;
+  setOpenModal: (value: boolean) => void;
+}
 
-export const CreateProject: React.FC = () => {
+export const CreateProject: React.FC<CreateProjectProps> = ({ openModal, setOpenModal }) => {
   const navigate = useNavigate();
   const {
     register,
@@ -32,18 +37,22 @@ export const CreateProject: React.FC = () => {
     try {
       await httpClient.post("/projects/create-project", requestBody);
       toast.success("Create project successfully!");
+      setOpenModal(false);
       navigate(PATH.projectInformation);
     } catch (error) {
       console.error("Create project error:", error);
-      console.log("requestBody", requestBody);
       toast.error("Failed to create project. Please try again.");
     }
   };
 
-  const handleCancel = () => navigate(PATH.projectInformation);
-
   const startDate = watch("start_date");
   const endDate = watch("end_date");
+  const [isClosing, setIsClosing] = useState(false);
+
+  const handleClose = () => {
+    setIsClosing(true); 
+    setTimeout(() => setOpenModal(false), 300); 
+  };
 
   useEffect(() => {
     if (startDate && endDate && endDate < startDate) {
@@ -54,7 +63,7 @@ export const CreateProject: React.FC = () => {
     } else {
       clearErrors("end_date");
     }
-  }, [startDate, endDate]);
+  }, [startDate, endDate, setError, clearErrors]);
 
   const projectId = watch("project_id");
   const [checkingId, setCheckingId] = useState(false);
@@ -113,31 +122,27 @@ export const CreateProject: React.FC = () => {
   }, [projectName]);
 
   return (
-    <div className="mt-12">
-      <div className="max-w-lg mx-auto p-9 bg-white shadow-xl rounded-xl">
-        <button onClick={handleCancel} className={styles.cancel_button}>
-          <X />
-        </button>
-        <h1 className="text-3xl font-bold text-gray-700 mb-6 text-center">
-          Create Project
-        </h1>
+    <Modal isOpen={openModal} onRequestClose={() => setOpenModal(false)} className={styles.modal} overlayClassName={styles.overlay}>
+      <div className="p-6 bg-white rounded-lg shadow-lg max-w-lg mx-auto relative">
+      <button 
+        onClick={() => {
+          toast.info("Cancel Create");
+          setOpenModal(false);
+        }} 
+        className={`${styles.close_button} absolute top-4 right-4`}
+      >
+        <X />
+      </button>
+
+        <h1 className="text-2xl font-bold text-gray-700 mb-4 text-center">Create Project</h1>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          {/* Project ID */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Project ID
-            </label>
-            <input
-              type="text"
-              placeholder="Pxxx"
-              {...register("project_id", {
-                required: "Project ID is required",
-                pattern: {
-                  value: /^P\d{3}$/,
-                  message: "Project ID must follow format: Pxxx (e.g., P001)",
-                },
-              })}
-              className="w-full p-2 border border-gray-300 rounded-md"
+            <label className="block text-sm font-medium text-gray-700">Project ID</label>
+            <input 
+              type="text" 
+              placeholder="Pxxx" 
+              {...register("project_id", { required: "Project ID is required", pattern: { value: /^P\d{3}$/, message: "Invalid format (Pxxx)" }})} 
+              className="w-full p-2 border border-gray-300 rounded-md" 
             />
             {checkingId && (
               <p className="text-blue-500 text-sm">Checking Project ID...</p>
@@ -148,18 +153,13 @@ export const CreateProject: React.FC = () => {
               </p>
             )}
           </div>
-
-          {/* Project Name */}
+  
           <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Project Name
-            </label>
-            <input
-              type="text"
-              {...register("project_name", {
-                required: "Project Name is required",
-              })}
-              className="w-full p-2 border border-gray-300 rounded-md"
+            <label className="block text-sm font-medium text-gray-700">Project Name</label>
+            <input 
+              type="text" 
+              {...register("project_name", { required: "Project Name is required" })} 
+              className="w-full p-2 border border-gray-300 rounded-md" 
             />
             {checkingName && (
               <p className="text-blue-500 text-sm">Checking Project Name...</p>
@@ -170,18 +170,13 @@ export const CreateProject: React.FC = () => {
               </p>
             )}
           </div>
-
-          {/* Start Date */}
+  
           <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Start Date
-            </label>
-            <input
-              type="date"
-              {...register("start_date", {
-                required: "Start Date is required",
-              })}
-              className="w-full p-2 border border-gray-300 rounded-md"
+            <label className="block text-sm font-medium text-gray-700">Start Date</label>
+            <input 
+              type="date" 
+              {...register("start_date", { required: "Start Date is required" })} 
+              className="w-full p-2 border border-gray-300 rounded-md" 
             />
             {errors.start_date && (
               <p className="text-red-500 text-sm">
@@ -189,48 +184,40 @@ export const CreateProject: React.FC = () => {
               </p>
             )}
           </div>
-
-          {/* End Date */}
+  
           <div>
-            <label className="block text-sm font-medium text-gray-700">
-              End Date
-            </label>
-            <input
-              type="date"
-              {...register("end_date", { required: "End Date is required" })}
-              className="w-full p-2 border border-gray-300 rounded-md"
+            <label className="block text-sm font-medium text-gray-700">End Date</label>
+            <input 
+              type="date" 
+              {...register("end_date", { required: "End Date is required" })} 
+              className="w-full p-2 border border-gray-300 rounded-md" 
             />
             {errors.end_date && (
               <p className="text-red-500 text-sm">{errors.end_date.message}</p>
             )}
           </div>
-
-          {/* Project Status */}
+  
           <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Project Status
-            </label>
-            <select
-              {...register("project_status", {
-                required: "Project Status is required",
-              })}
+            <label className="block text-sm font-medium text-gray-700">Project Status</label>
+            <select 
+              {...register("project_status", { required: "Project Status is required" })} 
               className="w-full p-2 border border-gray-300 rounded-md"
             >
               <option value="">Select Status</option>
               <option value="1">In Progress</option>
               <option value="2">Completed</option>
             </select>
+            {errors.project_status && <p className="text-red-500 text-sm">{errors.project_status.message}</p>}
           </div>
-
-          {/* Buttons */}
-          <div className="flex justify-between">
-            <button type="submit" className={styles.update_button}>
-              Create Project
+  
+          <div className="flex justify-end space-x-2">
+            <button type="submit" className={styles.update_button} disabled={checkingId}>
+              {checkingId ? "Validating..." : "Create"}
             </button>
           </div>
         </form>
       </div>
-    </div>
+    </Modal>
   );
 };
 export default CreateProject;

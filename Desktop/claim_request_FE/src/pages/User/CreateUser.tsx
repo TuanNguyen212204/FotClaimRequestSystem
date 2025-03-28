@@ -53,7 +53,7 @@ const options: Option[] = [
   { label: "Finance", value: "3" },
   { label: "Claimer", value: "4" },
 ];
-const Select: React.FC<SelectProps> = ({
+export const Select: React.FC<SelectProps> = ({
   options,
   value,
   onChange,

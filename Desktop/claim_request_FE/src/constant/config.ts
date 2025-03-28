@@ -16,7 +16,7 @@ export const PATH = {
   allUserInformation: "/user-information", //admin first page
   approveDetails: "/approve-details",
   claimStatus: "/paid-claim/detail",
-  paidClaim: "/paid-claim",
+  paidClaim: "/finance/paid",
   dashboard: "/dashboard",
   approvedFinance: "/finance/approved", //finance first page
   approvedApprover: "/approver/approved",

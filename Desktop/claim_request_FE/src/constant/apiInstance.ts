@@ -19,7 +19,6 @@ export class HttpClient {
     });
     this.createAxios.interceptors.response.use(
       (response) => {
-        console.log("Success");
         return response;
       },
       (error) => {
