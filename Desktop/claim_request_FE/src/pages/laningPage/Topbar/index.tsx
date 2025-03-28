@@ -8,7 +8,7 @@ function NavLink({
   children: React.ReactNode;
 }) {
   return (
-    <li>
+    <li className="m-0 flex items-center">
       <a
         href={href}
         className="group block px-3 py-2 text-2xl font-bold text-white no-underline decoration-4 underline-offset-4"
@@ -24,7 +24,7 @@ export default function TopBar(): JSX.Element {
   return (
     <header className="container mx-auto flex w-full items-center justify-center p-4">
       <nav>
-        <ul className="flex list-none space-x-2 md:space-x-4">
+        <ul className="flex list-none justify-evenly gap-7 p-0">
           <NavLink href="#home">Home</NavLink>
           <NavLink href="#about">About</NavLink>
           <NavLink href="#feature">Feature</NavLink>
