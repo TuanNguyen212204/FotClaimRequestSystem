@@ -140,16 +140,17 @@
   display: none;
   line-height: 40px;
   cursor: pointer;
+  border: 1px solid #ccc;
 }
 
 .threeDots {
-  position: absolute; /* Định vị tuyệt đối */
-  right: 0; /* Đặt ở bên phải */
-  top: 0; /* Đặt ở giữa theo chiều dọc */
-  transform: translate(-75%, 75%) rotate(90deg); /* Căn giữa theo chiều dọc */
-  font-size: 16px; /* Kích thước biểu tượng */
-  color: #333; /* Màu sắc biểu tượng */
-  cursor: pointer; /* Con trỏ chuột khi hover */
+  position: absolute; 
+  right: 0; 
+  top: 0; 
+  transform: translate(-75%, 75%) rotate(90deg); 
+  font-size: 16px; 
+  color: #333;
+  cursor: pointer;
 }
 
 .notificationItem:hover {

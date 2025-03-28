@@ -220,7 +220,9 @@ const Header: React.FC = () => {
                       : ""
                   }`}
                 >
-                  <div
+                  {
+                    !!notification.is_read === false ? (
+                      <div
                     className={styles.option}
                     style={{ display: "flex", alignItems: "center" }}
                   >
@@ -232,7 +234,10 @@ const Header: React.FC = () => {
                       Mark as Read
                     </div>
                   </div>
-
+                    ) : (
+                      <></>
+                    )
+                  } 
                   <div
                     className={styles.option}
                     style={{ display: "flex", alignItems: "center" }}
