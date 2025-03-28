@@ -117,6 +117,7 @@ export const DetailsApproval: React.FC<PendingDetailModalProps> = ({
       backgroundColor="#f5f5f5"
       footerPosition="center"
       height="95%"
+      okButtonProps={{ style: { backgroundColor: "#89AC46", color: "white" } }}
       className={styles.modal}
     >
       <hr className={styles.divider} />
