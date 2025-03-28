@@ -56,6 +56,7 @@ export const DetailsApproval: React.FC<PendingDetailModalProps> = ({
 
   useEffect(() => {
     if (isOpen && requestId) {
+      document.body.style.overflow = "hidden";
       dispatch(
         fetchPendingClaimDetailAsync({
           page: currentPage,
@@ -63,7 +64,12 @@ export const DetailsApproval: React.FC<PendingDetailModalProps> = ({
           request_id: requestId,
         })
       );
+    } else {
+      document.body.style.overflow = "";
     }
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [isOpen, requestId, currentPage, limit, dispatch]);
 
   const handleApproveClaimDetention = async (request_id: string) => {
