@@ -4,12 +4,13 @@ import { initReactI18next } from "react-i18next";
 // Import JSON
 import headerEn from "../locales/en/header.json";
 import headerVn from "../locales/vi/header.json";
-
+import userInfoEn from "../locales/en/userInfo.json";
+import userInfoVn from "../locales/vi/userInfo.json";
 // Khởi tạo i18n
 i18n.use(initReactI18next).init({
   resources: {
-    en: { header: headerEn },
-    vi: { header: headerVn },
+    en: { header: headerEn, userInfo: userInfoEn },
+    vi: { header: headerVn, userInfo: userInfoVn },
   },
   lng: "en", // Ngôn ngữ mặc định
   fallbackLng: "vi",

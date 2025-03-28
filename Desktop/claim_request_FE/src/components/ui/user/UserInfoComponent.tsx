@@ -9,6 +9,7 @@ import httpClient from "@constant/apiInstance";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export const UserInfoComponent: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -19,7 +20,7 @@ export const UserInfoComponent: React.FC = () => {
   const [isSalaryVisible, setIsSalaryVisible] = useState(false);
   const [isOtRateVisible, setIsOtRateVisible] = useState(false);
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
-
+  const { t } = useTranslation("userInfo");
   const navigate = useNavigate();
 
   const accessToken = localStorage.getItem("access_token");
@@ -263,7 +264,7 @@ export const UserInfoComponent: React.FC = () => {
         <div className={styles.profileInfo}>
           <h1>{selectedUser.full_name || "Full Name"}</h1>
           <p className={styles.position}>
-            <span>Job Rank:</span>{" "}
+            <span>{t("Job Rank")}:</span>{" "}
             {selectedUser.job_rank || "No Job Rank"}
             <span>Department:</span> {selectedUser.department || "Undetermined"}
           </p>
