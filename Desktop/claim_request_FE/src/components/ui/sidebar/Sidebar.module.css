@@ -6,13 +6,12 @@
 
 /* Sidebar */
 .sidebar {
-  width: 60px;
+  width: 4%;
   background-color: #213555;
   color: white;
   height: 100vh;
   position: fixed;
-  left: 0;
-  top: 0;
+  text-align: center;
   transition: all 0.3s ease-in;
 }
 
@@ -78,7 +77,8 @@
 }
 
 .menu {
-  margin-top: 70px;
+  width: 100%;
+  padding-top: 50px;
 }
 
 .claimHeader {
@@ -106,21 +106,25 @@
 }
 .claimList {
   transition: max-height 0.3s ease;
-
   list-style: none;
   padding: 0;
+  width: 100%;
+  max-height: 100px;
+  margin-top: -40rem;
 }
 
 .claimItemCollapse {
-  padding: 8px;
   cursor: pointer;
-  background-color: #34495e;
-  margin: 10px 0;
+  max-width: 100%;
+  height: 100%;
+  margin-top: 3rem;
   border-radius: 5px;
   display: flex;
   align-items: center;
   transition: none !important;
 }
+
+/* ac */
 .claimItemCreateClaim {
   padding: 4px;
   cursor: pointer;
@@ -132,7 +136,7 @@
   transition: none !important;
 }
 .claimItem {
-  padding: 8px;
+  /* padding: 8px; */
   cursor: pointer;
   background-color: #34495e;
   margin: 20px 0;
@@ -141,19 +145,13 @@
   align-items: center;
   transition: none !important;
 }
-.claimItem:hover {
-  background-color: #16a085;
-}
-.claimItemCollapse:hover {
-  background-color: #16a085;
-}
-.claimItem .icon {
-  margin-right: 10px;
-}
 
-.collapsed .claimItem .icon {
-  margin-right: 0;
+.selectedItem:hover {
+  background-color: #16a085;
 }
+/* .selectedItem{
+  
+} */
 
 .active {
   background-color: #16a085;
@@ -199,29 +197,12 @@
 }
 
 /* Arrow styles */
-.arrowUp {
-  display: inline-block;
-  width: 0;
-  height: 0;
-  margin-left: 5px; /* Space between text and arrow */
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-bottom: 5px solid white; /* Change color as needed */
-}
 
-.arrowDown {
-  display: inline-block;
-  width: 0;
-  height: 0;
-  margin-left: 5px; /* Space between text and arrow */
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-top: 5px solid white; /* Change color as needed */
-}
 .claimButton {
   color: white;
   transition: none !important;
   padding-top: 5px;
+  width: 100%;
   background-color: transparent;
 }
 .claimButton:hover {
@@ -233,6 +214,7 @@
   display: flex;
   flex-direction: row;
   transition: none !important;
+  width: 100%;
 }
 .iconInClaimButton_1 {
   margin-top: 2px;
@@ -253,7 +235,9 @@
 }
 .tooltip {
   position: relative;
-  display: inline-block;
+  width: 100%;
+  margin: 1rem 0rem;
+  padding: 0.75rem 0rem;
 }
 
 /* Tooltip text */
@@ -263,15 +247,19 @@
   background-color: #34495e;
   color: #fff;
   text-align: center;
-  padding: 13px 0px;
+  padding: 1rem 0rem;
   margin-left: 10px;
   border-radius: 6px;
   position: absolute;
   z-index: 1;
-  margin-left: 3rem;
-  bottom: -25%;
+  margin-bottom: 0rem;
+  margin-left: 13rem;
+  font-size: 0.75rem;
 }
 
 .tooltip:hover .tooltipText {
   visibility: visible;
+}
+.vy {
+  background-color: #16a085;
 }

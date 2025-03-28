@@ -18,10 +18,81 @@ import {
 import { LoadingProvider } from "@/components/ui/Loading/LoadingContext";
 import LoadingOverlay from "@/components/ui/Loading/LoadingOverlay";
 import { ApiResponseNoGeneric } from "@/types/ApiResponse";
+import { delay } from "@/utils/delay";
 interface CreateUserProps {
   openModal: boolean;
   setOpenModal: (value: boolean) => void;
 }
+type Department = {
+  id: string;
+  name: string;
+};
+type JobRank = {
+  id: number;
+  name: string;
+  ot_rate: string;
+};
+interface Option {
+  label: string;
+  value: string | number;
+}
+
+interface SelectProps {
+  options: Option[];
+  value?: string | number;
+  onChange: (value: string | number) => void;
+  placeholder?: string;
+  isDisabled?: boolean;
+  multiple?: boolean;
+  register?: any;
+  className?: string;
+}
+const options: Option[] = [
+  { label: "Admin", value: "1" },
+  { label: "Approver", value: "2" },
+  { label: "Finance", value: "3" },
+  { label: "Claimer", value: "4" },
+];
+const Select: React.FC<SelectProps> = ({
+  options,
+  value,
+  onChange,
+  register,
+  placeholder = "Select an option",
+  isDisabled = false,
+  multiple = false,
+  className = "",
+}) => {
+  return (
+    <select
+      className={`p-2 border rounded ${className}`}
+      value={value}
+      {...register}
+      onChange={(e) =>
+        multiple
+          ? onChange(
+              Array.from(
+                e.target.selectedOptions,
+                (option) => option.value
+              ).join(",")
+            )
+          : onChange(e.target.value)
+      }
+      disabled={isDisabled}
+      multiple={multiple}
+    >
+      {!multiple && <option value="">{placeholder}</option>}
+      {options.map((option) => (
+        <option key={option.value} value={option.value}>
+          {option.label}
+        </option>
+      ))}
+    </select>
+  );
+};
+
+type DepartmentList = Department[];
+type JobRankList = JobRank[];
 export const CreateUser: React.FC<CreateUserProps> = ({
   openModal,
   setOpenModal,
@@ -37,6 +108,39 @@ export const CreateUser: React.FC<CreateUserProps> = ({
     reset,
     formState: { errors },
   } = useForm<User>();
+  const [department, setDepartment] = useState<DepartmentList>([]);
+  const [jobRank, setJobRank] = useState<JobRankList>([]);
+  // Chỗ này để fetch api lấy list department từ BE về
+  const fetchDepartment = async () => {
+    try {
+      const response = await httpClient.get<ApiResponseNoGeneric>(
+        `/admin/departments`
+      );
+      setDepartment(response.data.data);
+    } catch (error) {
+      console.error("Fetch department error:", error);
+    }
+  };
+  // Chỗ này fetch api lấy list job rank từ BE về
+  const fetchJobRank = async () => {
+    try {
+      const response = await httpClient.get<ApiResponseNoGeneric>(
+        `/admin/job-ranks`
+      );
+      setJobRank(response.data.data);
+    } catch (error) {
+      console.error("Fetch job rank error:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDepartment();
+    fetchJobRank();
+  }, []);
+  useEffect(() => {
+    console.log(jobRank);
+    console.log(department);
+  }, [jobRank, department]);
   const handleCreateUser = async (data: any) => {
     try {
       const response = httpClient.post<ApiResponseNoGeneric>(
@@ -70,11 +174,11 @@ export const CreateUser: React.FC<CreateUserProps> = ({
     setLoading(true);
     const requestBody = {
       full_name: data.full_name,
-      department: data.department,
+      department_id: data.department,
       email: data.email,
       salary: data.salary,
       role: data.role_id,
-      job_rank: data.job_rank,
+      job_rank_id: data.job_rank,
     };
     console.log(requestBody);
     handleCreateUser(requestBody);
@@ -82,6 +186,18 @@ export const CreateUser: React.FC<CreateUserProps> = ({
   const handleCancel = () => {
     setOpenModal(false);
   };
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        handleCancel(); // Gọi hàm cancel khi nhấn Escape
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   return (
     <div>
@@ -188,22 +304,41 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                   </div>
                 </div>
               </label>
-              <input
+              {/* <select
                 id="department"
-                type="text"
                 {...register("department", {
                   required: "Department is required",
-                  minLength: {
-                    value: 2,
-                    message: "Must be at least 2 characters",
-                  },
-                  maxLength: {
-                    value: 50,
-                    message: "Must be at most 50 characters",
-                  },
                 })}
                 className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+              >
+                <option value="">Select Department</option>
+                {department &&
+                  department.map((a) => (
+                    <option key={a.id} value={a.id}>
+                      {a.name}
+                    </option>
+                  ))}
+              </select> */}
+              <Select
+                register={{
+                  ...register("department", {
+                    required: "Department is required",
+                  }),
+                }}
+                options={department.map((a) => ({
+                  label: a.name,
+                  value: a.id,
+                }))}
+                // register={{
+                //   ...register("department", {
+                //     required: "Department is required",
+                //   }),
+                // }}
+                placeholder="Select Department"
+                onChange={(value) => console.log(value)}
+                className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
               />
+
               {errors.department && (
                 <p className="text-red-500 text-sm mt-1">
                   {errors.department.message}
@@ -255,7 +390,7 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                   </div>
                 </div>
               </label>
-              <select
+              {/* <select
                 id="role_id"
                 {...register("role_id", { required: "Role ID is required" })}
                 className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
@@ -265,7 +400,14 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                 <option value="2">2 - Approver</option>
                 <option value="3">3 - Finance</option>
                 <option value="4">4 - Claimer</option>
-              </select>
+              </select> */}
+              <Select
+                options={options}
+                register={register("role_id")}
+                onChange={(value) => console.log(value)}
+                placeholder="Select Role ID"
+                className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+              />
               {errors.role_id && (
                 <p className="text-red-500 text-sm mt-1">
                   {errors.role_id.message}
@@ -287,21 +429,33 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                   </div>
                 </div>
               </label>
-              <input
+              {/* <select
                 id="job_rank"
                 {...register("job_rank", {
-                  required: "Job Rank is required",
-                  minLength: {
-                    value: 2,
-                    message: "Must be at least 2 characters",
-                  },
-                  maxLength: {
-                    value: 50,
-                    message: "Must be at most 50 characters",
-                  },
+                  required: "Department is required",
                 })}
                 className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+              >
+                <option value="">Select Job Rank</option>
+                {jobRank &&
+                  jobRank.map((a) => (
+                    <option key={a.id} value={a.id}>
+                      {a.name} - {a.ot_rate}
+                    </option>
+                  ))}
+              </select> */}
+              <Select
+                options={jobRank.map((a) => ({ label: a.name, value: a.id }))}
+                register={{
+                  ...register("job_rank", {
+                    required: "Job Rank is required",
+                  }),
+                }}
+                placeholder="Select Job Rank"
+                onChange={(value) => console.log(value)}
+                className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
               />
+
               {errors.job_rank && (
                 <p className="text-red-500 text-sm mt-1">
                   {errors.job_rank.message}

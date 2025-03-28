@@ -10,8 +10,19 @@ import { selectProject } from "@/redux/slices/Project/projectSlice";
 import { fetchUserByIdAsync } from "@/redux/thunk/User/userThunk";
 import { toast } from "react-toastify";
 import { fetchProjectByID } from "@/redux/thunk/CreateClaim";
-
-export default function CreateClaim() {
+import { FormData } from "@/types/claimForm.type";
+interface CreateClaimProps {
+  mode: "create" | "view" | "update";
+  initialValues?: FormData;
+  formStatus: "Draft" | "Pending" | "Approved" | "Rejected" | "Paid";
+  requestID?: string;
+}
+export default function CreateClaim({
+  mode,
+  initialValues,
+  formStatus,
+  requestID,
+}: CreateClaimProps) {
   const {
     register,
     setValue,
@@ -22,7 +33,7 @@ export default function CreateClaim() {
     setError,
     clearErrors,
     user,
-  } = useCreateClaimForm();
+  } = useCreateClaimForm({ initialValues, mode, requestID });
 
   const dispatch = useDispatch<AppDispatch>();
   const projectList = useSelector(selectProject);
@@ -40,7 +51,7 @@ export default function CreateClaim() {
             message: "This date is already chosen",
           });
         } else {
-          console.log("clearing error");
+          //   console.log("clearing error");
           seenDates.add(date);
           clearErrors(`claims.${index}.date`);
         }
@@ -62,11 +73,11 @@ export default function CreateClaim() {
     <form onSubmit={handleSubmit(onSubmit)}>
       <Header
         prepareBy={user?.full_name}
-        status="Draft"
+        status={formStatus}
         title="New Claim Request"
       />
       <StaffInfo
-        department={user?.job_rank}
+        department={user?.department}
         name={user?.full_name}
         staffID={user?.user_id}
       />
@@ -76,6 +87,7 @@ export default function CreateClaim() {
         errors={errors}
         register={register}
         setValue={setValue}
+        mode={mode}
       />
     </form>
   ) : (

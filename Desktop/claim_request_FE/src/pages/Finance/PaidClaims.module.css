@@ -2,6 +2,8 @@
   width: 95%;
   margin: auto;
   margin-top: 0.2rem; 
+  margin: auto;
+  margin-top: 0.5rem;
   background-color: white;
   padding: 1.5rem 2rem;  
   border-radius: 0.75rem;
@@ -41,6 +43,7 @@
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  margin-top: 0.5rem;
 }
 
 .table_body th,

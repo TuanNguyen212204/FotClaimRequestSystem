@@ -20,8 +20,10 @@ import { CircleX } from "lucide-react";
 import { Pencil } from "lucide-react";
 import { Plus } from "lucide-react";
 import { set } from "date-fns";
-import { RouteConfig, useRoute } from "@/Hooks/useRoute";
+// import { RouteConfig, useRoute } from "@/Hooks/useRoute";
 import { ROLES } from "@/enums/ROLES";
+import RouteConfig from "@/types/Route";
+import { PRIVATE_ROUTE } from "@/constant/routeConfig";
 import ROLE from "@/constant/role";
 export const Sidebar = ({
   setIsCollapsed,
@@ -42,24 +44,21 @@ export const Sidebar = ({
       if (route.role?.includes(role)) {
         acc.push(route);
       }
-      if (route.children) {
-        const filteredChildren = filterRoutesByRole(route.children, role);
-        acc.push(...filteredChildren);
-      }
+
       return acc;
     }, []);
   };
 
   const location = useLocation();
   const currentPath = location.pathname;
-  const routes: RouteConfig[] = useRoute();
+
   // const routeByRole: RouteConfig[] = useRoute().filter((route) =>
   //   route.role?.includes(ROLES.ADMIN)
   // );
-  const routeByRole: RouteConfig[] = filterRoutesByRole(
-    useRoute(),
-    role as number
+  const route: RouteConfig[] = PRIVATE_ROUTE.filter(
+    (route) => route.protected === true
   );
+  const routeByRole: RouteConfig[] = filterRoutesByRole(route, role as number);
   console.log(routeByRole);
   const navigate = useNavigate();
   useEffect(() => {
@@ -68,7 +67,6 @@ export const Sidebar = ({
       setSelectedClaim(record);
     }
   }, []);
-
   useEffect(() => {
     const record = Number(localStorage.getItem("role_id"));
     if (record === 1) {
@@ -87,66 +85,43 @@ export const Sidebar = ({
     navigate(PATH.login);
   };
 
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
-
-  const toggleSidebar = () => {
-    setIsCollapsed1(!isCollapsed1);
-    setIsCollapsed(!isCollapsed1);
-    setHover(true);
-    console.log(isCollapsed1);
-  };
-
-  const closeToggleSideBar = () => {
-    setIsCollapsed1(isCollapsed1);
-    setIsCollapsed(isCollapsed1);
-  };
-
-  const handleHover = () => {
-    setHover(true);
-    setIsCollapsed1(false);
-    setIsCollapsed(false);
-  };
-
-  const handleOutHover = () => {
-    setHover(false);
-    setIsCollapsed1(true);
-    setIsCollapsed(true);
-  };
   const handleNavigate = (path: string) => {
+    setSelectedClaim(path);
+    localStorage.setItem("selectedClaim", path);
     navigate(path);
   };
   return (
-    <div className={styles.container}>
-      <div
-        className={`${styles.sidebar} ${isCollapsed1 ? styles.collapsed : ""}`}
-      >
-        <div className={styles.menu}>
+    <div>
+      <div className={`${styles.sidebar} `}>
+        <div className={`${styles.claimItemCollapse} `}>
           <ul className={`${styles.claimList} `}>
             {routeByRole.map((route) => (
               <li
-                key={route.path}
-                className={`${styles.claimItemCollapse} ${
+                // className={`${styles.claimItemCollapse} ${styles.tooltip} ${
+                //   selectedClaim === route.path ? styles.active : ""
+                // } mt-2`}
+                className={`${styles.tooltip} ${styles.claimItem} ${
                   selectedClaim === route.path ? styles.active : ""
-                } `}
+                }`}
                 onClick={() => handleNavigate(route.path as string)}
               >
-                <button className={styles.claimButton}>
-                  <div className={styles.claimButtonIngredient}>
-                    <div
-                      className={`${styles.tooltip}`}
-                      style={{ cursor: "pointer" }}
-                    >
-                      <div className={"ml-1"}>
-                        <span>{route.icon}</span>
-                      </div>
-                      <div className={` ${styles.tooltipText}  `}>
-                        <span>{route.label}</span>
-                      </div>
-                    </div>{" "}
+                <div className={` ${styles.claimButton}  `}>
+                  <div
+                    className={`${styles.claimButtonIngredient} `}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <div>
+                      <span>{route.icon}</span>
+                    </div>
+                    <div className={` ${styles.tooltipText}  `}>
+                      <span>{route.label}</span>
+                    </div>
                   </div>
-                </button>
+                </div>
               </li>
             ))}
           </ul>
@@ -160,12 +135,14 @@ export const Sidebar = ({
           }}
         >
           <div style={{ width: "100%", backgroundColor: "red", bottom: "0" }}>
-            <button
+            <div
               className={`${styles.logoutCollapse}`}
               onClick={() => handleLogOut()}
             >
-              <LogOut size={20} />
-            </button>
+              <div className="">
+                <LogOut size={20} />
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -4,13 +4,22 @@ import { formSchema } from "@/Schemas/ClaimSchema";
 import { FormData } from "@/types/claimForm.type";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@/redux";
-import { createClaim } from "@/redux/thunk/CreateClaim";
+import { createClaim, updateClaim } from "@/redux/thunk/CreateClaim";
 import { selectUserById } from "@/redux/selector/userSelector";
 import { CreateClaimData } from "@/Services/Project/Project.type";
 import { toast } from "react-toastify";
-import { ApiError } from "@/api";
-
-export default function useCreateClaimForm() {
+import { useWatch } from "react-hook-form";
+import { useEffect } from "react";
+interface CreateClaimFormProps {
+  initialValues?: FormData;
+  mode: "create" | "view" | "update";
+  requestID?: string;
+}
+export default function useCreateClaimForm({
+  initialValues,
+  mode,
+  requestID,
+}: CreateClaimFormProps) {
   const {
     register,
     control,
@@ -24,7 +33,7 @@ export default function useCreateClaimForm() {
     trigger,
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
+    defaultValues: initialValues || {
       currentSelectedProject: {
         projectID: "",
         projectName: "",
@@ -35,6 +44,21 @@ export default function useCreateClaimForm() {
     },
     mode: "all",
   });
+  const formValues = useWatch({ control, name: "claims" });
+  if (mode === "update" && !requestID) {
+    throw new Error("requestID is required for update mode");
+  }
+  useEffect(() => {
+    console.log("Form Values:", formValues);
+    console.log("Errors:", errors);
+    // if (Object.keys(errors).length > 0) {
+    //   console.log("Validation Errors:", errors);
+    // }
+    if (Object.keys(formState.errors).length > 0) {
+      console.log("Validation Errors:", formState.errors);
+      trigger();
+    }
+  }, [JSON.stringify(formValues)]);
 
   const dispatch = useDispatch<AppDispatch>();
   const user = useSelector(selectUserById);
@@ -43,6 +67,7 @@ export default function useCreateClaimForm() {
     console.log(data);
     console.log(errors);
 
+    console.log("Validation errors", formState.errors);
     const isValid = await trigger();
 
     if (!data.currentSelectedProject.projectID) {
@@ -70,26 +95,41 @@ export default function useCreateClaimForm() {
       projectID: data.currentSelectedProject.projectID,
       claims: data.claims,
     };
-
-    try {
-      const resultAction = await dispatch(createClaim(DataToSend));
-      if (createClaim.fulfilled.match(resultAction)) {
-        toast.success("Claim request created successfully");
+    const handleSubmissionResult = (
+      resultAction: any,
+      successMessage: string,
+      errorPrefix: string
+    ) => {
+      if (resultAction.type.endsWith("/fulfilled")) {
+        toast.success(successMessage);
         reset();
       } else {
         const payloadError = resultAction.payload as any;
         const errorMessage = payloadError?.message || "Unknown error occurred";
-        toast.error(`Failed to create claim: ${errorMessage}`);
+        toast.error(`${errorPrefix}: ${errorMessage}`);
       }
-    } catch (error) {
-      if (error instanceof ApiError) {
-        console.log("API Error:", error.message, error.status, error.data);
-      } else if (error instanceof Error) {
-        console.log("Standard Error:", error.message);
-      } else {
-        console.log("Unknown Error:", error);
+    };
+
+    if (mode === "create") {
+      const resultAction = await dispatch(createClaim(DataToSend));
+      handleSubmissionResult(
+        resultAction,
+        "Claim request created successfully",
+        "Failed to create claim"
+      );
+    } else if (mode === "update") {
+      if (!requestID) {
+        toast.error("Request ID is required for update");
+        return;
       }
-      toast.error("Failed to create claim request");
+      const resultAction = await dispatch(
+        updateClaim({ claimData: DataToSend, requestID })
+      );
+      handleSubmissionResult(
+        resultAction,
+        "Claim request updated successfully",
+        "Failed to update claim"
+      );
     }
   };
 

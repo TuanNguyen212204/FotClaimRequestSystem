@@ -39,9 +39,9 @@ const ClaimStatus: React.FC<ClaimStatusProps> = ({ requestId }) => {
           <div>
             <p>{selectedClaim.full_name}</p>
             <p className={styles.department}>Department | {selectedClaim.department_name}</p>
+            <p className={styles.department}>{selectedClaim.job_rank_name}</p>
           </div>
         </div>
-        
       </div>
 
       <div className={styles.claimInfo}>
