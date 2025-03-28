@@ -173,7 +173,7 @@
   background: white;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  width: 180px;
+  width: 130px;
   padding: 0;
   z-index: 2000;
   display: flex;
@@ -211,13 +211,13 @@
 }
 
 .logoutItem {
-  background-color: #6b48ff;
+  background-color: #3e5879;
   color: white;
   border-radius: 8px;
 }
 
 .logoutItem:hover {
-  background-color: #5a3de6;
+  background-color: #3e5879;
   border-radius: 8px;
 }
 
