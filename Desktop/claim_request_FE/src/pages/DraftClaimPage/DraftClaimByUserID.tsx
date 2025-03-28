@@ -111,9 +111,9 @@ export const DraftClaimByUserID: React.FC = () => {
   return (
     <div>
       {openModal && (
-        <div className={styles.editModal}>
+        <div className={`${styles.editModal} p-0 m-0`}>
           <div>
-            <div className="w-[1080px] relative">
+            <div className="w-[640px] relative">
               {initValue && (
                 <span
                   className="absolute top-3 right-5 flex items-center justify-center w-6 h-6 cursor-pointer text-gray-600 hover:text-gray-800 hover:bg-gray-300 rounded-full"
