@@ -88,7 +88,7 @@ export const Sidebar = ({
               >
                 <div className={` ${styles.claimButton}`}>
                   <div
-                    className={`${styles.claimButtonIngredient}`}
+                    className={`${styles.claimButtonIngredient} ${styles.icon} `}
                     style={{
                       display: "flex",
                       alignItems: "center",

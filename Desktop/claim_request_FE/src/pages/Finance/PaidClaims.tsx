@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { EyeIcon, MoveRight } from "lucide-react";
+import { EyeIcon, MoveRight, ChevronDown } from "lucide-react";
 import styles from "./PaidClaims.module.css";
 import TableComponent, { Column, DataRecord } from "../../components/ui/Table/Table";
 import { fetchPaidClaimsAsync } from "../../redux/slices/Claim/paidClaimsSlice";
 import { AppDispatch } from "@/redux";
 import CustomModal from "@/components/ui/CustomModal/CustomModal";
-import ClaimStatus from './ClaimStatus';
+import StatusTag from "@/components/ui/StatusTag/StatusTag";
 
 const formatDateToDDMMYYYY = (date: string) => {
   const dateObj = new Date(date);
@@ -110,61 +110,92 @@ const PaidClaims: React.FC = () => {
               alt="avatar"
               className={styles.avatar}
             />
-            <div>
-              <p>{selectedClaim.full_name}</p>
-              <p className={styles.department}>Department | {selectedClaim.department_name}</p>
+            <div className={styles.infoUser1Row}>
+              <span>{selectedClaim.full_name}</span>
+              <div className={styles.infoUser1Row2}>
+                <span>{selectedClaim.job_rank_name}</span>
+                <span className={styles.separator}>|</span>
+                <span>{selectedClaim.department_name}</span>
+              </div>
             </div>
           </div>
           <div className={styles.infoUser2}>
-            <p>📧 {selectedClaim.email}</p>
+            <p>User ID: {selectedClaim.user_id}</p>
           </div>
         </div>
-
-        <div className={styles.claimInfo}>
-          <div className={styles.infoRow}>
-            <p>Project Name:</p>
-            <p>{selectedClaim.project_name}</p>
+        <hr />
+        <div className={styles.containerProject}>
+          <div className={styles.projectRow}>
+            <span className={styles.projectLabel}>Project ID:</span>
+            <span className={styles.projectValue}>{selectedClaim.project_id}</span>
           </div>
-          <div className={styles.infoRow}>
-            <p>Project ID:</p>
-            <p>{selectedClaim.project_id}</p>
+          <div className={styles.projectRow}>
+            <span className={styles.projectLabel}>Project Name:</span>
+            <span className={styles.projectValue}>{selectedClaim.project_name}</span>
           </div>
-          <div className={styles.infoRow}>
-            <p>Over Time Duration:</p>
-            <p>{formatDateToMonthDay(selectedClaim.start_date)} - {formatDateToMonthDay(selectedClaim.end_date)} ({selectedClaim.total_days} days)</p>
+          <div className={styles.projectRow}>
+            <span className={styles.projectLabel}>Time Duration:</span>
+            <span className={styles.projectValue}>
+              {formatDateToMonthDay(selectedClaim.start_date)}
+              <MoveRight size={20} className={styles.iconMoveRight} />
+              {formatDateToMonthDay(selectedClaim.end_date)}
+            </span>
           </div>
-          <div className={styles.infoRow}>
-            <p>Submitted Date:</p>
-            <p>{formatDateToMonthDay(selectedClaim.submitted_date)}</p>
+          <div className={styles.projectRow}>
+            <span className={styles.projectLabel}>Submitted Date:</span>
+            <span className={styles.projectValue}>
+              {formatDateToMonthDay(selectedClaim.submitted_date)}
+            </span>
           </div>
-          <div className={styles.infoRow}>
-            <p>Approved Date:</p>
-            <p>{formatDateToMonthDay(selectedClaim.approved_date)}</p>
+          <div className={styles.projectRow}>
+            <span className={styles.projectLabel}>Approved Date:</span>
+            <span className={styles.projectValue}>
+              {formatDateToMonthDay(selectedClaim.approved_date)}
+            </span>
           </div>
-          <div className={styles.infoRow}>
-            <p>Status:</p>
-            <div className={styles.statusPaid}>Paid</div>
+          <div className={styles.projectRow}>
+            <span className={styles.projectLabel}>Status:</span>
+            <span className={styles.projectValue}>
+              <StatusTag status="PAID" />
+            </span>
           </div>
-          <div className={styles.infoRow}>
-            <p>Total Overtime Salary:</p>
-            <p>${selectedClaim.salary_overtime}</p>
+          <div className={styles.projectRow}>
+            <span className={styles.projectLabel}>Total Working Hours:</span>
+            <span className={styles.projectValue}>{selectedClaim.total_hours} hours</span>
+          </div>
+          <div className={styles.projectRow}>
+            <span className={styles.projectLabel}>Salary Overtime:</span>
+            <span className={styles.projectValue}>${selectedClaim.salary_overtime}</span>
           </div>
         </div>
-
-        <div className={styles.history}>
-          <div className={styles.historyHeader}>
-            <h4>History</h4>
-            <MoveRight size={16} />
-          </div>
-          {selectedClaim.claim_details.map((detail: any, index: number) => (
-            <div key={index} className={styles.historyItem}>
-              <p>{formatDateToMonthDay(detail.date)}</p>
-              <div className={styles.historyDetails}>
-                <p>Working Hours: <span>{detail.working_hours} hours</span></p>
-                <p>Overtime Salary: <span>${detail.salaryOvertimePerDay}</span></p>
-              </div>
+        <div className={styles.containerHistory}>
+          <div className={styles.history}>
+            <div className={styles.historyHeader}>
+              <p>History</p>
+              <ChevronDown className={styles.historyIcon} />
             </div>
-          ))}
+            {selectedClaim.claim_details.map((detail: any, index: number) => (
+              <div key={index} className={styles.historyItem}>
+                <span className={styles.historyItemDate}>
+                  {formatDateToMonthDay(detail.date)}
+                </span>
+                <div className={styles.historyItemInfo}>
+                  <div className={styles.historyItemRow}>
+                    <span className={styles.historyItemLabel}>Working Hours:</span>
+                    <span className={styles.historyItemValue}>
+                      {detail.working_hours} hours
+                    </span>
+                  </div>
+                  <div className={styles.historyItemRow}>
+                    <span className={styles.historyItemLabel}>Overtime Salary:</span>
+                    <span className={styles.historyItemValue}>
+                      ${detail.salaryOvertimePerDay}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     );
@@ -192,11 +223,17 @@ const PaidClaims: React.FC = () => {
         onClose={handleCloseModal}
         title="Claim Detail"
         onPrint={() => window.print()}
+        width={600}
+        height="95%"
+        centered={false}
+        position={{ right: 20, top: 23 }}
+        backgroundColor="#E9ECEF"
+        data={selectedClaim}
       >
         {loading ? (
           <div className={styles.loading}>Loading claim details...</div>
         ) : (
-          <ClaimStatus requestId={selectedRequestId} />
+          renderClaimDetail()
         )}
       </CustomModal>
     </div>

@@ -60,6 +60,11 @@ export const RejectedComponent: React.FC = () => {
       title: "Full Name",
     },
     {
+      key: "email",
+      dataIndex: "user_email",
+      title: "Email",
+    },
+    {
       key: "start_date",
       dataIndex: "start_date",
       title: "Start Date",
@@ -140,9 +145,10 @@ export const RejectedComponent: React.FC = () => {
     key: claim.request_id,
     ...claim,
     user_full_name: claim.user.full_name,
+    user_email: claim.user.email,
     user_salary: claim.user.salary,
     user_ot_rate: claim.user.ot_rate,
-    claim_status: "rejected", // Ensure this is correctly set
+    claim_status: "REJECTED", // Ensure this is correctly set
   }));
 
   return (

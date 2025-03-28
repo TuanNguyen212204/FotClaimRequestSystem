@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useLoading } from "./LoadingContext";
 import styles from "./Loading.module.css";
 import { GiSpinningSword } from "react-icons/gi";
-
+import { ImSpinner8 } from "react-icons/im";
 const LoadingOverlay: React.FC = () => {
   const { isLoading } = useLoading();
 
@@ -32,7 +32,7 @@ const LoadingOverlay: React.FC = () => {
                 repeatType: "loop",
               }}
             >
-              <GiSpinningSword />
+              <ImSpinner8 />
             </motion.div>
 
             <div className="flex gap-3.5 ml-0.5">
