@@ -4,12 +4,12 @@
 .sidebar {
   min-width: 2%;
   max-height: 100vh;
-  width: 3.5%;
+  width: 4%;
   background-color: #213555;
   color: white;
   height: 100vh;
-  position: fixed; /* Giữ sidebar cố định */
-  left: 0; /* Đảm bảo nó luôn ở bên trái */
+  position: fixed;
+  left: 0;
   top: 0;
   text-align: center;
   transition: all 0.3s ease-in;
@@ -104,6 +104,9 @@
   margin-left: 10px;
   margin-top: 2px;
 }
+.icon:hover {
+  color: #16a085;
+}
 .claimList {
   transition: max-height 0.3s ease;
   list-style: none;
@@ -154,7 +157,7 @@
 } */
 @keyframes slideAndFade {
   0% {
-    transform: translateX(50%); /* Bắt đầu ngoài màn hình bên phải */
+    transform: translateX(100%); /* Bắt đầu ngoài màn hình bên phải */
     background-position: 100% 0;
     opacity: 0;
   }
@@ -171,7 +174,7 @@
   animation: slideAndFade 0.5s ease-in-out forwards;
 }
 .active:hover {
-  background-position: right;
+  background-position: left;
 }
 .noActive {
   background-color: none;
