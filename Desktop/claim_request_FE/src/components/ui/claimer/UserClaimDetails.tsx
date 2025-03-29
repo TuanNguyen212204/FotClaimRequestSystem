@@ -9,7 +9,7 @@ import { MoveRight } from "lucide-react";
 import StatusTag from "../StatusTag/StatusTag";
 import { useTranslation } from "react-i18next";
 
-
+// Mảng ánh xạ các tháng bằng tiếng Việt
 const monthsVi = [
   "Tháng Một",
   "Tháng Hai",
@@ -31,12 +31,10 @@ const formatDateToMonthDay = (date: string) => {
   const day = dateObj.getDate();
   const monthIndex = dateObj.getMonth();
 
-
   const month =
     i18n.language === "vi"
       ? monthsVi[monthIndex]
       : dateObj.toLocaleString("en-US", { month: "long" });
-
 
   const getDayWithSuffix = (day: number) => {
     if (i18n.language === "vi") {
@@ -57,8 +55,9 @@ const formatDateToMonthDay = (date: string) => {
 
   const formattedDay = getDayWithSuffix(day);
   return i18n.language === "vi"
-    ? `${formattedDay} ${month}` 
-    : `${month} ${formattedDay}`; 
+    ? `${formattedDay} ${month}`
+    : `${month} ${formattedDay}`;
+};
 
 interface UserClaimDetailsModalProps {
   isOpen: boolean;
