@@ -1,0 +1,27 @@
+{
+  "finance": {
+    "title": "Approved Claims",
+    "table": {
+      "userName": "User Name",
+      "projectName": "Project Name",
+      "timeDuration": "Time Duration",
+      "totalHours": "Total Working Hours",
+      "hours": "hours",
+      "action": "Action"
+    },
+    "modal": {
+      "title": "Claim Detail",
+      "projectId": "Project ID",
+      "projectName": "Project Name",
+      "timeDuration": "Time Duration",
+      "submittedDate": "Submitted Date",
+      "approvedDate": "Approved Date",
+      "status": "Status",
+      "totalHours": "Total Working Hours",
+      "salaryOvertime": "Salary Overtime",
+      "history": "History",
+      "pay": "Pay",
+      "confirmPay": "Are you sure you want to proceed with the payment?"
+    }
+  }
+}

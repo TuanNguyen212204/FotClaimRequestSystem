@@ -1,0 +1,27 @@
+{
+  "finance": {
+    "title": "Yêu Cầu Đã Duyệt",
+    "table": {
+      "userName": "Tên Người Dùng",
+      "projectName": "Tên Dự Án",
+      "timeDuration": "Thời Gian",
+      "totalHours": "Tổng Giờ Làm",
+      "hours": "giờ",
+      "action": "Thao Tác"
+    },
+    "modal": {
+      "title": "Chi Tiết Yêu Cầu",
+      "projectId": "Mã Dự Án",
+      "projectName": "Tên Dự Án",
+      "timeDuration": "Thời Gian",
+      "submittedDate": "Ngày Nộp",
+      "approvedDate": "Ngày Duyệt",
+      "status": "Trạng Thái",
+      "totalHours": "Tổng Giờ Làm",
+      "salaryOvertime": "Lương Tăng Ca",
+      "history": "Lịch Sử",
+      "pay": "Thanh Toán",
+      "confirmPay": "Bạn có chắc chắn muốn tiến hành thanh toán?"
+    }
+  }
+}

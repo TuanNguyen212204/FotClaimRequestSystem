@@ -1,0 +1,32 @@
+{
+  "claimstatus": {
+    "modal": {
+      "title": "Chi Tiết Yêu Cầu",
+      "close": "Đóng",
+      "print": "In",
+      "pay": "Thanh Toán",
+      "printDetails": "In chi tiết",
+      "payClaim": "Thanh toán yêu cầu"
+    },
+    "user": {
+      "userId": "Mã Người Dùng",
+      "avatar": "Ảnh đại diện"
+    },
+    "project": {
+      "projectId": "Mã Dự Án",
+      "projectName": "Tên Dự Án",
+      "timeDuration": "Thời Gian",
+      "submittedDate": "Ngày Nộp",
+      "approvedDate": "Ngày Duyệt",
+      "status": "Trạng Thái",
+      "totalHours": "Tổng Số Giờ",
+      "salaryOvertime": "Lương Tăng Ca",
+      "hours": "giờ"
+    },
+    "history": {
+      "title": "Lịch Sử",
+      "workingHours": "Số Giờ Làm",
+      "overtimeSalary": "Lương Tăng Ca"
+    }
+  }
+}
