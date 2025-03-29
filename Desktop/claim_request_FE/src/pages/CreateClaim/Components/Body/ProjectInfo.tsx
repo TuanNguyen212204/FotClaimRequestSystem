@@ -4,14 +4,15 @@ import {
   UseFormRegister,
   UseFormSetValue,
   useFormState,
+  FieldError,
 } from "react-hook-form";
-import { JSX, ReactNode, useEffect } from "react";
+import { JSX, ReactNode } from "react";
+import { useEffect } from "react";
 import { FormData } from "@/types/claimForm.type";
 import { TProjectInfo } from "@redux/slices/Project/projectSlice";
 import styles from "@pages/CreateClaim/Claim.module.css";
-import { fetchProjectByID } from "@/redux/thunk/CreateClaim";
-import { AppDispatch } from "@/redux";
-import { useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
 export interface IProjectInfoProps {
   ProjectList: TProjectInfo[];
   setValue: UseFormSetValue<FormData>;
@@ -23,11 +24,11 @@ export interface IProjectInfoProps {
 export default function ProjectInfo({
   ProjectList,
   setValue,
-  register,
   control,
   mode,
 }: IProjectInfoProps): JSX.Element {
   const currentProject = useWatch({ control, name: "currentSelectedProject" });
+  const { t } = useTranslation("claim");
   // console.log(currentProject);
   const { errors } = useFormState({ control, name: "currentSelectedProject" });
   function formatDateRange(from: string, to: string): string {
@@ -39,14 +40,19 @@ export default function ProjectInfo({
     const toYear = toDate.getFullYear();
     return `${fromMonth} ${fromYear} - ${toMonth} ${toYear}`;
   }
+  useEffect(() => {
+    if (errors.currentSelectedProject?.projectName) {
+      toast.error(t("toast.selectProject"), { toastId: "projectError" });
+    }
+  }, [errors.currentSelectedProject?.projectName, t]);
   return (
     <FormRow>
       <FormColumn>
         <FormGroup
-          label="Project Name"
+          label={t("projectInfo.nameLabel")}
           input={
             <select
-              title="Projects"
+              title={t("projectInfo.nameLabel")}
               className="w-full p-3.5! mb-2.5 text-base border-2 border-gray-200 box-border rounded-sm"
               defaultValue={
                 mode === "update" || mode === "view"
@@ -66,7 +72,7 @@ export default function ProjectInfo({
               }}
             >
               <option value="" disabled>
-                Select a Project
+                {t("projectInfo.selectPlaceholder")}
               </option>
               {ProjectList.length > 0 &&
                 ProjectList.map((project) => (
@@ -77,39 +83,15 @@ export default function ProjectInfo({
             </select>
           }
         />
-
-        {errors.currentSelectedProject?.projectName && (
-          <p className="text-red-500 text-sm p-1">
-            {
-              "Select a Project" /**
-              gu
-            */
-            }
-          </p>
-        )}
       </FormColumn>
-      {/* <FormColumn>
-        <FormGroup
-          label="Role in Project"
-          input={
-            <input
-              disabled
-              placeholder="Role in Project"
-              className={`w-full p-2 mb-2.5 border-2 border-white box-border rounded-sm ${styles.form_control}`}
-              {...register("currentSelectedProject.RoleInTheProject")}
-              value={currentProject?.RoleInTheProject || ""}
-            />
-          }
-        />
-      </FormColumn> */}
       <FormColumn>
         <FormGroup
-          label="Project Duration"
+          label={t("projectInfo.durationLabel")}
           input={
             <input
               disabled
-              className={`w-full p-2 mb-2.5 border-2 border-white box-border rounded-sm ${styles.form_control}`}
-              placeholder="Project Duration"
+              className={`w-full p-2! mb-2.5 border-2 border-white box-border rounded-sm ${styles.form_control}`}
+              placeholder={t("projectInfo.durationPlaceholder")}
               value={
                 currentProject?.ProjectDuration?.from &&
                 currentProject?.ProjectDuration?.to

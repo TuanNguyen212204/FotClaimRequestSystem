@@ -2,7 +2,7 @@ import { useWatch, useFieldArray, UseFormSetValue } from "react-hook-form";
 import { Control, UseFormRegister, FieldErrors } from "react-hook-form";
 import styles from "@pages/CreateClaim/Claim.module.css";
 import { FormData } from "@/types/claimForm.type";
-
+import { useTranslation } from "react-i18next";
 export interface ClaimTableProps {
   control: Control<FormData>;
   register: UseFormRegister<FormData>;
@@ -24,7 +24,7 @@ export default function ClaimTable({
   const currentProject = useWatch({ control, name: "currentSelectedProject" });
   const minDate = currentProject?.ProjectDuration?.from.split("T")[0] || "";
   const maxDate = currentProject?.ProjectDuration?.to.split("T")[0] || "";
-
+  const { t } = useTranslation("claim");
   const claims = useWatch({ control, name: "claims" });
   const totalHours = claims.reduce(
     (sum, claim) => sum + (claim.working_hours || 0),
@@ -32,7 +32,8 @@ export default function ClaimTable({
   );
   return (
     <div className="mb-5 box-border overflow-x-auto">
-      <h2 className="text-lg pb-1.5! mb-4!">Claim Details</h2>
+      <h2 className="text-lg pb-1.5! mb-4!">{t("claimTable.detailsTitle")}</h2>
+
       {errors.claims &&
         typeof errors.claims === "object" &&
         !Array.isArray(errors.claims) && (
@@ -50,6 +51,7 @@ export default function ClaimTable({
                   {...register(`claims.${index}.date`)}
                   min={minDate}
                   max={maxDate}
+                  disabled={!minDate || !maxDate}
                 />
               </TdWithError>
               <TdWithError
@@ -58,6 +60,7 @@ export default function ClaimTable({
                 <input
                   type="number"
                   step="0.1"
+                  disabled={!minDate || !maxDate}
                   className={styles.form_control}
                   {...register(`claims.${index}.working_hours`, {
                     valueAsNumber: true,
@@ -78,6 +81,10 @@ export default function ClaimTable({
                         e.preventDefault();
                         e.currentTarget.value = "24";
                         setValue(`claims.${index}.working_hours`, 24);
+                      } else if (value < 0) {
+                        e.preventDefault();
+                        e.currentTarget.value = "0";
+                        setValue(`claims.${index}.working_hours`, 0);
                       }
                     },
                   })}
@@ -101,7 +108,7 @@ export default function ClaimTable({
         <tfoot>
           <tr>
             <td colSpan={2} className="text-right font-bold">
-              Total Working Hours
+              {t("claimTable.totalHoursLabel")}
             </td>
             <td>{totalHours.toFixed(2)}</td>
           </tr>
@@ -109,10 +116,11 @@ export default function ClaimTable({
       </Table>
       <button
         type="button"
-        className={`${styles.btn} ${styles.btn_add}`}
+        disabled={!minDate || !maxDate}
+        className={`${styles.btn} ${styles.btn_add}  `}
         onClick={() => append({ date: minDate, working_hours: 0 })}
       >
-        Add Claim
+        {t("claimTable.addButton")}
       </button>
     </div>
   );
@@ -122,15 +130,18 @@ const Table: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <table className={styles.claim_table}>{children}</table>
 );
 
-const TableHead: React.FC = () => (
-  <thead>
-    <tr>
-      <TableHeaderCell>Date</TableHeaderCell>
-      <TableHeaderCell>Working Hours</TableHeaderCell>
-      <TableHeaderCell></TableHeaderCell>
-    </tr>
-  </thead>
-);
+const TableHead: React.FC = () => {
+  const { t } = useTranslation("claim");
+  return (
+    <thead>
+      <tr>
+        <TableHeaderCell>{t("claimTable.dateHeader")}</TableHeaderCell>
+        <TableHeaderCell>{t("claimTable.hoursHeader")}</TableHeaderCell>
+        <TableHeaderCell>{t("claimTable.actionsHeader")}</TableHeaderCell>
+      </tr>
+    </thead>
+  );
+};
 
 const TableHeaderCell: React.FC<{ children: React.ReactNode }> = ({
   children,

@@ -37,7 +37,7 @@ export default function ClaimBody({
         setValue={setValue}
       />
       {/* <AdditionalInfo register={register} /> */}
-      <ButtonGroup mode={mode} />
+      <ButtonGroup mode={mode} control={control} />
     </Card>
   );
 }

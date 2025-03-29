@@ -1,5 +1,5 @@
 .container {
-  max-width: 1440px;
+  max-width: 64rem;
   margin: 0 auto;
   padding: 20px;
   color: #333;
@@ -131,7 +131,11 @@
   font-size: 16px;
   transition: all 0.3s ease;
 }
-
+.form_control:disabled {
+  background-color: #f9f9f9;
+  color: #777;
+  cursor: not-allowed;
+}
 .form_control:hover {
   outline: none;
   border-color: #26a69a;
@@ -204,12 +208,20 @@
   transform: translateY(-2px);
   text-decoration: none;
 }
-
+.btn:hover:disabled {
+  transform: none !important;
+  cursor: not-allowed !important;
+}
 .btn_primary {
   background-color: #26a69a !important;
   color: white !important;
 }
-
+.bth_primary:disabled {
+  background-color: #ddd !important;
+  color: #aaa !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+}
 .btn_secondary {
   background-color: transparent;
   color: #777;
@@ -227,6 +239,12 @@
   display: flex;
   align-items: center;
   gap: 8px;
+}
+.btn_add:disabled {
+  background-color: #ddd !important;
+  color: #aaa !important;
+  cursor: not-allowed !important;
+  transform: none !important;
 }
 
 .btn_add:before {

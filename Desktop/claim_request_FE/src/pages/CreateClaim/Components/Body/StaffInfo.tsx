@@ -1,9 +1,10 @@
-import React, { JSX, ReactNode } from "react";
+import React, { JSX, ReactNode, useState } from "react";
 import staffInfoCss from "../../Claim.module.css";
 import Card from "../Card";
 import PopOver from "@/components/ui/PopOver";
 import { Check } from "lucide-react";
-import { useState } from "react";
+import { useTranslation } from "react-i18next";
+
 interface IStaffInfoProps {
   name: string | undefined;
   department: string | undefined;
@@ -15,33 +16,42 @@ export default function StaffInfo({
   department = "",
   staffID,
 }: IStaffInfoProps): JSX.Element {
+  const { t } = useTranslation("claim");
   const [copied, setCopied] = useState(false);
+
   const handleCopy = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     event.stopPropagation();
     navigator.clipboard.writeText(staffID);
     setCopied(true);
     setTimeout(() => setCopied(false), 4000);
   };
+
   return (
     <Card>
       <StaffContainer>
-        <StaffSection title="Staff Name">
+        <StaffSection title={t("staffInfo.nameLabel")}>
           <StaffValue isName value={name} />
         </StaffSection>
 
-        <StaffSection title="Department">
+        <StaffSection title={t("staffInfo.departmentLabel")}>
           <StaffValue value={department} />
         </StaffSection>
 
-        <StaffSection title="Staff ID">
+        <StaffSection title={t("staffInfo.staffIdLabel")}>
           <PopOver
             placement="top"
             trigger="hover"
             content={
               copied ? (
-                <Check className="transform delay-75" size={16} color="green" />
+                <>
+                  <Check
+                    className="transform delay-75 inline mr-1"
+                    size={16}
+                    color="green"
+                  />
+                </>
               ) : (
-                "Click to copy"
+                t("staffInfo.copyTooltip")
               )
             }
             style={{ padding: "0.5rem" }}

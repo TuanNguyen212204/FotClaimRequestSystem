@@ -1,0 +1,63 @@
+{
+  "title": {
+    "create": "Tạo Yêu Cầu",
+    "view": "Xem Yêu Cầu",
+    "update": "Cập Nhật Yêu Cầu"
+  },
+  "header": {
+    "preparedBy": "Chuẩn bị bởi: {{name}}",
+    "claimStatus": "Trạng thái: {{status}}"
+  },
+  "staffInfo": {
+    "nameLabel": "Tên Nhân Viên",
+    "departmentLabel": "Phòng Ban",
+    "staffIdLabel": "Mã Nhân Viên",
+    "copyTooltip": "Nhấn để sao chép",
+    "copiedTooltip": "Đã sao chép!"
+  },
+  "projectInfo": {
+    "nameLabel": "Tên Dự Án",
+    "durationLabel": "Thời Hạn Dự Án",
+    "selectPlaceholder": "Chọn Một Dự Án",
+    "durationPlaceholder": "Thời Hạn Dự Án"
+  },
+  "claimTable": {
+    "detailsTitle": "Chi Tiết Yêu Cầu",
+    "dateHeader": "Ngày",
+    "hoursHeader": "Số Giờ Làm Việc",
+    "actionsHeader": "Hành Động",
+    "removeButton": "Xóa",
+    "addButton": "Thêm Yêu Cầu",
+    "totalHoursLabel": "Tổng Số Giờ Làm Việc",
+    "errorPlaceholder": "giữ chỗ"
+  },
+  "buttons": {
+    "send": "Gửi",
+    "update": "Cập Nhật"
+  },
+  "loading": "Đang tải...",
+  "validation": {
+    "projectNameRequired": "Tên dự án là bắt buộc",
+    "startDateRequired": "Ngày bắt đầu là bắt buộc",
+    "endDateRequired": "Ngày kết thúc là bắt buộc",
+    "dateRequired": "Ngày là bắt buộc",
+    "hoursPositive": "Số giờ làm việc phải là số dương",
+    "hoursMax": "Số giờ làm việc phải nhỏ hơn 24 giờ",
+    "atLeastOneClaim": "Cần ít nhất một yêu cầu",
+    "dateNotInRange": "Tất cả ngày yêu cầu phải nằm trong thời hạn dự án",
+    "dateAlreadyChosen": "Ngày này đã được chọn",
+    "selectProjectError": "Chọn một Dự Án"
+  },
+  "toast": {
+    "selectProject": "Vui lòng chọn một dự án.",
+    "fixErrors": "Vui lòng sửa tất cả lỗi xác thực trước khi gửi.",
+    "addOneClaim": "Vui lòng thêm ít nhất một yêu cầu.",
+    "userUnavailable": "Thông tin người dùng không có sẵn.",
+    "createSuccess": "Tạo yêu cầu thành công.",
+    "createError": "Tạo yêu cầu thất bại: {{error}}",
+    "updateSuccess": "Cập nhật yêu cầu thành công.",
+    "updateError": "Cập nhật yêu cầu thất bại: {{error}}",
+    "updateRequestIdMissing": "Cần ID yêu cầu để cập nhật.",
+    "loadDataError": "Không thể tải dữ liệu. Vui lòng làm mới trang."
+  }
+}

@@ -11,6 +11,7 @@ import { fetchUserByIdAsync } from "@/redux/thunk/User/userThunk";
 import { toast } from "react-toastify";
 import { fetchProjectByID } from "@/redux/thunk/CreateClaim";
 import { FormData } from "@/types/claimForm.type";
+import { useTranslation } from "react-i18next";
 interface CreateClaimProps {
   mode: "create" | "view" | "update";
   initialValues?: FormData;
@@ -34,7 +35,7 @@ export default function CreateClaim({
     clearErrors,
     user,
   } = useCreateClaimForm({ initialValues, mode, requestID });
-
+  const { t } = useTranslation("claim");
   const dispatch = useDispatch<AppDispatch>();
   const projectList = useSelector(selectProject);
 
@@ -65,16 +66,27 @@ export default function CreateClaim({
       .then(() => dispatch(fetchProjectByID()))
       .catch((error) => {
         console.error("Failed to fetch data:", error);
-        toast.error("Failed to load data. Please refresh the page.");
+        toast.error(toast.error(t("toast.loadDataError")));
       });
   }, [dispatch]);
-
+  const getTitle = () => {
+    switch (mode) {
+      case "create":
+        return t("title.create");
+      case "view":
+        return t("title.view");
+      case "update":
+        return t("title.update");
+      default:
+        return "";
+    }
+  };
   return user ? (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Header
         prepareBy={user?.full_name}
         status={formStatus}
-        title={mode === "create" ? "Create Claim" : mode === "view" ? "View Claim" : "Update Claim"}
+        title={getTitle()}
       />
       <StaffInfo
         department={user?.department}
@@ -91,6 +103,6 @@ export default function CreateClaim({
       />
     </form>
   ) : (
-    <div>Loading...</div>
+    <div>{t("loading")}</div>
   );
 }

@@ -26,10 +26,10 @@ export const formSchema = z
   .refine(
     (data) => {
       const projectStart = new Date(
-        data.currentSelectedProject.ProjectDuration.from,
+        data.currentSelectedProject.ProjectDuration.from
       );
       const projectEnd = new Date(
-        data.currentSelectedProject.ProjectDuration.to,
+        data.currentSelectedProject.ProjectDuration.to
       );
       return data.claims.every((claim) => {
         const claimDate = new Date(claim.date);
@@ -40,7 +40,7 @@ export const formSchema = z
     {
       message: "All claim dates must be within the project's duration",
       path: ["claims"],
-    },
+    }
   )
   .superRefine((claims, ctx) => {
     const dateSet = new Set();
