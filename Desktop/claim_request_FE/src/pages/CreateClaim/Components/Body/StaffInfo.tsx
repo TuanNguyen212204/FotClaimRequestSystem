@@ -4,6 +4,8 @@ import Card from "../Card";
 import PopOver from "@/components/ui/PopOver";
 import { Check } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
+
 interface IStaffInfoProps {
   name: string | undefined;
   department: string | undefined;
@@ -15,25 +17,28 @@ export default function StaffInfo({
   department = "",
   staffID,
 }: IStaffInfoProps): JSX.Element {
+  const { t } = useTranslation("createClaim");
   const [copied, setCopied] = useState(false);
+
   const handleCopy = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     event.stopPropagation();
     navigator.clipboard.writeText(staffID);
     setCopied(true);
     setTimeout(() => setCopied(false), 4000);
   };
+
   return (
     <Card>
       <StaffContainer>
-        <StaffSection title="Staff Name">
+        <StaffSection title={t("staff_name_label")}>
           <StaffValue isName value={name} />
         </StaffSection>
 
-        <StaffSection title="Department">
+        <StaffSection title={t("department_label")}>
           <StaffValue value={department} />
         </StaffSection>
 
-        <StaffSection title="Staff ID">
+        <StaffSection title={t("staff_id_label")}>
           <PopOver
             placement="top"
             trigger="hover"
@@ -41,7 +46,7 @@ export default function StaffInfo({
               copied ? (
                 <Check className="transform delay-75" size={16} color="green" />
               ) : (
-                "Click to copy"
+                t("click_to_copy")
               )
             }
             style={{ padding: "0.5rem" }}

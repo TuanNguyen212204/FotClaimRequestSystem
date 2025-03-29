@@ -3,30 +3,25 @@ import { JSX } from "react";
 import { isClaimCreationLoading } from "@/redux/slices/Project/projectSlice";
 import { useSelector } from "react-redux";
 import { Button } from "@/components/ui/button/Button";
+import { useTranslation } from "react-i18next";
+
 interface ButtonGroupProps {
   mode: "create" | "view" | "update";
 }
+
 export default function ButtonGroup({ mode }: ButtonGroupProps): JSX.Element {
+  const { t } = useTranslation("createClaim");
   const loading = useSelector(isClaimCreationLoading);
+
   return (
     <div className={styles.actions}>
-      {/* <button type="button" className={`${styles.btn} ${styles.btn_secondary}`}>
-        Send
-      </button> */}
-      {/* <button
-        disabled={loading}
-        type="submit"
-        className={`${styles.btn} ${styles.btn_primary}`}
-      >
-        Send
-      </button> */}
       {mode === "create" && (
         <Button
           disabled={loading}
           className={`${styles.btn} ${styles.btn_primary}`}
           buttonType="submit"
         >
-          Send
+          {t("send_button")}
         </Button>
       )}
       {mode === "update" && (
@@ -35,7 +30,7 @@ export default function ButtonGroup({ mode }: ButtonGroupProps): JSX.Element {
           buttonType="submit"
           className={`${styles.btn} ${styles.btn_primary}`}
         >
-          Update
+          {t("update_button")}
         </Button>
       )}
       {mode === "view" && <></>}

@@ -12,6 +12,8 @@ import styles from "@pages/CreateClaim/Claim.module.css";
 import { fetchProjectByID } from "@/redux/thunk/CreateClaim";
 import { AppDispatch } from "@/redux";
 import { useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
+
 export interface IProjectInfoProps {
   ProjectList: TProjectInfo[];
   setValue: UseFormSetValue<FormData>;
@@ -27,9 +29,10 @@ export default function ProjectInfo({
   control,
   mode,
 }: IProjectInfoProps): JSX.Element {
+  const { t } = useTranslation("createClaim");
   const currentProject = useWatch({ control, name: "currentSelectedProject" });
-  // console.log(currentProject);
   const { errors } = useFormState({ control, name: "currentSelectedProject" });
+
   function formatDateRange(from: string, to: string): string {
     const fromDate = new Date(from);
     const toDate = new Date(to);
@@ -39,11 +42,12 @@ export default function ProjectInfo({
     const toYear = toDate.getFullYear();
     return `${fromMonth} ${fromYear} - ${toMonth} ${toYear}`;
   }
+
   return (
     <FormRow>
       <FormColumn>
         <FormGroup
-          label="Project Name"
+          label={t("project_name_label")}
           input={
             <select
               title="Projects"
@@ -66,7 +70,7 @@ export default function ProjectInfo({
               }}
             >
               <option value="" disabled>
-                Select a Project
+                {t("select_project_placeholder")}
               </option>
               {ProjectList.length > 0 &&
                 ProjectList.map((project) => (
@@ -80,36 +84,18 @@ export default function ProjectInfo({
 
         {errors.currentSelectedProject?.projectName && (
           <p className="text-red-500 text-sm p-1">
-            {
-              "Select a Project" /**
-              gu
-            */
-            }
+            {t("select_project_error")}
           </p>
         )}
       </FormColumn>
-      {/* <FormColumn>
-        <FormGroup
-          label="Role in Project"
-          input={
-            <input
-              disabled
-              placeholder="Role in Project"
-              className={`w-full p-2 mb-2.5 border-2 border-white box-border rounded-sm ${styles.form_control}`}
-              {...register("currentSelectedProject.RoleInTheProject")}
-              value={currentProject?.RoleInTheProject || ""}
-            />
-          }
-        />
-      </FormColumn> */}
       <FormColumn>
         <FormGroup
-          label="Project Duration"
+          label={t("project_duration_label")}
           input={
             <input
               disabled
               className={`w-full p-2 mb-2.5 border-2 border-white box-border rounded-sm ${styles.form_control}`}
-              placeholder="Project Duration"
+              placeholder={t("project_duration_placeholder")}
               value={
                 currentProject?.ProjectDuration?.from &&
                 currentProject?.ProjectDuration?.to
@@ -126,13 +112,16 @@ export default function ProjectInfo({
     </FormRow>
   );
 }
+
 const FormRow = ({ children }: { children: ReactNode }): JSX.Element => {
   return <div className={styles.form_row}>{children}</div>;
 };
+
 interface formGroupProps {
   label: string;
   input: JSX.Element;
 }
+
 const FormGroup = ({ label, input }: formGroupProps): JSX.Element => {
   return (
     <div className={styles.form_group}>
@@ -141,6 +130,7 @@ const FormGroup = ({ label, input }: formGroupProps): JSX.Element => {
     </div>
   );
 };
+
 const FormColumn = ({ children }: { children: ReactNode }): JSX.Element => {
   return <div className={styles.form_col}>{children}</div>;
 };
