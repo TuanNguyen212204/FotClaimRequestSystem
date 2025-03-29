@@ -1,0 +1,37 @@
+{
+  "paidclaims": {
+    "title": "Yêu Cầu Đã Thanh Toán",
+    "table": {
+      "no": "STT",
+      "userName": "Tên Người Dùng",
+      "projectName": "Tên Dự Án",
+      "projectDuration": "Thời Gian Dự Án",
+      "totalHours": "Tổng Số Giờ",
+      "action": "Thao Tác",
+      "hours": "giờ"
+    },
+    "modal": {
+      "title": "Chi Tiết Yêu Cầu",
+      "loading": "Đang tải chi tiết...",
+      "noData": "Không tìm thấy chi tiết tăng ca"
+    },
+    "user": {
+      "userId": "Mã Người Dùng"
+    },
+    "project": {
+      "projectId": "Mã Dự Án",
+      "projectName": "Tên Dự Án",
+      "timeDuration": "Thời Gian",
+      "submittedDate": "Ngày Nộp",
+      "approvedDate": "Ngày Duyệt",
+      "status": "Trạng Thái",
+      "totalHours": "Tổng Số Giờ",
+      "salaryOvertime": "Lương Tăng Ca"
+    },
+    "history": {
+      "title": "Lịch Sử",
+      "workingHours": "Số Giờ Làm",
+      "overtimeSalary": "Lương Tăng Ca"
+    }
+  }
+}

@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import styles from './CustomModal.module.css';
 import { X, Printer, MoveRight, ChevronDown } from 'lucide-react';
 import StatusTag from '../StatusTag/StatusTag';
+import { useTranslation } from 'react-i18next';
 
 interface Position {
   top?: number;
@@ -59,6 +60,7 @@ const CustomModal: React.FC<CustomModalProps> = ({
   backgroundColor = '#E9ECEF',
   data
 }) => {
+  const { t } = useTranslation('claimstatus'); // Moved to top level and removed array syntax
   const [visible, setVisible] = useState(isOpen);
   const [isHistoryExpanded, setIsHistoryExpanded] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
@@ -121,7 +123,7 @@ const CustomModal: React.FC<CustomModalProps> = ({
         <div className={styles.infoUser1}>
           <img
             src="https://i1.wp.com/upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"
-            alt="avatar"
+            alt={t('claimstatus.user.avatar')}
             className={styles.avatar}
           />
           <div className={styles.infoUser1Row}>
@@ -134,21 +136,21 @@ const CustomModal: React.FC<CustomModalProps> = ({
           </div>
         </div>
         <div className={styles.infoUser2}>
-          <p>User ID: {data.user_id}</p>
+          <p>{t('claimstatus.user.userId')}: {data.user_id}</p>
         </div>
       </div>
       <hr />
       <div className={styles.containerProject}>
         <div className={styles.projectRow}>
-          <span className={styles.projectLabel}>Project ID:</span>
+          <span className={styles.projectLabel}>{t('claimstatus.project.projectId')}:</span>
           <span className={styles.projectValue}>{data.project_id}</span>
         </div>
         <div className={styles.projectRow}>
-          <span className={styles.projectLabel}>Project Name:</span>
+          <span className={styles.projectLabel}>{t('claimstatus.project.projectName')}:</span>
           <span className={styles.projectValue}>{data.project_name}</span>
         </div>
         <div className={styles.projectRow}>
-          <span className={styles.projectLabel}>Time Duration:</span>
+          <span className={styles.projectLabel}>{t('claimstatus.project.timeDuration')}:</span>
           <span className={styles.projectValue}>
             {formatDateToMonthDay(data.start_date)}
             <MoveRight size={20} className={styles.iconMoveRight} />
@@ -156,29 +158,29 @@ const CustomModal: React.FC<CustomModalProps> = ({
           </span>
         </div>
         <div className={styles.projectRow}>
-          <span className={styles.projectLabel}>Submitted Date:</span>
+          <span className={styles.projectLabel}>{t('claimstatus.project.submittedDate')}:</span>
           <span className={styles.projectValue}>
             {formatDateToMonthDay(data.submitted_date)}
           </span>
         </div>
         <div className={styles.projectRow}>
-          <span className={styles.projectLabel}>Approved Date:</span>
+          <span className={styles.projectLabel}>{t('claimstatus.project.approvedDate')}:</span>
           <span className={styles.projectValue}>
             {formatDateToMonthDay(data.approved_date)}
           </span>
         </div>
         <div className={styles.projectRow}>
-          <span className={styles.projectLabel}>Status:</span>
+          <span className={styles.projectLabel}>{t('claimstatus.project.status')}:</span>
           <span className={styles.projectValue}>
             <StatusTag status={data.claim_status || "PAID"} />
           </span>
         </div>
         <div className={styles.projectRow}>
-          <span className={styles.projectLabel}>Total Working Hours:</span>
-          <span className={styles.projectValue}>{data.total_hours} hours</span>
+          <span className={styles.projectLabel}>{t('claimstatus.project.totalHours')}:</span>
+          <span className={styles.projectValue}>{data.total_hours} {t('claimstatus.project.hours')}</span>
         </div>
         <div className={styles.projectRow}>
-          <span className={styles.projectLabel}>Salary Overtime:</span>
+          <span className={styles.projectLabel}>{t('claimstatus.project.salaryOvertime')}:</span>
           <span className={styles.projectValue}>${data.salary_overtime}</span>
         </div>
       </div>
@@ -186,7 +188,7 @@ const CustomModal: React.FC<CustomModalProps> = ({
         {data.claim_details?.length > 0 && (
           <div className={styles.history}>
             <div className={styles.historyHeader}>
-              <p>History</p>
+              <p>{t('claimstatus.history.title')}</p>
               <ChevronDown
                 className={styles.historyIcon}
                 onClick={handleHistoryToggle}
@@ -199,13 +201,13 @@ const CustomModal: React.FC<CustomModalProps> = ({
                 </span>
                 <div className={styles.historyItemInfo}>
                   <div className={styles.historyItemRow}>
-                    <span className={styles.historyItemLabel}>Working Hours:</span>
+                    <span className={styles.historyItemLabel}>{t('claimstatus.history.workingHours')}:</span>
                     <span className={styles.historyItemValue}>
-                      {detail.working_hours} hours
+                      {detail.working_hours} {t('claimstatus.project.hours')}
                     </span>
                   </div>
                   <div className={styles.historyItemRow}>
-                    <span className={styles.historyItemLabel}>Overtime Salary:</span>
+                    <span className={styles.historyItemLabel}>{t('claimstatus.history.overtimeSalary')}:</span>
                     <span className={styles.historyItemValue}>
                       ${detail.salaryOvertimePerDay}
                     </span>
@@ -220,26 +222,18 @@ const CustomModal: React.FC<CustomModalProps> = ({
   );
 
   const modalNode = (
-    <div 
-      className={styles.overlay}
-      onClick={(e) => {
-        if (maskClosable && e.target === e.currentTarget) {
-          onClose();
-        }
-      }}
-    >
-      <div 
-        ref={modalRef} 
-        className={styles.modal} 
-        style={containerStyle}
-        onClick={e => e.stopPropagation()}
-      >
+    <div className={styles.overlay} onClick={(e) => {
+      if (maskClosable && e.target === e.currentTarget) {
+        onClose();
+      }
+    }}>
+      <div ref={modalRef} className={styles.modal} style={containerStyle} onClick={e => e.stopPropagation()}>
         <div className={styles.header}>
-          <h2>{title}</h2>
+          <h2>{t('claimstatus.modal.title')}</h2>
           <button 
             onClick={() => onClose()} 
             className={styles.closeButton}
-            aria-label="Close modal"
+            aria-label={t('claimstatus.modal.close')}
           >
             <X size={18} />
           </button>
@@ -253,19 +247,19 @@ const CustomModal: React.FC<CustomModalProps> = ({
             <button 
               onClick={onPay}
               className={styles.payButton}
-              aria-label="Pay claim"
+              aria-label={t('claimstatus.modal.payClaim')}
             >
-              Pay
+              {t('claimstatus.modal.pay')}
             </button>
           )}
           {onPrint && (
             <button 
               onClick={onPrint}
               className={styles.printButton}
-              aria-label="Print details"
+              aria-label={t('claimstatus.modal.printDetails')}
             >
               <Printer size={16} />
-              <span>Print</span>
+              <span>{t('claimstatus.modal.print')}</span>
             </button>
           )}
         </div>
