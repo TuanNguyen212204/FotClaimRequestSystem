@@ -320,7 +320,7 @@ export const PendingComponent: React.FC = () => {
       key: "salary_overtime",
       dataIndex: "salary_overtime",
       title: "Salary Overtime",
-      cell: ({ value }) => <div>{isSalaryVisible ? value : "******"}</div>,
+      cell: ({ value }) => <div>{isSalaryVisible ? value : "*****************"}</div>,
     },
     {
       key: "claim_status",

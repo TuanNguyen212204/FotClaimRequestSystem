@@ -108,7 +108,9 @@ export const ApprovedApproval: React.FC = () => {
       key: "salary_overtime",
       dataIndex: "salary_overtime",
       title: "Salary Overtime",
-      cell: ({ value }) => <div>{isSalaryVisible ? value : "******"}</div>,
+      cell: ({ value }) => (
+        <div>{isSalaryVisible ? value : "*****************"}</div>
+      ),
     },
     {
       key: "claim_status",
@@ -141,9 +143,11 @@ export const ApprovedApproval: React.FC = () => {
   return (
     <div>
       <div className={styles.container}>
-        <h1 className={styles.title}>Approved Claims</h1>
+        <h1 className={styles.title}>
+          {loading ? "Loading..." : "Approved Claims"}
+        </h1>
         <p className={styles.title2}>
-          Boom! Your claim just got the green light!"
+          {loading ? "Please wait..." : "Boom! Your claim just got the green light!"}
         </p>
       </div>
       <TableComponent

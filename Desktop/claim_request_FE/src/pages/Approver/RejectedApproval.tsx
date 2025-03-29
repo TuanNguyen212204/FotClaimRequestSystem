@@ -101,11 +101,7 @@ export const RejectedComponent: React.FC = () => {
       key: "salary",
       dataIndex: "user_salary",
       title: "Salary",
-      cell: ({ value }) => (
-        <div>
-          {isSalaryVisible ? value : "******"}
-        </div>
-      ),
+      cell: ({ value }) => <div>{isSalaryVisible ? value : "******"}</div>,
     },
     {
       key: "ot_rate",
@@ -117,9 +113,7 @@ export const RejectedComponent: React.FC = () => {
       dataIndex: "salary_overtime",
       title: "Salary Overtime",
       cell: ({ value }) => (
-        <div>
-          {isSalaryVisible ? value : "******"}
-        </div>
+        <div>{isSalaryVisible ? value : "*****************"}</div>
       ),
     },
     {
@@ -154,8 +148,12 @@ export const RejectedComponent: React.FC = () => {
   return (
     <div>
       <div className={styles.container}>
-        <h1 className={styles.title}>Rejected Claims</h1>
-        <p className={styles.title2}>Bummer, your claim got the boot.</p>
+        <h1 className={styles.title}>
+          {loading ? "Loading..." : "Rejected Claims"}
+        </h1>
+        <p className={styles.title2}>
+          {loading ? "Please wait..." : "Bummer, your claim got the boot."}
+        </p>
       </div>
       {/* <button onClick={toggleSalaryVisibility}>
         {isSalaryVisible ? "Hide Salary" : "Show Salary"}
