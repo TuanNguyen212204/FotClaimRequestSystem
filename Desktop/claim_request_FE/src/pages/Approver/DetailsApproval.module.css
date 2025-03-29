@@ -15,8 +15,8 @@
   border-radius: 8px; */
 }
 
-.emailIcon {
-
+.username {
+  font-weight: 300;
 }
 
 .email {
@@ -24,6 +24,7 @@
   padding: 10px;
   border-radius: 8px;
   background-color: #fff;
+  font-weight: 300;
 }
 
 .avatar {
@@ -101,6 +102,7 @@
 .projectLabel {
   width: 80%;
   text-align: left;
+  font-weight: 300;
 }
 
 .projectValue {
@@ -141,6 +143,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  font-weight: 300;
 }
 
 .history p {
@@ -191,4 +194,5 @@
 .historyItemValue {
   width: 70%;
   text-align: left;
+  font-weight: 300;
 }

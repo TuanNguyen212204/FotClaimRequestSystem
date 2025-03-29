@@ -136,10 +136,10 @@
   align-items: center;
   gap: 15px;
   margin-left: 15px;
-  border-radius:  10px;
+  /* border-radius:  10px;
   border: 1px solid #d1d5db;
   padding: 10px;
-  margin-right: 72.25%;
+  margin-right: 72.25%; */
 }
 
 .pagination {
