@@ -7,14 +7,30 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
+.container {
+  display: flex;
+  align-items: center;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+
 .title {
   font-size: 1.8em;
   margin-bottom: 15px;
   margin-left: 15px;
   font-weight: 600;
-  color: black;
+  color: #28A745;
   text-align: left;
 }
+
+.title2 {
+  margin-top: 25px;
+  margin-left: 5px;
+  font-size: 15px;
+  font-weight: 300;
+  opacity: 0.5;
+}
+
 
 .table_body {
   width: 100%;

@@ -60,35 +60,6 @@ export const PendingComponent: React.FC = () => {
   }>(null);
   const [selectedData, setSelectedData] = useState<DataRecord[]>([]);
 
-  // const handleSelectAll = () => {
-  //   const allChecked = checkedItems.size === dataSource.length;
-  //   if (allChecked) {
-  //     setCheckedItems(new Set());
-  //   } else {
-  //     setCheckedItems(new Set(dataSource.map((record) => record.id || "")));
-  //   }
-  // };
-
-  // const handleCheckboxChange = (requestId: string, checked: boolean) => {
-  //   setCheckedItems((prev) => {
-  //     const newCheckedItems = new Set(prev);
-  //     if (checked) {
-  //       newCheckedItems.add(requestId);
-  //     } else {
-  //       newCheckedItems.delete(requestId);
-  //     }
-  //     return newCheckedItems;
-  //   });
-  // };
-
-  // const handleGetSelectedData = () => {
-  //   const selectedClaims = dataSource.filter((record) =>
-  //     checkedItems.has(record.request_id)
-  //   );
-  //   setSelectedData(selectedClaims);
-  //   console.log("Selected claims:", selectedClaims);
-  // };
-
   const handleGetSelectedData = () => {
     if (checkboxRef.current) {
       const selected = checkboxRef.current.getSelectedData();
@@ -290,8 +261,6 @@ export const PendingComponent: React.FC = () => {
     return `${day}/${month}/${year}`;
   };
 
-
-
   const columns: Column<DataRecord>[] = [
     {
       key: "user_name",
@@ -414,23 +383,42 @@ export const PendingComponent: React.FC = () => {
 
   return (
     <div>
-      <h1 className={styles.title}>Pending Claims</h1>
+      <div className={styles.container}>
+        <h1 className={styles.title}>
+          {loading ? "Loading..." : "Pending Claims"}
+        </h1>
+        <p className={styles.title2}>
+          {loading ? "Please wait..." : "Your claims are still cooking!"}
+        </p>
+      </div>
       <div className={styles.buttonContainer}>
         <Button
           color="white"
           backgroundColor="#89AC46"
-          size="large"
+          size="small"
           style={{ borderRadius: "10px" }}
           onClick={handleApproveSelect}
+          disabled={loading}
         >
-          Approve Select Claim
+          {loading ? "..." : "Approve Select Claim"}
         </Button>
-        <Button danger size="large" onClick={handleRejectSelect} style={{ borderRadius: "10px" }}
+        <Button
+          danger
+          size="small"
+          onClick={handleRejectSelect}
+          style={{ borderRadius: "10px" }}
+          disabled={loading}
         >
-          Reject Select Claim
+          {loading ? "..." : "Reject Select Claim"}
         </Button>
-        <Button type="primary" size="large" onClick={handleReturnSelect} style={{ borderRadius: "10px" }}>
-          Return Select Claim
+        <Button
+          type="primary"
+          size="small"
+          onClick={handleReturnSelect}
+          style={{ borderRadius: "10px" }}
+          disabled={loading}
+        >
+          {loading ? "..." : "Return Select Claim"}
         </Button>
       </div>
       <TableComponent

@@ -1,9 +1,7 @@
 .container {
-  padding: 20px;
+  display: flex;
+  align-items: center;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  /* background-color: #f9fafb; */
-  border-radius: 10px;
-  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
 }
 
 .title {
@@ -11,8 +9,16 @@
   margin-bottom: 15px;
   margin-left: 15px;
   font-weight: 600;
-  color: black;
+  color: #FFC107;
   text-align: left;
+}
+
+.title2 {
+  margin-top: 25px;
+  margin-left: 5px;
+  font-size: 15px;
+  font-weight: 300;
+  opacity: 0.5;
 }
 
 .breadcrumb {
@@ -128,9 +134,12 @@
 .buttonContainer {
   display: flex;
   align-items: center;
-  /* justify-content: space-between; */
   gap: 15px;
   margin-left: 15px;
+  border-radius:  10px;
+  border: 1px solid #d1d5db;
+  padding: 10px;
+  margin-right: 72.25%;
 }
 
 .pagination {

@@ -153,7 +153,10 @@ export const RejectedComponent: React.FC = () => {
 
   return (
     <div>
-      <h1 className={styles.title}>Rejected Claims</h1>
+      <div className={styles.container}>
+        <h1 className={styles.title}>Rejected Claims</h1>
+        <p className={styles.title2}>Bummer, your claim got the boot.</p>
+      </div>
       {/* <button onClick={toggleSalaryVisibility}>
         {isSalaryVisible ? "Hide Salary" : "Show Salary"}
       </button> */}

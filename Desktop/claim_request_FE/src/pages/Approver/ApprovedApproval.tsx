@@ -140,7 +140,12 @@ export const ApprovedApproval: React.FC = () => {
 
   return (
     <div>
-      <h1 className={styles.title}>Approved Claims</h1>
+      <div className={styles.container}>
+        <h1 className={styles.title}>Approved Claims</h1>
+        <p className={styles.title2}>
+          Boom! Your claim just got the green light!"
+        </p>
+      </div>
       <TableComponent
         columns={columns}
         dataSource={dataSource}
