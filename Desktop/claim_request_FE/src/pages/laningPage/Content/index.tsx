@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-
+import { GlowingEffect } from "../Components/glowing-effect";
 import { FileText, CheckCircle2, BellRing } from "lucide-react";
 type FeatureCardProps = {
   title: string;
@@ -16,7 +16,14 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
   altText,
 }) => {
   return (
-    <div className="overflow-hidden rounded-xl bg-[#3a3f5e] text-left shadow-md transition duration-300 ease-in-out hover:-translate-y-2 hover:shadow-xl">
+    <div className="relative bg-[#3a3f5e] text-left shadow-md transition duration-300 ease-in-out hover:-translate-y-2 hover:shadow-xl">
+      <GlowingEffect
+        spread={60}
+        glow={true}
+        disabled={false}
+        proximity={74}
+        inactiveZone={0.01}
+      />
       <div className="flex h-[200px] items-center justify-center bg-white p-6">
         <img
           src={imageSrc}
