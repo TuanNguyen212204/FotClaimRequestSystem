@@ -49,17 +49,17 @@ export default function Herro() {
       }
     };
 
-    const navLinks = document.querySelectorAll(".nav-link");
-    const scrollIndicatorLink = document.querySelector(
+    const navLinks = document.querySelectorAll(".nav-link"); //lay all nav links class
+    const scrollIndicatorLink = document.querySelector( //svg 
       ".hero-scroll-indicator a",
     );
 
     navLinks.forEach((link) => {
-      link.addEventListener("click", handleNavLinkClick);
+      link.addEventListener("click", handleNavLinkClick); // add event listener cho tất cả nav link
     });
 
     if (scrollIndicatorLink) {
-      scrollIndicatorLink.addEventListener("click", handleScrollIndicatorClick);
+      scrollIndicatorLink.addEventListener("click", handleScrollIndicatorClick); // nhu tren
     }
 
     return () => {
@@ -85,7 +85,7 @@ export default function Herro() {
     >
       <div className="absolute inset-0 z-10 bg-black/50"></div>
 
-      <div className="relative z-20 flex h-full w-full flex-col items-center p-4 text-center">
+      <div className="relative z-20 flex h-full w-full flex-col items-center text-center">
         <div className="w-full flex-shrink-0">
           <TopBar />
         </div>

@@ -11,7 +11,7 @@ function NavLink({
     <li className="m-0 flex items-center">
       <a
         href={href}
-        className="group block px-3 py-2 text-2xl font-bold text-white no-underline decoration-4 underline-offset-4"
+        className="nav-link group block px-3 py-2 text-2xl font-bold text-white no-underline decoration-4 underline-offset-4"
       >
         {children}
         <span className="block h-[5px] max-w-0 bg-white transition-all duration-500 group-hover:max-w-full"></span>
