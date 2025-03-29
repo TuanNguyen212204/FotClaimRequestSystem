@@ -7,6 +7,7 @@ import { fetchPaidClaimsAsync } from "../../redux/slices/Claim/paidClaimsSlice";
 import { AppDispatch } from "@/redux";
 import CustomModal from "@/components/ui/CustomModal/CustomModal";
 import StatusTag from "@/components/ui/StatusTag/StatusTag";
+import { useTranslation } from 'react-i18next';
 
 const formatDateToDDMMYYYY = (date: string) => {
   const dateObj = new Date(date);
@@ -24,6 +25,7 @@ const formatDateToMonthDay = (date: string) => {
 };
 
 const PaidClaims: React.FC = () => {
+  const { t } = useTranslation('paidclaims');
   const dispatch = useDispatch<AppDispatch>();
   const { data: claims, loading, totalPages } = useSelector((state: any) => state.paidClaims);
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -49,35 +51,35 @@ const PaidClaims: React.FC = () => {
     {
       key: "index",
       dataIndex: "index",
-      title: "No",
+      title: t('paidclaims.table.no'),
       width: "80px",
       cell: ({ value }) => String(value).padStart(3, '0')
     },
     {
       key: "full_name",
       dataIndex: "full_name",
-      title: "User Name"
+      title: t('paidclaims.table.userName')
     },
     {
       key: "project_name",
       dataIndex: "project_name",
-      title: "Project Name"
+      title: t('paidclaims.table.projectName')
     },
     {
       key: "time_duration",
       dataIndex: "time_duration",
-      title: "Project Duration"
+      title: t('paidclaims.table.projectDuration')
     },
     {
       key: "total_hours",
       dataIndex: "total_hours",
-      title: "Total Working Hours",
-      cell: ({ value }) => `${value} hours`
+      title: t('paidclaims.table.totalHours'),
+      cell: ({ value }) => `${value} ${t('paidclaims.table.hours')}`
     },
     {
       key: "action",
       dataIndex: "request_id",
-      title: "Action",
+      title: t('paidclaims.table.action'),
       cell: ({ value }) => (
         <EyeIcon
           className={styles.icon}
@@ -98,7 +100,7 @@ const PaidClaims: React.FC = () => {
 
   const renderClaimDetail = () => {
     if (!selectedClaim?.claim_details?.length) {
-      return <div className={styles.loading}>No overtime details found</div>;
+      return <div className={styles.loading}>{t('paidclaims.modal.noData')}</div>;
     }
 
     return (
@@ -120,13 +122,13 @@ const PaidClaims: React.FC = () => {
             </div>
           </div>
           <div className={styles.infoUser2}>
-            <p>User ID: {selectedClaim.user_id}</p>
+            <p>{t('paidclaims.user.userId')}: {selectedClaim.user_id}</p>
           </div>
         </div>
         <hr />
         <div className={styles.containerProject}>
           <div className={styles.projectRow}>
-            <span className={styles.projectLabel}>Project ID:</span>
+            <span className={styles.projectLabel}>{t('paidclaims.project.projectId')}:</span>
             <span className={styles.projectValue}>{selectedClaim.project_id}</span>
           </div>
           <div className={styles.projectRow}>
@@ -204,7 +206,7 @@ const PaidClaims: React.FC = () => {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h1 className={styles.title}>Paid Claims</h1>
+        <h1 className={styles.title}>{t('paidclaims.title')}</h1>
       </div>
 
       <TableComponent
@@ -214,14 +216,14 @@ const PaidClaims: React.FC = () => {
         pagination={true}
         pageLength={limit}
         totalPage={totalPages}
-        name="Paid Claims"
+        name={t('paidclaims.title')}
         onPageChange={setCurrentPage}
       />
 
       <CustomModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
-        title="Claim Detail"
+        title={t('paidclaims.modal.title')}
         onPrint={() => window.print()}
         width={600}
         height="95%"
@@ -231,7 +233,7 @@ const PaidClaims: React.FC = () => {
         data={selectedClaim}
       >
         {loading ? (
-          <div className={styles.loading}>Loading claim details...</div>
+          <div className={styles.loading}>{t('paidclaims.modal.loading')}</div>
         ) : (
           renderClaimDetail()
         )}

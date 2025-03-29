@@ -1,0 +1,37 @@
+{
+  "paidclaims": {
+    "title": "Paid Claims",
+    "table": {
+      "no": "No",
+      "userName": "User Name",
+      "projectName": "Project Name",
+      "projectDuration": "Project Duration",
+      "totalHours": "Total Working Hours",
+      "action": "Action",
+      "hours": "hours"
+    },
+    "modal": {
+      "title": "Claim Detail",
+      "loading": "Loading claim details...",
+      "noData": "No overtime details found"
+    },
+    "user": {
+      "userId": "User ID"
+    },
+    "project": {
+      "projectId": "Project ID",
+      "projectName": "Project Name",
+      "timeDuration": "Time Duration",
+      "submittedDate": "Submitted Date",
+      "approvedDate": "Approved Date",
+      "status": "Status",
+      "totalHours": "Total Working Hours",
+      "salaryOvertime": "Salary Overtime"
+    },
+    "history": {
+      "title": "History",
+      "workingHours": "Working Hours",
+      "overtimeSalary": "Overtime Salary"
+    }
+  }
+}
