@@ -50,7 +50,8 @@ export default function Herro() {
     };
 
     const navLinks = document.querySelectorAll(".nav-link"); //lay all nav links class
-    const scrollIndicatorLink = document.querySelector( //svg 
+    const scrollIndicatorLink = document.querySelector(
+      //svg
       ".hero-scroll-indicator a",
     );
 

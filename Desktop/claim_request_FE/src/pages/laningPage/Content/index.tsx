@@ -1,5 +1,7 @@
 import React from "react";
+import { motion } from "framer-motion";
 
+import { FileText, CheckCircle2, BellRing } from "lucide-react";
 type FeatureCardProps = {
   title: string;
   description: string;
@@ -117,6 +119,105 @@ export default function Content() {
           </div>
         </div>
       </section>
+      <section
+        id="how-it-works"
+        className="bg-gray-800 py-16 text-center text-white"
+      >
+        <div className="container mx-auto px-4">
+          <h2 className="mb-4 text-3xl font-bold md:text-4xl">
+            How ClaimEasy Works
+          </h2>
+          <p className="mx-auto mb-12 max-w-2xl text-lg text-gray-300">
+            Get your overtime claims submitted and approved in just a few simple
+            steps.
+          </p>
+
+          <div className="mt-12 flex flex-col items-center justify-around gap-8 md:flex-row md:items-start">
+            <div className="w-full max-w-md p-6 text-center md:max-w-[320px] md:min-w-[250px] md:flex-1">
+              <div className="mb-6 inline-flex h-[70px] w-[70px] items-center justify-center rounded-full bg-indigo-600">
+                <FileText className="h-[35px] w-[35px] text-white" />
+              </div>
+              <h3 className="mb-3 text-xl font-bold">1. Submit Claim</h3>
+              <p className="text-base leading-relaxed text-gray-300">
+                Employees easily fill out a simple form with overtime details
+                and submit it instantly.
+              </p>
+            </div>
+
+            <div className="w-full max-w-md p-6 text-center md:max-w-[320px] md:min-w-[250px] md:flex-1">
+              <div className="mb-6 inline-flex h-[70px] w-[70px] items-center justify-center rounded-full bg-indigo-600">
+                <CheckCircle2 className="h-[35px] w-[35px] text-white" />
+              </div>
+              <h3 className="mb-3 text-xl font-bold">2. Manager Approval</h3>
+              <p className="text-base leading-relaxed text-gray-300">
+                Managers get notified, review the details, and can approve or
+                comment with a single click.
+              </p>
+            </div>
+
+            <div className="w-full max-w-md p-6 text-center md:max-w-[320px] md:min-w-[250px] md:flex-1">
+              <div className="mb-6 inline-flex h-[70px] w-[70px] items-center justify-center rounded-full bg-indigo-600">
+                <BellRing className="h-[35px] w-[35px] text-white" />
+              </div>
+              <h3 className="mb-3 text-xl font-bold">3. Track & Get Paid</h3>
+              <p className="text-base leading-relaxed text-gray-300">
+                Everyone stays informed with real-time status tracking and
+                automated notifications. Approved claims proceed smoothly.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="bg-[#252937] py-12 text-center align-middle text-white md:py-16">
+        <div className="container mx-auto px-4">
+          <h2 className="mb-4 text-2xl font-bold md:text-3xl">
+            Built With Leading Technologies
+          </h2>
+          <p className="mx-auto mb-10 max-w-xl text-base text-gray-300 md:text-lg">
+            Leveraging modern tools to deliver a reliable and efficient
+            experience.
+          </p>
+
+          <Marquee />
+        </div>
+      </section>
     </>
   );
 }
+
+const logos = [
+  "https://cdn.worldvectorlogo.com/logos/react-2.svg",
+  "https://cdn.worldvectorlogo.com/logos/tailwindcss.svg",
+  "https://cdn.worldvectorlogo.com/logos/framer-motion.svg",
+  "https://cdn.worldvectorlogo.com/logos/vitejs.svg",
+  "https://cdn.worldvectorlogo.com/logos/typescript.svg",
+  "https://cdn.worldvectorlogo.com/logos/nodejs-icon.svg",
+];
+
+const Marquee = () => {
+  const realLogos = Array(4).fill(logos).flat(); // 24 logos b vi 6 logos * 4 times
+
+  return (
+    <div className="overflow-hidden py-4">
+      <motion.div
+        className="flex gap-x-16"
+        initial={{ x: "0%" }}
+        animate={{ x: "-100%" }}
+        transition={{
+          ease: "linear",
+          duration: 25,
+          repeat: Infinity,
+        }}
+      >
+        {realLogos.map((logo, index) => (
+          <img
+            key={index}
+            src={logo}
+            alt={`Tech logo ${index + 1}`}
+            className="sm:h12 h-16 w-auto"
+          />
+        ))}
+      </motion.div>
+    </div>
+  );
+};
