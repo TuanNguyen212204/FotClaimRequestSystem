@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Chart } from "react-google-charts";
 import httpClient from "@/constant/apiInstance";
+import styles from "./OTChart.module.css"; 
 
 const OTChart: React.FC = () => {
   const [chartData, setChartData] = useState<[string, number][]>([]);
@@ -34,7 +35,7 @@ const OTChart: React.FC = () => {
   if (error) return <p>Error: {error}</p>;
 
   return (
-    <div style={{ width: "100%", height: "400px" }}>
+    <div className={styles.chartContainer}>
       <Chart
         chartType="ColumnChart"
         width="100%"
@@ -45,8 +46,17 @@ const OTChart: React.FC = () => {
           legend: { position: "none" },
           chartArea: { width: "80%", height: "70%" },
           backgroundColor: "transparent",
-          hAxis: { title: "Project Name" },
-          vAxis: { title: "Claim Count" },
+          hAxis: { 
+            title: "Project Name",
+            gridlines: { color: "transparent" }, 
+            textStyle: { color: "#333" }, 
+          },
+          vAxis: { 
+            title: "Claim Count",
+            baselineColor: "#333333", 
+            gridlines: { color: "transparent" }, 
+            textStyle: { color: "#333" }, 
+          },
           colors: ["#233754"],
         }}
       />

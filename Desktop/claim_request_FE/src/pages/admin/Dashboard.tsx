@@ -203,7 +203,7 @@ const Dashboard = () => {
     <div className={styles.container}>
       <DashboardHeader />
       <div className="grid grid-cols-2 gap-3">
-        <div className="grid grid-cols-2 grid-rows-2 gap-3">
+        <div className="grid grid-cols-2 grid-rows-2 gap-5">
           <SummaryCard 
             title="Total Claims" 
             totalvalue={totalClaim?.totalClaims ?? 0}
@@ -256,12 +256,14 @@ const Dashboard = () => {
           />
         </div>
       </div>
-      <div className={styles.chartOT} >
+      
+      <div className="grid grid-cols-3 gap-50">
+        <div className={`col-span-1 ${styles.chartOT}`}>
           <OTChart />
-      </div>
-
-      <div>
-        <ClaimChart />
+        </div>
+        <div className="col-span-2">
+          <ClaimChart />
+        </div>
       </div>
 
     </div>

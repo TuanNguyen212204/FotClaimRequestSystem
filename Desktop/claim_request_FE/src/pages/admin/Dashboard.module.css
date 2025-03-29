@@ -30,7 +30,9 @@
   }
   
   .chartOT{
-    margin-top: 40px;
+    width: 480px;
+    height: 400px;
+    margin-top: 20px;
     margin-bottom: 40px;
     background-color: white; 
     border-radius: 12px; 

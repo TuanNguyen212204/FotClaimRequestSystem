@@ -4,6 +4,8 @@
     border-radius: 0.75rem;
     border: 1px solid #ddd;
     box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    width: 635px;
   }
   
   .chartTitle {
@@ -17,7 +19,6 @@
     display: flex;
     justify-content: center;
     gap: 1rem;
-    margin-top: 1rem; /* Đẩy xuống dưới chart */
   }  
   
   .legendItem {

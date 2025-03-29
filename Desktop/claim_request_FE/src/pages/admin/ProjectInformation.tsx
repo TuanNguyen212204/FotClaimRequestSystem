@@ -22,6 +22,7 @@ import { Trash2, FilePen } from "lucide-react";
 import { confirmModal } from "@/components/ui/modal/Modal";
 import { toast } from "react-toastify";
 import { ArrowDown, ArrowUp } from "lucide-react";
+import FilterStatus from "./FilterStatus";
 
 const ProjectInformation: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -249,6 +250,7 @@ const ProjectInformation: React.FC = () => {
         </div>
       </div>
 
+      {/* <FilterStatus /> */}
 
       <TableComponent
         // ref={tableRef as any}

@@ -52,15 +52,14 @@ const ClaimChart = () => {
 
   return (
     <div className={styles.chartContainer}>
-      <p className={styles.chartTitle}>Claim Status Overview</p>
       <Chart
         chartType="ColumnChart"
         width="100%"
         height="400px"
         data={getFilteredData()}
         options={{
+          title: "Claim Status Overview",
           chartArea: { width: "70%" },
-          // hAxis: { title: "Months", minValue: 0 },
           vAxis: { title: "Claims", minValue: 0 },
           legend: { position: "none" }, 
           colors: colors.filter((_, i) => visibleSeries[statuses[i]]),
