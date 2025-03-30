@@ -31,7 +31,7 @@
   
   .chartOT{
     width: 480px;
-    height: 400px;
+    height: 433px;
     margin-top: 20px;
     margin-bottom: 40px;
     background-color: white; 
@@ -40,3 +40,18 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
     border: 1px solid #e0e0e0; 
   }
+
+  .gridContainer {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+  }
+  
+  .chartOT {
+    grid-column: span 1;
+  }
+  
+  .claimChart {
+    grid-column: span 2;
+  }
+  
