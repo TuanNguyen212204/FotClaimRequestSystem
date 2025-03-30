@@ -22,6 +22,9 @@ import {
 } from "lucide-react";
 import { MdOutlinePendingActions, MdPaid } from "react-icons/md";
 import { FaCheck } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
+
+//       setSelectedClaim(PATH.userInfo as string);
 
 export const PUBLIC_ROUTE: RouteConfig[] = [
   {

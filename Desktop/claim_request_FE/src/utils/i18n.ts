@@ -14,8 +14,15 @@ import approvedClaimEn from "../locales/en/approvedClaim.json";
 import approvedClaimVi from "../locales/vi/approvedClaim.json";
 import pendingClaimEn from "../locales/en/pendingClaim.json";
 import pendingClaimVi from "../locales/vi/pendingClaim.json";
+import financeEn from "../locales/en/finance.json";
+import financeVn from "../locales/vi/finance.json";
+import approvedetailEn from "../locales/en/approvedetail.json";
+import approvedetailVi from "../locales/vi/approvedetail.json";
+import paidclaimsEn from "../locales/en/paidclaims.json";
+import paidclaimsVi from "../locales/vi/paidclaims.json";
+import claimstatusEn from "../locales/en/claimstatus.json";
+import claimstatusVi from "../locales/vi/claimstatus.json";
 
-// Khởi tạo i18n
 i18n.use(initReactI18next).init({
   resources: {
     en: {
@@ -25,6 +32,10 @@ i18n.use(initReactI18next).init({
       userClaims: userClaimsEn,
       approvedClaim: approvedClaimEn,
       pendingClaim: pendingClaimEn,
+      finance: financeEn,
+      approvedetail: approvedetailEn,
+      paidclaims: paidclaimsEn,
+      claimstatus: claimstatusEn,
     },
     vi: {
       header: headerVn,
@@ -33,9 +44,13 @@ i18n.use(initReactI18next).init({
       userClaims: userClaimsVi,
       approvedClaim: approvedClaimVi,
       pendingClaim: pendingClaimVi,
+      finance: financeVn,
+      approvedetail: approvedetailVi,
+      paidclaims: paidclaimsVi,
+      claimstatus: claimstatusVi,
     },
   },
-  lng: "en", // Ngôn ngữ mặc định
+  lng: "en",
   fallbackLng: "vi",
   ns: [
     "header",
@@ -44,9 +59,19 @@ i18n.use(initReactI18next).init({
     "userClaims",
     "approvedClaim",
     "pendingClaim",
+    "finance",
+    "approvedetail",
+    "paidclaims",
+    "claimstatus",
   ],
   defaultNS: "header",
   debug: true,
+  interpolation: {
+    escapeValue: false,
+  },
+  react: {
+    useSuspense: false,
+  },
 });
 
 export default i18n;
