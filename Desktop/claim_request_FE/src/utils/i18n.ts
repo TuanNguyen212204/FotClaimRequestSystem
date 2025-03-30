@@ -22,6 +22,10 @@ import paidclaimsEn from "../locales/en/paidclaims.json";
 import paidclaimsVi from "../locales/vi/paidclaims.json";
 import claimstatusEn from "../locales/en/claimstatus.json";
 import claimstatusVi from "../locales/vi/claimstatus.json";
+import draftClaimEn from "../locales/en/draftClaim.json";
+import draftClaimVn from "../locales/vi/draftClaim.json";
+import rejectedClaimEn from "../locales/en/rejectedClaim.json";
+import rejectedClaimVn from "../locales/vi/rejectedClaim.json";
 
 i18n.use(initReactI18next).init({
   resources: {
@@ -36,6 +40,8 @@ i18n.use(initReactI18next).init({
       approvedetail: approvedetailEn,
       paidclaims: paidclaimsEn,
       claimstatus: claimstatusEn,
+      draftClaim: draftClaimEn,
+      rejectedClaim: rejectedClaimEn,
     },
     vi: {
       header: headerVn,
@@ -48,6 +54,8 @@ i18n.use(initReactI18next).init({
       approvedetail: approvedetailVi,
       paidclaims: paidclaimsVi,
       claimstatus: claimstatusVi,
+      draftClaim: draftClaimVn,
+      rejectedClaim: rejectedClaimVn,
     },
   },
   lng: "en",
