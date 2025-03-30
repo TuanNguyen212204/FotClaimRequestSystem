@@ -16,6 +16,8 @@ import claimstatusEn from "../locales/en/claimstatus.json";
 import claimstatusVi from "../locales/vi/claimstatus.json";
 import ProjectInformationEn from "@/locales/en/admin/projectInformation.json";
 import ProjectInformationVi from "@/locales/vi/admin/projectInformation.json";
+import AllUserInformationEn from "@/locales/en/admin/allUserInformation.json";
+import AllUserInformationVi from "@/locales/vi/admin/allUserInformation.json";
 
 i18n.use(initReactI18next).init({
   resources: {
@@ -27,6 +29,7 @@ i18n.use(initReactI18next).init({
       paidclaims: paidclaimsEn,
       claimstatus: claimstatusEn,
       projectInformation: ProjectInformationEn,
+      allUserInformation: AllUserInformationEn,
     },
     vi: {
       header: headerVn,
@@ -36,6 +39,7 @@ i18n.use(initReactI18next).init({
       paidclaims: paidclaimsVi,
       claimstatus: claimstatusVi,
       projectInformation: ProjectInformationVi,
+      allUserInformation: AllUserInformationVi,
     },
   },
   lng: "en",
@@ -48,6 +52,7 @@ i18n.use(initReactI18next).init({
     "paidclaims",
     "claimstatus",
     "projectInformation",
+    "allUserInformation",
   ],
   defaultNS: "header",
   debug: true,
