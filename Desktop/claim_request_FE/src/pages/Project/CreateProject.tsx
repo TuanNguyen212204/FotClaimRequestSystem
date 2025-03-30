@@ -8,14 +8,19 @@ import httpClient from "@/constant/apiInstance";
 import { Project } from "@/types/Project";
 import { toast } from "react-toastify";
 import styles from "./CreateProject.module.css";
+import { useTranslation } from "react-i18next";
 Modal.setAppElement("#root");
 interface CreateProjectProps {
   openModal: boolean;
   setOpenModal: (value: boolean) => void;
 }
 
-export const CreateProject: React.FC<CreateProjectProps> = ({ openModal, setOpenModal }) => {
+export const CreateProject: React.FC<CreateProjectProps> = ({
+  openModal,
+  setOpenModal,
+}) => {
   const navigate = useNavigate();
+  const { t } = useTranslation("projectInformation");
   const {
     register,
     handleSubmit,
@@ -50,8 +55,8 @@ export const CreateProject: React.FC<CreateProjectProps> = ({ openModal, setOpen
   const [isClosing, setIsClosing] = useState(false);
 
   const handleClose = () => {
-    setIsClosing(true); 
-    setTimeout(() => setOpenModal(false), 300); 
+    setIsClosing(true);
+    setTimeout(() => setOpenModal(false), 300);
   };
 
   useEffect(() => {
@@ -122,27 +127,42 @@ export const CreateProject: React.FC<CreateProjectProps> = ({ openModal, setOpen
   }, [projectName]);
 
   return (
-    <Modal isOpen={openModal} onRequestClose={() => setOpenModal(false)} className={styles.modal} overlayClassName={styles.overlay}>
+    <Modal
+      isOpen={openModal}
+      onRequestClose={() => setOpenModal(false)}
+      className={styles.modal}
+      overlayClassName={styles.overlay}
+    >
       <div className="p-6 bg-white rounded-lg shadow-lg max-w-lg mx-auto relative">
-      <button 
-        onClick={() => {
-          toast.info("Cancel Create");
-          setOpenModal(false);
-        }} 
-        className={`${styles.close_button} absolute top-4 right-4`}
-      >
-        <X />
-      </button>
+        <button
+          onClick={() => {
+            toast.info("Cancel Create");
+            setOpenModal(false);
+          }}
+          className={`${styles.close_button} absolute top-4 right-4`}
+        >
+          <X />
+        </button>
 
-        <h1 className="text-2xl font-bold text-gray-700 mb-4 text-center">Create Project</h1>
+        <h1 className="text-2xl font-bold text-gray-700 mb-4 text-center">
+          Create Project
+        </h1>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700">Project ID</label>
-            <input 
-              type="text" 
-              placeholder="Pxxx" 
-              {...register("project_id", { required: "Project ID is required", pattern: { value: /^P\d{3}$/, message: "Invalid format (Pxxx)" }})} 
-              className="w-full p-2 border border-gray-300 rounded-md" 
+            <label className="block text-sm font-medium text-gray-700">
+              {t("projectInformation.createProject.projectID")}
+            </label>
+            <input
+              type="text"
+              placeholder="Pxxx"
+              {...register("project_id", {
+                required: t("projectInformation.validation.projectID"),
+                pattern: {
+                  value: /^P\d{3}$/,
+                  message: "Invalid format (Pxxx)",
+                },
+              })}
+              className="w-full p-2 border border-gray-300 rounded-md"
             />
             {checkingId && (
               <p className="text-blue-500 text-sm">Checking Project ID...</p>
@@ -153,13 +173,17 @@ export const CreateProject: React.FC<CreateProjectProps> = ({ openModal, setOpen
               </p>
             )}
           </div>
-  
+
           <div>
-            <label className="block text-sm font-medium text-gray-700">Project Name</label>
-            <input 
-              type="text" 
-              {...register("project_name", { required: "Project Name is required" })} 
-              className="w-full p-2 border border-gray-300 rounded-md" 
+            <label className="block text-sm font-medium text-gray-700">
+              {t("projectInformation.createProject.projectName")}
+            </label>
+            <input
+              type="text"
+              {...register("project_name", {
+                required: t("projectInformation.validation.projectName"),
+              })}
+              className="w-full p-2 border border-gray-300 rounded-md"
             />
             {checkingName && (
               <p className="text-blue-500 text-sm">Checking Project Name...</p>
@@ -170,13 +194,17 @@ export const CreateProject: React.FC<CreateProjectProps> = ({ openModal, setOpen
               </p>
             )}
           </div>
-  
+
           <div>
-            <label className="block text-sm font-medium text-gray-700">Start Date</label>
-            <input 
-              type="date" 
-              {...register("start_date", { required: "Start Date is required" })} 
-              className="w-full p-2 border border-gray-300 rounded-md" 
+            <label className="block text-sm font-medium text-gray-700">
+              {t("projectInformation.createProject.startDate")}
+            </label>
+            <input
+              type="date"
+              {...register("start_date", {
+                required: t("projectInformation.validation.startDate"),
+              })}
+              className="w-full p-2 border border-gray-300 rounded-md"
             />
             {errors.start_date && (
               <p className="text-red-500 text-sm">
@@ -184,34 +212,56 @@ export const CreateProject: React.FC<CreateProjectProps> = ({ openModal, setOpen
               </p>
             )}
           </div>
-  
+
           <div>
-            <label className="block text-sm font-medium text-gray-700">End Date</label>
-            <input 
-              type="date" 
-              {...register("end_date", { required: "End Date is required" })} 
-              className="w-full p-2 border border-gray-300 rounded-md" 
+            <label className="block text-sm font-medium text-gray-700">
+              {t("projectInformation.createProject.endDate")}
+            </label>
+            <input
+              type="date"
+              {...register("end_date", {
+                required: t("projectInformation.validation.endDate"),
+              })}
+              className="w-full p-2 border border-gray-300 rounded-md"
             />
             {errors.end_date && (
               <p className="text-red-500 text-sm">{errors.end_date.message}</p>
             )}
           </div>
-  
+
           <div>
-            <label className="block text-sm font-medium text-gray-700">Project Status</label>
-            <select 
-              {...register("project_status", { required: "Project Status is required" })} 
+            <label className="block text-sm font-medium text-gray-700">
+              {t("projectInformation.createProject.projectStatus")}
+            </label>
+            <select
+              {...register("project_status", {
+                required: t("projectInformation.validation.projectStatus"),
+              })}
               className="w-full p-2 border border-gray-300 rounded-md"
             >
-              <option value="">Select Status</option>
-              <option value="1">In Progress</option>
-              <option value="2">Completed</option>
+              <option value="">
+                {t("projectInformation.createProject.selectStatus")}
+              </option>
+              <option value="1">
+                {t("projectInformation.createProject.inProgress")}
+              </option>
+              <option value="2">
+                {t("projectInformation.createProject.completed")}
+              </option>
             </select>
-            {errors.project_status && <p className="text-red-500 text-sm">{errors.project_status.message}</p>}
+            {errors.project_status && (
+              <p className="text-red-500 text-sm">
+                {errors.project_status.message}
+              </p>
+            )}
           </div>
-  
+
           <div className="flex justify-end space-x-2">
-            <button type="submit" className={styles.update_button} disabled={checkingId}>
+            <button
+              type="submit"
+              className={styles.update_button}
+              disabled={checkingId}
+            >
               {checkingId ? "Validating..." : "Create"}
             </button>
           </div>

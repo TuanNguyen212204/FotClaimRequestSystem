@@ -64,16 +64,16 @@ function LoginForm() {
         }
         const role_id = localStorage.getItem("role_id");
         if (role_id === "1") {
-          localStorage.setItem("selectedClaim", "usersetting");
+          localStorage.setItem("selectedClaim", "	/user-information");
           navigate(`${adminFirstPage}`);
         } else if (role_id === "2") {
-          localStorage.setItem("selectedClaim", "pendingClaim");
+          localStorage.setItem("selectedClaim", "/pending-claim");
           navigate(`${approverFirstPage}`);
         } else if (role_id === "3") {
-          localStorage.setItem("selectedClaim", "approvedFinance");
+          localStorage.setItem("selectedClaim", "/finance/approved");
           navigate(`${financeFirstPage}`);
         } else if (role_id === "4") {
-          localStorage.setItem("selectedClaim", "all");
+          localStorage.setItem("selectedClaim", "/my-claims");
           navigate(`${claimerFirstPage}`);
         } else {
           toast.error("Login failed");

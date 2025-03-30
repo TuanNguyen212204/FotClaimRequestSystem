@@ -22,7 +22,7 @@ import { Trash2, FilePen } from "lucide-react";
 import { confirmModal } from "@/components/ui/modal/Modal";
 import { toast } from "react-toastify";
 import { ArrowDown, ArrowUp } from "lucide-react";
-import FilterStatus from "./FilterStatus";
+import { useTranslation } from "react-i18next";
 
 const ProjectInformation: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -37,6 +37,7 @@ const ProjectInformation: React.FC = () => {
   const [selectedStatus, setSelectedStatus] = useState<string>("All");
   const [UpdateOpen, setUpdateOpen] = useState(false);
   console.log("Dữ liệu lấy từ Redux:", project);
+  const { t } = useTranslation("projectInformation");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -67,7 +68,6 @@ const ProjectInformation: React.FC = () => {
   useEffect(() => {
     console.log("Current project state:", project);
   }, [project]);
-
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -145,14 +145,30 @@ const ProjectInformation: React.FC = () => {
   };
 
   const columns: Column<Project>[] = [
-    { key: "projectID", dataIndex: "projectID", title: "Project ID" },
-    { key: "projectName", dataIndex: "projectName", title: "Project Name" },
-    { key: "startDate", dataIndex: "startDate", title: "Start Date" },
-    { key: "endDate", dataIndex: "endDate", title: "End Date" },
+    {
+      key: "projectID",
+      dataIndex: "projectID",
+      title: t("projectInformation.table.projectID"),
+    },
+    {
+      key: "projectName",
+      dataIndex: "projectName",
+      title: t("projectInformation.table.projectName"),
+    },
+    {
+      key: "startDate",
+      dataIndex: "startDate",
+      title: t("projectInformation.table.startDate"),
+    },
+    {
+      key: "endDate",
+      dataIndex: "endDate",
+      title: t("projectInformation.table.endDate"),
+    },
     {
       key: "projectStatus",
       dataIndex: "projectStatus",
-      title: "Status",
+      title: t("projectInformation.table.status"),
       cell: ({ value }) => (
         <span
           className={`${styles.statusBadge} ${
@@ -166,7 +182,7 @@ const ProjectInformation: React.FC = () => {
     {
       key: "action",
       dataIndex: "projectID",
-      title: "Action",
+      title: t("projectInformation.table.action"),
       cell: ({ value }) => {
         return (
           <div className={styles.button_container}>
@@ -192,12 +208,15 @@ const ProjectInformation: React.FC = () => {
 
   return (
     <div>
-      <h1>Project Information</h1>
+      <h1>{t("projectInformation.title")}</h1>
 
       {isModalOpen && (
         <div className={styles.editModal}>
           <div>
-            <CreateProject openModal={isModalOpen} setOpenModal={setIsModalOpen} />
+            <CreateProject
+              openModal={isModalOpen}
+              setOpenModal={setIsModalOpen}
+            />
           </div>
         </div>
       )}

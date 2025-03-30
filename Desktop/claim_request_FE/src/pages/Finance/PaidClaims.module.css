@@ -1,15 +1,17 @@
 .container {
   width: 95%;
   margin: auto;
+  margin-top: 0.2rem; 
+  margin: auto;
   margin-top: 0.5rem;
   background-color: white;
-  padding: 2rem;
+  padding: 1.5rem 2rem;  
   border-radius: 0.75rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .header {
-  margin-bottom: auto;
+  margin-bottom: 0.5rem;  
 }
 
 .title {
@@ -17,7 +19,7 @@
   color: #2d3142;
   font-weight: 700;
   letter-spacing: 0.5px;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.3rem; 
 }
 
 .icon {
@@ -122,4 +124,8 @@
 
 .icon:active {
   transform: scale(0.9);
+}
+
+.container :global([class*="filter"]) {
+  display: none !important;
 }

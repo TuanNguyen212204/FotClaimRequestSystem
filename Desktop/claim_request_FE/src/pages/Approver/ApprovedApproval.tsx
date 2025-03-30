@@ -12,7 +12,7 @@ import {
   selectApprovedClaimTotalPages,
 } from "@redux/selector/claimSelector";
 
-export const ApprovedApproverComponent: React.FC = () => {
+export const ApprovedApproval: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const claimList = useSelector(selectAppovedClaim);
@@ -54,6 +54,11 @@ export const ApprovedApproverComponent: React.FC = () => {
       key: "user_name",
       dataIndex: "user_full_name",
       title: "Full Name",
+    },
+    {
+      key: "email",
+      dataIndex: "user_email",
+      title: "Email",
     },
     {
       key: "start_date",
@@ -127,10 +132,12 @@ export const ApprovedApproverComponent: React.FC = () => {
     key: claim.request_id,
     ...claim,
     user_full_name: claim.user.full_name,
+    user_email: claim.user.email,
     user_salary: claim.user.salary,
     user_ot_rate: claim.user.ot_rate,
-    claim_status: "approved",
+    claim_status: "APPROVED",
   }));
+
   return (
     <div>
       <h1 className={styles.title}>Approved Claims</h1>
@@ -147,4 +154,4 @@ export const ApprovedApproverComponent: React.FC = () => {
   );
 };
 
-export default ApprovedApproverComponent;
+export default ApprovedApproval;

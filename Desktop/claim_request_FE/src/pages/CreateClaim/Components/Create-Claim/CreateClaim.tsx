@@ -74,7 +74,7 @@ export default function CreateClaim({
       <Header
         prepareBy={user?.full_name}
         status={formStatus}
-        title="New Claim Request"
+        title={mode === "create" ? "Create Claim" : mode === "view" ? "View Claim" : "Update Claim"}
       />
       <StaffInfo
         department={user?.department}

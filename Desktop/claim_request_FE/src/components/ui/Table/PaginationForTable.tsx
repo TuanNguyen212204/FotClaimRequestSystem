@@ -74,26 +74,30 @@ const PaginationForTable: React.FC<PaginationForTableProps> = ({
   };
 
   return (
-    <div className={styles.pagination}>
-      <button
-        tabIndex={-1}
-        onClick={() => handlePageChange(currentPage - 1)}
-        disabled={currentPage === 1}
-        className={styles.pagination_button_icon}
-      >
-        <ArrowLeft />
-      </button>
+    <div className={`${styles.pagination} flex`}>
+      <div>
+        <button
+          // tabIndex={-1}
+          // onClick={() => handlePageChange(currentPage - 1)}
+          // disabled={currentPage === 1}
+          className={` bg-transparent mt-5`}
+        >
+          <ArrowLeft />
+        </button>
+      </div>
 
-      {renderPageNumbers()}
+      <div className="p-0 m-0">{renderPageNumbers()}</div>
 
-      <button
-        tabIndex={-1}
-        onClick={() => handlePageChange(currentPage + 1)}
-        disabled={currentPage === totalPages}
-        className={styles.pagination_button_icon_right}
-      >
-        <ArrowRight />
-      </button>
+      <div>
+        <button
+          // tabIndex={-1}
+          // onClick={() => handlePageChange(currentPage + 1)}
+          // disabled={currentPage === totalPages}
+          className={` bg-transparent  mt-5`}
+        >
+          <ArrowRight />
+        </button>
+      </div>
     </div>
   );
 };

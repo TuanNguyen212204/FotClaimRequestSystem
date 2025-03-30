@@ -1,7 +1,9 @@
 import React, { useEffect, useState, useRef, CSSProperties } from 'react';
 import ReactDOM from 'react-dom';
 import styles from './CustomModal.module.css';
-import { X, Printer } from 'lucide-react';
+import { X, Printer, MoveRight, ChevronDown } from 'lucide-react';
+import StatusTag from '../StatusTag/StatusTag';
+import { useTranslation } from 'react-i18next';
 
 interface Position {
   top?: number;
@@ -21,23 +23,46 @@ interface CustomModalProps {
   centered?: boolean;
   position?: Position;
   onPrint?: () => void;
+  onPay?: () => void;
   backgroundColor?: string;
+  data?: any;
 }
+
+const formatDateToMonthDay = (date: string) => {
+  const dateObj = new Date(date);
+  const day = dateObj.getDate();
+  const month = dateObj.toLocaleString("en-US", { month: "long" });
+
+  const getDayWithSuffix = (day: number) => {
+    if (day > 3 && day < 21) return `${day}th`;
+    switch (day % 10) {
+      case 1: return `${day}st`;
+      case 2: return `${day}nd`;
+      case 3: return `${day}rd`;
+      default: return `${day}th`;
+    }
+  };
+
+  return `${month} ${getDayWithSuffix(day)}`;
+};
 
 const CustomModal: React.FC<CustomModalProps> = ({
   isOpen,
   onClose,
-  title = 'Modal Title',
-  children = 'Modal Content',
+  title = 'Claim Detail',
   width = 600,
-  height,
+  height = '95%',
   maskClosable = true,
   centered = false,
   position,
   onPrint,
-  backgroundColor = '#fff'
+  onPay,
+  backgroundColor = '#E9ECEF',
+  data
 }) => {
+  const { t } = useTranslation('claimstatus'); // Moved to top level and removed array syntax
   const [visible, setVisible] = useState(isOpen);
+  const [isHistoryExpanded, setIsHistoryExpanded] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -49,9 +74,8 @@ const CustomModal: React.FC<CustomModalProps> = ({
       document.body.style.overflow = 'hidden';
       document.addEventListener('keydown', handleEscape);
     }
-    
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = '';
       document.removeEventListener('keydown', handleEscape);
     };
   }, [isOpen]);
@@ -62,26 +86,29 @@ const CustomModal: React.FC<CustomModalProps> = ({
     }
   };
 
-  if (!visible) return null;
+  const handleHistoryToggle = () => {
+    setIsHistoryExpanded(!isHistoryExpanded);
+  };
+
+  if (!visible || !data) return null;
 
   const containerStyle: CSSProperties = {
     width: width || 'auto',
     minWidth: width || '600px',
-    height: 'auto',
-    minHeight: height || '300px',
+    height: height || 'auto',
     maxHeight: '95vh',
     position: position || centered ? 'fixed' : 'relative',
-    ...(position
-      ? {
-          top: position.top,
-          bottom: position.bottom,
-          left: position.left,
-          right: position.right,
-        }
-      : {}),
-    ...(centered
-      ? { top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }
-      : {}),
+    ...(position ? {
+      top: position.top,
+      bottom: position.bottom,
+      left: position.left,
+      right: position.right,
+    } : {}),
+    ...(centered ? { 
+      top: '50%', 
+      left: '50%', 
+      transform: 'translate(-50%, -50%)' 
+    } : {}),
     background: backgroundColor,
     borderRadius: 8,
     boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
@@ -90,46 +117,152 @@ const CustomModal: React.FC<CustomModalProps> = ({
     flexDirection: 'column',
   };
 
+  const modalContent = (
+    <div className={styles.container}>
+      <div className={styles.containerUser}>
+        <div className={styles.infoUser1}>
+          <img
+            src="https://i1.wp.com/upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"
+            alt={t('claimstatus.user.avatar')}
+            className={styles.avatar}
+          />
+          <div className={styles.infoUser1Row}>
+            <span>{data.full_name}</span>
+            <div className={styles.infoUser1Row2}>
+              <span>{data.job_rank_name}</span>
+              <span className={styles.separator}>|</span>
+              <span>{data.department_name}</span>
+            </div>
+          </div>
+        </div>
+        <div className={styles.infoUser2}>
+          <p>{t('claimstatus.user.userId')}: {data.user_id}</p>
+        </div>
+      </div>
+      <hr />
+      <div className={styles.containerProject}>
+        <div className={styles.projectRow}>
+          <span className={styles.projectLabel}>{t('claimstatus.project.projectId')}:</span>
+          <span className={styles.projectValue}>{data.project_id}</span>
+        </div>
+        <div className={styles.projectRow}>
+          <span className={styles.projectLabel}>{t('claimstatus.project.projectName')}:</span>
+          <span className={styles.projectValue}>{data.project_name}</span>
+        </div>
+        <div className={styles.projectRow}>
+          <span className={styles.projectLabel}>{t('claimstatus.project.timeDuration')}:</span>
+          <span className={styles.projectValue}>
+            {formatDateToMonthDay(data.start_date)}
+            <MoveRight size={20} className={styles.iconMoveRight} />
+            {formatDateToMonthDay(data.end_date)}
+          </span>
+        </div>
+        <div className={styles.projectRow}>
+          <span className={styles.projectLabel}>{t('claimstatus.project.submittedDate')}:</span>
+          <span className={styles.projectValue}>
+            {formatDateToMonthDay(data.submitted_date)}
+          </span>
+        </div>
+        <div className={styles.projectRow}>
+          <span className={styles.projectLabel}>{t('claimstatus.project.approvedDate')}:</span>
+          <span className={styles.projectValue}>
+            {formatDateToMonthDay(data.approved_date)}
+          </span>
+        </div>
+        <div className={styles.projectRow}>
+          <span className={styles.projectLabel}>{t('claimstatus.project.status')}:</span>
+          <span className={styles.projectValue}>
+            <StatusTag status={data.claim_status || "PAID"} />
+          </span>
+        </div>
+        <div className={styles.projectRow}>
+          <span className={styles.projectLabel}>{t('claimstatus.project.totalHours')}:</span>
+          <span className={styles.projectValue}>{data.total_hours} {t('claimstatus.project.hours')}</span>
+        </div>
+        <div className={styles.projectRow}>
+          <span className={styles.projectLabel}>{t('claimstatus.project.salaryOvertime')}:</span>
+          <span className={styles.projectValue}>${data.salary_overtime}</span>
+        </div>
+      </div>
+      <div className={styles.containerHistory}>
+        {data.claim_details?.length > 0 && (
+          <div className={styles.history}>
+            <div className={styles.historyHeader}>
+              <p>{t('claimstatus.history.title')}</p>
+              <ChevronDown
+                className={styles.historyIcon}
+                onClick={handleHistoryToggle}
+              />
+            </div>
+            {isHistoryExpanded && data.claim_details.map((detail: any, index: number) => (
+              <div key={index} className={styles.historyItem}>
+                <span className={styles.historyItemDate}>
+                  {formatDateToMonthDay(detail.date)}
+                </span>
+                <div className={styles.historyItemInfo}>
+                  <div className={styles.historyItemRow}>
+                    <span className={styles.historyItemLabel}>{t('claimstatus.history.workingHours')}:</span>
+                    <span className={styles.historyItemValue}>
+                      {detail.working_hours} {t('claimstatus.project.hours')}
+                    </span>
+                  </div>
+                  <div className={styles.historyItemRow}>
+                    <span className={styles.historyItemLabel}>{t('claimstatus.history.overtimeSalary')}:</span>
+                    <span className={styles.historyItemValue}>
+                      ${detail.salaryOvertimePerDay}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
   const modalNode = (
-    <div 
-      className={styles.overlay}
-      onClick={(e) => {
-        if (maskClosable && e.target === e.currentTarget) {
-          onClose();
-        }
-      }}
-    >
-      <div 
-        ref={modalRef} 
-        className={styles.modal} 
-        style={containerStyle}
-        onClick={e => e.stopPropagation()}
-      >
+    <div className={styles.overlay} onClick={(e) => {
+      if (maskClosable && e.target === e.currentTarget) {
+        onClose();
+      }
+    }}>
+      <div ref={modalRef} className={styles.modal} style={containerStyle} onClick={e => e.stopPropagation()}>
         <div className={styles.header}>
-          <h2>{title}</h2>
+          <h2>{t('claimstatus.modal.title')}</h2>
           <button 
             onClick={() => onClose()} 
             className={styles.closeButton}
-            aria-label="Close modal"
+            aria-label={t('claimstatus.modal.close')}
           >
             <X size={18} />
           </button>
         </div>
+        <hr className={styles.divider} />
         <div className={styles.content}>
-          {children}
+          {modalContent}
         </div>
-        {onPrint && (
-          <div className={styles.footer}>
+        <div className={styles.footer}>
+          {onPay && (
             <button 
-              onClick={onPrint} 
+              onClick={onPay}
+              className={styles.payButton}
+              aria-label={t('claimstatus.modal.payClaim')}
+            >
+              {t('claimstatus.modal.pay')}
+            </button>
+          )}
+          {onPrint && (
+            <button 
+              onClick={onPrint}
               className={styles.printButton}
-              aria-label="Print details"
+              aria-label={t('claimstatus.modal.printDetails')}
             >
               <Printer size={16} />
-              <span>Print</span>
+              <span>{t('claimstatus.modal.print')}</span>
             </button>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

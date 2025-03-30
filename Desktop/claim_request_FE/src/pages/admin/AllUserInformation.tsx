@@ -25,6 +25,7 @@ import { AssignProject } from "../AssignProject";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { ApiError } from "@/api";
 import { set } from "date-fns";
+import { useTranslation } from "react-i18next";
 type Department = {
   id: string;
   name: string;
@@ -72,6 +73,7 @@ const AllUserInformation: React.FC = () => {
     fetchDepartment();
   }, []);
   const navigate = useNavigate();
+  const { t } = useTranslation("allUserInformation");
   const dispatch = useDispatch<AppDispatch>();
   const users = useSelector(selectAllUser);
   const totalPage = useSelector(selectTotalPageOfAllUser);
@@ -212,19 +214,35 @@ const AllUserInformation: React.FC = () => {
     setAssignID(id);
   };
   const columns: Column<User>[] = [
-    { key: "full_name", dataIndex: "full_name", title: "Full Name" },
-    { key: "username", dataIndex: "username", title: "Username" },
-    { key: "email", dataIndex: "email", title: "Email" },
+    {
+      key: "full_name",
+      dataIndex: "full_name",
+      title: t("allUserInformation.table.fullName"),
+    },
+    {
+      key: "username",
+      dataIndex: "username",
+      title: t("allUserInformation.table.userName"),
+    },
+    {
+      key: "email",
+      dataIndex: "email",
+      title: t("allUserInformation.table.email"),
+    },
     {
       key: "department_name",
       dataIndex: "department_name",
-      title: "Department",
+      title: t("allUserInformation.table.department"),
     },
-    { key: "job_rank_name", dataIndex: "job_rank_name", title: "Job Rank" },
+    {
+      key: "job_rank_name",
+      dataIndex: "job_rank_name",
+      title: t("allUserInformation.table.jobRank"),
+    },
     {
       key: "user_status",
       dataIndex: "user_status",
-      title: "Status",
+      title: t("allUserInformation.table.status"),
       cell: ({ record }: { record: User }) => {
         return (
           <div>
@@ -250,7 +268,7 @@ const AllUserInformation: React.FC = () => {
     {
       key: "assign",
       dataIndex: "assign",
-      title: "Assign",
+      title: t("allUserInformation.table.assign"),
       cell: ({ record }: { record: User }) => {
         return (
           <div tabIndex={-1}>
@@ -259,6 +277,9 @@ const AllUserInformation: React.FC = () => {
               className={styles.circleCheckButton}
               onClick={() => handleAssignUser(record.user_id as string)}
               disabled={userStatuses[record.user_id] === 0}
+              onPointerDown={() =>
+                toast.error("You can not assign this user at the project now")
+              }
             >
               <div>
                 {userStatuses[record.user_id] === 1 ? <CircleCheck /> : <X />}
@@ -271,8 +292,8 @@ const AllUserInformation: React.FC = () => {
     {
       key: "user_id",
       dataIndex: "user_id",
-      title: "Action",
-      cell: ({ value }: { value: string }) => {
+      title: t("allUserInformation.table.action"),
+      cell: ({ value, record }: { value: string; record: User }) => {
         return (
           <div style={{ display: "flex" }}>
             <div>
@@ -281,10 +302,14 @@ const AllUserInformation: React.FC = () => {
                 className={styles.update_button}
                 style={{ cursor: "pointer" }}
                 onClick={() => handleUpdate(value as string)}
+                onPointerDown={() =>
+                  toast.error("You can not update this user information now")
+                }
+                disabled={userStatuses[record.user_id] === 0}
               >
-                <span>
-                  <SquarePen />
-                </span>
+                <div>
+                  {userStatuses[record.user_id] === 1 ? <SquarePen /> : <X />}
+                </div>
               </button>
             </div>
             {/* <div>
@@ -374,7 +399,9 @@ const AllUserInformation: React.FC = () => {
       <div className="flex ">
         <div className={`${styles.filter_section} `}>
           <div className={styles.filterStatusP}>
-            <p>Filter By {name}:</p>
+            <p>
+              {t("allUserInformation.filter")} {name}:
+            </p>
           </div>
           <div
             className="relative inline-block text-left mt-5.5 ml-3"
@@ -415,7 +442,6 @@ const AllUserInformation: React.FC = () => {
           dataSource={dataSource}
           loading={loading}
           pagination={true}
-          sortConfig={sortConfig}
           name="Role"
           createButton={true}
           totalPage={page}
