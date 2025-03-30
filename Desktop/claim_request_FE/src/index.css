@@ -16,8 +16,18 @@ body {
 }
 /* @import "tailwindcss/preflight.css" layer(base); */
 @theme inline {
-  /* Configure your theme variables here */
   --font-display: "Inter", "sans-serif";
   --color-primary-500: oklch(0.84 0.18 117.33);
   --spacing: 0.25rem;
+  --animate-spotlight: spotlight 2s ease 0.75s 1 forwards;
+}
+@keyframes spotlight {
+  0% {
+    opacity: 0;
+    transform: translate(-72%, -62%) scale(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -40%) scale(1);
+  }
 }
