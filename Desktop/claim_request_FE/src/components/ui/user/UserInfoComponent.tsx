@@ -9,10 +9,10 @@ import httpClient from "@constant/apiInstance";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next"; // Thêm useTranslation
+import { useTranslation } from "react-i18next";
 
 export const UserInfoComponent: React.FC = () => {
-  const { t } = useTranslation("userInfo"); // Sử dụng namespace userInfo
+  const { t } = useTranslation("userInfo");
   const dispatch = useDispatch<AppDispatch>();
   const selectedUser = useSelector(selectUserById);
   const [isEditing, setIsEditing] = useState(false);

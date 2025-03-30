@@ -12,6 +12,8 @@ import userClaimsEn from "../locales/en/userClaims.json";
 import userClaimsVi from "../locales/vi/userClaims.json";
 import approvedClaimEn from "../locales/en/approvedClaim.json";
 import approvedClaimVi from "../locales/vi/approvedClaim.json";
+import pendingClaimEn from "../locales/en/pendingClaim.json";
+import pendingClaimVi from "../locales/vi/pendingClaim.json";
 
 // Khởi tạo i18n
 i18n.use(initReactI18next).init({
@@ -22,6 +24,7 @@ i18n.use(initReactI18next).init({
       createClaim: createClaimEn,
       userClaims: userClaimsEn,
       approvedClaim: approvedClaimEn,
+      pendingClaim: pendingClaimEn,
     },
     vi: {
       header: headerVn,
@@ -29,11 +32,19 @@ i18n.use(initReactI18next).init({
       createClaim: createClaimVn,
       userClaims: userClaimsVi,
       approvedClaim: approvedClaimVi,
+      pendingClaim: pendingClaimVi,
     },
   },
   lng: "en", // Ngôn ngữ mặc định
   fallbackLng: "vi",
-  ns: ["header", "userInfo", "createClaim", "userClaims", "approvedClaim"],
+  ns: [
+    "header",
+    "userInfo",
+    "createClaim",
+    "userClaims",
+    "approvedClaim",
+    "pendingClaim",
+  ],
   defaultNS: "header",
   debug: true,
 });
