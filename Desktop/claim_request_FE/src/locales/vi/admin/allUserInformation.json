@@ -1,0 +1,59 @@
+{
+  "allUserInformation": {
+    "table": {
+      "fullName": "Họ và tên",
+      "userName": "Tên người dùng",
+      "email": "Email",
+      "department": "Phòng ban",
+      "jobRank": "Thứ hạng công việc",
+      "status": "Trạng thái",
+      "assign": "Phân công",
+      "action": "Thao tác"
+    },
+    "filter": "Lọc theo",
+    "createUser": {
+      "title": "Tạo người dùng",
+      "fullName": "Họ và tên",
+      "email": "Email",
+      "department": "Phòng ban",
+      "salary": "Lương",
+      "roleID": "Mã vai trò",
+      "selectRoleID": "Chọn mã vai trò",
+      "jobRank": "Chức vụ",
+      "validation": {
+        "fullName": "Họ và tên là bắt buộc",
+        "email": "Email là bắt buộc",
+        "department": "Phòng ban là bắt buộc",
+        "salary": "Lương là bắt buộc",
+        "roleID": "Mã vai trò là bắt buộc",
+        "jobRank": "Chức vụ là bắt buộc"
+      }
+    },
+    "updateUser": {
+      "title": "Cập nhật người dùng",
+      "fullName": "Họ và tên",
+      "email": "Email",
+      "department": "Phòng ban",
+      "roleID": "Mã vai trò",
+      "selectRoleID": "Chọn mã vai trò",
+      "jobRank": "Chức vụ",
+      "validation": {
+        "fullName": "Họ và tên là bắt buộc",
+        "email": "Email là bắt buộc",
+        "department": "Phòng ban là bắt buộc",
+        "roleID": "Mã vai trò là bắt buộc",
+        "jobRank": "Chức vụ là bắt buộc"
+      }
+    },
+    "assignUser": {
+      "title": "Phân công người dùng",
+      "project": "Dự án",
+      "projectName": "Tên dự án",
+      "startDate": "Ngày bắt đầu",
+      "endDate": "Ngày kết thúc",
+      "projectStatus": "Trạng thái dự án"
+    },
+    "buttonCreate": "Tạo",
+    "buttonUpdate": "Cập nhật"
+  }
+}

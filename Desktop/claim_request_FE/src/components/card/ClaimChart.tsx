@@ -2,14 +2,37 @@ import { useState, useEffect } from "react";
 import { Chart } from "react-google-charts";
 import httpClient from "@/constant/apiInstance";
 import styles from "./ClaimChart.module.css";
+import { useTranslation } from "react-i18next";
 
-const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const statuses = ["PENDING", "APPROVED", "REJECTED", "PAID"];
 const colors = ["#8884d8", "#82ca9d", "#ff7300", "#00c49f"];
 
 const ClaimChart = () => {
+  const { t } = useTranslation("dashboard");
+
+  const monthNames = [
+    t("dashboard.claimChart.months.january"),
+    t("dashboard.claimChart.months.february"),
+    t("dashboard.claimChart.months.march"),
+    t("dashboard.claimChart.months.april"),
+    t("dashboard.claimChart.months.may"),
+    t("dashboard.claimChart.months.june"),
+    t("dashboard.claimChart.months.july"),
+    t("dashboard.claimChart.months.august"),
+    t("dashboard.claimChart.months.september"),
+    t("dashboard.claimChart.months.october"),
+    t("dashboard.claimChart.months.november"),
+    t("dashboard.claimChart.months.december"),
+  ];
+
+  const statuses = ["Pending", "APPROVED", "REJECTED", "PAID"];
+
   const [rawData, setRawData] = useState([]);
-  const [visibleSeries, setVisibleSeries] = useState({ PENDING: true, APPROVED: true, REJECTED: true, PAID: true });
+  const [visibleSeries, setVisibleSeries] = useState({
+    PENDING: true,
+    APPROVED: true,
+    REJECTED: true,
+    PAID: true,
+  });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -37,14 +60,17 @@ const ClaimChart = () => {
 
   const getFilteredData = () => {
     const header = ["Month", ...statuses.filter((s) => visibleSeries[s])];
-    const body = rawData.map((item) => [item.month, ...statuses.filter((s) => visibleSeries[s]).map((s) => item[s])]);
+    const body = rawData.map((item) => [
+      item.month,
+      ...statuses.filter((s) => visibleSeries[s]).map((s) => item[s]),
+    ]);
     return [header, ...body];
   };
 
   const toggleSeries = (status) => {
     setVisibleSeries((prev) => ({
       ...prev,
-      [status]: !prev[status], 
+      [status]: !prev[status],
     }));
   };
 
@@ -52,7 +78,7 @@ const ClaimChart = () => {
 
   return (
     <div className={styles.chartContainer}>
-      <p className={styles.chartTitle}>Claim Status Overview</p>
+      <p className={styles.chartTitle}>{t("dashboard.claimChart.title")}</p>
       <Chart
         chartType="ColumnChart"
         width="100%"
@@ -60,9 +86,9 @@ const ClaimChart = () => {
         data={getFilteredData()}
         options={{
           chartArea: { width: "70%" },
-          // hAxis: { title: "Months", minValue: 0 },
-          vAxis: { title: "Claims", minValue: 0 },
-          legend: { position: "none" }, 
+          // hAxis: { title: t("dashboard.claimChart.hAxis"), minValue: 0 },
+          vAxis: { title: t("dashboard.claimChart.vAxis"), minValue: 0 },
+          legend: { position: "none" },
           colors: colors.filter((_, i) => visibleSeries[statuses[i]]),
         }}
       />
@@ -70,7 +96,9 @@ const ClaimChart = () => {
         {statuses.map((status, index) => (
           <span
             key={status}
-            className={`${styles.legendItem} ${visibleSeries[status] ? "" : styles.inactive}`}
+            className={`${styles.legendItem} ${
+              visibleSeries[status] ? "" : styles.inactive
+            }`}
             onClick={() => toggleSeries(status)}
             style={{ color: colors[index], cursor: "pointer" }}
           >

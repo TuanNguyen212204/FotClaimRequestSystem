@@ -22,6 +22,7 @@ import { Trash2, FilePen } from "lucide-react";
 import { confirmModal } from "@/components/ui/modal/Modal";
 import { toast } from "react-toastify";
 import { ArrowDown, ArrowUp } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const ProjectInformation: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -34,6 +35,7 @@ const ProjectInformation: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [UpdateOpen, setUpdateOpen] = useState(false);
   console.log("Dữ liệu lấy từ Redux:", project);
+  const { t } = useTranslation("projectInformation");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,7 +59,6 @@ const ProjectInformation: React.FC = () => {
   useEffect(() => {
     console.log("Current project state:", project);
   }, [project]);
-
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -148,16 +149,31 @@ const ProjectInformation: React.FC = () => {
     setIsDropdownOpen(false);
   };
 
-
   const columns: Column<Project>[] = [
-    { key: "projectID", dataIndex: "projectID", title: "Project ID" },
-    { key: "projectName", dataIndex: "projectName", title: "Project Name" },
-    { key: "startDate", dataIndex: "startDate", title: "Start Date" },
-    { key: "endDate", dataIndex: "endDate", title: "End Date" },
+    {
+      key: "projectID",
+      dataIndex: "projectID",
+      title: t("projectInformation.table.projectID"),
+    },
+    {
+      key: "projectName",
+      dataIndex: "projectName",
+      title: t("projectInformation.table.projectName"),
+    },
+    {
+      key: "startDate",
+      dataIndex: "startDate",
+      title: t("projectInformation.table.startDate"),
+    },
+    {
+      key: "endDate",
+      dataIndex: "endDate",
+      title: t("projectInformation.table.endDate"),
+    },
     {
       key: "projectStatus",
       dataIndex: "projectStatus",
-      title: "Status",
+      title: t("projectInformation.table.status"),
       cell: ({ value }) => (
         <span
           className={`${styles.statusBadge} ${
@@ -171,7 +187,7 @@ const ProjectInformation: React.FC = () => {
     {
       key: "action",
       dataIndex: "projectID",
-      title: "Action",
+      title: t("projectInformation.table.action"),
       cell: ({ value }) => {
         return (
           <div className={styles.button_container}>
@@ -197,12 +213,15 @@ const ProjectInformation: React.FC = () => {
 
   return (
     <div>
-      <h1>Project Information</h1>
+      <h1>{t("projectInformation.title")}</h1>
 
       {isModalOpen && (
         <div className={styles.editModal}>
           <div>
-            <CreateProject openModal={isModalOpen} setOpenModal={setIsModalOpen} />
+            <CreateProject
+              openModal={isModalOpen}
+              setOpenModal={setIsModalOpen}
+            />
           </div>
         </div>
       )}
@@ -214,14 +233,12 @@ const ProjectInformation: React.FC = () => {
         </div>
       )}
 
-<div className="flex ">
+      <div className="flex ">
         <div className={`${styles.filter_section} `}>
           <div className={styles.filterStatusP}>
-          <p>Filter By Status:</p>
+            <p>{t("projectInformation.filter")}:</p>
           </div>
-          <div
-            className="relative inline-block text-left mt-5.5 ml-3"
-          >
+          <div className="relative inline-block text-left mt-5.5 ml-3">
             <div
               onClick={toggleDropdown}
               className="flex items-center justify-between px-4 py-2 text-sm font-medium text-gray-700 bg-white border rounded-md shadow-sm hover:bg-gray-100 focus:outline-none"
@@ -248,7 +265,6 @@ const ProjectInformation: React.FC = () => {
           </div>
         </div>
       </div>
-
 
       <TableComponent
         // ref={tableRef as any}
