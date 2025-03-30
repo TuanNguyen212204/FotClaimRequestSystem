@@ -304,12 +304,13 @@ const Dashboard = () => {
           />
         </div>
       </div>
-      <div className={styles.chartOT}>
-        <OTChart />
-      </div>
-
-      <div>
-        <ClaimChart />
+      <div className="grid grid-cols-3 gap-50">
+        <div className={`col-span-1 ${styles.chartOT}`}>
+          <OTChart />
+        </div>
+        <div className="col-span-2">
+          <ClaimChart />
+        </div>
       </div>
     </div>
   );

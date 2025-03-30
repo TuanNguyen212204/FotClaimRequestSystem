@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Chart } from "react-google-charts";
 import httpClient from "@/constant/apiInstance";
 import { useTranslation } from "react-i18next";
+import styles from "./OTChart.module.css"
 
 const OTChart: React.FC = () => {
   const [chartData, setChartData] = useState<[string, number][]>([]);
