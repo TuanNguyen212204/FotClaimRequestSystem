@@ -23,13 +23,15 @@
   },
   "claimTable": {
     "detailsTitle": "Claim Details",
+    "ClaimEntries": "Claim Entries",
     "dateHeader": "Date",
     "hoursHeader": "Working Hours",
     "actionsHeader": "Actions",
     "removeButton": "Remove",
     "addButton": "Add Claim",
     "totalHoursLabel": "Total Working Hours",
-    "errorPlaceholder": "placeholder"
+    "errorPlaceholder": "placeholder",
+    "addRow": "Click to add row"
   },
   "buttons": {
     "send": "Send",
@@ -46,7 +48,8 @@
     "atLeastOneClaim": "At least one claim is required",
     "dateNotInRange": "All claim dates must be within the project's duration",
     "dateAlreadyChosen": "This date is already chosen",
-    "selectProjectError": "Select a Project"
+    "selectProjectError": "Select a Project",
+    "addRowError": "Fix all errors"
   },
   "toast": {
     "selectProject": "Please select a project.",

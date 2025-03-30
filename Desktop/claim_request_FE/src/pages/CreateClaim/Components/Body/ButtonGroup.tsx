@@ -7,13 +7,17 @@ import { useTranslation } from "react-i18next";
 import { Control } from "react-hook-form";
 import { FormData } from "@/types/claimForm.type";
 import { useWatch } from "react-hook-form";
+
+import { FieldErrors } from "react-hook-form";
 interface ButtonGroupProps {
   mode: "create" | "view" | "update";
   control: Control<FormData>;
+  fieldErrors?: FieldErrors<FormData>;
 }
 export default function ButtonGroup({
   mode,
   control,
+  fieldErrors,
 }: ButtonGroupProps): JSX.Element {
   const { t } = useTranslation("claim");
   const loading = useSelector(isClaimCreationLoading);
@@ -22,9 +26,10 @@ export default function ButtonGroup({
     <div className={styles.actions}>
       {mode === "create" && (
         <Button
-          disabled={loading || !claims?.projectName}
+          disabled={loading || !claims?.projectName || Object.keys(fieldErrors?.claims || {}).length > 0}
           className={`${styles.btn} ${styles.btn_primary}`}
           buttonType="submit"
+          
         >
           {t("buttons.send")}
         </Button>

@@ -23,13 +23,15 @@
   },
   "claimTable": {
     "detailsTitle": "Chi Tiết Yêu Cầu",
+    "ClaimEntries": "Các Mục Yêu Cầu",
     "dateHeader": "Ngày",
     "hoursHeader": "Số Giờ Làm Việc",
     "actionsHeader": "Hành Động",
     "removeButton": "Xóa",
     "addButton": "Thêm Yêu Cầu",
     "totalHoursLabel": "Tổng Số Giờ Làm Việc",
-    "errorPlaceholder": "giữ chỗ"
+    "errorPlaceholder": "giữ chỗ",
+    "addRow": "Ấn để thêm hàng"
   },
   "buttons": {
     "send": "Gửi",
@@ -46,7 +48,8 @@
     "atLeastOneClaim": "Cần ít nhất một yêu cầu",
     "dateNotInRange": "Tất cả ngày yêu cầu phải nằm trong thời hạn dự án",
     "dateAlreadyChosen": "Ngày này đã được chọn",
-    "selectProjectError": "Chọn một Dự Án"
+    "selectProjectError": "Chọn một Dự Án",
+    "addRowError": "Hãy sửa tất cả lỗi "
   },
   "toast": {
     "selectProject": "Vui lòng chọn một dự án.",

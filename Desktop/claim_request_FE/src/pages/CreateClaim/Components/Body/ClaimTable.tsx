@@ -3,6 +3,7 @@ import { Control, UseFormRegister, FieldErrors } from "react-hook-form";
 import styles from "@pages/CreateClaim/Claim.module.css";
 import { FormData } from "@/types/claimForm.type";
 import { useTranslation } from "react-i18next";
+import PopOver from "@/components/ui/PopOver";
 export interface ClaimTableProps {
   control: Control<FormData>;
   register: UseFormRegister<FormData>;
@@ -32,7 +33,7 @@ export default function ClaimTable({
   );
   return (
     <div className="mb-5 box-border overflow-x-auto">
-      <h2 className="text-lg pb-1.5! mb-4!">{t("claimTable.detailsTitle")}</h2>
+      <h2 className="text-lg pb-1.5! mb-4!">{t("claimTable.ClaimEntries")}</h2>
 
       {errors.claims &&
         typeof errors.claims === "object" &&
@@ -114,14 +115,29 @@ export default function ClaimTable({
           </tr>
         </tfoot>
       </Table>
-      <button
-        type="button"
-        disabled={!minDate || !maxDate}
-        className={`${styles.btn} ${styles.btn_add}  `}
-        onClick={() => append({ date: minDate, working_hours: 0 })}
+      <PopOver
+        trigger="hover"
+        style={{ width: "max-content" }}
+        content={
+          Object.keys(errors.claims || {}).length > 0
+            ? t("validation.addRowError")
+            : t("claimTable.addRow")
+        }
+        placement="top"
       >
-        {t("claimTable.addButton")}
-      </button>
+        <button
+          type="button"
+          disabled={
+            !minDate ||
+            !maxDate ||
+            (errors.claims && Object.keys(errors.claims).length > 0)
+          }
+          className={`${styles.btn} ${styles.btn_add}  `}
+          onClick={() => append({ date: minDate, working_hours: 0 })}
+        >
+          {t("claimTable.addButton")}
+        </button>
+      </PopOver>
     </div>
   );
 }

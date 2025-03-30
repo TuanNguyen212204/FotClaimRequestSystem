@@ -6,7 +6,7 @@ import { AdditionalInfoProps } from "./AdditionalInfo";
 import { IProjectInfoProps } from "./ProjectInfo";
 import ClaimTable from "./ClaimTable";
 import ButtonGroup from "./ButtonGroup";
-
+import { useTranslation } from "react-i18next";
 interface IClaimBodyProps
   extends ClaimTableProps,
     IProjectInfoProps,
@@ -22,8 +22,12 @@ export default function ClaimBody({
   setValue,
   mode,
 }: IClaimBodyProps): JSX.Element {
+  const { t } = useTranslation("claim");
   return (
     <Card>
+      <h2 className="text-[1.225rem] font-medium mb-4 text-[#26a69a]">
+        {t("claimTable.detailsTitle")}
+      </h2>
       <div className="mb-8 box-border">
         <ProjectInfo
           mode={mode}
