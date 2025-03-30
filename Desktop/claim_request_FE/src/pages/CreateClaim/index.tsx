@@ -13,10 +13,10 @@ const CreateClaimPage: React.FC<CreateClaimPageProps> = ({
   initialValues,
   formStatus = "Draft",
   requestID,
-}) => {
+}) => { 
   return (
     <div
-      className={`bg-gray-100 text-gray-800 p-4 md:p-6 font-['Roboto'] leading-relaxed box-border max-h-[1080px] overflow-auto`}
+      className={`bg-gray-100 text-gray-800 p-4 md:p-6 font-['Roboto'] leading-relaxed box-border  overflow-auto`}
     >
       <div className="max-w-7xl mx-auto p-4 md:p-6 bg-white rounded-md shadow-md box-border">
         <CreateClaim

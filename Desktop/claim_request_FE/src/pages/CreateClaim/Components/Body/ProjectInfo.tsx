@@ -124,7 +124,7 @@ interface formGroupProps {
 }
 const FormGroup = ({ label, input }: formGroupProps): JSX.Element => {
   return (
-    <div className="mb-4 box-border">
+    <div className="mb-4 box-border text-left">
       <label className="block text-sm font-medium text-gray-700 mb-2 box-border">
         {label}
       </label>

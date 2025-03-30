@@ -1,4 +1,4 @@
-import  { JSX } from "react"; 
+import { JSX } from "react";
 import { useTranslation } from "react-i18next";
 
 export interface IHeadProps {
@@ -8,10 +8,9 @@ export interface IHeadProps {
 }
 
 const statusStyles = {
-  Draft:
-    "bg-yellow-100 text-yellow-800 border border-yellow-300",
-  Pending: "bg-blue-100 text-blue-800 border border-blue-300", 
-  Approved: "bg-green-100 text-green-800 border border-green-300", 
+  Draft: "bg-yellow-100 text-yellow-800 border border-yellow-300",
+  Pending: "bg-blue-100 text-blue-800 border border-blue-300",
+  Approved: "bg-green-100 text-green-800 border border-green-300",
 };
 
 export default function Header({
@@ -22,11 +21,11 @@ export default function Header({
   const { t } = useTranslation("claim");
 
   const statusClass =
-    statusStyles[status as keyof typeof statusStyles] || statusStyles.Draft; 
+    statusStyles[status as keyof typeof statusStyles] || statusStyles.Draft;
 
   return (
     <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-8 pb-4 border-b border-gray-300 gap-2 sm:gap-0 box-border">
-      <div className="box-border">
+      <div className="box-border text-left">
         <h1 className="text-2xl font-bold mb-1 p-0 box-border">{title}</h1>
         <span className="text-sm text-gray-500 pt-0 box-border">
           {t("header.preparedBy", { name: prepareBy })}
@@ -40,4 +39,3 @@ export default function Header({
     </div>
   );
 }
-

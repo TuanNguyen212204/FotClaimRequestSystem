@@ -2,6 +2,7 @@ import React from "react";
 import { AppDispatch } from "@/redux";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import Modal from "@/components/ui/modal/Modal";
 import fetchClaims from "@/redux/thunk/Draft";
 import { selectInitialValues } from "@/redux/slices/UpdateDraft";
 import {
@@ -110,30 +111,27 @@ export const DraftClaimByUserID: React.FC = () => {
   }));
   return (
     <div>
-      {openModal && (
-        <div className={`${styles.editModal} p-0 m-0`}>
-          <div>
-            <div className="max-w-[680px] overflow-auto relative">
-              {initValue && (
-                <span
-                  className="absolute top-3 right-5 flex items-center justify-center w-6 h-6 cursor-pointer text-gray-600 hover:text-gray-800 hover:bg-gray-300 rounded-full"
-                  onClick={() => setOpenModal(false)}
-                >
-                  X
-                </span>
-              )}
-              {initValue && (
-                <CreateClaimPage
-                  initialValues={initValue}
-                  mode="update"
-                  formStatus="Draft"
-                  requestID={record.request_id}
-                />
-              )}
-            </div>
-          </div>
+      <Modal
+        open={openModal}
+        onCancel={() => setOpenModal(false)}
+        title=""
+        footer
+        width={""}
+        centered
+        height="95%"
+      >
+        <div className="max-w-[880px] rounded-3xl ">
+          {initValue && initValue && record?.request_id && (
+            <CreateClaimPage
+              initialValues={initValue}
+              mode="update"
+              formStatus="Draft"
+              requestID={record.request_id}
+            />
+          )}
         </div>
-      )}
+      </Modal>
+
       <TableComponent
         columns={columns}
         dataSource={dataSource}

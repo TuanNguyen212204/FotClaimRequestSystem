@@ -25,7 +25,7 @@ export default function ClaimBody({
   const { t } = useTranslation("claim");
   return (
     <Card>
-      <h2 className="text-[1.225rem] font-medium mb-4 text-[#26a69a]">
+      <h2 className="text-[1.225rem] text-left font-medium mb-4 text-[#26a69a]">
         {t("claimTable.detailsTitle")}
       </h2>
       <div className="mb-8 box-border">
@@ -38,7 +38,7 @@ export default function ClaimBody({
         />
       </div>
 
-      <div className="mb-8 box-border">
+      <div className="mb-8 box-borde text-left">
         <ClaimTable
           control={control}
           register={register}

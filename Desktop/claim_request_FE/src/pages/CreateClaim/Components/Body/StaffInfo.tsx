@@ -28,7 +28,7 @@ export default function StaffInfo({
   return (
     <Card>
       <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-6 box-border">
-        <div className="min-w-0 box-border">
+        <div className="min-w-0 box-border text-left">
           <label className="block text-xs font-medium text-gray-500 uppercase mb-1 box-border">
             {t("staffInfo.nameLabel")}
           </label>
@@ -38,7 +38,7 @@ export default function StaffInfo({
           </div>
         </div>
 
-        <div className="min-w-0 box-border">
+        <div className="min-w-0 box-border text-left">
           <label className="block text-xs font-medium text-gray-500 uppercase mb-1 box-border">
             {t("staffInfo.departmentLabel")}
           </label>
@@ -47,7 +47,7 @@ export default function StaffInfo({
           </div>
         </div>
 
-        <div className="min-w-0 box-border">
+        <div className="min-w-0 box-border text-left">
           <label className="block text-xs font-medium text-gray-500 uppercase mb-1 box-border">
             {t("staffInfo.staffIdLabel")}
           </label>
