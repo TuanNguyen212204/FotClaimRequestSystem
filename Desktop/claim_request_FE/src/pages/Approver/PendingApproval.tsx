@@ -60,6 +60,35 @@ export const PendingComponent: React.FC = () => {
   }>(null);
   const [selectedData, setSelectedData] = useState<DataRecord[]>([]);
 
+  // const handleSelectAll = () => {
+  //   const allChecked = checkedItems.size === dataSource.length;
+  //   if (allChecked) {
+  //     setCheckedItems(new Set());
+  //   } else {
+  //     setCheckedItems(new Set(dataSource.map((record) => record.id || "")));
+  //   }
+  // };
+
+  // const handleCheckboxChange = (requestId: string, checked: boolean) => {
+  //   setCheckedItems((prev) => {
+  //     const newCheckedItems = new Set(prev);
+  //     if (checked) {
+  //       newCheckedItems.add(requestId);
+  //     } else {
+  //       newCheckedItems.delete(requestId);
+  //     }
+  //     return newCheckedItems;
+  //   });
+  // };
+
+  // const handleGetSelectedData = () => {
+  //   const selectedClaims = dataSource.filter((record) =>
+  //     checkedItems.has(record.request_id)
+  //   );
+  //   setSelectedData(selectedClaims);
+  //   console.log("Selected claims:", selectedClaims);
+  // };
+
   const handleGetSelectedData = () => {
     if (checkboxRef.current) {
       const selected = checkboxRef.current.getSelectedData();
@@ -320,7 +349,9 @@ export const PendingComponent: React.FC = () => {
       key: "salary_overtime",
       dataIndex: "salary_overtime",
       title: "Salary Overtime",
-      cell: ({ value }) => <div>{isSalaryVisible ? value : "*****************"}</div>,
+      cell: ({ value }) => (
+        <div>{isSalaryVisible ? value : "*****************"}</div>
+      ),
     },
     {
       key: "claim_status",

@@ -20,7 +20,12 @@ import AllUserInformationEn from "@/locales/en/admin/allUserInformation.json";
 import AllUserInformationVi from "@/locales/vi/admin/allUserInformation.json";
 import DashboardEn from "@/locales/en/admin/dashboard.json";
 import DashboardVi from "@/locales/vi/admin/dashboard.json";
-
+import pendingEn from "@/locales/en/approval/pending.json";
+import pendingVn from "@/locales/vi/approval/pending.json";
+import approveEn from "@/locales/en/approval/approve.json";
+import approveVn from "@/locales/vi/approval/approve.json";
+import rejectEn from "@/locales/en/approval/reject.json";
+import rejectVn from "@/locales/vi/approval/reject.json";
 i18n.use(initReactI18next).init({
   resources: {
     en: {
