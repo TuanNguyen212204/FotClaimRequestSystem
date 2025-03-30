@@ -14,37 +14,49 @@ import paidclaimsEn from "../locales/en/paidclaims.json";
 import paidclaimsVi from "../locales/vi/paidclaims.json";
 import claimstatusEn from "../locales/en/claimstatus.json";
 import claimstatusVi from "../locales/vi/claimstatus.json";
+import ProjectInformationEn from "@/locales/en/admin/projectInformation.json";
+import ProjectInformationVi from "@/locales/vi/admin/projectInformation.json";
 
 i18n.use(initReactI18next).init({
   resources: {
-    en: { 
+    en: {
       header: headerEn,
       userInfo: userInfoEn,
       finance: financeEn,
       approvedetail: approvedetailEn,
       paidclaims: paidclaimsEn,
-      claimstatus: claimstatusEn
+      claimstatus: claimstatusEn,
+      projectInformation: ProjectInformationEn,
     },
-    vi: { 
+    vi: {
       header: headerVn,
       userInfo: userInfoVn,
       finance: financeVn,
       approvedetail: approvedetailVi,
       paidclaims: paidclaimsVi,
-      claimstatus: claimstatusVi
+      claimstatus: claimstatusVi,
+      projectInformation: ProjectInformationVi,
     },
   },
   lng: "en",
   fallbackLng: "vi",
-  ns: ["header", "userInfo", "finance", "approvedetail", "paidclaims", "claimstatus"],
+  ns: [
+    "header",
+    "userInfo",
+    "finance",
+    "approvedetail",
+    "paidclaims",
+    "claimstatus",
+    "projectInformation",
+  ],
   defaultNS: "header",
   debug: true,
   interpolation: {
-    escapeValue: false
+    escapeValue: false,
   },
   react: {
-    useSuspense: false
-  }
+    useSuspense: false,
+  },
 });
 
 export default i18n;

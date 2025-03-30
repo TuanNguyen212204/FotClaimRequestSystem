@@ -1,0 +1,31 @@
+{
+  "projectInformation": {
+    "title": "Project Information",
+    "table": {
+      "projectID": "Project ID",
+      "projectName": "Project Name",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "status": "Status",
+      "action": "Action"
+    },
+    "filter": "Filter By Status",
+    "createProject": {
+      "projectID": "Project ID",
+      "projectName": "Project Name",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "projectStatus": "Project Status",
+      "selectStatus": "Select Status",
+      "inProgress": "inProgress",
+      "completed": "Completed"
+    },
+    "validation": {
+      "projectID": "Project ID is required",
+      "projectName": "Project Name is required",
+      "startDate": "Start Date is required",
+      "endDate": "End Date is required",
+      "projectStatus": "Project Status is required"
+    }
+  }
+}

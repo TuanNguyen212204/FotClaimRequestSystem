@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 import styles from "@ui/finance/ApprovedFinance.module.css";
 import { EyeIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -31,7 +31,7 @@ const formatDateToDDMMYYYY = (date: string) => {
 };
 
 export const ApprovedFinanceComponent: React.FC = () => {
-  const { t } = useTranslation('finance');
+  const { t } = useTranslation("finance");
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const claimList = useSelector(selectApprovedClaimFinance);
@@ -62,7 +62,6 @@ export const ApprovedFinanceComponent: React.FC = () => {
   };
 
   const handlePageChange = (newPage: number) => {
-    console.log("Trang mới: ", newPage);
     setCurrentPage(newPage);
   };
 
@@ -75,24 +74,24 @@ export const ApprovedFinanceComponent: React.FC = () => {
     {
       key: "full_name",
       dataIndex: "full_name",
-      title: t('finance.table.userName'),
+      title: t("finance.table.userName"),
     },
     {
       key: "project_name",
       dataIndex: "project_name",
-      title: t('finance.table.projectName'),
+      title: t("finance.table.projectName"),
     },
     {
       key: "time_duration",
       dataIndex: "time_duration",
-      title: t('finance.table.timeDuration'),
+      title: t("finance.table.timeDuration"),
     },
     {
       key: "total_hours",
       dataIndex: "total_hours",
-      title: t('finance.table.totalHours'),
+      title: t("finance.table.totalHours"),
       cell: ({ value }) => {
-        return `${value} ${t('finance.table.hours')}`;
+        return `${value} ${t("finance.table.hours")}`;
       },
     },
     {
@@ -136,7 +135,7 @@ export const ApprovedFinanceComponent: React.FC = () => {
   });
   return (
     <div>
-      <h1>{t('finance.title')}</h1>
+      <h1>{t("finance.title")}</h1>
       <TableComponent
         columns={columns}
         dataSource={dataSource}
