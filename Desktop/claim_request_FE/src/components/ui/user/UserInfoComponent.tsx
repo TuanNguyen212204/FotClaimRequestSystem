@@ -21,7 +21,6 @@ export const UserInfoComponent: React.FC = () => {
   const [isSalaryVisible, setIsSalaryVisible] = useState(false);
   const [isOtRateVisible, setIsOtRateVisible] = useState(false);
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
-  const { t } = useTranslation("userInfo");
   const navigate = useNavigate();
 
   const accessToken = localStorage.getItem("access_token");
