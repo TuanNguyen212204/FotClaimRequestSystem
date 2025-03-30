@@ -1,8 +1,6 @@
 import React from "react";
-import styles from "@pages/CreateClaim/Claim.module.css";
 import CreateClaim from "@/pages/CreateClaim/Components/Create-Claim/CreateClaim";
 import { FormData } from "@/types/claimForm.type";
-
 export interface CreateClaimPageProps {
   mode: "create" | "view" | "update";
   initialValues?: FormData;
@@ -17,8 +15,10 @@ const CreateClaimPage: React.FC<CreateClaimPageProps> = ({
   requestID,
 }) => {
   return (
-    <div className={styles.container}>
-      <div className="flex flex-col box-border">
+    <div
+      className={`bg-gray-100 text-gray-800 p-4 md:p-6 font-['Roboto'] leading-relaxed box-border max-h-[1080px] overflow`}
+    >
+      <div className="max-w-7xl mx-auto p-4 md:p-6 bg-white rounded-md shadow-md box-border">
         <CreateClaim
           mode={mode}
           initialValues={initialValues}
@@ -31,40 +31,3 @@ const CreateClaimPage: React.FC<CreateClaimPageProps> = ({
 };
 
 export default CreateClaimPage;
-// const stuff = {
-//   currentSelectedProject: {
-//     projectID: "P123",
-//     projectName: "Web Development for Client X",
-//     RoleInTheProject: "Frontend Developer",
-//     ProjectDuration: {
-//       from: "2025-01-15",
-//       to: "2025-06-30",
-//     },
-//   },
-//   claims: [
-//     {
-//       date: "2023-02-11",
-//       working_hours: 8,
-//     },
-//     {
-//       date: "2023-02-12",
-//       working_hours: 7.5,
-//     },
-//     {
-//       date: "2023-02-13",
-//       working_hours: 8.5,
-//     },
-//     {
-//       date: "2023-03-15",
-//       working_hours: 6,
-//     },
-//     {
-//       date: "2023-03-16",
-//       working_hours: 8,
-//     },
-//     {
-//       date: "2023-04-01",
-//       working_hours: 9,
-//     },
-//   ],
-// };

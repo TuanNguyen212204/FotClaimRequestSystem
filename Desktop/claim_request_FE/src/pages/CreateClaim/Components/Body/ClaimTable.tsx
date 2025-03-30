@@ -90,18 +90,18 @@ export default function ClaimTable({
                   })}
                 />
               </TdWithError>
-              <TdWithError>
+              <td className={styles.table_action}>
                 {index === 0 ? (
                   <></>
                 ) : (
                   <button
-                    className={`${styles.btn} ${styles.btn_danger} self-center `}
+                    className={`${styles.btn} ${styles.btn_danger}  `}
                     onClick={() => remove(index)}
                   >
                     Remove
                   </button>
                 )}
-              </TdWithError>
+              </td>
             </tr>
           ))}
         </tbody>
@@ -157,13 +157,7 @@ const TdWithError: React.FC<TdWithErrorProps> = ({ children, error }) => (
   <td>
     <div className="flex flex-col gap-1">
       {children}
-      <div>
-        {error ? (
-          <p className="text-red-500 text-xs mt-1">{error}</p>
-        ) : (
-          <span className="text-xs mt-1 invisible">placeholder</span>
-        )}
-      </div>
+      {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
     </div>
   </td>
 );
