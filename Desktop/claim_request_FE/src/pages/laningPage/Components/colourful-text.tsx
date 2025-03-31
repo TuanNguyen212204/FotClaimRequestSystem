@@ -13,6 +13,9 @@ export function ColourfulText({ text }: { text: string }) {
     "rgb(230, 64, 92)",
     "rgb(232, 98, 63)",
     "rgb(249, 129, 47)",
+    "rgb(249, 174, 0)",
+    "rgb(249, 213, 0)",
+    "rgb(255, 255, 255)",
   ];
 
   const [currentColors, setCurrentColors] = React.useState(colors);
@@ -23,7 +26,7 @@ export function ColourfulText({ text }: { text: string }) {
       const shuffled = [...colors].sort(() => Math.random() - 0.5);
       setCurrentColors(shuffled);
       setCount((prev) => prev + 1);
-    }, 5000);
+    }, 6000);
 
     return () => clearInterval(interval);
   }, []);

@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { motion } from "framer-motion";
+import { useEffect } from "react";
+import { motion, Variants } from "framer-motion";
 import TopBar from "../Topbar/index";
 import { ColourfulText } from "../Components/colourful-text";
 import { Spotlight } from "../Components/Spotlight";
@@ -69,24 +69,30 @@ export default function Herro() {
   const heroBgImage =
     "url('https://s3-alpha-sig.figma.com/img/ece8/81e1/c879b3ca7917216b0433807c9e221046?Expires=1743984000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=DA2gYtBvf1STGdOtQiFLttNoLII9PdebMuILxsAMj1y6EloVOEfIKy2rK8~BLPphs2Geew1qOSqROfEEFaMomwRho~7VVgoTA6uJuIxHPU0NhM2IoSa1Piwv34utNIVU116VAdM3O-mco-bSX~GyA1oDFSgA5KLt-aoxTNKFP8octCa5-16mQZo69OgFtPco2juGTIHl-fF9usAw31bAhE-1dVkqdohRl94WVwWwe~bG1NC0lb8HlNFf~rIwaMvceGyRpirOvjG8DJbsgPOtZ8vL0LTOJ0YqubXG-AfgnrxSYUdYFi6q~DkNi6K4JiN1sTXnQPeTzdp7HRMymkBexg__')";
 
-  const overlayVariants = {
+  const overlayVariants: Variants = {
     hidden: { opacity: 0 },
-    visible: { opacity: 0.5, transition: { duration: 1, delay: 0.5 } },
+    visible: { opacity: 0.7, transition: { duration: 1.45, delay: 0.5 } },
   };
 
-  const contentVariants = {
-    hidden: { opacity: 0, y: 20 },
+  const contentContainerVariants: Variants = {
+    hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      y: 0,
-      transition: { duration: 0.8, delay: 1.5, staggerChildren: 0.2 },
+      transition: { duration: 0.1, delay: 1.5 },
     },
   };
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 15 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+  const itemVariants: Variants = {
+    hidden: { opacity: 0, y: 25 },
+    visible: { opacity: 1, y: 0 },
   };
+
+  const topBarVariants: Variants = {
+    hidden: { opacity: 0, y: -25 },
+    visible: { opacity: 1, y: 0 },
+  };
+
+  const contentStartDelay = 1.6;
 
   return (
     <div
@@ -98,36 +104,55 @@ export default function Herro() {
         variants={overlayVariants}
         initial="hidden"
         animate="visible"
-      />
-
+      />{" "}
       <motion.div
         className="relative z-20 flex h-full w-full flex-col items-center text-center"
+        variants={contentContainerVariants}
         initial="hidden"
         animate="visible"
-        variants={contentVariants}
       >
-        <motion.div className="w-full flex-shrink-0" variants={itemVariants}>
+        <motion.div
+          className="w-full flex-shrink-0"
+          variants={topBarVariants}
+          initial="hidden"
+          animate="visible"
+          transition={{ duration: 0.5, delay: contentStartDelay + 0 }}
+        >
           <TopBar />
         </motion.div>
-
+        <Spotlight
+          fill="white"
+          className="sm:top-80 sm:left-64 xl:top-60 xl:left-[20rem] 2xl:top-0 2xl:left-[40rem]"
+        />
         <div className="flex flex-grow flex-col items-center justify-center pb-20">
           <motion.h1
-            className="mb-8 max-w-[800px] text-5xl font-bold"
+            className="mb-8 max-w-[850px] text-5xl font-bold"
             variants={itemVariants}
+            initial="hidden"
+            animate="visible"
+            transition={{ duration: 0.8, delay: contentStartDelay + 0.5 }}
           >
-            <Spotlight fill="white" className="top-3.5" />
             <ColourfulText text="Simplify Overtime Claim Management" />
           </motion.h1>
 
           <motion.p
             className="mb-8 max-w-[650px] text-2xl opacity-90"
             variants={itemVariants}
+            initial="hidden"
+            animate="visible"
+            transition={{ duration: 0.9, delay: contentStartDelay + 0.8 }}
           >
             ClaimEasy provides an easy-to-use platform for employees and
             managers to handle overtime requests efficiently and transparently.
           </motion.p>
 
-          <motion.div variants={itemVariants}>
+          <motion.div
+            variants={itemVariants}
+            initial="hidden"
+            animate="visible"
+            transition={{ duration: 1, delay: contentStartDelay + 1.1 }}
+          >
+            {" "}
             <button className="font-pixelify cursor-pointer border-2 border-white bg-transparent px-8 py-3 text-lg font-bold text-white transition-colors duration-300 ease-in-out hover:bg-white hover:text-black">
               GET STARTED NOW!
             </button>
@@ -137,6 +162,9 @@ export default function Herro() {
         <motion.div
           className="hero-scroll-indicator absolute bottom-8 left-1/2 -translate-x-1/2"
           variants={itemVariants}
+          initial="hidden"
+          animate="visible"
+          transition={{ duration: 0.7, delay: contentStartDelay + 0.9 }}
         >
           <a
             href="#overview"
