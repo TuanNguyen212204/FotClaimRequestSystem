@@ -8,7 +8,7 @@ import httpClient from "@/constant/apiInstance";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PasswordProgress from "./PasswordProgress";
-import { PATH } from "@/constant/config";
+import { FIRST_PAGE_BY_ROLE } from "@/constant/firstPageByRole";
 
 const passwordCriteria = [
   {
@@ -61,11 +61,6 @@ async function changePasswordAPI(
     throw error;
   }
 }
-
-const approverFirstPage = PATH.pending;
-const financeFirstPage = PATH.approvedFinance;
-const claimerFirstPage = PATH.myClaims;
-const adminFirstPage = PATH.allUserInformation;
 
 function ChangePassword() {
   const navigate = useNavigate();
@@ -127,16 +122,16 @@ function ChangePassword() {
             const role_id = localStorage.getItem("role_id");
             if (role_id === "1") {
               localStorage.setItem("selectedClaim", "usersetting");
-              navigate(`${adminFirstPage}`);
+              navigate(`${FIRST_PAGE_BY_ROLE.ADMIN}`);
             } else if (role_id === "2") {
               localStorage.setItem("selectedClaim", "pendingClaim");
-              navigate(`${approverFirstPage}`);
+              navigate(`${FIRST_PAGE_BY_ROLE.APPROVER}`);
             } else if (role_id === "3") {
               localStorage.setItem("selectedClaim", "approvedFinance");
-              navigate(`${financeFirstPage}`);
+              navigate(`${FIRST_PAGE_BY_ROLE.FINANCE}`);
             } else if (role_id === "4") {
               localStorage.setItem("selectedClaim", "all");
-              navigate(`${claimerFirstPage}`);
+              navigate(`${FIRST_PAGE_BY_ROLE.CLAIMER}`);
             } else {
               toast.error("Không biết role là gì");
               navigate("/");
