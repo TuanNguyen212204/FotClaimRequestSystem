@@ -12,8 +12,11 @@ import styles from "@components/ui/claimer/UserClaims.module.css";
 import { useNavigate } from "react-router-dom";
 import UserClaimDetailsModal from "@components/ui/claimer/UserClaimDetails";
 import StatusTag from "@/components/ui/StatusTag/StatusTag";
+import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 export const RejectedClaimByUserID = () => {
+  const { t } = useTranslation("rejectedClaim");
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const userClaim = useSelector(selectRejectedClaimByUserID);
@@ -76,34 +79,34 @@ export const RejectedClaimByUserID = () => {
     {
       key: "project_id",
       dataIndex: "project_id",
-      title: "Project ID",
+      title: t("project_id_label"),
     },
     {
       key: "project_name",
       dataIndex: "project_name",
-      title: "Project Name",
+      title: t("project_name_label"),
     },
     {
       key: "time_duration",
       dataIndex: "time_duration",
-      title: "Time Duration",
+      title: t("time_duration_label"),
     },
     {
       key: "total_hours",
       dataIndex: "total_hours",
-      title: "Total Working Hours",
+      title: t("total_working_hours_label"),
       cell: ({ value }) => `${value} hours`,
     },
     {
       key: "submitted_date",
       dataIndex: "submitted_date",
-      title: "Submitted Date",
+      title: t("submitted_date_label"),
       cell: ({ value }) => formatDateToDDMMYYYY(value as string),
     },
     {
       key: "claim_status",
       dataIndex: "claim_status",
-      title: "Claim Status",
+      title: t("claim_status_label"),
       cell: ({ value }: { value: unknown }) => {
         const stringValue = value as string;
         return (
@@ -132,7 +135,7 @@ export const RejectedClaimByUserID = () => {
     {
       key: "action",
       dataIndex: "request_id",
-      title: "Action",
+      title: t("action_label"),
       cell: ({ value }) => (
         <>
           <EyeIcon
@@ -163,7 +166,7 @@ export const RejectedClaimByUserID = () => {
         ? `${formatDateToDDMMYYYY(claim.start_date)} - ${formatDateToDDMMYYYY(
             claim.end_date
           )}`
-        : "N/A",
+        : t("no_data"),
   }));
   return (
     <div className={styles.container}>

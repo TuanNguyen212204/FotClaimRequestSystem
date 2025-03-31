@@ -9,16 +9,24 @@ export interface DropdownProps {
   disabled?: boolean;
   configDefault?: ConfigDefault;
 }
+
 export interface ConfigDefault {
   value: keyof Option;
   label: keyof Option;
+  icon?: keyof Option;
 }
+
 export interface Option {
   value: string;
   label: string;
+  icon?: React.ReactNode;
 }
 
-const DEFAULT_OPTION: ConfigDefault = { value: "value", label: "label" };
+const DEFAULT_OPTION: ConfigDefault = {
+  value: "value",
+  label: "label",
+  icon: "icon",
+};
 
 const Dropdown: React.FC<DropdownProps> = ({
   configDefault = DEFAULT_OPTION,
@@ -28,20 +36,28 @@ const Dropdown: React.FC<DropdownProps> = ({
   disabled,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState<string | null>();
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [selectedLabel, setSelectedLabel] = useState<string | null>(label);
+
   const handleMouseEnter = () => !disabled && setIsOpen(true);
   const handleMouseLeave = () => !disabled && setIsOpen(false);
+
   const handleOptionClick = (value: string, label: string) => {
     setSelectedOption(value);
     setSelectedLabel(label);
     onSelect(value);
     setIsOpen(false);
   };
+
   const newOptions = options.map((option) => ({
-    label: option[configDefault.label] || "",
-    value: option[configDefault.value] || "",
+    label: String(option[configDefault.label] || ""),
+    value: String(option[configDefault.value] || ""),
+    icon:
+      configDefault.icon && option[configDefault.icon]
+        ? option[configDefault.icon]
+        : null,
   }));
+
   return (
     <div
       className={styles.dropdown_container}
@@ -57,15 +73,18 @@ const Dropdown: React.FC<DropdownProps> = ({
       </button>
       {isOpen && (
         <div className={styles.dropdown_menu}>
-          {newOptions.map(({ value, label }) => (
+          {newOptions.map(({ value, label, icon }) => (
             <button
               key={value}
               onClick={(e) => {
                 e.stopPropagation();
                 handleOptionClick(value, label);
               }}
-              className={styles.dropdown_item}
+              className={`${styles.dropdown_item} ${
+                label.toLowerCase() === "logout" ? styles.logout_item : ""
+              }`}
             >
+              {icon && <span className={styles.dropdown_icon}>{icon}</span>}
               {label}
             </button>
           ))}

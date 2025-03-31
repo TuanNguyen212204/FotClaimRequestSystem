@@ -4,8 +4,16 @@ import { initReactI18next } from "react-i18next";
 // Import JSON
 import headerEn from "../locales/en/header.json";
 import headerVn from "../locales/vi/header.json";
-import userInfoEn from "../locales/en/userInfo.json";
-import userInfoVn from "../locales/vi/userInfo.json";
+import userInfoEn from "@/locales/en/userInfo.json";
+import userInfoVn from "@/locales/vi/userInfo.json";
+import createClaimEn from "@/locales/en/createClaim.json";
+import createClaimVn from "@/locales/vi/createClaim.json";
+import userClaimsEn from "@/locales/en/userClaims.json";
+import userClaimsVi from "@/locales/vi/userClaims.json";
+import approvedClaimEn from "@/locales/en/approvedClaim.json";
+import approvedClaimVi from "@/locales/vi/approvedClaim.json";
+import pendingClaimEn from "@/locales/en/pendingClaim.json";
+import pendingClaimVi from "@/locales/vi/pendingClaim.json";
 import financeEn from "../locales/en/finance.json";
 import financeVn from "../locales/vi/finance.json";
 import approvedetailEn from "../locales/en/approvedetail.json";
@@ -20,30 +28,36 @@ import AllUserInformationEn from "@/locales/en/admin/allUserInformation.json";
 import AllUserInformationVi from "@/locales/vi/admin/allUserInformation.json";
 import DashboardEn from "@/locales/en/admin/dashboard.json";
 import DashboardVi from "@/locales/vi/admin/dashboard.json";
+import draftClaimEn from "../locales/en/draftClaim.json";
+import draftClaimVn from "../locales/vi/draftClaim.json";
+import rejectedClaimEn from "../locales/en/rejectedClaim.json";
+import rejectedClaimVn from "../locales/vi/rejectedClaim.json";
 
 i18n.use(initReactI18next).init({
   resources: {
     en: {
       header: headerEn,
       userInfo: userInfoEn,
+      createClaim: createClaimEn,
+      userClaims: userClaimsEn,
+      approvedClaim: approvedClaimEn,
+      pendingClaim: pendingClaimEn,
       finance: financeEn,
       approvedetail: approvedetailEn,
       paidclaims: paidclaimsEn,
       claimstatus: claimstatusEn,
-      projectInformation: ProjectInformationEn,
-      allUserInformation: AllUserInformationEn,
-      dashboard: DashboardEn,
     },
     vi: {
       header: headerVn,
       userInfo: userInfoVn,
+      createClaim: createClaimVn,
+      userClaims: userClaimsVi,
+      approvedClaim: approvedClaimVi,
+      pendingClaim: pendingClaimVi,
       finance: financeVn,
       approvedetail: approvedetailVi,
       paidclaims: paidclaimsVi,
       claimstatus: claimstatusVi,
-      projectInformation: ProjectInformationVi,
-      allUserInformation: AllUserInformationVi,
-      dashboard: DashboardVi,
     },
   },
   lng: "en",
@@ -51,6 +65,10 @@ i18n.use(initReactI18next).init({
   ns: [
     "header",
     "userInfo",
+    "createClaim",
+    "userClaims",
+    "approvedClaim",
+    "pendingClaim",
     "finance",
     "approvedetail",
     "paidclaims",

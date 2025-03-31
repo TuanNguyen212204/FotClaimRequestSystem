@@ -2,6 +2,7 @@ import { useWatch, useFieldArray, UseFormSetValue } from "react-hook-form";
 import { Control, UseFormRegister, FieldErrors } from "react-hook-form";
 import styles from "@pages/CreateClaim/Claim.module.css";
 import { FormData } from "@/types/claimForm.type";
+import { useTranslation } from "react-i18next";
 
 export interface ClaimTableProps {
   control: Control<FormData>;
@@ -16,6 +17,7 @@ export default function ClaimTable({
   errors,
   setValue,
 }: ClaimTableProps) {
+  const { t } = useTranslation("createClaim");
   const { fields, append, remove } = useFieldArray({
     control,
     name: "claims",
@@ -30,9 +32,10 @@ export default function ClaimTable({
     (sum, claim) => sum + (claim.working_hours || 0),
     0
   );
+
   return (
     <div className="mb-5 box-border overflow-x-auto">
-      <h2 className="text-lg pb-1.5! mb-4!">Claim Details</h2>
+      <h2 className="text-lg pb-1.5! mb-4!">{t("claim_details_title")}</h2>
       {errors.claims &&
         typeof errors.claims === "object" &&
         !Array.isArray(errors.claims) && (
@@ -61,17 +64,14 @@ export default function ClaimTable({
                   className={styles.form_control}
                   {...register(`claims.${index}.working_hours`, {
                     valueAsNumber: true,
-
                     min: {
                       value: 0,
-                      message: "Working hours must be positive",
+                      message: t("working_hours_positive_error"),
                     },
-
                     max: {
                       value: 24,
-                      message: "Working hours must be less than 24 hours",
+                      message: t("working_hours_max_error"),
                     },
-
                     onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
                       const value = Number(e.currentTarget.value);
                       if (value > 24) {
@@ -91,7 +91,7 @@ export default function ClaimTable({
                     className={`${styles.btn} ${styles.btn_danger} self-center `}
                     onClick={() => remove(index)}
                   >
-                    Remove
+                    {t("remove_button")}
                   </button>
                 )}
               </TdWithError>
@@ -101,7 +101,7 @@ export default function ClaimTable({
         <tfoot>
           <tr>
             <td colSpan={2} className="text-right font-bold">
-              Total Working Hours
+              {t("total_working_hours_label")}
             </td>
             <td>{totalHours.toFixed(2)}</td>
           </tr>
@@ -112,27 +112,30 @@ export default function ClaimTable({
         className={`${styles.btn} ${styles.btn_add}`}
         onClick={() => append({ date: minDate, working_hours: 0 })}
       >
-        Add Claim
+        {t("add_claim_button")}
       </button>
     </div>
   );
 }
 
-const Table: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <table className={styles.claim_table}>{children}</table>
-);
+const Table: React.FC<{
+  children: React.ReactElement | React.ReactElement[];
+}> = ({ children }) => <table className={styles.claim_table}>{children}</table>;
 
-const TableHead: React.FC = () => (
-  <thead>
-    <tr>
-      <TableHeaderCell>Date</TableHeaderCell>
-      <TableHeaderCell>Working Hours</TableHeaderCell>
-      <TableHeaderCell></TableHeaderCell>
-    </tr>
-  </thead>
-);
+const TableHead: React.FC = () => {
+  const { t } = useTranslation("createClaim");
+  return (
+    <thead>
+      <tr>
+        <TableHeaderCell>{t("date_label")}</TableHeaderCell>
+        <TableHeaderCell>{t("working_hours_label")}</TableHeaderCell>
+        <TableHeaderCell></TableHeaderCell>
+      </tr>
+    </thead>
+  );
+};
 
-const TableHeaderCell: React.FC<{ children: React.ReactNode }> = ({
+const TableHeaderCell: React.FC<{ children?: React.ReactNode }> = ({
   children,
 }) => <th>{children}</th>;
 
@@ -142,17 +145,22 @@ interface TdWithErrorProps {
   className?: string;
 }
 
-const TdWithError: React.FC<TdWithErrorProps> = ({ children, error }) => (
-  <td>
-    <div className="flex flex-col gap-1">
-      {children}
-      <div>
-        {error ? (
-          <p className="text-red-500 text-xs mt-1">{error}</p>
-        ) : (
-          <span className="text-xs mt-1 invisible">placeholder</span>
-        )}
+const TdWithError: React.FC<TdWithErrorProps> = ({ children, error }) => {
+  const { t } = useTranslation("createClaim");
+  return (
+    <td>
+      <div className="flex flex-col gap-1">
+        {children}
+        <div>
+          {error ? (
+            <p className="text-red-500 text-xs mt-1">{error}</p>
+          ) : (
+            <span className="text-xs mt-1 invisible">
+              {t("error_placeholder")}
+            </span>
+          )}
+        </div>
       </div>
-    </div>
-  </td>
-);
+    </td>
+  );
+};

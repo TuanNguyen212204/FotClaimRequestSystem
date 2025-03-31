@@ -5,14 +5,16 @@ import { ClaimTableProps } from "./ClaimTable";
 import { AdditionalInfoProps } from "./AdditionalInfo";
 import { IProjectInfoProps } from "./ProjectInfo";
 import ClaimTable from "./ClaimTable";
-// import AdditionalInfo from "./AdditionalInfo";
+import AdditionalInfo from "./AdditionalInfo";
 import ButtonGroup from "./ButtonGroup";
+
 interface IClaimBodyProps
   extends ClaimTableProps,
     IProjectInfoProps,
     AdditionalInfoProps {
   mode: "create" | "view" | "update";
 }
+
 export default function ClaimBody({
   ProjectList,
   control,
@@ -36,7 +38,7 @@ export default function ClaimBody({
         errors={errors}
         setValue={setValue}
       />
-      {/* <AdditionalInfo register={register} /> */}
+      <AdditionalInfo register={register} />
       <ButtonGroup mode={mode} />
     </Card>
   );
