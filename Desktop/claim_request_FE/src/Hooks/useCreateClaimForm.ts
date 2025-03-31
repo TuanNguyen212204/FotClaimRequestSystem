@@ -107,7 +107,7 @@ export default function useCreateClaimForm({
       errorPrefix: string
     ) => {
       if (resultAction.type.endsWith("/fulfilled")) {
-        toast.success(t('toast.createSuccess'));
+        toast.success(successMessage);
         reset();
       } else {
         const payloadError = resultAction.payload as any;
@@ -120,8 +120,8 @@ export default function useCreateClaimForm({
       const resultAction = await dispatch(createClaim(DataToSend));
       handleSubmissionResult(
         resultAction,
-        "Claim request created successfully",
-        "Failed to create claim"
+        t("toast.createSuccess"),
+        t("toast.createError")
       );
     } else if (mode === "update") {
       if (!requestID) {
@@ -134,8 +134,8 @@ export default function useCreateClaimForm({
       );
       handleSubmissionResult(
         resultAction,
-        "Claim request updated successfully",
-        "Failed to update claim"
+        t("toast.updateSuccess"),
+        t("toast.updateError")
       );
     }
   };
