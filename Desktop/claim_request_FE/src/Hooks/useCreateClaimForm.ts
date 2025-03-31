@@ -10,7 +10,7 @@ import { CreateClaimData } from "@/Services/Project/Project.type";
 import { toast } from "react-toastify";
 import { useWatch } from "react-hook-form";
 import { useEffect } from "react";
-
+import { useTranslation } from "react-i18next";
 interface CreateClaimFormProps {
   initialValues?: FormData;
   mode: "create" | "view" | "update";
@@ -47,6 +47,7 @@ export default function useCreateClaimForm({
     },
     mode: "all",
   });
+  const { t } = useTranslation("claim");
 
   const formValues = useWatch({ control, name: "claims" });
   if (mode === "update" && !requestID) {
@@ -73,22 +74,25 @@ export default function useCreateClaimForm({
     const isValid = await trigger();
 
     if (!data.currentSelectedProject.projectID) {
-      toast.error("Please select a project.");
+      toast.error(t("toast.selectProject"));
+
       return;
     }
 
     if (!isValid || Object.keys(formState.errors).length > 0) {
-      toast.error("Please fix all validation errors before submitting");
+      toast.error(t("toast.fixErrors"));
+
       return;
     }
 
     if (data.claims.length === 0) {
-      toast.error("Please add at least one claim.");
+      toast.error(t("toast.addOneClaim"));
+
       return;
     }
 
     if (!user) {
-      toast.error("User information not available.");
+      toast.error(t("toast.userUnavailable"));
       return;
     }
 
@@ -123,7 +127,8 @@ export default function useCreateClaimForm({
       );
     } else if (mode === "update") {
       if (!requestID) {
-        toast.error("Request ID is required for update");
+        toast.error(t("toast.updateRequestIdMissing"));
+
         return;
       }
       const resultAction = await dispatch(

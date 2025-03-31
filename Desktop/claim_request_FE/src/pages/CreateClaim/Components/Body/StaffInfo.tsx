@@ -1,9 +1,7 @@
-import React, { JSX, ReactNode } from "react";
-import staffInfoCss from "../../Claim.module.css";
+import React, { JSX, useState } from "react";
 import Card from "../Card";
 import PopOver from "@/components/ui/PopOver";
-import { Check } from "lucide-react";
-import { useState } from "react";
+import { User, Check } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 interface IStaffInfoProps {
@@ -17,8 +15,9 @@ export default function StaffInfo({
   department = "",
   staffID,
 }: IStaffInfoProps): JSX.Element {
-  const { t } = useTranslation("createClaim");
+  const { t } = useTranslation("claim");
   const [copied, setCopied] = useState(false);
+
 
   const handleCopy = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     event.stopPropagation();
@@ -27,81 +26,57 @@ export default function StaffInfo({
     setTimeout(() => setCopied(false), 4000);
   };
 
+
   return (
     <Card>
-      <StaffContainer>
-        <StaffSection title={t("staff_name_label")}>
-          <StaffValue isName value={name} />
-        </StaffSection>
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-6 box-border">
+        <div className="min-w-0 box-border text-left">
+          <label className="block text-xs font-medium text-gray-500 uppercase mb-1 box-border">
+            {t("staffInfo.nameLabel")}
+          </label>
+          <div className="text-base font-normal py-1 break-words flex items-center box-border">
+            <User size={16} className="mr-2 text-teal-600 inline box-border" />
+            {name}
+          </div>
+        </div>
 
-        <StaffSection title={t("department_label")}>
-          <StaffValue value={department} />
-        </StaffSection>
+        <div className="min-w-0 box-border text-left">
+          <label className="block text-xs font-medium text-gray-500 uppercase mb-1 box-border">
+            {t("staffInfo.departmentLabel")}
+          </label>
+          <div className="text-base font-normal py-1 break-words box-border">
+            {department}
+          </div>
+        </div>
 
-        <StaffSection title={t("staff_id_label")}>
+        <div className="min-w-0 box-border text-left">
+          <label className="block text-xs font-medium text-gray-500 uppercase mb-1 box-border">
+            {t("staffInfo.staffIdLabel")}
+          </label>
           <PopOver
             placement="top"
             trigger="hover"
             content={
               copied ? (
-                <Check className="transform delay-75" size={16} color="green" />
+                <span className="flex items-center text-green-600">
+                  <Check size={16} className="inline mr-1" />
+                  {t("staffInfo.copiedTooltip", { defaultValue: "Copied!" })}
+                </span>
               ) : (
-                t("click_to_copy")
+                t("staffInfo.copyTooltip")
               )
             }
-            style={{ padding: "0.5rem" }}
           >
-            <StaffValue cursor="pointer" onClick={handleCopy} value={staffID} />
+            <div
+              onClick={handleCopy}
+              title={t("staffInfo.copyTooltip")}
+              className="text-base font-normal py-1 break-words cursor-pointer inline-flex items-center gap-2 transition-colors duration-200 ease-in-out hover:text-teal-600 group box-border"
+            >
+              {staffID}
+            </div>
           </PopOver>
-        </StaffSection>
-      </StaffContainer>
+        </div>
+      </div>
     </Card>
   );
 }
-
-const StaffContainer = ({ children }: { children: ReactNode }): JSX.Element => {
-  return <div className={staffInfoCss.staff_info}>{children}</div>;
-};
-
-const StaffSection = ({
-  title,
-  children,
-}: {
-  title: string;
-  children: ReactNode;
-}): JSX.Element => {
-  return (
-    <div className={staffInfoCss.staff_field}>
-      <StaffLabel>{title}</StaffLabel>
-      {children}
-    </div>
-  );
-};
-
-const StaffLabel = ({ children }: { children: ReactNode }): JSX.Element => {
-  return <div className={staffInfoCss.staff_label}>{children}</div>;
-};
-
-const StaffValue = ({
-  isName = false,
-  value,
-  onClick,
-  cursor,
-}: {
-  isName?: boolean;
-  value?: string;
-  onClick?: React.MouseEventHandler<HTMLDivElement>;
-  cursor?: React.CSSProperties["cursor"];
-}): JSX.Element => {
-  return (
-    <div
-      onClick={onClick}
-      className={`${staffInfoCss.staff_value} ${
-        isName ? staffInfoCss.staff_name : ""
-      }`}
-      style={{ cursor }}
-    >
-      {value}
-    </div>
-  );
-};

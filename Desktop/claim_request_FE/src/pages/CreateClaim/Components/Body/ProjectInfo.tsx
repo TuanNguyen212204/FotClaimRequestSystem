@@ -5,15 +5,12 @@ import {
   UseFormSetValue,
   useFormState,
 } from "react-hook-form";
-import { JSX, ReactNode, useEffect } from "react";
+import { JSX, ReactNode } from "react";
+import { useEffect } from "react";
 import { FormData } from "@/types/claimForm.type";
 import { TProjectInfo } from "@redux/slices/Project/projectSlice";
-import styles from "@pages/CreateClaim/Claim.module.css";
-import { fetchProjectByID } from "@/redux/thunk/CreateClaim";
-import { AppDispatch } from "@/redux";
-import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
-
+import { toast } from "react-toastify";
 export interface IProjectInfoProps {
   ProjectList: TProjectInfo[];
   setValue: UseFormSetValue<FormData>;
@@ -25,12 +22,12 @@ export interface IProjectInfoProps {
 export default function ProjectInfo({
   ProjectList,
   setValue,
-  register,
   control,
   mode,
 }: IProjectInfoProps): JSX.Element {
-  const { t } = useTranslation("createClaim");
   const currentProject = useWatch({ control, name: "currentSelectedProject" });
+  const { t } = useTranslation("claim");
+  // console.log(currentProject);
   const { errors } = useFormState({ control, name: "currentSelectedProject" });
 
   function formatDateRange(from: string, to: string): string {
@@ -42,16 +39,24 @@ export default function ProjectInfo({
     const toYear = toDate.getFullYear();
     return `${fromMonth} ${fromYear} - ${toMonth} ${toYear}`;
   }
-
+  useEffect(() => {
+    if (errors.currentSelectedProject?.projectName) {
+      toast.error(t("toast.selectProject"), { toastId: "projectError" });
+    }
+  }, [errors.currentSelectedProject?.projectName, t]);
+  const formControlBase =
+    "block w-full! px-4! py-3! text-base! font-normal! leading-normal! text-gray-800! bg-white! bg-clip-padding! border! border-gray-300! rounded-md! appearance-none! transition! duration-150! ease-in-out! focus:text-gray-800! focus:bg-white! focus:border-teal-600! focus:outline-none! focus:ring-2! focus:ring-teal-600/25! placeholder-gray-500! box-border!";
+  const formControlDisabled =
+    "disabled:bg-gray-200! disabled:opacity-100! disabled:cursor-not-allowed! read-only:bg-gray-200! read-only:opacity-100! read-only:cursor-not-allowed!";
   return (
     <FormRow>
       <FormColumn>
         <FormGroup
-          label={t("project_name_label")}
+          label={t("projectInfo.nameLabel")}
           input={
             <select
-              title="Projects"
-              className="w-full p-3.5! mb-2.5 text-base border-2 border-gray-200 box-border rounded-sm"
+              title={t("projectInfo.nameLabel")}
+              className={`${formControlBase} `}
               defaultValue={
                 mode === "update" || mode === "view"
                   ? currentProject?.projectName
@@ -70,7 +75,7 @@ export default function ProjectInfo({
               }}
             >
               <option value="" disabled>
-                {t("select_project_placeholder")}
+                {t("projectInfo.selectPlaceholder")}
               </option>
               {ProjectList.length > 0 &&
                 ProjectList.map((project) => (
@@ -81,21 +86,16 @@ export default function ProjectInfo({
             </select>
           }
         />
-
-        {errors.currentSelectedProject?.projectName && (
-          <p className="text-red-500 text-sm p-1">
-            {t("select_project_error")}
-          </p>
-        )}
       </FormColumn>
       <FormColumn>
         <FormGroup
-          label={t("project_duration_label")}
+          label={t("projectInfo.durationLabel")}
           input={
             <input
               disabled
-              className={`w-full p-2 mb-2.5 border-2 border-white box-border rounded-sm ${styles.form_control}`}
-              placeholder={t("project_duration_placeholder")}
+              type="text"
+              className={`${formControlBase} ${formControlDisabled}`}
+              placeholder={t("projectInfo.durationPlaceholder")}
               value={
                 currentProject?.ProjectDuration?.from &&
                 currentProject?.ProjectDuration?.to
@@ -114,7 +114,11 @@ export default function ProjectInfo({
 }
 
 const FormRow = ({ children }: { children: ReactNode }): JSX.Element => {
-  return <div className={styles.form_row}>{children}</div>;
+  return (
+    <div className="flex flex-col md:flex-row flex-wrap gap-x-6 box-border">
+      {children}
+    </div>
+  );
 };
 
 interface formGroupProps {
@@ -124,13 +128,19 @@ interface formGroupProps {
 
 const FormGroup = ({ label, input }: formGroupProps): JSX.Element => {
   return (
-    <div className={styles.form_group}>
-      <label className={styles.form_label}>{label}</label>
+    <div className="mb-4 box-border text-left">
+      <label className="block text-sm font-medium text-gray-700 mb-2 box-border">
+        {label}
+      </label>
       {input}
     </div>
   );
 };
 
 const FormColumn = ({ children }: { children: ReactNode }): JSX.Element => {
-  return <div className={styles.form_col}>{children}</div>;
+  return (
+    <div className="flex-1 min-w-[250px] mb-4 md:mb-0 box-border">
+      {children}
+    </div>
+  );
 };

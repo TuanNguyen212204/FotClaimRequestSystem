@@ -3,7 +3,7 @@ import { Control, UseFormRegister, FieldErrors } from "react-hook-form";
 import styles from "@pages/CreateClaim/Claim.module.css";
 import { FormData } from "@/types/claimForm.type";
 import { useTranslation } from "react-i18next";
-
+import PopOver from "@/components/ui/PopOver";
 export interface ClaimTableProps {
   control: Control<FormData>;
   register: UseFormRegister<FormData>;
@@ -17,7 +17,6 @@ export default function ClaimTable({
   errors,
   setValue,
 }: ClaimTableProps) {
-  const { t } = useTranslation("createClaim");
   const { fields, append, remove } = useFieldArray({
     control,
     name: "claims",
@@ -26,7 +25,7 @@ export default function ClaimTable({
   const currentProject = useWatch({ control, name: "currentSelectedProject" });
   const minDate = currentProject?.ProjectDuration?.from.split("T")[0] || "";
   const maxDate = currentProject?.ProjectDuration?.to.split("T")[0] || "";
-
+  const { t } = useTranslation("claim");
   const claims = useWatch({ control, name: "claims" });
   const totalHours = claims.reduce(
     (sum, claim) => sum + (claim.working_hours || 0),
@@ -35,7 +34,8 @@ export default function ClaimTable({
 
   return (
     <div className="mb-5 box-border overflow-x-auto">
-      <h2 className="text-lg pb-1.5! mb-4!">{t("claim_details_title")}</h2>
+      <h2 className="text-lg pb-1.5! mb-4!">{t("claimTable.ClaimEntries")}</h2>
+
       {errors.claims &&
         typeof errors.claims === "object" &&
         !Array.isArray(errors.claims) && (
@@ -53,6 +53,7 @@ export default function ClaimTable({
                   {...register(`claims.${index}.date`)}
                   min={minDate}
                   max={maxDate}
+                  disabled={!minDate || !maxDate}
                 />
               </TdWithError>
               <TdWithError
@@ -61,6 +62,7 @@ export default function ClaimTable({
                 <input
                   type="number"
                   step="0.1"
+                  disabled={!minDate || !maxDate}
                   className={styles.form_control}
                   {...register(`claims.${index}.working_hours`, {
                     valueAsNumber: true,
@@ -78,42 +80,62 @@ export default function ClaimTable({
                         e.preventDefault();
                         e.currentTarget.value = "24";
                         setValue(`claims.${index}.working_hours`, 24);
+                      } else if (value < 0) {
+                        e.preventDefault();
+                        e.currentTarget.value = "0";
+                        setValue(`claims.${index}.working_hours`, 0);
                       }
                     },
                   })}
                 />
               </TdWithError>
-              <TdWithError>
+              <td className={styles.table_action}>
                 {index === 0 ? (
                   <></>
                 ) : (
                   <button
-                    className={`${styles.btn} ${styles.btn_danger} self-center `}
+                    className={`${styles.btn} ${styles.btn_danger}  `}
                     onClick={() => remove(index)}
                   >
-                    {t("remove_button")}
+                    {t("claimTable.removeButton")}
                   </button>
                 )}
-              </TdWithError>
+              </td>
             </tr>
           ))}
         </tbody>
         <tfoot>
           <tr>
             <td colSpan={2} className="text-right font-bold">
-              {t("total_working_hours_label")}
+              {t("claimTable.totalHoursLabel")}
             </td>
             <td>{totalHours.toFixed(2)}</td>
           </tr>
         </tfoot>
       </Table>
-      <button
-        type="button"
-        className={`${styles.btn} ${styles.btn_add}`}
-        onClick={() => append({ date: minDate, working_hours: 0 })}
+      <PopOver
+        trigger="hover"
+        style={{ width: "max-content" }}
+        content={
+          Object.keys(errors.claims || {}).length > 0
+            ? t("validation.addRowError")
+            : t("claimTable.addRow")
+        }
+        placement="top"
       >
-        {t("add_claim_button")}
-      </button>
+        <button
+          type="button"
+          disabled={
+            !minDate ||
+            !maxDate ||
+            (errors.claims && Object.keys(errors.claims).length > 0)
+          }
+          className={`${styles.btn} ${styles.btn_add}  `}
+          onClick={() => append({ date: minDate, working_hours: 0 })}
+        >
+          {t("claimTable.addButton")}
+        </button>
+      </PopOver>
     </div>
   );
 }
@@ -123,13 +145,13 @@ const Table: React.FC<{
 }> = ({ children }) => <table className={styles.claim_table}>{children}</table>;
 
 const TableHead: React.FC = () => {
-  const { t } = useTranslation("createClaim");
+  const { t } = useTranslation("claim");
   return (
     <thead>
       <tr>
-        <TableHeaderCell>{t("date_label")}</TableHeaderCell>
-        <TableHeaderCell>{t("working_hours_label")}</TableHeaderCell>
-        <TableHeaderCell></TableHeaderCell>
+        <TableHeaderCell>{t("claimTable.dateHeader")}</TableHeaderCell>
+        <TableHeaderCell>{t("claimTable.hoursHeader")}</TableHeaderCell>
+        <TableHeaderCell>{t("claimTable.actionsHeader")}</TableHeaderCell>
       </tr>
     </thead>
   );
@@ -145,22 +167,11 @@ interface TdWithErrorProps {
   className?: string;
 }
 
-const TdWithError: React.FC<TdWithErrorProps> = ({ children, error }) => {
-  const { t } = useTranslation("createClaim");
-  return (
-    <td>
-      <div className="flex flex-col gap-1">
-        {children}
-        <div>
-          {error ? (
-            <p className="text-red-500 text-xs mt-1">{error}</p>
-          ) : (
-            <span className="text-xs mt-1 invisible">
-              {t("error_placeholder")}
-            </span>
-          )}
-        </div>
-      </div>
-    </td>
-  );
-};
+const TdWithError: React.FC<TdWithErrorProps> = ({ children, error }) => (
+  <td>
+    <div className="flex flex-col gap-1">
+      {children}
+      {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
+    </div>
+  </td>
+);

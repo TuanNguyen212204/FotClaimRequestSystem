@@ -2,6 +2,8 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
 // Import JSON
+import claimEn from "../locales/en/createClaim.json";
+import claimVn from "../locales/vi/createClaim.json";
 import headerEn from "../locales/en/header.json";
 import headerVn from "../locales/vi/header.json";
 import userInfoEn from "@/locales/en/userInfo.json";
@@ -46,7 +48,7 @@ i18n.use(initReactI18next).init({
     en: {
       header: headerEn,
       userInfo: userInfoEn,
-      createClaim: createClaimEn,
+      claim: createClaimEn,
       userClaims: userClaimsEn,
       approvedClaim: approvedClaimEn,
       pendingClaim: pendingClaimEn,
@@ -65,7 +67,7 @@ i18n.use(initReactI18next).init({
     vi: {
       header: headerVn,
       userInfo: userInfoVn,
-      createClaim: createClaimVn,
+      claim: createClaimVn,
       userClaims: userClaimsVi,
       approvedClaim: approvedClaimVi,
       pendingClaim: pendingClaimVi,
