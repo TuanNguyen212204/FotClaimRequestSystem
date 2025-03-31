@@ -122,7 +122,7 @@ export default function Herro() {
         </motion.div>
         <Spotlight
           fill="white"
-          className="sm:top-80 sm:left-64 xl:top-60 xl:left-[20rem] 2xl:top-0 2xl:left-[40rem]"
+          className="sm:top-80 sm:left-64 xl:top-60 xl:left-[20rem] 2xl:top-0 2xl:left-[25rem]"
         />
         <div className="flex flex-grow flex-col items-center justify-center pb-20">
           <motion.h1
