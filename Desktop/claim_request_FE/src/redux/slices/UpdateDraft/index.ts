@@ -31,21 +31,16 @@ const updateDraftSlice = createSlice({
       .addCase(
         fetchClaims.fulfilled,
         (state, action: PayloadAction<Claim[]>) => {
-          const {
-            request_id,
-            start_date,
-            end_date,
-            project,
-            claimDetailsWithSalaryOvertimePerDay,
-          } = action.payload[0];
+          const { request_id, project, claimDetailsWithSalaryOvertimePerDay } =
+            action.payload[0];
           state.requestID = request_id;
-          
+
           state.initialValues = {
             currentSelectedProject: {
               projectName: project.project_name,
               ProjectDuration: {
-                from: start_date.split("T")[0],
-                to: end_date.split("T")[0],
+                from: project.start_date.split("T")[0],
+                to: project.end_date.split("T")[0],
               },
               projectID: project.project_id,
             },
