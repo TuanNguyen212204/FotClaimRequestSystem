@@ -97,7 +97,7 @@ export default function ClaimTable({
                     className={`${styles.btn} ${styles.btn_danger}  `}
                     onClick={() => remove(index)}
                   >
-                    {t("remove_button")}
+                    {t("claimTable.removeButton")}
                   </button>
                 )}
               </td>

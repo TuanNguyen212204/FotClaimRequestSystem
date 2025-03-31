@@ -25,7 +25,6 @@ export default function CreateClaim({
   formStatus,
   requestID,
 }: CreateClaimProps) {
-  const { t } = useTranslation("createClaim");
   const {
     register,
     setValue,
@@ -50,8 +49,8 @@ export default function CreateClaim({
       if (date) {
         if (seenDates.has(date)) {
           setError(`claims.${index}.date`, {
-            type: "manual",
-            message: t("date_already_chosen_error"),
+            type: "manual"
+
           });
         } else {
           seenDates.add(date);
@@ -104,7 +103,6 @@ export default function CreateClaim({
       />
     </form>
   ) : (
-    <div>{t("loading")}</div>
     <div>{t("loading")}</div>
   );
 }

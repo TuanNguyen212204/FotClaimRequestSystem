@@ -28,8 +28,9 @@
     "hoursHeader": "Số Giờ Làm Việc",
     "actionsHeader": "Hành Động",
     "removeButton": "Xóa",
-    "addButtClaim Details
-aceholder": "giữ chỗ",
+    "addButton": "Thêm Yêu Cầu",
+    "totalHoursLabel": "Tổng Số Giờ Làm Việc",
+    "errorPlaceholder": "giữ chỗ",
     "addRow": "Ấn để thêm hàng"
   },
   "buttons": {
