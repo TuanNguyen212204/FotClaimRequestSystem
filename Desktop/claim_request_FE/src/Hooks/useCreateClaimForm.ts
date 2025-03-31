@@ -107,7 +107,7 @@ export default function useCreateClaimForm({
       errorPrefix: string
     ) => {
       if (resultAction.type.endsWith("/fulfilled")) {
-        toast.success(successMessage);
+        toast.success(t('toast.createSuccess'));
         reset();
       } else {
         const payloadError = resultAction.payload as any;
