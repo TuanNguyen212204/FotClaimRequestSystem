@@ -38,6 +38,7 @@ i18n.use(initReactI18next).init({
       projectInformation: ProjectInformationEn,
       allUserInformation: AllUserInformationEn,
       dashboard: DashboardEn,
+      pending: pendingEn,
     },
     vi: {
       header: headerVn,
@@ -49,6 +50,7 @@ i18n.use(initReactI18next).init({
       projectInformation: ProjectInformationVi,
       allUserInformation: AllUserInformationVi,
       dashboard: DashboardVi,
+      pending: pendingVn,
     },
   },
   lng: "en",
@@ -63,6 +65,7 @@ i18n.use(initReactI18next).init({
     "projectInformation",
     "allUserInformation",
     "dashboard",
+    "pending",
   ],
   defaultNS: "header",
   debug: true,

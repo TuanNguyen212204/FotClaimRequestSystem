@@ -1,3 +1,23 @@
 {
-    
+  "title": "Yêu Cầu Đang Chờ",
+  "subtitle": "Yêu cầu của bạn đang được xử lý!",
+  "approveSelected": "Duyệt Yêu Cầu Đã Chọn",
+  "rejectSelected": "Từ Chối Yêu Cầu Đã Chọn",
+  "returnSelected": "Trả Lại Yêu Cầu Đã Chọn",
+  "loading": "Đang tải...",
+  "pleaseWait": "Vui lòng chờ...",
+  "columns": {
+    "fullName": "Họ và Tên",
+    "email": "Email",
+    "startDate": "Ngày Bắt Đầu",
+    "endDate": "Ngày Kết Thúc",
+    "totalHours": "Tổng Giờ",
+    "projectId": "Mã Dự Án",
+    "projectName": "Tên Dự Án",
+    "submittedDate": "Ngày Nộp",
+    "salary": "Lương",
+    "otRate": "Tỷ Lệ OT",
+    "salaryOvertime": "Lương Làm Thêm Giờ",
+    "claimStatus": "Trạng Thái Yêu Cầu"
+  }
 }
