@@ -1,11 +1,11 @@
 import "./App.css";
-import { Router } from "./routers";
+import { AppRoute } from "./routers";
 
 function App() {
   return (
     <>
       {/* <Router /> */}
-      <Router />
+      <AppRoute />
     </>
   );
 }

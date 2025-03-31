@@ -1,0 +1,32 @@
+{
+  "approvedetail": {
+    "title": "Chi Tiết Yêu Cầu",
+    "modal": {
+      "confirmTitle": "Xác nhận?",
+      "confirmPay": "Bạn có chắc chắn muốn tiến hành thanh toán?",
+      "pay": "Thanh Toán"
+    },
+    "user": {
+      "avatar": "Ảnh đại diện",
+      "userId": "Mã người dùng"
+    },
+    "project": {
+      "projectId": "Mã dự án",
+      "projectName": "Tên dự án"
+    },
+    "claim": {
+      "timeDuration": "Thời gian",
+      "submittedDate": "Ngày nộp",
+      "approvedDate": "Ngày duyệt",
+      "status": "Trạng thái",
+      "totalHours": "Giờ",
+      "salaryOvertime": "Lương tăng ca",
+      "hours": "giờ"
+    },
+    "history": {
+      "title": "Lịch sử",
+      "workingHours": "Số giờ làm",
+      "overtimeSalary": "Lương tăng ca"
+    }
+  }
+}

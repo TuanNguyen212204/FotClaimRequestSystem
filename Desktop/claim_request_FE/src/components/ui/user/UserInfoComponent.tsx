@@ -9,14 +9,18 @@ import httpClient from "@constant/apiInstance";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export const UserInfoComponent: React.FC = () => {
+  const { t } = useTranslation("userInfo");
   const dispatch = useDispatch<AppDispatch>();
   const selectedUser = useSelector(selectUserById);
   const [isEditing, setIsEditing] = useState(false);
   const [editedUser, setEditedUser] = useState<Partial<User>>({});
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isSalaryVisible, setIsSalaryVisible] = useState(false);
+  const [isOtRateVisible, setIsOtRateVisible] = useState(false);
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const navigate = useNavigate();
 
   const accessToken = localStorage.getItem("access_token");
@@ -32,53 +36,77 @@ export const UserInfoComponent: React.FC = () => {
     if (selectedUser) {
       setEditedUser(selectedUser);
       if (selectedUser.user_status === 2) {
-        toast.warning("Please change your password for the first time.");
+        toast.warning(t("toast.change_password_first_time"));
         setTimeout(() => {
           navigate("/change-password");
+        }, 2000);
+      } else if (selectedUser.user_status === 0) {
+        toast.error(t("toast.account_inactive"));
+        setTimeout(() => {
+          navigate("/");
         }, 2000);
       }
     } else {
       setEditedUser({});
     }
-  }, [selectedUser, navigate]);
+  }, [selectedUser, navigate, t]);
 
   const getRoleName = (roleId: number | undefined): string => {
     switch (roleId) {
       case 1:
-        return "Admin";
+        return t("admin");
       case 2:
-        return "Approver";
+        return t("approver");
       case 3:
-        return "Finance";
+        return t("finance");
       case 4:
-        return "Claimer";
+        return t("claimer");
       default:
-        return "N/A";
+        return t("na");
     }
   };
 
   const getUserStatusLabel = (status: number | undefined): string => {
     switch (status) {
       case 1:
-        return "Active";
+        return t("active");
       case 0:
-        return "Disabled";
+        return t("disabled");
       case 2:
-        return "Need First-Time Login";
+        return t("need_first_time_login");
       default:
-        return "Unknown";
+        return t("unknown");
+    }
+  };
+
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const validImageTypes = ["image/jpeg", "image/png", "image/gif"];
+      if (!validImageTypes.includes(file.type)) {
+        toast.error(t("toast.invalid_image_file"));
+        return;
+      }
+      const maxSizeInMB = 5;
+      if (file.size > maxSizeInMB * 1024 * 1024) {
+        toast.error(t("toast.file_size_exceeded"));
+        return;
+      }
+      setAvatarFile(file);
+      const previewUrl = URL.createObjectURL(file);
+      setEditedUser({ ...editedUser, avatar: previewUrl });
     }
   };
 
   const validateFields = async () => {
     if (!editedUser.email || editedUser.email.trim() === "") {
-      toast.error("Email is required!");
+      toast.error(t("toast.email_required"));
       return false;
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(editedUser.email || "")) {
-      toast.error("Please enter a valid email address!");
+      toast.error(t("toast.invalid_email"));
       return false;
     }
 
@@ -90,43 +118,43 @@ export const UserInfoComponent: React.FC = () => {
           user.email === editedUser.email && user.user_id !== userId
       );
       if (emailExists) {
-        toast.error("This email is already in use!");
+        toast.error(t("toast.email_exists"));
         return false;
       }
     } catch (error) {
-      toast.error("Failed to validate email. Please try again.");
+      toast.error(t("toast.email_validation_failed"));
       return false;
     }
 
     if (!editedUser.department || editedUser.department.trim() === "") {
-      toast.error("Department is required!");
+      toast.error(t("toast.department_required"));
       return false;
     }
 
     const deptRegex = /^[A-Za-z\s]+$/;
     if (!deptRegex.test(editedUser.department)) {
-      toast.error("Department can only contain letters and spaces!");
+      toast.error(t("toast.department_invalid"));
       return false;
     }
 
     if (!editedUser.job_rank || editedUser.job_rank.trim() === "") {
-      toast.error("Job Rank is required!");
+      toast.error(t("toast.job_rank_required"));
       return false;
     }
 
     const jobRankRegex = /^[A-Za-z\s]+$/;
     if (!jobRankRegex.test(editedUser.job_rank)) {
-      toast.error("Job Rank can only contain letters and spaces!");
+      toast.error(t("toast.job_rank_invalid"));
       return false;
     }
 
     if (editedUser.password && editedUser.password.trim() !== "") {
       if (editedUser.password !== confirmPassword) {
-        toast.error("New password and confirm password do not match!");
+        toast.error(t("toast.password_mismatch"));
         return false;
       }
       if (editedUser.password.length < 6) {
-        toast.error("Password must be at least 6 characters long!");
+        toast.error(t("toast.password_too_short"));
         return false;
       }
     }
@@ -136,7 +164,7 @@ export const UserInfoComponent: React.FC = () => {
 
   const handleSave = async () => {
     if (!userId || !editedUser) {
-      toast.error("Cannot save, missing user information.");
+      toast.error(t("toast.missing_user_info"));
       return;
     }
 
@@ -146,29 +174,31 @@ export const UserInfoComponent: React.FC = () => {
     }
 
     try {
-      const requestBody: {
-        email: string;
-        department: string;
-        job_rank: string;
-        password?: string;
-      } = {
-        email: editedUser.email || "",
-        department: editedUser.department || "",
-        job_rank: editedUser.job_rank || "",
-      };
-
+      const formData = new FormData();
+      formData.append("email", editedUser.email || "");
+      formData.append("department", editedUser.department || "");
+      formData.append("job_rank", editedUser.job_rank || "");
       if (editedUser.password && editedUser.password.trim() !== "") {
-        requestBody.password = editedUser.password;
+        formData.append("password", editedUser.password);
+      }
+      if (avatarFile) {
+        formData.append("avatar", avatarFile);
       }
 
       const response = await httpClient.put(
         `/admin/staff/${userId}`,
-        requestBody
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
 
       dispatch(fetchUserByIdAsync());
       setIsEditing(false);
-      toast.success("Update user successfully.");
+      setAvatarFile(null);
+      toast.success(t("toast.update_success"));
       if (editedUser.password && editedUser.user_status === 2) {
         await httpClient.put(`/admin/staff/${userId}`, {
           user_status: 1,
@@ -177,7 +207,7 @@ export const UserInfoComponent: React.FC = () => {
       }
     } catch (error) {
       console.error("Update User error: ", error);
-      toast.error("Update user failed: " + (error as any).message);
+      toast.error(`${t("toast.update_failed")} ${(error as any).message}`);
     }
   };
 
@@ -185,14 +215,14 @@ export const UserInfoComponent: React.FC = () => {
     return (
       <div className={styles.profileContainer}>
         <h2 style={{ textAlign: "center", color: "#ff4d4f" }}>
-          You need to login to view personal information.
+          {t("login_required")}
         </h2>
         <button
-          onClick={() => navigate("/login")}
+          onClick={() => navigate("/")}
           className={styles.saveButton}
           style={{ display: "block", margin: "1rem auto" }}
         >
-          Login
+          {t("login")}
         </button>
       </div>
     );
@@ -202,7 +232,7 @@ export const UserInfoComponent: React.FC = () => {
     return (
       <div className={styles.loadingContainer}>
         <div className={styles.spinner}></div>
-        <p>Loading...</p>
+        <p>{t("loading")}</p>
       </div>
     );
   }
@@ -212,7 +242,10 @@ export const UserInfoComponent: React.FC = () => {
       <div className={styles.profileHeader}>
         <div className={styles.avatarSection}>
           <img
-            src="https://i.pinimg.com/736x/63/f0/0d/63f00d6ebe2c93b945be3c39135503c2.jpg"
+            src={
+              selectedUser.avatar ||
+              "https://i.pinimg.com/736x/63/f0/0d/63f00d6ebe2c93b945be3c39135503c2.jpg"
+            }
             alt="Avatar"
             className={styles.profileAvatar}
           />
@@ -221,7 +254,7 @@ export const UserInfoComponent: React.FC = () => {
               onClick={() => setIsEditing(true)}
               className={styles.editButton}
             >
-              UPDATE
+              {t("edit_information")}
             </button>
           </div>
         </div>
@@ -229,15 +262,19 @@ export const UserInfoComponent: React.FC = () => {
         <div className={styles.profileInfo}>
           <h1>{selectedUser.full_name || "Full Name"}</h1>
           <p className={styles.position}>
-            <span>Job Rank:</span> {selectedUser.job_rank || "No Job Rank"},{" "}
-            <span>Department:</span> {selectedUser.department || "Undetermined"}
+            <span>{t("job_rank_label")}</span>{" "}
+            {selectedUser.job_rank || t("na")}
+            <span>{t("department_label")}</span>{" "}
+            {selectedUser.department || t("na")}
           </p>
 
           <div className={styles.statsContainer}>
             <div className={styles.statItem}>
               <span className={styles.statIcon}>💰</span>
               <h3>
-                {isSalaryVisible ? `${selectedUser.salary || "N/A"} $` : "****"}
+                {isSalaryVisible
+                  ? `${selectedUser.salary || t("na")} $`
+                  : "****"}
               </h3>
               <button
                 onClick={() => setIsSalaryVisible(!isSalaryVisible)}
@@ -245,12 +282,27 @@ export const UserInfoComponent: React.FC = () => {
               >
                 {isSalaryVisible ? "👁️" : "👁️‍🗨️"}
               </button>
-              <span>Salary</span>
+              <span>{t("salary")}</span>
+            </div>
+            <div className={styles.statItem}>
+              <span className={styles.statIcon}>⏰</span>
+              <h3>
+                {isOtRateVisible
+                  ? `${selectedUser.ot_rate || t("na")} %`
+                  : "****"}
+              </h3>
+              <button
+                onClick={() => setIsOtRateVisible(!isOtRateVisible)}
+                className={styles.eyeButton}
+              >
+                {isOtRateVisible ? "👁️" : "👁️‍🗨️"}
+              </button>
+              <span>{t("ot_rate")}</span>
             </div>
             <div className={styles.statItem}>
               <span className={styles.statIcon}>📡</span>
               <h3>{getUserStatusLabel(selectedUser.user_status)}</h3>
-              <span>Status</span>
+              <span>{t("status")}</span>
             </div>
           </div>
         </div>
@@ -258,26 +310,30 @@ export const UserInfoComponent: React.FC = () => {
 
       <div className={styles.profileContent}>
         <div className={styles.infoSection}>
-          <h2 className={styles.sectionTitle}>INFORMATION</h2>
+          <h2 className={styles.sectionTitle}>{t("information")}</h2>
           <div className={styles.infoDetails}>
             <p>
-              <strong>Username:</strong> {selectedUser.username || "N/A"}
+              <strong>{t("username_label")}</strong>{" "}
+              {selectedUser.username || t("na")}
             </p>
             <p>
-              <strong>Email:</strong> {selectedUser.email || "N/A"}
+              <strong>{t("email_label")}</strong>{" "}
+              {selectedUser.email || t("na")}
             </p>
             <p>
-              <strong>Role:</strong>{" "}
-              {getRoleName(selectedUser.role_id) || "N/A"}
+              <strong>{t("role_label")}</strong>
+              {getRoleName(selectedUser.role_id) || t("na")}
             </p>
             <p>
-              <strong>Department:</strong> {selectedUser.department || "N/A"}
+              <strong>{t("department_label")}</strong>{" "}
+              {selectedUser.department || t("na")}
             </p>
             <p>
-              <strong>Job Rank:</strong> {selectedUser.job_rank || "N/A"}
+              <strong>{t("job_rank_label")}</strong>{" "}
+              {selectedUser.job_rank || t("na")}
             </p>
             <p>
-              <strong>Status:</strong>{" "}
+              <strong>{t("status_label")}</strong>
               {getUserStatusLabel(selectedUser.user_status)}
             </p>
           </div>
@@ -287,10 +343,11 @@ export const UserInfoComponent: React.FC = () => {
       {isEditing && (
         <div className={styles.editModal}>
           <div className={styles.modalContent}>
-            <h2>Edit Information</h2>
+            <h2>{t("edit_information")}</h2>
             <div className={styles.formSection}>
               <label>
-                <span className={styles.required}>*</span> Full Name:
+                <span className={styles.required}>*</span>{" "}
+                {t("full_name_label")}
               </label>
               <input
                 value={editedUser.full_name || ""}
@@ -303,7 +360,7 @@ export const UserInfoComponent: React.FC = () => {
             </div>
             <div className={styles.formSection}>
               <label>
-                <span className={styles.required}>*</span> Email:
+                <span className={styles.required}>*</span> {t("email_label")}
               </label>
               <input
                 type="email"
@@ -314,28 +371,44 @@ export const UserInfoComponent: React.FC = () => {
               />
             </div>
             <div className={styles.formSection}>
-              <label>New Password:</label>
+              <label>{t("avatar_label")}</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleAvatarChange}
+              />
+              {editedUser.avatar && (
+                <img
+                  src={editedUser.avatar}
+                  alt="Avatar Preview"
+                  style={{ width: "100px", height: "100px", marginTop: "10px" }}
+                />
+              )}
+            </div>
+            <div className={styles.formSection}>
+              <label>{t("new_password_label")}</label>
               <input
                 type="password"
                 value={editedUser.password || ""}
                 onChange={(e) =>
                   setEditedUser({ ...editedUser, password: e.target.value })
                 }
-                placeholder="password"
+                placeholder={t("new_password_label")}
               />
             </div>
             <div className={styles.formSection}>
-              <label>Verify New Password:</label>
+              <label>{t("verify_new_password_label")}</label>
               <input
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="verify password"
+                placeholder={t("verify_new_password_label")}
               />
             </div>
             <div className={styles.formSection}>
               <label>
-                <span className={styles.required}>*</span> Department:
+                <span className={styles.required}>*</span>{" "}
+                {t("department_label")}
               </label>
               <input
                 value={editedUser.department || ""}
@@ -349,7 +422,7 @@ export const UserInfoComponent: React.FC = () => {
             </div>
             <div className={styles.formSection}>
               <label>
-                <span className={styles.required}>*</span> Job Rank:
+                <span className={styles.required}>*</span> {t("job_rank_label")}
               </label>
               <input
                 value={editedUser.job_rank || ""}
@@ -360,13 +433,13 @@ export const UserInfoComponent: React.FC = () => {
             </div>
             <div className={styles.buttonGroup}>
               <button className={styles.saveButton} onClick={handleSave}>
-                Save
+                {t("save")}
               </button>
               <button
                 className={styles.cancelButton}
                 onClick={() => setIsEditing(false)}
               >
-                Cancel
+                {t("cancel")}
               </button>
             </div>
           </div>
@@ -375,3 +448,5 @@ export const UserInfoComponent: React.FC = () => {
     </div>
   );
 };
+
+export default UserInfoComponent;

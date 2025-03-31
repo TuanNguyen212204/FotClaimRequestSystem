@@ -1,25 +1,20 @@
 /* Container chính bọc Sidebar và Content */
-.container {
-  /* display: flex; */
-  height: 100vh;
-}
 
 /* Sidebar */
 .sidebar {
-  width: 60px;
+  min-width: 2%;
+  max-height: 100vh;
+  width: 4%;
   background-color: #213555;
   color: white;
   height: 100vh;
   position: fixed;
   left: 0;
   top: 0;
-  transition: all 0.3s ease-in;
-  overflow: hidden;
-}
-.sidebar:hover {
-  width: 300px;
+  text-align: center;
   transition: all 0.3s ease-in;
 }
+
 /* .collapsed {
   width: 50px;
   padding: 10px;
@@ -82,7 +77,8 @@
 }
 
 .menu {
-  margin-top: 200px;
+  width: 100%;
+  padding-top: 50px;
 }
 
 .claimHeader {
@@ -108,23 +104,30 @@
   margin-left: 10px;
   margin-top: 2px;
 }
+.icon:hover {
+  color: #16a085;
+}
 .claimList {
   transition: max-height 0.3s ease;
-  overflow: hidden;
   list-style: none;
   padding: 0;
+  width: 100%;
+  max-height: 20%;
+  margin-top: 3rem;
 }
 
 .claimItemCollapse {
-  padding: 4px;
   cursor: pointer;
-  background-color: #34495e;
-  margin: 10px 0;
+  max-width: 100%;
+  /* height: 100%; */
+  margin-top: 3rem;
   border-radius: 5px;
   display: flex;
   align-items: center;
   transition: none !important;
 }
+
+/* ac */
 .claimItemCreateClaim {
   padding: 4px;
   cursor: pointer;
@@ -136,31 +139,42 @@
   transition: none !important;
 }
 .claimItem {
-  padding: 8px;
+  /* padding: 8px; */
   cursor: pointer;
-  background-color: #34495e;
+  /* background-color: #34495e; */
   margin: 20px 0;
   border-radius: 5px;
   display: flex;
   align-items: center;
   transition: none !important;
 }
-.claimItem:hover {
-  background-color: #16a085;
-}
-.claimItemCollapse:hover {
-  background-color: #16a085;
-}
-.claimItem .icon {
-  margin-right: 10px;
-}
 
-.collapsed .claimItem .icon {
-  margin-right: 0;
+.selectedItem:hover {
+  background-color: #16a085;
+}
+/* .selectedItem{
+  
+} */
+@keyframes slideAndFade {
+  0% {
+    transform: translateX(100%); /* Bắt đầu ngoài màn hình bên phải */
+    background-position: 100% 0;
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0); /* Di chuyển về vị trí ban đầu */
+    background-position: 0 0;
+    opacity: 1;
+  }
 }
 
 .active {
-  background-color: #16a085;
+  background: linear-gradient(to right, #16a085, transparent);
+  background-size: 100% 200%;
+  animation: slideAndFade 0.5s ease-in-out forwards;
+}
+.active:hover {
+  background-position: left;
 }
 .noActive {
   background-color: none;
@@ -192,14 +206,6 @@
   color: #2c3e50;
 }
 
-.logout {
-  /* background-color: #e74c3c;
-  color: white;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-  position: absolute; */
-}
 .logout:hover {
   background-color: #c0392b;
   width: 100%;
@@ -207,32 +213,17 @@
 .logoutCollapse {
   color: white;
   width: 100%;
+  background-color: transparent;
 }
 
 /* Arrow styles */
-.arrowUp {
-  display: inline-block;
-  width: 0;
-  height: 0;
-  margin-left: 5px; /* Space between text and arrow */
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-bottom: 5px solid white; /* Change color as needed */
-}
 
-.arrowDown {
-  display: inline-block;
-  width: 0;
-  height: 0;
-  margin-left: 5px; /* Space between text and arrow */
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-top: 5px solid white; /* Change color as needed */
-}
 .claimButton {
   color: white;
   transition: none !important;
   padding-top: 5px;
+  width: 100%;
+  background-color: transparent;
 }
 .claimButton:hover {
   text-decoration: none;
@@ -243,6 +234,7 @@
   display: flex;
   flex-direction: row;
   transition: none !important;
+  width: 100%;
 }
 .iconInClaimButton_1 {
   margin-top: 2px;
@@ -260,4 +252,34 @@
 .hideText {
   visibility: hidden;
   transition: none !important;
+}
+.tooltip {
+  position: relative;
+  width: 100%;
+  margin: 1rem 0rem;
+  padding: 0.75rem 0rem;
+}
+
+/* Tooltip text */
+.tooltip .tooltipText {
+  visibility: hidden;
+  width: 120px;
+  background-color: #34495e;
+  color: #fff;
+  text-align: center;
+  padding: 1rem 0rem;
+  margin-left: 10px;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+  margin-bottom: 0rem;
+  margin-left: 13rem;
+  font-size: 0.75rem;
+}
+
+.tooltip:hover .tooltipText {
+  visibility: visible;
+}
+.vy {
+  background-color: #16a085;
 }

@@ -5,9 +5,10 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import { Typewriter } from "react-simple-typewriter";
 import httpClient from "@/constant/apiInstance";
-import { PATH } from "@/constant/config";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { HTTP_STATUS } from "@/constant/httpStatus";
+import { FIRST_PAGE_BY_ROLE } from "@/constant/firstPageByRole";
 
 async function loginUser(values: {
   username: string;
@@ -32,11 +33,6 @@ async function loginUser(values: {
     localStorage.setItem("user_status", data.user.user_status.toString());
   }
 }
-
-const approverFirstPage = PATH.pending;
-const financeFirstPage = PATH.approvedFinance;
-const claimerFirstPage = PATH.myClaims;
-const adminFirstPage = PATH.allUserInformation;
 
 function LoginForm() {
   const navigate = useNavigate();
@@ -65,24 +61,32 @@ function LoginForm() {
         const role_id = localStorage.getItem("role_id");
         if (role_id === "1") {
           localStorage.setItem("selectedClaim", "usersetting");
-          navigate(`${adminFirstPage}`);
+          navigate(`${FIRST_PAGE_BY_ROLE.ADMIN}`);
         } else if (role_id === "2") {
           localStorage.setItem("selectedClaim", "pendingClaim");
-          navigate(`${approverFirstPage}`);
+          navigate(`${FIRST_PAGE_BY_ROLE.APPROVER}`);
         } else if (role_id === "3") {
           localStorage.setItem("selectedClaim", "approvedFinance");
-          navigate(`${financeFirstPage}`);
+          navigate(`${FIRST_PAGE_BY_ROLE.FINANCE}`);
         } else if (role_id === "4") {
           localStorage.setItem("selectedClaim", "all");
-          navigate(`${claimerFirstPage}`);
+          navigate(`${FIRST_PAGE_BY_ROLE.CLAIMER}`);
         } else {
           toast.error("Login failed");
         }
       } catch (error: any) {
+        const errorCode = error.response?.data?.errorCode;
         const errMsg =
           error.response?.data?.message ||
           error.message ||
           "Msg Login thất bại ngay chỗ onSubmit, không nhận thông báo từ backend đưa lên";
+        if (
+          errorCode === HTTP_STATUS.INTERNAL_SERVER_ERROR ||
+          errorCode === HTTP_STATUS.SERVICE_UNAVAILABLE
+        ) {
+          navigate(`/error/400`);
+        }
+
         if (errMsg.toLowerCase().includes("username")) {
           setFieldError("username", errMsg);
         } else if (errMsg.toLowerCase().includes("password")) {

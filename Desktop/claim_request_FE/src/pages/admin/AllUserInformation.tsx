@@ -22,12 +22,31 @@ import ToggleButton from "@/components/ui/ToggleButton/ToggleButton";
 import { CreateUser } from "../User/CreateUser";
 import { CircleCheck } from "lucide-react";
 import { AssignProject } from "../AssignProject";
+import { ArrowDown, ArrowUp } from "lucide-react";
+import { ApiError } from "@/api";
+import { set } from "date-fns";
+import { useTranslation } from "react-i18next";
+type Department = {
+  id: string;
+  name: string;
+};
+type DepartmentList = Department[];
 const AllUserInformation: React.FC = () => {
+  const fetchDepartment = async () => {
+    try {
+      const response = await httpClient.get<ApiResponseNoGeneric>(
+        `/admin/departments`
+      );
+      setDepartment(response.data.data);
+    } catch (error) {
+      console.error("Fetch department error:", error);
+    }
+  };
   const tableRef = useRef<{
     getSelectedData: () => DataRecord[];
   }>(null);
   const [selectedData, setSelectedData] = useState<DataRecord[]>([]);
-
+  const [department, setDepartment] = useState<DepartmentList>([]);
   const handleGetSelectedData = () => {
     if (tableRef.current) {
       const a = tableRef.current.getSelectedData();
@@ -35,7 +54,7 @@ const AllUserInformation: React.FC = () => {
     }
   };
 
-  const listUserIDisDeleted: string[] = selectedData.map((data) => data.id);
+  // const listUserIDisDeleted: string[] = selectedData.map((data) => data.id);
 
   const deleteAllOFSelectedData = () => {
     handleGetSelectedData();
@@ -50,7 +69,11 @@ const AllUserInformation: React.FC = () => {
       localStorage.setItem("count", "1");
     }
   }, [username]);
+  useEffect(() => {
+    fetchDepartment();
+  }, []);
   const navigate = useNavigate();
+  const { t } = useTranslation("allUserInformation");
   const dispatch = useDispatch<AppDispatch>();
   const users = useSelector(selectAllUser);
   const totalPage = useSelector(selectTotalPageOfAllUser);
@@ -63,12 +86,14 @@ const AllUserInformation: React.FC = () => {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [checkedDisable, setCheckedDisable] = useState<boolean>(true);
+  const [page, setPage] = useState<number>(1);
   const [initialToggleStates, setInitialToggleStates] = useState<{
     [key: string]: boolean;
   }>({});
   const [userStatuses, setUserStatuses] = useState<{ [key: string]: number }>(
     {}
   );
+  const [departmentID, setDepartmentID] = useState<number>(0);
   useEffect(() => {
     const statuses = users.reduce((acc, user) => {
       acc[user.user_id] = user.user_status ?? 0;
@@ -76,30 +101,58 @@ const AllUserInformation: React.FC = () => {
     }, {} as { [key: string]: number });
     setUserStatuses(statuses);
   }, [users]);
-
+  useEffect(() => {
+    console.log("Total PAge" + totalPage);
+    setPage(totalPage);
+  }, [totalPage, currentPage]);
   const [assignID, setAssignID] = useState<string>("");
   const [toggleState, setToggleState] = useState<{ [key: string]: boolean }>(
     {}
   );
+  const [dataSource, setDataSource] = useState<DataRecord[]>([]);
+
+  useEffect(() => {
+    const fetchDataSource = async () => {
+      try {
+        const data = users.map((user: User, index: number) => ({
+          ...user,
+          key: index,
+          id: user.user_id ? user.user_id.toString() : "",
+          status: user.department ? user.department : "",
+        }));
+        setDataSource(data);
+      } catch (error) {
+        console.error("Error fetching data source:", error);
+      }
+    };
+
+    fetchDataSource();
+  }, [users]);
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      await dispatch(fetchAllUserAsync(currentPage.toString()));
-      await dispatch(fetchTotalPage({ page: currentPage.toString() }));
+      await dispatch(
+        fetchAllUserAsync({
+          page: currentPage.toString(),
+          department_id: departmentID,
+        })
+      );
+      await dispatch(
+        fetchTotalPage({
+          page: currentPage.toString(),
+          department_id: departmentID,
+        })
+      );
+
       setLoading(false);
     };
     fetchData();
   }, [dispatch, currentPage]);
+
   const handleCreateUser = async () => {
     handleOpenModal();
   };
-  const dataSource: DataRecord[] = users.map((user, index) => ({
-    ...user,
-    key: index,
-    id: user.user_id ? user.user_id.toString() : "",
-    status: user.department ? user.department : "",
-  }));
 
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
@@ -120,7 +173,7 @@ const AllUserInformation: React.FC = () => {
       await deleteUser(id);
       toast("Delete user successfully!");
       console.log("Deleted user with ID:", id);
-      dispatch(fetchAllUserAsync(currentPage.toString()));
+      // dispatch(fetchAllUserAsync(currentPage.toString()));
     } catch (error) {
       console.error("Error deleting user:", error);
     }
@@ -161,19 +214,39 @@ const AllUserInformation: React.FC = () => {
     setAssignID(id);
   };
   const columns: Column<User>[] = [
-    { key: "full_name", dataIndex: "full_name", title: "Full Name" },
-    { key: "username", dataIndex: "username", title: "Username" },
-    { key: "email", dataIndex: "email", title: "Email" },
-    { key: "department", dataIndex: "department", title: "Department" },
-    { key: "job_rank", dataIndex: "job_rank", title: "Job Rank" },
+    {
+      key: "full_name",
+      dataIndex: "full_name",
+      title: t("allUserInformation.table.fullName"),
+    },
+    {
+      key: "username",
+      dataIndex: "username",
+      title: t("allUserInformation.table.userName"),
+    },
+    {
+      key: "email",
+      dataIndex: "email",
+      title: t("allUserInformation.table.email"),
+    },
+    {
+      key: "department_name",
+      dataIndex: "department_name",
+      title: t("allUserInformation.table.department"),
+    },
+    {
+      key: "job_rank_name",
+      dataIndex: "job_rank_name",
+      title: t("allUserInformation.table.jobRank"),
+    },
     {
       key: "user_status",
       dataIndex: "user_status",
-      title: "Status",
+      title: t("allUserInformation.table.status"),
       cell: ({ record }: { record: User }) => {
         return (
           <div>
-            <div>
+            <div tabIndex={-1}>
               <ToggleButton
                 userId={record.user_id}
                 checked={
@@ -195,29 +268,23 @@ const AllUserInformation: React.FC = () => {
     {
       key: "assign",
       dataIndex: "assign",
-      title: "Assign",
+      title: t("allUserInformation.table.assign"),
       cell: ({ record }: { record: User }) => {
         return (
-          <div>
-            {userStatuses[record.user_id] === 1 && (
-              <button
-                onClick={() => handleAssignUser(record.user_id as string)}
-              >
-                <div>
-                  <CircleCheck />
-                </div>
-              </button>
-            )}
-            {userStatuses[record.user_id] === 0 && (
-              <button
-                disabled
-                onClick={() => handleAssignUser(record.user_id as string)}
-              >
-                <div>
-                  <X />
-                </div>
-              </button>
-            )}
+          <div tabIndex={-1}>
+            <button
+              tabIndex={-1}
+              className={styles.circleCheckButton}
+              onClick={() => handleAssignUser(record.user_id as string)}
+              disabled={userStatuses[record.user_id] === 0}
+              onPointerDown={() =>
+                toast.error("You can not assign this user at the project now")
+              }
+            >
+              <div>
+                {userStatuses[record.user_id] === 1 ? <CircleCheck /> : <X />}
+              </div>
+            </button>
           </div>
         );
       },
@@ -225,18 +292,24 @@ const AllUserInformation: React.FC = () => {
     {
       key: "user_id",
       dataIndex: "user_id",
-      title: "Action",
-      cell: ({ value }: { value: string }) => {
+      title: t("allUserInformation.table.action"),
+      cell: ({ value, record }: { value: string; record: User }) => {
         return (
           <div style={{ display: "flex" }}>
             <div>
               <button
+                tabIndex={-1}
                 className={styles.update_button}
+                style={{ cursor: "pointer" }}
                 onClick={() => handleUpdate(value as string)}
+                onPointerDown={() =>
+                  toast.error("You can not update this user information now")
+                }
+                disabled={userStatuses[record.user_id] === 0}
               >
-                <span>
-                  <SquarePen />
-                </span>
+                <div>
+                  {userStatuses[record.user_id] === 1 ? <SquarePen /> : <X />}
+                </div>
               </button>
             </div>
             {/* <div>
@@ -260,7 +333,45 @@ const AllUserInformation: React.FC = () => {
       },
     },
   ];
-
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+  const [selectedStatus, setSelectedStatus] = useState<string>("All");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const uniqueStatuses = [
+    "All",
+    ...new Set(department.map((item) => item.name)),
+  ];
+  const fetchStaffByDepartmentID = async (department_name: string) => {
+    const a = department.find((item) => item.name === department_name);
+    const department_id = a?.id;
+    setDepartmentID(department_id as number | undefined);
+    try {
+      const response = await httpClient.get<ApiResponseNoGeneric>(
+        "/admin/staffs",
+        {
+          page: currentPage.toString(),
+          department_id: department_id,
+          limit: 10,
+        }
+      );
+      console.log(response.data.data);
+      setDataSource(response.data.data);
+      setPage(response.data.totalPages);
+    } catch (error) {
+      console.error("Fetch staff by department error:", error);
+    }
+  };
+  const handleStatusSelect = (status: string) => {
+    setSelectedStatus(status);
+    fetchStaffByDepartmentID(status);
+    setCurrentPage(1);
+    setIsDropdownOpen(false);
+  };
+  useEffect(() => {
+    console.log(dataSource);
+    console.log(page);
+  }, [dataSource, page]);
   return (
     <div>
       {openModal && (
@@ -285,7 +396,43 @@ const AllUserInformation: React.FC = () => {
           </div>
         </div>
       )}
+      <div className="flex ">
+        <div className={`${styles.filter_section} `}>
+          <div className={styles.filterStatusP}>
+            <p>
+              {t("allUserInformation.filter")} {name}:
+            </p>
+          </div>
+          <div
+            className="relative inline-block text-left mt-5.5 ml-3"
+            // style={{ marginTop: "15px", marginLeft: "15px" }}
+          >
+            <div
+              onClick={toggleDropdown}
+              className="flex items-center justify-between px-4 py-2 text-sm font-medium text-gray-700 bg-white border rounded-md shadow-sm hover:bg-gray-100 focus:outline-none"
+            >
+              <span>{selectedStatus}</span>
+              <ArrowDown className="w-4 h-4 ml-2" />
+            </div>
 
+            {isDropdownOpen && (
+              <div className="absolute right-0 z-10 mt-2 origin-top-right bg-white border border-gray-300 rounded-md shadow-lg w-48">
+                <div className="py-1">
+                  {uniqueStatuses.map((status) => (
+                    <div
+                      key={status}
+                      onClick={() => handleStatusSelect(status)}
+                      className="block px-4 py-2 text-sm text-gray-700 w-4/5 text-left hover:bg-gray-200"
+                    >
+                      {status}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
       <div>
         <TableComponent
           // sortConfig={sortConfig}
@@ -295,10 +442,9 @@ const AllUserInformation: React.FC = () => {
           dataSource={dataSource}
           loading={loading}
           pagination={true}
-          sortConfig={sortConfig}
           name="Role"
           createButton={true}
-          totalPage={totalPage}
+          totalPage={page}
           onPageChange={handlePageChange}
           onCreateButtonClick={handleCreateUser}
         />

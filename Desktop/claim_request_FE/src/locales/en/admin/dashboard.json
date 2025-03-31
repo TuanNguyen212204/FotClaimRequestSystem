@@ -1,0 +1,46 @@
+{
+  "dashboard": {
+    "title": "Welcome Back",
+    "subTitle": "Track, manage, and forecast your staff and projects.",
+    "summaryCard": {
+      "totalClaim": "Total Claims",
+      "active": "Active",
+      "inactive": "Inactive",
+      "thisMonth": "This Month",
+      "sinceLastMonth": "since last month",
+      "pendingClaim": "Pending Claims",
+      "approvedClaim": "Approved Claims",
+      "rejectedClaim": "Rejected Claims",
+      "totalProject": "Total Projects",
+      "totalUser": "Total Users"
+    },
+    "otChart": {
+      "title": "Top Projects by Claim Count",
+      "hAxis": "Project Name",
+      "vAxis": "Claim Count"
+    },
+    "claimChart": {
+      "title": "Claim Status Overview",
+      "hAxis": "Month",
+      "vAxis": "Claims",
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "paid": "Paid",
+      "months": {
+        "january": "Jan",
+        "february": "Feb",
+        "march": "Mar",
+        "april": "April",
+        "may": "May",
+        "june": "Jun",
+        "july": "Jul",
+        "august": "Aug",
+        "september": "Sep",
+        "october": "Oct",
+        "november": "Nov",
+        "december": "Dec"
+      }
+    }
+  }
+}

@@ -9,6 +9,7 @@ import {
   DetailClaimFinance,
   ClaimApprovedApprover,
   ClaimApprovedFinance,
+  MyClaimDetail,
 } from "@/types/Claim";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { delay } from "@utils/delay";
@@ -196,9 +197,32 @@ export const fetchAllRejectedClaimAsync = createAsyncThunk<
   }
 });
 
-export const fetchClaimByUserAsync = createAsyncThunk<Claim[]>(
-  "claim/fetchUserClaim",
-  async (): Promise<Claim[]> => {
+export const fetchClaimByUserAsync = createAsyncThunk<
+  Claim[],
+  { page: number }
+>("claim/fetchUserClaim", async ({ page }): Promise<Claim[]> => {
+  try {
+    await delay(1000);
+    const userId = localStorage.getItem("user_id");
+    if (!userId) {
+      throw new Error("User id not found");
+    }
+    const response = await httpClient.get<ApiResponse<Claim[]>>("/claims", {
+      userID: userId,
+      page: page,
+      limit: 10,
+    });
+    console.log(response.data.totalPages);
+    return response.data.data;
+  } catch (error) {
+    console.error("Fetch Claims error " + error);
+    throw error;
+  }
+});
+
+export const fetchTotalClaimByUserAsync = createAsyncThunk<number>(
+  "claim/fetchTotalClaimByUserAsync",
+  async (): Promise<number> => {
     try {
       await delay(1000);
       const userId = localStorage.getItem("user_id");
@@ -208,7 +232,7 @@ export const fetchClaimByUserAsync = createAsyncThunk<Claim[]>(
       const response = await httpClient.get<ApiResponse<Claim[]>>("/claims", {
         userID: userId,
       });
-      return response.data.data;
+      return response.data.totalPages;
     } catch (error) {
       console.error("Fetch Claims error " + error);
       throw error;
@@ -216,9 +240,12 @@ export const fetchClaimByUserAsync = createAsyncThunk<Claim[]>(
   }
 );
 
-export const fetchClaimByUserWithPendingStatusAsync = createAsyncThunk<Claim[]>(
+export const fetchClaimByUserWithPendingStatusAsync = createAsyncThunk<
+  Claim[],
+  { page: number }
+>(
   "claim/fetchClaimByUserWithPendingStatusAsync",
-  async (): Promise<Claim[]> => {
+  async ({ page }): Promise<Claim[]> => {
     try {
       await delay(1000);
       const userId = localStorage.getItem("user_id");
@@ -227,6 +254,7 @@ export const fetchClaimByUserWithPendingStatusAsync = createAsyncThunk<Claim[]>(
       }
       const response = await httpClient.get<ApiResponse<Claim[]>>("/claims", {
         userID: userId,
+        page: page,
       });
       return response.data.data.filter(
         (claim) => claim.claim_status === "PENDING"
@@ -239,10 +267,11 @@ export const fetchClaimByUserWithPendingStatusAsync = createAsyncThunk<Claim[]>(
 );
 
 export const fetchClaimByUserWithApprovedStatusAsync = createAsyncThunk<
-  Claim[]
+  Claim[],
+  { page: number }
 >(
   "claim/fetchClaimByUserWithApprovedStatusAsync",
-  async (): Promise<Claim[]> => {
+  async ({ page }): Promise<Claim[]> => {
     try {
       await delay(1000);
       const userId = localStorage.getItem("user_id");
@@ -251,6 +280,7 @@ export const fetchClaimByUserWithApprovedStatusAsync = createAsyncThunk<
       }
       const response = await httpClient.get<ApiResponse<Claim[]>>("/claims", {
         userID: userId,
+        page: page,
       });
       return response.data.data.filter(
         (claim) => claim.claim_status === "APPROVED"
@@ -262,9 +292,12 @@ export const fetchClaimByUserWithApprovedStatusAsync = createAsyncThunk<
   }
 );
 
-export const fetchClaimByUserWithRejectStatusAsync = createAsyncThunk<Claim[]>(
+export const fetchClaimByUserWithRejectStatusAsync = createAsyncThunk<
+  Claim[],
+  { page: number }
+>(
   "claim/fetchClaimByUserWithRejectStatusAsync",
-  async (): Promise<Claim[]> => {
+  async ({ page }): Promise<Claim[]> => {
     try {
       await delay(1000);
       const userId = localStorage.getItem("user_id");
@@ -273,12 +306,32 @@ export const fetchClaimByUserWithRejectStatusAsync = createAsyncThunk<Claim[]>(
       }
       const response = await httpClient.get<ApiResponse<Claim[]>>("/claims", {
         userID: userId,
+        page: page,
       });
+      console.log(response.data.data);
       return response.data.data.filter(
         (claim) => claim.claim_status === "REJECTED"
       );
     } catch (error) {
       console.error("Fetch Claims error " + error);
+      throw error;
+    }
+  }
+);
+
+// fetch claim detail by claim_id
+export const fetchMyClaimDetailAsync = createAsyncThunk<MyClaimDetail, string>(
+  "claim/fetchClaimDetail",
+  async (request_id: string): Promise<MyClaimDetail> => {
+    try {
+      await delay(1000);
+      const response = await httpClient.get<ApiResponse<MyClaimDetail>>(
+        `/claims/${request_id}`
+      );
+      console.log(response.data.data);
+      return response.data.data;
+    } catch (error) {
+      console.error("Fetch Claim Detail error " + error);
       throw error;
     }
   }

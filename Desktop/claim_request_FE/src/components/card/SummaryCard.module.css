@@ -3,12 +3,19 @@
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   border: 1px solid #d1d5db;
+  background-color: white;
+  width: 300px;
+  margin: -2px;
+}
+
+:hover.card{
+  box-shadow: 0 2px 2px #233754;
 }
 
 .header {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 18px;
 }
 
 .icon {
@@ -18,12 +25,82 @@
 }
 
 .title {
-  font-size: 1.25rem;
-  font-weight: bold;
+  font-size: 1rem;
+  /* font-weight: bold; */
 }
 
 .value {
-  font-size: 2.5rem;
   font-weight: bold;
+  font-size: 3rem;
+  margin-bottom: 0.01em;
+  font-weight: lighter;
+  margin-top: 0.1px;
+}
+
+.detail{
+  font-size: 1.3rem;
+  margin-top: 3px;
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
   margin-bottom: 2px;
+}
+
+.percentage {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.percentageValue {
+  font-size: 1rem;
+}
+
+.comparison {
+  color: #6b7280; 
+  font-size: 0.875rem;
+}
+
+.positive {
+  color: #00c853;
+}
+
+.negative {
+  color: #d50000; 
+}
+
+.chartWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 20px; 
+}
+
+.legend {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 50%;
+}
+
+.legendItem {
+  display: flex;
+  align-items: left;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.legendColor {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 2px;
+}
+
+.chartContainer {
+  margin-top: 30px;
+  width: 150px;
+  height: 150px;
+  flex-shrink: 0;
 }

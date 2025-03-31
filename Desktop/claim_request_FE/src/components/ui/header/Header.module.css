@@ -43,3 +43,193 @@
   object-fit: contain;
   margin-top: -20px;
 }
+
+.dropdown {
+  z-index: 1000;
+  position: absolute;
+  right: 20px;
+  top: 60px;
+  width: 250px;
+  background: white;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 10px;
+  scroll-behavior: smooth;
+  max-height: 80vh;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+.markAll {
+  text-align: center;
+  padding: 10px;
+  cursor: pointer;
+  background: #f0f0f0;
+  font-weight: bold;
+}
+
+.notificationItem {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+  position: relative;
+}
+
+.unread {
+  background-color: #f0f8ff;
+  font-weight: bold;
+}
+
+.read {
+  background-color: #ffffff;
+  font-weight: normal;
+}
+
+.timestamp {
+  font-size: 12px;
+  color: gray;
+}
+
+.notification-container {
+  max-height: 80vh;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  padding: 10px;
+  background-color: white;
+}
+
+.options {
+  display: none;
+  position: absolute;
+  right: 0;
+  padding: 10px 8px;
+  background-color: white;
+  border-radius: 8px;
+  z-index: 10;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  font-weight: normal;
+}
+
+.showOptions {
+  display: block;
+}
+
+.option {
+  font-weight: normal;
+  margin-left: 4px;
+  font-size: 14px;
+  padding: 5px 5px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.option:hover {
+  background-color: #f0f0f0;
+}
+
+.circle {
+  position: absolute;
+  background-color: #fff;
+  top: 30%;
+  right: 5%;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: none;
+  line-height: 40px;
+  cursor: pointer;
+}
+
+.threeDots {
+  position: absolute; /* Định vị tuyệt đối */
+  right: 0; /* Đặt ở bên phải */
+  top: 0; /* Đặt ở giữa theo chiều dọc */
+  transform: translate(-75%, 75%) rotate(90deg); /* Căn giữa theo chiều dọc */
+  font-size: 16px; /* Kích thước biểu tượng */
+  color: #333; /* Màu sắc biểu tượng */
+  cursor: pointer; /* Con trỏ chuột khi hover */
+}
+
+.notificationItem:hover {
+  background-color: #eeeeee;
+}
+
+.notificationItem:hover .circle {
+  display: flex;
+}
+
+.avatarDropdown {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.avatarDropdownMenu {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  width: 130px;
+  padding: 0;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  transform: translate(-50%, 10px);
+  animation: dropdownFade 0.2s ease forwards;
+}
+
+.avatarDropdownItem {
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
+  border: none;
+  background: none;
+  border-radius: 8px;
+}
+
+.avatarDropdownItem:hover {
+  background-color: #f5f5f5;
+  border-radius: 8px;
+}
+
+.avatarDropdownIcon {
+  margin-right: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.logoutItem {
+  background-color: #3e5879;
+  color: white;
+  border-radius: 8px;
+}
+
+.logoutItem:hover {
+  background-color: rgba(163, 163, 163, 0.64);
+  border-radius: 8px;
+  /* color: rgb(255, 255, 255) */
+  color: #333;
+}
+
+@keyframes dropdownFade {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 10px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}

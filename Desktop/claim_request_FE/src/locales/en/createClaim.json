@@ -1,0 +1,66 @@
+{
+  "title": {
+    "create": "Create Claim",
+    "view": "View Claim",
+    "update": "Update Claim"
+  },
+  "header": {
+    "preparedBy": "Prepare By: {{name}}",
+    "claimStatus": "Claim Status: {{status}}"
+  },
+  "staffInfo": {
+    "nameLabel": "Staff Name",
+    "departmentLabel": "Department",
+    "staffIdLabel": "Staff ID",
+    "copyTooltip": "Click to copy",
+    "copiedTooltip": "Copied!"
+  },
+  "projectInfo": {
+    "nameLabel": "Project Name",
+    "durationLabel": "Project Duration",
+    "selectPlaceholder": "Select a Project",
+    "durationPlaceholder": "Project Duration"
+  },
+  "claimTable": {
+    "detailsTitle": "Claim Details",
+    "ClaimEntries": "Claim Entries",
+    "dateHeader": "Date",
+    "hoursHeader": "Working Hours",
+    "actionsHeader": "Actions",
+    "removeButton": "Remove",
+    "addButton": "Add Claim",
+    "totalHoursLabel": "Total Working Hours",
+    "errorPlaceholder": "placeholder",
+    "addRow": "Click to add row"
+  },
+  "buttons": {
+    "send": "Send",
+    "update": "Update"
+  },
+  "loading": "Loading...",
+  "validation": {
+    "projectNameRequired": "Project Name is required",
+    "startDateRequired": "Start date is required",
+    "endDateRequired": "End date is required",
+    "dateRequired": "Date is required",
+    "hoursPositive": "Working hours must be positive",
+    "hoursMax": "Working hours must be less than 24 hours",
+    "atLeastOneClaim": "At least one claim is required",
+    "dateNotInRange": "All claim dates must be within the project's duration",
+    "dateAlreadyChosen": "This date is already chosen",
+    "selectProjectError": "Select a Project",
+    "addRowError": "Fix all errors"
+  },
+  "toast": {
+    "selectProject": "Please select a project.",
+    "fixErrors": "Please fix all validation errors before submitting.",
+    "addOneClaim": "Please add at least one claim.",
+    "userUnavailable": "User information not available.",
+    "createSuccess": "Claim request created successfully.",
+    "createError": "Failed to create claim: {{error}}",
+    "updateSuccess": "Claim request updated successfully.",
+    "updateError": "Failed to update claim: {{error}}",
+    "updateRequestIdMissing": "Request ID is required for update.",
+    "loadDataError": "Failed to load data. Please refresh the page."
+  }
+}

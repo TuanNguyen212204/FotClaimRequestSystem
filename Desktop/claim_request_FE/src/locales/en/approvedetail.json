@@ -1,0 +1,33 @@
+{
+  "approvedetail": {
+    "title": "Claim Detail",
+    "modal": {
+      "confirmTitle": "Confirm?",
+      "confirmPay": "Are you sure you want to proceed with the payment?",
+      "pay": "Pay"
+    },
+    "user": {
+      "avatar": "Avatar",
+      "userId": "User ID",
+      "jobRank": "Job Rank",
+      "department": "Department"
+    },
+    "project": {
+      "projectId": "Project ID",
+      "projectName": "Project Name"
+    },
+    "claim": {
+      "timeDuration": "Time Duration",
+      "submittedDate": "Submitted Date",
+      "approvedDate": "Approved Date",
+      "status": "Status",
+      "totalHours": "Total Working Hours",
+      "salaryOvertime": "Salary Overtime"
+    },
+    "history": {
+      "title": "History",
+      "workingHours": "Working Hours",
+      "overtimeSalary": "Overtime Salary"
+    }
+  }
+}

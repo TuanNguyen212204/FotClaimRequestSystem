@@ -1,11 +1,30 @@
 import React from "react";
-import styles from "@pages/CreateClaim/Claim.module.css";
 import CreateClaim from "@/pages/CreateClaim/Components/Create-Claim/CreateClaim";
-const CreateClaimPage: React.FC = () => {
+import { FormData } from "@/types/claimForm.type";
+export interface CreateClaimPageProps {
+  mode: "create" | "view" | "update";
+  initialValues?: FormData;
+  formStatus: "Draft" | "Pending" | "Approved" | "Rejected" | "Paid";
+  requestID?: string;
+}
+
+const CreateClaimPage: React.FC<CreateClaimPageProps> = ({
+  mode = "create",
+  initialValues,
+  formStatus = "Draft",
+  requestID,
+}) => { 
   return (
-    <div className={styles.container}>
-      <div className="flex flex-col box-border">
-        <CreateClaim />
+    <div
+      className={`bg-gray-100 text-gray-800 p-4 md:p-6 font-['Roboto'] leading-relaxed box-border  overflow-auto`}
+    >
+      <div className="max-w-7xl mx-auto p-4 md:p-6 bg-white rounded-md shadow-md box-border">
+        <CreateClaim
+          mode={mode}
+          initialValues={initialValues}
+          formStatus={formStatus}
+          requestID={requestID}
+        />
       </div>
     </div>
   );

@@ -82,21 +82,23 @@
   display: flex;
   justify-content: right;
   width: 100%;
-  gap: 5px;
+  background-color: transparent;
   max-width: 1900px;
 }
 
 .pagination_button {
   font-size: 1rem;
-  border: 1.5px solid black;
+  background-color: transparent;
+  border: 2px solid black;
   width: 100%;
   width: 2.5rem;
   height: 2.5rem;
   margin-top: 0.5rem;
   border-radius: 10px;
   gap: 2px;
-  padding-top: 2px;
+  padding: 0;
   overflow-x: auto;
+  cursor: pointer;
 }
 
 .pagination button:hover {
@@ -167,7 +169,7 @@
 } */
 
 .activePage {
-  border: 2px solid #007bff;
+  border: 3px solid #007bff;
 }
 .thead {
   text-align: center;
@@ -177,11 +179,13 @@
 }
 .pagination_button_icon {
   border: none;
+  background-color: transparent;
   margin-right: 10px;
 }
 .pagination_button_icon_right {
   padding-right: 20px;
   border: none;
+  background-color: transparent;
   margin-right: 10px;
 }
 .pagination_button_number {
@@ -278,12 +282,51 @@
   display: flex;
 }
 .create_button {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #4ade80 0%, #34c759 100%);
   color: white;
-  background-color: #4ade80;
-  border-radius: 25px;
-  padding: 5px;
-  width: 100%;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
+
+.create_button:hover {
+  background: linear-gradient(135deg, #34c759 0%, #2db54f 100%);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.create_button:active {
+  background: linear-gradient(135deg, #2db54f 0%, #28a745 100%);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transform: translateY(0);
+}
+
+.create_button_content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.create_button_icon {
+  width: 20px;
+  height: 20px;
+}
+
+.create_button_text {
+  font-size: 14px;
+}
+
 .checkbox {
   margin-top: -36px;
+}
+.pageButton {
+  background-color: transparent;
 }

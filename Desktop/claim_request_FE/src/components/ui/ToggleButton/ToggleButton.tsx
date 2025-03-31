@@ -37,6 +37,7 @@ const ToggleButton = ({
 
   return (
     <button
+      tabIndex={-1}
       className={`toggle-wrapper ${enabled ? "enabled" : ""}`}
       onClick={handleClick}
     >

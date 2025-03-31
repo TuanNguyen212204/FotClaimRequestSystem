@@ -24,8 +24,11 @@ import { toast } from "react-toastify";
 import Modal from "@/components/ui/modal/Modal";
 import StatusTag, { StatusType } from "@/components/ui/StatusTag/StatusTag";
 import { DetailsApproval } from "./DetailsApproval";
+import { Button } from "@/components/ui/button/Button";
+import { useTranslation } from "react-i18next";
 
 export const PendingComponent: React.FC = () => {
+  const { t } = useTranslation("pending");
   const dispatch = useDispatch<AppDispatch>();
   const claimList = useSelector(selectAllPending);
   const totalPages = useSelector(selectAllPendingTotalPages);
@@ -40,6 +43,7 @@ export const PendingComponent: React.FC = () => {
   const [openModal, setOpenModal] = useState(false);
   const [selectedRequestId, setSelectedRequestId] = useState<string>("");
   const [isSalaryVisible, setIsSalaryVisible] = useState(false);
+  const [checkedItems, setCheckedItems] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     setLoading(true);
@@ -51,15 +55,58 @@ export const PendingComponent: React.FC = () => {
     ).finally(() => setLoading(false));
   }, [currentPage]);
 
-  const tableRef = useRef<{ getSelectionData: () => DataRecord[] }>(null);
+  const checkboxRef = useRef<{
+    getSelectedData: () => DataRecord[];
+    getSortedData: () => DataRecord[];
+    indeterminate?: boolean;
+  }>(null);
   const [selectedData, setSelectedData] = useState<DataRecord[]>([]);
 
+  // const handleSelectAll = () => {
+  //   const allChecked = checkedItems.size === dataSource.length;
+  //   if (allChecked) {
+  //     setCheckedItems(new Set());
+  //   } else {
+  //     setCheckedItems(new Set(dataSource.map((record) => record.id || "")));
+  //   }
+  // };
+
+  // const handleCheckboxChange = (requestId: string, checked: boolean) => {
+  //   setCheckedItems((prev) => {
+  //     const newCheckedItems = new Set(prev);
+  //     if (checked) {
+  //       newCheckedItems.add(requestId);
+  //     } else {
+  //       newCheckedItems.delete(requestId);
+  //     }
+  //     return newCheckedItems;
+  //   });
+  // };
+
+  // const handleGetSelectedData = () => {
+  //   const selectedClaims = dataSource.filter((record) =>
+  //     checkedItems.has(record.request_id)
+  //   );
+  //   setSelectedData(selectedClaims);
+  //   console.log("Selected claims:", selectedClaims);
+  // };
+
   const handleGetSelectedData = () => {
-    if (tableRef.current) {
-      const a = tableRef.current.getSelectionData();
-      setSelectedData(a);
+    if (checkboxRef.current) {
+      const selected = checkboxRef.current.getSelectedData();
+      setSelectedData(selected);
+      return selected;
     }
+    return [];
   };
+
+  useEffect(() => {
+    if (checkboxRef.current) {
+      const someChecked = checkedItems.size > 0;
+      const allChecked = checkedItems.size === dataSource.length;
+      checkboxRef.current.indeterminate = someChecked && !allChecked;
+    }
+  }, [checkedItems]);
 
   const handleApproveClaim = async (request_id: string) => {
     handleGetSelectedData();
@@ -133,22 +180,104 @@ export const PendingComponent: React.FC = () => {
     console.log("Selected data:", selectedData);
   };
 
+  const handleApproveSelect = async () => {
+    const selectedClaims = handleGetSelectedData();
+    const requestIds = selectedClaims.map((claim) => claim.id as string);
+    if (requestIds.length === 0) {
+      toast.warn("Please select at least one claim to approve.");
+      return;
+    }
+    setModalContent({
+      title: `Are you sure you want to approve ${requestIds.length} claim(s)?`,
+      onOk: async () => {
+        try {
+          await httpClient.post("/approvers/approve-multiple-claims", {
+            request_ids: requestIds,
+          });
+          dispatch(
+            fetchAllPendingClaimAsync({
+              page: currentPage.toString(),
+              limit: limit.toString(),
+            })
+          );
+          toast.success("Selected claims approved successfully!");
+        } catch (error) {
+          console.log("Error approving claims: ", error);
+          toast.error("Failed to approve selected claims.");
+        }
+      },
+    });
+    setModalVisible(true);
+  };
+
+  const handleRejectSelect = async () => {
+    const selectedClaims = handleGetSelectedData();
+    const requestIds = selectedClaims.map((claim) => claim.id as string);
+    if (requestIds.length === 0) {
+      toast.warn("Please select at least one claim to reject.");
+      return;
+    }
+    setModalContent({
+      title: `Are you sure you want to reject ${requestIds.length} claim(s)?`,
+      onOk: async () => {
+        try {
+          await httpClient.post("/approvers/reject-multiple-claims", {
+            request_ids: requestIds,
+          });
+          dispatch(
+            fetchAllPendingClaimAsync({
+              page: currentPage.toString(),
+              limit: limit.toString(),
+            })
+          );
+          toast.success("Selected claims reject successfully!");
+        } catch (error) {
+          console.log("Error approving claims: ", error);
+          toast.error("Failed to reject selected claims.");
+        }
+      },
+    });
+    setModalVisible(true);
+  };
+
+  const handleReturnSelect = async () => {
+    const selectedClaims = handleGetSelectedData();
+    const requestIds = selectedClaims.map((claim) => claim.id as string);
+    if (requestIds.length === 0) {
+      toast.warn("Please select at least one claim to return.");
+      return;
+    }
+    setModalContent({
+      title: `Are you sure you want to return ${requestIds.length} claim(s)?`,
+      onOk: async () => {
+        try {
+          await httpClient.post("/approvers/return-multiple-claims", {
+            request_ids: requestIds,
+          });
+          dispatch(
+            fetchAllPendingClaimAsync({
+              page: currentPage.toString(),
+              limit: limit.toString(),
+            })
+          );
+          toast.success("Selected claims return successfully!");
+        } catch (error) {
+          console.log("Error approving claims: ", error);
+          toast.error("Failed to return selected claims.");
+        }
+      },
+    });
+    setModalVisible(true);
+  };
+
   const handleViewDetail = (value: string) => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 500);
     setSelectedRequestId(value);
     setOpenModal(true);
   };
-
-  // const handleViewDetail = (request_id: string) => {
-  //   const selectedClaim = claimList.find(claim => claim.request_id === request_id);
-  //   if (selectedClaim) {
-  //     setDetailData(selectedClaim);
-  //     setDetailModalVisible(true);
-  //   }
-  // };
-
-  // const closeDetailModal = () => {
-  //   setDetailModalVisible(false);
-  // };
 
   const handlePageChange = (newPage: number) => {
     console.log("Trang mới: ", newPage);
@@ -164,75 +293,72 @@ export const PendingComponent: React.FC = () => {
   };
 
   const columns: Column<DataRecord>[] = [
-    // {
-    //   key: "request_id",
-    //   dataIndex: "request_id",
-    //   title: "Request ID",
-    // },
-    // {
-    //   key: "user_id",
-    //   dataIndex: "user_id",
-    //   title: "User ID",
-    // },
     {
       key: "user_name",
       dataIndex: "user_full_name",
-      title: "Full Name",
+      title: t("columns.fullName"),
+    },
+    {
+      key: "email",
+      dataIndex: "email",
+      title: t("columns.email"),
     },
     {
       key: "start_date",
       dataIndex: "start_date",
-      title: "Start Date",
+      title: t("columns.startDate"),
       cell: ({ value }) => formatDateToDDMMYYYY(value as string),
     },
     {
       key: "end_date",
       dataIndex: "end_date",
-      title: "End Date",
+      title: t("columns.endDate"),
       cell: ({ value }) => formatDateToDDMMYYYY(value as string),
     },
     {
       key: "total_hours",
       dataIndex: "total_hours",
-      title: "Total Hours",
+      title: t("columns.totalHours"),
     },
     {
       key: "project_id",
       dataIndex: "project_id",
-      title: "Project ID",
+      title: t("columns.projectId"),
     },
     {
       key: "project_name",
       dataIndex: "project_name",
-      title: "Project Name",
+      title: t("columns.projectName"),
     },
     {
       key: "submitted_date",
       dataIndex: "submitted_date",
-      title: "Submitted Date",
+      title: t("columns.submittedDate"),
       cell: ({ value }) => formatDateToDDMMYYYY(value as string),
     },
     {
       key: "salary",
       dataIndex: "user_salary",
-      title: "Salary",
+      title: t("columns.salary"),
       cell: ({ value }) => <div>{isSalaryVisible ? value : "******"}</div>,
     },
     {
       key: "ot_rate",
       dataIndex: "user_ot_rate",
-      title: "OT Rate",
+      title: t("columns.otRate"),
     },
     {
       key: "salary_overtime",
       dataIndex: "salary_overtime",
-      title: "Salary Overtime",
-      cell: ({ value }) => <div>{isSalaryVisible ? value : "******"}</div>,
+      title: t("columns.salaryOvertime"),
+      cell: ({ value }) => (
+        <div>{isSalaryVisible ? value : "*****************"}</div>
+      ),
     },
     {
       key: "claim_status",
       dataIndex: "claim_status",
-      title: "Claim Status",
+      title: t("columns.claimStatus"),
       cell: ({ value }) => <StatusTag status={value as StatusType} />,
     },
     {
@@ -272,12 +398,6 @@ export const PendingComponent: React.FC = () => {
               onClick={() => handleReturnClaim(value as string)}
             />
           </Tooltip>
-          {/* <button
-            className={styles.deleteButton}
-            onClick={() => handleReturnClaim(value as string)}
-          >
-            Return
-          </button> */}
         </div>
       ),
     },
@@ -287,27 +407,62 @@ export const PendingComponent: React.FC = () => {
     key: claim.request_id,
     ...claim,
     user_full_name: claim.user.full_name,
+    email: claim.user.email,
     user_salary: claim.user.salary,
     user_ot_rate: claim.user.ot_rate,
-    claim_status: "pending",
+    claim_status: "PENDING",
+    id: claim.request_id,
   }));
 
   return (
     <div>
-      <h1 className={styles.title}>Pending Claims</h1>
-      {/* <nav className={styles.breadcrumb}>
-        <Link to="/">My Claims</Link> &gt;{" "}
-        <Link to="/pending-claim">Pending Approval</Link>
-      </nav> */}
+      <div className={styles.container}>
+        <h1 className={styles.title}>
+          {loading ? t("loading") : t("title")}
+        </h1>
+        <p className={styles.title2}>
+          {loading ? t("pleaseWait") : t("subtitle")}
+        </p>
+      </div>
+      <div className={styles.buttonContainer}>
+        <Button
+          color="white"
+          backgroundColor="#89AC46"
+          size="small"
+          style={{ borderRadius: "10px" }}
+          onClick={handleApproveSelect}
+          disabled={loading}
+        >
+          {loading ? "..." : t("approveSelected")}
+        </Button>
+        <Button
+          danger
+          size="small"
+          onClick={handleRejectSelect}
+          style={{ borderRadius: "10px" }}
+          disabled={loading}
+        >
+          {loading ? "..." : t("rejectSelected")}
+        </Button>
+        <Button
+          type="primary"
+          size="small"
+          onClick={handleReturnSelect}
+          style={{ borderRadius: "10px" }}
+          disabled={loading}
+        >
+          {loading ? "..." : t("returnSelected")}
+        </Button>
+      </div>
       <TableComponent
+        ref={checkboxRef}
         columns={columns}
         dataSource={dataSource}
         loading={loading}
         totalPage={totalPages}
         pagination={true}
-        name="Claims"
         onPageChange={handlePageChange}
-        isHaveCheckbox={false}
+        isHaveCheckbox={true}
       />
       <Modal
         open={modalVisible}
@@ -320,18 +475,7 @@ export const PendingComponent: React.FC = () => {
       >
         <p>Do you want to proceed?</p>
       </Modal>
-      {/* <Modal
-        open={openModal}
-        onCancel={() => setOpenModal(false)}
-        footer={null}
-      >
-        {selectedRequestId && (
-          <DetailsApproval
-            request_id={selectedRequestId}
-            setOpenModal={setOpenModal}
-          />
-        )}
-      </Modal> */}
     </div>
   );
 };
+export default PendingComponent;

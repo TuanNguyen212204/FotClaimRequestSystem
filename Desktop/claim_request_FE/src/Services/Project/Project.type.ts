@@ -33,8 +33,11 @@ export interface CreateClaimData {
     date: string;
     working_hours: number;
   }[];
+  claimRemark?: string;
 }
-
+export interface UpdateClaimData extends CreateClaimData {
+  requestID: string;
+}
 export interface projectsParamOptions {
   page: number;
   limit: number;

@@ -13,6 +13,7 @@ import { set } from "date-fns";
 import { setLoading } from "@/redux/slices/Project/projectSlice";
 import httpClient from "@/constant/apiInstance";
 import { ApiResponseNoGeneric } from "@/types/ApiResponse";
+import { useTranslation } from "react-i18next";
 interface AssignProjectProps {
   id: string;
   setOpen: (value: boolean) => void;
@@ -27,6 +28,7 @@ export const AssignProject: React.FC<AssignProjectProps> = ({
   const [selectedProject, setSelectedProject] = useState<any>(null);
   const [userID, setUserID] = useState<string>(id);
   const [loading, setLoading] = useState<boolean>(false);
+  const { t } = useTranslation("allUserInformation");
   useEffect(() => {
     dispatch(
       getAllProjects({ limit: 10, page: 1, order: "ASC", sortBy: "project_id" })
@@ -80,6 +82,19 @@ export const AssignProject: React.FC<AssignProjectProps> = ({
   const handleCancel = () => {
     setOpen(false);
   };
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        handleCancel(); // Gọi hàm cancel khi nhấn Escape
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
   return (
     <div>
       <div style={{ marginTop: "50px" }}>
@@ -91,16 +106,18 @@ export const AssignProject: React.FC<AssignProjectProps> = ({
             <X />
           </button>
           <h1 className="text-3xl font-bold text-green-700 mb-6 text-center">
-            Assign User
+            {t("allUserInformation.assignUser.title")}
           </h1>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
             {/* Select Project */}
             <div className={styles.input_container}>
               <label className="block text-sm font-medium text-gray-600">
-                Project
+                {t("allUserInformation.assignUser.project")}
               </label>
               <select
-                {...register("project_id", { required: "Project is required" })}
+                {...register("project_id", {
+                  required: t("allUserInformation.assignUser.validate.project"),
+                })}
                 onChange={handleProjectChange}
                 className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               >
@@ -121,7 +138,7 @@ export const AssignProject: React.FC<AssignProjectProps> = ({
             {/* Project Name */}
             <div className={styles.input_container}>
               <label className="block text-sm font-medium text-gray-600">
-                Project Name
+                {t("allUserInformation.assignUser.projectName")}
               </label>
               <input
                 type="text"
@@ -134,7 +151,7 @@ export const AssignProject: React.FC<AssignProjectProps> = ({
             {/* Start Date */}
             <div className={styles.input_container}>
               <label className="block text-sm font-medium text-gray-600">
-                Start Date
+                {t("allUserInformation.assignUser.startDate")}
               </label>
               <input
                 type="date"
@@ -147,7 +164,7 @@ export const AssignProject: React.FC<AssignProjectProps> = ({
             {/* End Date */}
             <div className={styles.input_container}>
               <label className="block text-sm font-medium text-gray-600">
-                End Date
+                {t("allUserInformation.assignUser.endDate")}
               </label>
               <input
                 type="date"
@@ -160,7 +177,7 @@ export const AssignProject: React.FC<AssignProjectProps> = ({
             {/* Project Status */}
             <div className={styles.input_container}>
               <label className="block text-sm font-medium text-gray-600">
-                Project Status
+                {t("allUserInformation.assignUser.projectStatus")}
               </label>
               <input
                 type="text"
@@ -172,7 +189,7 @@ export const AssignProject: React.FC<AssignProjectProps> = ({
 
             <div className={styles.update_button_container}>
               <button type="submit" className={styles.update_button}>
-                Create
+                {t("allUserInformation.buttonCreate")}
               </button>
             </div>
           </form>

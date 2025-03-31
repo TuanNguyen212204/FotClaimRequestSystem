@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@/redux";
 import {
@@ -7,11 +7,12 @@ import {
 } from "@/redux/thunk/Claim/claimThunk";
 import { selectAllDetailPending } from "@/redux/selector/pendingSelector";
 import Modal from "@ui/modal/Modal";
-import { MoveRight } from "lucide-react";
+import { MoveRight, Mail, ChevronDown, ChevronUp } from "lucide-react";
 import styles from "./DetailsApproval.module.css";
 import StatusTag from "@/components/ui/StatusTag/StatusTag";
 import { toast } from "react-toastify";
 import httpClient from "@/constant/apiInstance.ts";
+import { useTranslation } from "react-i18next";
 
 const formatDateToMonthDay = (date: string) => {
   const dateObj = new Date(date);
@@ -50,11 +51,14 @@ export const DetailsApproval: React.FC<PendingDetailModalProps> = ({
   currentPage,
   limit,
 }) => {
+  const { t } = useTranslation("details");
   const dispatch = useDispatch<AppDispatch>();
   const claimDetail = useSelector(selectAllDetailPending);
+  const [isChevronDown, setIsChevronDown] = useState<boolean>(false);
 
   useEffect(() => {
     if (isOpen && requestId) {
+      document.body.style.overflow = "hidden";
       dispatch(
         fetchPendingClaimDetailAsync({
           page: currentPage,
@@ -62,7 +66,12 @@ export const DetailsApproval: React.FC<PendingDetailModalProps> = ({
           request_id: requestId,
         })
       );
+    } else {
+      document.body.style.overflow = "";
     }
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [isOpen, requestId, currentPage, limit, dispatch]);
 
   const handleApproveClaimDetention = async (request_id: string) => {
@@ -75,118 +84,156 @@ export const DetailsApproval: React.FC<PendingDetailModalProps> = ({
         })
       );
       toast.success("Claim approved successfully!");
-      onClose(); 
+      onClose();
     } catch (error) {
       console.log("Error approving claim: ", error);
       toast.error("Failed to approve claim.");
     }
   };
 
+  const handleHistoryItems = () => {
+    setIsChevronDown(!isChevronDown);
+    const historyContainer = document.querySelector(`.${styles.history}`);
+    if (historyContainer) {
+      if (!isChevronDown) {
+        historyContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        historyContainer.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      }
+    }
+  };
+
+  
+
   return (
     <Modal
       open={isOpen}
       onCancel={onClose}
       onOk={() => handleApproveClaimDetention(requestId)}
-      buttonCancel="Close"
-      buttonOk="Approve"
-      title="Claim Detail"
+      buttonCancel={t("closeButton")}
+      buttonOk={t("approveButton")}
+      title={t("claimDetailTitle")}
       width={600}
       centered={false}
-      position={{ right: 20, top: 23 }}
+      position={{ right: 5, top: 23 }}
+      backgroundColor="#f5f5f5"
+      footerPosition="center"
       height="95%"
+      okButtonProps={{ style: { backgroundColor: "#89AC46", color: "white" } }}
       className={styles.modal}
     >
-      <hr />
-      <div className={styles.container}>
-        <div className={styles.containerUser}>
-          <div className={styles.infoUser1}>
+      <hr className={styles.divider} />
+      <div className={styles.modalContent}>
+        <div className={styles.container}>
+          <div className={styles.containerUser}>
             <img
               src="https://i1.wp.com/upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"
-              title="avatar"
+              alt="User avatar"
               className={styles.avatar}
             />
-            <p>{claimDetail?.user.full_name}</p>
+            <p className={styles.username}>{claimDetail?.user.full_name}</p>
           </div>
-          <div className={styles.infoUser2}>
-            <p>User ID: {claimDetail?.user_id}</p>
+          <div className={styles.emailContainer}>
+            <Mail className={styles.emailIcon} />|
+            <p className={styles.email}>{claimDetail?.user.email}</p>
           </div>
-        </div>
-        <hr />
-        <div className={styles.containerProject}>
-          <p>
-            Project ID:{" "}
-            <span className={styles.boldText}> {claimDetail?.project_id}</span>{" "}
-          </p>
-          <p>
-            Project Name:{" "}
-            <span className={styles.boldText}>{claimDetail?.project_name}</span>
-          </p>
-        </div>
-        <div className={styles.containerRequest}>
-          <div className={styles.timeDuration}>
-            <p>Time Duration:</p>
-            <h4>
-              <span className={styles.boldText}>
+          <hr className={styles.divider} />
+          <div className={styles.containerProject}>
+            <div className={styles.projectRow}>
+              <span className={styles.projectLabel}>{t("projectId")}:</span>
+              <span className={styles.projectValue}>
+                {claimDetail?.project_id}
+              </span>
+            </div>
+            <div className={styles.projectRow}>
+              <span className={styles.projectLabel}>{t("projectName")}:</span>
+              <span className={styles.projectValue}>
+                {claimDetail?.project_name}
+              </span>
+            </div>
+
+            <div className={styles.projectRow}>
+              <span className={styles.projectLabel}>{t("timeDuration")}:</span>
+              <span className={styles.projectValue}>
                 {formatDateToMonthDay(`${claimDetail?.start_date}`)}
-              </span>{" "}
-              <MoveRight size={20} className={styles.iconMoveRight} />{" "}
-              <span className={styles.boldText}>
+                <MoveRight size={20} className={styles.iconMoveRight} />
                 {formatDateToMonthDay(`${claimDetail?.end_date}`)}
               </span>
-            </h4>
-          </div>
-          <p>
-            Submitted Date:{"   "}
-            <span className={styles.boldText}>
-              {formatDateToMonthDay(`${claimDetail?.submitted_date}`)}
-            </span>
-          </p>
-          <p>
-            Total Working Hours:{" "}
-            <span className={styles.boldText}>
-              {claimDetail?.total_hours} hours
-            </span>
-          </p>
-          <p>
-            Status:{" "}
-            {claimDetail?.claim_status ? (
-              <StatusTag
-                status={
-                  claimDetail.claim_status as
-                    | "PENDING"
-                    | "APPROVED"
-                    | "REJECTED"
-                    | "PAID"
-                }
-              />
-            ) : (
-              "-"
-            )}
-          </p>
-        </div>
-        <div>
-          {claimDetail?.claim_details &&
-          claimDetail.claim_details.length > 0 ? (
-            <div className={styles.history}>
-              <h4>Claim History</h4>
-              {claimDetail.claim_details.map((detail, index) => (
-                <div key={index} className={styles.historyItem}>
-                  <p>
-                    Date:{""}
-                    <span className={styles.boldText}>
-                      {formatDateToMonthDay(detail.date)}
-                    </span>
-                  </p>
-                  <p>
-                    Working Hours:{" "}
-                    <span className={styles.boldText}>
-                      {detail.working_hours} hours
-                    </span>
-                  </p>
-                </div>
-              ))}
             </div>
-          ) : null}
+            <div className={styles.projectRow}>
+              <span className={styles.projectLabel}>{t("submittedDate")}:</span>
+              <span className={styles.projectValue}>
+                {formatDateToMonthDay(`${claimDetail?.submitted_date}`)}
+              </span>
+            </div>
+            <div className={styles.projectRow}>
+              <span className={styles.projectLabel}>{t("status")}:</span>
+              <span className={styles.projectValue}>
+                {claimDetail?.claim_status ? (
+                  <StatusTag
+                    status={
+                      claimDetail.claim_status as
+                      | "PENDING"
+                      | "APPROVED"
+                      | "REJECTED"
+                      | "PAID"
+                    }
+                  />
+                ) : (
+                  "-"
+                )}
+              </span>
+            </div>
+            <div className={styles.projectRow}>
+              <span className={styles.projectLabel}>
+                {t("totalWorkingHours")}:
+              </span>
+              <span className={styles.projectValue}>
+                {claimDetail?.total_hours} {t("hours")}
+              </span>
+            </div>
+          </div>
+          <div className={styles.containerHistory}>
+            {claimDetail?.claim_details &&
+              claimDetail.claim_details.length > 0 ? (
+              <div className={styles.history}>
+                <div className={styles.historyHeader}>
+                  <p>{t("history")}</p>
+                  {isChevronDown ? (
+                    <ChevronUp
+                      className={styles.historyIcon}
+                      onClick={handleHistoryItems}
+                    />
+                  ) : (
+                    <ChevronDown
+                      className={styles.historyIcon}
+                      onClick={handleHistoryItems}
+                    />
+                  )}
+                </div>
+                {isChevronDown ? (
+                  claimDetail.claim_details.map((detail, index) => (
+                    <div key={index} className={styles.historyItem}>
+                      <span className={styles.historyItemDate}>
+                        {formatDateToMonthDay(detail.date)}
+                      </span>
+
+                      <div className={styles.historyItemInfo}>
+                        <div className={styles.historyItemRow}>
+                          <span className={styles.historyItemLabel}>
+                            {t("workingHours")}:
+                          </span>
+                          <span className={styles.historyItemValue}>
+                            {detail.working_hours} {t("hours")}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                ) : null}
+              </div>
+            ) : null}
+          </div>
         </div>
       </div>
     </Modal>

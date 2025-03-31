@@ -11,8 +11,9 @@ import {
   selectAppovedClaim,
   selectApprovedClaimTotalPages,
 } from "@redux/selector/claimSelector";
+import { useTranslation } from "react-i18next";
 
-export const ApprovedApproverComponent: React.FC = () => {
+export const ApprovedApproval: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const claimList = useSelector(selectAppovedClaim);
@@ -21,6 +22,7 @@ export const ApprovedApproverComponent: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [limit] = useState(10);
   const [isSalaryVisible, setIsSalaryVisible] = useState(false);
+  const { t } = useTranslation("approve");
 
   useEffect(() => {
     setLoading(true);
@@ -53,62 +55,69 @@ export const ApprovedApproverComponent: React.FC = () => {
     {
       key: "user_name",
       dataIndex: "user_full_name",
-      title: "Full Name",
+      title: t("columns.fullName"),
+    },
+    {
+      key: "email",
+      dataIndex: "user_email",
+      title: t("columns.email"),
     },
     {
       key: "start_date",
       dataIndex: "start_date",
-      title: "Start Date",
+      title: t("columns.startDate"),
       cell: ({ value }) => formatDateToDDMMYYYY(value as string),
     },
     {
       key: "end_date",
       dataIndex: "end_date",
-      title: "End Date",
+      title: t("columns.endDate"),
       cell: ({ value }) => formatDateToDDMMYYYY(value as string),
     },
     {
       key: "total_hours",
       dataIndex: "total_hours",
-      title: "Total Hours",
+      title: t("columns.totalHours"),
     },
     {
       key: "project_id",
       dataIndex: "project_id",
-      title: "Project ID",
+      title: t("columns.projectId"),
     },
     {
       key: "project_name",
       dataIndex: "project_name",
-      title: "Project Name",
+      title: t("columns.projectName"),
     },
     {
       key: "submitted_date",
       dataIndex: "submitted_date",
-      title: "Submitted Date",
+      title: t("columns.submittedDate"),
       cell: ({ value }) => formatDateToDDMMYYYY(value as string),
     },
     {
       key: "salary",
       dataIndex: "user_salary",
-      title: "Salary",
+      title: t("columns.salary"),
       cell: ({ value }) => <div>{isSalaryVisible ? value : "******"}</div>,
     },
     {
       key: "ot_rate",
       dataIndex: "user_ot_rate",
-      title: "OT Rate",
+      title: t("columns.otRate"),
     },
     {
       key: "salary_overtime",
       dataIndex: "salary_overtime",
-      title: "Salary Overtime",
-      cell: ({ value }) => <div>{isSalaryVisible ? value : "******"}</div>,
+      title: t("columns.salaryOvertime"),
+      cell: ({ value }) => (
+        <div>{isSalaryVisible ? value : "*****************"}</div>
+      ),
     },
     {
       key: "claim_status",
       dataIndex: "claim_status",
-      title: "Claim Status",
+      title: t("columns.claimStatus"),
       cell: ({ value }) => <StatusTag status={value as StatusType} />,
     },
     // {
@@ -127,13 +136,20 @@ export const ApprovedApproverComponent: React.FC = () => {
     key: claim.request_id,
     ...claim,
     user_full_name: claim.user.full_name,
+    user_email: claim.user.email,
     user_salary: claim.user.salary,
     user_ot_rate: claim.user.ot_rate,
-    claim_status: "approved",
+    claim_status: "APPROVED",
   }));
+
   return (
     <div>
-      <h1 className={styles.title}>Approved Claims</h1>
+      <div className={styles.container}>
+        <h1 className={styles.title}>{loading ? t("loading") : t("title")}</h1>
+        <p className={styles.title2}>
+          {loading ? t("loadingMessage") : t("successMessage")}
+        </p>
+      </div>
       <TableComponent
         columns={columns}
         dataSource={dataSource}
@@ -147,4 +163,4 @@ export const ApprovedApproverComponent: React.FC = () => {
   );
 };
 
-export default ApprovedApproverComponent;
+export default ApprovedApproval;

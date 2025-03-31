@@ -1,0 +1,46 @@
+{
+  "dashboard": {
+    "title": "Chào mừng trở lại",
+    "subTitle": "Theo dõi, quản lý và dự báo nhân sự và dự án của bạn.",
+    "summaryCard": {
+      "totalClaim": "Tổng số yêu cầu",
+      "active": "Đang hoạt động",
+      "inactive": "Không hoạt động",
+      "thisMonth": "Tháng này",
+      "sinceLastMonth": "so với tháng trước",
+      "pendingClaim": "Yêu cầu đang chờ duyệt",
+      "approvedClaim": "Yêu cầu đã được duyệt",
+      "rejectedClaim": "Yêu cầu bị từ chối",
+      "totalProject": "Tổng số dự án",
+      "totalUser": "Tổng số người dùng"
+    },
+    "otChart": {
+      "title": "Dự án có số lượng yêu cầu cao nhất",
+      "hAxis": "Tên dự án",
+      "vAxis": "Số lượng yêu cầu"
+    },
+    "claimChart": {
+      "title": "Tổng Quan Trạng Thái Yêu Cầu",
+      "hAxis": "Tháng",
+      "vAxis": "Yêu cầu",
+      "pending": "Đang chờ",
+      "approved": "Đã duyệt",
+      "rejected": "Bị từ chối",
+      "paid": "Đã thanh toán",
+      "months": {
+        "january": "Tháng 1",
+        "february": "Tháng 2",
+        "march": "Tháng 3",
+        "april": "Tháng 4",
+        "may": "Tháng 5",
+        "june": "Tháng 6",
+        "july": "Tháng 7",
+        "august": "Tháng 8",
+        "september": "Tháng 9",
+        "october": "Tháng 10",
+        "november": "Tháng 11",
+        "december": "Tháng 12"
+      }
+    }
+  }
+}

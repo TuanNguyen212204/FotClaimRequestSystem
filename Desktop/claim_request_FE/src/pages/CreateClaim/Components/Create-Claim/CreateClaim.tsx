@@ -10,8 +10,21 @@ import { selectProject } from "@/redux/slices/Project/projectSlice";
 import { fetchUserByIdAsync } from "@/redux/thunk/User/userThunk";
 import { toast } from "react-toastify";
 import { fetchProjectByID } from "@/redux/thunk/CreateClaim";
+import { FormData } from "@/types/claimForm.type";
+import { useTranslation } from "react-i18next";
+interface CreateClaimProps {
+  mode: "create" | "view" | "update";
+  initialValues?: FormData;
+  formStatus: "Draft" | "Pending" | "Approved" | "Rejected" | "Paid";
+  requestID?: string;
+}
 
-export default function CreateClaim() {
+export default function CreateClaim({
+  mode,
+  initialValues,
+  formStatus,
+  requestID,
+}: CreateClaimProps) {
   const {
     register,
     setValue,
@@ -22,8 +35,8 @@ export default function CreateClaim() {
     setError,
     clearErrors,
     user,
-  } = useCreateClaimForm();
-
+  } = useCreateClaimForm({ initialValues, mode, requestID });
+  const { t } = useTranslation("claim");
   const dispatch = useDispatch<AppDispatch>();
   const projectList = useSelector(selectProject);
 
@@ -36,17 +49,16 @@ export default function CreateClaim() {
       if (date) {
         if (seenDates.has(date)) {
           setError(`claims.${index}.date`, {
-            type: "manual",
-            message: "This date is already chosen",
+            type: "manual"
+
           });
         } else {
-          console.log("clearing error");
           seenDates.add(date);
           clearErrors(`claims.${index}.date`);
         }
       }
     });
-  }, [claims, setError, clearErrors]);
+  }, [claims, setError, clearErrors, t]);
 
   useEffect(() => {
     dispatch(fetchUserByIdAsync())
@@ -54,19 +66,30 @@ export default function CreateClaim() {
       .then(() => dispatch(fetchProjectByID()))
       .catch((error) => {
         console.error("Failed to fetch data:", error);
-        toast.error("Failed to load data. Please refresh the page.");
+        toast.error(toast.error(t("toast.loadDataError")));
       });
   }, [dispatch]);
-
+  const getTitle = () => {
+    switch (mode) {
+      case "create":
+        return t("title.create");
+      case "view":
+        return t("title.view");
+      case "update":
+        return t("title.update");
+      default:
+        return "";
+    }
+  };
   return user ? (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Header
         prepareBy={user?.full_name}
-        status="Draft"
-        title="New Claim Request"
+        status={formStatus}
+        title={getTitle()}
       />
       <StaffInfo
-        department={user?.job_rank}
+        department={user?.department}
         name={user?.full_name}
         staffID={user?.user_id}
       />
@@ -76,9 +99,10 @@ export default function CreateClaim() {
         errors={errors}
         register={register}
         setValue={setValue}
+        mode={mode}
       />
     </form>
   ) : (
-    <div>Loading...</div>
+    <div>{t("loading")}</div>
   );
 }
