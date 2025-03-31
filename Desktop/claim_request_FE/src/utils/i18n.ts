@@ -26,6 +26,8 @@ import approveEn from "@/locales/en/approval/approve.json";
 import approveVn from "@/locales/vi/approval/approve.json";
 import rejectEn from "@/locales/en/approval/reject.json";
 import rejectVn from "@/locales/vi/approval/reject.json";
+import detailsEn from "@/locales/en/approval/details.json";
+import detailsVn from "@/locales/vi/approval/details.json";
 i18n.use(initReactI18next).init({
   resources: {
     en: {
@@ -39,6 +41,9 @@ i18n.use(initReactI18next).init({
       allUserInformation: AllUserInformationEn,
       dashboard: DashboardEn,
       pending: pendingEn,
+      approve: approveEn,
+      reject: rejectEn,
+      details: detailsEn,
     },
     vi: {
       header: headerVn,
@@ -51,6 +56,9 @@ i18n.use(initReactI18next).init({
       allUserInformation: AllUserInformationVi,
       dashboard: DashboardVi,
       pending: pendingVn,
+      approve: approveVn,
+      reject: rejectVn,
+      details: detailsVn,
     },
   },
   lng: "en",
@@ -66,6 +74,9 @@ i18n.use(initReactI18next).init({
     "allUserInformation",
     "dashboard",
     "pending",
+    "approve",
+    "reject",
+    "details",
   ],
   defaultNS: "header",
   debug: true,

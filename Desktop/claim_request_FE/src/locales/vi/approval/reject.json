@@ -1,3 +1,21 @@
 {
-    
+  "loading": "Đang tải...",
+  "rejectedClaims": "Yêu cầu bị từ chối",
+  "pleaseWait": "Vui lòng đợi...",
+  "rejectedMessage": "Rất tiếc, yêu cầu của bạn đã bị từ chối.",
+  "claims": "Yêu cầu",
+  "hideSalary": "Ẩn lương",
+  "showSalary": "Hiển thị lương",
+  "fullName": "Họ và tên",
+  "email": "Email",
+  "startDate": "Ngày bắt đầu",
+  "endDate": "Ngày kết thúc",
+  "totalHours": "Tổng giờ",
+  "projectId": "Mã dự án",
+  "projectName": "Tên dự án",
+  "submittedDate": "Ngày gửi",
+  "salary": "Lương",
+  "otRate": "Tỉ lệ OT",
+  "salaryOvertime": "Lương làm thêm giờ",
+  "claimStatus": "Trạng thái yêu cầu"
 }

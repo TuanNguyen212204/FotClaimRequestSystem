@@ -1,3 +1,20 @@
 {
-    
+  "title": "Approved Claims",
+  "loading": "Loading...",
+  "loadingMessage": "Please wait...",
+  "successMessage": "Boom! Your claim just got the green light!",
+  "columns": {
+    "fullName": "Full Name",
+    "email": "Email",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "totalHours": "Total Hours",
+    "projectId": "Project ID",
+    "projectName": "Project Name",
+    "submittedDate": "Submitted Date",
+    "salary": "Salary",
+    "otRate": "OT Rate",
+    "salaryOvertime": "Salary Overtime",
+    "claimStatus": "Claim Status"
+  }
 }
