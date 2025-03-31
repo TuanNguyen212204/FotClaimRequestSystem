@@ -25,8 +25,10 @@ import Modal from "@/components/ui/modal/Modal";
 import StatusTag, { StatusType } from "@/components/ui/StatusTag/StatusTag";
 import { DetailsApproval } from "./DetailsApproval";
 import { Button } from "@/components/ui/button/Button";
+import { useTranslation } from "react-i18next";
 
 export const PendingComponent: React.FC = () => {
+  const { t } = useTranslation("pending");
   const dispatch = useDispatch<AppDispatch>();
   const claimList = useSelector(selectAllPending);
   const totalPages = useSelector(selectAllPendingTotalPages);
@@ -290,73 +292,73 @@ export const PendingComponent: React.FC = () => {
     return `${day}/${month}/${year}`;
   };
 
-
-
   const columns: Column<DataRecord>[] = [
     {
       key: "user_name",
       dataIndex: "user_full_name",
-      title: "Full Name",
+      title: t("columns.fullName"),
     },
     {
       key: "email",
       dataIndex: "email",
-      title: "Email",
+      title: t("columns.email"),
     },
     {
       key: "start_date",
       dataIndex: "start_date",
-      title: "Start Date",
+      title: t("columns.startDate"),
       cell: ({ value }) => formatDateToDDMMYYYY(value as string),
     },
     {
       key: "end_date",
       dataIndex: "end_date",
-      title: "End Date",
+      title: t("columns.endDate"),
       cell: ({ value }) => formatDateToDDMMYYYY(value as string),
     },
     {
       key: "total_hours",
       dataIndex: "total_hours",
-      title: "Total Hours",
+      title: t("columns.totalHours"),
     },
     {
       key: "project_id",
       dataIndex: "project_id",
-      title: "Project ID",
+      title: t("columns.projectId"),
     },
     {
       key: "project_name",
       dataIndex: "project_name",
-      title: "Project Name",
+      title: t("columns.projectName"),
     },
     {
       key: "submitted_date",
       dataIndex: "submitted_date",
-      title: "Submitted Date",
+      title: t("columns.submittedDate"),
       cell: ({ value }) => formatDateToDDMMYYYY(value as string),
     },
     {
       key: "salary",
       dataIndex: "user_salary",
-      title: "Salary",
+      title: t("columns.salary"),
       cell: ({ value }) => <div>{isSalaryVisible ? value : "******"}</div>,
     },
     {
       key: "ot_rate",
       dataIndex: "user_ot_rate",
-      title: "OT Rate",
+      title: t("columns.otRate"),
     },
     {
       key: "salary_overtime",
       dataIndex: "salary_overtime",
-      title: "Salary Overtime",
-      cell: ({ value }) => <div>{isSalaryVisible ? value : "******"}</div>,
+      title: t("columns.salaryOvertime"),
+      cell: ({ value }) => (
+        <div>{isSalaryVisible ? value : "*****************"}</div>
+      ),
     },
     {
       key: "claim_status",
       dataIndex: "claim_status",
-      title: "Claim Status",
+      title: t("columns.claimStatus"),
       cell: ({ value }) => <StatusTag status={value as StatusType} />,
     },
     {
@@ -414,23 +416,42 @@ export const PendingComponent: React.FC = () => {
 
   return (
     <div>
-      <h1 className={styles.title}>Pending Claims</h1>
+      <div className={styles.container}>
+        <h1 className={styles.title}>
+          {loading ? t("loading") : t("title")}
+        </h1>
+        <p className={styles.title2}>
+          {loading ? t("pleaseWait") : t("subtitle")}
+        </p>
+      </div>
       <div className={styles.buttonContainer}>
         <Button
           color="white"
           backgroundColor="#89AC46"
-          size="large"
+          size="small"
           style={{ borderRadius: "10px" }}
           onClick={handleApproveSelect}
+          disabled={loading}
         >
-          Approve Select Claim
+          {loading ? "..." : t("approveSelected")}
         </Button>
-        <Button danger size="large" onClick={handleRejectSelect} style={{ borderRadius: "10px" }}
+        <Button
+          danger
+          size="small"
+          onClick={handleRejectSelect}
+          style={{ borderRadius: "10px" }}
+          disabled={loading}
         >
-          Reject Select Claim
+          {loading ? "..." : t("rejectSelected")}
         </Button>
-        <Button type="primary" size="large" onClick={handleReturnSelect} style={{ borderRadius: "10px" }}>
-          Return Select Claim
+        <Button
+          type="primary"
+          size="small"
+          onClick={handleReturnSelect}
+          style={{ borderRadius: "10px" }}
+          disabled={loading}
+        >
+          {loading ? "..." : t("returnSelected")}
         </Button>
       </div>
       <TableComponent

@@ -18,12 +18,14 @@ export default function StaffInfo({
   const { t } = useTranslation("claim");
   const [copied, setCopied] = useState(false);
 
+
   const handleCopy = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     event.stopPropagation();
     navigator.clipboard.writeText(staffID);
     setCopied(true);
     setTimeout(() => setCopied(false), 4000);
   };
+
 
   return (
     <Card>

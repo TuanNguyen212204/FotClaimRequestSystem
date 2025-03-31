@@ -11,6 +11,7 @@ import { X } from "lucide-react";
 import styles from "./UpdateUser.module.css";
 import { ToastContainer, toast } from "react-toastify";
 import { Select } from "./CreateUser";
+import { useTranslation } from "react-i18next";
 interface UpdateUserProps {
   id: string;
   setOpenModal: (value: boolean) => void;
@@ -37,6 +38,7 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
   const [user, setUser] = useState<User | null>(null);
   const [department, setDepartment] = useState<DepartmentList>([]);
   const [jobRank, setJobRank] = useState<JobRankList>([]);
+  const { t } = useTranslation("allUserInformation");
   const fetchDepartment = async () => {
     try {
       const response = await httpClient.get<ApiResponseNoGeneric>(
@@ -169,7 +171,7 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
           </button>
         </div>
         <h1 className="text-3xl font-bold text-blue-700 mb-6 text-center">
-          Update User
+          {t("allUserInformation.updateUser.title")}
         </h1>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           <div className={styles.input_container}>
@@ -182,7 +184,7 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
                   <span>*</span>
                 </div>
                 <div>
-                  <span>Full Name</span>
+                  <span>{t("allUserInformation.updateUser.fullName")}</span>
                 </div>
               </div>
             </label>
@@ -208,7 +210,7 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
                   <span>*</span>
                 </div>
                 <div>
-                  <span>Email</span>
+                  <span>{t("allUserInformation.updateUser.email")}</span>
                 </div>
               </div>
             </label>
@@ -229,7 +231,7 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
                   <span>*</span>
                 </div>
                 <div>
-                  <span>Department</span>
+                  <span>{t("allUserInformation.updateUser.department")}</span>
                 </div>
               </div>
             </label>
@@ -251,7 +253,9 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
             <Select
               register={{
                 ...register("department_id", {
-                  required: "Department is required",
+                  required: t(
+                    "allUserInformation.updateUser.validation.department"
+                  ),
                 }),
               }}
               options={department.map((a) => ({
@@ -284,7 +288,7 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
                   <span>*</span>
                 </div>
                 <div>
-                  <span>Role ID</span>
+                  <span>{t("allUserInformation.updateUser.roleID")}</span>
                 </div>
               </div>
             </label>
@@ -342,7 +346,7 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
                   <span>*</span>
                 </div>
                 <div>
-                  <span>Job Rank</span>
+                  <span>{t("allUserInformation.updateUser.jobRank")}</span>
                 </div>
               </div>
             </label>
@@ -365,7 +369,9 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
               options={jobRank.map((a) => ({ label: a.name, value: a.id }))}
               register={{
                 ...register("job_rank_id", {
-                  required: "Job Rank is required",
+                  required: t(
+                    "allUserInformation.updateUser.validation.department"
+                  ),
                 }),
               }}
               placeholder="Select Job Rank"
@@ -381,7 +387,7 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
 
           <div className={styles.update_button_container}>
             <button type="submit" className={styles.update_button}>
-              Update
+              {t("allUserInformation.buttonUpdate")}
             </button>
           </div>
         </form>

@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { Chart } from "react-google-charts";
 import httpClient from "@/constant/apiInstance";
+import { useTranslation } from "react-i18next";
 
 const OTChart: React.FC = () => {
   const [chartData, setChartData] = useState<[string, number][]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const { t } = useTranslation("dashboard");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await httpClient.get("admin/top-projects");
         if (response.data && Array.isArray(response.data.data)) {
-          const formattedData: [string, number][] = response.data.data.map((item) => [
-            item.project_name,
-            item.claim_count,
-          ]);
+          const formattedData: [string, number][] = response.data.data.map(
+            (item) => [item.project_name, item.claim_count]
+          );
           setChartData([["Project", "Claims"], ...formattedData]);
         } else {
           setError("Invalid response format");
@@ -41,12 +42,12 @@ const OTChart: React.FC = () => {
         height="100%"
         data={chartData}
         options={{
-          title: "Top Projects by Claim Count",
+          title: t("dashboard.otChart.title"),
           legend: { position: "none" },
           chartArea: { width: "80%", height: "70%" },
           backgroundColor: "transparent",
-          hAxis: { title: "Project Name" },
-          vAxis: { title: "Claim Count" },
+          hAxis: { title: t("dashboard.otChart.hAxis") },
+          vAxis: { title: t("dashboard.otChart.vAxis") },
           colors: ["#233754"],
         }}
       />

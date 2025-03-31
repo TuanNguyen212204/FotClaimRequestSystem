@@ -25,6 +25,7 @@ export const formSchema = z
   .object({
     currentSelectedProject: ProjectInfoSchema,
     claims: z.array(claimSchema).min(1, "At least one claim is required"),
+    claimRemark: z.string().optional(),
   })
   .refine(
     (data) => {
@@ -36,7 +37,6 @@ export const formSchema = z
       );
       return data.claims.every((claim) => {
         const claimDate = new Date(claim.date);
-        //console.log(claimDate, projectStart, projectEnd);
         return claimDate >= projectStart && claimDate <= projectEnd;
       });
     },

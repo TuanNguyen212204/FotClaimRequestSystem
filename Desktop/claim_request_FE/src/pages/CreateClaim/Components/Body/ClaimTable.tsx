@@ -31,6 +31,7 @@ export default function ClaimTable({
     (sum, claim) => sum + (claim.working_hours || 0),
     0
   );
+
   return (
     <div className="mb-5 box-border overflow-x-auto">
       <h2 className="text-lg pb-1.5! mb-4!">{t("claimTable.ClaimEntries")}</h2>
@@ -65,17 +66,14 @@ export default function ClaimTable({
                   className={styles.form_control}
                   {...register(`claims.${index}.working_hours`, {
                     valueAsNumber: true,
-
                     min: {
                       value: 0,
-                      message: "Working hours must be positive",
+                      message: t("working_hours_positive_error"),
                     },
-
                     max: {
                       value: 24,
-                      message: "Working hours must be less than 24 hours",
+                      message: t("working_hours_max_error"),
                     },
-
                     onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
                       const value = Number(e.currentTarget.value);
                       if (value > 24) {
@@ -99,7 +97,7 @@ export default function ClaimTable({
                     className={`${styles.btn} ${styles.btn_danger}  `}
                     onClick={() => remove(index)}
                   >
-                    Remove
+                    {t("remove_button")}
                   </button>
                 )}
               </td>
@@ -142,9 +140,9 @@ export default function ClaimTable({
   );
 }
 
-const Table: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <table className={styles.claim_table}>{children}</table>
-);
+const Table: React.FC<{
+  children: React.ReactElement | React.ReactElement[];
+}> = ({ children }) => <table className={styles.claim_table}>{children}</table>;
 
 const TableHead: React.FC = () => {
   const { t } = useTranslation("claim");
@@ -159,7 +157,7 @@ const TableHead: React.FC = () => {
   );
 };
 
-const TableHeaderCell: React.FC<{ children: React.ReactNode }> = ({
+const TableHeaderCell: React.FC<{ children?: React.ReactNode }> = ({
   children,
 }) => <th>{children}</th>;
 

@@ -16,6 +16,7 @@ interface CreateClaimFormProps {
   mode: "create" | "view" | "update";
   requestID?: string;
 }
+
 export default function useCreateClaimForm({
   initialValues,
   mode,
@@ -42,6 +43,7 @@ export default function useCreateClaimForm({
         ProjectDuration: { from: "", to: "" },
       },
       claims: [{ date: "", working_hours: 0 }],
+      claimRemark: "",
     },
     mode: "all",
   });
@@ -51,12 +53,10 @@ export default function useCreateClaimForm({
   if (mode === "update" && !requestID) {
     throw new Error("requestID is required for update mode");
   }
+
   useEffect(() => {
     console.log("Form Values:", formValues);
     console.log("Errors:", errors);
-    // if (Object.keys(errors).length > 0) {
-    //   console.log("Validation Errors:", errors);
-    // }
     if (Object.keys(formState.errors).length > 0) {
       console.log("Validation Errors:", formState.errors);
       trigger();
@@ -100,7 +100,9 @@ export default function useCreateClaimForm({
       userID: user.user_id,
       projectID: data.currentSelectedProject.projectID,
       claims: data.claims,
+      claimRemark: data.claimRemark || "",
     };
+
     const handleSubmissionResult = (
       resultAction: any,
       successMessage: string,

@@ -29,6 +29,7 @@ export default function ProjectInfo({
   const { t } = useTranslation("claim");
   // console.log(currentProject);
   const { errors } = useFormState({ control, name: "currentSelectedProject" });
+
   function formatDateRange(from: string, to: string): string {
     const fromDate = new Date(from);
     const toDate = new Date(to);
@@ -111,6 +112,7 @@ export default function ProjectInfo({
     </FormRow>
   );
 }
+
 const FormRow = ({ children }: { children: ReactNode }): JSX.Element => {
   return (
     <div className="flex flex-col md:flex-row flex-wrap gap-x-6 box-border">
@@ -118,10 +120,12 @@ const FormRow = ({ children }: { children: ReactNode }): JSX.Element => {
     </div>
   );
 };
+
 interface formGroupProps {
   label: string;
   input: JSX.Element;
 }
+
 const FormGroup = ({ label, input }: formGroupProps): JSX.Element => {
   return (
     <div className="mb-4 box-border text-left">
@@ -132,6 +136,7 @@ const FormGroup = ({ label, input }: formGroupProps): JSX.Element => {
     </div>
   );
 };
+
 const FormColumn = ({ children }: { children: ReactNode }): JSX.Element => {
   return (
     <div className="flex-1 min-w-[250px] mb-4 md:mb-0 box-border">

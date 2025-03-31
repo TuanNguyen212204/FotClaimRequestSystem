@@ -21,7 +21,9 @@ import { EyeIcon } from "lucide-react";
 import { SquarePen } from "lucide-react";
 import styles from "./DraftClaimByUserID.module.css";
 import CreateClaimPage from "../CreateClaim";
+import { useTranslation } from "react-i18next";
 export const DraftClaimByUserID: React.FC = () => {
+  const { t } = useTranslation("draftClaim");
   const listApprovedClaim = useSelector(selectDraftClaimByUserID);
   const initValue = useSelector(selectInitialValues);
   const dispatch = useDispatch<AppDispatch>();
@@ -59,24 +61,24 @@ export const DraftClaimByUserID: React.FC = () => {
     {
       key: "project_id",
       dataIndex: "project_id",
-      title: "Project ID",
+      title: t("project_id_label"),
     },
     {
       key: "total_hours",
       dataIndex: "total_hours",
-      title: "Total Hours",
-      cell: ({ value }) => `${value} hours`,
+      title: t("total_working_hours_label"),
+      cell: ({ value }) => `${value} ${t("hours_suffix")}`,
     },
     {
       key: "submitted_date",
       dataIndex: "submitted_date",
-      title: "Submitted Date",
+      title: t("submitted_date_label"),
       cell: ({ value }) => formatDateToDDMMYYYY(value as string),
     },
     {
       key: "claim_status",
       dataIndex: "claim_status",
-      title: "Claim Status",
+      title: t("claim_status_label"),
       cell: ({ value }: { value: unknown }) => {
         const stringValue = value as string;
         return stringValue === "DRAFT" ? (
@@ -89,7 +91,7 @@ export const DraftClaimByUserID: React.FC = () => {
     {
       key: "action",
       dataIndex: "claim_id",
-      title: "Action",
+      title: t("action_label"),
       cell: ({ value }) => (
         <EyeIcon onClick={() => handleViewDetail(value as string)} />
       ),
@@ -97,7 +99,7 @@ export const DraftClaimByUserID: React.FC = () => {
     {
       key: "update",
       dataIndex: "update",
-      title: "Update",
+      title: t("update_label"),
       cell: ({ record }: { record: any }) => (
         <SquarePen onClick={() => handleUpdate(record)} />
       ),

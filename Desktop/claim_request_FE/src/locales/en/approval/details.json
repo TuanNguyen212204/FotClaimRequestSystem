@@ -1,0 +1,14 @@
+{
+  "claimDetailTitle": "Claim Detail",
+  "closeButton": "Close",
+  "approveButton": "Approve",
+  "projectId": "Project ID",
+  "projectName": "Project Name",
+  "timeDuration": "Time Duration",
+  "submittedDate": "Submitted Date",
+  "status": "Status",
+  "totalWorkingHours": "Total Working Hours",
+  "hours": "hours",
+  "history": "History",
+  "workingHours": "Working Hours"
+}

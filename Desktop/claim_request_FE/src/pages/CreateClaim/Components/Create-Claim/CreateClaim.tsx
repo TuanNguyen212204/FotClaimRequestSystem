@@ -18,12 +18,14 @@ interface CreateClaimProps {
   formStatus: "Draft" | "Pending" | "Approved" | "Rejected" | "Paid";
   requestID?: string;
 }
+
 export default function CreateClaim({
   mode,
   initialValues,
   formStatus,
   requestID,
 }: CreateClaimProps) {
+  const { t } = useTranslation("createClaim");
   const {
     register,
     setValue,
@@ -49,16 +51,15 @@ export default function CreateClaim({
         if (seenDates.has(date)) {
           setError(`claims.${index}.date`, {
             type: "manual",
-            message: "This date is already chosen",
+            message: t("date_already_chosen_error"),
           });
         } else {
-          //   console.log("clearing error");
           seenDates.add(date);
           clearErrors(`claims.${index}.date`);
         }
       }
     });
-  }, [claims, setError, clearErrors]);
+  }, [claims, setError, clearErrors, t]);
 
   useEffect(() => {
     dispatch(fetchUserByIdAsync())
@@ -103,6 +104,7 @@ export default function CreateClaim({
       />
     </form>
   ) : (
+    <div>{t("loading")}</div>
     <div>{t("loading")}</div>
   );
 }

@@ -1,0 +1,12 @@
+{
+  "rejected_claims_title": "Rejected Claims",
+  "project_id_label": "Project ID",
+  "project_name_label": "Project Name",
+  "time_duration_label": "Time Duration",
+  "total_working_hours_label": "Total Working Hours",
+  "submitted_date_label": "Submitted Date",
+  "claim_status_label": "Claim Status",
+  "action_label": "Action",
+  "hours_suffix": "hours",
+  "no_data": "N/A"
+}

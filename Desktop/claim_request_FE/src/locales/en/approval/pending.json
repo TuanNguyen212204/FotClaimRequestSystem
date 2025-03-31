@@ -1,0 +1,23 @@
+{
+  "title": "Pending Claims",
+  "subtitle": "Your claims are still cooking!",
+  "approveSelected": "Approve Selected Claims",
+  "rejectSelected": "Reject Selected Claims",
+  "returnSelected": "Return Selected Claims",
+  "loading": "Loading...",
+  "pleaseWait": "Please wait...",
+  "columns": {
+    "fullName": "Full Name",
+    "email": "Email",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "totalHours": "Total Hours",
+    "projectId": "Project ID",
+    "projectName": "Project Name",
+    "submittedDate": "Submitted Date",
+    "salary": "Salary",
+    "otRate": "OT Rate",
+    "salaryOvertime": "Salary Overtime",
+    "claimStatus": "Claim Status"
+  }
+}

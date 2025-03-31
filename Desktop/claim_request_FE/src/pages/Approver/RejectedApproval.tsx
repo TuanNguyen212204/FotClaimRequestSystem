@@ -11,6 +11,7 @@ import {
   selectAllRejected,
   selectAllRejectedTotalPages,
 } from "@/redux/selector/rejectedSelector.ts";
+import { useTranslation } from "react-i18next";
 
 export const RejectedComponent: React.FC = () => {
   // const navigate = useNavigate();
@@ -21,6 +22,7 @@ export const RejectedComponent: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [limit] = useState(10);
   const [isSalaryVisible, setIsSalaryVisible] = useState(false);
+  const { t } = useTranslation("reject");
 
   useEffect(() => {
     setLoading(true);
@@ -57,88 +59,71 @@ export const RejectedComponent: React.FC = () => {
     {
       key: "user_name",
       dataIndex: "user_full_name",
-      title: "Full Name",
+      title: t("fullName"),
     },
     {
       key: "email",
       dataIndex: "user_email",
-      title: "Email",
+      title: t("email"),
     },
     {
       key: "start_date",
       dataIndex: "start_date",
-      title: "Start Date",
+      title: t("startDate"),
       cell: ({ value }) => formatDateToDDMMYYYY(value as string),
     },
     {
       key: "end_date",
       dataIndex: "end_date",
-      title: "End Date",
+      title: t("endDate"),
       cell: ({ value }) => formatDateToDDMMYYYY(value as string),
     },
     {
       key: "total_hours",
       dataIndex: "total_hours",
-      title: "Total Hours",
+      title: t("totalHours"),
     },
     {
       key: "project_id",
       dataIndex: "project_id",
-      title: "Project ID",
+      title: t("projectId"),
     },
     {
       key: "project_name",
       dataIndex: "project_name",
-      title: "Project Name",
+      title: t("projectName"),
     },
     {
       key: "submitted_date",
       dataIndex: "submitted_date",
-      title: "Submitted Date",
+      title: t("submittedDate"),
       cell: ({ value }) => formatDateToDDMMYYYY(value as string),
     },
     {
       key: "salary",
       dataIndex: "user_salary",
-      title: "Salary",
-      cell: ({ value }) => (
-        <div>
-          {isSalaryVisible ? value : "******"}
-        </div>
-      ),
+      title: t("salary"),
+      cell: ({ value }) => <div>{isSalaryVisible ? value : "******"}</div>,
     },
     {
       key: "ot_rate",
       dataIndex: "user_ot_rate",
-      title: "OT Rate",
+      title: t("otRate"),
     },
     {
       key: "salary_overtime",
       dataIndex: "salary_overtime",
-      title: "Salary Overtime",
+      title: t("salaryOvertime"),
       cell: ({ value }) => (
-        <div>
-          {isSalaryVisible ? value : "******"}
-        </div>
+        <div>{isSalaryVisible ? value : "*****************"}</div>
       ),
     },
     {
       key: "claim_status",
       dataIndex: "claim_status",
-      title: "Claim Status",
+      title: t("claimStatus"),
       cell: ({ value }) => <StatusTag status={value as StatusType} />,
     },
-    // {
-    //   key: "action",
-    //   dataIndex: "claim_id",
-    //   title: "",
-    //   cell: ({ value }) => (
-    //     <EyeIcon
-    //       className={styles.icon}
-    //       // onClick={() => handleViewDetail(value as string)}
-    //     />
-    //   ),
-    // },
   ].filter((column) => !column.hidden);
 
   const dataSource: DataRecord[] = claimList.map((claim) => ({
@@ -153,9 +138,16 @@ export const RejectedComponent: React.FC = () => {
 
   return (
     <div>
-      <h1 className={styles.title}>Rejected Claims</h1>
+      <div className={styles.container}>
+        <h1 className={styles.title}>
+          {loading ? t("loading") : t("rejectedClaims")}
+        </h1>
+        <p className={styles.title2}>
+          {loading ? t("pleaseWait") : t("rejectedMessage")}
+        </p>
+      </div>
       {/* <button onClick={toggleSalaryVisibility}>
-        {isSalaryVisible ? "Hide Salary" : "Show Salary"}
+        {isSalaryVisible ? t("hideSalary") : t("showSalary")}
       </button> */}
       <TableComponent
         columns={columns}
@@ -163,7 +155,7 @@ export const RejectedComponent: React.FC = () => {
         loading={loading}
         totalPage={totalPages}
         pagination={true}
-        name="Claims"
+        name={t("claims")}
         onPageChange={handlePageChange}
       />
     </div>

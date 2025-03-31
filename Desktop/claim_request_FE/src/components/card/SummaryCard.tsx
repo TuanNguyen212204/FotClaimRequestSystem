@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import { Chart } from "react-google-charts";
 import styles from "./SummaryCard.module.css";
 import { ArrowUp, ArrowDown } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const SummaryCard = ({
   title,
@@ -10,7 +11,7 @@ const SummaryCard = ({
   icon,
   percentage,
   chartData,
-  colors = [], 
+  colors = [],
 }: {
   title: string;
   totalvalue: number;
@@ -18,8 +19,10 @@ const SummaryCard = ({
   icon: ReactNode;
   percentage?: number;
   chartData?: [string, number][];
-  colors?: string[]; 
+  colors?: string[];
 }) => {
+  const { t } = useTranslation("dashboard");
+
   return (
     <div className={styles.card}>
       <div className={styles.header}>
@@ -27,18 +30,33 @@ const SummaryCard = ({
         <h2 className={styles.title}>{title}</h2>
       </div>
       <p className={styles.value}>{totalvalue}</p>
-      {monthvalue !== undefined && <p className={styles.detail}>This Month: {monthvalue}</p>}
+      {monthvalue !== undefined && (
+        <p className={styles.detail}>
+          {t("dashboard.summaryCard.thisMonth")}: {monthvalue}
+        </p>
+      )}
 
-      <div className={`${styles.percentage} ${percentage !== undefined && percentage >= 0 ? styles.positive : styles.negative}`}>
+      <div
+        className={`${styles.percentage} ${
+          percentage !== undefined && percentage >= 0
+            ? styles.positive
+            : styles.negative
+        }`}
+      >
         {percentage !== undefined ? (
           <>
             {percentage >= 0 ? <ArrowUp size={16} /> : <ArrowDown size={16} />}
-            <span className={styles.percentageValue}>{Math.abs(percentage)}%</span>
+            <span className={styles.percentageValue}>
+              {Math.abs(percentage)}%
+            </span>
           </>
         ) : (
           <span className={styles.percentagePlaceholder}></span>
         )}
-        <span className={styles.comparison}> since last month</span>
+        <span className={styles.comparison}>
+          {" "}
+          {t("dashboard.summaryCard.sinceLastMonth")}
+        </span>
       </div>
 
       {chartData && chartData.length > 0 && (
@@ -48,7 +66,7 @@ const SummaryCard = ({
               <div key={index} className={styles.legendItem}>
                 <span
                   className={styles.legendColor}
-                  style={{ backgroundColor: colors[index] || getColor(index) }} 
+                  style={{ backgroundColor: colors[index] || getColor(index) }}
                 ></span>
                 {value} {label}
               </div>
@@ -57,14 +75,14 @@ const SummaryCard = ({
 
           <Chart
             chartType="PieChart"
-            width="100%"
-            height="100%"
+            width="90%"
+            height="90%"
             data={[["Label", "Value"], ...chartData]}
             options={{
               pieHole: 0.4,
               legend: "none",
               backgroundColor: "transparent",
-              chartArea: { width: "100%", height: "100%" },
+              chartArea: { width: "90%", height: "90%" },
               tooltip: { trigger: "focus" },
               pieSliceText: "none",
               slices: chartData.reduce((acc, _, index) => {
@@ -74,7 +92,7 @@ const SummaryCard = ({
               animation: {
                 startup: true,
                 easing: "out",
-                duration: 1000, 
+                duration: 1000,
               },
               pieStartAngle: 180,
             }}

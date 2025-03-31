@@ -87,10 +87,17 @@
 }
 
 .position {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
   font-size: 1.1rem;
   color: #64748b;
   margin-bottom: 1rem;
   font-weight: 500;
+}
+
+.position p {
+  margin: 0;
 }
 
 .position span {
