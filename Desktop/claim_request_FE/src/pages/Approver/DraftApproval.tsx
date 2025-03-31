@@ -1,6 +1,8 @@
 export const DraftApproval: React.FC = () => {
     return (
-        <div></div>
+        <div>
+            
+        </div>
     )
 }
 
