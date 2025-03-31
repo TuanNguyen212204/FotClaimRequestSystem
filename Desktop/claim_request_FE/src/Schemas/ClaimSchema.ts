@@ -22,25 +22,25 @@ export const formSchema = z
   .object({
     currentSelectedProject: ProjectInfoSchema,
     claims: z.array(claimSchema).min(1, "At least one claim is required"),
+    claimRemark: z.string().optional(),
   })
   .refine(
     (data) => {
       const projectStart = new Date(
-        data.currentSelectedProject.ProjectDuration.from,
+        data.currentSelectedProject.ProjectDuration.from
       );
       const projectEnd = new Date(
-        data.currentSelectedProject.ProjectDuration.to,
+        data.currentSelectedProject.ProjectDuration.to
       );
       return data.claims.every((claim) => {
         const claimDate = new Date(claim.date);
-        //console.log(claimDate, projectStart, projectEnd);
         return claimDate >= projectStart && claimDate <= projectEnd;
       });
     },
     {
       message: "All claim dates must be within the project's duration",
       path: ["claims"],
-    },
+    }
   )
   .superRefine((claims, ctx) => {
     const dateSet = new Set();

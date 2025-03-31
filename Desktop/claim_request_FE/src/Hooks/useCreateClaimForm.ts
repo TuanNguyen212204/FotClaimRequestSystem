@@ -10,11 +10,13 @@ import { CreateClaimData } from "@/Services/Project/Project.type";
 import { toast } from "react-toastify";
 import { useWatch } from "react-hook-form";
 import { useEffect } from "react";
+
 interface CreateClaimFormProps {
   initialValues?: FormData;
   mode: "create" | "view" | "update";
   requestID?: string;
 }
+
 export default function useCreateClaimForm({
   initialValues,
   mode,
@@ -41,19 +43,19 @@ export default function useCreateClaimForm({
         ProjectDuration: { from: "", to: "" },
       },
       claims: [{ date: "", working_hours: 0 }],
+      claimRemark: "",
     },
     mode: "all",
   });
+
   const formValues = useWatch({ control, name: "claims" });
   if (mode === "update" && !requestID) {
     throw new Error("requestID is required for update mode");
   }
+
   useEffect(() => {
     console.log("Form Values:", formValues);
     console.log("Errors:", errors);
-    // if (Object.keys(errors).length > 0) {
-    //   console.log("Validation Errors:", errors);
-    // }
     if (Object.keys(formState.errors).length > 0) {
       console.log("Validation Errors:", formState.errors);
       trigger();
@@ -94,7 +96,9 @@ export default function useCreateClaimForm({
       userID: user.user_id,
       projectID: data.currentSelectedProject.projectID,
       claims: data.claims,
+      claimRemark: data.claimRemark || "",
     };
+
     const handleSubmissionResult = (
       resultAction: any,
       successMessage: string,

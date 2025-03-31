@@ -258,9 +258,11 @@ const TableComponent = forwardRef(
                 tabIndex={-1}
                 className={styles.create_button}
                 onClick={() => onCreateButtonClick && onCreateButtonClick()}
+                aria-label="Create new record"
               >
-                <span>
-                  <Plus className="w-8 h-7 rounded-2xl" />
+                <span className={styles.create_button_content}>
+                  <Plus className={styles.create_button_icon} />
+                  <span className={styles.create_button_text}>Add New</span>
                 </span>
               </button>
             </div>

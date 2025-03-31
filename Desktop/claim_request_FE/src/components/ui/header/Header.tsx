@@ -26,6 +26,8 @@ import {
 } from "@/redux/slices/notification/notificationSlice";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useTranslation } from "react-i18next";
+import { User, LogOut } from "lucide-react";
+import { Button } from "@components/ui/button/Button";
 
 interface Notification {
   id: string;
@@ -36,8 +38,11 @@ interface Notification {
 }
 
 const Header: React.FC = () => {
+  const { t, i18n } = useTranslation("header");
   const [_, setRole] = useState<string>();
   const [dropdownVisible, setDropdownVisible] = useState<boolean>(false);
+  const [avatarDropdownVisible, setAvatarDropdownVisible] =
+    useState<boolean>(false);
   const [optionsVisibleId, setOptionsVisibleId] = useState<number | null>(null);
   const username = localStorage.getItem("username");
   const navigate = useNavigate();
@@ -147,6 +152,7 @@ const Header: React.FC = () => {
   const toggleDropdown = () => {
     setDropdownVisible(!dropdownVisible);
   };
+
   const handleMarkAllAsRead = async () => {
     await dispatch(markNotificationAllAsRead() as any);
     await dispatch(fetchNotificationsAsync() as any);
@@ -156,10 +162,26 @@ const Header: React.FC = () => {
     dispatch(updateMarkAsRead(id));
     dispatch(markNotificationAsReadById(id) as any);
   };
+
   const handleDelete = (id: number) => {
     dispatch(deleteNotificationById(id) as any);
     dispatch(fetchNotificationsAsync() as any);
   };
+
+  const handleAvatarDropdownSelect = (value: string) => {
+    if (value === "profile") {
+      navigate(PATH.userInfo);
+    } else if (value === "logout") {
+      localStorage.clear();
+      navigate(PATH.login);
+    }
+    setAvatarDropdownVisible(false);
+  };
+
+  const avatarDropdownOptions = [
+    { value: "profile", label: t("profile"), icon: <User size={16} /> },
+    { value: "logout", label: t("logout"), icon: <LogOut size={16} /> },
+  ];
 
   return (
     <>
@@ -168,16 +190,39 @@ const Header: React.FC = () => {
           <img src={fptlogo} alt="logo" className={styles.logoImage} />
         </div>
         <div className={styles.rightSection}>
-          <SearchBar />
+          <SearchBar /> 
           <div>
             <Badge count={unreadCount}>
               <FaBell className={styles.icon} onClick={toggleDropdown} />
             </Badge>
           </div>
-          <FaUserCircle
-            className={styles.icon}
-            onClick={() => navigate(PATH.userInfo)}
-          />
+          <div
+            className={styles.avatarDropdown}
+            onMouseEnter={() => setAvatarDropdownVisible(true)}
+            onMouseLeave={() => setAvatarDropdownVisible(false)}
+          >
+            <FaUserCircle className={styles.icon} />
+            {avatarDropdownVisible && (
+              <div className={styles.avatarDropdownMenu}>
+                {avatarDropdownOptions.map(({ value, label, icon }) => (
+                  <Button
+                    key={value}
+                    type="text"
+                    size="middle"
+                    icon={icon}
+                    onClick={() => handleAvatarDropdownSelect(value)}
+                    className={`${styles.avatarDropdownItem} ${
+                      label.toLowerCase() === t("logout").toLowerCase()
+                        ? styles.logoutItem
+                        : ""
+                    }`}
+                  >
+                    {label}
+                  </Button>
+                ))}
+              </div>
+            )}
+          </div>
           <span className={styles.username}>{username}</span>
           <LanguageSwitcher />
         </div>
@@ -185,7 +230,7 @@ const Header: React.FC = () => {
       {dropdownVisible && (
         <div className={styles.dropdown}>
           <div className={styles.markAll} onClick={handleMarkAllAsRead}>
-            Mark All As Read
+            {t("mark_all_as_read")}
           </div>
           {Array.isArray(notifications) && notifications.length > 0 ? (
             notifications.map((notification: any) => (
@@ -220,34 +265,31 @@ const Header: React.FC = () => {
                       : ""
                   }`}
                 >
-                  <div
+                  <Button
+                    type="text"
+                    size="small"
+                    icon={<FaCheck />}
+                    onClick={() => handleMarkAsRead(notification.id)}
                     className={styles.option}
-                    style={{ display: "flex", alignItems: "center" }}
                   >
-                    <FaCheck />
-                    <div
-                      style={{ marginLeft: 4 }}
-                      onClick={() => handleMarkAsRead(notification.id)}
-                    >
-                      Mark as Read
-                    </div>
-                  </div>
-
-                  <div
+                    {t("mark_as_read")}
+                  </Button>
+                  <Button
+                    type="text"
+                    size="small"
+                    icon={<FaTrash />}
+                    onClick={() => handleDelete(notification.id)}
                     className={styles.option}
-                    style={{ display: "flex", alignItems: "center" }}
-                    onClick={() => {
-                      handleDelete(notification.id);
-                    }}
                   >
-                    <FaTrash />
-                    <div style={{ marginLeft: 4 }}>Delete</div>
-                  </div>
+                    {t("delete")}
+                  </Button>
                 </div>
               </div>
             ))
           ) : (
-            <div className={styles.emptyNotification}>No Notification</div>
+            <div className={styles.emptyNotification}>
+              {t("no_notification")}
+            </div>
           )}
         </div>
       )}
