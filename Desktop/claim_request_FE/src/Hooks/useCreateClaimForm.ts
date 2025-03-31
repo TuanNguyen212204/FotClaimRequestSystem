@@ -43,7 +43,6 @@ export default function useCreateClaimForm({
         ProjectDuration: { from: "", to: "" },
       },
       claims: [{ date: "", working_hours: 0 }],
-      claimRemark: "",
     },
     mode: "all",
   });
@@ -100,7 +99,6 @@ export default function useCreateClaimForm({
       userID: user.user_id,
       projectID: data.currentSelectedProject.projectID,
       claims: data.claims,
-      claimRemark: data.claimRemark || "",
     };
 
     const handleSubmissionResult = (
