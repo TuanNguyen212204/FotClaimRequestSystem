@@ -47,7 +47,7 @@ export const DraftApproval: React.FC = () => {
     {
       key: "user_name",
       dataIndex: "user_full_name",
-      title: t("fullName"),
+      title: t("full_name"),
     },
     {
       key: "email",
@@ -57,29 +57,29 @@ export const DraftApproval: React.FC = () => {
     {
       key: "start_date",
       dataIndex: "start_date",
-      title: t("startDate"),
+      title: t("start_date"),
       cell: ({ value }) => formatDateToDDMMYYYY(value as string),
     },
     {
       key: "end_date",
       dataIndex: "end_date",
-      title: t("endDate"),
+      title: t("end_date"),
       cell: ({ value }) => formatDateToDDMMYYYY(value as string),
     },
     {
       key: "total_hours",
       dataIndex: "total_hours",
-      title: t("totalHours"),
+      title: t("total_hours"),
     },
     {
       key: "project_id",
       dataIndex: "project_id",
-      title: t("projectId"),
+      title: t("project_id"),
     },
     {
       key: "project_name",
       dataIndex: "project_name",
-      title: t("projectName"),
+      title: t("project_name"),
     },
     // {
     //   key: "submitted_date",
@@ -90,7 +90,7 @@ export const DraftApproval: React.FC = () => {
     {
       key: "claim_status",
       dataIndex: "claim_status",
-      title: t("claimStatus"),
+      title: t("claims_status"),
       cell: ({ value }) => <StatusTag status={value as StatusType} />,
     },
   ];

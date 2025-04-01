@@ -1,16 +1,16 @@
 { 
   "title": "Draft Claims",
   "message": "Work in progress – finish it up when you're ready!",
-  "fullName": "Full Name",
+  "full_name": "Full Name",
   "email": "Email",
-  "startDate": "Start Date",
-  "endDate": "End Date",
-  "totalHours": "Total Hours",
-  "projectId": "Project ID",
-  "projectName": "Project Name",
-  "submittedDate": "Submitted Date",
+  "start_date": "Start Date",
+  "end_date": "End Date",
+  "total_hours": "Total Hours",
+  "project_id": "Project ID",
+  "project_name": "Project Name",
+  "submitted_date": "Submitted Date",
   "salary": "Salary",
   "otRate": "OT Rate",
-  "salaryOvertime": "Salary Overtime",
-  "claimStatus": "Claim Status"
+  "salary_overtime": "Salary Overtime",
+  "claims_status": "Claim Status"
 }
