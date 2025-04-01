@@ -35,14 +35,14 @@ export default function Footer() {
                 <Mail size={16} className="text-gray-400" />
                 <a
                   href="mailto:lalalala@fpt.edu.vn"
-                  className="transition-colors duration-300 ease-in-out hover:text-blue-600"
+                  className="transition-colors duration-300 ease-in-out text-blue-400 hover:text-blue-600"
                 >
                   fot@fpt.edu.vn
                 </a>
               </li>
               <li className="flex items-center gap-2 text-xl">
                 <Phone size={16} className="text-gray-400" />
-                <span>09xxxxxxxx</span>
+                <span>0912345678</span>
               </li>
               <li className="flex items-start gap-2 text-xl">
                 <MapPin size={16} className="mt-1 text-gray-400" />

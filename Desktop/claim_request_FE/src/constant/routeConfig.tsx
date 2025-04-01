@@ -25,9 +25,15 @@ import { FaCheck } from "react-icons/fa";
 
 export const PUBLIC_ROUTE: RouteConfig[] = [
   {
-    component: lazy(() => import("@pages/laningPage")),
+    component: lazy(() => import("@ui/login/LoginForm")),
     path: PATH.login,
     label: "Login",
+    protected: false,
+  },
+  {
+    component: lazy(() => import("@pages/laningPage")),
+    path: PATH.landingPage,
+    label: "Landing Page",
     protected: false,
   },
   {
