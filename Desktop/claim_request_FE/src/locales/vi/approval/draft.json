@@ -1,0 +1,16 @@
+{ 
+  "title": "Yêu cầu chưa gửi",
+  "message": "Đang trong quá trình hoàn thiện - hãy hoàn thành khi bạn đã sẵn sàng!",
+  "full_name": "Họ và tên",
+  "email": "Email",
+  "start_date": "Ngày bắt đầu",
+  "end_date": "Ngày kết thúc",
+  "total_hours": "Tổng giờ",
+  "project_id": "Mã dự án",
+  "project_name": "Tên dự án",
+  "submitted_date": "Ngày gửi",
+  "salary": "Lương",
+  "otRate": "Tỉ lệ OT",
+  "salary_overtime": "Lương làm thêm giờ",
+  "claims_status": "Trạng thái yêu cầu"
+}
