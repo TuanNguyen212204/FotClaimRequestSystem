@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./DraftApproval.module.css";
-import { EyeIcon, EyeOffIcon } from "lucide-react";
+// import { EyeIcon, EyeOffIcon } from "lucide-react";
 import TableComponent, { Column, DataRecord } from "@ui/Table/Table";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllDraftClaimAsync } from "@redux/thunk/Claim/claimThunk";
@@ -18,6 +18,7 @@ export const DraftApproval: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [limit] = useState(10);
+  const {t} = useTranslation("draft");
 
   useEffect(() => {
     setLoading(true);
@@ -46,39 +47,39 @@ export const DraftApproval: React.FC = () => {
     {
       key: "user_name",
       dataIndex: "user_full_name",
-      title: "Full Name",
+      title: t("fullName"),
     },
     {
       key: "email",
       dataIndex: "user_email",
-      title: "Email",
+      title: t("email"),
     },
     {
       key: "start_date",
       dataIndex: "start_date",
-      title: "Start Date",
+      title: t("startDate"),
       cell: ({ value }) => formatDateToDDMMYYYY(value as string),
     },
     {
       key: "end_date",
       dataIndex: "end_date",
-      title: "End Date",
+      title: t("endDate"),
       cell: ({ value }) => formatDateToDDMMYYYY(value as string),
     },
     {
       key: "total_hours",
       dataIndex: "total_hours",
-      title: "Total Hours",
+      title: t("totalHours"),
     },
     {
       key: "project_id",
       dataIndex: "project_id",
-      title: "Project ID",
+      title: t("projectId"),
     },
     {
       key: "project_name",
       dataIndex: "project_name",
-      title: "Project Name",
+      title: t("projectName"),
     },
     // {
     //   key: "submitted_date",
@@ -89,7 +90,7 @@ export const DraftApproval: React.FC = () => {
     {
       key: "claim_status",
       dataIndex: "claim_status",
-      title: "Status",
+      title: t("claimStatus"),
       cell: ({ value }) => <StatusTag status={value as StatusType} />,
     },
   ];
@@ -106,9 +107,9 @@ export const DraftApproval: React.FC = () => {
   return (
     <div>
       <div className={styles.container}>
-        <h1 className={styles.title}>Draft Claim</h1>
+        <h1 className={styles.title}>{t("title")}</h1>
         <p className={styles.title2}>
-          Work in progress – finish it up when you're ready!
+          {t("message")}
         </p>
       </div>
       <TableComponent

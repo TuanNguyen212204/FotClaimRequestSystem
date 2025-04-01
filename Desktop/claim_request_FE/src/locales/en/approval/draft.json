@@ -1,0 +1,16 @@
+{ 
+  "title": "Draft Claims",
+  "message": "Work in progress – finish it up when you're ready!",
+  "fullName": "Full Name",
+  "email": "Email",
+  "startDate": "Start Date",
+  "endDate": "End Date",
+  "totalHours": "Total Hours",
+  "projectId": "Project ID",
+  "projectName": "Project Name",
+  "submittedDate": "Submitted Date",
+  "salary": "Salary",
+  "otRate": "OT Rate",
+  "salaryOvertime": "Salary Overtime",
+  "claimStatus": "Claim Status"
+}
