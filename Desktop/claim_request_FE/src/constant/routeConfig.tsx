@@ -35,7 +35,7 @@ export const PUBLIC_ROUTE: RouteConfig[] = [
   },
   {
     component: lazy(() => import("@pages/laningPage")),
-    path: PATH.landingPage,
+    path: PATH.home,
     label: "Landing Page",
     protected: false,
   },

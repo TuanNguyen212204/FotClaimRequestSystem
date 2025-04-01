@@ -38,5 +38,5 @@ export const PATH = {
   rejectedClaim: "/rejected-claim",
   changePassword: "/change-password",
   draftApproval: "/draft-approval",
-  landingPage: "/landing-page",
+  home: "/home",
 };
