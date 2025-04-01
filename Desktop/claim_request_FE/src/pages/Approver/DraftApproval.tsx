@@ -11,7 +11,7 @@ import {
   selectAllDraftTotalPages,
 } from "@/redux/selector/draftSelector.ts";
 import { useTranslation } from "react-i18next";
-import {format} from "date-fns";
+import { formatDate } from "@/utils/dateUtils";
 export const DraftApproval: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const claimList = useSelector(selectAllDraft);
@@ -19,7 +19,7 @@ export const DraftApproval: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [limit] = useState(10);
-  const {t} = useTranslation("draft");
+  const { t } = useTranslation("draft");
 
   useEffect(() => {
     setLoading(true);
@@ -30,10 +30,6 @@ export const DraftApproval: React.FC = () => {
       })
     ).finally(() => setLoading(false));
   }, [currentPage]);
-
-  const formatDateToDDMMYYYY = (date: string) => {
-    return format(new Date(date), "dd/MM/yyyy");
-  };
 
   const handlePageChange = (newPage: number) => {
     console.log("New Page: ", newPage);
@@ -55,13 +51,13 @@ export const DraftApproval: React.FC = () => {
       key: "start_date",
       dataIndex: "start_date",
       title: t("start_date"),
-      cell: ({ value }) => formatDateToDDMMYYYY(value as string),
+      cell: ({ value }) => formatDate(value as string),
     },
     {
       key: "end_date",
       dataIndex: "end_date",
       title: t("end_date"),
-      cell: ({ value }) => formatDateToDDMMYYYY(value as string),
+      cell: ({ value }) => formatDate(value as string),
     },
     {
       key: "total_hours",
@@ -82,7 +78,7 @@ export const DraftApproval: React.FC = () => {
     //   key: "submitted_date",
     //   dataIndex: "submitted_date",
     //   title: "Submitted Date",
-    //   cell: ({ value }) => formatDateToDDMMYYYY(value as string),
+    //   cell: ({ value }) => formatDate(value as string),
     // },
     {
       key: "claim_status",
