@@ -264,7 +264,7 @@ const ProjectInformation: React.FC = () => {
         isHaveCheckbox={false}
         columns={columns}
         dataSource={dataSource}
-        loading={true}
+        loading={loading}
         pagination={true}
         name="Status"
         createButton={true}
