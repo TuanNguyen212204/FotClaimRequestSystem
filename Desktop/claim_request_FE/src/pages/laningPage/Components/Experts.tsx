@@ -4,6 +4,7 @@ import { GlowingEffect } from "../Components/glowing-effect";
 
 type ExpertCardProps = {
   name: string;
+  image: string; 
 };
 
 const ExpertCard: React.FC<ExpertCardProps> = ({ name }) => {
@@ -26,11 +27,12 @@ const ExpertCard: React.FC<ExpertCardProps> = ({ name }) => {
 
 export default function Experts() {
   // Create an array of 12 experts
-  const experts = Array(12)
+  const experts = Array(16)
     .fill(null)
     .map((_, index) => ({
       id: index + 1,
-      name: "Name",
+      name: `Expert ${index + 1}`, // Có thể thay bằng tên thật
+      image: `/path/to/expert${index + 1}.jpg`, // Đường dẫn đến ảnh
     }));
 
   return (
@@ -40,9 +42,13 @@ export default function Experts() {
         <h1 className="mb-12 text-center text-5xl font-bold">Our Experts</h1>
 
         <div className="mt-12 rounded-lg bg-[#252937] p-8">
-          <div className="grid grid-cols-3 gap-8 sm:grid-cols-4 md:grid-cols-6">
-            {experts.slice(0, 12).map((expert) => (
-              <ExpertCard key={expert.id} name={expert.name} />
+          <div className="grid grid-cols-2 gap-8 sm:grid-cols-6">
+            {experts.map((expert) => (
+              <ExpertCard
+                key={expert.id}
+                name={expert.name}
+                image={expert.image}
+              />
             ))}
           </div>
         </div>
