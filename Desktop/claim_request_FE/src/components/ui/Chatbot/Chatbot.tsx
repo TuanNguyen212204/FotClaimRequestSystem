@@ -138,11 +138,12 @@ const Chatbot = ({
     setIsTyping(true);
 
     try {
-      // Use httpClient instead of fetch
       const response = await httpClient.post('https://claimsystem.info.vn/chatbot/api/chat/stream', {
         message: inputValue,
         user_id: userId,
         role_id: roleId
+      }, {
+        timeout: 30000
       });
 
       if (!response.status || response.status !== 200) {
