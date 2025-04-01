@@ -3,6 +3,8 @@ import { motion } from "framer-motion";
 import { GlowingEffect } from "../Components/glowing-effect";
 import { FileText, CheckCircle2, BellRing } from "lucide-react";
 import { Meteors } from "../Components/meteors";
+import WorkingProcess from "../Components/WorkingProcess";
+import Experts from "../Components/Experts";
 type FeatureCardProps = {
   title: string;
   description: string;
@@ -98,7 +100,7 @@ export default function Content() {
         className="flex w-full flex-col items-center justify-center overflow-hidden bg-[#2d3142] py-16 text-white"
       >
         <div className="text flex max-w-[800px] flex-col px-4 text-center">
-          <h2 className="mb-6 text-4xl font-bold">Overtime Claims Made Easy</h2>
+          <h1 className="mb-6 text-5xl font-bold">Overtime Claims Made Easy</h1>
           <p className="mb-6 text-base opacity-90">
             Stop wasting time with inefficient, error-prone manual overtime
             claims. ClaimEasy provides a simple, transparent platform for
@@ -114,7 +116,7 @@ export default function Content() {
         className="w-full overflow-hidden bg-[#2d3142] py-16 text-white"
       >
         <div className="mx-auto max-w-6xl px-4">
-          <h2 className="mb-10 text-center text-4xl font-bold">Features</h2>{" "}
+          <h1 className="mb-10 text-center text-5xl font-bold">Features</h1>{" "}
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {features.map((feature) => (
               <FeatureCard
@@ -133,10 +135,10 @@ export default function Content() {
         className="bg-gray-800 py-16 text-center text-white"
       >
         <div className="container mx-auto px-4">
-          <h2 className="mb-4 text-3xl font-bold md:text-4xl">
+          <h2 className="mb-4 text-5xl font-bold">
             How ClaimEasy Works
           </h2>
-          <p className="mx-auto mb-12 max-w-2xl text-lg text-gray-300">
+          <p className="mx-auto mb-12 max-w-5xl text-lg text-gray-300">
             Get your overtime claims submitted and approved in just a few simple
             steps.
           </p>
@@ -179,9 +181,9 @@ export default function Content() {
       </section>
       <section className="bg-[#252937] py-12 text-center align-middle text-white md:py-16">
         <div className="container mx-auto px-4">
-          <h2 className="mb-4 text-2xl font-bold md:text-3xl">
+          <h1 className="mb-4 text-5xl font-bold">
             Built With Leading Technologies
-          </h2>
+          </h1>
           <p className="mx-auto mb-10 max-w-xl text-base text-gray-300 md:text-lg">
             Leveraging modern tools to deliver a reliable and efficient
             experience.
@@ -190,6 +192,8 @@ export default function Content() {
           <Marquee />
         </div>
       </section>
+      <WorkingProcess/>
+      <Experts/>
     </>
   );
 }
