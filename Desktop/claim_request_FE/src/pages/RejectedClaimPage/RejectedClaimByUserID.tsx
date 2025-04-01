@@ -12,6 +12,7 @@ import { EyeIcon } from "lucide-react";
 import TableComponent, { Column, DataRecord } from "@components/ui/Table/Table";
 import UserClaimDetailsModal from "@components/ui/claimer/UserClaimDetails";
 import StatusTag from "@components/ui/StatusTag/StatusTag";
+import { title } from "process";
 const RejectedClaimByUserID = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -75,6 +76,15 @@ const RejectedClaimByUserID = () => {
     return `${day}/${month}/${year}`;
   };
 
+  const formatDateRange = (dateRange: any) => {
+    return dateRange.replace(
+      /(\d{1,2})\/(\d{1,2})\/(\d{4})/g,
+      (match, day, month, year) => {
+        return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
+      }
+    );
+  };
+
   const columns: Column[] = [
     {
       key: "project_id",
@@ -90,6 +100,10 @@ const RejectedClaimByUserID = () => {
       key: "time_duration",
       dataIndex: "time_duration",
       title: "Time Duration",
+      cell: ({ value }) => {
+        const formattedValue = formatDateRange(value as string);
+        return <span>{formattedValue}</span>;
+      },
     },
     {
       key: "total_hours",
@@ -101,7 +115,13 @@ const RejectedClaimByUserID = () => {
       key: "submitted_date",
       dataIndex: "submitted_date",
       title: "Submitted Date",
-      cell: ({ value }) => formatDateToDDMMYYYY(value as string),
+
+      cell: ({ value }) => {
+        const formattedValue = formatDateRange(
+          formatDateToDDMMYYYY(value as string)
+        );
+        return <span>{formattedValue}</span>;
+      },
     },
     {
       key: "claim_status",
