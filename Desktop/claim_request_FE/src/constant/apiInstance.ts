@@ -53,7 +53,7 @@ export class HttpClient {
             break;
           default:
             console.error(`API Error: ${status}`);
-            window.location.href = `/error/${HTTP_STATUS.NOT_FOUND}`;
+          // window.location.href = `/error/${HTTP_STATUS.NOT_FOUND}`;
         }
         return Promise.reject(error);
       }

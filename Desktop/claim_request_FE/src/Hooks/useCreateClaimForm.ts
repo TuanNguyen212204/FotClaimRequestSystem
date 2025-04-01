@@ -100,7 +100,7 @@ export default function useCreateClaimForm({
       userID: user.user_id,
       projectID: data.currentSelectedProject.projectID,
       claims: data.claims,
-      claimRemark: data.claimRemark || "",
+      // claimRemark: data.claimRemark || "",
     };
 
     const handleSubmissionResult = (
