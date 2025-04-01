@@ -15,7 +15,7 @@ import httpClient from "@constant/apiInstance";
         console.log("Fetching projects - Page:", page, "Status:", status);
 
         const response = await httpClient.get<ApiResponse<Project[]>>(
-          `/projects?project_status=${status}&page=1&limit=10&sortBy=project_id&order=ASC`
+         `/projects?project_status=${status}&page=${page}&limit=10&sortBy=project_id&order=ASC`
         );
 
         if (!response.data.data || !Array.isArray(response.data.data)) {
@@ -39,7 +39,7 @@ export const fetchTotalPage = createAsyncThunk<
     try {
       await delay(1000);
       const response = await httpClient.get<ApiResponse<Project[]>>(
-        `/projects?project_status=${status}&page=1&limit=10&sortBy=project_id&order=ASC`
+        `/projects?project_status=${status}&page=${page}&limit=10&sortBy=project_id&order=ASC`
       );
 
       console.log("response", response.data);
