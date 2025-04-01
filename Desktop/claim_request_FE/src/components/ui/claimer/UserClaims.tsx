@@ -17,7 +17,7 @@ const UserClaims = () => {
   const navigate = useNavigate();
   const userClaim = useSelector(selectMyClaim);
   const totalPage = useSelector(selectTotalPage);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedClaim, setSelectedClaim] = useState<string>("");

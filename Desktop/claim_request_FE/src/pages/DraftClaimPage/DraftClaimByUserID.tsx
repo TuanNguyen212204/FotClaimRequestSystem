@@ -17,7 +17,7 @@ const DraftClaimByUserID = () => {
   const navigate = useNavigate();
   const userClaim = useSelector(selectMyClaim);
   const totalPage = useSelector(selectTotalPage);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedClaim, setSelectedClaim] = useState<string>("");
@@ -73,7 +73,14 @@ const DraftClaimByUserID = () => {
     const year = dateObj.getFullYear();
     return `${day}/${month}/${year}`;
   };
-
+  const formatDateRange = (dateRange: any) => {
+    return dateRange.replace(
+      /(\d{1,2})\/(\d{1,2})\/(\d{4})/g,
+      (match, day, month, year) => {
+        return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
+      }
+    );
+  };
   const columns: Column[] = [
     {
       key: "project_id",
@@ -89,6 +96,10 @@ const DraftClaimByUserID = () => {
       key: "time_duration",
       dataIndex: "time_duration",
       title: "Time Duration",
+      cell: ({ value }) => {
+        const formattedValue = formatDateRange(value as string);
+        return <span>{formattedValue}</span>;
+      },
     },
     {
       key: "total_hours",
@@ -100,7 +111,13 @@ const DraftClaimByUserID = () => {
       key: "submitted_date",
       dataIndex: "submitted_date",
       title: "Submitted Date",
-      cell: ({ value }) => formatDateToDDMMYYYY(value as string),
+
+      cell: ({ value }) => {
+        const formattedValue = formatDateRange(
+          formatDateToDDMMYYYY(value as string)
+        );
+        return <span>{formattedValue}</span>;
+      },
     },
     {
       key: "claim_status",

@@ -12,16 +12,25 @@ import { EyeIcon } from "lucide-react";
 import TableComponent, { Column, DataRecord } from "@components/ui/Table/Table";
 import UserClaimDetailsModal from "@components/ui/claimer/UserClaimDetails";
 import StatusTag from "@components/ui/StatusTag/StatusTag";
+import { t } from "i18next";
 const PendingClaimByUserID = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const userClaim = useSelector(selectMyClaim);
   const totalPage = useSelector(selectTotalPage);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedClaim, setSelectedClaim] = useState<string>("");
   const [limit] = useState(5);
+  const formatDateRange = (dateRange: any) => {
+    return dateRange.replace(
+      /(\d{1,2})\/(\d{1,2})\/(\d{4})/g,
+      (match, day, month, year) => {
+        return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
+      }
+    );
+  };
 
   // useEffect(() => {
   //   setLoading(true);
@@ -90,6 +99,10 @@ const PendingClaimByUserID = () => {
       key: "time_duration",
       dataIndex: "time_duration",
       title: "Time Duration",
+      cell: ({ value }) => {
+        const formattedValue = formatDateRange(value as string);
+        return <span>{formattedValue}</span>;
+      },
     },
     {
       key: "total_hours",
@@ -101,7 +114,13 @@ const PendingClaimByUserID = () => {
       key: "submitted_date",
       dataIndex: "submitted_date",
       title: "Submitted Date",
-      cell: ({ value }) => formatDateToDDMMYYYY(value as string),
+
+      cell: ({ value }) => {
+        const formattedValue = formatDateRange(
+          formatDateToDDMMYYYY(value as string)
+        );
+        return <span>{formattedValue}</span>;
+      },
     },
     {
       key: "claim_status",
