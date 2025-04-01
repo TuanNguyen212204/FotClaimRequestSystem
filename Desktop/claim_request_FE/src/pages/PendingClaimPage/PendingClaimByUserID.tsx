@@ -1,47 +1,66 @@
-import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { AppDispatch } from "@/redux";
-import {
-  selectPendingClaimByUserID,
-  selectTotalPage,
-} from "@/redux/selector/claimSelector";
-import {
-  fetchClaimByUserWithPendingStatusAsync,
-  fetchTotalClaimByUserAsync,
-} from "@/redux/thunk/Claim/claimThunk";
-import TableComponent, {
-  DataRecord,
-  Column,
-} from "@/components/ui/Table/Table";
-import { EyeIcon } from "lucide-react";
+import { selectMyClaim, selectTotalPage } from "@/redux/selector/claimSelector";
+import { useEffect, useState } from "react";
 import styles from "@components/ui/claimer/UserClaims.module.css";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "@redux/index";
+import {
+  fetchClaimByUserAsync,
+  fetchTotalClaimByUserAsync,
+} from "@redux/thunk/Claim/claimThunk";
+import { EyeIcon } from "lucide-react";
+import TableComponent, { Column, DataRecord } from "@components/ui/Table/Table";
 import UserClaimDetailsModal from "@components/ui/claimer/UserClaimDetails";
 import StatusTag from "@components/ui/StatusTag/StatusTag";
-import { useTranslation } from "react-i18next";
-
-export const PendingClaimByUserID = () => {
-  const { t } = useTranslation("pendingClaim");
+import { t } from "i18next";
+const PendingClaimByUserID = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const listApprovedClaim = useSelector(selectPendingClaimByUserID);
+  const userClaim = useSelector(selectMyClaim);
   const totalPage = useSelector(selectTotalPage);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedClaim, setSelectedClaim] = useState<string>("");
   const [limit] = useState(5);
+  const formatDateRange = (dateRange: any) => {
+    return dateRange.replace(
+      /(\d{1,2})\/(\d{1,2})\/(\d{4})/g,
+      (match, day, month, year) => {
+        return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
+      }
+    );
+  };
+
+  // useEffect(() => {
+  //   setLoading(true);
+  //   const fetchData = async () => {
+  //     await dispatch(fetchClaimByUserAsync());
+  //     setLoading(false);
+  //   };
+  //   fetchData();
+  // }, [dispatch, currentPage]);
+  // useEffect(() => {
+  //   console.log(userClaim);
+  // }, [userClaim]);
+
+  // const handleViewDetail = (id: string) => {
+  //   setSelectedClaim(id);
+  //   setIsModalOpen(true);
+  // };
 
   useEffect(() => {
     setLoading(true);
     const fetchData = async () => {
-      dispatch(
-        fetchClaimByUserWithPendingStatusAsync({ page: currentPage })
-      ).finally(() => setLoading(false));
-      dispatch(fetchTotalClaimByUserAsync());
+      await dispatch(
+        fetchClaimByUserAsync({ page: currentPage, status: "PENDING" })
+      );
+      setLoading(false);
+      dispatch(fetchTotalClaimByUserAsync({ status: "PENDING" }));
     };
     fetchData();
-  }, [currentPage, dispatch]);
+    console.log(totalPage);
+  }, [currentPage, dispatch, totalPage]);
 
   const handleViewDetail = (id: string) => {
     setLoading(true);
@@ -69,37 +88,61 @@ export const PendingClaimByUserID = () => {
     {
       key: "project_id",
       dataIndex: "project_id",
-      title: t("project_id_label"),
+      title: "Project ID",
     },
     {
       key: "project_name",
       dataIndex: "project_name",
-      title: t("project_name_label"),
+      title: "Project Name",
     },
     {
       key: "time_duration",
       dataIndex: "time_duration",
-      title: t("time_duration_label"),
+      title: "Time Duration",
+      cell: ({ value }) => {
+        const formattedValue = formatDateRange(value as string);
+        return <span>{formattedValue}</span>;
+      },
     },
     {
       key: "total_hours",
       dataIndex: "total_hours",
-      title: t("total_working_hours_label"),
-      cell: ({ value }) => `${value} ${t("hours_suffix")}`,
+      title: "Total Working Hours",
+      cell: ({ value }) => `${value} hours`,
     },
     {
       key: "submitted_date",
       dataIndex: "submitted_date",
-      title: t("submitted_date_label"),
-      cell: ({ value }) => formatDateToDDMMYYYY(value as string),
+      title: "Submitted Date",
+
+      cell: ({ value }) => {
+        const formattedValue = formatDateRange(
+          formatDateToDDMMYYYY(value as string)
+        );
+        return <span>{formattedValue}</span>;
+      },
     },
     {
       key: "claim_status",
       dataIndex: "claim_status",
-      title: t("claim_status_label"),
+      title: "Claim Status",
       cell: ({ value }: { value: unknown }) => {
         const stringValue = value as string;
         return (
+          // <span
+          //   style={{
+          //     color:
+          //       stringValue === "APPROVED"
+          //         ? "green"
+          //         : stringValue === "REJECTED"
+          //         ? "red"
+          //         : stringValue === "PENDING"
+          //         ? "orange"
+          //         : "inherit",
+          //   }}
+          // >
+          //   {stringValue}
+          // </span>
           <div>
             <StatusTag
               status={value as "PENDING" | "APPROVED" | "REJECTED" | "PAID"}
@@ -111,11 +154,11 @@ export const PendingClaimByUserID = () => {
     {
       key: "action",
       dataIndex: "request_id",
-      title: t("action_label"),
+      title: "Action",
       cell: ({ value }) => (
         <>
           <EyeIcon
-            className={styles.icon}
+            className="cursor-pointer"
             onClick={() => handleViewDetail(value as string)}
           />
           <UserClaimDetailsModal
@@ -129,8 +172,7 @@ export const PendingClaimByUserID = () => {
       ),
     },
   ];
-
-  const dataSource: DataRecord[] = listApprovedClaim.map((claim, index) => ({
+  const dataSource: DataRecord[] = userClaim.map((claim, index) => ({
     ...claim,
     key: index,
     id: claim.claim_id ? claim.claim_id.toString() : "",
@@ -143,9 +185,8 @@ export const PendingClaimByUserID = () => {
         ? `${formatDateToDDMMYYYY(claim.start_date)} - ${formatDateToDDMMYYYY(
             claim.end_date
           )}`
-        : t("no_data"),
+        : "N/A",
   }));
-
   return (
     <div className={styles.container}>
       <TableComponent
@@ -153,12 +194,11 @@ export const PendingClaimByUserID = () => {
         dataSource={dataSource}
         loading={loading}
         pagination={true}
-        name={t("pending_claims_title")}
+        name="My Claims"
         totalPage={totalPage}
         onPageChange={handlePageChange}
       />
     </div>
   );
 };
-
 export default PendingClaimByUserID;

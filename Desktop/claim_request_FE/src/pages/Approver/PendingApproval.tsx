@@ -320,11 +320,11 @@ export const PendingComponent: React.FC = () => {
       dataIndex: "total_hours",
       title: t("columns.totalHours"),
     },
-    {
-      key: "project_id",
-      dataIndex: "project_id",
-      title: t("columns.projectId"),
-    },
+    // {
+    //   key: "project_id",
+    //   dataIndex: "project_id",
+    //   title: t("columns.projectId"),
+    // },
     {
       key: "project_name",
       dataIndex: "project_name",
@@ -336,25 +336,25 @@ export const PendingComponent: React.FC = () => {
       title: t("columns.submittedDate"),
       cell: ({ value }) => formatDateToDDMMYYYY(value as string),
     },
-    {
-      key: "salary",
-      dataIndex: "user_salary",
-      title: t("columns.salary"),
-      cell: ({ value }) => <div>{isSalaryVisible ? value : "******"}</div>,
-    },
-    {
-      key: "ot_rate",
-      dataIndex: "user_ot_rate",
-      title: t("columns.otRate"),
-    },
-    {
-      key: "salary_overtime",
-      dataIndex: "salary_overtime",
-      title: t("columns.salaryOvertime"),
-      cell: ({ value }) => (
-        <div>{isSalaryVisible ? value : "*****************"}</div>
-      ),
-    },
+    // {
+    //   key: "salary",
+    //   dataIndex: "user_salary",
+    //   title: t("columns.salary"),
+    //   cell: ({ value }) => <div>{isSalaryVisible ? value : "******"}</div>,
+    // },
+    // {
+    //   key: "ot_rate",
+    //   dataIndex: "user_ot_rate",
+    //   title: t("columns.otRate"),
+    // },
+    // {
+    //   key: "salary_overtime",
+    //   dataIndex: "salary_overtime",
+    //   title: t("columns.salaryOvertime"),
+    //   cell: ({ value }) => (
+    //     <div>{isSalaryVisible ? value : "*****************"}</div>
+    //   ),
+    // },
     {
       key: "claim_status",
       dataIndex: "claim_status",
@@ -364,7 +364,7 @@ export const PendingComponent: React.FC = () => {
     {
       key: "action",
       dataIndex: "request_id",
-      title: "",
+      title: "Action",
       cell: ({ value }) => (
         <div className={styles.actions}>
           <Tooltip text="View Details" position="top">
@@ -417,9 +417,7 @@ export const PendingComponent: React.FC = () => {
   return (
     <div>
       <div className={styles.container}>
-        <h1 className={styles.title}>
-          {loading ? t("loading") : t("title")}
-        </h1>
+        <h1 className={styles.title}>{loading ? t("loading") : t("title")}</h1>
         <p className={styles.title2}>
           {loading ? t("pleaseWait") : t("subtitle")}
         </p>

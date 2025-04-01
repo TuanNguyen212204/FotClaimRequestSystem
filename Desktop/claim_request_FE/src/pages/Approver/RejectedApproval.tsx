@@ -99,25 +99,25 @@ export const RejectedComponent: React.FC = () => {
       title: t("submittedDate"),
       cell: ({ value }) => formatDateToDDMMYYYY(value as string),
     },
-    {
-      key: "salary",
-      dataIndex: "user_salary",
-      title: t("salary"),
-      cell: ({ value }) => <div>{isSalaryVisible ? value : "******"}</div>,
-    },
-    {
-      key: "ot_rate",
-      dataIndex: "user_ot_rate",
-      title: t("otRate"),
-    },
-    {
-      key: "salary_overtime",
-      dataIndex: "salary_overtime",
-      title: t("salaryOvertime"),
-      cell: ({ value }) => (
-        <div>{isSalaryVisible ? value : "*****************"}</div>
-      ),
-    },
+    // {
+    //   key: "salary",
+    //   dataIndex: "user_salary",
+    //   title: t("salary"),
+    //   cell: ({ value }) => <div>{isSalaryVisible ? value : "******"}</div>,
+    // },
+    // {
+    //   key: "ot_rate",
+    //   dataIndex: "user_ot_rate",
+    //   title: t("otRate"),
+    // },
+    // {
+    //   key: "salary_overtime",
+    //   dataIndex: "salary_overtime",
+    //   title: t("salaryOvertime"),
+    //   cell: ({ value }) => (
+    //     <div>{isSalaryVisible ? value : "*****************"}</div>
+    //   ),
+    // },
     {
       key: "claim_status",
       dataIndex: "claim_status",

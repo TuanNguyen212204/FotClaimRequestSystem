@@ -42,7 +42,8 @@ import draftClaimEn from "../locales/en/draftClaim.json";
 import draftClaimVn from "../locales/vi/draftClaim.json";
 import rejectedClaimEn from "../locales/en/rejectedClaim.json";
 import rejectedClaimVn from "../locales/vi/rejectedClaim.json";
-
+import draftEn from "@/locales/en/approval/draft.json";
+import draftVn from "@/locales/vi/approval/draft.json";
 i18n.use(initReactI18next).init({
   resources: {
     en: {
@@ -65,6 +66,7 @@ i18n.use(initReactI18next).init({
       details: detailsEn,
       draftClaim: draftClaimEn,
       rejectedClaim: rejectedClaimEn,
+      draft: draftEn,
     },
     vi: {
       header: headerVn,
@@ -86,6 +88,7 @@ i18n.use(initReactI18next).init({
       details: detailsVn,
       draftClaim: draftClaimVn,
       rejectedClaim: rejectedClaimVn,
+      draft: draftVn,
     },
   },
   lng: "en",
@@ -108,6 +111,7 @@ i18n.use(initReactI18next).init({
     "approve",
     "reject",
     "details",
+    "draft"
   ],
   defaultNS: "header",
   debug: true,

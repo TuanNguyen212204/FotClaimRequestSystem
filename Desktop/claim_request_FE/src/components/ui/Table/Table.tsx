@@ -51,10 +51,11 @@ const Cell = ({ children }: { children: ReactNode }) => {
   return (
     <div
       tabIndex={-1}
-      style={{
-        display: "flex",
-        justifyContent: "center",
-      }}
+      // style={{
+      //   display: "flex",
+      //   justifyContent: "left",
+      // }}
+      className="flex justify-left pt-1 "
     >
       {children}
     </div>
@@ -274,8 +275,8 @@ const TableComponent = forwardRef(
             <table className={styles.table}>
               <thead className={styles.thead}>
                 <tr>
-                  <th className={styles.th}>
-                    {isHaveCheckbox && (
+                  {isHaveCheckbox && (
+                    <th className={styles.th}>
                       <div>
                         <input
                           ref={checkboxRef}
@@ -288,8 +289,8 @@ const TableComponent = forwardRef(
                           className=" text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 "
                         />
                       </div>
-                    )}
-                  </th>
+                    </th>
+                  )}
                   {columns.map((col) => (
                     <th
                       key={String(col.key || col.dataIndex)}
@@ -298,6 +299,7 @@ const TableComponent = forwardRef(
                           ? () => handleSort(String(col.dataIndex))
                           : undefined
                       }
+                      className={styles.th}
                     >
                       {col.title}
                       {sortColumn === col.dataIndex && (
@@ -317,8 +319,12 @@ const TableComponent = forwardRef(
                 {filteredData.length > 0 ? (
                   paginatedData.map((record) => (
                     <tr key={record.key || record.id}>
-                      <td style={{ paddingTop: "3rem" }} tabIndex={-1}>
-                        {isHaveCheckbox && (
+                      {isHaveCheckbox && (
+                        <td
+                          style={{ paddingTop: "3rem" }}
+                          tabIndex={-1}
+                          className="p-2"
+                        >
                           <div className={styles.checkbox}>
                             <input
                               type="checkbox"
@@ -326,10 +332,11 @@ const TableComponent = forwardRef(
                               onChange={() => handleCheck(record.id || "")}
                             />
                           </div>
-                        )}
-                      </td>
+                        </td>
+                      )}
                       {columns.map((col) => (
                         <td
+                          className="p-2"
                           key={String(col.key || col.dataIndex)}
                           tabIndex={-1}
                         >

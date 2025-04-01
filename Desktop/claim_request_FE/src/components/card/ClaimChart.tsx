@@ -24,7 +24,7 @@ const ClaimChart = () => {
     t("dashboard.claimChart.months.december"),
   ];
 
-  const statuses = ["Pending", "APPROVED", "REJECTED", "PAID"];
+  const statuses = ["PENDING", "APPROVED", "REJECTED", "PAID"];
 
   const [rawData, setRawData] = useState([]);
   const [visibleSeries, setVisibleSeries] = useState({
@@ -39,7 +39,7 @@ const ClaimChart = () => {
     const fetchData = async () => {
       try {
         const response = await httpClient.get("/admin/claims-by-status");
-        if (response.data?.data?.result) {
+        if (response.data?.data.result) {
           const formattedData = response.data.data.result.map((item) => ({
             month: monthNames[item.month - 1],
             PENDING: item.data.PENDING || 0,
@@ -47,6 +47,8 @@ const ClaimChart = () => {
             REJECTED: item.data.REJECTED || 0,
             PAID: item.data.PAID || 0,
           }));
+          console.log("Formatted Data:", formattedData);
+          console.log("Formatted Data2:", response.data.data.result);
           setRawData(formattedData);
         }
       } catch (error) {
@@ -62,10 +64,10 @@ const ClaimChart = () => {
     const header = ["Month", ...statuses.filter((s) => visibleSeries[s])];
     const body = rawData.map((item) => [
       item.month,
-      ...statuses.filter((s) => visibleSeries[s]).map((s) => item[s]),
+      ...statuses.filter((s) => visibleSeries[s]).map((s) => Number(item[s]) || 0),
     ]);
     return [header, ...body];
-  };
+  };  
 
   const toggleSeries = (status) => {
     setVisibleSeries((prev) => ({
@@ -78,15 +80,15 @@ const ClaimChart = () => {
 
   return (
     <div className={styles.chartContainer}>
-      <p className={styles.chartTitle}>{t("dashboard.claimChart.title")}</p>
       <Chart
         chartType="ColumnChart"
         width="100%"
         height="400px"
         data={getFilteredData()}
         options={{
+          title: "Claim Status Overview",
           chartArea: { width: "70%" },
-          // hAxis: { title: t("dashboard.claimChart.hAxis"), minValue: 0 },
+          hAxis: { title: t("dashboard.claimChart.hAxis"), minValue: 0 },
           vAxis: { title: t("dashboard.claimChart.vAxis"), minValue: 0 },
           legend: { position: "none" },
           colors: colors.filter((_, i) => visibleSeries[statuses[i]]),

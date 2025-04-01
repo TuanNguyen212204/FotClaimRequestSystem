@@ -43,7 +43,6 @@ export default function useCreateClaimForm({
         ProjectDuration: { from: "", to: "" },
       },
       claims: [{ date: "", working_hours: 0 }],
-      claimRemark: "",
     },
     mode: "all",
   });
@@ -100,7 +99,7 @@ export default function useCreateClaimForm({
       userID: user.user_id,
       projectID: data.currentSelectedProject.projectID,
       claims: data.claims,
-      claimRemark: data.claimRemark || "",
+      // claimRemark: data.claimRemark || "",
     };
 
     const handleSubmissionResult = (
@@ -122,8 +121,8 @@ export default function useCreateClaimForm({
       const resultAction = await dispatch(createClaim(DataToSend));
       handleSubmissionResult(
         resultAction,
-        "Claim request created successfully",
-        "Failed to create claim"
+        t("toast.createSuccess"),
+        t("toast.createError")
       );
     } else if (mode === "update") {
       if (!requestID) {
@@ -136,8 +135,8 @@ export default function useCreateClaimForm({
       );
       handleSubmissionResult(
         resultAction,
-        "Claim request updated successfully",
-        "Failed to update claim"
+        t("toast.updateSuccess"),
+        t("toast.updateError")
       );
     }
   };

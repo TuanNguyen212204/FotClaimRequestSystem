@@ -1,5 +1,5 @@
 import React from "react";
-import { PendingClaimByUserID } from "./PendingClaimByUserID";
+import PendingClaimByUserID from "./PendingClaimByUserID";
 const PengdingClaimForUserPage = () => {
   return (
     <div>
