@@ -211,6 +211,7 @@ const TableComponent = forwardRef(
           <LoadingProvider>
             <LoadingOverlay></LoadingOverlay>
           </LoadingProvider>
+          {/* <h1>Loading...</h1> */}
         </div>
       );
     }
