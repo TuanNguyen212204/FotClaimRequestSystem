@@ -93,19 +93,15 @@ const Header: React.FC = () => {
     const socket = socketRef.current;
 
     socket.on("connect", () => {
-      console.log("Socket connected");
       if (user_id) {
         socket.emit("login", user_id);
-        console.log("a");
       }
     });
 
     socket.on("notification", (notification) => {
       try {
-        console.log("Sắp dispatch action addNotification:", notification);
         dispatch(addNotification(notification));
-        toast.success("You have a new notification!")
-        console.log("Đã gửi action addNotification!");
+        toast.success("You have a new notification!");
       } catch (error) {
         console.error("Lỗi khi dispatch:", error);
       }
@@ -113,9 +109,7 @@ const Header: React.FC = () => {
 
     socket.on("broadcast", (notification) => {
       try {
-        console.log("Sắp dispatch action addNotification:", notification);
         dispatch(addNotification(notification));
-        console.log("Đã gửi action addNotification!");
       } catch (error) {
         console.error("Lỗi khi dispatch:", error);
       }
@@ -125,8 +119,7 @@ const Header: React.FC = () => {
       console.error("Socket connection error:", error);
     });
 
-    socket.on("disconnect", (reason) => {
-      console.log("Socket disconnected:", reason);
+    socket.on("disconnect", (_) => {
       setTimeout(() => {
         if (socketRef.current) {
           console.log("Attempting to reconnect...");
@@ -156,20 +149,22 @@ const Header: React.FC = () => {
     await dispatch(fetchNotificationsAsync() as any);
   };
 
-  const handleMarkAsRead = (id: number) => {
-    dispatch(updateMarkAsRead(id));
-    dispatch(markNotificationAsReadById(id) as any);
+  const handleMarkAsRead = async (id: number) => {
+    console.log(id);
+    await dispatch(updateMarkAsRead(id));
+    await dispatch(markNotificationAsReadById(id) as any);
   };
-  const handleDelete = (id: number) => {
-    dispatch(deleteNotificationById(id) as any);
-    dispatch(fetchNotificationsAsync() as any);
+  const handleDelete = async (id: number) => {
+    console.log(id);
+    await dispatch(deleteNotificationById(id) as any);
+    await dispatch(fetchNotificationsAsync() as any);
   };
 
   const handleDeleteAllNoti = async () => {
-    await dispatch(deleteNotificationAll() as any)
+    await dispatch(deleteNotificationAll() as any);
     await dispatch(fetchNotificationsAsync() as any);
   };
-  
+
   return (
     <>
       <header className={styles.header}>
@@ -195,14 +190,22 @@ const Header: React.FC = () => {
         <div className={styles.dropdown}>
           <div className={styles.top}>
             <div
-              style={{ display: "flex", alignItems: "center", cursor: "pointer" }}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                cursor: "pointer",
+              }}
               onClick={handleMarkAllAsRead}
             >
               <FaCheck style={{ marginRight: 5 }} />
               Mark All As Read
             </div>
             <div
-              style={{ display: "flex", alignItems: "center", cursor: "pointer" }}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                cursor: "pointer",
+              }}
               onClick={handleDeleteAllNoti}
             >
               <FaTrash style={{ marginRight: 5 }} />
@@ -219,8 +222,10 @@ const Header: React.FC = () => {
               >
                 <strong>{notification.title}</strong>
                 <div className={styles.headers}>
-                  <div style={{ display: "flex", alignItems: "center" }} >
-                    <FaExclamationTriangle style={{ marginRight: 5, fontSize: 14}} />
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <FaExclamationTriangle
+                      style={{ marginRight: 5, fontSize: 14 }}
+                    />
                     <span className={styles.noti}>Notification</span>
                   </div>
                   <span className={styles.timestamp}>
@@ -242,41 +247,36 @@ const Header: React.FC = () => {
                 >
                   <FaEllipsisV className={styles.threeDots} />
                   <div
-                  className={`${styles.options} ${
-                    optionsVisibleId === notification.id
-                      ? styles.showOptions
-                      : ""
-                  }`}
-                >
-                  {!!notification.is_read === false ? (
+                    className={`${styles.options} ${
+                      optionsVisibleId === notification.id
+                        ? styles.showOptions
+                        : ""
+                    }`}
+                  >
+                    {!!notification.is_read === false ? (
+                      <div
+                        className={styles.option}
+                        style={{ display: "flex", alignItems: "center" }}
+                        onClick={() => handleMarkAsRead(notification.id)}
+                      >
+                        <FaCheck />
+                        <div style={{ marginLeft: 4 }}>Mark as Read</div>
+                      </div>
+                    ) : (
+                      <></>
+                    )}
                     <div
                       className={styles.option}
                       style={{ display: "flex", alignItems: "center" }}
+                      onClick={() => {
+                        handleDelete(notification.id);
+                      }}
                     >
-                      <FaCheck />
-                      <div
-                        style={{ marginLeft: 4 }}
-                        onClick={() => handleMarkAsRead(notification.id)}
-                      >
-                        Mark as Read
-                      </div>
+                      <FaTrash />
+                      <div style={{ marginLeft: 4 }}>Delete</div>
                     </div>
-                  ) : (
-                    <></>
-                  )}
-                  <div
-                    className={styles.option}
-                    style={{ display: "flex", alignItems: "center" }}
-                    onClick={() => {
-                      handleDelete(notification.id);
-                    }}
-                  >
-                    <FaTrash />
-                    <div style={{ marginLeft: 4 }}>Delete</div>
                   </div>
                 </div>
-                </div>
-
               </div>
             ))
           ) : (

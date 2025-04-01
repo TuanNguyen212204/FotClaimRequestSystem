@@ -11,8 +11,6 @@ export const LanguageSwitcher: React.FC = () => {
       .then(() => console.log(`Language switched to ${selectedLanguage}`))
       .catch((error) => console.error("Language change error:", error));
   };
-  console.log("i18n instance:", i18n);
-
   return (
     <div style={{ width: "70px" }}>
       <select
