@@ -11,7 +11,7 @@ import {
   selectAllDraftTotalPages,
 } from "@/redux/selector/draftSelector.ts";
 import { useTranslation } from "react-i18next";
-import { formatDate } from "@/utils/dateUtils";
+import { formatDate } from "@/utils/date";
 export const DraftApproval: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const claimList = useSelector(selectAllDraft);
