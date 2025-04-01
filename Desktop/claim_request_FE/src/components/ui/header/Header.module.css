@@ -50,7 +50,7 @@
 }
 
 .noti {
-  font-size: 14px;
+  font-size: 12px;
   font-weight: normal;
 }
 
@@ -61,7 +61,7 @@
   right: 20px;
   top: 60px;
   width: 300px;
-  background: #e7e7e7;
+  background: #fff;
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
   border-radius: 8px;
   padding: 10px;
@@ -73,12 +73,14 @@
 }
 
 .top {
-  background-color: #fff;
+  background-color: #3e5879;
   font-size: 14px;
   margin-bottom: 12px;
   padding: 8px 10px;
   display: flex;
   justify-content: space-between;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
 }
 
 .markAll {
@@ -98,9 +100,19 @@
   margin-bottom: 5px;
 }
 
+.bold {
+  color: #000;
+}
+
+.normal {
+  font-weight: normal;
+  color: #9a9a9a;
+}
+
+
 .unread {
-  background-color: #f0f8ff;
-  font-weight: bold;
+  background-color: #ffffff;
+  font-weight: normal;
 }
 
 .read {
@@ -185,4 +197,13 @@
 
 .notificationItem:hover .circle {
   display: flex;
+}
+
+
+.redDot {
+  width: 8px;
+  height: 8px;
+  background-color: rgb(211, 0, 0);
+  border-radius: 50%; 
+  margin-left: 8px; 
 }

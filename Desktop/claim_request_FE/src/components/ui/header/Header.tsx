@@ -50,6 +50,7 @@ const Header: React.FC = () => {
   const notifications = useSelector(
     (state: any) => state.notifications?.notifications?.notifications
   );
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     dispatch(fetchNotificationsAsync() as any);
@@ -101,7 +102,7 @@ const Header: React.FC = () => {
     socket.on("notification", (notification) => {
       try {
         dispatch(addNotification(notification));
-        toast.success("You have a new notification!");
+        toast.info("You have a new notification!");
       } catch (error) {
         console.error("Lỗi khi dispatch:", error);
       }
@@ -144,6 +145,24 @@ const Header: React.FC = () => {
   const toggleDropdown = () => {
     setDropdownVisible(!dropdownVisible);
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setDropdownVisible(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropdownRef]);
+
   const handleMarkAllAsRead = async () => {
     await dispatch(markNotificationAllAsRead() as any);
     await dispatch(fetchNotificationsAsync() as any);
@@ -164,6 +183,12 @@ const Header: React.FC = () => {
     await dispatch(deleteNotificationAll() as any);
     await dispatch(fetchNotificationsAsync() as any);
   };
+
+  const allRead =
+    notifications &&
+    notifications?.length > 0 &&
+    notifications?.every((n: any) => n.is_read);
+  const disableMarkAll = notifications?.length === 0 || allRead;
 
   return (
     <>
@@ -187,15 +212,17 @@ const Header: React.FC = () => {
         </div>
       </header>
       {dropdownVisible && (
-        <div className={styles.dropdown}>
+        <div ref={dropdownRef} className={styles.dropdown}>
           <div className={styles.top}>
             <div
               style={{
                 display: "flex",
                 alignItems: "center",
-                cursor: "pointer",
+                color: "white",
+                cursor: disableMarkAll ? "not-allowed" : "pointer",
+                opacity: disableMarkAll ? 0.5 : 1,
               }}
-              onClick={handleMarkAllAsRead}
+              onClick={!disableMarkAll ? handleMarkAllAsRead : undefined}
             >
               <FaCheck style={{ marginRight: 5 }} />
               Mark All As Read
@@ -203,6 +230,7 @@ const Header: React.FC = () => {
             <div
               style={{
                 display: "flex",
+                color: "white",
                 alignItems: "center",
                 cursor: "pointer",
               }}
@@ -222,18 +250,33 @@ const Header: React.FC = () => {
               >
                 <strong>{notification.title}</strong>
                 <div className={styles.headers}>
-                  <div style={{ display: "flex", alignItems: "center" }}>
+                  <div
+                    style={{ display: "flex", alignItems: "center" }}
+                    className={
+                      notification.is_read ? styles.normal : styles.bold
+                    }
+                  >
                     <FaExclamationTriangle
-                      style={{ marginRight: 5, fontSize: 14 }}
+                      style={{ marginRight: 5, fontSize: 12 }}
                     />
                     <span className={styles.noti}>Notification</span>
                   </div>
-                  <span className={styles.timestamp}>
-                    {new Date(notification.created_at).toLocaleString()}
-                  </span>
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <span
+                      className={
+                        notification.is_read ? styles.normal : styles.bold
+                      }
+                      style={{ fontSize: 12 }}
+                    >
+                      {new Date(notification.created_at).toLocaleString()}
+                    </span>
+                    {!notification.is_read && (
+                      <span className={styles.redDot}></span>
+                    )}
+                  </div>
                 </div>
                 <hr style={{ border: "0.3px solid #ccc" }} />
-                <p>{notification.message}</p>
+                <p style={{ fontSize: 14 }}>{notification.message}</p>
                 <div
                   className={styles.circle}
                   onClick={(e) => {
