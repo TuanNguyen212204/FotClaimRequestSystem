@@ -1,22 +1,22 @@
-import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { AppDispatch } from "@/redux";
-import { selectApprovedClaimByUserID } from "@/redux/selector/claimSelector";
-import { fetchClaimByUserWithApprovedStatusAsync } from "@/redux/thunk/Claim/claimThunk";
-import TableComponent, {
-  DataRecord,
-  Column,
-} from "@/components/ui/Table/Table";
-import { EyeIcon } from "lucide-react";
+import { selectMyClaim, selectTotalPage } from "@/redux/selector/claimSelector";
+import { useEffect, useState } from "react";
 import styles from "@components/ui/claimer/UserClaims.module.css";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "@redux/index";
+import {
+  fetchClaimByUserAsync,
+  fetchTotalClaimByUserAsync,
+} from "@redux/thunk/Claim/claimThunk";
+import { EyeIcon } from "lucide-react";
+import TableComponent, { Column, DataRecord } from "@components/ui/Table/Table";
 import UserClaimDetailsModal from "@components/ui/claimer/UserClaimDetails";
-import StatusTag from "@/components/ui/StatusTag/StatusTag";
-
-export const ApprovedClaimByUserID = () => {
+import StatusTag from "@components/ui/StatusTag/StatusTag";
+const ApprovedClaimByUserID = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const userClaim = useSelector(selectApprovedClaimByUserID);
+  const userClaim = useSelector(selectMyClaim);
+  const totalPage = useSelector(selectTotalPage);
   const [loading, setLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -43,13 +43,15 @@ export const ApprovedClaimByUserID = () => {
   useEffect(() => {
     setLoading(true);
     const fetchData = async () => {
-      dispatch(
-        fetchClaimByUserWithApprovedStatusAsync({ page: currentPage })
-      ).finally(() => setLoading(false));
+      await dispatch(
+        fetchClaimByUserAsync({ page: currentPage, status: "APPROVED" })
+      );
+      setLoading(false);
+      dispatch(fetchTotalClaimByUserAsync({ status: "APPROVED" }));
     };
     fetchData();
-  }, [currentPage, dispatch]);
-
+    console.log(totalPage);
+  }, [currentPage, dispatch, totalPage]);
   const handleViewDetail = (id: string) => {
     setLoading(true);
     setTimeout(() => {
@@ -136,7 +138,7 @@ export const ApprovedClaimByUserID = () => {
       cell: ({ value }) => (
         <>
           <EyeIcon
-            className={styles.icon}
+            className="cursor-pointer"
             onClick={() => handleViewDetail(value as string)}
           />
           <UserClaimDetailsModal
@@ -173,7 +175,8 @@ export const ApprovedClaimByUserID = () => {
         loading={loading}
         pagination={true}
         name="My Claims"
-        totalPage={1}
+        totalPage={totalPage}
+        onPageChange={handlePageChange}
       />
     </div>
   );

@@ -8,7 +8,8 @@
       "jobRank": "Job Rank",
       "status": "Status",
       "assign": "Assign",
-      "action": "Action"
+      "action": "Action",
+      "role": "Role"
     },
     "filter": "Filter By",
     "createUser": {
@@ -56,7 +57,7 @@
       "endDate": "End Date",
       "projectStatus": "Project Status"
     },
-    "buttonCreate": "Create",
+    "buttonCreate": "Submit",
     "buttonUpdate": "Update"
   }
 }

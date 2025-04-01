@@ -10,11 +10,13 @@ import { CreateClaimData } from "@/Services/Project/Project.type";
 import { toast } from "react-toastify";
 import { useWatch } from "react-hook-form";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 interface CreateClaimFormProps {
   initialValues?: FormData;
   mode: "create" | "view" | "update";
   requestID?: string;
 }
+
 export default function useCreateClaimForm({
   initialValues,
   mode,
@@ -44,16 +46,16 @@ export default function useCreateClaimForm({
     },
     mode: "all",
   });
+  const { t } = useTranslation("claim");
+
   const formValues = useWatch({ control, name: "claims" });
   if (mode === "update" && !requestID) {
     throw new Error("requestID is required for update mode");
   }
+
   useEffect(() => {
     console.log("Form Values:", formValues);
     console.log("Errors:", errors);
-    // if (Object.keys(errors).length > 0) {
-    //   console.log("Validation Errors:", errors);
-    // }
     if (Object.keys(formState.errors).length > 0) {
       console.log("Validation Errors:", formState.errors);
       trigger();
@@ -71,22 +73,25 @@ export default function useCreateClaimForm({
     const isValid = await trigger();
 
     if (!data.currentSelectedProject.projectID) {
-      toast.error("Please select a project.");
+      toast.error(t("toast.selectProject"));
+
       return;
     }
 
     if (!isValid || Object.keys(formState.errors).length > 0) {
-      toast.error("Please fix all validation errors before submitting");
+      toast.error(t("toast.fixErrors"));
+
       return;
     }
 
     if (data.claims.length === 0) {
-      toast.error("Please add at least one claim.");
+      toast.error(t("toast.addOneClaim"));
+
       return;
     }
 
     if (!user) {
-      toast.error("User information not available.");
+      toast.error(t("toast.userUnavailable"));
       return;
     }
 
@@ -94,7 +99,9 @@ export default function useCreateClaimForm({
       userID: user.user_id,
       projectID: data.currentSelectedProject.projectID,
       claims: data.claims,
+      // claimRemark: data.claimRemark || "",
     };
+
     const handleSubmissionResult = (
       resultAction: any,
       successMessage: string,
@@ -114,12 +121,13 @@ export default function useCreateClaimForm({
       const resultAction = await dispatch(createClaim(DataToSend));
       handleSubmissionResult(
         resultAction,
-        "Claim request created successfully",
-        "Failed to create claim"
+        t("toast.createSuccess"),
+        t("toast.createError")
       );
     } else if (mode === "update") {
       if (!requestID) {
-        toast.error("Request ID is required for update");
+        toast.error(t("toast.updateRequestIdMissing"));
+
         return;
       }
       const resultAction = await dispatch(
@@ -127,8 +135,8 @@ export default function useCreateClaimForm({
       );
       handleSubmissionResult(
         resultAction,
-        "Claim request updated successfully",
-        "Failed to update claim"
+        t("toast.updateSuccess"),
+        t("toast.updateError")
       );
     }
   };

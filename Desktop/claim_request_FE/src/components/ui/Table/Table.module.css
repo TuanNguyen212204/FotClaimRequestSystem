@@ -2,6 +2,9 @@
   min-width: 1200px;
   margin-left: 1rem;
 }
+body {
+  font-family: "ROBOTO", sans-serif;
+}
 .table {
   border-collapse: collapse;
   text-align: center;
@@ -22,15 +25,18 @@
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
 .th {
-  padding: 1.5rem 1rem;
+  padding: 1.3rem 0.5rem;
   font-size: 16px;
+  font-family: "ROBOTO", sans-serif;
   font-weight: 900;
-  text-align: center;
+  text-align: left;
 }
 
 .td {
+  font-family: "ROBOTO", sans-serif;
   padding: 1rem 2rem;
   font-size: 1rem;
+  text-align: right;
 }
 
 .status {
@@ -283,12 +289,47 @@
 }
 .create_button {
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #4ade80 0%, #34c759 100%);
   color: white;
-  padding: 0;
-  margin: 0;
   font-size: 16px;
-  background-color: #4ade80;
+  font-weight: 600;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
+
+.create_button:hover {
+  background: linear-gradient(135deg, #34c759 0%, #2db54f 100%);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.create_button:active {
+  background: linear-gradient(135deg, #2db54f 0%, #28a745 100%);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transform: translateY(0);
+}
+
+.create_button_content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.create_button_icon {
+  width: 20px;
+  height: 20px;
+}
+
+.create_button_text {
+  font-size: 14px;
+}
+
 .checkbox {
   margin-top: -36px;
 }

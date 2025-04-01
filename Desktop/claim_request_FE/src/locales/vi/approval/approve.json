@@ -1,0 +1,20 @@
+{
+  "title": "Yêu cầu đã được duyệt",
+  "loading": "Đang tải...",
+  "loadingMessage": "Vui lòng chờ...",
+  "successMessage": "Boom! Yêu cầu của bạn vừa được phê duyệt!",
+  "columns": {
+    "fullName": "Họ và Tên",
+    "email": "Email",
+    "startDate": "Ngày bắt đầu",
+    "endDate": "Ngày kết thúc",
+    "totalHours": "Tổng giờ",
+    "projectId": "Mã dự án",
+    "projectName": "Tên dự án",
+    "submittedDate": "Ngày gửi",
+    "salary": "Lương",
+    "otRate": "Hệ số OT",
+    "salaryOvertime": "Lương làm thêm giờ",
+    "claimStatus": "Trạng thái yêu cầu"
+  }
+}

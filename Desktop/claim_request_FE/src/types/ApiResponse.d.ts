@@ -29,4 +29,5 @@ export interface ApiResponseNoGeneric {
   };
   data: any;
   message: string;
+  statusCode: number;
 }

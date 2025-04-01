@@ -18,7 +18,9 @@ import { X } from "lucide-react";
 import { SquarePen } from "lucide-react";
 import { User } from "@/types/User";
 import { UpdateUser } from "../User/UpdateUser";
-import ToggleButton from "@/components/ui/ToggleButton/ToggleButton";
+import ToggleButton, {
+  AdminButton,
+} from "@/components/ui/ToggleButton/ToggleButton";
 import { CreateUser } from "../User/CreateUser";
 import { CircleCheck } from "lucide-react";
 import { AssignProject } from "../AssignProject";
@@ -26,6 +28,7 @@ import { ArrowDown, ArrowUp } from "lucide-react";
 import { ApiError } from "@/api";
 import { set } from "date-fns";
 import { useTranslation } from "react-i18next";
+import ToggleButtonForAdmin from "@/components/ui/ToggleButton/ToggleButton";
 type Department = {
   id: string;
   name: string;
@@ -230,6 +233,11 @@ const AllUserInformation: React.FC = () => {
       title: t("allUserInformation.table.email"),
     },
     {
+      key: "role_name",
+      dataIndex: "role_name",
+      title: t("allUserInformation.table.role"),
+    },
+    {
       key: "department_name",
       dataIndex: "department_name",
       title: t("allUserInformation.table.department"),
@@ -244,7 +252,7 @@ const AllUserInformation: React.FC = () => {
       dataIndex: "user_status",
       title: t("allUserInformation.table.status"),
       cell: ({ record }: { record: User }) => {
-        return (
+        return record.role_id !== 1 ? (
           <div>
             <div tabIndex={-1}>
               <ToggleButton
@@ -258,6 +266,20 @@ const AllUserInformation: React.FC = () => {
                     [record.user_id]: newChecked,
                   }));
                   handleToggleStatus(record.user_id as string);
+                }}
+              />
+            </div>
+          </div>
+        ) : (
+          <div>
+            <div tabIndex={-1}>
+              <AdminButton
+                userId={record.user_id}
+                checked={record.user_status === 1}
+                onClick={() => {
+                  toast.error(
+                    "You don't have permission to change this user status!"
+                  );
                 }}
               />
             </div>
@@ -277,9 +299,6 @@ const AllUserInformation: React.FC = () => {
               className={styles.circleCheckButton}
               onClick={() => handleAssignUser(record.user_id as string)}
               disabled={userStatuses[record.user_id] === 0}
-              onPointerDown={() =>
-                toast.error("You can not assign this user at the project now")
-              }
             >
               <div>
                 {userStatuses[record.user_id] === 1 ? <CircleCheck /> : <X />}
@@ -302,9 +321,6 @@ const AllUserInformation: React.FC = () => {
                 className={styles.update_button}
                 style={{ cursor: "pointer" }}
                 onClick={() => handleUpdate(value as string)}
-                onPointerDown={() =>
-                  toast.error("You can not update this user information now")
-                }
                 disabled={userStatuses[record.user_id] === 0}
               >
                 <div>
@@ -396,44 +412,46 @@ const AllUserInformation: React.FC = () => {
           </div>
         </div>
       )}
-      <div className="flex ">
-        <div className={`${styles.filter_section} `}>
-          <div className={styles.filterStatusP}>
-            <p>
-              {t("allUserInformation.filter")} {name}:
-            </p>
-          </div>
-          <div
-            className="relative inline-block text-left mt-5.5 ml-3"
-            // style={{ marginTop: "15px", marginLeft: "15px" }}
-          >
-            <div
-              onClick={toggleDropdown}
-              className="flex items-center justify-between px-4 py-2 text-sm font-medium text-gray-700 bg-white border rounded-md shadow-sm hover:bg-gray-100 focus:outline-none"
-            >
-              <span>{selectedStatus}</span>
-              <ArrowDown className="w-4 h-4 ml-2" />
-            </div>
 
-            {isDropdownOpen && (
-              <div className="absolute right-0 z-10 mt-2 origin-top-right bg-white border border-gray-300 rounded-md shadow-lg w-48">
-                <div className="py-1">
-                  {uniqueStatuses.map((status) => (
-                    <div
-                      key={status}
-                      onClick={() => handleStatusSelect(status)}
-                      className="block px-4 py-2 text-sm text-gray-700 w-4/5 text-left hover:bg-gray-200"
-                    >
-                      {status}
-                    </div>
-                  ))}
-                </div>
+      <div>
+        <div className="flex">
+          <div className={`${styles.filter_section} `}>
+            <div className={styles.filterStatusP}>
+              <p>
+                {t("allUserInformation.filter")} {name}:
+              </p>
+            </div>
+            <div
+              className="relative inline-block text-left mt-5.5 ml-3"
+              // style={{ marginTop: "15px", marginLeft: "15px" }}
+            >
+              <div
+                onClick={toggleDropdown}
+                className="flex items-center justify-between px-4 py-2 text-sm font-medium text-gray-700 bg-white border rounded-md shadow-sm hover:bg-gray-100 focus:outline-none"
+              >
+                <span>{selectedStatus}</span>
+                <ArrowDown className="w-4 h-4 ml-2" />
               </div>
-            )}
+
+              {isDropdownOpen && (
+                <div className="absolute right-0 z-10 mt-2 origin-top-right bg-white border border-gray-300 rounded-md shadow-lg w-48">
+                  <div className="py-1">
+                    {uniqueStatuses.map((status) => (
+                      <div
+                        key={status}
+                        onClick={() => handleStatusSelect(status)}
+                        className="block px-4 py-2 text-sm text-gray-700 w-4/5 text-left hover:bg-gray-200"
+                      >
+                        {status}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </div>
-      <div>
+
         <TableComponent
           // sortConfig={sortConfig}
           ref={tableRef as any}

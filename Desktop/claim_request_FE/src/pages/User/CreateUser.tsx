@@ -213,7 +213,7 @@ export const CreateUser: React.FC<CreateUserProps> = ({
         )}
       </div>
       <div style={{ marginTop: "50px" }}>
-        <div className=" mx-auto p-8 bg-white shadow-xl rounded-xl">
+        <div className=" mx-auto  pr-0 pb-5   bg-white shadow-xl rounded-xl">
           <div>
             <button
               onClick={() => handleCancel()}
@@ -229,7 +229,7 @@ export const CreateUser: React.FC<CreateUserProps> = ({
           </h1>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
             {/* Full Name */}
-            <div className={styles.input_container}>
+            <div className="ml-15">
               <label
                 className="block text-sm font-medium text-gray-600"
                 htmlFor="full_name"
@@ -238,7 +238,7 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                   <div className={styles.label_container}>
                     <span>*</span>
                   </div>
-                  <div>
+                  <div className={styles.input_container}>
                     <span>{t("allUserInformation.createUser.fullName")}</span>
                   </div>
                 </div>
@@ -262,7 +262,7 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                     ),
                   },
                 })}
-                className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+                className="mt-1 w-4/5 p-2 h-6 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
               />
               {errors.full_name && (
                 <p className="text-red-500 text-sm mt-1">
@@ -270,7 +270,7 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                 </p>
               )}
             </div>
-            <div className={styles.input_container}>
+            <div className="ml-15">
               <label
                 className="block text-sm font-medium text-gray-600"
                 htmlFor="email"
@@ -279,7 +279,7 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                   <div className={styles.label_container}>
                     <span>*</span>
                   </div>
-                  <div>
+                  <div className={styles.input_container}>
                     <span>{t("allUserInformation.createUser.email")}</span>
                   </div>
                 </div>
@@ -290,7 +290,7 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                 {...register("email", {
                   required: t("allUserInformation.createUser.validation.email"),
                 })}
-                className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+                className="mt-1 w-4/5 p-2 h-6 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
               />
               {errors.email && (
                 <p className="text-red-500 text-sm mt-1">
@@ -298,7 +298,7 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                 </p>
               )}
             </div>
-            <div className={styles.input_container}>
+            <div className="ml-15">
               <label
                 className="block text-sm font-medium text-gray-600"
                 htmlFor="department"
@@ -307,7 +307,7 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                   <div className={styles.label_container}>
                     <span>*</span>
                   </div>
-                  <div>
+                  <div className={styles.input_container}>
                     <span>{t("allUserInformation.createUser.department")}</span>
                   </div>
                 </div>
@@ -346,7 +346,7 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                 // }}
                 placeholder="Select Department"
                 onChange={(value) => console.log(value)}
-                className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+                className="mt-1  h-11 w-83.5 p-2 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
               />
 
               {errors.department && (
@@ -355,7 +355,7 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                 </p>
               )}
             </div>
-            <div className={styles.input_container}>
+            <div className="ml-15">
               <label
                 className="block text-sm font-medium text-gray-600"
                 htmlFor="salary"
@@ -364,7 +364,7 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                   <div className={styles.label_container}>
                     <span>*</span>
                   </div>
-                  <div>
+                  <div className={styles.input_container}>
                     <span>{t("allUserInformation.createUser.salary")}</span>
                   </div>
                 </div>
@@ -382,7 +382,7 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                     ),
                   },
                 })}
-                className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+                className="mt-1 w-4/5 p-2 h-6 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
               />
               {errors.salary && (
                 <p className="text-red-500 text-sm mt-1">
@@ -390,7 +390,7 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                 </p>
               )}
             </div>
-            <div className={styles.input_container}>
+            <div className="ml-15">
               <label
                 className="block text-sm font-medium text-gray-600"
                 htmlFor="role_id"
@@ -399,7 +399,7 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                   <div className={styles.label_container}>
                     <span>*</span>
                   </div>
-                  <div>
+                  <div className={styles.input_container}>
                     <span>{t("allUserInformation.createUser.roleID")}</span>
                   </div>
                 </div>
@@ -420,7 +420,7 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                 register={register("role_id")}
                 onChange={(value) => console.log(value)}
                 placeholder="Select Role ID"
-                className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+                className="mt-1  h-11 w-83.5 p-2  border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
               />
               {errors.role_id && (
                 <p className="text-red-500 text-sm mt-1">
@@ -429,7 +429,7 @@ export const CreateUser: React.FC<CreateUserProps> = ({
               )}
             </div>
 
-            <div className={styles.input_container}>
+            <div className="ml-15">
               <label
                 className="block text-sm font-medium text-gray-600"
                 htmlFor="job_rank"
@@ -438,7 +438,7 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                   <div className={styles.label_container}>
                     <span>*</span>
                   </div>
-                  <div>
+                  <div className={styles.input_container}>
                     <span>{t("allUserInformation.createUser.jobRank")}</span>
                   </div>
                 </div>
@@ -469,7 +469,7 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                 }}
                 placeholder="Select Job Rank"
                 onChange={(value) => console.log(value)}
-                className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+                className="mt-1  h-11 w-83.5 p-2  border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
               />
 
               {errors.job_rank && (
@@ -479,7 +479,7 @@ export const CreateUser: React.FC<CreateUserProps> = ({
               )}
             </div>
 
-            <div className={styles.update_button_container}>
+            <div className={`${styles.update_button_container} `}>
               <button type="submit" className={styles.update_button}>
                 {t("allUserInformation.buttonCreate")}
               </button>
