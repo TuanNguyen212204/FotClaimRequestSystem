@@ -4,10 +4,10 @@ import fot from "@assets/fotLandingPageFooter.png";
 
 export default function Footer() {
   return (
-    <footer className="w-full bg-[#2d3142] py-12 text-white">
+    <footer id="contact" className="w-full bg-[#2d3142] py-12 text-white">
       <div className="container mx-auto px-4">
         <hr className="my-12 border-t border-gray-600" />
-        <div className="flex flex-col justify-between gap-8 md:flex-row ">
+        <div className="flex flex-col justify-between gap-8 md:flex-row">
           <div className="max-w-3xl">
             <div className="mb-4 flex items-center">
               <img
@@ -29,14 +29,13 @@ export default function Footer() {
           </div>
 
           <div>
-            <h1 className="mb-4 text-3xl font-bold ">Contact</h1>
+            <h1 className="mb-4 text-3xl font-bold">Contact</h1>
             <ul className="space-y-3">
               <li className="flex items-center gap-2 text-xl">
                 <Mail size={16} className="text-gray-400" />
                 <a
                   href="mailto:lalalala@fpt.edu.vn"
-                  className="hover:text-blue-600
-                  transition-colors duration-300 ease-in-out"
+                  className="transition-colors duration-300 ease-in-out hover:text-blue-600"
                 >
                   fot@fpt.edu.vn
                 </a>

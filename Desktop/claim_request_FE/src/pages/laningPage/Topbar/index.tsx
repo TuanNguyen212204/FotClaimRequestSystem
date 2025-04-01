@@ -26,7 +26,7 @@ export default function TopBar(): JSX.Element {
       <nav>
         <ul className="flex list-none justify-evenly gap-7 p-0">
           <NavLink href="#home">Home</NavLink>
-          <NavLink href="#about">About</NavLink>
+          <NavLink href="#overview">About</NavLink>
           <NavLink href="#feature">Feature</NavLink>
           <NavLink href="#contact">Contact Us</NavLink>
         </ul>
