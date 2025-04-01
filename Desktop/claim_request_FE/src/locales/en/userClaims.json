@@ -24,5 +24,6 @@
   "status_paid": "Paid",
   "status_draft": "Draft",
   "cancel_button": "Cancel",
-  "confirm_button": "Confirm"
+  "confirm_button": "Confirm",
+  "language": "en"
 }

@@ -26,13 +26,12 @@ export const UserInfoComponent: React.FC = () => {
   const accessToken = localStorage.getItem("access_token");
   const userId = localStorage.getItem("user_id");
 
-  // Lấy backendUrl và staticBaseUrl từ biến môi trường
   const backendUrl =
     import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
   const staticBaseUrl =
     import.meta.env.VITE_STATIC_BASE_URL || "http://localhost:3000";
 
-  // Hàm để tạo URL đầy đủ cho avatar
+
   const getFullAvatarUrl = (avatarPath: string | undefined): string => {
     const defaultAvatar =
       "https://i.pinimg.com/736x/63/f0/0d/63f00d6ebe2c93b945be3c39135503c2.jpg";
@@ -41,7 +40,7 @@ export const UserInfoComponent: React.FC = () => {
       return defaultAvatar;
     }
 
-    // Nếu avatarPath đã là URL đầy đủ (bắt đầu bằng http), trả về luôn
+
     if (avatarPath.startsWith("http")) {
       return avatarPath;
     }

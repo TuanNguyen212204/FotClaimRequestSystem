@@ -8,5 +8,6 @@
   "claim_status_label": "Claim Status",
   "action_label": "Action",
   "hours_suffix": "hours",
-  "no_data": "N/A"
+  "no_data": "N/A",
+  "language": "en"
 }

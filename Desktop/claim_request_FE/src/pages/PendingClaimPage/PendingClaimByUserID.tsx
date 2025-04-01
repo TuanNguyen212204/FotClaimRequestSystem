@@ -1,30 +1,24 @@
-import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { AppDispatch } from "@/redux";
-import {
-  selectPendingClaimByUserID,
-  selectTotalPage,
-} from "@/redux/selector/claimSelector";
-import {
-  fetchClaimByUserWithPendingStatusAsync,
-  fetchTotalClaimByUserAsync,
-} from "@/redux/thunk/Claim/claimThunk";
-import TableComponent, {
-  DataRecord,
-  Column,
-} from "@/components/ui/Table/Table";
-import { EyeIcon } from "lucide-react";
+import { selectMyClaim, selectTotalPage } from "@/redux/selector/claimSelector";
+import { useEffect, useState } from "react";
 import styles from "@components/ui/claimer/UserClaims.module.css";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "@redux/index";
+import {
+  fetchClaimByUserAsync,
+  fetchTotalClaimByUserAsync,
+} from "@redux/thunk/Claim/claimThunk";
+import { EyeIcon } from "lucide-react";
+import TableComponent, { Column, DataRecord } from "@components/ui/Table/Table";
 import UserClaimDetailsModal from "@components/ui/claimer/UserClaimDetails";
 import StatusTag from "@components/ui/StatusTag/StatusTag";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next"; 
 
-export const PendingClaimByUserID = () => {
-  const { t } = useTranslation("pendingClaim");
+const PendingClaimByUserID = () => {
+  const { t } = useTranslation("pendingClaim"); 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const listApprovedClaim = useSelector(selectPendingClaimByUserID);
+  const userClaim = useSelector(selectMyClaim);
   const totalPage = useSelector(selectTotalPage);
   const [loading, setLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -35,13 +29,15 @@ export const PendingClaimByUserID = () => {
   useEffect(() => {
     setLoading(true);
     const fetchData = async () => {
-      dispatch(
-        fetchClaimByUserWithPendingStatusAsync({ page: currentPage })
-      ).finally(() => setLoading(false));
-      dispatch(fetchTotalClaimByUserAsync());
+      await dispatch(
+        fetchClaimByUserAsync({ page: currentPage, status: "PENDING" })
+      );
+      setLoading(false);
+      dispatch(fetchTotalClaimByUserAsync({ status: "PENDING" }));
     };
     fetchData();
-  }, [currentPage, dispatch]);
+    console.log(totalPage);
+  }, [currentPage, dispatch, totalPage]);
 
   const handleViewDetail = (id: string) => {
     setLoading(true);
@@ -62,7 +58,9 @@ export const PendingClaimByUserID = () => {
     const day = dateObj.getDate();
     const month = dateObj.getMonth() + 1;
     const year = dateObj.getFullYear();
-    return `${day}/${month}/${year}`;
+    return t("language") === "en"
+      ? `${month}/${day}/${year}` 
+      : `${day}/${month}/${year}`; 
   };
 
   const columns: Column[] = [
@@ -115,7 +113,7 @@ export const PendingClaimByUserID = () => {
       cell: ({ value }) => (
         <>
           <EyeIcon
-            className={styles.icon}
+            className="cursor-pointer"
             onClick={() => handleViewDetail(value as string)}
           />
           <UserClaimDetailsModal
@@ -130,7 +128,7 @@ export const PendingClaimByUserID = () => {
     },
   ];
 
-  const dataSource: DataRecord[] = listApprovedClaim.map((claim, index) => ({
+  const dataSource: DataRecord[] = userClaim.map((claim, index) => ({
     ...claim,
     key: index,
     id: claim.claim_id ? claim.claim_id.toString() : "",

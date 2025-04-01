@@ -1,5 +1,5 @@
 import React from "react";
-import { ApprovedClaimByUserID } from "@pages/ApprovedClaimPage/ApprovedClaimByUserID";
+import ApprovedClaimByUserID from "./ApprovedClaimByUserID";
 
 const AprrovedClaimForUserPage: React.FC = () => {
   return (

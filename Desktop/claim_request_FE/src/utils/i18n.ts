@@ -63,6 +63,7 @@ i18n.use(initReactI18next).init({
       approve: approveEn,
       reject: rejectEn,
       details: detailsEn,
+      rejectedClaim: rejectedClaimEn,
     },
     vi: {
       header: headerVn,
@@ -82,6 +83,7 @@ i18n.use(initReactI18next).init({
       approve: approveVn,
       reject: rejectVn,
       details: detailsVn,
+      rejectedClaim: rejectedClaimVn,
     },
   },
   lng: "en",

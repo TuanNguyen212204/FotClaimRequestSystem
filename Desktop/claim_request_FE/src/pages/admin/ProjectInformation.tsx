@@ -33,6 +33,8 @@ const ProjectInformation: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [projectID, setProjectID] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState<string>("All");
   const [UpdateOpen, setUpdateOpen] = useState(false);
   console.log("Dữ liệu lấy từ Redux:", project);
   const { t } = useTranslation("projectInformation");
@@ -41,12 +43,12 @@ const ProjectInformation: React.FC = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        console.log("Fetching projects for page:", currentPage);
+        console.log("Fetching projects for page:", currentPage, "with status:", statusFilter);
         const result = await dispatch(
-          fetchAllProjectAsync(currentPage.toString())
+          fetchAllProjectAsync({ page: currentPage.toString(), status: statusFilter || "all" })
         );
         console.log("Fetch result:", result);
-        await dispatch(fetchTotalPage({ page: currentPage.toString() }));
+        await dispatch(fetchTotalPage({ page: currentPage.toString(), status: statusFilter || "all" }));
       } catch (error) {
         console.error("Error fetching projects:", error);
       } finally {
@@ -54,7 +56,14 @@ const ProjectInformation: React.FC = () => {
       }
     };
     fetchData();
-  }, [dispatch, currentPage]);
+  }, [dispatch, currentPage, statusFilter]); 
+  
+  const handleStatusSelect = (status: string) => {
+    setStatusFilter(status);
+    setSelectedStatus(status === "all" ? "All" : status === "1" ? "Active" : "Inactive");
+    setCurrentPage(1); 
+    setIsDropdownOpen(false);
+  };  
 
   useEffect(() => {
     console.log("Current project state:", project);
@@ -110,8 +119,8 @@ const ProjectInformation: React.FC = () => {
         try {
           await deleteProject(id);
           console.log("Deleted project with ID:", id);
-          dispatch(fetchAllProjectAsync(currentPage.toString()));
           toast.success("Project deleted successfully!");
+          await dispatch(fetchAllProjectAsync({ page: currentPage.toString(), status: statusFilter || "all" }));
         } catch (error) {
           console.error("Error deleting project:", error);
           toast.error("Failed to delete project. Please try again.");
@@ -123,30 +132,16 @@ const ProjectInformation: React.FC = () => {
       },
     });
   };
-
+  
   const handleUpdate = (id?: string) => {
     if (!id) return;
     console.log("Update project with ID:", id);
     setProjectID(id ? id : "");
     setUpdateOpen(true);
-    console.log(UpdateOpen);
   };
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
-  };
-  const [selectedStatus, setSelectedStatus] = useState<string>("All");
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const uniqueStatuses = [
-    "All",
-    ...new Set(project.map((item) => item.project_status)),
-  ];
-
-  const handleStatusSelect = (status: string) => {
-    setSelectedStatus(status);
-    fetchProjectByStatus(status);
-    setCurrentPage(1);
-    setIsDropdownOpen(false);
   };
 
   const columns: Column<Project>[] = [
@@ -233,38 +228,36 @@ const ProjectInformation: React.FC = () => {
         </div>
       )}
 
-      <div className="flex ">
-        <div className={`${styles.filter_section} `}>
-          <div className={styles.filterStatusP}>
-            <p>{t("projectInformation.filter")}:</p>
+      <div className="flex items-center mt-5.5 ml-3">
+        <span className="mr-2 text-base font-bold text-gray-700">Filter by status:</span>
+        <div className="relative inline-block text-left ml-1"> 
+          <div
+            onClick={toggleDropdown}
+            className="flex items-center justify-between px-4 py-2 text-sm font-medium text-gray-700 bg-white border rounded-md shadow-sm hover:bg-gray-100 focus:outline-none"
+          >
+            <span>{selectedStatus}</span>
+            <ArrowDown className="w-4 h-4 ml-2" />
           </div>
-          <div className="relative inline-block text-left mt-5.5 ml-3">
-            <div
-              onClick={toggleDropdown}
-              className="flex items-center justify-between px-4 py-2 text-sm font-medium text-gray-700 bg-white border rounded-md shadow-sm hover:bg-gray-100 focus:outline-none"
-            >
-              <span>{selectedStatus}</span>
-              <ArrowDown className="w-4 h-4 ml-2" />
-            </div>
 
-            {isDropdownOpen && (
-              <div className="absolute right-0 z-10 mt-2 origin-top-right bg-white border border-gray-300 rounded-md shadow-lg w-48">
-                <div className="py-1">
-                  {uniqueStatuses.map((status) => (
-                    <div
-                      key={status}
-                      onClick={() => handleStatusSelect(status)}
-                      className="block px-4 py-2 text-sm text-gray-700 w-4/5 text-left hover:bg-gray-200"
-                    >
-                      {status}
-                    </div>
-                  ))}
-                </div>
+          {isDropdownOpen && (
+            <div className="absolute right-0 z-10 mt-2 origin-top-right bg-white border border-gray-300 rounded-md shadow-lg w-48">
+              <div className="py-1">
+                {["all", "1", "2"].map((status) => (  
+                  <div
+                    key={status}
+                    onClick={() => handleStatusSelect(status)}
+                    className="block px-4 py-2 text-sm text-black w-4/5 text-left hover:bg-gray-200"
+                  >
+                    {status === "all" ? "All" : status === "1" ? "Active" : "Inactive"}
+                  </div>
+                ))}
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
+
+      {/* <FilterStatus /> */}
 
       <TableComponent
         // ref={tableRef as any}

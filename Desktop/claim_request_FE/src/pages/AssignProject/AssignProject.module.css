@@ -1,25 +1,27 @@
 .cancel_button {
   margin-left: 418px;
-  margin-top: -18px;
-  color: red;
+  margin-top: 0px;
   background-color: transparent;
+  color: red;
 }
 .update_button_container {
-  display: flex;
   justify-content: center;
   text-align: center;
 }
 .update_button {
-  margin-top: 20px;
-  margin-left: 10px;
-  background-color: #89cff0;
-  border-radius: 10px;
-  padding: 10px;
+  text-align: center;
+  background-color: transparent;
+  padding: 0.5rem 1rem;
+  color: white;
+  border-radius: 15px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #5e22ce 0%, #94208a 100%);
 }
 
-.input_container {
-  margin-left: 50px;
-}
+/* .input_container {
+  margin-left: 3.5rem;
+  padding: 0;
+} */
 .flex {
   display: flex;
 }
@@ -29,4 +31,8 @@
 }
 .label_container div {
   color: red;
+}
+.input_container span {
+  font-size: 14px;
+  font-weight: bold;
 }

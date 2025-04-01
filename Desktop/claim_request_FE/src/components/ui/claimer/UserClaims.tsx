@@ -12,10 +12,10 @@ import { EyeIcon } from "lucide-react";
 import TableComponent, { Column, DataRecord } from "../Table/Table";
 import UserClaimDetailsModal from "./UserClaimDetails";
 import StatusTag from "../StatusTag/StatusTag";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next"; 
 
 const UserClaims = () => {
-  const { t } = useTranslation("userClaims");
+  const { t } = useTranslation("userClaims"); 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const userClaim = useSelector(selectMyClaim);
@@ -32,10 +32,11 @@ const UserClaims = () => {
       dispatch(fetchClaimByUserAsync({ page: currentPage })).finally(() =>
         setLoading(false)
       );
-      dispatch(fetchTotalClaimByUserAsync());
+      dispatch(fetchTotalClaimByUserAsync({}));
     };
     fetchData();
-  }, [currentPage, dispatch]);
+    console.log(totalPage);
+  }, [currentPage, dispatch, totalPage]);
 
   const handleViewDetail = (id: string) => {
     setLoading(true);
@@ -56,7 +57,20 @@ const UserClaims = () => {
     const day = dateObj.getDate();
     const month = dateObj.getMonth() + 1;
     const year = dateObj.getFullYear();
-    return `${day}/${month}/${year}`;
+    return t("language") === "en"
+      ? `${month}/${day}/${year}`
+      : `${day}/${month}/${year}`;
+  };
+
+  const formatDateRange = (dateRange: any) => {
+    return dateRange.replace(
+      /(\d{1,2})\/(\d{1,2})\/(\d{4})/g,
+      (match, day, month, year) => {
+        return t("language") === "en"
+          ? `${month.padStart(2, "0")}/${day.padStart(2, "0")}/${year}` 
+          : `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`; 
+      }
+    );
   };
 
   const columns: Column[] = [
@@ -74,6 +88,10 @@ const UserClaims = () => {
       key: "time_duration",
       dataIndex: "time_duration",
       title: t("time_duration_label"),
+      cell: ({ value }) => {
+        const formattedValue = formatDateRange(value as string);
+        return <span>{formattedValue}</span>;
+      },
     },
     {
       key: "total_hours",
@@ -109,7 +127,7 @@ const UserClaims = () => {
       cell: ({ value }) => (
         <>
           <EyeIcon
-            className={styles.icon}
+            className="cursor-pointer"
             onClick={() => handleViewDetail(value as string)}
           />
           <UserClaimDetailsModal
@@ -141,8 +159,9 @@ const UserClaims = () => {
   }));
 
   return (
-    <div className={styles.container}>
+    <div>
       <TableComponent
+        isHaveCheckbox={false}
         columns={columns}
         dataSource={dataSource}
         loading={loading}
