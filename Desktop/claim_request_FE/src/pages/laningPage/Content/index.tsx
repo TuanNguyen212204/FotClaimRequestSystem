@@ -2,6 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { GlowingEffect } from "../Components/glowing-effect";
 import { FileText, CheckCircle2, BellRing } from "lucide-react";
+import { Meteors } from "../Components/meteors";
 type FeatureCardProps = {
   title: string;
   description: string;
@@ -24,16 +25,17 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
         proximity={74}
         inactiveZone={0.01}
       />
-      <div className="flex h-[200px] items-center justify-center bg-white p-6">
+
+      <div className="relative flex h-[200px] items-center justify-center bg-white p-6">
         <img
           src={imageSrc}
           alt={altText}
           className="block max-h-full max-w-full object-contain"
         />
       </div>
-      <div className="p-6">
+      <div className="relative overflow-hidden p-6">
         <h3 className="m-0 mb-2 text-xl font-bold">{title}</h3>
-
+        <Meteors number={33} />
         <p className="text-sm leading-relaxed text-[#ced4da]">{description}</p>
       </div>
     </div>
