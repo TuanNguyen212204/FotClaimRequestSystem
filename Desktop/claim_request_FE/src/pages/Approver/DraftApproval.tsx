@@ -11,6 +11,7 @@ import {
   selectAllDraftTotalPages,
 } from "@/redux/selector/draftSelector.ts";
 import { useTranslation } from "react-i18next";
+import {format} from "date-fns";
 export const DraftApproval: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const claimList = useSelector(selectAllDraft);
@@ -31,11 +32,7 @@ export const DraftApproval: React.FC = () => {
   }, [currentPage]);
 
   const formatDateToDDMMYYYY = (date: string) => {
-    const dateObj = new Date(date);
-    const day = dateObj.getDate();
-    const month = dateObj.getMonth() + 1;
-    const year = dateObj.getFullYear();
-    return `${day}/${month}/${year}`;
+    return format(new Date(date), "dd/MM/yyyy");
   };
 
   const handlePageChange = (newPage: number) => {
