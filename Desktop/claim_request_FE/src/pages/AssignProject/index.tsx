@@ -32,7 +32,12 @@ export const AssignProject: React.FC<AssignProjectProps> = ({
   const { t } = useTranslation("allUserInformation");
   useEffect(() => {
     dispatch(
-      getAllProjects({ limit: 10, page: 1, order: "ASC", sortBy: "project_id" })
+      getAllProjects({
+        limit: 1000,
+        page: 1,
+        order: "ASC",
+        sortBy: "project_id",
+      })
     );
   }, [dispatch]);
 
@@ -71,7 +76,7 @@ export const AssignProject: React.FC<AssignProjectProps> = ({
         "/projects/assign-user",
         requestBody
       );
-      if (response.data.statusCode === 200) {
+      if (response.data.httpStatus === 200) {
         console.log(response.data);
         toast.success("Assign user to project successfully!");
         return;
