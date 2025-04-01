@@ -304,12 +304,13 @@ const Dashboard = () => {
           />
         </div>
       </div>
-      <div className={styles.chartOT}>
-        <OTChart />
-      </div>
-
-      <div>
-        <ClaimChart />
+      <div className={styles.gridContainer}>
+        <div className={styles.chartOT}>
+          <OTChart />
+        </div>
+        <div className={styles.claimChart}>
+          <ClaimChart />
+        </div>
       </div>
     </div>
   );

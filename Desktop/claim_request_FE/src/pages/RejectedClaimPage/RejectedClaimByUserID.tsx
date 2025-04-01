@@ -1,25 +1,22 @@
-import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { AppDispatch } from "@/redux";
-import { selectRejectedClaimByUserID } from "@/redux/selector/claimSelector";
-import { fetchClaimByUserWithRejectStatusAsync } from "@/redux/thunk/Claim/claimThunk";
-import TableComponent, {
-  DataRecord,
-  Column,
-} from "@/components/ui/Table/Table";
-import { EyeIcon } from "lucide-react";
+import { selectMyClaim, selectTotalPage } from "@/redux/selector/claimSelector";
+import { useEffect, useState } from "react";
 import styles from "@components/ui/claimer/UserClaims.module.css";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "@redux/index";
+import {
+  fetchClaimByUserAsync,
+  fetchTotalClaimByUserAsync,
+} from "@redux/thunk/Claim/claimThunk";
+import { EyeIcon } from "lucide-react";
+import TableComponent, { Column, DataRecord } from "@components/ui/Table/Table";
 import UserClaimDetailsModal from "@components/ui/claimer/UserClaimDetails";
-import StatusTag from "@/components/ui/StatusTag/StatusTag";
-import { t } from "i18next";
-import { useTranslation } from "react-i18next";
-
-export const RejectedClaimByUserID = () => {
-  const { t } = useTranslation("rejectedClaim");
+import StatusTag from "@components/ui/StatusTag/StatusTag";
+const RejectedClaimByUserID = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const userClaim = useSelector(selectRejectedClaimByUserID);
+  const userClaim = useSelector(selectMyClaim);
+  const totalPage = useSelector(selectTotalPage);
   const [loading, setLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -46,12 +43,15 @@ export const RejectedClaimByUserID = () => {
   useEffect(() => {
     setLoading(true);
     const fetchData = async () => {
-      dispatch(
-        fetchClaimByUserWithRejectStatusAsync({ page: currentPage })
-      ).finally(() => setLoading(false));
+      await dispatch(
+        fetchClaimByUserAsync({ page: currentPage, status: "REJECTED" })
+      );
+      setLoading(false);
+      dispatch(fetchTotalClaimByUserAsync({ status: "REJECTED" }));
     };
     fetchData();
-  }, [currentPage, dispatch]);
+    console.log(totalPage);
+  }, [currentPage, dispatch, totalPage]);
 
   const handleViewDetail = (id: string) => {
     setLoading(true);
@@ -79,34 +79,34 @@ export const RejectedClaimByUserID = () => {
     {
       key: "project_id",
       dataIndex: "project_id",
-      title: t("project_id_label"),
+      title: "Project ID",
     },
     {
       key: "project_name",
       dataIndex: "project_name",
-      title: t("project_name_label"),
+      title: "Project Name",
     },
     {
       key: "time_duration",
       dataIndex: "time_duration",
-      title: t("time_duration_label"),
+      title: "Time Duration",
     },
     {
       key: "total_hours",
       dataIndex: "total_hours",
-      title: t("total_working_hours_label"),
+      title: "Total Working Hours",
       cell: ({ value }) => `${value} hours`,
     },
     {
       key: "submitted_date",
       dataIndex: "submitted_date",
-      title: t("submitted_date_label"),
+      title: "Submitted Date",
       cell: ({ value }) => formatDateToDDMMYYYY(value as string),
     },
     {
       key: "claim_status",
       dataIndex: "claim_status",
-      title: t("claim_status_label"),
+      title: "Claim Status",
       cell: ({ value }: { value: unknown }) => {
         const stringValue = value as string;
         return (
@@ -135,7 +135,7 @@ export const RejectedClaimByUserID = () => {
     {
       key: "action",
       dataIndex: "request_id",
-      title: t("action_label"),
+      title: "Action",
       cell: ({ value }) => (
         <>
           <EyeIcon
@@ -166,7 +166,7 @@ export const RejectedClaimByUserID = () => {
         ? `${formatDateToDDMMYYYY(claim.start_date)} - ${formatDateToDDMMYYYY(
             claim.end_date
           )}`
-        : t("no_data"),
+        : "N/A",
   }));
   return (
     <div className={styles.container}>
@@ -176,7 +176,8 @@ export const RejectedClaimByUserID = () => {
         loading={loading}
         pagination={true}
         name="My Claims"
-        totalPage={1}
+        totalPage={totalPage}
+        onPageChange={handlePageChange}
       />
     </div>
   );

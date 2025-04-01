@@ -1,5 +1,5 @@
 import React from "react";
-import { DraftClaimByUserID } from "./DraftClaimByUserID";
+import DraftClaimByUserID from "./DraftClaimByUserID";
 const DraftClaimPage: React.FC = () => {
   return (
     <div>

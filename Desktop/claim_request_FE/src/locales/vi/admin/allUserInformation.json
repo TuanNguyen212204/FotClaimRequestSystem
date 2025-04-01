@@ -8,7 +8,8 @@
       "jobRank": "Thứ hạng công việc",
       "status": "Trạng thái",
       "assign": "Phân công",
-      "action": "Thao tác"
+      "action": "Thao tác",
+      "role": "Vai trò"
     },
     "filter": "Lọc theo",
     "createUser": {

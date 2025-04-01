@@ -95,25 +95,25 @@ export const ApprovedApproval: React.FC = () => {
       title: t("columns.submittedDate"),
       cell: ({ value }) => formatDateToDDMMYYYY(value as string),
     },
-    {
-      key: "salary",
-      dataIndex: "user_salary",
-      title: t("columns.salary"),
-      cell: ({ value }) => <div>{isSalaryVisible ? value : "******"}</div>,
-    },
-    {
-      key: "ot_rate",
-      dataIndex: "user_ot_rate",
-      title: t("columns.otRate"),
-    },
-    {
-      key: "salary_overtime",
-      dataIndex: "salary_overtime",
-      title: t("columns.salaryOvertime"),
-      cell: ({ value }) => (
-        <div>{isSalaryVisible ? value : "*****************"}</div>
-      ),
-    },
+    // {
+    //   key: "salary",
+    //   dataIndex: "user_salary",
+    //   title: t("columns.salary"),
+    //   cell: ({ value }) => <div>{isSalaryVisible ? value : "******"}</div>,
+    // },
+    // {
+    //   key: "ot_rate",
+    //   dataIndex: "user_ot_rate",
+    //   title: t("columns.otRate"),
+    // },
+    // {
+    //   key: "salary_overtime",
+    //   dataIndex: "salary_overtime",
+    //   title: t("columns.salaryOvertime"),
+    //   cell: ({ value }) => (
+    //     <div>{isSalaryVisible ? value : "*****************"}</div>
+    //   ),
+    // },
     {
       key: "claim_status",
       dataIndex: "claim_status",

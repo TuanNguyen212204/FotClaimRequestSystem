@@ -13,8 +13,11 @@ export const fetchAllUserAsync = createAsyncThunk<
       await delay(1000);
       const response = await httpClient.get<ApiResponseNoGeneric>(
         "/admin/staffs",
-        { page: page }
+        { page: page, limit: 8 }
       );
+      // response.data.data = response.data.data.filter((user: User) => {
+      //   return String(user.role_id) !== "1";
+      // });
       console.log(response.data.totalPages);
       return response.data.data;
     } catch (error) {
@@ -28,7 +31,7 @@ export const fetchAllUserAsync = createAsyncThunk<
         "/admin/staffs",
         { page: page, department_id: department_id }
       );
-      console.log(response.data.totalPages);
+      console.log("TotalPage :" + response.data.totalPages);
       return response.data.data;
     } catch (error) {
       console.error("Fetch Users error " + error);

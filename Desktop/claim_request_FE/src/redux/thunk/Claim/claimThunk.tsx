@@ -14,6 +14,8 @@ import {
 } from "@/types/Claim";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { delay } from "@utils/delay";
+import { stat } from "fs";
+import { string } from "yup";
 
 export const fetchAllClaimAsync = createAsyncThunk<Claim[]>(
   "claim/fetchAllClaim",
@@ -223,8 +225,8 @@ export const fetchAllDraftClaimAsync = createAsyncThunk<
 
 export const fetchClaimByUserAsync = createAsyncThunk<
   Claim[],
-  { page: number }
->("claim/fetchUserClaim", async ({ page }): Promise<Claim[]> => {
+  { page: number; status?: string }
+>("claim/fetchUserClaim", async ({ page, status }): Promise<Claim[]> => {
   try {
     await delay(1000);
     const userId = localStorage.getItem("user_id");
@@ -234,9 +236,10 @@ export const fetchClaimByUserAsync = createAsyncThunk<
     const response = await httpClient.get<ApiResponse<Claim[]>>("/claims", {
       userID: userId,
       page: page,
-      limit: 10,
+      limit: 8,
+      status: status,
     });
-    console.log(response.data.totalPages);
+
     return response.data.data;
   } catch (error) {
     console.error("Fetch Claims error " + error);
@@ -244,25 +247,27 @@ export const fetchClaimByUserAsync = createAsyncThunk<
   }
 });
 
-export const fetchTotalClaimByUserAsync = createAsyncThunk<number>(
-  "claim/fetchTotalClaimByUserAsync",
-  async (): Promise<number> => {
-    try {
-      await delay(1000);
-      const userId = localStorage.getItem("user_id");
-      if (!userId) {
-        throw new Error("User id not found");
-      }
-      const response = await httpClient.get<ApiResponse<Claim[]>>("/claims", {
-        userID: userId,
-      });
-      return response.data.totalPages;
-    } catch (error) {
-      console.error("Fetch Claims error " + error);
-      throw error;
+export const fetchTotalClaimByUserAsync = createAsyncThunk<
+  number,
+  { status?: string }
+>("claim/fetchTotalClaimByUserAsync", async ({ status }): Promise<number> => {
+  try {
+    await delay(1000);
+    const userId = localStorage.getItem("user_id");
+    if (!userId) {
+      throw new Error("User id not found");
     }
+    const response = await httpClient.get<ApiResponse<Claim[]>>("/claims", {
+      userID: userId,
+      limit: 8,
+      status: status,
+    });
+    return response.data.totalPages;
+  } catch (error) {
+    console.error("Fetch Claims error " + error);
+    throw error;
   }
-);
+});
 
 export const fetchClaimByUserWithPendingStatusAsync = createAsyncThunk<
   Claim[],
@@ -279,6 +284,8 @@ export const fetchClaimByUserWithPendingStatusAsync = createAsyncThunk<
       const response = await httpClient.get<ApiResponse<Claim[]>>("/claims", {
         userID: userId,
         page: page,
+        limit: 10,
+        status: "PENDING",
       });
       return response.data.data.filter(
         (claim) => claim.claim_status === "PENDING"
@@ -305,6 +312,7 @@ export const fetchClaimByUserWithApprovedStatusAsync = createAsyncThunk<
       const response = await httpClient.get<ApiResponse<Claim[]>>("/claims", {
         userID: userId,
         page: page,
+        status: "APPROVED",
       });
       return response.data.data.filter(
         (claim) => claim.claim_status === "APPROVED"
@@ -331,6 +339,7 @@ export const fetchClaimByUserWithRejectStatusAsync = createAsyncThunk<
       const response = await httpClient.get<ApiResponse<Claim[]>>("/claims", {
         userID: userId,
         page: page,
+        status: "REJECTED",
       });
       console.log(response.data.data);
       return response.data.data.filter(

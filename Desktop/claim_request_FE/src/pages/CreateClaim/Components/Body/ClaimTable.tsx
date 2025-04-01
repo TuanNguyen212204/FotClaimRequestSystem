@@ -49,6 +49,7 @@ export default function ClaimTable({
               <TdWithError error={errors.claims?.[index]?.date?.message}>
                 <input
                   type="date"
+                  
                   className={styles.form_control}
                   {...register(`claims.${index}.date`)}
                   min={minDate}

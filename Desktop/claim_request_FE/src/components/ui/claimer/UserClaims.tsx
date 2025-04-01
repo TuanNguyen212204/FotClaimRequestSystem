@@ -12,10 +12,7 @@ import { EyeIcon } from "lucide-react";
 import TableComponent, { Column, DataRecord } from "../Table/Table";
 import UserClaimDetailsModal from "./UserClaimDetails";
 import StatusTag from "../StatusTag/StatusTag";
-import { useTranslation } from "react-i18next";
-
 const UserClaims = () => {
-  const { t } = useTranslation("userClaims");
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const userClaim = useSelector(selectMyClaim);
@@ -26,16 +23,34 @@ const UserClaims = () => {
   const [selectedClaim, setSelectedClaim] = useState<string>("");
   const [limit] = useState(5);
 
+  // useEffect(() => {
+  //   setLoading(true);
+  //   const fetchData = async () => {
+  //     await dispatch(fetchClaimByUserAsync());
+  //     setLoading(false);
+  //   };
+  //   fetchData();
+  // }, [dispatch, currentPage]);
+  // useEffect(() => {
+  //   console.log(userClaim);
+  // }, [userClaim]);
+
+  // const handleViewDetail = (id: string) => {
+  //   setSelectedClaim(id);
+  //   setIsModalOpen(true);
+  // };
+
   useEffect(() => {
     setLoading(true);
     const fetchData = async () => {
       dispatch(fetchClaimByUserAsync({ page: currentPage })).finally(() =>
         setLoading(false)
       );
-      dispatch(fetchTotalClaimByUserAsync());
+      dispatch(fetchTotalClaimByUserAsync({}));
     };
     fetchData();
-  }, [currentPage, dispatch]);
+    console.log(totalPage);
+  }, [currentPage, dispatch, totalPage]);
 
   const handleViewDetail = (id: string) => {
     setLoading(true);
@@ -58,42 +73,68 @@ const UserClaims = () => {
     const year = dateObj.getFullYear();
     return `${day}/${month}/${year}`;
   };
+  const formatDateRange = (dateRange: any) => {
+    return dateRange.replace(
+      /(\d{1,2})\/(\d{1,2})\/(\d{4})/g,
+      (match, day, month, year) => {
+        return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
+      }
+    );
+  };
 
   const columns: Column[] = [
     {
       key: "project_id",
       dataIndex: "project_id",
-      title: t("project_id_label"),
+      title: "Project ID",
     },
     {
       key: "project_name",
       dataIndex: "project_name",
-      title: t("project_name_label"),
+      title: "Project Name",
     },
     {
       key: "time_duration",
       dataIndex: "time_duration",
-      title: t("time_duration_label"),
+      title: "Time Duration",
+      cell: ({ value }) => {
+        const formattedValue = formatDateRange(value as string);
+        return <span>{formattedValue}</span>;
+      },
     },
     {
       key: "total_hours",
       dataIndex: "total_hours",
-      title: t("total_working_hours_label"),
-      cell: ({ value }) => `${value} ${t("hours_suffix")}`,
+      title: "Total Working Hours",
+      cell: ({ value }) => `${value} hours`,
     },
     {
       key: "submitted_date",
       dataIndex: "submitted_date",
-      title: t("submitted_date_label"),
+      title: "Submitted Date",
       cell: ({ value }) => formatDateToDDMMYYYY(value as string),
     },
     {
       key: "claim_status",
       dataIndex: "claim_status",
-      title: t("claim_status_label"),
+      title: "Claim Status",
       cell: ({ value }: { value: unknown }) => {
         const stringValue = value as string;
         return (
+          // <span
+          //   style={{
+          //     color:
+          //       stringValue === "APPROVED"
+          //         ? "green"
+          //         : stringValue === "REJECTED"
+          //         ? "red"
+          //         : stringValue === "PENDING"
+          //         ? "orange"
+          //         : "inherit",
+          //   }}
+          // >
+          //   {stringValue}
+          // </span>
           <div>
             <StatusTag
               status={value as "PENDING" | "APPROVED" | "REJECTED" | "PAID"}
@@ -105,11 +146,11 @@ const UserClaims = () => {
     {
       key: "action",
       dataIndex: "request_id",
-      title: t("action_label"),
+      title: "Action",
       cell: ({ value }) => (
         <>
           <EyeIcon
-            className={styles.icon}
+            className="cursor-pointer"
             onClick={() => handleViewDetail(value as string)}
           />
           <UserClaimDetailsModal
@@ -123,7 +164,6 @@ const UserClaims = () => {
       ),
     },
   ];
-
   const dataSource: DataRecord[] = userClaim.map((claim, index) => ({
     ...claim,
     key: index,
@@ -137,22 +177,21 @@ const UserClaims = () => {
         ? `${formatDateToDDMMYYYY(claim.start_date)} - ${formatDateToDDMMYYYY(
             claim.end_date
           )}`
-        : t("no_data"),
+        : "N/A",
   }));
-
   return (
-    <div className={styles.container}>
+    <div>
       <TableComponent
+        isHaveCheckbox={false}
         columns={columns}
         dataSource={dataSource}
         loading={loading}
         pagination={true}
-        name={t("my_claims_title")}
+        name="My Claims"
         totalPage={totalPage}
         onPageChange={handlePageChange}
       />
     </div>
   );
 };
-
 export default UserClaims;

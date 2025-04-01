@@ -57,9 +57,9 @@
     "addOneClaim": "Vui lòng thêm ít nhất một yêu cầu.",
     "userUnavailable": "Thông tin người dùng không có sẵn.",
     "createSuccess": "Tạo yêu cầu thành công.",
-    "createError": "Tạo yêu cầu thất bại: {{error}}",
+    "createError": "Tạo yêu cầu thất bại: ",
     "updateSuccess": "Cập nhật yêu cầu thành công.",
-    "updateError": "Cập nhật yêu cầu thất bại: {{error}}",
+    "updateError": "Cập nhật yêu cầu thất bại: ",
     "updateRequestIdMissing": "Cần ID yêu cầu để cập nhật.",
     "loadDataError": "Không thể tải dữ liệu. Vui lòng làm mới trang."
   }
