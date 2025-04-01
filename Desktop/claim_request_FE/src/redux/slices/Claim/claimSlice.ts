@@ -204,7 +204,7 @@ export const claimSlice = createSlice({
       })
       .addCase(fetchAllDraftClaimAsync.fulfilled, (state, action) => {
         state.status = "success";
-        state.listClaimRejected = action.payload.data;
+        state.listClaimDraft = action.payload.data;
         state.totalPages = action.payload.totalPages;
       })
       .addCase(fetchAllDraftClaimAsync.pending, (state) => {

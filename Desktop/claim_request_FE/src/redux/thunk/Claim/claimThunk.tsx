@@ -200,7 +200,7 @@ export const fetchAllRejectedClaimAsync = createAsyncThunk<
   }
 });
 
-//------------------------------------------------- GET REJECTED CLAIM FOR APPROVAL ----------------------------------------------------------------------
+//------------------------------------------------- GET DRAFT CLAIM FOR APPROVAL ----------------------------------------------------------------------
 export const fetchAllDraftClaimAsync = createAsyncThunk<
   { data: DraftApproval[]; totalPages: number },
   { page: string; limit: string }
@@ -221,7 +221,6 @@ export const fetchAllDraftClaimAsync = createAsyncThunk<
     throw error;
   }
 });
-
 
 export const fetchClaimByUserAsync = createAsyncThunk<
   Claim[],
