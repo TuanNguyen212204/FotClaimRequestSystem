@@ -34,6 +34,12 @@ export const PUBLIC_ROUTE: RouteConfig[] = [
     protected: false,
   },
   {
+    component: lazy(() => import("@pages/laningPage")),
+    path: PATH.landingPage,
+    label: "Landing Page",
+    protected: false,
+  },
+  {
     component: lazy(() => import("@ui/login/ResetPassword")),
     path: PATH.resetPassword,
     label: "Reset Password",
