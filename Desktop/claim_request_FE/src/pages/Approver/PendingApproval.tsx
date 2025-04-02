@@ -14,6 +14,7 @@ import {
   XCircle,
   // ArrowLeftCircle,
   Undo2,
+  RotateCcw
 } from "lucide-react";
 import styles from "@/pages/Approver/PendingApproval.module.css";
 import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
@@ -394,7 +395,7 @@ export const PendingComponent: React.FC = () => {
             />
           </Tooltip>
           <Tooltip text="Return" position="top">
-            <Undo2
+            <RotateCcw
               className={styles.iconReturn}
               onClick={() => handleReturnClaim(value as string)}
             />
