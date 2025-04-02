@@ -26,6 +26,36 @@ export const UserInfoComponent: React.FC = () => {
   const accessToken = localStorage.getItem("access_token");
   const userId = localStorage.getItem("user_id");
 
+  const backendUrl =
+    import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
+  const staticBaseUrl =
+    import.meta.env.VITE_STATIC_BASE_URL || "http://localhost:3000";
+
+
+  const getFullAvatarUrl = (avatarPath: string | undefined): string => {
+    const defaultAvatar =
+      "https://i.pinimg.com/736x/63/f0/0d/63f00d6ebe2c93b945be3c39135503c2.jpg";
+
+    if (!avatarPath) {
+      return defaultAvatar;
+    }
+
+
+    if (avatarPath.startsWith("http")) {
+      return avatarPath;
+    }
+
+    // Nếu avatarPath không bắt đầu bằng /uploads/avatars/, bổ sung phần này
+    const normalizedAvatarPath = avatarPath.startsWith("/uploads/avatars/")
+      ? avatarPath
+      : `/uploads/avatars/${
+          avatarPath.startsWith("avatar-") ? "" : "avatar-"
+        }${avatarPath}`;
+
+    // Sử dụng staticBaseUrl để tạo URL cho file tĩnh
+    return `${staticBaseUrl}${normalizedAvatarPath}`;
+  };
+
   useEffect(() => {
     if (accessToken && userId) {
       dispatch(fetchUserByIdAsync());
@@ -126,28 +156,6 @@ export const UserInfoComponent: React.FC = () => {
       return false;
     }
 
-    if (!editedUser.department || editedUser.department.trim() === "") {
-      toast.error(t("toast.department_required"));
-      return false;
-    }
-
-    const deptRegex = /^[A-Za-z\s]+$/;
-    if (!deptRegex.test(editedUser.department)) {
-      toast.error(t("toast.department_invalid"));
-      return false;
-    }
-
-    if (!editedUser.job_rank || editedUser.job_rank.trim() === "") {
-      toast.error(t("toast.job_rank_required"));
-      return false;
-    }
-
-    const jobRankRegex = /^[A-Za-z\s]+$/;
-    if (!jobRankRegex.test(editedUser.job_rank)) {
-      toast.error(t("toast.job_rank_invalid"));
-      return false;
-    }
-
     if (editedUser.password && editedUser.password.trim() !== "") {
       if (editedUser.password !== confirmPassword) {
         toast.error(t("toast.password_mismatch"));
@@ -174,31 +182,38 @@ export const UserInfoComponent: React.FC = () => {
     }
 
     try {
-      const formData = new FormData();
-      formData.append("email", editedUser.email || "");
-      formData.append("department", editedUser.department || "");
-      formData.append("job_rank", editedUser.job_rank || "");
-      if (editedUser.password && editedUser.password.trim() !== "") {
-        formData.append("password", editedUser.password);
-      }
+      // 1. Cập nhật avatar nếu có file avatar
       if (avatarFile) {
-        formData.append("avatar", avatarFile);
-      }
+        const avatarFormData = new FormData();
+        avatarFormData.append("avatar", avatarFile);
 
-      const response = await httpClient.put(
-        `/admin/staff/${userId}`,
-        formData,
-        {
+        await httpClient.post(`/users/${userId}/avatar`, avatarFormData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        }
-      );
+        });
+      }
 
-      dispatch(fetchUserByIdAsync());
+      // 2. Cập nhật các thông tin khác (email, password) - không gửi department
+      const userFormData = new FormData();
+      userFormData.append("email", editedUser.email || "");
+      if (editedUser.password && editedUser.password.trim() !== "") {
+        userFormData.append("password", editedUser.password);
+      }
+
+      await httpClient.put(`/admin/staff/${userId}`, userFormData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      // 3. Sau khi cập nhật thành công, gọi lại API GET để làm mới dữ liệu người dùng
+      await dispatch(fetchUserByIdAsync());
       setIsEditing(false);
       setAvatarFile(null);
       toast.success(t("toast.update_success"));
+
+      // 4. Nếu người dùng cần đổi mật khẩu lần đầu (user_status === 2)
       if (editedUser.password && editedUser.user_status === 2) {
         await httpClient.put(`/admin/staff/${userId}`, {
           user_status: 1,
@@ -242,12 +257,13 @@ export const UserInfoComponent: React.FC = () => {
       <div className={styles.profileHeader}>
         <div className={styles.avatarSection}>
           <img
-            src={
-              selectedUser.avatar ||
-              "https://i.pinimg.com/736x/63/f0/0d/63f00d6ebe2c93b945be3c39135503c2.jpg"
-            }
+            src={getFullAvatarUrl(selectedUser.avatar)}
             alt="Avatar"
             className={styles.profileAvatar}
+            onError={(e) =>
+              (e.currentTarget.src =
+                "https://i.pinimg.com/736x/63/f0/0d/63f00d6ebe2c93b945be3c39135503c2.jpg")
+            }
           />
           <div className={styles.updateButtonWrapper}>
             <button
@@ -406,29 +422,25 @@ export const UserInfoComponent: React.FC = () => {
               />
             </div>
             <div className={styles.formSection}>
-              <label>
-                <span className={styles.required}>*</span>{" "}
-                {t("department_label")}
-              </label>
+              <label>{t("department_label")}</label>
               <input
                 value={editedUser.department || ""}
-                onChange={(e) =>
-                  setEditedUser({
-                    ...editedUser,
-                    department: e.target.value,
-                  })
-                }
+                disabled
+                style={{
+                  backgroundColor: "#f0f0f0",
+                  cursor: "not-allowed",
+                }}
               />
             </div>
             <div className={styles.formSection}>
-              <label>
-                <span className={styles.required}>*</span> {t("job_rank_label")}
-              </label>
+              <label>{t("job_rank_label")}</label>
               <input
                 value={editedUser.job_rank || ""}
-                onChange={(e) =>
-                  setEditedUser({ ...editedUser, job_rank: e.target.value })
-                }
+                disabled
+                style={{
+                  backgroundColor: "#f0f0f0",
+                  cursor: "not-allowed",
+                }}
               />
             </div>
             <div className={styles.buttonGroup}>

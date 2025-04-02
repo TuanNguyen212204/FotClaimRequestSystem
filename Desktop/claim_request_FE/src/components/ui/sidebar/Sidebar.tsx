@@ -42,7 +42,6 @@ export const Sidebar = ({
     (route) => route.protected === true
   );
   const routeByRole: RouteConfig[] = filterRoutesByRole(route, role as number);
-  console.log(routeByRole);
   const navigate = useNavigate();
   useEffect(() => {
     const record = String(localStorage.getItem("selectedClaim"));
