@@ -12,6 +12,7 @@ import {
   selectApprovedClaimTotalPages,
 } from "@redux/selector/claimSelector";
 import { useTranslation } from "react-i18next";
+import { format } from "path";
 
 export const ApprovedApproval: React.FC = () => {
   const navigate = useNavigate();
@@ -30,7 +31,7 @@ export const ApprovedApproval: React.FC = () => {
       fetchApprovedClaimsApproverAsync({
         page: currentPage.toString(),
         limit: limit.toString(),
-      })
+      }),
     ).finally(() => setLoading(false));
   }, [currentPage]);
 
@@ -50,7 +51,14 @@ export const ApprovedApproval: React.FC = () => {
     console.log("Trang mới: ", newPage);
     setCurrentPage(newPage);
   };
-
+  const formatDateRange = (dateRange: any) => {
+    return dateRange.replace(
+      /(\d{1,2})\/(\d{1,2})\/(\d{4})/g,
+      (match, day, month, year) => {
+        return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
+      },
+    );
+  };
   const columns: Column<DataRecord>[] = [
     {
       key: "user_name",
@@ -66,13 +74,15 @@ export const ApprovedApproval: React.FC = () => {
       key: "start_date",
       dataIndex: "start_date",
       title: t("columns.startDate"),
-      cell: ({ value }) => formatDateToDDMMYYYY(value as string),
+      cell: ({ value }) =>
+        formatDateRange(formatDateToDDMMYYYY(value as string)),
     },
     {
       key: "end_date",
       dataIndex: "end_date",
       title: t("columns.endDate"),
-      cell: ({ value }) => formatDateToDDMMYYYY(value as string),
+      cell: ({ value }) =>
+        formatDateRange(formatDateToDDMMYYYY(value as string)),
     },
     {
       key: "total_hours",
@@ -93,7 +103,8 @@ export const ApprovedApproval: React.FC = () => {
       key: "submitted_date",
       dataIndex: "submitted_date",
       title: t("columns.submittedDate"),
-      cell: ({ value }) => formatDateToDDMMYYYY(value as string),
+      cell: ({ value }) =>
+        formatDateRange(formatDateToDDMMYYYY(value as string)),
     },
     // {
     //   key: "salary",

@@ -44,7 +44,7 @@ const DraftClaimByUserID = () => {
     setLoading(true);
     const fetchData = async () => {
       await dispatch(
-        fetchClaimByUserAsync({ page: currentPage, status: "DRAFT" })
+        fetchClaimByUserAsync({ page: currentPage, status: "DRAFT" }),
       );
       setLoading(false);
       dispatch(fetchTotalClaimByUserAsync({ status: "DRAFT" }));
@@ -78,7 +78,7 @@ const DraftClaimByUserID = () => {
       /(\d{1,2})\/(\d{1,2})\/(\d{4})/g,
       (match, day, month, year) => {
         return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
-      }
+      },
     );
   };
   const columns: Column[] = [
@@ -114,7 +114,7 @@ const DraftClaimByUserID = () => {
 
       cell: ({ value }) => {
         const formattedValue = formatDateRange(
-          formatDateToDDMMYYYY(value as string)
+          formatDateToDDMMYYYY(value as string),
         );
         return <span>{formattedValue}</span>;
       },
@@ -180,22 +180,44 @@ const DraftClaimByUserID = () => {
     time_duration:
       claim.start_date && claim.end_date
         ? `${formatDateToDDMMYYYY(claim.start_date)} - ${formatDateToDDMMYYYY(
-            claim.end_date
+            claim.end_date,
           )}`
         : "N/A",
   }));
   return (
-    <div className={styles.container}>
-      <TableComponent
-        columns={columns}
-        dataSource={dataSource}
-        loading={loading}
-        pagination={true}
-        name="My Claims"
-        totalPage={totalPage}
-        onPageChange={handlePageChange}
-      />
-    </div>
+    // <div className={styles.container}>
+    //   <TableComponent
+    //     columns={columns}
+    //     dataSource={dataSource}
+    //     loading={loading}
+    //     pagination={true}
+    //     name="My Claims"
+    //     totalPage={totalPage}
+    //     onPageChange={handlePageChange}
+    //   />
+    // </div>
+    <>
+      <div className="mt-2 p-0">
+        <div className="mb-10 ml-5">
+          <h1 className="m-0 p-0">Draft Claims</h1>
+          <p className="m-0 p-0">
+            Here you can view all your draft claims and their statuses.
+          </p>
+        </div>
+        <div className={`${styles.tableContainer}`}>
+          <TableComponent
+            isHaveCheckbox={false}
+            columns={columns}
+            dataSource={dataSource}
+            loading={loading}
+            pagination={true}
+            name="My Claims"
+            totalPage={totalPage}
+            onPageChange={handlePageChange}
+          />
+        </div>
+      </div>
+    </>
   );
 };
 export default DraftClaimByUserID;

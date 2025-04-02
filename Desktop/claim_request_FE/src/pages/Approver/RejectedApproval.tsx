@@ -30,7 +30,7 @@ export const RejectedComponent: React.FC = () => {
       fetchAllRejectedClaimAsync({
         page: currentPage.toString(),
         limit: limit.toString(),
-      })
+      }),
     ).finally(() => setLoading(false));
   }, [currentPage]);
 
@@ -54,7 +54,14 @@ export const RejectedComponent: React.FC = () => {
   const toggleSalaryVisibility = () => {
     setIsSalaryVisible(!isSalaryVisible);
   };
-
+  const formatDateRange = (dateRange: any) => {
+    return dateRange.replace(
+      /(\d{1,2})\/(\d{1,2})\/(\d{4})/g,
+      (match, day, month, year) => {
+        return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
+      },
+    );
+  };
   const columns: Column<DataRecord>[] = [
     {
       key: "user_name",
@@ -70,13 +77,15 @@ export const RejectedComponent: React.FC = () => {
       key: "start_date",
       dataIndex: "start_date",
       title: t("startDate"),
-      cell: ({ value }) => formatDateToDDMMYYYY(value as string),
+      cell: ({ value }) =>
+        formatDateRange(formatDateToDDMMYYYY(value as string)),
     },
     {
       key: "end_date",
       dataIndex: "end_date",
       title: t("endDate"),
-      cell: ({ value }) => formatDateToDDMMYYYY(value as string),
+      cell: ({ value }) =>
+        formatDateRange(formatDateToDDMMYYYY(value as string)),
     },
     {
       key: "total_hours",
@@ -97,7 +106,8 @@ export const RejectedComponent: React.FC = () => {
       key: "submitted_date",
       dataIndex: "submitted_date",
       title: t("submittedDate"),
-      cell: ({ value }) => formatDateToDDMMYYYY(value as string),
+      cell: ({ value }) =>
+        formatDateRange(formatDateToDDMMYYYY(value as string)),
     },
     // {
     //   key: "salary",

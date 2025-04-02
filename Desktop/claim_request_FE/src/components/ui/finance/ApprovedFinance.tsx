@@ -48,7 +48,7 @@ export const ApprovedFinanceComponent: React.FC = () => {
       fetchApprovedClaimsFinanceAsync({
         page: currentPage.toString(),
         limit: limit.toString(),
-      })
+      }),
     ).finally(() => setLoading(false));
   }, [currentPage]);
 
@@ -64,7 +64,14 @@ export const ApprovedFinanceComponent: React.FC = () => {
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
   };
-
+  const formatDateRange = (dateRange: any) => {
+    return dateRange.replace(
+      /(\d{1,2})\/(\d{1,2})\/(\d{4})/g,
+      (match, day, month, year) => {
+        return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
+      },
+    );
+  };
   const columns: Column[] = [
     // {
     //   key: "request_id",
@@ -85,6 +92,7 @@ export const ApprovedFinanceComponent: React.FC = () => {
       key: "time_duration",
       dataIndex: "time_duration",
       title: t("finance.table.timeDuration"),
+      cell: ({ value }) => formatDateRange(value as string),
     },
     {
       key: "total_hours",
@@ -128,7 +136,7 @@ export const ApprovedFinanceComponent: React.FC = () => {
       time_duration:
         claim.start_date && claim.end_date
           ? `${formatDateToDDMMYYYY(claim.start_date)} - ${formatDateToDDMMYYYY(
-              claim.end_date
+              claim.end_date,
             )}`
           : "N/A",
     };

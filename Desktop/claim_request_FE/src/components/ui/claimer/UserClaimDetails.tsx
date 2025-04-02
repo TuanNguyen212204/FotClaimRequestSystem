@@ -81,6 +81,21 @@ const UserClaimDetailsModal = ({
       dispatch(fetchMyClaimDetailAsync(requestID));
     }
   }, [isOpen, requestID, dispatch]);
+  const formatDateToDDMMYYYY = (date: string) => {
+    const dateObj = new Date(date);
+    const day = dateObj.getDate();
+    const month = dateObj.getMonth() + 1;
+    const year = dateObj.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+  const formatDateRange = (dateRange: any) => {
+    return dateRange.replace(
+      /(\d{1,2})\/(\d{1,2})\/(\d{4})/g,
+      (match, day, month, year) => {
+        return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
+      },
+    );
+  };
 
   return (
     <Modal
@@ -132,7 +147,11 @@ const UserClaimDetailsModal = ({
             {t("submitted_date_detail_label")}
           </span>
           <span className={styles.projectValue}>
-            {claimDetail?.submitted_date || t("no_data")}
+            {claimDetail?.submitted_date
+              ? formatDateRange(
+                  formatDateToDDMMYYYY(claimDetail.submitted_date),
+                )
+              : t("no_data")}
           </span>
         </div>
         <div className={styles.projectRow}>
@@ -189,7 +208,7 @@ const UserClaimDetailsModal = ({
                     </div>
                   </div>
                 </div>
-              )
+              ),
             )}
           </div>
         ) : null}

@@ -27,13 +27,21 @@ export const DraftApproval: React.FC = () => {
       fetchAllDraftClaimAsync({
         page: currentPage.toString(),
         limit: limit.toString(),
-      })
+      }),
     ).finally(() => setLoading(false));
   }, [currentPage]);
 
   const handlePageChange = (newPage: number) => {
     console.log("New Page: ", newPage);
     setCurrentPage(newPage);
+  };
+  const formatDateRange = (dateRange: any) => {
+    return dateRange.replace(
+      /(\d{1,2})\/(\d{1,2})\/(\d{4})/g,
+      (match, day, month, year) => {
+        return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
+      },
+    );
   };
 
   const columns: Column<DataRecord>[] = [
@@ -51,13 +59,13 @@ export const DraftApproval: React.FC = () => {
       key: "start_date",
       dataIndex: "start_date",
       title: t("start_date"),
-      cell: ({ value }) => formatDate(value as string),
+      cell: ({ value }) => formatDateRange(formatDate(value as string)),
     },
     {
       key: "end_date",
       dataIndex: "end_date",
       title: t("end_date"),
-      cell: ({ value }) => formatDate(value as string),
+      cell: ({ value }) => formatDateRange(formatDate(value as string)),
     },
     {
       key: "total_hours",
@@ -74,12 +82,12 @@ export const DraftApproval: React.FC = () => {
       dataIndex: "project_name",
       title: t("project_name"),
     },
-    // {
-    //   key: "submitted_date",
-    //   dataIndex: "submitted_date",
-    //   title: "Submitted Date",
-    //   cell: ({ value }) => formatDate(value as string),
-    // },
+    {
+      key: "submitted_date",
+      dataIndex: "submitted_date",
+      title: "Submitted Date",
+      cell: ({ value }) => formatDateRange(formatDate(value as string)),
+    },
     {
       key: "claim_status",
       dataIndex: "claim_status",
@@ -101,9 +109,7 @@ export const DraftApproval: React.FC = () => {
     <div>
       <div className={styles.container}>
         <h1 className={styles.title}>{t("title")}</h1>
-        <p className={styles.title2}>
-          {t("message")}
-        </p>
+        <p className={styles.title2}>{t("message")}</p>
       </div>
       <TableComponent
         columns={columns}

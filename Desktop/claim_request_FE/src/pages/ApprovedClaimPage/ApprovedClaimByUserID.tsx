@@ -40,18 +40,31 @@ const ApprovedClaimByUserID = () => {
   //   setIsModalOpen(true);
   // };
 
+  // useEffect(() => {
+  //   setLoading(true);
+  //   const fetchData = async () => {
+  //     await dispatch(
+  //       fetchClaimByUserAsync({ page: currentPage, status: "APPROVED" }),
+  //     );
+  //     setLoading(false);
+  //     dispatch(fetchTotalClaimByUserAsync({ status: "APPROVED" }));
+  //   };
+  //   fetchData();
+  //   console.log(totalPage);
+  // }, [currentPage, dispatch, totalPage]);
   useEffect(() => {
     setLoading(true);
     const fetchData = async () => {
       await dispatch(
-        fetchClaimByUserAsync({ page: currentPage, status: "APPROVED" })
+        fetchClaimByUserAsync({ page: currentPage, status: "APPROVED" }),
       );
+      await dispatch(fetchTotalClaimByUserAsync({ status: "APPROVED" }));
       setLoading(false);
-      dispatch(fetchTotalClaimByUserAsync({ status: "APPROVED" }));
     };
     fetchData();
     console.log(totalPage);
   }, [currentPage, dispatch, totalPage]);
+
   const handleViewDetail = (id: string) => {
     setLoading(true);
     setTimeout(() => {
@@ -163,22 +176,49 @@ const ApprovedClaimByUserID = () => {
     time_duration:
       claim.start_date && claim.end_date
         ? `${formatDateToDDMMYYYY(claim.start_date)} - ${formatDateToDDMMYYYY(
-            claim.end_date
+            claim.end_date,
           )}`
         : "N/A",
   }));
   return (
-    <div className={styles.container}>
-      <TableComponent
-        columns={columns}
-        dataSource={dataSource}
-        loading={loading}
-        pagination={true}
-        name="My Claims"
-        totalPage={totalPage}
-        onPageChange={handlePageChange}
-      />
-    </div>
+    // <div className={styles.container}>
+    //   <div>
+    //     <h1>Approved Claim</h1>
+    //   </div>
+    //   <div>
+    //     <TableComponent
+    //       columns={columns}
+    //       dataSource={dataSource}
+    //       loading={loading}
+    //       pagination={true}
+    //       name="My Claims"
+    //       totalPage={totalPage}
+    //       onPageChange={handlePageChange}
+    //     />
+    //   </div>
+    // </div>
+    <>
+      <div className="mt-2 p-0">
+        <div className="mb-10 ml-5">
+          <h1 className="m-0 p-0">Approved Claims</h1>
+          <p className="m-0 p-0">
+            Here you can view your approved claims and their statuses.
+          </p>
+        </div>
+        <div className={`${styles.tableContainer}`}>
+          <TableComponent
+            isHaveCheckbox={false}
+            columns={columns}
+            dataSource={dataSource}
+            loading={loading}
+            pagination={true}
+            name="My Claims"
+            totalPage={totalPage}
+            onPageChange={handlePageChange}
+          />
+        </div>
+      </div>
+    </>
   );
 };
 export default ApprovedClaimByUserID;

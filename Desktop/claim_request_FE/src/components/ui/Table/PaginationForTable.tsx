@@ -21,7 +21,7 @@ const PaginationForTable: React.FC<PaginationForTableProps> = ({
 
   const renderPageNumbers = () => {
     const pages = [];
-    const maxPageNumbers = 5;
+    const maxPageNumbers = 10;
     const halfRange = Math.floor(maxPageNumbers / 2);
 
     if (totalPages <= maxPageNumbers) {
@@ -60,7 +60,7 @@ const PaginationForTable: React.FC<PaginationForTableProps> = ({
               page === currentPage ? styles.activePage : ""
             }`}
           >
-            <div className="mt-2">
+            <div className="mt-1">
               <span>{page}</span>
             </div>
           </div>
@@ -69,7 +69,7 @@ const PaginationForTable: React.FC<PaginationForTableProps> = ({
         <span key={index} className={styles.pagination_dots}>
           {page}
         </span>
-      )
+      ),
     );
   };
 
@@ -80,20 +80,20 @@ const PaginationForTable: React.FC<PaginationForTableProps> = ({
           tabIndex={-1}
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
-          className={` bg-transparent mt-5`}
+          className={`mt-4 bg-transparent`}
         >
           <ArrowLeft />
         </button>
       </div>
 
-      <div className="p-0 m-0">{renderPageNumbers()}</div>
+      <div className="m-0 p-0">{renderPageNumbers()}</div>
 
       <div>
         <button
           tabIndex={-1}
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
-          className={` bg-transparent  mt-5`}
+          className={`mt-4 bg-transparent`}
         >
           <ArrowRight />
         </button>
