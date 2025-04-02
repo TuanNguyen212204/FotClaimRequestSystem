@@ -275,7 +275,7 @@ export const PendingComponent: React.FC = () => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-    }, 1500);
+    }, 2500);
     setSelectedRequestId(value);
     setOpenModal(true);
   };
