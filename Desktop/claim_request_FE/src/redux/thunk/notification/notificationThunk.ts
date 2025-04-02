@@ -29,15 +29,27 @@ export const markNotificationAsReadById = createAsyncThunk(
     const response = await httpClient.post<ApiResponse<Notification[]>>(
       `/notifications/${id}/read`
     )
+    console.log(id)
     return response.data
   }
 );
 
 export const deleteNotificationById = createAsyncThunk(
-  "notification/delete",
+  "notification/deleteById",
   async (id: number) => {
     const res = await httpClient.delete<ApiResponse<Notification[]>>(
       `/notifications/${id}`
+    )
+    console.log(res)
+    return res.data
+  }
+);
+
+export const deleteNotificationAll = createAsyncThunk(
+  "notification/deleteAll",
+  async () => {
+    const res = await httpClient.delete<ApiResponse<Notification[]>>(
+      `/notifications`
     )
     return res.data
   }
