@@ -19,6 +19,7 @@ import { LoadingProvider } from "@/components/ui/Loading/LoadingContext";
 import LoadingOverlay from "@/components/ui/Loading/LoadingOverlay";
 import { ApiResponseNoGeneric } from "@/types/ApiResponse";
 import { delay } from "@/utils/delay";
+import { useTranslation } from "react-i18next";
 interface CreateUserProps {
   openModal: boolean;
   setOpenModal: (value: boolean) => void;
@@ -98,6 +99,7 @@ export const CreateUser: React.FC<CreateUserProps> = ({
   setOpenModal,
 }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation("allUserInformation");
   const dispatch = useDispatch<AppDispatch>();
   const users = useSelector(selectAllUser);
   const totalPage = String(useSelector(selectTotalPageOfAllUser));
@@ -211,7 +213,7 @@ export const CreateUser: React.FC<CreateUserProps> = ({
         )}
       </div>
       <div style={{ marginTop: "50px" }}>
-        <div className=" mx-auto p-8 bg-white shadow-xl rounded-xl">
+        <div className=" mx-auto  pr-0 pb-5   bg-white shadow-xl rounded-xl">
           <div>
             <button
               onClick={() => handleCancel()}
@@ -223,11 +225,11 @@ export const CreateUser: React.FC<CreateUserProps> = ({
             </button>
           </div>
           <h1 className="text-3xl font-bold text-green-700 mb-6 text-center">
-            Create User
+            {t("allUserInformation.createUser.title")}
           </h1>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
             {/* Full Name */}
-            <div className={styles.input_container}>
+            <div className="ml-15">
               <label
                 className="block text-sm font-medium text-gray-600"
                 htmlFor="full_name"
@@ -236,25 +238,31 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                   <div className={styles.label_container}>
                     <span>*</span>
                   </div>
-                  <div>
-                    <span>Full Name</span>
+                  <div className={styles.input_container}>
+                    <span>{t("allUserInformation.createUser.fullName")}</span>
                   </div>
                 </div>
               </label>
               <input
                 id="full_name"
                 {...register("full_name", {
-                  required: "Full name is required",
+                  required: t(
+                    "allUserInformation.createUser.validation.fullName"
+                  ),
                   minLength: {
                     value: 3,
-                    message: "Must be at least 3 characters",
+                    message: t(
+                      "allUserInformation.createUser.validation.minLength"
+                    ),
                   },
                   maxLength: {
                     value: 100,
-                    message: "Must be at most 50 characters",
+                    message: t(
+                      "allUserInformation.createUser.validation.maxLength"
+                    ),
                   },
                 })}
-                className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+                className="mt-1 w-4/5 p-2 h-6 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
               />
               {errors.full_name && (
                 <p className="text-red-500 text-sm mt-1">
@@ -262,7 +270,7 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                 </p>
               )}
             </div>
-            <div className={styles.input_container}>
+            <div className="ml-15">
               <label
                 className="block text-sm font-medium text-gray-600"
                 htmlFor="email"
@@ -271,8 +279,8 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                   <div className={styles.label_container}>
                     <span>*</span>
                   </div>
-                  <div>
-                    <span>Email</span>
+                  <div className={styles.input_container}>
+                    <span>{t("allUserInformation.createUser.email")}</span>
                   </div>
                 </div>
               </label>
@@ -280,17 +288,17 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                 id="email"
                 type="email"
                 {...register("email", {
-                  required: "Email is required",
+                  required: t("allUserInformation.createUser.validation.email"),
                 })}
-                className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+                className="mt-1 w-4/5 p-2 h-6 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
               />
-              {errors.full_name && (
+              {errors.email && (
                 <p className="text-red-500 text-sm mt-1">
-                  {errors.full_name.message}
+                  {errors.email.message}
                 </p>
               )}
             </div>
-            <div className={styles.input_container}>
+            <div className="ml-15">
               <label
                 className="block text-sm font-medium text-gray-600"
                 htmlFor="department"
@@ -299,8 +307,8 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                   <div className={styles.label_container}>
                     <span>*</span>
                   </div>
-                  <div>
-                    <span>Department</span>
+                  <div className={styles.input_container}>
+                    <span>{t("allUserInformation.createUser.department")}</span>
                   </div>
                 </div>
               </label>
@@ -322,7 +330,9 @@ export const CreateUser: React.FC<CreateUserProps> = ({
               <Select
                 register={{
                   ...register("department", {
-                    required: "Department is required",
+                    required: t(
+                      "allUserInformation.createUser.validation.department"
+                    ),
                   }),
                 }}
                 options={department.map((a) => ({
@@ -336,7 +346,7 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                 // }}
                 placeholder="Select Department"
                 onChange={(value) => console.log(value)}
-                className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+                className="mt-1  h-11 w-83.5 p-2 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
               />
 
               {errors.department && (
@@ -345,7 +355,7 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                 </p>
               )}
             </div>
-            <div className={styles.input_container}>
+            <div className="ml-15">
               <label
                 className="block text-sm font-medium text-gray-600"
                 htmlFor="salary"
@@ -354,21 +364,25 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                   <div className={styles.label_container}>
                     <span>*</span>
                   </div>
-                  <div>
-                    <span>Salary</span>
+                  <div className={styles.input_container}>
+                    <span>{t("allUserInformation.createUser.salary")}</span>
                   </div>
                 </div>
               </label>
               <input
                 id="salary"
                 {...register("salary", {
-                  required: "Salary is required",
+                  required: t(
+                    "allUserInformation.createUser.validation.salary"
+                  ),
                   minLength: {
                     value: 0,
-                    message: "Salary must greater than 0",
+                    message: t(
+                      "allUserInformation.createUser.validation.salaryMesssage"
+                    ),
                   },
                 })}
-                className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+                className="mt-1 w-4/5 p-2 h-6 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
               />
               {errors.salary && (
                 <p className="text-red-500 text-sm mt-1">
@@ -376,7 +390,7 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                 </p>
               )}
             </div>
-            <div className={styles.input_container}>
+            <div className="ml-15">
               <label
                 className="block text-sm font-medium text-gray-600"
                 htmlFor="role_id"
@@ -385,8 +399,8 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                   <div className={styles.label_container}>
                     <span>*</span>
                   </div>
-                  <div>
-                    <span>Role ID</span>
+                  <div className={styles.input_container}>
+                    <span>{t("allUserInformation.createUser.roleID")}</span>
                   </div>
                 </div>
               </label>
@@ -406,7 +420,7 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                 register={register("role_id")}
                 onChange={(value) => console.log(value)}
                 placeholder="Select Role ID"
-                className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+                className="mt-1  h-11 w-83.5 p-2  border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
               />
               {errors.role_id && (
                 <p className="text-red-500 text-sm mt-1">
@@ -415,7 +429,7 @@ export const CreateUser: React.FC<CreateUserProps> = ({
               )}
             </div>
 
-            <div className={styles.input_container}>
+            <div className="ml-15">
               <label
                 className="block text-sm font-medium text-gray-600"
                 htmlFor="job_rank"
@@ -424,8 +438,8 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                   <div className={styles.label_container}>
                     <span>*</span>
                   </div>
-                  <div>
-                    <span>Job Rank</span>
+                  <div className={styles.input_container}>
+                    <span>{t("allUserInformation.createUser.jobRank")}</span>
                   </div>
                 </div>
               </label>
@@ -448,12 +462,14 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                 options={jobRank.map((a) => ({ label: a.name, value: a.id }))}
                 register={{
                   ...register("job_rank", {
-                    required: "Job Rank is required",
+                    required: t(
+                      "allUserInformation.createUser.validation.jobRank"
+                    ),
                   }),
                 }}
                 placeholder="Select Job Rank"
                 onChange={(value) => console.log(value)}
-                className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+                className="mt-1  h-11 w-83.5 p-2  border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
               />
 
               {errors.job_rank && (
@@ -463,9 +479,9 @@ export const CreateUser: React.FC<CreateUserProps> = ({
               )}
             </div>
 
-            <div className={styles.update_button_container}>
+            <div className={`${styles.update_button_container} `}>
               <button type="submit" className={styles.update_button}>
-                Create
+                {t("allUserInformation.buttonCreate")}
               </button>
             </div>
           </form>

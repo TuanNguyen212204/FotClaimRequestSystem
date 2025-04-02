@@ -11,6 +11,7 @@ import { X } from "lucide-react";
 import styles from "./UpdateUser.module.css";
 import { ToastContainer, toast } from "react-toastify";
 import { Select } from "./CreateUser";
+import { useTranslation } from "react-i18next";
 interface UpdateUserProps {
   id: string;
   setOpenModal: (value: boolean) => void;
@@ -37,6 +38,7 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
   const [user, setUser] = useState<User | null>(null);
   const [department, setDepartment] = useState<DepartmentList>([]);
   const [jobRank, setJobRank] = useState<JobRankList>([]);
+  const { t } = useTranslation("allUserInformation");
   const fetchDepartment = async () => {
     try {
       const response = await httpClient.get<ApiResponseNoGeneric>(
@@ -157,7 +159,7 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
 
   return (
     <div style={{ marginTop: "50px" }}>
-      <div className="mx-auto p-8 bg-white shadow-xl rounded-xl">
+      <div className="mx-auto  pr-0 pb-5 8 bg-white shadow-xl rounded-xl">
         <div>
           <button
             onClick={() => handleCancel()}
@@ -169,10 +171,10 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
           </button>
         </div>
         <h1 className="text-3xl font-bold text-blue-700 mb-6 text-center">
-          Update User
+          {t("allUserInformation.updateUser.title")}
         </h1>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-          <div className={styles.input_container}>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
+          <div className="ml-15">
             <label
               className="block text-sm font-medium text-gray-600"
               htmlFor="full_name"
@@ -181,8 +183,8 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
                 <div className={styles.label_container}>
                   <span>*</span>
                 </div>
-                <div>
-                  <span>Full Name</span>
+                <div className={styles.input_container}>
+                  <span>{t("allUserInformation.updateUser.fullName")}</span>
                 </div>
               </div>
             </label>
@@ -190,7 +192,7 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
               disabled
               id="full_name"
               {...register("full_name")}
-              className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200"
+              className="mt-1 w-4/5 p-2 h-6 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
             />
             {errors.full_name && (
               <p className="text-red-500 text-sm mt-1">
@@ -198,7 +200,7 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
               </p>
             )}
           </div>
-          <div className={styles.input_container}>
+          <div className="ml-15">
             <label
               className="block text-sm font-medium text-gray-600"
               htmlFor="email"
@@ -207,8 +209,8 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
                 <div className={styles.label_container}>
                   <span>*</span>
                 </div>
-                <div>
-                  <span>Email</span>
+                <div className={styles.input_container}>
+                  <span>{t("allUserInformation.updateUser.email")}</span>
                 </div>
               </div>
             </label>
@@ -216,10 +218,10 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
               {...register("email")}
               disabled
               id="email"
-              className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200"
+              className="mt-1 w-4/5 p-2 h-6 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
             />
           </div>
-          <div className={styles.input_container}>
+          <div className="ml-15">
             <label
               className="block text-sm font-medium text-gray-600"
               id="department"
@@ -228,8 +230,8 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
                 <div className={styles.label_container}>
                   <span>*</span>
                 </div>
-                <div>
-                  <span>Department</span>
+                <div className={styles.input_container}>
+                  <span>{t("allUserInformation.updateUser.department")}</span>
                 </div>
               </div>
             </label>
@@ -251,7 +253,9 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
             <Select
               register={{
                 ...register("department_id", {
-                  required: "Department is required",
+                  required: t(
+                    "allUserInformation.updateUser.validation.department"
+                  ),
                 }),
               }}
               options={department.map((a) => ({
@@ -265,7 +269,7 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
               // }}
               placeholder="Select Department"
               onChange={(value) => console.log(value)}
-              className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+              className="mt-1  h-10 w-83.5 p-2  border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
             />
             {errors.department && (
               <p className="text-red-500 text-sm mt-1">
@@ -274,7 +278,7 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
             )}
           </div>
 
-          <div className={styles.input_container}>
+          <div className="ml-15">
             <label
               className="block text-sm font-medium text-gray-600"
               htmlFor="role_id"
@@ -283,8 +287,8 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
                 <div className={styles.label_container}>
                   <span>*</span>
                 </div>
-                <div>
-                  <span>Role ID</span>
+                <div className={styles.input_container}>
+                  <span>{t("allUserInformation.updateUser.roleID")}</span>
                 </div>
               </div>
             </label>
@@ -303,7 +307,7 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
               register={register("role_id")}
               onChange={(value) => console.log(value)}
               placeholder="Select Role ID"
-              className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+              className="mt-1  h-10 w-83.5 p-2  border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
             />
             {/* <Select
               register={{
@@ -332,7 +336,7 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
             )}
           </div>
 
-          <div className={styles.input_container}>
+          <div className="ml-15">
             <label
               className="block text-sm font-medium text-gray-600"
               htmlFor="job_rank"
@@ -341,8 +345,8 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
                 <div className={styles.label_container}>
                   <span>*</span>
                 </div>
-                <div>
-                  <span>Job Rank</span>
+                <div className={styles.input_container}>
+                  <span>{t("allUserInformation.updateUser.jobRank")}</span>
                 </div>
               </div>
             </label>
@@ -365,12 +369,14 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
               options={jobRank.map((a) => ({ label: a.name, value: a.id }))}
               register={{
                 ...register("job_rank_id", {
-                  required: "Job Rank is required",
+                  required: t(
+                    "allUserInformation.updateUser.validation.department"
+                  ),
                 }),
               }}
               placeholder="Select Job Rank"
               onChange={(value) => console.log(value)}
-              className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+              className="mt-1  h-10 w-83.5 p-2  border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
             />
             {errors.job_rank && (
               <p className="text-red-500 text-sm mt-1">
@@ -381,7 +387,7 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
 
           <div className={styles.update_button_container}>
             <button type="submit" className={styles.update_button}>
-              Update
+              {t("allUserInformation.buttonUpdate")}
             </button>
           </div>
         </form>

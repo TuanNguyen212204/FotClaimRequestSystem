@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import Select from "react-select";
 import { useTranslation } from "react-i18next";
-import { FaGlobe } from "react-icons/fa";
 
 const languageOptions = [
   {
@@ -33,7 +32,8 @@ const languageOptions = [
 ];
 
 export const LanguageSwitcher: React.FC = () => {
-  const { i18n } = useTranslation();
+  const { i18n } = useTranslation("header");
+  const [isOpen, setIsOpen] = useState(false);
 
   const changeLanguage = (selectedOption: any) => {
     i18n

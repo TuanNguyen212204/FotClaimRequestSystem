@@ -2,13 +2,12 @@ import styles from "./Sidebar.module.css";
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { PATH } from "../../../constant/config";
-// import { RouteConfig, useRoute } from "@/Hooks/useRoute";
 import { ROLES } from "@/enums/ROLES";
 import RouteConfig from "@/types/Route";
 import { PRIVATE_ROUTE } from "@/constant/routeConfig";
 import ROLE from "@/constant/role";
-import { LogOut } from "lucide-react";
 import { useTranslation } from "react-i18next";
+
 export const Sidebar = ({
   setIsCollapsed,
 }: {
@@ -32,7 +31,6 @@ export const Sidebar = ({
       if (route.role?.includes(role)) {
         acc.push(route);
       }
-
       return acc;
     }, []);
   };
@@ -40,9 +38,6 @@ export const Sidebar = ({
   const location = useLocation();
   const currentPath = location.pathname;
 
-  // const routeByRole: RouteConfig[] = useRoute().filter((route) =>
-  //   route.role?.includes(ROLES.ADMIN)
-  // );
   const route: RouteConfig[] = PRIVATE_ROUTE.filter(
     (route) => route.protected === true
   );
@@ -71,11 +66,6 @@ export const Sidebar = ({
     }
   }, []);
 
-  const handleLogOut = () => {
-    localStorage.clear();
-    navigate(PATH.login);
-  };
-
   const handleNavigate = (path: string) => {
     setSelectedClaim(path);
     localStorage.setItem("selectedClaim", path);
@@ -84,21 +74,18 @@ export const Sidebar = ({
 
   return (
     <div>
-      <div className={`${styles.sidebar} `}>
-        <div className={`${styles.claimItemCollapse}  `}>
-          <ul className={`${styles.claimList} `}>
+      <div className={`${styles.sidebar}`}>
+        <div className={`${styles.claimItemCollapse}`}>
+          <ul className={`${styles.claimList}`}>
             {routeByRole.map((route, index) => (
               <li
                 key={index}
-                // className={`${styles.claimItemCollapse} ${styles.tooltip} ${
-                //   selectedClaim === route.path ? styles.active : ""
-                // } mt-2`}
                 className={`${styles.tooltip} ${styles.claimItem} ${
                   selectedClaim === route.path ? styles.active : ""
                 }`}
                 onClick={() => handleNavigate(route.path as string)}
               >
-                <div className={` ${styles.claimButton}  `}>
+                <div className={` ${styles.claimButton}`}>
                   <div
                     className={`${styles.claimButtonIngredient} ${styles.icon} `}
                     style={{
@@ -110,7 +97,7 @@ export const Sidebar = ({
                     <div>
                       <span>{route.icon}</span>
                     </div>
-                    <div className={` ${styles.tooltipText}  `}>
+                    <div className={` ${styles.tooltipText}`}>
                       <span>{route.label}</span>
                     </div>
                   </div>
@@ -118,25 +105,6 @@ export const Sidebar = ({
               </li>
             ))}
           </ul>
-        </div>
-        <div
-          style={{
-            width: "100%",
-            backgroundColor: "red",
-            position: "absolute",
-            bottom: "0",
-          }}
-        >
-          <div style={{ width: "100%", backgroundColor: "red", bottom: "0" }}>
-            <div
-              className={`${styles.logoutCollapse}`}
-              onClick={() => handleLogOut()}
-            >
-              <div className="">
-                <LogOut size={20} />
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>

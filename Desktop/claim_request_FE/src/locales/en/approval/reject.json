@@ -1,0 +1,21 @@
+{
+  "loading": "Loading...",
+  "rejectedClaims": "Rejected Claims",
+  "pleaseWait": "Please wait...",
+  "rejectedMessage": "Bummer, your claim got the boot.",
+  "claims": "Claims",
+  "hideSalary": "Hide Salary",
+  "showSalary": "Show Salary",
+  "fullName": "Full Name",
+  "email": "Email",
+  "startDate": "Start Date",
+  "endDate": "End Date",
+  "totalHours": "Total Hours",
+  "projectId": "Project ID",
+  "projectName": "Project Name",
+  "submittedDate": "Submitted Date",
+  "salary": "Salary",
+  "otRate": "OT Rate",
+  "salaryOvertime": "Salary Overtime",
+  "claimStatus": "Claim Status"
+}

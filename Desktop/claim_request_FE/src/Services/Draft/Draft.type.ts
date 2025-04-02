@@ -10,6 +10,8 @@ interface ClaimDetail {
 interface Project {
   project_id: string;
   project_name: string;
+  start_date: string;
+  end_date: string;
 }
 
 export interface Claim {

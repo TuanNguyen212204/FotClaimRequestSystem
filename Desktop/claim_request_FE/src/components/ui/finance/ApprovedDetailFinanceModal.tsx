@@ -11,6 +11,7 @@ import StatusTag from "@ui/StatusTag/StatusTag";
 import styles from "@ui/finance/ApprovedDetailFinance.module.css";
 import { MoveRight, ChevronDown } from "lucide-react";
 import httpClient from "@/constant/apiInstance";
+import { useTranslation } from 'react-i18next';
 
 const formatDateToMonthDay = (date: string) => {
   const dateObj = new Date(date);
@@ -49,6 +50,7 @@ const ApprovedDetailFinanceModal = ({
   currentPage,
   limit,
 }: ApprovedDetailFinanceModalProps) => {
+  const { t } = useTranslation('approvedetail');
   const dispatch = useDispatch<AppDispatch>();
   const claimDetail = useSelector(selectApprovedDetailFinance);
   const [isChevronDown, setIsChevronDown] = useState<boolean>(false);
@@ -79,8 +81,8 @@ const ApprovedDetailFinanceModal = ({
   const handleOnPay = async () => {
     try {
       const result = await confirmModal({
-        title: "Confirm?",
-        children: "Are you sure you want to proceed with the payment?",
+        title: t('approvedetail.modal.confirmTitle'),
+        children: t('approvedetail.modal.confirmPay'),
         onOk() {
           return httpClient.put(`/finance/claims/paid/${requestId}`);
         },
@@ -109,10 +111,8 @@ const ApprovedDetailFinanceModal = ({
     <Modal
       open={isOpen}
       onCancel={onClose}
-      // onOk={handleOnPay}
-      // buttonCancel="Print"
-      buttonOk="Pay"
-      title="Claim Detail"
+      buttonOk={t('approvedetail.modal.pay')}
+      title={t('approvedetail.title')}
       width={600}
       centered={false}
       position={{ right: 20, top: 23 }}
@@ -121,7 +121,7 @@ const ApprovedDetailFinanceModal = ({
       footerPosition="right"
       footer={
         <div className={styles.payButton}>
-          <button onClick={handleOnPay}>Pay</button>
+          <button onClick={handleOnPay}>{t('approvedetail.modal.pay')}</button>
         </div>
       }
     >
@@ -131,7 +131,7 @@ const ApprovedDetailFinanceModal = ({
           <div className={styles.infoUser1}>
             <img
               src="https://i1.wp.com/upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"
-              title="avatar"
+              title={t('approvedetail.user.avatar')}
               className={styles.avatar}
             />
             <div className={styles.infoUser1Row}>
@@ -144,25 +144,21 @@ const ApprovedDetailFinanceModal = ({
             </div>
           </div>
           <div className={styles.infoUser2}>
-            <p>User ID: {claimDetail?.user_id}</p>
+            <p>{t('approvedetail.user.userId')}: {claimDetail?.user_id}</p>
           </div>
         </div>
         <hr />
         <div className={styles.containerProject}>
           <div className={styles.projectRow}>
-            <span className={styles.projectLabel}>Project ID:</span>
-            <span className={styles.projectValue}>
-              {claimDetail?.project_id}
-            </span>
+            <span className={styles.projectLabel}>{t('approvedetail.project.projectId')}:</span>
+            <span className={styles.projectValue}>{claimDetail?.project_id}</span>
           </div>
           <div className={styles.projectRow}>
-            <span className={styles.projectLabel}>Project Name:</span>
-            <span className={styles.projectValue}>
-              {claimDetail?.project_name}
-            </span>
+            <span className={styles.projectLabel}>{t('approvedetail.project.projectName')}:</span>
+            <span className={styles.projectValue}>{claimDetail?.project_name}</span>
           </div>
           <div className={styles.projectRow}>
-            <span className={styles.projectLabel}>Time Duration:</span>
+            <span className={styles.projectLabel}>{t('approvedetail.claim.timeDuration')}:</span>
             <span className={styles.projectValue}>
               {formatDateToMonthDay(`${claimDetail?.start_date}`)}
               <MoveRight size={20} className={styles.iconMoveRight} />
@@ -170,30 +166,23 @@ const ApprovedDetailFinanceModal = ({
             </span>
           </div>
           <div className={styles.projectRow}>
-            <span className={styles.projectLabel}>Submitted Date:</span>
+            <span className={styles.projectLabel}>{t('approvedetail.claim.submittedDate')}:</span>
             <span className={styles.projectValue}>
               {formatDateToMonthDay(`${claimDetail?.submitted_date}`)}
             </span>
           </div>
           <div className={styles.projectRow}>
-            <span className={styles.projectLabel}>Approved Date:</span>
+            <span className={styles.projectLabel}>{t('approvedetail.claim.approvedDate')}:</span>
             <span className={styles.projectValue}>
               {formatDateToMonthDay(`${claimDetail?.approved_date}`)}
             </span>
           </div>
           <div className={styles.projectRow}>
-            <span className={styles.projectLabel}>Status:</span>
+            <span className={styles.projectLabel}>{t('approvedetail.claim.status')}:</span>
             <span className={styles.projectValue}>
               {claimDetail?.claim_status ? (
                 <StatusTag
-                  status={
-                    claimDetail.claim_status as
-                      | "PENDING"
-                      | "APPROVED"
-                      | "REJECTED"
-                      | "PAID"
-                      | "DRAFT"
-                  }
+                  status={claimDetail.claim_status as "PENDING" | "APPROVED" | "REJECTED" | "PAID" | "DRAFT"}
                 />
               ) : (
                 "-"
@@ -201,59 +190,55 @@ const ApprovedDetailFinanceModal = ({
             </span>
           </div>
           <div className={styles.projectRow}>
-            <span className={styles.projectLabel}>Total Working Hours:</span>
+            <span className={styles.projectLabel}>{t('approvedetail.claim.totalHours')}:</span>
             <span className={styles.projectValue}>
-              {claimDetail?.total_hours} hours
+              {claimDetail?.total_hours} {t('approvedetail.claim.hours')}
             </span>
           </div>
           <div className={styles.projectRow}>
-            <span className={styles.projectLabel}>Salary Overtime:</span>
+            <span className={styles.projectLabel}>{t('approvedetail.claim.salaryOvertime')}:</span>
             <span className={styles.projectValue}>
               {claimDetail?.salary_overtime}
             </span>
           </div>
         </div>
         <div className={styles.containerHistory}>
-          {claimDetail?.claim_details &&
-          claimDetail.claim_details.length > 0 ? (
+          {claimDetail?.claim_details && claimDetail.claim_details.length > 0 && (
             <div className={styles.history}>
               <div className={styles.historyHeader}>
-                <p>History</p>
+                <p>{t('approvedetail.history.title')}</p>
                 <ChevronDown
                   className={styles.historyIcon}
                   onClick={handleHistoryItems}
                 />
               </div>
-              {isChevronDown
-                ? claimDetail.claim_details.map((detail, index) => (
-                    <div key={index} className={styles.historyItem}>
-                      <span className={styles.historyItemDate}>
-                        {formatDateToMonthDay(detail.date)}
+              {isChevronDown && claimDetail.claim_details.map((detail, index) => (
+                <div key={index} className={styles.historyItem}>
+                  <span className={styles.historyItemDate}>
+                    {formatDateToMonthDay(detail.date)}
+                  </span>
+                  <div className={styles.historyItemInfo}>
+                    <div className={styles.historyItemRow}>
+                      <span className={styles.historyItemLabel}>
+                        {t('approvedetail.history.workingHours')}:
                       </span>
-
-                      <div className={styles.historyItemInfo}>
-                        <div className={styles.historyItemRow}>
-                          <span className={styles.historyItemLabel}>
-                            Working Hours:
-                          </span>
-                          <span className={styles.historyItemValue}>
-                            {detail.working_hours} hours
-                          </span>
-                        </div>
-                        <div className={styles.historyItemRow}>
-                          <span className={styles.historyItemLabel}>
-                            Overtime Salary:
-                          </span>
-                          <span className={styles.historyItemValue}>
-                            ${detail.salaryOvertimePerDay}
-                          </span>
-                        </div>
-                      </div>
+                      <span className={styles.historyItemValue}>
+                        {detail.working_hours} {t('approvedetail.claim.totalHours')}
+                      </span>
                     </div>
-                  ))
-                : null}
+                    <div className={styles.historyItemRow}>
+                      <span className={styles.historyItemLabel}>
+                        {t('approvedetail.history.overtimeSalary')}:
+                      </span>
+                      <span className={styles.historyItemValue}>
+                        ${detail.salaryOvertimePerDay}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
-          ) : null}
+          )}
         </div>
       </div>
     </Modal>

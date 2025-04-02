@@ -52,8 +52,8 @@
 }
 
 .summaryCard {
-  width: 250px; /* Cố định độ rộng */
-  height: 150px; /* Cố định độ cao */
+  width: 250px; 
+  height: 150px; 
   padding: 20px;
   border-radius: 10px;
   background-color: #f4f4f4;

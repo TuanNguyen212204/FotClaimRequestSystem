@@ -22,6 +22,7 @@ import { Trash2, FilePen } from "lucide-react";
 import { confirmModal } from "@/components/ui/modal/Modal";
 import { toast } from "react-toastify";
 import { ArrowDown, ArrowUp } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const ProjectInformation: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -32,19 +33,35 @@ const ProjectInformation: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [projectID, setProjectID] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState<string>("All");
   const [UpdateOpen, setUpdateOpen] = useState(false);
   console.log("Dữ liệu lấy từ Redux:", project);
+  const { t } = useTranslation("projectInformation");
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        console.log("Fetching projects for page:", currentPage);
+        console.log(
+          "Fetching projects for page:",
+          currentPage,
+          "with status:",
+          statusFilter
+        );
         const result = await dispatch(
-          fetchAllProjectAsync(currentPage.toString())
+          fetchAllProjectAsync({
+            page: currentPage.toString(),
+            status: statusFilter || "all",
+          })
         );
         console.log("Fetch result:", result);
-        await dispatch(fetchTotalPage({ page: currentPage.toString() }));
+        await dispatch(
+          fetchTotalPage({
+            page: currentPage,
+            status: statusFilter || "all",
+          })
+        );
       } catch (error) {
         console.error("Error fetching projects:", error);
       } finally {
@@ -52,12 +69,20 @@ const ProjectInformation: React.FC = () => {
       }
     };
     fetchData();
-  }, [dispatch, currentPage]);
+  }, [dispatch, currentPage, statusFilter]);
+
+  const handleStatusSelect = (status: string) => {
+    setStatusFilter(status);
+    setSelectedStatus(
+      status === "all" ? "All" : status === "1" ? "Active" : "Inactive"
+    );
+    setCurrentPage(1);
+    setIsDropdownOpen(false);
+  };
 
   useEffect(() => {
     console.log("Current project state:", project);
   }, [project]);
-
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -109,8 +134,13 @@ const ProjectInformation: React.FC = () => {
         try {
           await deleteProject(id);
           console.log("Deleted project with ID:", id);
-          dispatch(fetchAllProjectAsync(currentPage.toString()));
           toast.success("Project deleted successfully!");
+          await dispatch(
+            fetchAllProjectAsync({
+              page: currentPage.toString(),
+              status: statusFilter || "all",
+            })
+          );
         } catch (error) {
           console.error("Error deleting project:", error);
           toast.error("Failed to delete project. Please try again.");
@@ -128,36 +158,37 @@ const ProjectInformation: React.FC = () => {
     console.log("Update project with ID:", id);
     setProjectID(id ? id : "");
     setUpdateOpen(true);
-    console.log(UpdateOpen);
   };
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
-  const [selectedStatus, setSelectedStatus] = useState<string>("All");
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const uniqueStatuses = [
-    "All",
-    ...new Set(project.map((item) => item.project_status)),
-  ];
-
-  const handleStatusSelect = (status: string) => {
-    setSelectedStatus(status);
-    fetchProjectByStatus(status);
-    setCurrentPage(1);
-    setIsDropdownOpen(false);
-  };
-
 
   const columns: Column<Project>[] = [
-    { key: "projectID", dataIndex: "projectID", title: "Project ID" },
-    { key: "projectName", dataIndex: "projectName", title: "Project Name" },
-    { key: "startDate", dataIndex: "startDate", title: "Start Date" },
-    { key: "endDate", dataIndex: "endDate", title: "End Date" },
+    {
+      key: "projectID",
+      dataIndex: "projectID",
+      title: t("projectInformation.table.projectID"),
+    },
+    {
+      key: "projectName",
+      dataIndex: "projectName",
+      title: t("projectInformation.table.projectName"),
+    },
+    {
+      key: "startDate",
+      dataIndex: "startDate",
+      title: t("projectInformation.table.startDate"),
+    },
+    {
+      key: "endDate",
+      dataIndex: "endDate",
+      title: t("projectInformation.table.endDate"),
+    },
     {
       key: "projectStatus",
       dataIndex: "projectStatus",
-      title: "Status",
+      title: t("projectInformation.table.status"),
       cell: ({ value }) => (
         <span
           className={`${styles.statusBadge} ${
@@ -171,7 +202,7 @@ const ProjectInformation: React.FC = () => {
     {
       key: "action",
       dataIndex: "projectID",
-      title: "Action",
+      title: t("projectInformation.table.action"),
       cell: ({ value }) => {
         return (
           <div className={styles.button_container}>
@@ -197,12 +228,15 @@ const ProjectInformation: React.FC = () => {
 
   return (
     <div>
-      <h1>Project Information</h1>
+      <h1>{t("projectInformation.title")}</h1>
 
       {isModalOpen && (
         <div className={styles.editModal}>
           <div>
-            <CreateProject openModal={isModalOpen} setOpenModal={setIsModalOpen} />
+            <CreateProject
+              openModal={isModalOpen}
+              setOpenModal={setIsModalOpen}
+            />
           </div>
         </div>
       )}
@@ -214,48 +248,49 @@ const ProjectInformation: React.FC = () => {
         </div>
       )}
 
-<div className="flex ">
-        <div className={`${styles.filter_section} `}>
-          <div className={styles.filterStatusP}>
-          <p>Filter By Status:</p>
-          </div>
+      <div className="flex items-center mt-5.5 ml-3">
+        <span className="mr-2 text-base font-bold text-gray-700">
+          Filter by status:
+        </span>
+        <div className="relative inline-block text-left ml-1">
           <div
-            className="relative inline-block text-left mt-5.5 ml-3"
+            onClick={toggleDropdown}
+            className="flex items-center justify-between px-4 py-2 text-sm font-medium text-gray-700 bg-white border rounded-md shadow-sm hover:bg-gray-100 focus:outline-none"
           >
-            <div
-              onClick={toggleDropdown}
-              className="flex items-center justify-between px-4 py-2 text-sm font-medium text-gray-700 bg-white border rounded-md shadow-sm hover:bg-gray-100 focus:outline-none"
-            >
-              <span>{selectedStatus}</span>
-              <ArrowDown className="w-4 h-4 ml-2" />
-            </div>
-
-            {isDropdownOpen && (
-              <div className="absolute right-0 z-10 mt-2 origin-top-right bg-white border border-gray-300 rounded-md shadow-lg w-48">
-                <div className="py-1">
-                  {uniqueStatuses.map((status) => (
-                    <div
-                      key={status}
-                      onClick={() => handleStatusSelect(status)}
-                      className="block px-4 py-2 text-sm text-gray-700 w-4/5 text-left hover:bg-gray-200"
-                    >
-                      {status}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+            <span>{selectedStatus}</span>
+            <ArrowDown className="w-4 h-4 ml-2" />
           </div>
+
+          {isDropdownOpen && (
+            <div className="absolute right-0 z-10 mt-2 origin-top-right bg-white border border-gray-300 rounded-md shadow-lg w-48">
+              <div className="py-1">
+                {["all", "1", "2"].map((status) => (
+                  <div
+                    key={status}
+                    onClick={() => handleStatusSelect(status)}
+                    className="block px-4 py-2 text-sm text-black w-4/5 text-left hover:bg-gray-200"
+                  >
+                    {status === "all"
+                      ? "All"
+                      : status === "1"
+                      ? "Active"
+                      : "Inactive"}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
+      {/* <FilterStatus /> */}
 
       <TableComponent
         // ref={tableRef as any}
         isHaveCheckbox={false}
         columns={columns}
         dataSource={dataSource}
-        loading={true}
+        loading={loading}
         pagination={true}
         name="Status"
         createButton={true}

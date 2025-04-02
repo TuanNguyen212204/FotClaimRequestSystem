@@ -1,5 +1,5 @@
 import React from "react";
-import { RejectedClaimByUserID } from "./RejectedClaimByUserID";
+import RejectedClaimByUserID from "./RejectedClaimByUserID";
 const RejectedClaimByUserPage = () => {
   return (
     <div>

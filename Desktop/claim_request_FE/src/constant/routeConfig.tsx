@@ -22,12 +22,21 @@ import {
 } from "lucide-react";
 import { MdOutlinePendingActions, MdPaid } from "react-icons/md";
 import { FaCheck } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
+
+//       setSelectedClaim(PATH.userInfo as string);
 
 export const PUBLIC_ROUTE: RouteConfig[] = [
   {
     component: lazy(() => import("@ui/login/LoginForm")),
     path: PATH.login,
     label: "Login",
+    protected: false,
+  },
+  {
+    component: lazy(() => import("@pages/laningPage")),
+    path: PATH.home,
+    label: "Landing Page",
     protected: false,
   },
   {
@@ -210,12 +219,20 @@ export const PRIVATE_ROUTE: RouteConfig[] = [
     label: "Approved Detail",
     icon: <FileCheck size={24} />,
   },
+  // {
+  //   path: `${PATH.claimStatus}/:id`,
+  //   component: lazy(() => import("@pages/Finance/ClaimStatus")),
+  //   protected: false,
+  //   label: "Claim Status",
+  //   icon: <FileText size={24} />,
+  //   role: [ROLE.FINANCE],
+  // },
   {
-    path: `${PATH.claimStatus}/:id`,
-    component: lazy(() => import("@pages/Finance/ClaimStatus")),
-    protected: false,
-    label: "Claim Status",
-    icon: <FileText size={24} />,
-    role: [ROLE.FINANCE],
+    path: PATH.draftApproval,
+    component: lazy(() => import("@pages/Approver/DraftApproval")),
+    protected: true,
+    label: "Draft Approval",
+    icon: <FilePlus size={24} />,
+    role: [ROLE.APPROVER],
   },
 ];

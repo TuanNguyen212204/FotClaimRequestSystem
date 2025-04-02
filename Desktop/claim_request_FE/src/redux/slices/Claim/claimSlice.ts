@@ -9,6 +9,7 @@ import {
   ClaimApprovedApprover,
   ClaimApprovedFinance,
   MyClaimDetail,
+  DraftApproval
 } from "@/types/Claim";
 
 import {
@@ -27,6 +28,7 @@ import {
   fetchClaimByUserWithDraftStatusAsync,
   fetchMyClaimDetailAsync,
   fetchTotalClaimByUserAsync,
+  fetchAllDraftClaimAsync,
 } from "@/redux/thunk/Claim/claimThunk";
 
 const initialState: {
@@ -36,6 +38,7 @@ const initialState: {
   listClaimApprovedApprover: ClaimApprovedApprover[];
   detailClaimApprovedApprover: DetailClaimApprover | null;
   // listClaimApproved: ApprovedClaim[]; cái này dùng mà sai tên
+  listClaimDraft: DraftApproval[];
   detailClaimPending: DetailPendingClaim | null;
   listClaimPending: PendingClaim[];
   listClaimRejected: RejectedClaim[];
@@ -53,6 +56,7 @@ const initialState: {
   listClaimApprovedApprover: [],
   detailClaimApprovedApprover: null as DetailClaimApprover | null,
   // listClaimApproved: [],
+  listClaimDraft: [],
   listClaimPending: [],
   detailClaimPending: null as DetailPendingClaim | null,
   listClaimApprovedFiance: [],
@@ -191,6 +195,19 @@ export const claimSlice = createSlice({
         state.totalPages = action.payload.totalPages;
       })
       .addCase(fetchAllRejectedClaimAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      //fetch all draft claim with role is Approver
+      .addCase(fetchAllDraftClaimAsync.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = String(action.error.message);
+      })
+      .addCase(fetchAllDraftClaimAsync.fulfilled, (state, action) => {
+        state.status = "success";
+        state.listClaimDraft = action.payload.data;
+        state.totalPages = action.payload.totalPages;
+      })
+      .addCase(fetchAllDraftClaimAsync.pending, (state) => {
         state.status = "loading";
       })
       //my claim is with approved status

@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
+import { HTTP_STATUS } from "./httpStatus";
 
 export class HttpClient {
   private createAxios: AxiosInstance;
@@ -33,19 +34,26 @@ export class HttpClient {
             break;
           case 403:
             console.log("API: 403 Forbidden");
-            window.location.href = "/";
+            window.location.href = `/error/${HTTP_STATUS.FORBIDDEN}`;
             break;
           case 404:
             console.log("API: 404 Not Found");
+            window.location.href = `/error/${HTTP_STATUS.NOT_FOUND}`;
             break;
           case 500:
             console.log("API: 500 Internal Server Error");
+            window.location.href = `/error/${HTTP_STATUS.INTERNAL_SERVER_ERROR}`;
             break;
           case 502:
             console.log("API: 502 Bad Gateway");
             break;
+          case 503:
+            console.log("API: 503 Server Unavailable");
+            window.location.href = `/error/${HTTP_STATUS.SERVICE_UNAVAILABLE}`;
+            break;
           default:
             console.error(`API Error: ${status}`);
+          // window.location.href = `/error/${HTTP_STATUS.NOT_FOUND}`;
         }
         return Promise.reject(error);
       }

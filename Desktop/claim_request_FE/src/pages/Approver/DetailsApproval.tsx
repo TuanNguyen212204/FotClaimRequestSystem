@@ -12,6 +12,7 @@ import styles from "./DetailsApproval.module.css";
 import StatusTag from "@/components/ui/StatusTag/StatusTag";
 import { toast } from "react-toastify";
 import httpClient from "@/constant/apiInstance.ts";
+import { useTranslation } from "react-i18next";
 
 const formatDateToMonthDay = (date: string) => {
   const dateObj = new Date(date);
@@ -50,6 +51,7 @@ export const DetailsApproval: React.FC<PendingDetailModalProps> = ({
   currentPage,
   limit,
 }) => {
+  const { t } = useTranslation("details");
   const dispatch = useDispatch<AppDispatch>();
   const claimDetail = useSelector(selectAllDetailPending);
   const [isChevronDown, setIsChevronDown] = useState<boolean>(false);
@@ -108,9 +110,9 @@ export const DetailsApproval: React.FC<PendingDetailModalProps> = ({
       open={isOpen}
       onCancel={onClose}
       onOk={() => handleApproveClaimDetention(requestId)}
-      buttonCancel="Close"
-      buttonOk="Approve"
-      title="Claim Detail"
+      buttonCancel={t("closeButton")}
+      buttonOk={t("approveButton")}
+      title={t("claimDetailTitle")}
       width={600}
       centered={false}
       position={{ right: 5, top: 23 }}
@@ -138,20 +140,20 @@ export const DetailsApproval: React.FC<PendingDetailModalProps> = ({
           <hr className={styles.divider} />
           <div className={styles.containerProject}>
             <div className={styles.projectRow}>
-              <span className={styles.projectLabel}>Project ID:</span>
+              <span className={styles.projectLabel}>{t("projectId")}:</span>
               <span className={styles.projectValue}>
                 {claimDetail?.project_id}
               </span>
             </div>
             <div className={styles.projectRow}>
-              <span className={styles.projectLabel}>Project Name:</span>
+              <span className={styles.projectLabel}>{t("projectName")}:</span>
               <span className={styles.projectValue}>
                 {claimDetail?.project_name}
               </span>
             </div>
 
             <div className={styles.projectRow}>
-              <span className={styles.projectLabel}>Time Duration:</span>
+              <span className={styles.projectLabel}>{t("timeDuration")}:</span>
               <span className={styles.projectValue}>
                 {formatDateToMonthDay(`${claimDetail?.start_date}`)}
                 <MoveRight size={20} className={styles.iconMoveRight} />
@@ -159,13 +161,13 @@ export const DetailsApproval: React.FC<PendingDetailModalProps> = ({
               </span>
             </div>
             <div className={styles.projectRow}>
-              <span className={styles.projectLabel}>Submitted Date:</span>
+              <span className={styles.projectLabel}>{t("submittedDate")}:</span>
               <span className={styles.projectValue}>
                 {formatDateToMonthDay(`${claimDetail?.submitted_date}`)}
               </span>
             </div>
             <div className={styles.projectRow}>
-              <span className={styles.projectLabel}>Status:</span>
+              <span className={styles.projectLabel}>{t("status")}:</span>
               <span className={styles.projectValue}>
                 {claimDetail?.claim_status ? (
                   <StatusTag
@@ -183,9 +185,11 @@ export const DetailsApproval: React.FC<PendingDetailModalProps> = ({
               </span>
             </div>
             <div className={styles.projectRow}>
-              <span className={styles.projectLabel}>Total Working Hours:</span>
+              <span className={styles.projectLabel}>
+                {t("totalWorkingHours")}:
+              </span>
               <span className={styles.projectValue}>
-                {claimDetail?.total_hours} hours
+                {claimDetail?.total_hours} {t("hours")}
               </span>
             </div>
           </div>
@@ -194,7 +198,7 @@ export const DetailsApproval: React.FC<PendingDetailModalProps> = ({
               claimDetail.claim_details.length > 0 ? (
               <div className={styles.history}>
                 <div className={styles.historyHeader}>
-                  <p>History</p>
+                  <p>{t("history")}</p>
                   {isChevronDown ? (
                     <ChevronUp
                       className={styles.historyIcon}
@@ -217,10 +221,10 @@ export const DetailsApproval: React.FC<PendingDetailModalProps> = ({
                       <div className={styles.historyItemInfo}>
                         <div className={styles.historyItemRow}>
                           <span className={styles.historyItemLabel}>
-                            Working Hours:
+                            {t("workingHours")}:
                           </span>
                           <span className={styles.historyItemValue}>
-                            {detail.working_hours} hours
+                            {detail.working_hours} {t("hours")}
                           </span>
                         </div>
                       </div>

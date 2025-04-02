@@ -1,0 +1,63 @@
+{
+  "allUserInformation": {
+    "table": {
+      "fullName": "Full Name",
+      "userName": "Username",
+      "email": "Email",
+      "department": "Department",
+      "jobRank": "Job Rank",
+      "status": "Status",
+      "assign": "Assign",
+      "action": "Action",
+      "role": "Role"
+    },
+    "filter": "Filter By",
+    "createUser": {
+      "title": "Create User",
+      "fullName": "Full Name",
+      "email": "Email",
+      "department": "Department",
+      "salary": "Salary",
+      "roleID": "Role ID",
+      "selectRoleID": "Select Role ID",
+      "jobRank": "Job Rank",
+      "validation": {
+        "fullName": "Full name is required",
+        "email": "Email is required",
+        "department": "Deparment is required",
+        "salary": "Salary is required",
+        "roleID": "Role ID is required",
+        "jobRank": "Job Rank is required",
+        "minLength": "Must be at least 3 characters",
+        "maxLength": "Must be at most 50 characters",
+        "salaryMessage": "Salary must greater than 0 "
+      }
+    },
+    "updateUser": {
+      "title": "Update User",
+      "fullName": "Full Name",
+      "email": "Email",
+      "department": "Department",
+      "roleID": "Role ID",
+      "selectRoleID": "Select Role ID",
+      "jobRank": "Job Rank",
+      "validation": {
+        "fullName": "Full name is required",
+        "email": "Email is required",
+        "department": "Deparment is required",
+        "roleID": "Role ID is required",
+        "jobRank": "Job Rank is required"
+      }
+    },
+    "assignUser": {
+      "title": "Assign User",
+      "project": "Project",
+      "projectName": "Project Name",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "projectStatus": "Project Status"
+    },
+    "buttonCreate": "Submit",
+    "buttonUpdate": "Update"
+  }
+}
