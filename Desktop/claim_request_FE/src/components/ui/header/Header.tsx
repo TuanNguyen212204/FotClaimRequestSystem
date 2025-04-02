@@ -270,7 +270,7 @@ const Header: React.FC = () => {
               onClick={!disableMarkAll ? handleMarkAllAsRead : undefined}
             >
               <FaCheck style={{ marginRight: 5 }} />
-              {t("Mark All As Read")}
+              {t("mark_all_as_read")}
             </div>
             <div
               style={{
@@ -282,7 +282,7 @@ const Header: React.FC = () => {
               onClick={handleDeleteAllNoti}
             >
               <FaTrash style={{ marginRight: 5 }} />
-              {t("Clear All")}
+              {t("clear_all")}
             </div>
           </div>
           {Array.isArray(notifications) && notifications.length > 0 ? (
@@ -304,7 +304,7 @@ const Header: React.FC = () => {
                     <FaExclamationTriangle
                       style={{ marginRight: 5, fontSize: 12 }}
                     />
-                    <span className={styles.noti}>Notification</span>
+                    <span className={styles.noti}>{t("notification")}</span>
                   </div>
                   <div style={{ display: "flex", alignItems: "center" }}>
                     <span

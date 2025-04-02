@@ -1,6 +1,7 @@
 {
   "Search": "Tìm kiếm",
   "Hello": "Xin Chào",
-  "Mark All As Read": "Đánh dấu tất cả đã đọc",
-  "Clear All": "Xóa tất cả"
+  "mark_all_as_read": "Đánh dấu tất cả đã đọc",
+  "clear_all": "Xóa tất cả",
+  "notification": "Thông báo"
 }

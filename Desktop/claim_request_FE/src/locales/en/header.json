@@ -1,6 +1,7 @@
 {
     "Search": "Search",
     "Hello": "Hello",
-    "Mark All As Read": "Mark All As Read",
-    "Clear All": "Clear All"
+    "mark_all_as_read": "Mark All As Read",
+    "clear_all": "Clear All",
+    "notification": "Notification"
 }
