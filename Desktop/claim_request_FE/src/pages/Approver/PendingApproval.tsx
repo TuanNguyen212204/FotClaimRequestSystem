@@ -26,6 +26,7 @@ import StatusTag, { StatusType } from "@/components/ui/StatusTag/StatusTag";
 import { DetailsApproval } from "./DetailsApproval";
 import { Button } from "@/components/ui/button/Button";
 import { useTranslation } from "react-i18next";
+import { formatDate } from "@/utils/date.ts";
 
 export const PendingComponent: React.FC = () => {
   const { t } = useTranslation("pending");
@@ -51,7 +52,7 @@ export const PendingComponent: React.FC = () => {
       fetchAllPendingClaimAsync({
         page: currentPage.toString(),
         limit: limit.toString(),
-      })
+      }),
     ).finally(() => setLoading(false));
   }, [currentPage]);
 
@@ -119,7 +120,7 @@ export const PendingComponent: React.FC = () => {
             fetchAllPendingClaimAsync({
               page: currentPage.toString(),
               limit: limit.toString(),
-            })
+            }),
           );
           toast.success("Claim approved successfully!");
         } catch (error) {
@@ -143,7 +144,7 @@ export const PendingComponent: React.FC = () => {
             fetchAllPendingClaimAsync({
               page: currentPage.toString(),
               limit: limit.toString(),
-            })
+            }),
           );
           toast.success("Claim rejected successfully!");
         } catch (error) {
@@ -167,7 +168,7 @@ export const PendingComponent: React.FC = () => {
             fetchAllPendingClaimAsync({
               page: currentPage.toString(),
               limit: limit.toString(),
-            })
+            }),
           );
           toast.success("Claim returned successfully!");
         } catch (error) {
@@ -198,7 +199,7 @@ export const PendingComponent: React.FC = () => {
             fetchAllPendingClaimAsync({
               page: currentPage.toString(),
               limit: limit.toString(),
-            })
+            }),
           );
           toast.success("Selected claims approved successfully!");
         } catch (error) {
@@ -228,7 +229,7 @@ export const PendingComponent: React.FC = () => {
             fetchAllPendingClaimAsync({
               page: currentPage.toString(),
               limit: limit.toString(),
-            })
+            }),
           );
           toast.success("Selected claims reject successfully!");
         } catch (error) {
@@ -258,7 +259,7 @@ export const PendingComponent: React.FC = () => {
             fetchAllPendingClaimAsync({
               page: currentPage.toString(),
               limit: limit.toString(),
-            })
+            }),
           );
           toast.success("Selected claims return successfully!");
         } catch (error) {
@@ -274,7 +275,7 @@ export const PendingComponent: React.FC = () => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-    }, 500);
+    }, 2500);
     setSelectedRequestId(value);
     setOpenModal(true);
   };
@@ -291,7 +292,14 @@ export const PendingComponent: React.FC = () => {
     const year = dateObj.getFullYear();
     return `${day}/${month}/${year}`;
   };
-
+  const formatDateRange = (dateRange: any) => {
+    return dateRange.replace(
+      /(\d{1,2})\/(\d{1,2})\/(\d{4})/g,
+      (match, day, month, year) => {
+        return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
+      },
+    );
+  };
   const columns: Column<DataRecord>[] = [
     {
       key: "user_name",
@@ -307,13 +315,15 @@ export const PendingComponent: React.FC = () => {
       key: "start_date",
       dataIndex: "start_date",
       title: t("columns.startDate"),
-      cell: ({ value }) => formatDateToDDMMYYYY(value as string),
+      cell: ({ value }) =>
+        formatDateRange(formatDateToDDMMYYYY(value as string)),
     },
     {
       key: "end_date",
       dataIndex: "end_date",
       title: t("columns.endDate"),
-      cell: ({ value }) => formatDateToDDMMYYYY(value as string),
+      cell: ({ value }) =>
+        formatDateRange(formatDateToDDMMYYYY(value as string)),
     },
     {
       key: "total_hours",
@@ -334,7 +344,8 @@ export const PendingComponent: React.FC = () => {
       key: "submitted_date",
       dataIndex: "submitted_date",
       title: t("columns.submittedDate"),
-      cell: ({ value }) => formatDateToDDMMYYYY(value as string),
+      cell: ({ value }) =>
+        formatDateRange(formatDateToDDMMYYYY(value as string)),
     },
     // {
     //   key: "salary",
@@ -417,40 +428,41 @@ export const PendingComponent: React.FC = () => {
   return (
     <div>
       <div className={styles.container}>
-        <h1 className={styles.title}>{loading ? t("loading") : t("title")}</h1>
-        <p className={styles.title2}>
-          {loading ? t("pleaseWait") : t("subtitle")}
-        </p>
-      </div>
-      <div className={styles.buttonContainer}>
-        <Button
-          color="white"
-          backgroundColor="#89AC46"
-          size="small"
-          style={{ borderRadius: "10px" }}
-          onClick={handleApproveSelect}
-          disabled={loading}
-        >
-          {loading ? "..." : t("approveSelected")}
-        </Button>
-        <Button
-          danger
-          size="small"
-          onClick={handleRejectSelect}
-          style={{ borderRadius: "10px" }}
-          disabled={loading}
-        >
-          {loading ? "..." : t("rejectSelected")}
-        </Button>
-        <Button
-          type="primary"
-          size="small"
-          onClick={handleReturnSelect}
-          style={{ borderRadius: "10px" }}
-          disabled={loading}
-        >
-          {loading ? "..." : t("returnSelected")}
-        </Button>
+        <div className="flex">
+          <h1 className={styles.title}>{t("title")}</h1>
+          <p className={styles.title2}>{t("subtitle")}</p>
+        </div>
+        <div className={styles.buttonContainer}>
+          {!loading && (
+            <>
+              <Button
+                color="white"
+                backgroundColor="#89AC46"
+                size="small"
+                style={{ borderRadius: "10px" }}
+                onClick={handleApproveSelect}
+              >
+                {t("approveSelected")}
+              </Button>
+              <Button
+                danger
+                size="small"
+                onClick={handleRejectSelect}
+                style={{ borderRadius: "10px" }}
+              >
+                {t("rejectSelected")}
+              </Button>
+              <Button
+                type="primary"
+                size="small"
+                onClick={handleReturnSelect}
+                style={{ borderRadius: "10px" }}
+              >
+                {t("returnSelected")}
+              </Button>
+            </>
+          )}
+        </div>
       </div>
       <TableComponent
         ref={checkboxRef}

@@ -24,5 +24,6 @@
   "status_paid": "Đã thanh toán",
   "status_draft": "Bản nháp",
   "cancel_button": "Hủy",
-  "confirm_button": "Xác nhận"
+  "confirm_button": "Xác nhận",
+  "language": "vi"
 }

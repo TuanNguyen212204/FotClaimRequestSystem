@@ -38,7 +38,7 @@ export class HttpClient {
             break;
           case 404:
             console.log("API: 404 Not Found");
-            window.location.href = `/error/${HTTP_STATUS.NOT_FOUND}`;
+            // window.location.href = `/error/${HTTP_STATUS.NOT_FOUND}`;
             break;
           case 500:
             console.log("API: 500 Internal Server Error");

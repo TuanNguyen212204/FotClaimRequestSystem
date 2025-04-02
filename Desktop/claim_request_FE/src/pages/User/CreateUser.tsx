@@ -66,7 +66,7 @@ export const Select: React.FC<SelectProps> = ({
 }) => {
   return (
     <select
-      className={`p-2 border rounded ${className}`}
+      className={`rounded border p-2 ${className}`}
       value={value}
       {...register}
       onChange={(e) =>
@@ -74,8 +74,8 @@ export const Select: React.FC<SelectProps> = ({
           ? onChange(
               Array.from(
                 e.target.selectedOptions,
-                (option) => option.value
-              ).join(",")
+                (option) => option.value,
+              ).join(","),
             )
           : onChange(e.target.value)
       }
@@ -115,9 +115,8 @@ export const CreateUser: React.FC<CreateUserProps> = ({
   // Chỗ này để fetch api lấy list department từ BE về
   const fetchDepartment = async () => {
     try {
-      const response = await httpClient.get<ApiResponseNoGeneric>(
-        `/admin/departments`
-      );
+      const response =
+        await httpClient.get<ApiResponseNoGeneric>(`/admin/departments`);
       setDepartment(response.data.data);
     } catch (error) {
       console.error("Fetch department error:", error);
@@ -126,9 +125,8 @@ export const CreateUser: React.FC<CreateUserProps> = ({
   // Chỗ này fetch api lấy list job rank từ BE về
   const fetchJobRank = async () => {
     try {
-      const response = await httpClient.get<ApiResponseNoGeneric>(
-        `/admin/job-ranks`
-      );
+      const response =
+        await httpClient.get<ApiResponseNoGeneric>(`/admin/job-ranks`);
       setJobRank(response.data.data);
     } catch (error) {
       console.error("Fetch job rank error:", error);
@@ -147,7 +145,7 @@ export const CreateUser: React.FC<CreateUserProps> = ({
     try {
       const response = httpClient.post<ApiResponseNoGeneric>(
         "/admin/create-staff",
-        data
+        data,
       );
       if ((await response).status === 200) {
         toast.success("Create user successfully!");
@@ -191,7 +189,7 @@ export const CreateUser: React.FC<CreateUserProps> = ({
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        handleCancel(); // Gọi hàm cancel khi nhấn Escape
+        handleCancel();
       }
     };
 
@@ -213,7 +211,7 @@ export const CreateUser: React.FC<CreateUserProps> = ({
         )}
       </div>
       <div style={{ marginTop: "50px" }}>
-        <div className=" mx-auto  pr-0 pb-5   bg-white shadow-xl rounded-xl">
+        <div className="mx-auto rounded-xl bg-white pr-0 pb-5 shadow-xl">
           <div>
             <button
               onClick={() => handleCancel()}
@@ -224,7 +222,7 @@ export const CreateUser: React.FC<CreateUserProps> = ({
               </div>
             </button>
           </div>
-          <h1 className="text-3xl font-bold text-green-700 mb-6 text-center">
+          <h1 className="mb-6 text-center text-3xl font-bold text-green-700">
             {t("allUserInformation.createUser.title")}
           </h1>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
@@ -247,25 +245,25 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                 id="full_name"
                 {...register("full_name", {
                   required: t(
-                    "allUserInformation.createUser.validation.fullName"
+                    "allUserInformation.createUser.validation.fullName",
                   ),
                   minLength: {
                     value: 3,
                     message: t(
-                      "allUserInformation.createUser.validation.minLength"
+                      "allUserInformation.createUser.validation.minLength",
                     ),
                   },
                   maxLength: {
                     value: 100,
                     message: t(
-                      "allUserInformation.createUser.validation.maxLength"
+                      "allUserInformation.createUser.validation.maxLength",
                     ),
                   },
                 })}
-                className="mt-1 w-4/5 p-2 h-6 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+                className="mt-1 h-6 w-4/5 rounded-lg border border-gray-300 p-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               />
               {errors.full_name && (
-                <p className="text-red-500 text-sm mt-1">
+                <p className="mt-1 text-sm text-red-500">
                   {errors.full_name.message}
                 </p>
               )}
@@ -290,10 +288,10 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                 {...register("email", {
                   required: t("allUserInformation.createUser.validation.email"),
                 })}
-                className="mt-1 w-4/5 p-2 h-6 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+                className="mt-1 h-6 w-4/5 rounded-lg border border-gray-300 p-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               />
               {errors.email && (
-                <p className="text-red-500 text-sm mt-1">
+                <p className="mt-1 text-sm text-red-500">
                   {errors.email.message}
                 </p>
               )}
@@ -331,7 +329,7 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                 register={{
                   ...register("department", {
                     required: t(
-                      "allUserInformation.createUser.validation.department"
+                      "allUserInformation.createUser.validation.department",
                     ),
                   }),
                 }}
@@ -346,11 +344,11 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                 // }}
                 placeholder="Select Department"
                 onChange={(value) => console.log(value)}
-                className="mt-1  h-11 w-83.5 p-2 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+                className="mt-1 h-11 w-83.5 rounded-lg border border-gray-300 p-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               />
 
               {errors.department && (
-                <p className="text-red-500 text-sm mt-1">
+                <p className="mt-1 text-sm text-red-500">
                   {errors.department.message}
                 </p>
               )}
@@ -373,19 +371,19 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                 id="salary"
                 {...register("salary", {
                   required: t(
-                    "allUserInformation.createUser.validation.salary"
+                    "allUserInformation.createUser.validation.salary",
                   ),
                   minLength: {
                     value: 0,
                     message: t(
-                      "allUserInformation.createUser.validation.salaryMesssage"
+                      "allUserInformation.createUser.validation.salaryMesssage",
                     ),
                   },
                 })}
-                className="mt-1 w-4/5 p-2 h-6 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+                className="mt-1 h-6 w-4/5 rounded-lg border border-gray-300 p-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               />
               {errors.salary && (
-                <p className="text-red-500 text-sm mt-1">
+                <p className="mt-1 text-sm text-red-500">
                   {errors.salary.message}
                 </p>
               )}
@@ -420,10 +418,10 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                 register={register("role_id")}
                 onChange={(value) => console.log(value)}
                 placeholder="Select Role ID"
-                className="mt-1  h-11 w-83.5 p-2  border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+                className="mt-1 h-11 w-83.5 rounded-lg border border-gray-300 p-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               />
               {errors.role_id && (
-                <p className="text-red-500 text-sm mt-1">
+                <p className="mt-1 text-sm text-red-500">
                   {errors.role_id.message}
                 </p>
               )}
@@ -463,17 +461,17 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                 register={{
                   ...register("job_rank", {
                     required: t(
-                      "allUserInformation.createUser.validation.jobRank"
+                      "allUserInformation.createUser.validation.jobRank",
                     ),
                   }),
                 }}
                 placeholder="Select Job Rank"
                 onChange={(value) => console.log(value)}
-                className="mt-1  h-11 w-83.5 p-2  border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+                className="mt-1 h-11 w-83.5 rounded-lg border border-gray-300 p-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               />
 
               {errors.job_rank && (
-                <p className="text-red-500 text-sm mt-1">
+                <p className="mt-1 text-sm text-red-500">
                   {errors.job_rank.message}
                 </p>
               )}
