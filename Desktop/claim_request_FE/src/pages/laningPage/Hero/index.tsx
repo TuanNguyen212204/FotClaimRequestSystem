@@ -153,7 +153,7 @@ export default function Herro() {
             transition={{ duration: 1, delay: contentStartDelay + 1.1 }}
           >
             {" "}
-            <button className="font-pixelify cursor-pointer border-2 border-white bg-transparent px-8 py-3 text-lg font-bold text-white transition-colors duration-300 ease-in-out hover:bg-white hover:text-black">
+            <button className="font-pixelify cursor-pointer border-2 border-white bg-transparent px-8 py-3 text-lg font-bold text-white transition-colors duration-300 ease-in-out hover:bg-white! hover:text-black">
               GET STARTED NOW!
             </button>
           </motion.div>
