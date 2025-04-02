@@ -1,6 +1,8 @@
 .container {
   font-weight: 50;
   justify-items: center;
+  font-family: Roboto;
+  font-weight: 400;
 }
 
 .avatar {

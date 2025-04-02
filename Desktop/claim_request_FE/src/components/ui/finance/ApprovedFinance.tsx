@@ -12,6 +12,7 @@ import {
   selectApprovedClaimTotalPages,
 } from "@/redux/selector/claimSelector";
 import ApprovedDetailFinanceModal from "@ui/finance/ApprovedDetailFinanceModal";
+import StatusTag, { StatusType } from "../StatusTag/StatusTag";
 
 // interface claimList {
 //   claim_id?: string;
@@ -38,7 +39,7 @@ export const ApprovedFinanceComponent: React.FC = () => {
   const totalPages = useSelector(selectApprovedClaimTotalPages);
   const [loading, setLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [limit] = useState(7);
+  const [limit] = useState(10);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRequestId, setSelectedRequestId] = useState<string>("");
 
@@ -103,6 +104,12 @@ export const ApprovedFinanceComponent: React.FC = () => {
       },
     },
     {
+      key: "status",
+      dataIndex: "status",
+      title: "Claim Status",
+      cell: ({ value }) => <StatusTag status={value as StatusType} />,
+    },
+    {
       key: "action",
       dataIndex: "request_id",
       title: "Action",
@@ -133,6 +140,7 @@ export const ApprovedFinanceComponent: React.FC = () => {
       start_date: claim.start_date || null,
       end_date: claim.end_date || null,
       full_name: claim.full_name || "",
+      status: claim.claim_status || "",
       time_duration:
         claim.start_date && claim.end_date
           ? `${formatDateToDDMMYYYY(claim.start_date)} - ${formatDateToDDMMYYYY(
@@ -143,16 +151,20 @@ export const ApprovedFinanceComponent: React.FC = () => {
   });
   return (
     <div>
-      <h1>{t("finance.title")}</h1>
-      <TableComponent
-        columns={columns}
-        dataSource={dataSource}
-        loading={loading}
-        totalPage={totalPages}
-        pagination={true}
-        name="Claims"
-        onPageChange={handlePageChange}
-      />
+      <div className={styles.header}>
+        <h1>{t("finance.title")}</h1>
+      </div>
+      <div className={styles.containerTable}>
+        <TableComponent
+          columns={columns}
+          dataSource={dataSource}
+          loading={loading}
+          totalPage={totalPages}
+          pagination={true}
+          name="Claims"
+          onPageChange={handlePageChange}
+        />
+      </div>
     </div>
   );
 };
