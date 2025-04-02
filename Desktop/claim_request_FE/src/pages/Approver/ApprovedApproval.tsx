@@ -146,9 +146,9 @@ export const ApprovedApproval: React.FC = () => {
   return (
     <div>
       <div className={styles.container}>
-        <h1 className={styles.title}>{loading ? t("loading") : t("title")}</h1>
+        <h1 className={styles.title}>{t("title")}</h1>
         <p className={styles.title2}>
-          {loading ? t("loadingMessage") : t("successMessage")}
+          {t("successMessage")}
         </p>
       </div>
       <TableComponent

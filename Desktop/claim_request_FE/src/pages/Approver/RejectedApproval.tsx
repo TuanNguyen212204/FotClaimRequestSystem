@@ -142,10 +142,10 @@ export const RejectedComponent: React.FC = () => {
     <div>
       <div className={styles.container}>
         <h1 className={styles.title}>
-          {loading ? t("loading") : t("rejectedClaims")}
+          {t("rejectedClaims")}
         </h1>
         <p className={styles.title2}>
-          {loading ? t("pleaseWait") : t("rejectedMessage")}
+          {t("rejectedMessage")}
         </p>
       </div>
       {/* <button onClick={toggleSalaryVisibility}>
