@@ -25,18 +25,53 @@ const PendingClaimByUserID = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedClaim, setSelectedClaim] = useState<string>("");
   const [limit] = useState(5);
+  const formatDateRange = (dateRange: any) => {
+    return dateRange.replace(
+      /(\d{1,2})\/(\d{1,2})\/(\d{4})/g,
+      (match, day, month, year) => {
+        return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
+      },
+    );
+  };
+
+  // useEffect(() => {
+  //   setLoading(true);
+  //   const fetchData = async () => {
+  //     await dispatch(fetchClaimByUserAsync());
+  //     setLoading(false);
+  //   };
+  //   fetchData();
+  // }, [dispatch, currentPage]);
+  // useEffect(() => {
+  //   console.log(userClaim);
+  // }, [userClaim]);
+
+  // const handleViewDetail = (id: string) => {
+  //   setSelectedClaim(id);
+  //   setIsModalOpen(true);
+  // };
+
+  // useEffect(() => {
+  //   setLoading(true);
+  //   const fetchData = async () => {
+  //     await dispatch(
+  //       fetchClaimByUserAsync({ page: currentPage, status: "PENDING" }),
+  //     );
+  //     setLoading(false);
+  //     dispatch(fetchTotalClaimByUserAsync({ status: "PENDING" }));
+  //   };
+  //   fetchData();
+  //   console.log(totalPage);
+  // }, [currentPage, dispatch, totalPage]);
 
   useEffect(() => {
     setLoading(true);
     const fetchData = async () => {
-      try {
-        await Promise.all([
-          dispatch(fetchClaimByUserWithPendingStatusAsync({ page: currentPage })).unwrap(),
-          dispatch(fetchTotalClaimByUserAsync({ status: "PENDING" })).unwrap(),
-        ]);
-      } finally {
-        setLoading(false);
-      }
+      await dispatch(
+        fetchClaimByUserAsync({ page: currentPage, status: "PENDING" }),
+      );
+      await dispatch(fetchTotalClaimByUserAsync({ status: "PENDING" }));
+      setLoading(false);
     };
     fetchData();
   }, [currentPage, dispatch]);
@@ -88,7 +123,7 @@ const PendingClaimByUserID = () => {
       key: "submitted_date",
       dataIndex: "submitted_date",
       title: t("submitted_date_label"),
-      cell: ({ value }) => <span>{formatDateToDDMMYYYY(value as string)}</span>,
+      cell: ({ value }) => <span>{formatDateToDDMMYYYY(value as string),}</span>,
     },
     {
       key: "claim_status",
@@ -138,23 +173,45 @@ const PendingClaimByUserID = () => {
     time_duration:
       claim.start_date && claim.end_date
         ? `${formatDateToDDMMYYYY(claim.start_date)} - ${formatDateToDDMMYYYY(
-            claim.end_date
+            claim.end_date,
           )}`
         : t("no_data"),
   }));
 
   return (
-    <div className={styles.container}>
-      <TableComponent
-        columns={columns}
-        dataSource={dataSource}
-        loading={loading}
-        pagination={true}
-        name={t("pending_claims_title")}
-        totalPage={totalPage}
-        onPageChange={handlePageChange}
-      />
-    </div>
+    // <div className={styles.container}>
+    //   <TableComponent
+    //     columns={columns}
+    //     dataSource={dataSource}
+    //     loading={loading}
+    //     pagination={true}
+    //     name="My Claims"
+    //     totalPage={totalPage}
+    //     onPageChange={handlePageChange}
+    //   />
+    // </div>
+    <>
+      <div className="mt-2 p-0">
+        <div className="mb-10 ml-5">
+          <h1 className="m-0 p-0">Pending Claims</h1>
+          <p className="m-0 p-0">
+            Here you can view all pending claims and their statuses.
+          </p>
+        </div>
+        <div className={`${styles.tableContainer}`}>
+          <TableComponent
+            isHaveCheckbox={false}
+            columns={columns}
+            dataSource={dataSource}
+            loading={loading}
+            pagination={true}
+            name="My Claims"
+            totalPage={totalPage}
+            onPageChange={handlePageChange}
+          />
+        </div>
+      </div>
+    </>
   );
 };
 

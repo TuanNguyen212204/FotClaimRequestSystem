@@ -286,14 +286,21 @@ export const PendingComponent: React.FC = () => {
     setCurrentPage(newPage);
   };
 
-  // const formatDateToDDMMYYYY = (date: string) => {
-  //   const dateObj = new Date(date);
-  //   const day = dateObj.getDate();
-  //   const month = dateObj.getMonth() + 1;
-  //   const year = dateObj.getFullYear();
-  //   return `${day}/${month}/${year}`;
-  // };
-
+  const formatDateToDDMMYYYY = (date: string) => {
+    const dateObj = new Date(date);
+    const day = dateObj.getDate();
+    const month = dateObj.getMonth() + 1;
+    const year = dateObj.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+  const formatDateRange = (dateRange: any) => {
+    return dateRange.replace(
+      /(\d{1,2})\/(\d{1,2})\/(\d{4})/g,
+      (match, day, month, year) => {
+        return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
+      },
+    );
+  };
   const columns: Column<DataRecord>[] = [
     {
       key: "user_name",
@@ -309,13 +316,15 @@ export const PendingComponent: React.FC = () => {
       key: "start_date",
       dataIndex: "start_date",
       title: t("columns.startDate"),
-      cell: ({ value }) => formatDate(value as string),
+      cell: ({ value }) =>
+        formatDateRange(formatDateToDDMMYYYY(value as string)),
     },
     {
       key: "end_date",
       dataIndex: "end_date",
       title: t("columns.endDate"),
-      cell: ({ value }) => formatDate(value as string),
+      cell: ({ value }) =>
+        formatDateRange(formatDateToDDMMYYYY(value as string)),
     },
     {
       key: "total_hours",
@@ -336,7 +345,8 @@ export const PendingComponent: React.FC = () => {
       key: "submitted_date",
       dataIndex: "submitted_date",
       title: t("columns.submittedDate"),
-      cell: ({ value }) => formatDate(value as string),
+      cell: ({ value }) =>
+        formatDateRange(formatDateToDDMMYYYY(value as string)),
     },
     // {
     //   key: "salary",
@@ -419,10 +429,10 @@ export const PendingComponent: React.FC = () => {
   return (
     <div>
       <div className={styles.container}>
-        <h1 className={styles.title}>{t("title")}</h1>
-        <p className={styles.title2}>
-          {t("subtitle")}
-        </p>
+        <div className="flex">
+          <h1 className={styles.title}>{t("title")}</h1>
+          <p className={styles.title2}>{t("subtitle")}</p>
+        </div>
         <div className={styles.buttonContainer}>
           {!loading && (
             <>

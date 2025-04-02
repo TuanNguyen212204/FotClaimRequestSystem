@@ -14,7 +14,6 @@ import {
 import { useTranslation } from "react-i18next";
 import { formatDate } from "@/utils/date.ts";
 
-
 export const RejectedComponent: React.FC = () => {
   // const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
@@ -32,7 +31,7 @@ export const RejectedComponent: React.FC = () => {
       fetchAllRejectedClaimAsync({
         page: currentPage.toString(),
         limit: limit.toString(),
-      })
+      }),
     ).finally(() => setLoading(false));
   }, [currentPage]);
 
@@ -47,6 +46,15 @@ export const RejectedComponent: React.FC = () => {
   //   const year = dateObj.getFullYear();
   //   return `${day}/${month}/${year}`;
   // };
+  const formatDateToDDMMYYYY = (date: string) => {
+    const dateObj = new Date(date);
+    const day = dateObj.getDate();
+    const month = dateObj.getMonth() + 1;
+    const year = dateObj.getFullYear();
+    return t("language") === "en"
+      ? `${month}/${day}/${year}`
+      : `${day}/${month}/${year}`;
+  };
 
   const handlePageChange = (newPage: number) => {
     console.log("New Page: ", newPage);
@@ -56,7 +64,14 @@ export const RejectedComponent: React.FC = () => {
   const toggleSalaryVisibility = () => {
     setIsSalaryVisible(!isSalaryVisible);
   };
-
+  const formatDateRange = (dateRange: any) => {
+    return dateRange.replace(
+      /(\d{1,2})\/(\d{1,2})\/(\d{4})/g,
+      (match, day, month, year) => {
+        return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
+      },
+    );
+  };
   const columns: Column<DataRecord>[] = [
     {
       key: "user_name",
@@ -72,13 +87,15 @@ export const RejectedComponent: React.FC = () => {
       key: "start_date",
       dataIndex: "start_date",
       title: t("startDate"),
-      cell: ({ value }) => formatDate(value as string),
+      cell: ({ value }) =>
+        formatDateRange(formatDateToDDMMYYYY(value as string)),
     },
     {
       key: "end_date",
       dataIndex: "end_date",
       title: t("endDate"),
-      cell: ({ value }) => formatDate(value as string),
+      cell: ({ value }) =>
+        formatDateRange(formatDateToDDMMYYYY(value as string)),
     },
     {
       key: "total_hours",
@@ -99,7 +116,8 @@ export const RejectedComponent: React.FC = () => {
       key: "submitted_date",
       dataIndex: "submitted_date",
       title: t("submittedDate"),
-      cell: ({ value }) => formatDate(value as string),
+      cell: ({ value }) =>
+        formatDateRange(formatDateToDDMMYYYY(value as string)),
     },
     // {
     //   key: "salary",
@@ -141,12 +159,8 @@ export const RejectedComponent: React.FC = () => {
   return (
     <div>
       <div className={styles.container}>
-        <h1 className={styles.title}>
-          {t("rejectedClaims")}
-        </h1>
-        <p className={styles.title2}>
-          {t("rejectedMessage")}
-        </p>
+        <h1 className={styles.title}>{t("rejectedClaims")}</h1>
+        <p className={styles.title2}>{t("rejectedMessage")}</p>
       </div>
       {/* <button onClick={toggleSalaryVisibility}>
         {isSalaryVisible ? t("hideSalary") : t("showSalary")}
