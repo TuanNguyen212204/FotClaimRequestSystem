@@ -12,6 +12,8 @@ import {
   selectAllRejectedTotalPages,
 } from "@/redux/selector/rejectedSelector.ts";
 import { useTranslation } from "react-i18next";
+import { formatDate } from "@/utils/date.ts";
+
 
 export const RejectedComponent: React.FC = () => {
   // const navigate = useNavigate();
@@ -38,13 +40,13 @@ export const RejectedComponent: React.FC = () => {
   //   navigate(`/reject-details?id=${id}`);
   // };
 
-  const formatDateToDDMMYYYY = (date: string) => {
-    const dateObj = new Date(date);
-    const day = dateObj.getDate();
-    const month = dateObj.getMonth() + 1;
-    const year = dateObj.getFullYear();
-    return `${day}/${month}/${year}`;
-  };
+  // const formatDateToDDMMYYYY = (date: string) => {
+  //   const dateObj = new Date(date);
+  //   const day = dateObj.getDate();
+  //   const month = dateObj.getMonth() + 1;
+  //   const year = dateObj.getFullYear();
+  //   return `${day}/${month}/${year}`;
+  // };
 
   const handlePageChange = (newPage: number) => {
     console.log("New Page: ", newPage);
@@ -70,13 +72,13 @@ export const RejectedComponent: React.FC = () => {
       key: "start_date",
       dataIndex: "start_date",
       title: t("startDate"),
-      cell: ({ value }) => formatDateToDDMMYYYY(value as string),
+      cell: ({ value }) => formatDate(value as string),
     },
     {
       key: "end_date",
       dataIndex: "end_date",
       title: t("endDate"),
-      cell: ({ value }) => formatDateToDDMMYYYY(value as string),
+      cell: ({ value }) => formatDate(value as string),
     },
     {
       key: "total_hours",
@@ -97,7 +99,7 @@ export const RejectedComponent: React.FC = () => {
       key: "submitted_date",
       dataIndex: "submitted_date",
       title: t("submittedDate"),
-      cell: ({ value }) => formatDateToDDMMYYYY(value as string),
+      cell: ({ value }) => formatDate(value as string),
     },
     // {
     //   key: "salary",

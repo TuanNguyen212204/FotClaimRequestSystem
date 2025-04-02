@@ -26,6 +26,7 @@ import StatusTag, { StatusType } from "@/components/ui/StatusTag/StatusTag";
 import { DetailsApproval } from "./DetailsApproval";
 import { Button } from "@/components/ui/button/Button";
 import { useTranslation } from "react-i18next";
+import { formatDate } from "@/utils/date.ts";
 
 export const PendingComponent: React.FC = () => {
   const { t } = useTranslation("pending");
@@ -284,13 +285,13 @@ export const PendingComponent: React.FC = () => {
     setCurrentPage(newPage);
   };
 
-  const formatDateToDDMMYYYY = (date: string) => {
-    const dateObj = new Date(date);
-    const day = dateObj.getDate();
-    const month = dateObj.getMonth() + 1;
-    const year = dateObj.getFullYear();
-    return `${day}/${month}/${year}`;
-  };
+  // const formatDateToDDMMYYYY = (date: string) => {
+  //   const dateObj = new Date(date);
+  //   const day = dateObj.getDate();
+  //   const month = dateObj.getMonth() + 1;
+  //   const year = dateObj.getFullYear();
+  //   return `${day}/${month}/${year}`;
+  // };
 
   const columns: Column<DataRecord>[] = [
     {
@@ -307,13 +308,13 @@ export const PendingComponent: React.FC = () => {
       key: "start_date",
       dataIndex: "start_date",
       title: t("columns.startDate"),
-      cell: ({ value }) => formatDateToDDMMYYYY(value as string),
+      cell: ({ value }) => formatDate(value as string),
     },
     {
       key: "end_date",
       dataIndex: "end_date",
       title: t("columns.endDate"),
-      cell: ({ value }) => formatDateToDDMMYYYY(value as string),
+      cell: ({ value }) => formatDate(value as string),
     },
     {
       key: "total_hours",
@@ -334,7 +335,7 @@ export const PendingComponent: React.FC = () => {
       key: "submitted_date",
       dataIndex: "submitted_date",
       title: t("columns.submittedDate"),
-      cell: ({ value }) => formatDateToDDMMYYYY(value as string),
+      cell: ({ value }) => formatDate(value as string),
     },
     // {
     //   key: "salary",
@@ -421,36 +422,36 @@ export const PendingComponent: React.FC = () => {
         <p className={styles.title2}>
           {loading ? t("pleaseWait") : t("subtitle")}
         </p>
-      </div>
-      <div className={styles.buttonContainer}>
-        <Button
-          color="white"
-          backgroundColor="#89AC46"
-          size="small"
-          style={{ borderRadius: "10px" }}
-          onClick={handleApproveSelect}
-          disabled={loading}
-        >
-          {loading ? "..." : t("approveSelected")}
-        </Button>
-        <Button
-          danger
-          size="small"
-          onClick={handleRejectSelect}
-          style={{ borderRadius: "10px" }}
-          disabled={loading}
-        >
-          {loading ? "..." : t("rejectSelected")}
-        </Button>
-        <Button
-          type="primary"
-          size="small"
-          onClick={handleReturnSelect}
-          style={{ borderRadius: "10px" }}
-          disabled={loading}
-        >
-          {loading ? "..." : t("returnSelected")}
-        </Button>
+        <div className={styles.buttonContainer}>
+          <Button
+            color="white"
+            backgroundColor="#89AC46"
+            size="small"
+            style={{ borderRadius: "10px" }}
+            onClick={handleApproveSelect}
+            disabled={loading}
+          >
+            {loading ? "..." : t("approveSelected")}
+          </Button>
+          <Button
+            danger
+            size="small"
+            onClick={handleRejectSelect}
+            style={{ borderRadius: "10px" }}
+            disabled={loading}
+          >
+            {loading ? "..." : t("rejectSelected")}
+          </Button>
+          <Button
+            type="primary"
+            size="small"
+            onClick={handleReturnSelect}
+            style={{ borderRadius: "10px" }}
+            disabled={loading}
+          >
+            {loading ? "..." : t("returnSelected")}
+          </Button>
+        </div>
       </div>
       <TableComponent
         ref={checkboxRef}

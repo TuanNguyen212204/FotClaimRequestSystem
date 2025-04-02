@@ -5,7 +5,7 @@
 }
 
 .title {
-  font-size: 1.8em;
+  font-size: 2em;
   margin-bottom: 15px;
   margin-left: 15px;
   font-weight: 600;
@@ -14,11 +14,11 @@
 }
 
 .title2 {
-  margin-top: 25px;
-  margin-left: 5px;
+  margin-top: 30px;
+  margin-left: 10px;
   font-size: 15px;
   font-weight: 300;
-  opacity: 0.5;
+  opacity: 0.3;
 }
 
 .breadcrumb {
@@ -133,9 +133,10 @@
 
 .buttonContainer {
   display: flex;
+  justify-content: center;
   align-items: center;
   gap: 15px;
-  margin-left: 15px;
+  margin-left: 700px;
   /* border-radius:  10px;
   border: 1px solid #d1d5db;
   padding: 10px;
