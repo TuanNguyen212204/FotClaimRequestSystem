@@ -52,7 +52,7 @@ export const PendingComponent: React.FC = () => {
       fetchAllPendingClaimAsync({
         page: currentPage.toString(),
         limit: limit.toString(),
-      })
+      }),
     ).finally(() => setLoading(false));
   }, [currentPage]);
 
@@ -120,7 +120,7 @@ export const PendingComponent: React.FC = () => {
             fetchAllPendingClaimAsync({
               page: currentPage.toString(),
               limit: limit.toString(),
-            })
+            }),
           );
           toast.success("Claim approved successfully!");
         } catch (error) {
@@ -144,7 +144,7 @@ export const PendingComponent: React.FC = () => {
             fetchAllPendingClaimAsync({
               page: currentPage.toString(),
               limit: limit.toString(),
-            })
+            }),
           );
           toast.success("Claim rejected successfully!");
         } catch (error) {
@@ -168,7 +168,7 @@ export const PendingComponent: React.FC = () => {
             fetchAllPendingClaimAsync({
               page: currentPage.toString(),
               limit: limit.toString(),
-            })
+            }),
           );
           toast.success("Claim returned successfully!");
         } catch (error) {
@@ -199,7 +199,7 @@ export const PendingComponent: React.FC = () => {
             fetchAllPendingClaimAsync({
               page: currentPage.toString(),
               limit: limit.toString(),
-            })
+            }),
           );
           toast.success("Selected claims approved successfully!");
         } catch (error) {
@@ -229,7 +229,7 @@ export const PendingComponent: React.FC = () => {
             fetchAllPendingClaimAsync({
               page: currentPage.toString(),
               limit: limit.toString(),
-            })
+            }),
           );
           toast.success("Selected claims reject successfully!");
         } catch (error) {
@@ -259,7 +259,7 @@ export const PendingComponent: React.FC = () => {
             fetchAllPendingClaimAsync({
               page: currentPage.toString(),
               limit: limit.toString(),
-            })
+            }),
           );
           toast.success("Selected claims return successfully!");
         } catch (error) {
@@ -423,34 +423,35 @@ export const PendingComponent: React.FC = () => {
           {loading ? t("pleaseWait") : t("subtitle")}
         </p>
         <div className={styles.buttonContainer}>
-          <Button
-            color="white"
-            backgroundColor="#89AC46"
-            size="small"
-            style={{ borderRadius: "10px" }}
-            onClick={handleApproveSelect}
-            disabled={loading}
-          >
-            {loading ? "..." : t("approveSelected")}
-          </Button>
-          <Button
-            danger
-            size="small"
-            onClick={handleRejectSelect}
-            style={{ borderRadius: "10px" }}
-            disabled={loading}
-          >
-            {loading ? "..." : t("rejectSelected")}
-          </Button>
-          <Button
-            type="primary"
-            size="small"
-            onClick={handleReturnSelect}
-            style={{ borderRadius: "10px" }}
-            disabled={loading}
-          >
-            {loading ? "..." : t("returnSelected")}
-          </Button>
+          {!loading && (
+            <>
+              <Button
+                color="white"
+                backgroundColor="#89AC46"
+                size="small"
+                style={{ borderRadius: "10px" }}
+                onClick={handleApproveSelect}
+              >
+                {t("approveSelected")}
+              </Button>
+              <Button
+                danger
+                size="small"
+                onClick={handleRejectSelect}
+                style={{ borderRadius: "10px" }}
+              >
+                {t("rejectSelected")}
+              </Button>
+              <Button
+                type="primary"
+                size="small"
+                onClick={handleReturnSelect}
+                style={{ borderRadius: "10px" }}
+              >
+                {t("returnSelected")}
+              </Button>
+            </>
+          )}
         </div>
       </div>
       <TableComponent
