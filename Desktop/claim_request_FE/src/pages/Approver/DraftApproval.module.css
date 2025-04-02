@@ -5,18 +5,18 @@
 }
 
 .title {
-  font-size: 1.8em;
+  font-size: 2em;
   margin-bottom: 15px;
   margin-left: 15px;
   font-weight: 600;
-  color: #17A2B8;
+  color: #e227d9;
   text-align: left;
 }
 
 .title2 {
-  margin-top: 25px;
-  margin-left: 5px;
+  margin-top: 30px;
+  margin-left: 15px;
   font-size: 15px;
   font-weight: 300;
-  opacity: 0.5;
+  opacity: 0.3;
 }

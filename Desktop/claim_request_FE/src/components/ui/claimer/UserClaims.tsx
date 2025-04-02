@@ -12,7 +12,10 @@ import { EyeIcon } from "lucide-react";
 import TableComponent, { Column, DataRecord } from "../Table/Table";
 import UserClaimDetailsModal from "./UserClaimDetails";
 import StatusTag from "../StatusTag/StatusTag";
+import { useTranslation } from "react-i18next";
+
 const UserClaims = () => {
+  const { t } = useTranslation("userClaims");
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const userClaim = useSelector(selectMyClaim);
@@ -22,23 +25,6 @@ const UserClaims = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedClaim, setSelectedClaim] = useState<string>("");
   const [limit] = useState(5);
-
-  // useEffect(() => {
-  //   setLoading(true);
-  //   const fetchData = async () => {
-  //     await dispatch(fetchClaimByUserAsync());
-  //     setLoading(false);
-  //   };
-  //   fetchData();
-  // }, [dispatch, currentPage]);
-  // useEffect(() => {
-  //   console.log(userClaim);
-  // }, [userClaim]);
-
-  // const handleViewDetail = (id: string) => {
-  //   setSelectedClaim(id);
-  //   setIsModalOpen(true);
-  // };
 
   useEffect(() => {
     setLoading(true);
@@ -70,8 +56,11 @@ const UserClaims = () => {
     const day = dateObj.getDate();
     const month = dateObj.getMonth() + 1;
     const year = dateObj.getFullYear();
-    return `${day}/${month}/${year}`;
+    return t("language") === "en"
+      ? `${month}/${day}/${year}`
+      : `${day}/${month}/${year}`;
   };
+
   const formatDateRange = (dateRange: any) => {
     return dateRange.replace(
       /(\d{1,2})\/(\d{1,2})\/(\d{4})/g,
@@ -85,17 +74,17 @@ const UserClaims = () => {
     {
       key: "project_id",
       dataIndex: "project_id",
-      title: "Project ID",
+      title: t("project_id_label"),
     },
     {
       key: "project_name",
       dataIndex: "project_name",
-      title: "Project Name",
+      title: t("project_name_label"),
     },
     {
       key: "time_duration",
       dataIndex: "time_duration",
-      title: "Time Duration",
+      title: t("time_duration_label"),
       cell: ({ value }) => {
         const formattedValue = formatDateRange(value as string);
         return <span>{formattedValue}</span>;
@@ -104,36 +93,22 @@ const UserClaims = () => {
     {
       key: "total_hours",
       dataIndex: "total_hours",
-      title: "Total Working Hours",
-      cell: ({ value }) => `${value} hours`,
+      title: t("total_working_hours_label"),
+      cell: ({ value }) => `${value} ${t("hours_suffix")}`,
     },
     {
       key: "submitted_date",
       dataIndex: "submitted_date",
-      title: "Submitted Date",
+      title: t("submitted_date_label"),
       cell: ({ value }) => formatDateToDDMMYYYY(value as string),
     },
     {
       key: "claim_status",
       dataIndex: "claim_status",
-      title: "Claim Status",
+      title: t("claim_status_label"),
       cell: ({ value }: { value: unknown }) => {
         const stringValue = value as string;
         return (
-          // <span
-          //   style={{
-          //     color:
-          //       stringValue === "APPROVED"
-          //         ? "green"
-          //         : stringValue === "REJECTED"
-          //         ? "red"
-          //         : stringValue === "PENDING"
-          //         ? "orange"
-          //         : "inherit",
-          //   }}
-          // >
-          //   {stringValue}
-          // </span>
           <div>
             <StatusTag
               status={value as "PENDING" | "APPROVED" | "REJECTED" | "PAID"}
@@ -145,7 +120,7 @@ const UserClaims = () => {
     {
       key: "action",
       dataIndex: "request_id",
-      title: "Action",
+      title: t("action_label"),
       cell: ({ value }) => (
         <div className="flex items-center justify-center gap-2">
           <EyeIcon
@@ -163,6 +138,7 @@ const UserClaims = () => {
       ),
     },
   ];
+
   const dataSource: DataRecord[] = userClaim.map((claim, index) => ({
     ...claim,
     key: index,
@@ -176,8 +152,9 @@ const UserClaims = () => {
         ? `${formatDateToDDMMYYYY(claim.start_date)} - ${formatDateToDDMMYYYY(
             claim.end_date,
           )}`
-        : "N/A",
+        : t("no_data"),
   }));
+
   return (
     <>
       <div className="mt-2 p-0">
@@ -203,4 +180,5 @@ const UserClaims = () => {
     </>
   );
 };
+
 export default UserClaims;

@@ -8,5 +8,6 @@
   "claim_status_label": "Trạng thái yêu cầu",
   "action_label": "Hành động",
   "hours_suffix": "giờ",
-  "no_data": "Không có dữ liệu"
+  "no_data": "Không có dữ liệu",
+  "language": "vi"
 }

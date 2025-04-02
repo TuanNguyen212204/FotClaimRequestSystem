@@ -7,6 +7,7 @@ import {
   FaEllipsisV,
   FaCheck,
   FaTrash,
+  FaExclamationTriangle,
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { PATH } from "../../../constant/config";
@@ -14,6 +15,7 @@ import Badge from "@components/ui/Badge";
 import fptlogo from "@assets/fot.png";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  deleteNotificationAll,
   deleteNotificationById,
   fetchNotificationsAsync,
   markNotificationAllAsRead,
@@ -26,6 +28,7 @@ import {
 } from "@/redux/slices/notification/notificationSlice";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
 import { User, LogOut } from "lucide-react";
 import { Button } from "@components/ui/button/Button";
 
@@ -52,6 +55,7 @@ const Header: React.FC = () => {
   const notifications = useSelector(
     (state: any) => state.notifications?.notifications?.notifications,
   );
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     dispatch(fetchNotificationsAsync() as any);
@@ -95,18 +99,15 @@ const Header: React.FC = () => {
     const socket = socketRef.current;
 
     socket.on("connect", () => {
-      console.log("Socket connected");
       if (user_id) {
         socket.emit("login", user_id);
-        console.log("a");
       }
     });
 
     socket.on("notification", (notification) => {
       try {
-        console.log("Sắp dispatch action addNotification:", notification);
         dispatch(addNotification(notification));
-        console.log("Đã gửi action addNotification!");
+        toast.info("You have a new notification!");
       } catch (error) {
         console.error("Lỗi khi dispatch:", error);
       }
@@ -114,9 +115,7 @@ const Header: React.FC = () => {
 
     socket.on("broadcast", (notification) => {
       try {
-        console.log("Sắp dispatch action addNotification:", notification);
         dispatch(addNotification(notification));
-        console.log("Đã gửi action addNotification!");
       } catch (error) {
         console.error("Lỗi khi dispatch:", error);
       }
@@ -126,8 +125,7 @@ const Header: React.FC = () => {
       console.error("Socket connection error:", error);
     });
 
-    socket.on("disconnect", (reason) => {
-      console.log("Socket disconnected:", reason);
+    socket.on("disconnect", (_) => {
       setTimeout(() => {
         if (socketRef.current) {
           console.log("Attempting to reconnect...");
@@ -153,19 +151,42 @@ const Header: React.FC = () => {
     setDropdownVisible(!dropdownVisible);
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setDropdownVisible(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropdownRef]);
+
   const handleMarkAllAsRead = async () => {
     await dispatch(markNotificationAllAsRead() as any);
     await dispatch(fetchNotificationsAsync() as any);
   };
 
-  const handleMarkAsRead = (id: number) => {
-    dispatch(updateMarkAsRead(id));
-    dispatch(markNotificationAsReadById(id) as any);
+  const handleMarkAsRead = async (id: number) => {
+    console.log(id);
+    await dispatch(updateMarkAsRead(id));
+    await dispatch(markNotificationAsReadById(id) as any);
+  };
+  const handleDelete = async (id: number) => {
+    console.log(id);
+    await dispatch(deleteNotificationById(id) as any);
+    await dispatch(fetchNotificationsAsync() as any);
   };
 
-  const handleDelete = (id: number) => {
-    dispatch(deleteNotificationById(id) as any);
-    dispatch(fetchNotificationsAsync() as any);
+  const handleDeleteAllNoti = async () => {
+    await dispatch(deleteNotificationAll() as any);
+    await dispatch(fetchNotificationsAsync() as any);
   };
 
   const handleAvatarDropdownSelect = (value: string) => {
@@ -178,10 +199,18 @@ const Header: React.FC = () => {
     setAvatarDropdownVisible(false);
   };
 
+
   const avatarDropdownOptions = [
     { value: "profile", label: t("profile"), icon: <User size={16} /> },
     { value: "logout", label: t("logout"), icon: <LogOut size={16} /> },
   ];
+
+
+  const allRead =
+    notifications &&
+    notifications?.length > 0 &&
+    notifications?.every((n: any) => n.is_read);
+  const disableMarkAll = notifications?.length === 0 || allRead;
 
   return (
     <>
@@ -227,9 +256,33 @@ const Header: React.FC = () => {
         </div>
       </header>
       {dropdownVisible && (
-        <div className={styles.dropdown}>
-          <div className={styles.markAll} onClick={handleMarkAllAsRead}>
-            {t("mark_all_as_read")}
+        <div ref={dropdownRef} className={styles.dropdown}>
+          <div className={styles.top}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                color: "white",
+                cursor: disableMarkAll ? "not-allowed" : "pointer",
+                opacity: disableMarkAll ? 0.5 : 1,
+              }}
+              onClick={!disableMarkAll ? handleMarkAllAsRead : undefined}
+            >
+              <FaCheck style={{ marginRight: 5 }} />
+              {t("mark_all_as_read")}
+            </div>
+            <div
+              style={{
+                display: "flex",
+                color: "white",
+                alignItems: "center",
+                cursor: "pointer",
+              }}
+              onClick={handleDeleteAllNoti}
+            >
+              <FaTrash style={{ marginRight: 5 }} />
+              {t("clear_all")}
+            </div>
           </div>
           {Array.isArray(notifications) && notifications.length > 0 ? (
             notifications.map((notification: any) => (
@@ -240,10 +293,34 @@ const Header: React.FC = () => {
                 }`}
               >
                 <strong>{notification.title}</strong>
-                <p>{notification.message}</p>
-                <span className={styles.timestamp}>
-                  {new Date(notification.created_at).toLocaleString()}
-                </span>
+                <div className={styles.headers}>
+                  <div
+                    style={{ display: "flex", alignItems: "center" }}
+                    className={
+                      notification.is_read ? styles.normal : styles.bold
+                    }
+                  >
+                    <FaExclamationTriangle
+                      style={{ marginRight: 5, fontSize: 12 }}
+                    />
+                    <span className={styles.noti}>{t("notification")}</span>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <span
+                      className={
+                        notification.is_read ? styles.normal : styles.bold
+                      }
+                      style={{ fontSize: 12 }}
+                    >
+                      {new Date(notification.created_at).toLocaleString()}
+                    </span>
+                    {!notification.is_read && (
+                      <span className={styles.redDot}></span>
+                    )}
+                  </div>
+                </div>
+                <hr style={{ border: "0.3px solid #ccc" }} />
+                <p style={{ fontSize: 14 }}>{notification.message}</p>
                 <div
                   className={styles.circle}
                   onClick={(e) => {
@@ -256,32 +333,36 @@ const Header: React.FC = () => {
                   }}
                 >
                   <FaEllipsisV className={styles.threeDots} />
-                </div>
-                <div
-                  className={`${styles.options} ${
-                    optionsVisibleId === notification.id
-                      ? styles.showOptions
-                      : ""
-                  }`}
-                >
-                  <Button
-                    type="text"
-                    size="small"
-                    icon={<FaCheck />}
-                    onClick={() => handleMarkAsRead(notification.id)}
-                    className={styles.option}
+                  <div
+                    className={`${styles.options} ${
+                      optionsVisibleId === notification.id
+                        ? styles.showOptions
+                        : ""
+                    }`}
                   >
-                    {t("mark_as_read")}
-                  </Button>
-                  <Button
-                    type="text"
-                    size="small"
-                    icon={<FaTrash />}
-                    onClick={() => handleDelete(notification.id)}
-                    className={styles.option}
-                  >
-                    {t("delete")}
-                  </Button>
+                    {!!notification.is_read === false ? (
+                      <div
+                        className={styles.option}
+                        style={{ display: "flex", alignItems: "center" }}
+                        onClick={() => handleMarkAsRead(notification.id)}
+                      >
+                        <FaCheck />
+                        <div style={{ marginLeft: 4 }}>Mark as Read</div>
+                      </div>
+                    ) : (
+                      <></>
+                    )}
+                    <div
+                      className={styles.option}
+                      style={{ display: "flex", alignItems: "center" }}
+                      onClick={() => {
+                        handleDelete(notification.id);
+                      }}
+                    >
+                      <FaTrash />
+                      <div style={{ marginLeft: 4 }}>Delete</div>
+                    </div>
+                  </div>
                 </div>
               </div>
             ))

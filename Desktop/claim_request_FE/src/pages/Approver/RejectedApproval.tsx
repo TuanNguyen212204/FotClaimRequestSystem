@@ -12,6 +12,7 @@ import {
   selectAllRejectedTotalPages,
 } from "@/redux/selector/rejectedSelector.ts";
 import { useTranslation } from "react-i18next";
+import { formatDate } from "@/utils/date.ts";
 
 export const RejectedComponent: React.FC = () => {
   // const navigate = useNavigate();
@@ -38,12 +39,21 @@ export const RejectedComponent: React.FC = () => {
   //   navigate(`/reject-details?id=${id}`);
   // };
 
+  // const formatDateToDDMMYYYY = (date: string) => {
+  //   const dateObj = new Date(date);
+  //   const day = dateObj.getDate();
+  //   const month = dateObj.getMonth() + 1;
+  //   const year = dateObj.getFullYear();
+  //   return `${day}/${month}/${year}`;
+  // };
   const formatDateToDDMMYYYY = (date: string) => {
     const dateObj = new Date(date);
     const day = dateObj.getDate();
     const month = dateObj.getMonth() + 1;
     const year = dateObj.getFullYear();
-    return `${day}/${month}/${year}`;
+    return t("language") === "en"
+      ? `${month}/${day}/${year}`
+      : `${day}/${month}/${year}`;
   };
 
   const handlePageChange = (newPage: number) => {
@@ -149,12 +159,8 @@ export const RejectedComponent: React.FC = () => {
   return (
     <div>
       <div className={styles.container}>
-        <h1 className={styles.title}>
-          {loading ? t("loading") : t("rejectedClaims")}
-        </h1>
-        <p className={styles.title2}>
-          {loading ? t("pleaseWait") : t("rejectedMessage")}
-        </p>
+        <h1 className={styles.title}>{t("rejectedClaims")}</h1>
+        <p className={styles.title2}>{t("rejectedMessage")}</p>
       </div>
       {/* <button onClick={toggleSalaryVisibility}>
         {isSalaryVisible ? t("hideSalary") : t("showSalary")}

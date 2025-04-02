@@ -9,7 +9,9 @@ import { Project } from "@/types/Project";
 import { toast } from "react-toastify";
 import styles from "./CreateProject.module.css";
 import { useTranslation } from "react-i18next";
+
 Modal.setAppElement("#root");
+
 interface CreateProjectProps {
   openModal: boolean;
   setOpenModal: (value: boolean) => void;
@@ -271,3 +273,4 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
   );
 };
 export default CreateProject;
+

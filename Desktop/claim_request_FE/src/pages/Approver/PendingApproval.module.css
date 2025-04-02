@@ -1,24 +1,23 @@
 .container {
-  display: flex;
   align-items: center;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .title {
-  font-size: 1.8em;
+  font-size: 2em;
   margin-bottom: 15px;
   margin-left: 15px;
   font-weight: 600;
-  color: #FFC107;
+  color: #ffc107;
   text-align: left;
 }
 
 .title2 {
-  margin-top: 25px;
-  margin-left: 5px;
+  margin-top: 30px;
+  margin-left: 10px;
   font-size: 15px;
   font-weight: 300;
-  opacity: 0.5;
+  opacity: 0.3;
 }
 
 .breadcrumb {
@@ -51,7 +50,6 @@
 .claimsTable td {
   padding: 12px 15px;
   text-align: center;
-
 }
 
 .claimsTable th {
@@ -86,31 +84,37 @@
 .iconApprove {
   cursor: pointer;
   color: #6b7280;
-  transition: transform 0.2s ease-in-out, color 0.2s;
+  transition:
+    transform 0.2s ease-in-out,
+    color 0.2s;
   width: 20px;
 }
 
 .iconApprove:hover {
-  color: #89AC46;
+  color: #89ac46;
   transform: scale(1.2);
 }
 
 .iconReject {
   cursor: pointer;
   color: #6b7280;
-  transition: transform 0.2s ease-in-out, color 0.2s;
+  transition:
+    transform 0.2s ease-in-out,
+    color 0.2s;
   width: 20px;
 }
 
 .iconReject:hover {
-  color: #A31D1D;
+  color: #a31d1d;
   transform: scale(1.2);
 }
 
 .iconReturn {
   cursor: pointer;
   color: #6b7280;
-  transition: transform 0.2s ease-in-out, color 0.2s;
+  transition:
+    transform 0.2s ease-in-out,
+    color 0.2s;
   width: 20px;
 }
 
@@ -122,7 +126,9 @@
 .iconSearch {
   cursor: pointer;
   color: #6b7280;
-  transition: transform 0.2s ease-in-out, color 0.2s;
+  transition:
+    transform 0.2s ease-in-out,
+    color 0.2s;
   width: 20px;
 }
 
@@ -133,9 +139,12 @@
 
 .buttonContainer {
   display: flex;
+  justify-content: right;
+  margin-left: 0;
   align-items: center;
   gap: 15px;
-  margin-left: 15px;
+  margin-left: 767px;
+  margin-top: 10px;
   /* border-radius:  10px;
   border: 1px solid #d1d5db;
   padding: 10px;
@@ -198,16 +207,18 @@ input[type="checkbox"] {
   align-items: center;
   justify-content: center;
   padding: 5px 10px;
-  border: 2px solid #0057FC; /* Change border color here */
+  border: 2px solid #0057fc; /* Change border color here */
   border-radius: 15px;
   font-size: 16px;
   cursor: pointer;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
-  color: #0057FC;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease;
+  color: #0057fc;
 }
 
 .deleteButton:hover:not(:disabled) {
-  background-color: #0057FC;
+  background-color: #0057fc;
   color: #fff;
 }
 

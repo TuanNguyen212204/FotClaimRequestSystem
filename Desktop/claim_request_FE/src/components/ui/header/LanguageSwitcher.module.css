@@ -1,4 +1,21 @@
 .languageSwitcher {
+  width: 100%;
+  padding: 8px 12px; /* Increased padding for better touch targets */
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  cursor: pointer;
+  font-size: 16px; /* Adjust font size for better readability */
+  transition: border-color 0.3s ease; /* Smooth transition for border color */
+}
+
+.languageSwitcher:focus {
+  border-color: #007bff; /* Change border color on focus */
+  outline: none; /* Remove default outline */
+}
+
+.languageSwitcher option {
+  padding: 10px; /* Add padding to options for better spacing */
   position: relative;
   display: inline-block;
 }
