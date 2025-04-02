@@ -10,6 +10,7 @@ import {
   ClaimApprovedApprover,
   ClaimApprovedFinance,
   MyClaimDetail,
+  DraftApproval,
 } from "@/types/Claim";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { delay } from "@utils/delay";
@@ -186,6 +187,28 @@ export const fetchAllRejectedClaimAsync = createAsyncThunk<
     await delay(1000);
     const response = await httpClient.get<ApiResponse<RejectedClaim[]>>(
       "/approvers/rejected-claim",
+      { page: page, limit: limit }
+    );
+    console.log("data: ", response.data);
+    return {
+      data: response.data.data || [],
+      totalPages: response.data.totalPages,
+    };
+  } catch (error) {
+    console.error("Fetch Rejected Claims for Approver error " + error);
+    throw error;
+  }
+});
+
+//------------------------------------------------- GET DRAFT CLAIM FOR APPROVAL ----------------------------------------------------------------------
+export const fetchAllDraftClaimAsync = createAsyncThunk<
+  { data: DraftApproval[]; totalPages: number },
+  { page: string; limit: string }
+>("claim/approver/fetchDraftClaim", async ({ page, limit }) => {
+  try {
+    await delay(1000);
+    const response = await httpClient.get<ApiResponse<DraftApproval[]>>(
+      "/approvers/draft-claim",
       { page: page, limit: limit }
     );
     console.log("data: ", response.data);

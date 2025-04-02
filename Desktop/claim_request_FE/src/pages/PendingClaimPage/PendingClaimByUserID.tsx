@@ -1,26 +1,26 @@
-import { selectMyClaim, selectTotalPage } from "@/redux/selector/claimSelector";
-import { useEffect, useState } from "react";
+import { selectPendingClaimByUserID, selectTotalPage } from "@/redux/selector/claimSelector";
+import { useEffect, useState, useCallback } from "react";
 import styles from "@components/ui/claimer/UserClaims.module.css";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@redux/index";
 import {
-  fetchClaimByUserAsync,
+  fetchClaimByUserWithPendingStatusAsync,
   fetchTotalClaimByUserAsync,
 } from "@redux/thunk/Claim/claimThunk";
 import { EyeIcon } from "lucide-react";
 import TableComponent, { Column, DataRecord } from "@components/ui/Table/Table";
 import UserClaimDetailsModal from "@components/ui/claimer/UserClaimDetails";
 import StatusTag from "@components/ui/StatusTag/StatusTag";
-import { useTranslation } from "react-i18next"; 
+import { useTranslation } from "react-i18next";
 
 const PendingClaimByUserID = () => {
-  const { t } = useTranslation("pendingClaim"); 
+  const { t } = useTranslation("pendingClaim");
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const userClaim = useSelector(selectMyClaim);
+  const userClaim = useSelector(selectPendingClaimByUserID);
   const totalPage = useSelector(selectTotalPage);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedClaim, setSelectedClaim] = useState<string>("");
@@ -29,21 +29,19 @@ const PendingClaimByUserID = () => {
   useEffect(() => {
     setLoading(true);
     const fetchData = async () => {
-      await dispatch(
-        fetchClaimByUserAsync({ page: currentPage, status: "PENDING" })
-      );
-      setLoading(false);
-      dispatch(fetchTotalClaimByUserAsync({ status: "PENDING" }));
+      try {
+        await Promise.all([
+          dispatch(fetchClaimByUserWithPendingStatusAsync({ page: currentPage })).unwrap(),
+          dispatch(fetchTotalClaimByUserAsync({ status: "PENDING" })).unwrap(),
+        ]);
+      } finally {
+        setLoading(false);
+      }
     };
     fetchData();
-    console.log(totalPage);
-  }, [currentPage, dispatch, totalPage]);
+  }, [currentPage, dispatch]);
 
   const handleViewDetail = (id: string) => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 1500);
     setSelectedClaim(id);
     setIsModalOpen(true);
   };
@@ -53,15 +51,15 @@ const PendingClaimByUserID = () => {
     setCurrentPage(newPage);
   };
 
-  const formatDateToDDMMYYYY = (date: string) => {
+  const formatDateToDDMMYYYY = useCallback((date: string) => {
     const dateObj = new Date(date);
-    const day = dateObj.getDate();
-    const month = dateObj.getMonth() + 1;
+    const day = String(dateObj.getDate()).padStart(2, "0");
+    const month = String(dateObj.getMonth() + 1).padStart(2, "0");
     const year = dateObj.getFullYear();
     return t("language") === "en"
-      ? `${month}/${day}/${year}` 
-      : `${day}/${month}/${year}`; 
-  };
+      ? `${month}/${day}/${year}` // Tiếng Anh: MM/DD/YYYY
+      : `${day}/${month}/${year}`; // Tiếng Việt: DD/MM/YYYY
+  }, [t]);
 
   const columns: Column[] = [
     {
@@ -78,6 +76,7 @@ const PendingClaimByUserID = () => {
       key: "time_duration",
       dataIndex: "time_duration",
       title: t("time_duration_label"),
+      cell: ({ value }) => <span>{value as string}</span>,
     },
     {
       key: "total_hours",
@@ -89,7 +88,7 @@ const PendingClaimByUserID = () => {
       key: "submitted_date",
       dataIndex: "submitted_date",
       title: t("submitted_date_label"),
-      cell: ({ value }) => formatDateToDDMMYYYY(value as string),
+      cell: ({ value }) => <span>{formatDateToDDMMYYYY(value as string)}</span>,
     },
     {
       key: "claim_status",

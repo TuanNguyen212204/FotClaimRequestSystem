@@ -77,9 +77,9 @@ const PaginationForTable: React.FC<PaginationForTableProps> = ({
     <div className={`${styles.pagination} flex`}>
       <div>
         <button
-          // tabIndex={-1}
-          // onClick={() => handlePageChange(currentPage - 1)}
-          // disabled={currentPage === 1}
+          tabIndex={-1}
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
           className={` bg-transparent mt-5`}
         >
           <ArrowLeft />
@@ -90,9 +90,9 @@ const PaginationForTable: React.FC<PaginationForTableProps> = ({
 
       <div>
         <button
-          // tabIndex={-1}
-          // onClick={() => handlePageChange(currentPage + 1)}
-          // disabled={currentPage === totalPages}
+          tabIndex={-1}
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
           className={` bg-transparent  mt-5`}
         >
           <ArrowRight />

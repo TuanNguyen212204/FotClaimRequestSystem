@@ -1,5 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=ABeeZee:ital@0;1&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;700&display=swap");
+
 @import "tailwindcss/utilities.css" layer(utilities);
 @layer theme, base, components, utilities;
 @import "tailwindcss/theme.css" layer(theme);
@@ -13,11 +15,36 @@ body {
   margin: 0;
 }
 /* @import "tailwindcss/preflight.css" layer(base); */
+@theme inline {
+  --font-display: "Inter", "sans-serif";
+  --color-primary-500: oklch(0.84 0.18 117.33);
+  --spacing: 0.25rem;
+  --animate-spotlight: spotlight 6s ease 3s 1 forwards;
+  --breakpoint-hd: 1920px;
+  --breakpoint-4k: 2560px;
+  --animate-meteor-effect: meteor 5s linear infinite;
 
-@theme {
-  --color-dark-gray: #2d3142;
-  --color-light-gray: #4f5d75;
-  --color-lighter-gray: #d9d9d9;
-  --color-white: #ffffff;
-  --color-orange: #ef8354;
+  @keyframes meteor {
+    0% {
+      transform: rotate(215deg) translateX(0);
+      opacity: 1;
+    }
+    70% {
+      opacity: 1;
+    }
+    100% {
+      transform: rotate(215deg) translateX(-500px);
+      opacity: 0;
+    }
+  }
+}
+@keyframes spotlight {
+  0% {
+    opacity: 0;
+    transform: translate(-72%, -62%) scale(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -40%) scale(1);
+  }
 }
