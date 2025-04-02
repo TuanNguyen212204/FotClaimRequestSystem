@@ -1,5 +1,4 @@
 .languageSwitcher {
-<<<<<<< HEAD
   width: 100%;
   padding: 8px 12px; /* Increased padding for better touch targets */
   border-radius: 5px;
@@ -17,7 +16,6 @@
 
 .languageSwitcher option {
   padding: 10px; /* Add padding to options for better spacing */
-=======
   position: relative;
   display: inline-block;
 }
@@ -96,5 +94,4 @@
 .checkIcon {
   font-size: 14px;
   color: #666;
->>>>>>> fa9575de64812a5e266a4dfd071e64beec2b0162
 }
