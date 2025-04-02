@@ -81,13 +81,13 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
     const checkProjectId = async () => {
       setCheckingId(true);
       try {
-        await httpClient.get<any>(`/projects/${projectId}`);
+        await httpClient.get<any>(`/projects/check/${projectId}`);
         setError("project_id", {
           type: "manual",
           message: "Project ID already exists!",
         });
       } catch (error: any) {
-        if (error.response?.status === 404) {
+        if (error.response?.status === 400) {
           clearErrors("project_id");
         } else {
           console.error("Error checking project ID:", error);
