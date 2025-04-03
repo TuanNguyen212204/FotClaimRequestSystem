@@ -162,18 +162,17 @@ export const RejectedComponent: React.FC = () => {
         <h1 className={styles.title}>{t("rejectedClaims")}</h1>
         <p className={styles.title2}>{t("rejectedMessage")}</p>
       </div>
-      {/* <button onClick={toggleSalaryVisibility}>
-        {isSalaryVisible ? t("hideSalary") : t("showSalary")}
-      </button> */}
-      <TableComponent
-        columns={columns}
-        dataSource={dataSource}
-        loading={loading}
-        totalPage={totalPages}
-        pagination={true}
-        name={t("claims")}
-        onPageChange={handlePageChange}
-      />
+      <div className={styles.containerTable}>
+        <TableComponent
+          columns={columns}
+          dataSource={dataSource}
+          loading={loading}
+          totalPage={totalPages}
+          pagination={true}
+          name={t("claims")}
+          onPageChange={handlePageChange}
+        />
+      </div>
     </div>
   );
 };
