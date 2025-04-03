@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { data, useNavigate } from "react-router-dom";
 import { PATH } from "@constant/config";
 import Modal from "react-modal";
 import { useForm } from "react-hook-form";
@@ -44,9 +44,10 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
       start_date: data.start_date,
       end_date: data.end_date,
       project_status: data.project_status,
-      project_manager: data.project_manager,
-    };
-
+      project_managers: data.project_managers
+    }
+    console.log("DATARE:", requestBody);
+    
     try {
       await httpClient.post("/projects/create-project", requestBody);
       toast.success("Create project successfully!");
@@ -64,16 +65,21 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
     const fetchPmUsers = async () => {
       try {
         const response = await httpClient.get("/admin/staffs?department_id=7"); 
-        console.log("data12:", response.data);
-        
-        setPmUsers(response.data); 
+        console.log("data12:", response.data.data);
+
+        const filteredUsers = response.data.data.map((user: any) => ({
+          user_id: user.user_id,
+          full_name: user.full_name
+        }));
+        console.log("Dữ liệu sau khi lọc:", filteredUsers); 
+        setPmUsers(filteredUsers); 
       } catch (error) {
         console.error("Error fetching PM users:", error);
       }
     };
-  
     fetchPmUsers();
   }, []);
+  
 
   const startDate = watch("start_date");
   const endDate = watch("end_date");
@@ -325,19 +331,21 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
             </label>
             <select
               {...register("project_manager", {
-                required: t("projectInformation.validation.projectManager"),
+                required: t("projectManager"),
               })}
               className="w-full p-2 border border-gray-300 rounded-md"
+              onChange={(e) => {
+                console.log("Selected Project Manager ID:", e.target.value); 
+              }}
             >
               <option value="">
-                Select Project Manager
+                {t("selectManager")}
               </option>
-              <option value="1">
-                PM 1
-              </option>
-              <option value="2">
-                PM 2
-              </option>
+              {pmUsers.map((user) => (
+                <option key={user.user_id} value={user.user_id}>
+                  {user.full_name}
+                </option>
+              ))}
             </select>
             {errors.project_manager && (
               <p className="text-red-500 text-sm">
@@ -345,8 +353,6 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
               </p>
             )}
           </div>
-
-          
 
           <div className="flex justify-end space-x-2">
             <button
