@@ -330,7 +330,7 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
               Project Manager
             </label>
             <select
-              {...register("project_manager", {
+              {...register("project_managers", {
                 required: t("projectManager"),
               })}
               className="w-full p-2 border border-gray-300 rounded-md"
@@ -347,9 +347,9 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
                 </option>
               ))}
             </select>
-            {errors.project_manager && (
+            {errors.project_managers && (
               <p className="text-red-500 text-sm">
-                {errors.project_manager.message}
+                {errors.project_managers.message}
               </p>
             )}
           </div>
