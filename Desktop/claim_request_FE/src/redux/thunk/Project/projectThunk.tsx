@@ -12,12 +12,13 @@ export const fetchAllProjectAsync = createAsyncThunk<
     await delay(1000);
     console.log("Fetching projects - Page:", page, "Status:", status);
 
-        const response = await httpClient.get<ApiResponse<Project[]>>(
-         `/projects?project_status=${status}&page=${page}&limit=10&sortBy=project_id&order=ASC`
-        );
+    const response = await httpClient.get<ApiResponse<Project[]>>(
+      `/projects?project_status=${status}&page=${page}&limit=8&sortBy=project_id&order=ASC`,
+    );
 
     if (!response.data.data || !Array.isArray(response.data.data)) {
       throw new Error("Invalid data format from API");
+      A;
     }
 
     return response.data.data;
@@ -29,15 +30,13 @@ export const fetchAllProjectAsync = createAsyncThunk<
 
 export const fetchTotalPage = createAsyncThunk<
   number,
-  { page: number; status: string } 
->(
-  "project/fetchTotalPage",
-  async ({ page, status }): Promise<number> => {
-    try {
-      await delay(1000);
-      const response = await httpClient.get<ApiResponse<Project[]>>(
-        `/projects?project_status=${status}&page=${page}&limit=10&sortBy=project_id&order=ASC`
-      );
+  { page: number; status: string }
+>("project/fetchTotalPage", async ({ page, status }): Promise<number> => {
+  try {
+    await delay(1000);
+    const response = await httpClient.get<ApiResponse<Project[]>>(
+      `/projects?project_status=${status}&page=${page}&limit=10&sortBy=project_id&order=ASC`,
+    );
 
     console.log("response", response.data);
     console.log("Total Pages:", response.data.totalPages);
@@ -54,7 +53,7 @@ export const fetchProjectByIdAsync = createAsyncThunk<Project[], string>(
   async (id: string): Promise<Project[]> => {
     try {
       const response = await httpClient.get<ApiResponse<Project[]>>(
-        `/projects/${id}`
+        `/projects/${id}`,
       );
 
       if (!response.data.data || !Array.isArray(response.data.data)) {
@@ -66,5 +65,5 @@ export const fetchProjectByIdAsync = createAsyncThunk<Project[], string>(
       console.error("Fetch Project by ID error:", error);
       throw error;
     }
-  }
+  },
 );

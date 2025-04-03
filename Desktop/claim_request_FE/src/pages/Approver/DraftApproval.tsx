@@ -35,10 +35,10 @@ export const DraftApproval: React.FC = () => {
     console.log("New Page: ", newPage);
     setCurrentPage(newPage);
   };
-  const formatDateRange = (dateRange: any) => {
+  const formatDateRange = (dateRange: string) => {
     return dateRange.replace(
       /(\d{1,2})\/(\d{1,2})\/(\d{4})/g,
-      (match, day, month, year) => {
+      (_: string, day: string, month: string, year: string) => {
         return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
       },
     );
@@ -111,15 +111,17 @@ export const DraftApproval: React.FC = () => {
         <h1 className={styles.title}>{t("title")}</h1>
         <p className={styles.title2}>{t("message")}</p>
       </div>
-      <TableComponent
-        columns={columns}
-        dataSource={dataSource}
-        loading={loading}
-        totalPage={totalPages}
-        pagination={true}
-        name="Claims"
-        onPageChange={handlePageChange}
-      />
+      <div className={styles.containerTable}>
+        <TableComponent
+          columns={columns}
+          dataSource={dataSource}
+          loading={loading}
+          totalPage={totalPages}
+          pagination={true}
+          name="Claims"
+          onPageChange={handlePageChange}
+        />
+      </div>
     </div>
   );
 };

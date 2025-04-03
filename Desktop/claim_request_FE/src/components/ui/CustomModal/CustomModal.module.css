@@ -165,6 +165,8 @@
 .container {
   font-weight: 50;
   justify-items: center;
+  font-family: Roboto;
+  font-weight: 400;
 }
 
 .avatar {
@@ -178,9 +180,9 @@
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
-  margin: 20px 20px 0 20px;  
+  margin: 20px 0 0 30px;
   align-items: flex-start;
-  width: calc(100% - 40px);  
+  width: 100%;
 }
 
 .infoUser1Row {
@@ -224,9 +226,9 @@
   align-items: flex-start;
   border: 1px solid #ddd;
   border-radius: 8px;
-  width: calc(100% - 40px);  
-  padding: 20px;
-  margin: 2rem 20px;  
+  width: 95%;
+  padding: 20px 0 20px 20px;
+  margin: 2rem 0 0 0.7rem;
   background-color: #ffffff;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
   gap: 26px;
@@ -275,12 +277,16 @@
   width: 100%;
 }
 
+.history p {
+  align-self: flex-start;
+  margin: 20px 10px 20px 1rem;
+}
+
 .historyHeader {
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px;
 }
 
 .historyIcon {
@@ -292,8 +298,8 @@
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  padding: 20px 15px;
-  width: calc(100% - 30px);  
+  padding: 20px 15px 20px 15px;
+  width: 93%;
   border-top: 1px solid #ddd;
   gap: 5px;
 }
@@ -328,57 +334,62 @@
   text-align: left;
 }
 
+.payButton {
+  width: 95%;
+  display: flex;
+  justify-content: right;
+  margin: 0 0px 12px 0;
+}
+
+.payButton button {
+  width: 120px;
+  height: 40px;
+  background-color: rgb(62, 228, 237);
+  border: 1px solid transparent;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
 .footer {
-  padding: 16px 24px;
-  background: white;
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
   display: flex;
   gap: 12px;
   justify-content: flex-end;
+  padding: 16px 24px;
+  background: #fff;
+  border-top: 1px solid #eee;
+}
+
+.closeButton {
+  padding: 8px 20px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  background: white;
+  color: #666;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .printButton {
-  padding: 8px 16px;
-  background-color: #0d6efd;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 500;
-  font-size: 14px;
   display: flex;
   align-items: center;
   gap: 8px;
-  transition: background-color 0.2s;
+  padding: 8px 20px;
+  border-radius: 6px;
+  border: 1px solid #3ee4ed;
+  background: #3ee4ed;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .printButton:hover {
-  background-color: #0b5ed7;
+  background: #35ccd4;
+  border-color: #35ccd4;
 }
 
-.payButton {
-  padding: 8px 16px;
-  background-color: rgb(62, 228, 237);
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 500;
-  font-size: 14px;
-}
-
-.divider {
-  margin: 0;
-  border: none;
-  border-top: 1px solid #ddd;
-}
-
-@keyframes slideIn {
-  from {
-    transform: translateX(100%);
-  }
-  to {
-    transform: translateX(0);
-  }
+.closeButton:hover {
+  background: #f5f5f5;
+  border-color: #ccc;
 }

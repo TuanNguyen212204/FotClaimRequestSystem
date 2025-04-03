@@ -1,40 +1,10 @@
-.container {
-  width: 95%;
+.container_table {
+  width: 90%;
   margin: auto;
-  margin-top: 0.2rem; 
-  margin: auto;
-  margin-top: 0.5rem;
   background-color: white;
-  padding: 1.5rem 2rem;  
-  border-radius: 0.75rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.header {
-  margin-bottom: 0.5rem;  
-}
-
-.title {
-  font-size: 2.5rem;
-  color: #2d3142;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  margin-bottom: 0.3rem; 
-}
-
-.icon {
-  cursor: pointer;
-  color: #2d3142;
-  transition: all 0.2s;
-}
-
-.icon:hover {
-  color: #007bff;
-  transform: scale(1.1);
-}
-
-.modal {
-  background: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
 .table_body {
@@ -43,11 +13,12 @@
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  margin-top: 0.5rem;
 }
 
 .table_body th,
 .table_body td {
+  border-bottom: 1px solid #ddd;
+  border-left: 1px solid white;
   padding: 1rem;
   text-align: center;
   vertical-align: middle;
@@ -124,6 +95,21 @@
 
 .icon:active {
   transform: scale(0.9);
+}
+
+.header {
+  color: #3A97FB;
+
+  
+  margin-top: 30px;
+}
+
+.containerTable {
+  background-color: #ffffff;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  margin-top: 30px;
+  padding: 30px;
 }
 
 .container :global([class*="filter"]) {

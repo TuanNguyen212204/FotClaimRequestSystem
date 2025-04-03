@@ -47,9 +47,18 @@ export type TableComponentProps<T extends DataRecord> = {
   onPageChange?: (newPage: number) => void;
 };
 
-const Cell = ({ children }: { children: ReactNode }) => {
+const Cell = ({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className: string;
+}) => {
   return (
-    <div tabIndex={-1} className="flex justify-center pt-1">
+    <div
+      tabIndex={-1}
+      className={`justify-left ${className} flex pt-1 text-sm`}
+    >
       {children}
     </div>
   );
@@ -325,11 +334,13 @@ const TableComponent = forwardRef(
                       )}
                       {columns.map((col) => (
                         <td
-                          className="p-2"
+                          className={`p-2`}
                           key={String(col.key || col.dataIndex)}
                           tabIndex={-1}
                         >
-                          <Cell>
+                          <Cell
+                            className={`${col.key === "action" ? "justify-center" : ""} ${col.key === "claim_status" ? "justify-center" : ""} `}
+                          >
                             {col.cell
                               ? col.cell({
                                   value: record[col.dataIndex as keyof T],

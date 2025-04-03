@@ -4,6 +4,7 @@ import styles from "@pages/CreateClaim/Claim.module.css";
 import { FormData } from "@/types/claimForm.type";
 import { useTranslation } from "react-i18next";
 import PopOver from "@/components/ui/PopOver";
+import { useEffect, useState } from "react";
 export interface ClaimTableProps {
   control: Control<FormData>;
   register: UseFormRegister<FormData>;
@@ -29,17 +30,24 @@ export default function ClaimTable({
   const claims = useWatch({ control, name: "claims" });
   const totalHours = claims.reduce(
     (sum, claim) => sum + (claim.working_hours || 0),
-    0
+    0,
   );
+  const [hasEmptyRows, setHasEmptyRows] = useState(true);
 
+  useEffect(() => {
+    const emptyRowExists = claims.some(
+      (claim) => !claim.date || !claim.working_hours,
+    );
+    setHasEmptyRows(emptyRowExists);
+  }, [claims]);
   return (
     <div className="mb-5 box-border overflow-x-auto">
-      <h2 className="text-lg pb-1.5! mb-4!">{t("claimTable.ClaimEntries")}</h2>
+      <h2 className="mb-4! pb-1.5! text-lg">{t("claimTable.ClaimEntries")}</h2>
 
       {errors.claims &&
         typeof errors.claims === "object" &&
         !Array.isArray(errors.claims) && (
-          <p className="text-red-500 text-xs mb-2">{errors.claims.message}</p>
+          <p className="mb-2 text-xs text-red-500">{errors.claims.message}</p>
         )}
       <Table>
         <TableHead />
@@ -49,7 +57,6 @@ export default function ClaimTable({
               <TdWithError error={errors.claims?.[index]?.date?.message}>
                 <input
                   type="date"
-                  
                   className={styles.form_control}
                   {...register(`claims.${index}.date`)}
                   min={minDate}
@@ -95,7 +102,7 @@ export default function ClaimTable({
                   <></>
                 ) : (
                   <button
-                    className={`${styles.btn} ${styles.btn_danger}  `}
+                    className={`${styles.btn} ${styles.btn_danger} `}
                     onClick={() => remove(index)}
                   >
                     {t("claimTable.removeButton")}
@@ -129,9 +136,10 @@ export default function ClaimTable({
           disabled={
             !minDate ||
             !maxDate ||
-            (errors.claims && Object.keys(errors.claims).length > 0)
+            (errors.claims && Object.keys(errors.claims).length > 0) ||
+            hasEmptyRows
           }
-          className={`${styles.btn} ${styles.btn_add}  `}
+          className={`${styles.btn} ${styles.btn_add} `}
           onClick={() => append({ date: minDate, working_hours: 0 })}
         >
           {t("claimTable.addButton")}
@@ -172,7 +180,7 @@ const TdWithError: React.FC<TdWithErrorProps> = ({ children, error }) => (
   <td>
     <div className="flex flex-col gap-1">
       {children}
-      {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
+      {error && <p className="mt-1 text-xs text-red-500">{error}</p>}
     </div>
   </td>
 );
