@@ -47,20 +47,20 @@ const ProjectInformation: React.FC = () => {
           "Fetching projects for page:",
           currentPage,
           "with status:",
-          statusFilter
+          statusFilter,
         );
         const result = await dispatch(
           fetchAllProjectAsync({
             page: currentPage.toString(),
             status: statusFilter || "all",
-          })
+          }),
         );
         console.log("Fetch result:", result);
         await dispatch(
           fetchTotalPage({
             page: currentPage,
             status: statusFilter || "all",
-          })
+          }),
         );
       } catch (error) {
         console.error("Error fetching projects:", error);
@@ -74,7 +74,7 @@ const ProjectInformation: React.FC = () => {
   const handleStatusSelect = (status: string) => {
     setStatusFilter(status);
     setSelectedStatus(
-      status === "all" ? "All" : status === "1" ? "Active" : "Inactive"
+      status === "all" ? "All" : status === "1" ? "Active" : "Inactive",
     );
     setCurrentPage(1);
     setIsDropdownOpen(false);
@@ -117,7 +117,7 @@ const ProjectInformation: React.FC = () => {
   const deleteProject = async (id: string) => {
     try {
       const response = await httpClient.delete<ApiResponseNoGeneric>(
-        "projects/" + id
+        "projects/" + id,
       );
       console.log(response.data.message);
     } catch (error) {
@@ -139,7 +139,7 @@ const ProjectInformation: React.FC = () => {
             fetchAllProjectAsync({
               page: currentPage.toString(),
               status: statusFilter || "all",
-            })
+            }),
           );
         } catch (error) {
           console.error("Error deleting project:", error);
@@ -248,33 +248,33 @@ const ProjectInformation: React.FC = () => {
         </div>
       )}
 
-      <div className="flex items-center mt-5.5 ml-3">
+      <div className="mt-5.5 ml-3 flex items-center">
         <span className="mr-2 text-base font-bold text-gray-700">
           Filter by status:
         </span>
-        <div className="relative inline-block text-left ml-1">
+        <div className="relative ml-1 inline-block text-left">
           <div
             onClick={toggleDropdown}
-            className="flex items-center justify-between px-4 py-2 text-sm font-medium text-gray-700 bg-white border rounded-md shadow-sm hover:bg-gray-100 focus:outline-none"
+            className="flex items-center justify-between rounded-md border bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-100 focus:outline-none"
           >
             <span>{selectedStatus}</span>
-            <ArrowDown className="w-4 h-4 ml-2" />
+            <ArrowDown className="ml-2 h-4 w-4" />
           </div>
 
           {isDropdownOpen && (
-            <div className="absolute right-0 z-10 mt-2 origin-top-right bg-white border border-gray-300 rounded-md shadow-lg w-48">
+            <div className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md border border-gray-300 bg-white shadow-lg">
               <div className="py-1">
                 {["all", "1", "2"].map((status) => (
                   <div
                     key={status}
                     onClick={() => handleStatusSelect(status)}
-                    className="block px-4 py-2 text-sm text-black w-4/5 text-left hover:bg-gray-200"
+                    className="block w-4/5 px-4 py-2 text-left text-sm text-black hover:bg-gray-200"
                   >
                     {status === "all"
                       ? "All"
                       : status === "1"
-                      ? "Active"
-                      : "Inactive"}
+                        ? "Active"
+                        : "Inactive"}
                   </div>
                 ))}
               </div>
