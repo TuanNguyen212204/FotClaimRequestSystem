@@ -1,32 +1,25 @@
 {
-  "claimstatus": {
-    "modal": {
-      "title": "Claim Detail",
-      "close": "Close modal",
-      "print": "Print",
-      "pay": "Pay",
-      "printDetails": "Print details",
-      "payClaim": "Pay claim"
-    },
-    "user": {
-      "userId": "User ID",
-      "avatar": "avatar"
-    },
-    "project": {
-      "projectId": "Project ID",
-      "projectName": "Project Name",
-      "timeDuration": "Time Duration",
-      "submittedDate": "Submitted Date",
-      "approvedDate": "Approved Date",
-      "status": "Status",
-      "totalHours": "Total Working Hours",
-      "salaryOvertime": "Salary Overtime",
-      "hours": "hours"
-    },
-    "history": {
-      "title": "History",
-      "workingHours": "Working Hours",
-      "overtimeSalary": "Overtime Salary"
-    }
+  "title": "Claim Detail",
+  "user": {
+    "avatar": "Avatar",
+    "userId": "User ID"
+  },
+  "project": {
+    "projectId": "Project ID",
+    "projectName": "Project Name"
+  },
+  "claim": {
+    "timeDuration": "Time Duration",
+    "submittedDate": "Submitted Date", 
+    "approvedDate": "Approved Date",
+    "status": "Status",
+    "totalHours": "Total Working Hours",
+    "hours": "hours",
+    "salaryOvertime": "Salary Overtime"
+  },
+  "history": {
+    "title": "History",
+    "workingHours": "Working Hours",
+    "overtimeSalary": "Overtime Salary"
   }
 }

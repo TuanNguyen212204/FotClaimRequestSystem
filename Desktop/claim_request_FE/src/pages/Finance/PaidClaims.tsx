@@ -9,7 +9,7 @@ import TableComponent, {
 import { fetchPaidClaimsAsync } from "../../redux/slices/Claim/paidClaimsSlice";
 import { AppDispatch } from "@/redux";
 import CustomModal from "@/components/ui/CustomModal/CustomModal";
-import StatusTag from "@/components/ui/StatusTag/StatusTag";
+import StatusTag, { StatusType } from "@/components/ui/StatusTag/StatusTag";
 import { useTranslation } from "react-i18next";
 
 const formatDateToDDMMYYYY = (date: string) => {
@@ -239,21 +239,23 @@ const PaidClaims: React.FC = () => {
   };
 
   return (
-    <div className={styles.container}>
+    <>
       <div className={styles.header}>
         <h1 className={styles.title}>{t("paidclaims.title")}</h1>
       </div>
 
-      <TableComponent
-        columns={columns}
-        dataSource={dataSource}
-        loading={loading}
-        pagination={true}
-        pageLength={limit}
-        totalPage={totalPages}
-        name={t("paidclaims.title")}
-        onPageChange={setCurrentPage}
-      />
+      <div className={styles.containerTable}>
+        <TableComponent
+          columns={columns}
+          dataSource={dataSource}
+          loading={loading}
+          pagination={true}
+          pageLength={limit}
+          totalPage={totalPages}
+          name={t("paidclaims.title")}
+          onPageChange={setCurrentPage}
+        />
+      </div>
 
       <CustomModal
         isOpen={isModalOpen}
@@ -273,7 +275,7 @@ const PaidClaims: React.FC = () => {
           renderClaimDetail()
         )}
       </CustomModal>
-    </div>
+    </>
   );
 };
 
