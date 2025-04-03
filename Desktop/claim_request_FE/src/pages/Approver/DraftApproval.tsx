@@ -35,10 +35,10 @@ export const DraftApproval: React.FC = () => {
     console.log("New Page: ", newPage);
     setCurrentPage(newPage);
   };
-  const formatDateRange = (dateRange: any) => {
+  const formatDateRange = (dateRange: string) => {
     return dateRange.replace(
       /(\d{1,2})\/(\d{1,2})\/(\d{4})/g,
-      (match, day, month, year) => {
+      (_: string, day: string, month: string, year: string) => {
         return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
       },
     );

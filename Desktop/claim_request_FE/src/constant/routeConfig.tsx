@@ -87,7 +87,7 @@ export const PRIVATE_ROUTE: RouteConfig[] = [
   {
     path: PATH.createRequest,
     protected: true,
-    component: lazy(() => import("@pages/CreateClaim")),
+    component: lazy(() => import("@pages/CreateClaim/")),
     icon: <FilePlus size={24} />,
     label: "Create Request",
     role: [ROLE.CLAIMER],
@@ -145,6 +145,14 @@ export const PRIVATE_ROUTE: RouteConfig[] = [
     label: "Claim Details",
     icon: <FileText size={24} />,
     protected: true,
+  },
+  {
+    path: PATH.myProject,
+    component: lazy(() => import("@pages/User/MyProjectPage")),
+    label: "My Project",
+    icon: <BriefcaseBusiness size={24} />,
+    protected: true,
+    role: [ROLE.CLAIMER],
   },
   {
     path: PATH.userInfo,

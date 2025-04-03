@@ -13,6 +13,8 @@ import TableComponent, { Column, DataRecord } from "../Table/Table";
 import UserClaimDetailsModal from "./UserClaimDetails";
 import StatusTag from "../StatusTag/StatusTag";
 import { useTranslation } from "react-i18next";
+import { Claim } from "@/types/Claim";
+import { C } from "node_modules/framer-motion/dist/types.d-B50aGbjN";
 
 const UserClaims = () => {
   const { t } = useTranslation("userClaims");
@@ -64,13 +66,13 @@ const UserClaims = () => {
   const formatDateRange = (dateRange: any) => {
     return dateRange.replace(
       /(\d{1,2})\/(\d{1,2})\/(\d{4})/g,
-      (match, day, month, year) => {
+      (match: string, day: string, month: string, year: string) => {
         return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
       },
     );
   };
 
-  const columns: Column[] = [
+  const columns: Column<Claim>[] = [
     {
       key: "project_id",
       dataIndex: "project_id",
@@ -100,14 +102,14 @@ const UserClaims = () => {
       key: "submitted_date",
       dataIndex: "submitted_date",
       title: t("submitted_date_label"),
-      cell: ({ value }) => formatDateToDDMMYYYY(value as string),
+      cell: ({ value }) =>
+        formatDateRange(formatDateToDDMMYYYY(value as string)),
     },
     {
       key: "claim_status",
       dataIndex: "claim_status",
       title: t("claim_status_label"),
       cell: ({ value }: { value: unknown }) => {
-        const stringValue = value as string;
         return (
           <div>
             <StatusTag
@@ -167,7 +169,7 @@ const UserClaims = () => {
         <div className={`${styles.tableContainer}`}>
           <TableComponent
             isHaveCheckbox={false}
-            columns={columns}
+            columns={columns as Column<DataRecord>[]}
             dataSource={dataSource}
             loading={loading}
             pagination={true}
