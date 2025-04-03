@@ -161,6 +161,7 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
   const [showEndDateCalendar, setShowEndDateCalendar] = useState(false);
   const [startDateSelected, setStartDateSelected] = useState<Date | null>(null);
   const [endDateSelected, setEndDateSelected] = useState<Date | null>(null);
+  const minDate = new Date("2025-01-01");
 
   const handleStartDateChange = (newDate: Date) => {
     setStartDateSelected(newDate);
@@ -266,6 +267,7 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
                   value={startDateSelected}
                   locale="vi-VN"
                   className={styles.calendarwrapperstartDateCalendar}
+                  minDate={minDate}
                 />
               </div>
             )}
@@ -293,6 +295,7 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
                   value={endDateSelected}
                   locale="vi-VN"
                   className={styles.calendarwrapperendDateCalendar}
+                  minDate={minDate}
                 />
               </div>
             )}
