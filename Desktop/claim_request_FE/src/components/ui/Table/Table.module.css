@@ -27,7 +27,6 @@ body {
 }
 .th {
   padding: 1rem 0.5rem;
-
   font-size: 16px;
   border-right: 0.5px solid rgba(255, 255, 255, 0.5);
   font-family: "ROBOTO", sans-serif;
@@ -296,27 +295,53 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #4ade80 0%, #34c759 100%);
+  position: relative;
+  background: linear-gradient(90deg, #6b48ff 0%, #a855f7 100%);
   color: white;
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 700;
   padding: 10px 20px;
-  border: none;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  transition:
+    transform 0.3s ease-in-out,
+    background 0.4s ease,
+    border 0.3s ease,
+    box-shadow 0.3s ease;
+  overflow: hidden;
 }
 
 .create_button:hover {
-  background: linear-gradient(135deg, #34c759 0%, #2db54f 100%);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-  transform: translateY(-2px);
+  background: linear-gradient(90deg, #a855f7 0%, #6b48ff 100%);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  transform: scale(1.05);
 }
 
 .create_button:active {
-  background: linear-gradient(135deg, #2db54f 0%, #28a745 100%);
+  background: linear-gradient(90deg, #5a3edb 0%, #9333ea 100%);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transform: translateY(0);
+  transform: scale(0.98);
+}
+
+.create_button::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition:
+    width 0.5s ease,
+    height 0.5s ease;
+}
+
+.create_button:active::after {
+  width: 200px;
+  height: 200px;
+  opacity: 0;
 }
 
 .create_button_content {
@@ -326,12 +351,18 @@ body {
 }
 
 .create_button_icon {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 22px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.create_button:hover .create_button_icon {
+  transform: rotate(90deg);
 }
 
 .create_button_text {
   font-size: 14px;
+  letter-spacing: 0.5px;
 }
 
 .checkbox {
