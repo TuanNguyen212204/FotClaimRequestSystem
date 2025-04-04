@@ -5,12 +5,12 @@ import Modal from "react-modal";
 import { useForm } from "react-hook-form";
 import { X } from "lucide-react";
 import httpClient from "@/constant/apiInstance";
-import Calendar from "react-calendar";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { Project } from "@/types/Project";
 import { toast } from "react-toastify";
 import styles from "./CreateProject.module.css";
 import { useTranslation } from "react-i18next";
-import "react-calendar/dist/Calendar.css";
 
 Modal.setAppElement("#root");
 
@@ -216,7 +216,7 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
                   message: "Invalid format (Pxxx)",
                 },
               })}
-              className="w-full p-2 border border-gray-300 rounded-md"
+              className="w-full px-1 py-3 border border-gray-300 rounded-md"
             />
             {checkingId && (
               <p className="text-blue-500 text-sm">Checking Project ID...</p>
@@ -235,7 +235,7 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
               {...register("project_name", {
                 required: t("projectInformation.validation.projectName"),
               })}
-              className="w-full p-2 border border-gray-300 rounded-md"
+              className="w-full px-1 py-3 border border-gray-300 rounded-md"
             />
             {errors.project_name && (
               <p className="text-red-500 text-sm">{errors.project_name.message}</p>
@@ -243,60 +243,30 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">
-              {t("projectInformation.createProject.startDate")}
-            </label>
-            <div
-              className="w-full p-2 border border-gray-300 rounded-md cursor-pointer"
-              onClick={() => setShowStartDateCalendar(!showStartDateCalendar)}
-            >
-              {startDateSelected
-                ? startDateSelected.toLocaleDateString("vi-VN")
-                : "DD/MM/YYYY"}
+                        <label className="block text-sm font-medium text-gray-700">Start Date</label>
+                        <DatePicker
+                          selected={startDateSelected}
+                          onChange={(date: Date) => handleStartDateChange(date)}
+                          dateFormat="dd/MM/yyyy"
+                          className={styles.datePickerInput}
+                          minDate={minDate}
+                          placeholderText="DD/MM/YYYY"
+                          locale="vi"
+                        />
+                      </div>
+          
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700">End Date</label>
+                        <DatePicker
+                          selected={endDateSelected}
+                          onChange={(date: Date) => handleEndDateChange(date)}
+                          dateFormat="dd/MM/yyyy"
+                          className={styles.datePickerInput}
+                          minDate={minDate}
+                          placeholderText="DD/MM/YYYY"
+                  locale="vi"
+              />
             </div>
-            {errors.start_date && (
-              <p className="text-red-500 text-sm">{errors.start_date.message}</p>
-            )}
-            {showStartDateCalendar && (
-              <div className={styles.calendarwrapper}>
-                <Calendar
-                  onChange={handleStartDateChange}
-                  value={startDateSelected}
-                  locale="vi-VN"
-                  className={styles.calendarwrapperstartDateCalendar}
-                  minDate={minDate}
-                />
-              </div>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              {t("projectInformation.createProject.endDate")}
-            </label>
-            <div
-              className="w-full p-2 border border-gray-300 rounded-md cursor-pointer"
-              onClick={() => setShowEndDateCalendar(!showEndDateCalendar)}
-            >
-              {endDateSelected
-                ? endDateSelected.toLocaleDateString("vi-VN")
-                : "DD/MM/YYYY"}
-            </div>
-            {errors.end_date && (
-              <p className="text-red-500 text-sm">{errors.end_date.message}</p>
-            )}
-            {showEndDateCalendar && (
-              <div className={styles.calendarwrapper}>
-                <Calendar
-                  onChange={handleEndDateChange}
-                  value={endDateSelected}
-                  locale="vi-VN"
-                  className={styles.calendarwrapperendDateCalendar}
-                  minDate={minDate}
-                />
-              </div>
-            )}
-          </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700">

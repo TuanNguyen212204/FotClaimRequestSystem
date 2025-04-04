@@ -38,7 +38,7 @@
   background-color: white;
   border-radius: 10px;
   padding: 20px;
-  width: 500px;
+  width: 410px;
   height: auto; 
   max-height: none; 
   overflow: hidden; 
@@ -110,3 +110,20 @@
   max-width: 200px;
 }
 
+.datePickerInput {
+  width: 160%;
+  padding: 0.5rem;
+  border: 1px solid #d1d5db; 
+  border-radius: 0.375rem;   
+  text-align: left;
+  font-size: 1rem;
+}
+
+.selectStatus {
+  width: 103%;
+  padding: 0.5rem;
+  border: 1px solid #d1d5db; 
+  border-radius: 0.375rem;   
+  text-align: left;
+  font-size: 1rem;
+}

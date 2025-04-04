@@ -6,8 +6,9 @@ import styles from "./UpdateProject.module.css";
 import Modal from "react-modal";
 import httpClient from "@/constant/apiInstance";
 import { toast } from "react-toastify";
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 
 Modal.setAppElement("#root");
 
@@ -18,8 +19,6 @@ interface UpdateProjectProps {
 
 export const UpdateProject: React.FC<UpdateProjectProps> = ({ projectid, setOpenModal }) => {
   const {
-    register,
-    watch,
     setValue,
     setError,
     clearErrors,
@@ -160,53 +159,34 @@ export const UpdateProject: React.FC<UpdateProjectProps> = ({ projectid, setOpen
                 value={projectData.project_name}
                 onChange={handleChange}
                 required
-                className="w-full p-2 border border-gray-300 rounded-md"
+                className="w-full px-1 py-2 border border-gray-300 rounded-md"
               />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700">Start Date</label>
-              <div
-                className="w-full p-2 border border-gray-300 rounded-md cursor-pointer"
-                onClick={() => setShowStartDateCalendar(!showStartDateCalendar)}
-              >
-                {startDateSelected ? startDateSelected.toLocaleDateString("vi-VN") : "DD/MM/YYYY"}
-              </div>
-              {showStartDateCalendar && (
-                <div className={styles.calendarwrapper}>
-                  <Calendar
-                    onChange={handleStartDateChange}
-                    value={startDateSelected}
-                    locale="vi-VN"
-                    className={styles.calendarwrapperstartDateCalendar}
-                    minDate={minDate}
-                  />
-                </div>
-              )}
+              <DatePicker
+                selected={startDateSelected}
+                onChange={(date: Date) => handleStartDateChange(date)}
+                dateFormat="dd/MM/yyyy"
+                className={styles.datePickerInput}
+                minDate={minDate}
+                placeholderText="DD/MM/YYYY"
+                locale="vi"
+              />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700">End Date</label>
-              <div
-                className="w-full p-2 border border-gray-300 rounded-md cursor-pointer"
-                onClick={() => setShowEndDateCalendar(!showEndDateCalendar)}
-              >
-                {endDateSelected ? endDateSelected.toLocaleDateString("vi-VN") : "DD/MM/YYYY"}
-              </div>
-              {errors.end_date && (
-                <p className="text-red-500 text-sm">{errors.end_date.message}</p>
-              )}
-              {showEndDateCalendar && (
-                <div className={styles.calendarwrapper}>
-                  <Calendar
-                    onChange={handleEndDateChange}
-                    value={endDateSelected}
-                    locale="vi-VN"
-                    className={styles.calendarwrapperendDateCalendar}
-                    minDate={minDate}
-                  />
-                </div>
-              )}
+              <DatePicker
+                selected={endDateSelected}
+                onChange={(date: Date) => handleEndDateChange(date)}
+                dateFormat="dd/MM/yyyy"
+                className={styles.datePickerInput}
+                minDate={minDate}
+                placeholderText="DD/MM/YYYY"
+                locale="vi"
+              />
             </div>
 
             <div>
@@ -215,7 +195,7 @@ export const UpdateProject: React.FC<UpdateProjectProps> = ({ projectid, setOpen
                 name="project_status"
                 value={projectData.project_status}
                 onChange={handleChange}
-                className="w-full p-2 border border-gray-300 rounded-md"
+                className={styles.selectStatus}
               >
                 <option value="1">Active</option>
                 <option value="0">Inactive</option>
