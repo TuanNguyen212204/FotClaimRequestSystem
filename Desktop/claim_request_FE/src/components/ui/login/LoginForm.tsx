@@ -10,7 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { HTTP_STATUS } from "@/constant/httpStatus";
 import { FIRST_PAGE_BY_ROLE } from "@/constant/firstPageByRole";
 import { USER_STATUS } from "@/types/UserStatus";
-import ROLE from "@/constant/role";
+import ROLE_STRING from "@/constant/roleString";
 
 async function loginUser(values: {
   username: string;
@@ -61,16 +61,17 @@ function LoginForm() {
           return;
         }
         const role_id = localStorage.getItem("role_id");
-        if (role_id === ROLE.ADMIN) {
+        if (role_id === ROLE_STRING.ADMIN) {
           localStorage.setItem("selectedClaim", "usersetting");
+          localStorage.setItem("roleadminCheck", ROLE_STRING.ADMIN);
           navigate(`${FIRST_PAGE_BY_ROLE.ADMIN}`);
-        } else if (role_id === ROLE.APPROVER) {
+        } else if (role_id === ROLE_STRING.APPROVER) {
           localStorage.setItem("selectedClaim", "pendingClaim");
           navigate(`${FIRST_PAGE_BY_ROLE.APPROVER}`);
-        } else if (role_id === ROLE.FINANCE) {
+        } else if (role_id === ROLE_STRING.FINANCE) {
           localStorage.setItem("selectedClaim", "approvedFinance");
           navigate(`${FIRST_PAGE_BY_ROLE.FINANCE}`);
-        } else if (role_id === ROLE.CLAIMER) {
+        } else if (role_id === ROLE_STRING.CLAIMER) {
           localStorage.setItem("selectedClaim", "all");
           navigate(`${FIRST_PAGE_BY_ROLE.CLAIMER}`);
         } else {
