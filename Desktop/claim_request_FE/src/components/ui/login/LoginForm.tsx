@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { HTTP_STATUS } from "@/constant/httpStatus";
 import { FIRST_PAGE_BY_ROLE } from "@/constant/firstPageByRole";
-import { USER_STATUS } from "@/types/UserStatus";
+import { USER_STATUS } from "@/types/userStatus";
 import ROLE_STRING from "@/constant/roleString";
 
 async function loginUser(values: {
@@ -63,7 +63,6 @@ function LoginForm() {
         const role_id = localStorage.getItem("role_id");
         if (role_id === ROLE_STRING.ADMIN) {
           localStorage.setItem("selectedClaim", "usersetting");
-          localStorage.setItem("roleadminCheck", ROLE_STRING.ADMIN);
           navigate(`${FIRST_PAGE_BY_ROLE.ADMIN}`);
         } else if (role_id === ROLE_STRING.APPROVER) {
           localStorage.setItem("selectedClaim", "pendingClaim");

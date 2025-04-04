@@ -39,7 +39,6 @@ export default function CreateClaim({
   const { t } = useTranslation("claim");
   const dispatch = useDispatch<AppDispatch>();
   const projectList = useSelector(selectProject);
-
   const claims = useWatch({ control, name: "claims" });
 
   useEffect(() => {
@@ -49,8 +48,7 @@ export default function CreateClaim({
       if (date) {
         if (seenDates.has(date)) {
           setError(`claims.${index}.date`, {
-            type: "manual"
-
+            type: "manual",
           });
         } else {
           seenDates.add(date);
