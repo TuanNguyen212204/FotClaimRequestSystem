@@ -82,7 +82,7 @@ const SummaryCard = ({
               pieHole: 0.4,
               legend: "none",
               backgroundColor: "transparent",
-              chartArea: { width: "90%", height: "90%" },
+              chartArea: { width: "110%", height: "110%" },
               tooltip: { trigger: "focus" },
               pieSliceText: "none",
               slices: chartData.reduce((acc, _, index) => {
