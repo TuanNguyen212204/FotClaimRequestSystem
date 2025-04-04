@@ -64,35 +64,6 @@ export const PendingComponent: React.FC = () => {
   }>(null);
   const [selectedData, setSelectedData] = useState<DataRecord[]>([]);
 
-  // const handleSelectAll = () => {
-  //   const allChecked = checkedItems.size === dataSource.length;
-  //   if (allChecked) {
-  //     setCheckedItems(new Set());
-  //   } else {
-  //     setCheckedItems(new Set(dataSource.map((record) => record.id || "")));
-  //   }
-  // };
-
-  // const handleCheckboxChange = (requestId: string, checked: boolean) => {
-  //   setCheckedItems((prev) => {
-  //     const newCheckedItems = new Set(prev);
-  //     if (checked) {
-  //       newCheckedItems.add(requestId);
-  //     } else {
-  //       newCheckedItems.delete(requestId);
-  //     }
-  //     return newCheckedItems;
-  //   });
-  // };
-
-  // const handleGetSelectedData = () => {
-  //   const selectedClaims = dataSource.filter((record) =>
-  //     checkedItems.has(record.request_id)
-  //   );
-  //   setSelectedData(selectedClaims);
-  //   console.log("Selected claims:", selectedClaims);
-  // };
-
   const handleGetSelectedData = () => {
     if (checkboxRef.current) {
       const selected = checkboxRef.current.getSelectedData();
@@ -333,11 +304,6 @@ export const PendingComponent: React.FC = () => {
       dataIndex: "total_hours",
       title: t("columns.totalHours"),
     },
-    // {
-    //   key: "project_id",
-    //   dataIndex: "project_id",
-    //   title: t("columns.projectId"),
-    // },
     {
       key: "project_name",
       dataIndex: "project_name",
@@ -350,25 +316,6 @@ export const PendingComponent: React.FC = () => {
       cell: ({ value }) =>
         formatDateRange(formatDateToDDMMYYYY(value as string)),
     },
-    // {
-    //   key: "salary",
-    //   dataIndex: "user_salary",
-    //   title: t("columns.salary"),
-    //   cell: ({ value }) => <div>{isSalaryVisible ? value : "******"}</div>,
-    // },
-    // {
-    //   key: "ot_rate",
-    //   dataIndex: "user_ot_rate",
-    //   title: t("columns.otRate"),
-    // },
-    // {
-    //   key: "salary_overtime",
-    //   dataIndex: "salary_overtime",
-    //   title: t("columns.salaryOvertime"),
-    //   cell: ({ value }) => (
-    //     <div>{isSalaryVisible ? value : "*****************"}</div>
-    //   ),
-    // },
     {
       key: "claim_status",
       dataIndex: "claim_status",
@@ -435,6 +382,8 @@ export const PendingComponent: React.FC = () => {
           <h1 className={styles.title}>{t("title")}</h1>
           <p className={styles.title2}>{t("subtitle")}</p>
         </div>
+      </div>
+      <div className={styles.containerTable}>
         <div className={styles.buttonContainer}>
           {!loading && (
             <>
@@ -466,8 +415,6 @@ export const PendingComponent: React.FC = () => {
             </>
           )}
         </div>
-      </div>
-      <div className={styles.containerTable}>
         <TableComponent
           ref={checkboxRef}
           columns={columns}

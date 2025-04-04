@@ -30,6 +30,7 @@ import { set } from "date-fns";
 import { useTranslation } from "react-i18next";
 import ToggleButtonForAdmin from "@/components/ui/ToggleButton/ToggleButton";
 import { u } from "node_modules/framer-motion/dist/types.d-B50aGbjN";
+import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
 type Department = {
   id: string;
   name: string;
@@ -268,7 +269,25 @@ const AllUserInformation: React.FC = () => {
       dataIndex: "assign",
       title: t("allUserInformation.table.assign"),
       cell: ({ record }: { record: User }) => {
-        return (
+        // return (
+        //   <div tabIndex={-1}>
+        //     <button
+        //       tabIndex={-1}
+        //       className={styles.circleCheckButton}
+        //       onClick={() => handleAssignUser(record.user_id as string)}
+        //       disabled={userStatuses[record.user_id] === 0}
+        //     >
+        //       <div>
+        //         {userStatuses[record.user_id] === 1 ? (
+        //           <CircleCheck size={20} />
+        //         ) : (
+        //           <X size={20} />
+        //         )}
+        //       </div>
+        //     </button>
+        //   </div>
+        // );
+        return record.role_id !== 1 ? (
           <div tabIndex={-1}>
             <button
               tabIndex={-1}
@@ -280,8 +299,31 @@ const AllUserInformation: React.FC = () => {
                 {userStatuses[record.user_id] === 1 ? (
                   <CircleCheck size={20} />
                 ) : (
-                  <X size={20} />
+                  <div className={styles.circleCheckButtonNotAllowed}>
+                    <Tooltip text="This user is disabled" position="top">
+                      <X size={20} />
+                    </Tooltip>
+                  </div>
                 )}
+              </div>
+            </button>
+          </div>
+        ) : (
+          <div tabIndex={-1}>
+            <button
+              tabIndex={-1}
+              className={styles.circleCheckButtonNotAllowed}
+              onClick={() => {
+                toast.error("You don't have permission to assign this user!");
+              }}
+              disabled={userStatuses[record.user_id] === 0}
+            >
+              <div>
+                {/* <X size={20} />
+                <Tooltip></Tooltip> */}
+                <Tooltip text="Don't have permission" position="top">
+                  <X size={20} />
+                </Tooltip>
               </div>
             </button>
           </div>
@@ -293,7 +335,28 @@ const AllUserInformation: React.FC = () => {
       dataIndex: "user_id",
       title: t("allUserInformation.table.action"),
       cell: ({ value, record }: { value: string; record: User }) => {
-        return (
+        // return (
+        //   <div style={{ display: "flex" }}>
+        //     <div>
+        //       <button
+        //         tabIndex={-1}
+        //         className={styles.update_button}
+        //         style={{ cursor: "pointer" }}
+        //         onClick={() => handleUpdate(value as string)}
+        //         disabled={userStatuses[record.user_id] === 0}
+        //       >
+        //         <div>
+        //           {userStatuses[record.user_id] === 1 ? (
+        //             <SquarePen size={20} />
+        //           ) : (
+        //             <X size={20} />
+        //           )}
+        //         </div>
+        //       </button>
+        //     </div>
+        //   </div>
+        // );
+        return record.role_id !== 1 ? (
           <div style={{ display: "flex" }}>
             <div>
               <button
@@ -307,8 +370,32 @@ const AllUserInformation: React.FC = () => {
                   {userStatuses[record.user_id] === 1 ? (
                     <SquarePen size={20} />
                   ) : (
-                    <X size={20} />
+                    <div className={styles.circleCheckButtonNotAllowed}>
+                      <Tooltip text="This user is disabled" position="top">
+                        <X size={20} />
+                      </Tooltip>
+                    </div>
                   )}
+                </div>
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div style={{ display: "flex" }}>
+            <div>
+              <button
+                tabIndex={-1}
+                className={styles.circleCheckButtonNotAllowed}
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  toast.error("You don't have permission to update this user!");
+                }}
+                disabled={userStatuses[record.user_id] === 0}
+              >
+                <div className={styles.circleCheckButtonNotAllowed}>
+                  <Tooltip text="This user is disabled" position="top">
+                    <X size={20} />
+                  </Tooltip>
                 </div>
               </button>
             </div>
@@ -357,7 +444,7 @@ const AllUserInformation: React.FC = () => {
     console.log(page);
   }, [dataSource, page]);
   return (
-    <div>
+    <div className="m-0 p-0">
       {openModal && (
         <div className={styles.editModal}>
           <div>

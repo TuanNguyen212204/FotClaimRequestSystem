@@ -82,12 +82,12 @@ export const DraftApproval: React.FC = () => {
       dataIndex: "project_name",
       title: t("project_name"),
     },
-    {
-      key: "submitted_date",
-      dataIndex: "submitted_date",
-      title: "Submitted Date",
-      cell: ({ value }) => formatDateRange(formatDate(value as string)),
-    },
+    // {
+    //   key: "submitted_date",
+    //   dataIndex: "submitted_date",
+    //   title: "Submitted Date",
+    //   cell: ({ value }) => formatDateRange(formatDate(value as string)),
+    // },
     {
       key: "claim_status",
       dataIndex: "claim_status",

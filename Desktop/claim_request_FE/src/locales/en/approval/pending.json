@@ -1,9 +1,9 @@
 {
   "title": "Pending Claims",
   "subtitle": "Your claims are still cooking!",
-  "approveSelected": "Approve",
-  "rejectSelected": "Reject",
-  "returnSelected": "Return",
+  "approveSelected": "Approve Selected",
+  "rejectSelected": "Reject Selected",
+  "returnSelected": "Return Selected",
   "loading": "Loading...",
   "pleaseWait": "Please wait...",
   "columns": {
