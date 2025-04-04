@@ -9,13 +9,15 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { HTTP_STATUS } from "@/constant/httpStatus";
 import { FIRST_PAGE_BY_ROLE } from "@/constant/firstPageByRole";
+import { USER_STATUS } from "@/types/UserStatus";
+import ROLE from "@/constant/role";
 
 async function loginUser(values: {
   username: string;
   password: string;
 }): Promise<void> {
   const response = await httpClient.post("auth/login", values);
-  if (response.status === 200) {
+  if (response.status === HTTP_STATUS.OK) {
     const data = response.data as {
       tokens: { access: { token: string } };
       user: {
@@ -54,21 +56,21 @@ function LoginForm() {
       try {
         await loginUser(values);
         const user_status = localStorage.getItem("user_status");
-        if (user_status === "2") {
+        if (user_status === USER_STATUS.NOT_VERIFY) {
           navigate("/change-password");
           return;
         }
         const role_id = localStorage.getItem("role_id");
-        if (role_id === "1") {
+        if (role_id === ROLE.ADMIN) {
           localStorage.setItem("selectedClaim", "usersetting");
           navigate(`${FIRST_PAGE_BY_ROLE.ADMIN}`);
-        } else if (role_id === "2") {
+        } else if (role_id === ROLE.APPROVER) {
           localStorage.setItem("selectedClaim", "pendingClaim");
           navigate(`${FIRST_PAGE_BY_ROLE.APPROVER}`);
-        } else if (role_id === "3") {
+        } else if (role_id === ROLE.FINANCE) {
           localStorage.setItem("selectedClaim", "approvedFinance");
           navigate(`${FIRST_PAGE_BY_ROLE.FINANCE}`);
-        } else if (role_id === "4") {
+        } else if (role_id === ROLE.CLAIMER) {
           localStorage.setItem("selectedClaim", "all");
           navigate(`${FIRST_PAGE_BY_ROLE.CLAIMER}`);
         } else {
