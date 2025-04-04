@@ -64,6 +64,8 @@ const ErrorPage: React.FC<ErrorPageProps> = (props) => {
         navigate(`${FIRST_PAGE_BY_ROLE.FINANCE}`);
       } else if (roleID === 4) {
         navigate(`${FIRST_PAGE_BY_ROLE.CLAIMER}`);
+      }else{
+        navigate("/");
       }
     }
   };
