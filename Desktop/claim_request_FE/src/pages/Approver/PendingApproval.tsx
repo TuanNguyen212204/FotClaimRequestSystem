@@ -356,7 +356,7 @@ export const PendingComponent: React.FC = () => {
             />
           </Tooltip>
           <Tooltip text="Return" position="top">
-            <Undo2
+            <RotateCcw
               className={styles.iconReturn}
               onClick={() => handleReturnClaim(value as string)}
             />
@@ -391,10 +391,11 @@ export const PendingComponent: React.FC = () => {
             <>
               <Button
                 color="white"
-                backgroundColor="#89AC46"
+                // backgroundColor="linear-gradient(90deg, #89AC46, #6B8E23)"
                 size="large"
-                style={{ borderRadius: "10px" }}
+                style={{ borderRadius: "10px", background: "linear-gradient(90deg, #89AC46, #6B8E23)" }}
                 onClick={handleApproveSelect}
+                icon={<Check />}
               >
                 {t("approveSelected")}
               </Button>
@@ -402,7 +403,12 @@ export const PendingComponent: React.FC = () => {
                 danger
                 size="large"
                 onClick={handleRejectSelect}
-                style={{ borderRadius: "10px" }}
+                style={{
+                  borderRadius: "10px",
+                  background: "linear-gradient(90deg, #FF6347, #FF4500)",
+                  color: "white",
+                }}
+                icon={<X />}
               >
                 {t("rejectSelected")}
               </Button>
@@ -410,7 +416,12 @@ export const PendingComponent: React.FC = () => {
                 type="primary"
                 size="large"
                 onClick={handleReturnSelect}
-                style={{ borderRadius: "10px" }}
+                style={{
+                  borderRadius: "10px",
+                  background: "linear-gradient(90deg, #4682B4, #1E90FF)",
+                  color: "white",
+                }}
+                icon={<RotateCcw />}
               >
                 {t("returnSelected")}
               </Button>
