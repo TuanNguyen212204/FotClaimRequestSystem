@@ -31,6 +31,11 @@
   cursor: pointer;
   color: #1b56fd;
 }
+.circleCheckButtonNotAllowed {
+  background-color: transparent;
+  cursor: not-allowed;
+  color: grey;
+}
 .circleCheckButton:hover {
   color: #133eb4;
 }

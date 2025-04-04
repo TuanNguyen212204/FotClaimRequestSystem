@@ -18,7 +18,6 @@ export const fetchAllProjectAsync = createAsyncThunk<
 
     if (!response.data.data || !Array.isArray(response.data.data)) {
       throw new Error("Invalid data format from API");
-      A;
     }
 
     return response.data.data;
