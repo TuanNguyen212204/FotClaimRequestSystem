@@ -1,23 +1,28 @@
 {
   "title": "Pending Claims",
   "subtitle": "Your claims are still cooking!",
-  "approveSelected": "Approve Selected",
-  "rejectSelected": "Reject Selected",
-  "returnSelected": "Return Selected",
-  "loading": "Loading...",
-  "pleaseWait": "Please wait...",
+  "approve_selected": "Approve Selected",
+  "reject_selected": "Reject Selected",
+  "return_selected": "Return Selected",
   "columns": {
-    "fullName": "Full Name",
+    "full_name": "Full Name",
     "email": "Email",
-    "startDate": "Start Date",
-    "endDate": "End Date",
-    "totalHours": "Total Hours",
-    "projectId": "Project ID",
-    "projectName": "Project Name",
-    "submittedDate": "Submitted Date",
+    "start_date": "Start Date",
+    "end_date": "End Date",
+    "total_hours": "Total Hours",
+    "project_id": "Project ID",
+    "project_name": "Project Name",
+    "submitted_date": "Submitted Date",
     "salary": "Salary",
-    "otRate": "OT Rate",
-    "salaryOvertime": "Salary Overtime",
-    "claimStatus": "Claim Status"
+    "ot_rate": "OT Rate",
+    "salary_overtime": "Salary Overtime",
+    "claim_status": "Claim Status",
+    "action": "Action"
+  },
+  "tooltip": {
+    "details": "View Details",
+    "approve": "Approve",
+    "reject": "Reject",
+    "return": "Return"
   }
 }

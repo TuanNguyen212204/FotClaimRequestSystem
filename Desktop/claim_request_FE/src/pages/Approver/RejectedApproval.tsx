@@ -76,7 +76,7 @@ export const RejectedComponent: React.FC = () => {
     {
       key: "user_name",
       dataIndex: "user_full_name",
-      title: t("fullName"),
+      title: t("full_name"),
     },
     {
       key: "email",
@@ -86,36 +86,36 @@ export const RejectedComponent: React.FC = () => {
     {
       key: "start_date",
       dataIndex: "start_date",
-      title: t("startDate"),
+      title: t("start_date"),
       cell: ({ value }) =>
         formatDateRange(formatDateToDDMMYYYY(value as string)),
     },
     {
       key: "end_date",
       dataIndex: "end_date",
-      title: t("endDate"),
+      title: t("end_date"),
       cell: ({ value }) =>
         formatDateRange(formatDateToDDMMYYYY(value as string)),
     },
     {
       key: "total_hours",
       dataIndex: "total_hours",
-      title: t("totalHours"),
+      title: t("total_hours"),
     },
     {
       key: "project_id",
       dataIndex: "project_id",
-      title: t("projectId"),
+      title: t("project_id"),
     },
     {
       key: "project_name",
       dataIndex: "project_name",
-      title: t("projectName"),
+      title: t("project_name"),
     },
     {
       key: "submitted_date",
       dataIndex: "submitted_date",
-      title: t("submittedDate"),
+      title: t("submitted_date"),
       cell: ({ value }) =>
         formatDateRange(formatDateToDDMMYYYY(value as string)),
     },
@@ -141,7 +141,7 @@ export const RejectedComponent: React.FC = () => {
     {
       key: "claim_status",
       dataIndex: "claim_status",
-      title: t("claimStatus"),
+      title: t("claim_status"),
       cell: ({ value }) => <StatusTag status={value as StatusType} />,
     },
   ].filter((column) => !column.hidden);
@@ -159,8 +159,8 @@ export const RejectedComponent: React.FC = () => {
   return (
     <div>
       <div className={styles.container}>
-        <h1 className={styles.title}>{t("rejectedClaims")}</h1>
-        <p className={styles.title2}>{t("rejectedMessage")}</p>
+        <h1 className={styles.title}>{t("title")}</h1>
+        <p className={styles.title2}>{t("message")}</p>
       </div>
       <div className={styles.containerTable}>
         <TableComponent
