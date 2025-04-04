@@ -155,7 +155,7 @@ function ChangePassword() {
             position: "top-right",
             autoClose: 2000,
           });
-        } else if (error.errorCode === 2) {
+        } else if (error.errorCode === 2 || error.errorCode === 6) {
           setFieldError("newPassword", error.message);
         } else if (error.errorCode === 3) {
           setFieldError("confirmPassword", error.message);
