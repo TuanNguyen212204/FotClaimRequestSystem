@@ -1,14 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { data, useNavigate } from "react-router-dom";
 import { PATH } from "@constant/config";
 import Modal from "react-modal";
 import { useForm } from "react-hook-form";
 import { X } from "lucide-react";
 import httpClient from "@/constant/apiInstance";
+import Calendar from "react-calendar";
 import { Project } from "@/types/Project";
 import { toast } from "react-toastify";
 import styles from "./CreateProject.module.css";
 import { useTranslation } from "react-i18next";
+
+// Import CSS for react-calendar
+import "react-calendar/dist/Calendar.css";
 
 Modal.setAppElement("#root");
 
@@ -29,6 +33,7 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
     watch,
     setError,
     clearErrors,
+    setValue,
     formState: { errors },
   } = useForm<Project>();
 
@@ -39,8 +44,10 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
       start_date: data.start_date,
       end_date: data.end_date,
       project_status: data.project_status,
-    };
-
+      project_managers: data.project_managers
+    }
+    console.log("DATARE:", requestBody);
+    
     try {
       await httpClient.post("/projects/create-project", requestBody);
       toast.success("Create project successfully!");
@@ -51,6 +58,28 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
       toast.error("Failed to create project. Please try again.");
     }
   };
+  
+  const [pmUsers, setPmUsers] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchPmUsers = async () => {
+      try {
+        const response = await httpClient.get("/admin/staffs?department_id=7"); 
+        console.log("data12:", response.data.data);
+
+        const filteredUsers = response.data.data.map((user: any) => ({
+          user_id: user.user_id,
+          full_name: user.full_name
+        }));
+        console.log("Dữ liệu sau khi lọc:", filteredUsers); 
+        setPmUsers(filteredUsers); 
+      } catch (error) {
+        console.error("Error fetching PM users:", error);
+      }
+    };
+    fetchPmUsers();
+  }, []);
+  
 
   const startDate = watch("start_date");
   const endDate = watch("end_date");
@@ -81,13 +110,13 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
     const checkProjectId = async () => {
       setCheckingId(true);
       try {
-        await httpClient.get<any>(`/projects/${projectId}`);
+        await httpClient.get<any>(`/projects/check/${projectId}`);
         setError("project_id", {
           type: "manual",
           message: "Project ID already exists!",
         });
       } catch (error: any) {
-        if (error.response?.status === 404) {
+        if (error.response?.status === 400) {
           clearErrors("project_id");
         } else {
           console.error("Error checking project ID:", error);
@@ -127,6 +156,32 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
     const timer = setTimeout(checkProjectName, 500);
     return () => clearTimeout(timer);
   }, [projectName]);
+
+  const [showStartDateCalendar, setShowStartDateCalendar] = useState(false);
+  const [showEndDateCalendar, setShowEndDateCalendar] = useState(false);
+  const [startDateSelected, setStartDateSelected] = useState<Date | null>(null);
+  const [endDateSelected, setEndDateSelected] = useState<Date | null>(null);
+  const minDate = new Date("2025-01-01");
+
+  const handleStartDateChange = (newDate: Date) => {
+    setStartDateSelected(newDate);
+    setValue("start_date", newDate);
+    setShowStartDateCalendar(false);
+  };
+
+  const handleEndDateChange = (newDate: Date) => {
+    setEndDateSelected(newDate);
+    setValue("end_date", newDate);
+    setShowEndDateCalendar(false);
+  };
+
+  useEffect(() => {
+    if (openModal) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [openModal]);
 
   return (
     <Modal
@@ -170,9 +225,7 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
               <p className="text-blue-500 text-sm">Checking Project ID...</p>
             )}
             {errors.project_id && (
-              <p className="text-red-500 text-sm">
-                {errors.project_id.message}
-              </p>
+              <p className="text-red-500 text-sm">{errors.project_id.message}</p>
             )}
           </div>
 
@@ -187,13 +240,8 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
               })}
               className="w-full p-2 border border-gray-300 rounded-md"
             />
-            {checkingName && (
-              <p className="text-blue-500 text-sm">Checking Project Name...</p>
-            )}
             {errors.project_name && (
-              <p className="text-red-500 text-sm">
-                {errors.project_name.message}
-              </p>
+              <p className="text-red-500 text-sm">{errors.project_name.message}</p>
             )}
           </div>
 
@@ -201,17 +249,27 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
             <label className="block text-sm font-medium text-gray-700">
               {t("projectInformation.createProject.startDate")}
             </label>
-            <input
-              type="date"
-              {...register("start_date", {
-                required: t("projectInformation.validation.startDate"),
-              })}
-              className="w-full p-2 border border-gray-300 rounded-md"
-            />
+            <div
+              className="w-full p-2 border border-gray-300 rounded-md cursor-pointer"
+              onClick={() => setShowStartDateCalendar(!showStartDateCalendar)}
+            >
+              {startDateSelected
+                ? startDateSelected.toLocaleDateString("vi-VN")
+                : "DD/MM/YYYY"}
+            </div>
             {errors.start_date && (
-              <p className="text-red-500 text-sm">
-                {errors.start_date.message}
-              </p>
+              <p className="text-red-500 text-sm">{errors.start_date.message}</p>
+            )}
+            {showStartDateCalendar && (
+              <div className={styles.calendarwrapper}>
+                <Calendar
+                  onChange={handleStartDateChange}
+                  value={startDateSelected}
+                  locale="vi-VN"
+                  className={styles.calendarwrapperstartDateCalendar}
+                  minDate={minDate}
+                />
+              </div>
             )}
           </div>
 
@@ -219,15 +277,27 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
             <label className="block text-sm font-medium text-gray-700">
               {t("projectInformation.createProject.endDate")}
             </label>
-            <input
-              type="date"
-              {...register("end_date", {
-                required: t("projectInformation.validation.endDate"),
-              })}
-              className="w-full p-2 border border-gray-300 rounded-md"
-            />
+            <div
+              className="w-full p-2 border border-gray-300 rounded-md cursor-pointer"
+              onClick={() => setShowEndDateCalendar(!showEndDateCalendar)}
+            >
+              {endDateSelected
+                ? endDateSelected.toLocaleDateString("vi-VN")
+                : "DD/MM/YYYY"}
+            </div>
             {errors.end_date && (
               <p className="text-red-500 text-sm">{errors.end_date.message}</p>
+            )}
+            {showEndDateCalendar && (
+              <div className={styles.calendarwrapper}>
+                <Calendar
+                  onChange={handleEndDateChange}
+                  value={endDateSelected}
+                  locale="vi-VN"
+                  className={styles.calendarwrapperendDateCalendar}
+                  minDate={minDate}
+                />
+              </div>
             )}
           </div>
 
@@ -258,6 +328,35 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
             )}
           </div>
 
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Project Manager
+            </label>
+            <select
+              {...register("project_managers", {
+                required: t("projectManager"),
+              })}
+              className="w-full p-2 border border-gray-300 rounded-md"
+              onChange={(e) => {
+                console.log("Selected Project Manager ID:", e.target.value); 
+              }}
+            >
+              <option value="">
+                {t("selectManager")}
+              </option>
+              {pmUsers.map((user) => (
+                <option key={user.user_id} value={user.user_id}>
+                  {user.full_name}
+                </option>
+              ))}
+            </select>
+            {errors.project_managers && (
+              <p className="text-red-500 text-sm">
+                {errors.project_managers.message}
+              </p>
+            )}
+          </div>
+
           <div className="flex justify-end space-x-2">
             <button
               type="submit"
@@ -272,5 +371,5 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
     </Modal>
   );
 };
-export default CreateProject;
 
+export default CreateProject;

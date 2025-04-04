@@ -83,11 +83,11 @@ const ClaimChart = () => {
       <Chart
         chartType="ColumnChart"
         width="100%"
-        height="400px"
+        height="95%"
         data={getFilteredData()}
         options={{
           title: "Claim Status Overview",
-          chartArea: { width: "70%" },
+          chartArea: { width: "90%", height: "80%" },
           hAxis: { title: t("dashboard.claimChart.hAxis"), minValue: 0 },
           vAxis: { title: t("dashboard.claimChart.vAxis"), minValue: 0 },
           legend: { position: "none" },

@@ -23,7 +23,6 @@ export const InfiniteMovingCards = ({
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    
     if (containerRef.current) {
       containerRef.current.style.setProperty(
         "--animation-direction",
@@ -38,9 +37,8 @@ export const InfiniteMovingCards = ({
       }
       containerRef.current.style.setProperty("--animation-duration", duration);
     }
-  }, [direction, speed]); 
+  }, [direction, speed]);
 
-  
   const duplicatedItems = [...items, ...items];
 
   return (
@@ -51,38 +49,29 @@ export const InfiniteMovingCards = ({
         className,
       )}
     >
-     
       <ul
         className={cn(
           "flex w-max min-w-full shrink-0 flex-nowrap gap-8 py-4",
-          
+
           "animate-scroll",
           pauseOnHover && "hover:[animation-play-state:paused]",
         )}
       >
-       
         {duplicatedItems.map((item, idx) => (
           <li
-            className="h-40 w-auto shrink-0 shadow-md md:h-52" 
-            key={`${item.alt}-${idx}`} 
+            className="h-40 w-auto shrink-0 shadow-md md:h-52"
+            key={`${item.alt}-${idx}`}
           >
-            <Lens
-              className="h-full w-full"
-              lensSize={100}
-              zoomFactor={2}
-            >
+            <Lens className="h-full w-full" lensSize={160} zoomFactor={2.5}>
               <img
                 src={item.src}
                 alt={item.alt}
-                className="h-full w-full object-contain" 
+                className="h-full w-full object-contain"
               />
             </Lens>
           </li>
         ))}
-       
       </ul>
     </div>
   );
 };
-
-
