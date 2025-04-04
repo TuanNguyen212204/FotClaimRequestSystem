@@ -280,7 +280,7 @@ export const PendingComponent: React.FC = () => {
     {
       key: "user_name",
       dataIndex: "user_full_name",
-      title: t("columns.fullName"),
+      title: t("columns.full_name"),
     },
     {
       key: "email",
@@ -290,47 +290,47 @@ export const PendingComponent: React.FC = () => {
     {
       key: "start_date",
       dataIndex: "start_date",
-      title: t("columns.startDate"),
+      title: t("columns.start_date"),
       cell: ({ value }) =>
         formatDateRange(formatDateToDDMMYYYY(value as string)),
     },
     {
       key: "end_date",
       dataIndex: "end_date",
-      title: t("columns.endDate"),
+      title: t("columns.end_date"),
       cell: ({ value }) =>
         formatDateRange(formatDateToDDMMYYYY(value as string)),
     },
     {
       key: "total_hours",
       dataIndex: "total_hours",
-      title: t("columns.totalHours"),
+      title: t("columns.total_hours"),
     },
     {
       key: "project_name",
       dataIndex: "project_name",
-      title: t("columns.projectName"),
+      title: t("columns.project_name"),
     },
     {
       key: "submitted_date",
       dataIndex: "submitted_date",
-      title: t("columns.submittedDate"),
+      title: t("columns.submitted_date"),
       cell: ({ value }) =>
         formatDateRange(formatDateToDDMMYYYY(value as string)),
     },
     {
       key: "claim_status",
       dataIndex: "claim_status",
-      title: t("columns.claimStatus"),
+      title: t("columns.claim_status"),
       cell: ({ value }) => <StatusTag status={value as StatusType} />,
     },
     {
       key: "action",
       dataIndex: "request_id",
-      title: "Action",
+      title: t("columns.action"),
       cell: ({ value }) => (
         <div className={styles.actions}>
-          <Tooltip text="View Details" position="top">
+          <Tooltip text={t("tooltip.details")} position="top">
             <FileSearchIcon
               className={styles.iconSearch}
               onClick={() => handleViewDetail(value as string)}
@@ -343,20 +343,20 @@ export const PendingComponent: React.FC = () => {
               limit={limit.toString()}
             />
           </Tooltip>
-          <Tooltip text="Approve" position="top">
+          <Tooltip text={t("tooltip.approve")} position="top">
             <CheckCircle2
               className={styles.iconApprove}
               onClick={() => handleApproveClaim(value as string)}
             />
           </Tooltip>
-          <Tooltip text="Reject" position="top">
+          <Tooltip text={t("tooltip.reject")} position="top">
             <XCircle
               className={styles.iconReject}
               onClick={() => handleRejectClaim(value as string)}
             />
           </Tooltip>
-          <Tooltip text="Return" position="top">
-            <Undo2
+          <Tooltip text={t("tooltip.return")} position="top">
+            <RotateCcw
               className={styles.iconReturn}
               onClick={() => handleReturnClaim(value as string)}
             />
@@ -391,31 +391,42 @@ export const PendingComponent: React.FC = () => {
             <>
               <Button
                 color="white"
-                backgroundColor="#89AC46"
+                // backgroundColor="linear-gradient(90deg, #89AC46, #6B8E23)"
                 size="large"
-                style={{ borderRadius: "10px" }}
+                style={{
+                  borderRadius: "10px",
+                  background: "linear-gradient(90deg, #89AC46, #6B8E23)",
+                }}
                 onClick={handleApproveSelect}
                 icon={<Check />}
               >
-                {t("approveSelected")}
+                {t("approve_selected")}
               </Button>
               <Button
                 danger
                 size="large"
                 onClick={handleRejectSelect}
-                style={{ borderRadius: "10px" }}
+                style={{
+                  borderRadius: "10px",
+                  background: "linear-gradient(90deg, #FF6347, #FF4500)",
+                  color: "white",
+                }}
                 icon={<X />}
               >
-                {t("rejectSelected")}
+                {t("reject_selected")}
               </Button>
               <Button
                 type="primary"
                 size="large"
                 onClick={handleReturnSelect}
-                style={{ borderRadius: "10px" }}
+                style={{
+                  borderRadius: "10px",
+                  background: "linear-gradient(90deg, #4682B4, #1E90FF)",
+                  color: "white",
+                }}
                 icon={<RotateCcw />}
               >
-                {t("returnSelected")}
+                {t("return_selected")}
               </Button>
             </>
           )}

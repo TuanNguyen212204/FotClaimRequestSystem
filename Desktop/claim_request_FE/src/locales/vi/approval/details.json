@@ -1,14 +1,14 @@
 {
-  "claimDetailTitle": "Chi Tiết Yêu Cầu",
-  "closeButton": "Đóng",
-  "approveButton": "Phê Duyệt",
-  "projectId": "Mã Dự Án",
-  "projectName": "Tên Dự Án",
-  "timeDuration": "Thời Gian",
-  "submittedDate": "Ngày Nộp",
+  "claim_detail_title": "Chi Tiết Yêu Cầu",
+  "close_button": "Đóng",
+  "approve_button": "Phê Duyệt",
+  "project_id": "Mã Dự Án",
+  "project_name": "Tên Dự Án",
+  "time_duration": "Thời Gian",
+  "submitted_date": "Ngày Nộp",
   "status": "Trạng Thái",
-  "totalWorkingHours": "Tổng Giờ Làm Việc",
+  "total_working_hours": "Tổng Giờ Làm Việc",
   "hours": "giờ",
   "history": "Lịch Sử",
-  "workingHours": "Giờ Làm Việc"
+  "working_hours": "Giờ Làm Việc"
 }
