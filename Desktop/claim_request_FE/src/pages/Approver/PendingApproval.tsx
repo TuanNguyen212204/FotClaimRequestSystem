@@ -36,7 +36,7 @@ export const PendingComponent: React.FC = () => {
   const totalPages = useSelector(selectAllPendingTotalPages);
   const [loading, setLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [limit] = useState(8);
+  const [limit] = useState(6);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalContent, setModalContent] = useState<{
     title: string;
@@ -441,7 +441,7 @@ export const PendingComponent: React.FC = () => {
               <Button
                 color="white"
                 backgroundColor="#89AC46"
-                size="small"
+                size="large"
                 style={{ borderRadius: "10px" }}
                 onClick={handleApproveSelect}
               >
@@ -449,7 +449,7 @@ export const PendingComponent: React.FC = () => {
               </Button>
               <Button
                 danger
-                size="small"
+                size="large"
                 onClick={handleRejectSelect}
                 style={{ borderRadius: "10px" }}
               >
@@ -457,7 +457,7 @@ export const PendingComponent: React.FC = () => {
               </Button>
               <Button
                 type="primary"
-                size="small"
+                size="large"
                 onClick={handleReturnSelect}
                 style={{ borderRadius: "10px" }}
               >

@@ -43,7 +43,7 @@
 
   .gridContainer {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 40% 65%;
     gap: 25px;
   }
   
@@ -52,6 +52,7 @@
   }
   
   .claimChart {
-    grid-column: span 2;
+    grid-column: span 1;
   }
+
   

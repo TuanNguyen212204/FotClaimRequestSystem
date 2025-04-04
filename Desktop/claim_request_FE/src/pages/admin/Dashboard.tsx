@@ -3,6 +3,7 @@ import SummaryCard from "@/components/card/SummaryCard";
 import DashboardHeader from "@/components/card/DashboardHeader";
 import ClaimChart from "@/components/card/ClaimChart";
 import OTChart from "@/components/card/OTChart";
+import EmployeeClaimChart from "@/components/card/EmployeeClaimChart";
 import { Chart } from "react-google-charts";
 import {
   CheckCircle,
@@ -305,11 +306,14 @@ const Dashboard = () => {
         </div>
       </div>
       <div className={styles.gridContainer}>
-        <div className={styles.chartOT}>
+        <div>
           <OTChart />
         </div>
-        <div className={styles.claimChart}>
+        <div>
           <ClaimChart />
+        </div>
+        <div>
+          {/* <EmployeeClaimChart/> */}
         </div>
       </div>
     </div>
