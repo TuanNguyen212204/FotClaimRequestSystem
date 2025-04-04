@@ -4,6 +4,18 @@ import { GlowingEffect } from "../Components/glowing-effect";
 import { FileText, CheckCircle2, BellRing } from "lucide-react";
 import { Meteors } from "../Components/meteors";
 import WorkingProcess from "../Components/WorkingProcess";
+import { InfiniteMovingCards } from "../Components/infiniteCards";
+import approveImage from "@/assets/Library/Approve.png";
+import createImage from "@/assets/Library/Create.png";
+import dashboardImage from "@/assets/Library/Dashboard.jpg";
+import draftImage from "@/assets/Library/Draft.png";
+import financeImage from "@/assets/Library/Finance.png";
+import loginImage from "@/assets/Library/Login.png";
+import myClaimImage from "@/assets/Library/MyClaim.png";
+import pendingImage from "@/assets/Library/Pending.png";
+import projectImage from "@/assets/Library/Project.png";
+import rejectImage from "@/assets/Library/Reject.png";
+import staffImage from "@/assets/Library/Staff.png";
 import Experts from "../Components/Experts";
 type FeatureCardProps = {
   title: string;
@@ -135,9 +147,7 @@ export default function Content() {
         className="bg-gray-800 py-16 text-center text-white"
       >
         <div className="container mx-auto px-4">
-          <h2 className="mb-4 text-5xl font-bold">
-            How ClaimEasy Works
-          </h2>
+          <h2 className="mb-4 text-5xl font-bold">How ClaimEasy Works</h2>
           <p className="mx-auto mb-12 max-w-5xl text-lg text-gray-300">
             Get your overtime claims submitted and approved in just a few simple
             steps.
@@ -192,12 +202,40 @@ export default function Content() {
           <Marquee />
         </div>
       </section>
-      <WorkingProcess/>
-      <Experts/>
+      <WorkingProcess />
+      <section className="bg-[#2d3142] py-16 text-center text-white">
+        <div className="container mx-auto px-4">
+          <h2 className="mb-4 text-4xl font-bold md:text-5xl">
+            See ClaimEasy in Action
+          </h2>
+          <p className="mx-auto mb-12 max-w-2xl text-lg text-gray-300">
+            A glimpse into our intuitive interface and powerful features.
+          </p>
+          <InfiniteMovingCards
+            items={productImages}
+            direction="right"
+            speed="slow"
+            pauseOnHover={true}
+          />
+        </div>
+      </section>
+      <Experts />
     </>
   );
 }
-
+const productImages = [
+  { src: loginImage, alt: "Login Screen" },
+  { src: dashboardImage, alt: "Dashboard View" },
+  { src: createImage, alt: "Create Claim Form" },
+  { src: myClaimImage, alt: "My Claims List" },
+  { src: pendingImage, alt: "Pending Claims View" },
+  { src: approveImage, alt: "Approved Claims View" },
+  { src: rejectImage, alt: "Rejected Claims View" },
+  { src: draftImage, alt: "Draft Claims" },
+  { src: financeImage, alt: "Finance Department View" },
+  { src: staffImage, alt: "Staff Management" },
+  { src: projectImage, alt: "Project Management Integration" },
+];
 const logos = [
   "https://cdn.worldvectorlogo.com/logos/react-2.svg",
   "https://cdn.worldvectorlogo.com/logos/tailwindcss.svg",

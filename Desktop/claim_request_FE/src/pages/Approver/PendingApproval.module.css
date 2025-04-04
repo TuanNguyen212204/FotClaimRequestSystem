@@ -3,6 +3,14 @@
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
+.containerTable {
+  background-color: #fff;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  margin-top: 10px;
+  padding: 20px;
+}
+
 .title {
   font-size: 2em;
   margin-bottom: 15px;
@@ -143,8 +151,9 @@
   margin-left: 0;
   align-items: center;
   gap: 15px;
-  margin-left: 767px;
-  /* margin-top: 10px; */
+  /* margin-left: 767px; */
+  /* margin-bottom: 30px; */
+  /* margin-top: 5px; */
   /* border-radius:  10px;
   border: 1px solid #d1d5db;
   padding: 10px;

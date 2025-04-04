@@ -29,6 +29,7 @@ import { ApiError } from "@/api";
 import { set } from "date-fns";
 import { useTranslation } from "react-i18next";
 import ToggleButtonForAdmin from "@/components/ui/ToggleButton/ToggleButton";
+import { u } from "node_modules/framer-motion/dist/types.d-B50aGbjN";
 type Department = {
   id: string;
   name: string;
@@ -162,41 +163,14 @@ const AllUserInformation: React.FC = () => {
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
   };
-  const deleteUser = async (id: string) => {
-    try {
-      const response = await httpClient.delete<ApiResponseNoGeneric>(
-        "/admin/staff/" + id,
-      );
-      console.log(response.data.message);
-    } catch (error) {
-      console.error("Delete user error " + error);
-    }
-  };
-  const handleDelete = async (id?: string) => {
-    if (!id) return;
-    try {
-      await deleteUser(id);
-      toast("Delete user successfully!");
-      console.log("Deleted user with ID:", id);
-      // dispatch(fetchAllUserAsync(currentPage.toString()));
-    } catch (error) {
-      console.error("Error deleting user:", error);
-    }
-  };
 
   const handleOpenModal = () => {
     setOpenModal(true);
   };
-  const handleCloseModal = () => {
-    setOpenModal(false);
-  };
+
   const handleUpdate = (id?: string) => {
     setUserID(id ? id : "");
     setOpenUpdate(true);
-  };
-  const sortConfig: SortConfig = {
-    columnKey: "full_name",
-    order: "asc",
   };
 
   const handleToggleStatus = async (userId: string) => {
@@ -303,7 +277,11 @@ const AllUserInformation: React.FC = () => {
               disabled={userStatuses[record.user_id] === 0}
             >
               <div>
-                {userStatuses[record.user_id] === 1 ? <CircleCheck /> : <X />}
+                {userStatuses[record.user_id] === 1 ? (
+                  <CircleCheck size={20} />
+                ) : (
+                  <X size={20} />
+                )}
               </div>
             </button>
           </div>
@@ -326,26 +304,14 @@ const AllUserInformation: React.FC = () => {
                 disabled={userStatuses[record.user_id] === 0}
               >
                 <div>
-                  {userStatuses[record.user_id] === 1 ? <SquarePen /> : <X />}
+                  {userStatuses[record.user_id] === 1 ? (
+                    <SquarePen size={20} />
+                  ) : (
+                    <X size={20} />
+                  )}
                 </div>
               </button>
             </div>
-            {/* <div>
-              <button
-                className={styles.delete_button}
-                onClick={() =>
-                  handleDeleteConfirm(
-                    record.username as string,
-                    record.email as string,
-                    record.user_id as string
-                  )
-                }
-              >
-                <span>
-                  <X />
-                </span>
-              </button>
-            </div> */}
           </div>
         );
       },
@@ -363,14 +329,14 @@ const AllUserInformation: React.FC = () => {
   const fetchStaffByDepartmentID = async (department_name: string) => {
     const a = department.find((item) => item.name === department_name);
     const department_id = a?.id;
-    setDepartmentID(department_id as number | undefined);
+    setDepartmentID(department_id ? parseInt(department_id, 10) : 0);
     try {
       const response = await httpClient.get<ApiResponseNoGeneric>(
         "/admin/staffs",
         {
           page: currentPage.toString(),
           department_id: department_id,
-          limit: 10,
+          limit: 8,
         },
       );
       console.log(response.data.data);

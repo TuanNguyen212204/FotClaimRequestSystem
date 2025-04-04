@@ -22,13 +22,6 @@ function Test() {
         <StatusTag status="REJECTED" />
         <StatusTag status="PAID" />
         <StatusTag status="DRAFT" />
-        <ApprovedDetailFinanceModal
-          isOpen={true}
-          onClose={false}
-          requestId={"f752218c-4d43-4af2-a032-cded27124ffe"}
-          currentPage={"1"}
-          limit={"7"}
-        />
       </div>
     </div>
   );

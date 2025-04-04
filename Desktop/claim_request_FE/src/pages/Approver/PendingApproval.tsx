@@ -293,6 +293,7 @@ export const PendingComponent: React.FC = () => {
     const year = dateObj.getFullYear();
     return `${day}/${month}/${year}`;
   };
+  
   const formatDateRange = (dateRange: any) => {
     return dateRange.replace(
       /(\d{1,2})\/(\d{1,2})\/(\d{4})/g,
@@ -301,6 +302,7 @@ export const PendingComponent: React.FC = () => {
       },
     );
   };
+
   const columns: Column<DataRecord>[] = [
     {
       key: "user_name",
@@ -465,16 +467,18 @@ export const PendingComponent: React.FC = () => {
           )}
         </div>
       </div>
-      <TableComponent
-        ref={checkboxRef}
-        columns={columns}
-        dataSource={dataSource}
-        loading={loading}
-        totalPage={totalPages}
-        pagination={true}
-        onPageChange={handlePageChange}
-        isHaveCheckbox={true}
-      />
+      <div className={styles.containerTable}>
+        <TableComponent
+          ref={checkboxRef}
+          columns={columns}
+          dataSource={dataSource}
+          loading={loading}
+          totalPage={totalPages}
+          pagination={true}
+          onPageChange={handlePageChange}
+          isHaveCheckbox={true}
+        />
+      </div>
       <Modal
         open={modalVisible}
         title={modalContent?.title}

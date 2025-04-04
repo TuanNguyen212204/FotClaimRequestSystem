@@ -1,11 +1,11 @@
-import { selectPendingClaimByUserID, selectTotalPage } from "@/redux/selector/claimSelector";
-import { useEffect, useState, useCallback } from "react";
+import { selectMyClaim, selectTotalPage } from "@/redux/selector/claimSelector";
+import { useEffect, useState } from "react";
 import styles from "@components/ui/claimer/UserClaims.module.css";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@redux/index";
 import {
-  fetchClaimByUserWithPendingStatusAsync,
+  fetchClaimByUserAsync,
   fetchTotalClaimByUserAsync,
 } from "@redux/thunk/Claim/claimThunk";
 import { EyeIcon } from "lucide-react";
@@ -13,56 +13,19 @@ import TableComponent, { Column, DataRecord } from "@components/ui/Table/Table";
 import UserClaimDetailsModal from "@components/ui/claimer/UserClaimDetails";
 import StatusTag from "@components/ui/StatusTag/StatusTag";
 import { useTranslation } from "react-i18next";
+import { Claim } from "@/types/Claim";
 
 const PendingClaimByUserID = () => {
-  const { t } = useTranslation("pendingClaim");
+  const { t } = useTranslation("userClaims");
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const userClaim = useSelector(selectPendingClaimByUserID);
+  const userClaim = useSelector(selectMyClaim);
   const totalPage = useSelector(selectTotalPage);
   const [loading, setLoading] = useState<boolean>(true);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedClaim, setSelectedClaim] = useState<string>("");
   const [limit] = useState(5);
-  const formatDateRange = (dateRange: any) => {
-    return dateRange.replace(
-      /(\d{1,2})\/(\d{1,2})\/(\d{4})/g,
-      (match, day, month, year) => {
-        return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
-      },
-    );
-  };
-
-  // useEffect(() => {
-  //   setLoading(true);
-  //   const fetchData = async () => {
-  //     await dispatch(fetchClaimByUserAsync());
-  //     setLoading(false);
-  //   };
-  //   fetchData();
-  // }, [dispatch, currentPage]);
-  // useEffect(() => {
-  //   console.log(userClaim);
-  // }, [userClaim]);
-
-  // const handleViewDetail = (id: string) => {
-  //   setSelectedClaim(id);
-  //   setIsModalOpen(true);
-  // };
-
-  // useEffect(() => {
-  //   setLoading(true);
-  //   const fetchData = async () => {
-  //     await dispatch(
-  //       fetchClaimByUserAsync({ page: currentPage, status: "PENDING" }),
-  //     );
-  //     setLoading(false);
-  //     dispatch(fetchTotalClaimByUserAsync({ status: "PENDING" }));
-  //   };
-  //   fetchData();
-  //   console.log(totalPage);
-  // }, [currentPage, dispatch, totalPage]);
 
   useEffect(() => {
     setLoading(true);
@@ -74,9 +37,14 @@ const PendingClaimByUserID = () => {
       setLoading(false);
     };
     fetchData();
-  }, [currentPage, dispatch]);
+    console.log(totalPage);
+  }, [currentPage, dispatch, totalPage]);
 
   const handleViewDetail = (id: string) => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 1500);
     setSelectedClaim(id);
     setIsModalOpen(true);
   };
@@ -86,17 +54,26 @@ const PendingClaimByUserID = () => {
     setCurrentPage(newPage);
   };
 
-  const formatDateToDDMMYYYY = useCallback((date: string) => {
+  const formatDateToDDMMYYYY = (date: string) => {
     const dateObj = new Date(date);
-    const day = String(dateObj.getDate()).padStart(2, "0");
-    const month = String(dateObj.getMonth() + 1).padStart(2, "0");
+    const day = dateObj.getDate();
+    const month = dateObj.getMonth() + 1;
     const year = dateObj.getFullYear();
     return t("language") === "en"
-      ? `${month}/${day}/${year}` // Tiếng Anh: MM/DD/YYYY
-      : `${day}/${month}/${year}`; // Tiếng Việt: DD/MM/YYYY
-  }, [t]);
+      ? `${month}/${day}/${year}`
+      : `${day}/${month}/${year}`;
+  };
 
-  const columns: Column[] = [
+  const formatDateRange = (dateRange: any) => {
+    return dateRange.replace(
+      /(\d{1,2})\/(\d{1,2})\/(\d{4})/g,
+      (match: string, day: string, month: string, year: string) => {
+        return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
+      },
+    );
+  };
+
+  const columns: Column<Claim>[] = [
     {
       key: "project_id",
       dataIndex: "project_id",
@@ -111,7 +88,10 @@ const PendingClaimByUserID = () => {
       key: "time_duration",
       dataIndex: "time_duration",
       title: t("time_duration_label"),
-      cell: ({ value }) => <span>{value as string}</span>,
+      cell: ({ value }) => {
+        const formattedValue = formatDateRange(value as string);
+        return <span>{formattedValue}</span>;
+      },
     },
     {
       key: "total_hours",
@@ -123,14 +103,14 @@ const PendingClaimByUserID = () => {
       key: "submitted_date",
       dataIndex: "submitted_date",
       title: t("submitted_date_label"),
-      cell: ({ value }) => <span>{formatDateToDDMMYYYY(value as string),}</span>,
+      cell: ({ value }) =>
+        formatDateRange(formatDateToDDMMYYYY(value as string)),
     },
     {
       key: "claim_status",
       dataIndex: "claim_status",
       title: t("claim_status_label"),
       cell: ({ value }: { value: unknown }) => {
-        const stringValue = value as string;
         return (
           <div>
             <StatusTag
@@ -145,7 +125,7 @@ const PendingClaimByUserID = () => {
       dataIndex: "request_id",
       title: t("action_label"),
       cell: ({ value }) => (
-        <>
+        <div className="flex items-center justify-center gap-2">
           <EyeIcon
             className="cursor-pointer"
             onClick={() => handleViewDetail(value as string)}
@@ -157,7 +137,7 @@ const PendingClaimByUserID = () => {
             currentPage={currentPage.toString()}
             limit={limit.toString()}
           />
-        </>
+        </div>
       ),
     },
   ];
@@ -179,29 +159,18 @@ const PendingClaimByUserID = () => {
   }));
 
   return (
-    // <div className={styles.container}>
-    //   <TableComponent
-    //     columns={columns}
-    //     dataSource={dataSource}
-    //     loading={loading}
-    //     pagination={true}
-    //     name="My Claims"
-    //     totalPage={totalPage}
-    //     onPageChange={handlePageChange}
-    //   />
-    // </div>
     <>
       <div className="mt-2 p-0">
         <div className="mb-10 ml-5">
-          <h1 className="m-0 p-0">Pending Claims</h1>
+          <h1 className="m-0 p-0">My Claims</h1>
           <p className="m-0 p-0">
-            Here you can view all pending claims and their statuses.
+            Here you can view all your pending claims and their statuses.
           </p>
         </div>
         <div className={`${styles.tableContainer}`}>
           <TableComponent
             isHaveCheckbox={false}
-            columns={columns}
+            columns={columns as Column<DataRecord>[]}
             dataSource={dataSource}
             loading={loading}
             pagination={true}
