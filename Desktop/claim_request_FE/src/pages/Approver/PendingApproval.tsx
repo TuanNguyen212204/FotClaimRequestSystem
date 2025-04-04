@@ -14,7 +14,9 @@ import {
   XCircle,
   // ArrowLeftCircle,
   Undo2,
-  RotateCcw
+  Check,
+  X,
+  RotateCcw,
 } from "lucide-react";
 import styles from "@/pages/Approver/PendingApproval.module.css";
 import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
@@ -393,6 +395,7 @@ export const PendingComponent: React.FC = () => {
                 size="large"
                 style={{ borderRadius: "10px" }}
                 onClick={handleApproveSelect}
+                icon={<Check />}
               >
                 {t("approveSelected")}
               </Button>
@@ -401,6 +404,7 @@ export const PendingComponent: React.FC = () => {
                 size="large"
                 onClick={handleRejectSelect}
                 style={{ borderRadius: "10px" }}
+                icon={<X />}
               >
                 {t("rejectSelected")}
               </Button>
@@ -409,6 +413,7 @@ export const PendingComponent: React.FC = () => {
                 size="large"
                 onClick={handleReturnSelect}
                 style={{ borderRadius: "10px" }}
+                icon={<RotateCcw />}
               >
                 {t("returnSelected")}
               </Button>
