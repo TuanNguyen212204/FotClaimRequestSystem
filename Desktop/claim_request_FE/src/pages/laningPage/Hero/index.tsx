@@ -4,6 +4,8 @@ import TopBar from "../Topbar/index";
 import { ColourfulText } from "../Components/colourful-text";
 import { Spotlight } from "../Components/Spotlight";
 import "./Herro.css";
+import { useNavigate } from "react-router-dom";
+import { FIRST_PAGE_BY_ROLE } from "@/constant/firstPageByRole";
 
 const ScrollArrow = () => (
   <svg
@@ -65,6 +67,31 @@ export default function Herro() {
       }
     };
   }, []);
+
+  const navigate = useNavigate();
+  const getStarted = () => {
+    const user_status = localStorage.getItem("user_status");
+    if (user_status === "0" || user_status === "2") {
+      navigate("/");
+      return;
+    }
+    const role_id = localStorage.getItem("role_id");
+    if (role_id === "1") {
+      localStorage.setItem("selectedClaim", "usersetting");
+      navigate(`${FIRST_PAGE_BY_ROLE.ADMIN}`);
+    } else if (role_id === "2") {
+      localStorage.setItem("selectedClaim", "pendingClaim");
+      navigate(`${FIRST_PAGE_BY_ROLE.APPROVER}`);
+    } else if (role_id === "3") {
+      localStorage.setItem("selectedClaim", "approvedFinance");
+      navigate(`${FIRST_PAGE_BY_ROLE.FINANCE}`);
+    } else if (role_id === "4") {
+      localStorage.setItem("selectedClaim", "all");
+      navigate(`${FIRST_PAGE_BY_ROLE.CLAIMER}`);
+    } else {
+      navigate("/");
+    }
+  };
 
   const heroBgImage =
     "url('https://s3-alpha-sig.figma.com/img/ece8/81e1/c879b3ca7917216b0433807c9e221046?Expires=1743984000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=DA2gYtBvf1STGdOtQiFLttNoLII9PdebMuILxsAMj1y6EloVOEfIKy2rK8~BLPphs2Geew1qOSqROfEEFaMomwRho~7VVgoTA6uJuIxHPU0NhM2IoSa1Piwv34utNIVU116VAdM3O-mco-bSX~GyA1oDFSgA5KLt-aoxTNKFP8octCa5-16mQZo69OgFtPco2juGTIHl-fF9usAw31bAhE-1dVkqdohRl94WVwWwe~bG1NC0lb8HlNFf~rIwaMvceGyRpirOvjG8DJbsgPOtZ8vL0LTOJ0YqubXG-AfgnrxSYUdYFi6q~DkNi6K4JiN1sTXnQPeTzdp7HRMymkBexg__')";
@@ -153,7 +180,10 @@ export default function Herro() {
             transition={{ duration: 1, delay: contentStartDelay + 1.1 }}
           >
             {" "}
-            <button className="font-pixelify cursor-pointer border-2 border-white bg-transparent px-8 py-3 text-lg font-bold text-white transition-colors duration-300 ease-in-out hover:bg-white! hover:text-black">
+            <button
+              onClick={getStarted}
+              className="font-pixelify cursor-pointer border-2 border-white bg-transparent px-8 py-3 text-lg font-bold text-white transition-colors duration-300 ease-in-out hover:bg-white! hover:text-black"
+            >
               GET STARTED NOW!
             </button>
           </motion.div>
