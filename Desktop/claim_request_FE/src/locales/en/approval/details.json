@@ -1,14 +1,14 @@
 {
-  "claimDetailTitle": "Claim Detail",
-  "closeButton": "Close",
-  "approveButton": "Approve",
-  "projectId": "Project ID",
-  "projectName": "Project Name",
-  "timeDuration": "Time Duration",
-  "submittedDate": "Submitted Date",
+  "claim_detail_title": "Claim Detail",
+  "close_button": "Close",
+  "approve_button": "Approve",
+  "project_id": "Project ID",
+  "project_name": "Project Name",
+  "time_duration": "Time Duration",
+  "submitted_date": "Submitted Date",
   "status": "Status",
-  "totalWorkingHours": "Total Working Hours",
+  "total_working_hours": "Total Working Hours",
   "hours": "hours",
   "history": "History",
-  "workingHours": "Working Hours"
+  "working_hours": "Working Hours"
 }
