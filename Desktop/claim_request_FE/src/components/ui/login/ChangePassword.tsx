@@ -8,6 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PasswordProgress from "./PasswordProgress";
 import { FIRST_PAGE_BY_ROLE } from "@/constant/firstPageByRole";
+import ROLE from "@/constant/role";
 
 const passwordCriteria = [
   {
@@ -118,16 +119,16 @@ function ChangePassword() {
           });
           setTimeout(() => {
             const role_id = localStorage.getItem("role_id");
-            if (role_id === "1") {
+            if (role_id === ROLE.ADMIN) {
               localStorage.setItem("selectedClaim", "usersetting");
               navigate(`${FIRST_PAGE_BY_ROLE.ADMIN}`);
-            } else if (role_id === "2") {
+            } else if (role_id === ROLE.APPROVER) {
               localStorage.setItem("selectedClaim", "pendingClaim");
               navigate(`${FIRST_PAGE_BY_ROLE.APPROVER}`);
-            } else if (role_id === "3") {
+            } else if (role_id === ROLE.FINANCE) {
               localStorage.setItem("selectedClaim", "approvedFinance");
               navigate(`${FIRST_PAGE_BY_ROLE.FINANCE}`);
-            } else if (role_id === "4") {
+            } else if (role_id === ROLE.CLAIMER) {
               localStorage.setItem("selectedClaim", "all");
               navigate(`${FIRST_PAGE_BY_ROLE.CLAIMER}`);
             } else {

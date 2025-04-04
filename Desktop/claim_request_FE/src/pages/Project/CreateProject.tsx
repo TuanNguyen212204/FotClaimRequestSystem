@@ -10,8 +10,6 @@ import { Project } from "@/types/Project";
 import { toast } from "react-toastify";
 import styles from "./CreateProject.module.css";
 import { useTranslation } from "react-i18next";
-
-// Import CSS for react-calendar
 import "react-calendar/dist/Calendar.css";
 
 Modal.setAppElement("#root");
@@ -65,7 +63,6 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
     const fetchPmUsers = async () => {
       try {
         const response = await httpClient.get("/admin/staffs?department_id=7"); 
-        console.log("data12:", response.data.data);
 
         const filteredUsers = response.data.data.map((user: any) => ({
           user_id: user.user_id,
