@@ -79,7 +79,7 @@ export const AssignProject: React.FC<AssignProjectProps> = ({
       if (response.data.httpStatus === 200) {
         console.log(response.data);
         toast.success("Assign user to project successfully!");
-        return;
+        setOpen(false);
       }
     } catch (error: any) {
       if (error.response) {
