@@ -55,8 +55,11 @@ export const UpdateProject: React.FC<UpdateProjectProps> = ({ projectid, setOpen
     try {
       setLoading(true);
       const res = await httpClient.get(`/projects/${projectid}`);
-      const { project_name, start_date, end_date, project_status } = res.data;
+      console.log("Fetched project data:", res.data);
+      const { project_name, start_date, end_date, project_status } = res.data.data;
 
+
+      console.log("Project name:", project_name);
       const parsedStart = new Date(start_date);
       const parsedEnd = new Date(end_date);
 
@@ -96,7 +99,19 @@ export const UpdateProject: React.FC<UpdateProjectProps> = ({ projectid, setOpen
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
+    console.log("Typed:", value);
+    console.log("Current state:", projectData.project_name);
+
     setProjectData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleProjectNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    if (value === projectData.project_name) return;
+    setProjectData((prev) => ({
+      ...prev,
+      project_name: value,
+    }));
   };
 
   const handleStartDateChange = (newDate: Date) => {
@@ -152,15 +167,18 @@ export const UpdateProject: React.FC<UpdateProjectProps> = ({ projectid, setOpen
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700">Project Name</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Project Name
+              </label>
+              <p className="text-xs text-gray-400 mb-1"></p>
               <input
                 type="text"
                 name="project_name"
                 value={projectData.project_name}
-                onChange={handleChange}
-                required
-                className="w-full px-1 py-2 border border-gray-300 rounded-md"
-              />
+                onChange={handleProjectNameChange}
+                className="w-full px-1 py-3 border border-gray-300 rounded-md"
+                style={{ fontSize: "15px" }}
+            />
             </div>
 
             <div>
@@ -172,7 +190,7 @@ export const UpdateProject: React.FC<UpdateProjectProps> = ({ projectid, setOpen
                 className={styles.datePickerInput}
                 minDate={minDate}
                 placeholderText="DD/MM/YYYY"
-                locale="vi"
+                // locale="vi"
               />
             </div>
 
@@ -185,7 +203,7 @@ export const UpdateProject: React.FC<UpdateProjectProps> = ({ projectid, setOpen
                 className={styles.datePickerInput}
                 minDate={minDate}
                 placeholderText="DD/MM/YYYY"
-                locale="vi"
+                // locale="vi"
               />
             </div>
 

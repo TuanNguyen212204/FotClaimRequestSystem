@@ -243,30 +243,28 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
           </div>
 
           <div>
-                        <label className="block text-sm font-medium text-gray-700">Start Date</label>
-                        <DatePicker
-                          selected={startDateSelected}
-                          onChange={(date: Date) => handleStartDateChange(date)}
-                          dateFormat="dd/MM/yyyy"
-                          className={styles.datePickerInput}
-                          minDate={minDate}
-                          placeholderText="DD/MM/YYYY"
-                          locale="vi"
-                        />
-                      </div>
+            <label className="block text-sm font-medium text-gray-700">Start Date</label>
+            <DatePicker
+              selected={startDateSelected}
+              onChange={(date: Date) => handleStartDateChange(date)}
+              dateFormat="dd/MM/yyyy"
+              className={styles.datePickerInput}
+              minDate={minDate}
+              placeholderText="DD/MM/YYYY"
+            />
+          </div>
           
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700">End Date</label>
-                        <DatePicker
-                          selected={endDateSelected}
-                          onChange={(date: Date) => handleEndDateChange(date)}
-                          dateFormat="dd/MM/yyyy"
-                          className={styles.datePickerInput}
-                          minDate={minDate}
-                          placeholderText="DD/MM/YYYY"
-                  locale="vi"
-              />
-            </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">End Date</label>
+            <DatePicker
+              selected={endDateSelected}
+              onChange={(date: Date) => handleEndDateChange(date)}
+              dateFormat="dd/MM/yyyy"
+              className={styles.datePickerInput}
+              minDate={minDate}
+              placeholderText="DD/MM/YYYY"
+            />
+          </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700">
@@ -309,7 +307,7 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
               }}
             >
               <option value="">
-                {t("selectManager")}
+                {t("Select Manager")}
               </option>
               {pmUsers.map((user) => (
                 <option key={user.user_id} value={user.user_id}>
