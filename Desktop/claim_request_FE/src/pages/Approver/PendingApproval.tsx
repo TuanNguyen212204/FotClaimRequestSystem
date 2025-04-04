@@ -405,7 +405,7 @@ export const PendingComponent: React.FC = () => {
             />
           </Tooltip>
           <Tooltip text="Return" position="top">
-            <RotateCcw
+            <Undo2
               className={styles.iconReturn}
               onClick={() => handleReturnClaim(value as string)}
             />
