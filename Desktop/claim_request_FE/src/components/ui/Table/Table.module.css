@@ -295,7 +295,7 @@ body {
   align-items: center;
   justify-content: center;
   position: relative;
-  background: linear-gradient(90deg, #6b48ff 0%, #a855f7 100%);
+  background: linear-gradient(90deg, #3e5879 0%, #213555 100%);
   color: white;
   font-size: 14px;
   font-weight: 700;
@@ -312,14 +312,14 @@ body {
 }
 
 .create_button:hover {
-  background: linear-gradient(90deg, #a855f7 0%, #6b48ff 100%);
+  background: linear-gradient(90deg, #213555 0%, #3e5879 100%);
   border: 2px solid rgba(255, 255, 255, 0.3);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
   transform: scale(1.05);
 }
 
 .create_button:active {
-  background: linear-gradient(90deg, #5a3edb 0%, #9333ea 100%);
+  background: linear-gradient(90deg, #2d415f 0%, #17263e 100%);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transform: scale(0.98);
 }
