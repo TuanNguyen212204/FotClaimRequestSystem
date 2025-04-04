@@ -395,7 +395,6 @@ export const PendingComponent: React.FC = () => {
                 size="large"
                 style={{ borderRadius: "10px" }}
                 onClick={handleApproveSelect}
-                icon={<Check />}
               >
                 {t("approveSelected")}
               </Button>
@@ -404,7 +403,6 @@ export const PendingComponent: React.FC = () => {
                 size="large"
                 onClick={handleRejectSelect}
                 style={{ borderRadius: "10px" }}
-                icon={<X />}
               >
                 {t("rejectSelected")}
               </Button>
@@ -413,7 +411,6 @@ export const PendingComponent: React.FC = () => {
                 size="large"
                 onClick={handleReturnSelect}
                 style={{ borderRadius: "10px" }}
-                icon={<RotateCcw />}
               >
                 {t("returnSelected")}
               </Button>
