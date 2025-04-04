@@ -79,3 +79,25 @@
 .label_container div {
   color: red;
 }
+
+.calendarwrapper {
+  z-index: 20;
+  /* position: fixed; */
+  /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  border-radius: 8px;
+  width: 100%; */
+}
+
+.calendarwrapperstartDateCalendar {
+  top: 50px; 
+}
+
+.calendarwrapperendDateCalendar {
+  bottom: 50px; 
+}
+
+.calendar {
+  width: 80%;
+  max-width: 200px;
+}

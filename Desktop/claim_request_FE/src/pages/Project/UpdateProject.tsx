@@ -6,6 +6,8 @@ import styles from "./UpdateProject.module.css";
 import Modal from "react-modal";
 import httpClient from "@/constant/apiInstance";
 import { toast } from "react-toastify";
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
 
 Modal.setAppElement("#root");
 interface UpdateProjectProps {
@@ -72,6 +74,24 @@ export const UpdateProject: React.FC<UpdateProjectProps> = ({ projectid, setOpen
     setProjectData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const [showStartDateCalendar, setShowStartDateCalendar] = useState(false);
+    const [showEndDateCalendar, setShowEndDateCalendar] = useState(false);
+    const [startDateSelected, setStartDateSelected] = useState<Date | null>(null);
+    const [endDateSelected, setEndDateSelected] = useState<Date | null>(null);
+    const minDate = new Date("2025-01-01");
+  
+    const handleStartDateChange = (newDate: Date) => {
+      setStartDateSelected(newDate);
+      setValue("start_date", newDate);
+      setShowStartDateCalendar(false);
+    };
+  
+    const handleEndDateChange = (newDate: Date) => {
+      setEndDateSelected(newDate);
+      setValue("end_date", newDate);
+      setShowEndDateCalendar(false);
+    };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -124,24 +144,60 @@ export const UpdateProject: React.FC<UpdateProjectProps> = ({ projectid, setOpen
             </div>
 
             <div>
-            <label className="block text-sm font-medium text-gray-700">Start Date</label>
-            <input 
-              type="date" 
-              {...register("start_date", { required: "Start Date is required" })} 
-              className="w-full p-2 border border-gray-300 rounded-md" 
-            />
-            {errors.start_date && <p className="text-red-500 text-sm">{errors.start_date.message}</p>}
-          </div>
-  
-          <div>
-            <label className="block text-sm font-medium text-gray-700">End Date</label>
-            <input 
-              type="date" 
-              {...register("end_date", { required: "End Date is required" })} 
-              className="w-full p-2 border border-gray-300 rounded-md" 
-            />
-            {errors.end_date && <p className="text-red-500 text-sm">{errors.end_date.message}</p>}
-          </div>
+              <label className="block text-sm font-medium text-gray-700">
+                Start Date
+              </label>
+              <div
+                className="w-full p-2 border border-gray-300 rounded-md cursor-pointer"
+                onClick={() => setShowStartDateCalendar(!showStartDateCalendar)}
+              >
+                {startDateSelected
+                  ? startDateSelected.toLocaleDateString("vi-VN")
+                  : "DD/MM/YYYY"}
+              </div>
+              {errors.start_date && (
+                <p className="text-red-500 text-sm">{errors.start_date.message}</p>
+              )}
+              {showStartDateCalendar && (
+                <div className={styles.calendarwrapper}>
+                  <Calendar
+                    onChange={handleStartDateChange}
+                    value={startDateSelected}
+                    locale="vi-VN"
+                    className={styles.calendarwrapperstartDateCalendar}
+                    minDate={minDate}
+                  />
+                </div>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                End Date
+              </label>
+              <div
+                className="w-full p-2 border border-gray-300 rounded-md cursor-pointer"
+                onClick={() => setShowEndDateCalendar(!showEndDateCalendar)}
+              >
+                {endDateSelected
+                  ? endDateSelected.toLocaleDateString("vi-VN")
+                  : "DD/MM/YYYY"}
+              </div>
+              {errors.end_date && (
+                <p className="text-red-500 text-sm">{errors.end_date.message}</p>
+              )}
+              {showEndDateCalendar && (
+                <div className={styles.calendarwrapper}>
+                  <Calendar
+                    onChange={handleEndDateChange}
+                    value={endDateSelected}
+                    locale="vi-VN"
+                    className={styles.calendarwrapperendDateCalendar}
+                    minDate={minDate}
+                  />
+                </div>
+              )}
+            </div>  
 
             <div>
               <label className="block text-sm font-medium text-gray-700">Project Status</label>
@@ -156,6 +212,8 @@ export const UpdateProject: React.FC<UpdateProjectProps> = ({ projectid, setOpen
               </select>
             </div>
 
+            <div></div>
+
             <div className="flex justify-end space-x-2">
               <button type="submit" className={styles.update_button} disabled={loading}>
                 {loading ? "Updating..." : "Update"}
@@ -167,11 +225,3 @@ export const UpdateProject: React.FC<UpdateProjectProps> = ({ projectid, setOpen
     </Modal>
   );
 };
-function setError(arg0: string, arg1: { type: string; message: string; }) {
-  throw new Error("Function not implemented.");
-}
-
-function clearErrors(arg0: string) {
-  throw new Error("Function not implemented.");
-}
-
