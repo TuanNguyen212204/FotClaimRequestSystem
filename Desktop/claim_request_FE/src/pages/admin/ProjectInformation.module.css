@@ -64,12 +64,7 @@
   text-align: center;
 }
 
-.summaryCard h3 {
-  max-width: 200px; /* Giới hạn độ rộng của tiêu đề */
-  /* white-space: nowrap; Không xuống dòng */
-  /* overflow: hidden; Ẩn phần chữ bị tràn */
-  /* text-overflow: ellipsis; Hiển thị "..." khi quá dài */
-}
+
 .filter_section {
   font-weight: 500;
   font-size: 1.5rem;
@@ -81,3 +76,13 @@
   color: black;
 }
 
+.tableContainer {
+  width: 95%;
+  margin: auto;
+  margin: auto;
+  margin-top: 0.5rem;
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
