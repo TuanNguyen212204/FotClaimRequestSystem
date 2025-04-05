@@ -5,32 +5,34 @@
 
 .box {
   background-color: #eaf1ff;
-  padding: 30px;
-  border-radius: 20px;
+  padding: 20px;
+  border-radius: 15px;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
 
 .header {
-  display: fle;
-  margin: 0 0 30px 0;
+  display: flex;
+  margin: 0 0 20px 0;
   text-align: center;
+  font-size: 1.2rem;
 }
 
 .upload_icon {
-  width: 160px;
-  height: 140px;
+  width: 120px;
+  height: 100px;
   display: flex;
-  justify-items: left;
+  justify-items: center;
   user-select: none;
 }
+
 /* -------------------------------------------------- DROP FILE ---------------------------------------------- */
 .drop_file_container {
   position: relative;
-  width: 300px;
-  height: 200px;
+  width: 250px;
+  height: 150px;
   padding: 0 0 10px 0;
   border: 2px dashed #4f9fe2;
-  border-radius: 20px;
+  border-radius: 15px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -59,6 +61,7 @@
   text-align: center;
   color: #797777;
   user-select: none;
+  font-size: 0.9rem;
 }
 
 /* -------------------------------------------------- PREVIEW ITEM ---------------------------------------------- */
@@ -83,8 +86,8 @@
   display: flex;
   margin: 0 0 10px 0;
   background-color: #cde7fa;
-  padding: 15px;
-  border-radius: 20px;
+  padding: 10px;
+  border-radius: 15px;
 }
 
 .drop_file_preview_item img {
@@ -94,6 +97,7 @@
   justify-content: center;
   justify-items: center;
   margin: 0 5px 0 0;
+  border-radius: 5px;
 }
 
 .drop_file_preview_item_info {
@@ -105,17 +109,19 @@
 
 .name {
   margin: 0 0 0 0;
+  font-size: 0.9rem;
 }
 
 .size {
   text-align: start;
   margin: 0 0 0 0px;
+  font-size: 0.8rem;
 }
 
 .drop_file_preview_item_remove {
   background-color: #eaeaea;
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   display: flex;
   align-items: center;

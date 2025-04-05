@@ -3,7 +3,6 @@ import styles from "./Header.module.css";
 import SearchBar from "../searchbar/SearchBar";
 import {
   FaBell,
-  FaUserCircle,
   FaEllipsisV,
   FaCheck,
   FaTrash,
@@ -31,6 +30,7 @@ import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import { User, LogOut } from "lucide-react";
 import { Button } from "@components/ui/button/Button";
+import { selectUserById } from "@redux/selector/userSelector"; 
 
 interface Notification {
   id: string;
@@ -55,6 +55,7 @@ const Header: React.FC = () => {
   const notifications = useSelector(
     (state: any) => state.notifications?.notifications?.notifications,
   );
+  const selectedUser = useSelector(selectUserById); 
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -178,6 +179,7 @@ const Header: React.FC = () => {
     await dispatch(updateMarkAsRead(id));
     await dispatch(markNotificationAsReadById(id) as any);
   };
+
   const handleDelete = async (id: number) => {
     console.log(id);
     await dispatch(deleteNotificationById(id) as any);
@@ -199,18 +201,38 @@ const Header: React.FC = () => {
     setAvatarDropdownVisible(false);
   };
 
-
   const avatarDropdownOptions = [
     { value: "profile", label: t("profile"), icon: <User size={16} /> },
     { value: "logout", label: t("logout"), icon: <LogOut size={16} /> },
   ];
-
 
   const allRead =
     notifications &&
     notifications?.length > 0 &&
     notifications?.every((n: any) => n.is_read);
   const disableMarkAll = notifications?.length === 0 || allRead;
+
+  const getFullAvatarUrl = (avatarPath: string | undefined): string => {
+    const defaultAvatar =
+      "https://i.pinimg.com/736x/63/f0/0d/63f00d6ebe2c93b945be3c39135503c2.jpg";
+
+    if (!avatarPath) {
+      return defaultAvatar;
+    }
+
+    if (avatarPath.startsWith("http")) {
+      return avatarPath;
+    }
+
+    const staticBaseUrl = "https://claimsystem.info.vn";
+    const normalizedAvatarPath = avatarPath.startsWith("/uploads/avatars/")
+      ? avatarPath
+      : `/uploads/avatars/${
+          avatarPath.startsWith("avatar-") ? "" : "avatar-"
+        }${avatarPath}`;
+
+    return `${staticBaseUrl}${normalizedAvatarPath}?t=${new Date().getTime()}`;
+  };
 
   return (
     <>
@@ -229,7 +251,15 @@ const Header: React.FC = () => {
             onMouseEnter={() => setAvatarDropdownVisible(true)}
             onMouseLeave={() => setAvatarDropdownVisible(false)}
           >
-            <FaUserCircle className={styles.icon} />
+            <img
+              src={getFullAvatarUrl(selectedUser?.avatar)}
+              alt="User Avatar"
+              className={styles.avatarImage} 
+              onError={(e) =>
+                (e.currentTarget.src =
+                  "https://i.pinimg.com/736x/63/f0/0d/63f00d6ebe2c93b945be3c39135503c2.jpg")
+              }
+            />
             {avatarDropdownVisible && (
               <div className={styles.avatarDropdownMenu}>
                 {avatarDropdownOptions.map(({ value, label, icon }) => (
