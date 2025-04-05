@@ -4,10 +4,10 @@ import { useForm } from "react-hook-form";
 import httpClient from "@constant/apiInstance";
 import { ApiResponse } from "@/types/ApiResponse";
 import { ApiResponseNoGeneric } from "@/types/ApiResponse";
-import { User } from "@/types/User";
+
 import { useNavigate } from "react-router-dom";
 import { PATH } from "@constant/config";
-import { X } from "lucide-react";
+import { X, Mail, User } from "lucide-react";
 import styles from "./UpdateUser.module.css";
 import { ToastContainer, toast } from "react-toastify";
 import { Select } from "./CreateUser";
@@ -107,8 +107,7 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
     } catch (error) {
       console.error("Update user error: " + error);
     } finally {
-      setIsSubmitting(false); // ✅ kết thúc submit
-    }
+      setIsSubmitting(false); 
   };
 
   const handleCancel = () => {
@@ -192,12 +191,21 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
                 </div>
               </div>
             </label>
-            <input
+            {/* <input
               disabled
               id="full_name"
               {...register("full_name")}
               className="mt-1 h-6 w-4/5 rounded-lg border border-gray-300 p-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-            />
+            /> */}
+            <div className="relative w-4/5">
+              <User className="absolute top-1/2 left-2 -translate-y-1/2 transform text-gray-400" />
+              <input
+                disabled
+                id="full_name"
+                {...register("full_name")}
+                className="mt-1 h-6 w-full rounded-lg border border-gray-300 p-2 pl-9 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              />
+            </div>
             {errors.full_name && (
               <p className="mt-1 text-sm text-red-500">
                 {errors.full_name.message}
@@ -218,12 +226,15 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
                 </div>
               </div>
             </label>
-            <input
-              {...register("email")}
-              disabled
-              id="email"
-              className="mt-1 h-6 w-4/5 rounded-lg border border-gray-300 p-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-            />
+            <div className="relative w-4/5">
+              <Mail className="absolute top-1/2 left-2 -translate-y-1/2 transform text-gray-400" />
+              <input
+                {...register("email")}
+                disabled
+                id="email"
+                className="mt-1 h-6 w-full rounded-lg border border-gray-300 p-2 pl-9 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              />
+            </div>
           </div>
           <div className="ml-15">
             <label

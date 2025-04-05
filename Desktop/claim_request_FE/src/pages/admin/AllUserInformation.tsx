@@ -194,6 +194,12 @@ const AllUserInformation: React.FC = () => {
     setAssignID(id);
   };
   const columns: Column<User>[] = [
+    // {
+    //   key: "index",
+    //   dataIndex: "index",
+    //   title: t("paidclaims.table.no"),
+    //   cell: ({ value }) => String(value).padStart(3, "0"),
+    // },
     {
       key: "full_name",
       dataIndex: "full_name",
@@ -297,7 +303,9 @@ const AllUserInformation: React.FC = () => {
             >
               <div>
                 {userStatuses[record.user_id] === 1 ? (
-                  <CircleCheck size={20} />
+                  <Tooltip text="Assign project" position="top">
+                    <CircleCheck size={20} />
+                  </Tooltip>
                 ) : (
                   <div className={styles.circleCheckButtonNotAllowed}>
                     <Tooltip text="This user is disabled" position="top">
@@ -368,7 +376,10 @@ const AllUserInformation: React.FC = () => {
               >
                 <div>
                   {userStatuses[record.user_id] === 1 ? (
-                    <SquarePen size={20} />
+                    // <SquarePen size={20} />
+                    <Tooltip text="Update user" position="top">
+                      <SquarePen size={20} />
+                    </Tooltip>
                   ) : (
                     <div className={styles.circleCheckButtonNotAllowed}>
                       <Tooltip text="This user is disabled" position="top">

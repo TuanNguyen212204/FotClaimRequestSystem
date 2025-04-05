@@ -12,7 +12,6 @@ import {
 } from "@redux/thunk/Project/projectThunk";
 import { Column, DataRecord } from "@components/ui/Table/Table";
 import { CreateProject } from "../Project/CreateProject";
-import { UpdateProject } from "../Project/UpdateProject";
 import styles from "./ProjectInformation.module.css";
 import httpClient from "@/constant/apiInstance";
 import { useNavigate } from "react-router-dom";
@@ -23,7 +22,7 @@ import { confirmModal } from "@/components/ui/modal/Modal";
 import { toast } from "react-toastify";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { useTranslation } from "react-i18next";
-
+import { UpdateProject } from "../Project/UpdateProject";
 const ProjectInformation: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const project = useSelector(selectAllProject) || [];
@@ -36,7 +35,7 @@ const ProjectInformation: React.FC = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState<string>("All");
   const [UpdateOpen, setUpdateOpen] = useState(false);
-  console.log("Dữ liệu lấy từ Redux:", project);
+
   const { t } = useTranslation("projectInformation");
 
   useEffect(() => {
@@ -148,7 +147,7 @@ const ProjectInformation: React.FC = () => {
       },
       onCancel: () => {
         console.log("Delete cancelled");
-        toast.info("Project deletion cancelled.");
+        toast.error("Project deletion cancelled.");
       },
     });
   };
@@ -230,9 +229,8 @@ const ProjectInformation: React.FC = () => {
     <div>
       <h1 className="m-3 p-0">Project Information</h1>
       <p className="m-3 p-0">
-          The project information system manages project and project
-          assignments
-        </p>
+        The project information system manages project and project assignments
+      </p>
       {isModalOpen && (
         <div className={styles.editModal}>
           <div>
@@ -287,21 +285,21 @@ const ProjectInformation: React.FC = () => {
       </div>
 
       {/* <FilterStatus /> */}
-    <div className={styles.tableContainer}>
-      <TableComponent
-        // ref={tableRef as any}
-        isHaveCheckbox={false}
-        columns={columns}
-        dataSource={dataSource}
-        loading={loading}
-        pagination={true}
-        name="Status"
-        createButton={true}
-        totalPage={totalPage}
-        onPageChange={handlePageChange}
-        onCreateButtonClick={handleCreateProject}
-      />
-    </div>    
+      <div className={styles.tableContainer}>
+        <TableComponent
+          // ref={tableRef as any}
+          isHaveCheckbox={false}
+          columns={columns}
+          dataSource={dataSource}
+          loading={loading}
+          pagination={true}
+          name="Status"
+          createButton={true}
+          totalPage={totalPage}
+          onPageChange={handlePageChange}
+          onCreateButtonClick={handleCreateProject}
+        />
+      </div>
     </div>
   );
 };

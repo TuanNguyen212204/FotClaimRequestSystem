@@ -1,18 +1,24 @@
-import React, { useState, useEffect } from "react";
-import { data, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { PATH } from "@constant/config";
 import Modal from "react-modal";
 import { useForm } from "react-hook-form";
-import { X } from "lucide-react";
+import { BriefcaseBusiness, Calendar, X } from "lucide-react";
 import httpClient from "@/constant/apiInstance";
-import Calendar from "react-calendar";
 import { Project } from "@/types/Project";
 import { toast } from "react-toastify";
 import styles from "./CreateProject.module.css";
 import { useTranslation } from "react-i18next";
-import "react-calendar/dist/Calendar.css";
-
+import { ApiResponse } from "@/types/ApiResponse";
+import { Select } from "../User/CreateUser";
+import { LoadingProvider } from "@/components/ui/Loading/LoadingContext";
+import LoadingOverlay from "@/components/ui/Loading/LoadingOverlay";
 Modal.setAppElement("#root");
+
+interface Option {
+  label: string;
+  value: string | number;
+}
 
 interface CreateProjectProps {
   openModal: boolean;
@@ -25,6 +31,7 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
 }) => {
   const navigate = useNavigate();
   const { t } = useTranslation("projectInformation");
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -34,18 +41,27 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
     setValue,
     formState: { errors },
   } = useForm<Project>();
-
+  const options: Option[] = [
+    { label: "Active", value: "1" },
+    { label: "Inactive", value: "2" },
+  ];
+  // <option value="">
+  //               {t("projectInformation.createProject.selectStatus")}
+  //             </option>
+  //             <option value="1">
+  //               {t("projectInformation.createProject.inProgress")}
+  //             </option>
+  //             <option value="2">
+  //               {t("projectInformation.createProject.completed")}
+  //             </option>
   const onSubmit = async (data: Project) => {
     const requestBody = {
-      project_id: data.project_id,
       project_name: data.project_name,
       start_date: data.start_date,
       end_date: data.end_date,
       project_status: data.project_status,
-      project_managers: data.project_managers
-    }
-    console.log("DATARE:", requestBody);
-    
+    };
+
     try {
       await httpClient.post("/projects/create-project", requestBody);
       toast.success("Create project successfully!");
@@ -56,36 +72,9 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
       toast.error("Failed to create project. Please try again.");
     }
   };
-  
-  const [pmUsers, setPmUsers] = useState<any[]>([]);
-
-  useEffect(() => {
-    const fetchPmUsers = async () => {
-      try {
-        const response = await httpClient.get("/admin/staffs?department_id=7"); 
-
-        const filteredUsers = response.data.data.map((user: any) => ({
-          user_id: user.user_id,
-          full_name: user.full_name
-        }));
-        console.log("Dữ liệu sau khi lọc:", filteredUsers); 
-        setPmUsers(filteredUsers); 
-      } catch (error) {
-        console.error("Error fetching PM users:", error);
-      }
-    };
-    fetchPmUsers();
-  }, []);
-  
 
   const startDate = watch("start_date");
   const endDate = watch("end_date");
-  const [isClosing, setIsClosing] = useState(false);
-
-  const handleClose = () => {
-    setIsClosing(true);
-    setTimeout(() => setOpenModal(false), 300);
-  };
 
   useEffect(() => {
     if (startDate && endDate && endDate < startDate) {
@@ -96,35 +85,7 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
     } else {
       clearErrors("end_date");
     }
-  }, [startDate, endDate, setError, clearErrors]);
-
-  const projectId = watch("project_id");
-  const [checkingId, setCheckingId] = useState(false);
-
-  useEffect(() => {
-    if (!projectId || !/^P\d{3}$/.test(projectId)) return;
-
-    const checkProjectId = async () => {
-      setCheckingId(true);
-      try {
-        await httpClient.get<any>(`/projects/check/${projectId}`);
-        setError("project_id", {
-          type: "manual",
-          message: "Project ID already exists!",
-        });
-      } catch (error: any) {
-        if (error.response?.status === 400) {
-          clearErrors("project_id");
-        } else {
-          console.error("Error checking project ID:", error);
-        }
-      }
-      setCheckingId(false);
-    };
-
-    const timer = setTimeout(checkProjectId, 500);
-    return () => clearTimeout(timer);
-  }, [projectId]);
+  }, [startDate, endDate]);
 
   const projectName = watch("project_name");
   const [checkingName, setCheckingName] = useState(false);
@@ -154,24 +115,6 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
     return () => clearTimeout(timer);
   }, [projectName]);
 
-  const [showStartDateCalendar, setShowStartDateCalendar] = useState(false);
-  const [showEndDateCalendar, setShowEndDateCalendar] = useState(false);
-  const [startDateSelected, setStartDateSelected] = useState<Date | null>(null);
-  const [endDateSelected, setEndDateSelected] = useState<Date | null>(null);
-  const minDate = new Date("2025-01-01");
-
-  const handleStartDateChange = (newDate: Date) => {
-    setStartDateSelected(newDate);
-    setValue("start_date", newDate);
-    setShowStartDateCalendar(false);
-  };
-
-  const handleEndDateChange = (newDate: Date) => {
-    setEndDateSelected(newDate);
-    setValue("end_date", newDate);
-    setShowEndDateCalendar(false);
-  };
-
   useEffect(() => {
     if (openModal) {
       document.body.style.overflow = "hidden";
@@ -179,193 +122,156 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
       document.body.style.overflow = "auto";
     }
   }, [openModal]);
+  const handleCancel = () => {
+    setOpenModal(false);
+  };
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        handleCancel();
+      }
+    };
 
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
   return (
-    <Modal
-      isOpen={openModal}
-      onRequestClose={() => setOpenModal(false)}
-      className={styles.modal}
-      overlayClassName={styles.overlay}
-    >
-      <div className="p-6 bg-white rounded-lg shadow-lg max-w-lg mx-auto relative">
-        <button
-          onClick={() => {
-            toast.info("Cancel Create");
-            setOpenModal(false);
-          }}
-          className={`${styles.close_button} absolute top-4 right-4`}
-        >
-          <X />
-        </button>
-
-        <h1 className="text-2xl font-bold text-gray-700 mb-4 text-center">
-          Create Project
-        </h1>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <div>
+      <div>
+        {loading && (
           <div>
-            <label className="block text-sm font-medium text-gray-700">
-              {t("projectInformation.createProject.projectID")}
-            </label>
-            <input
-              type="text"
-              placeholder="Pxxx"
-              {...register("project_id", {
-                required: t("projectInformation.validation.projectID"),
-                pattern: {
-                  value: /^P\d{3}$/,
-                  message: "Invalid format (Pxxx)",
-                },
-              })}
-              className="w-full p-2 border border-gray-300 rounded-md"
-            />
-            {checkingId && (
-              <p className="text-blue-500 text-sm">Checking Project ID...</p>
-            )}
-            {errors.project_id && (
-              <p className="text-red-500 text-sm">{errors.project_id.message}</p>
-            )}
+            <LoadingProvider>
+              <LoadingOverlay />
+            </LoadingProvider>
           </div>
-
+        )}
+      </div>
+      <div style={{ marginTop: "50px" }}>
+        <div className="mx-auto rounded-xl bg-white pr-5 pb-5 pl-1 shadow-xl">
           <div>
-            <label className="block text-sm font-medium text-gray-700">
-              {t("projectInformation.createProject.projectName")}
-            </label>
-            <input
-              type="text"
-              {...register("project_name", {
-                required: t("projectInformation.validation.projectName"),
-              })}
-              className="w-full p-2 border border-gray-300 rounded-md"
-            />
-            {errors.project_name && (
-              <p className="text-red-500 text-sm">{errors.project_name.message}</p>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              {t("projectInformation.createProject.startDate")}
-            </label>
-            <div
-              className="w-full p-2 border border-gray-300 rounded-md cursor-pointer"
-              onClick={() => setShowStartDateCalendar(!showStartDateCalendar)}
-            >
-              {startDateSelected
-                ? startDateSelected.toLocaleDateString("vi-VN")
-                : "DD/MM/YYYY"}
-            </div>
-            {errors.start_date && (
-              <p className="text-red-500 text-sm">{errors.start_date.message}</p>
-            )}
-            {showStartDateCalendar && (
-              <div className={styles.calendarwrapper}>
-                <Calendar
-                  onChange={handleStartDateChange}
-                  value={startDateSelected}
-                  locale="vi-VN"
-                  className={styles.calendarwrapperstartDateCalendar}
-                  minDate={minDate}
-                />
-              </div>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              {t("projectInformation.createProject.endDate")}
-            </label>
-            <div
-              className="w-full p-2 border border-gray-300 rounded-md cursor-pointer"
-              onClick={() => setShowEndDateCalendar(!showEndDateCalendar)}
-            >
-              {endDateSelected
-                ? endDateSelected.toLocaleDateString("vi-VN")
-                : "DD/MM/YYYY"}
-            </div>
-            {errors.end_date && (
-              <p className="text-red-500 text-sm">{errors.end_date.message}</p>
-            )}
-            {showEndDateCalendar && (
-              <div className={styles.calendarwrapper}>
-                <Calendar
-                  onChange={handleEndDateChange}
-                  value={endDateSelected}
-                  locale="vi-VN"
-                  className={styles.calendarwrapperendDateCalendar}
-                  minDate={minDate}
-                />
-              </div>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              {t("projectInformation.createProject.projectStatus")}
-            </label>
-            <select
-              {...register("project_status", {
-                required: t("projectInformation.validation.projectStatus"),
-              })}
-              className="w-full p-2 border border-gray-300 rounded-md"
-            >
-              <option value="">
-                {t("projectInformation.createProject.selectStatus")}
-              </option>
-              <option value="1">
-                {t("projectInformation.createProject.inProgress")}
-              </option>
-              <option value="2">
-                {t("projectInformation.createProject.completed")}
-              </option>
-            </select>
-            {errors.project_status && (
-              <p className="text-red-500 text-sm">
-                {errors.project_status.message}
-              </p>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Project Manager
-            </label>
-            <select
-              {...register("project_managers", {
-                required: t("projectManager"),
-              })}
-              className="w-full p-2 border border-gray-300 rounded-md"
-              onChange={(e) => {
-                console.log("Selected Project Manager ID:", e.target.value); 
-              }}
-            >
-              <option value="">
-                {t("selectManager")}
-              </option>
-              {pmUsers.map((user) => (
-                <option key={user.user_id} value={user.user_id}>
-                  {user.full_name}
-                </option>
-              ))}
-            </select>
-            {errors.project_managers && (
-              <p className="text-red-500 text-sm">
-                {errors.project_managers.message}
-              </p>
-            )}
-          </div>
-
-          <div className="flex justify-end space-x-2">
             <button
-              type="submit"
-              className={styles.update_button}
-              disabled={checkingId}
+              onClick={() => handleCancel()}
+              className={`${styles.cancel_button} `}
             >
-              {checkingId ? "Validating..." : "Create"}
+              <div>
+                <X />
+              </div>
             </button>
           </div>
-        </form>
+
+          <h1 className={`mb-6 text-center text-3xl font-bold ${styles.title}`}>
+            Create Project
+          </h1>
+
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <div className="ml-15">
+              <label className="block text-sm font-medium text-gray-700">
+                {t("projectInformation.createProject.projectName")}
+              </label>
+              <div className="relative w-4/5">
+                <BriefcaseBusiness className="absolute top-1/2 left-2 -translate-y-1/2 transform text-gray-400" />
+                <input
+                  placeholder="Enter the project name"
+                  type="text"
+                  {...register("project_name", {
+                    required: t("projectInformation.validation.projectName"),
+                  })}
+                  className="mt-1 h-6 w-full rounded-lg border border-gray-300 p-2 pl-8 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                />
+              </div>
+              {errors.project_name && (
+                <p className="text-sm text-red-500">
+                  {errors.project_name.message}
+                </p>
+              )}
+            </div>
+
+            <div className="ml-15">
+              <label className="block text-sm font-medium text-gray-700">
+                {t("projectInformation.createProject.startDate")}
+              </label>
+              <div className="relative w-4/5">
+                <Calendar className="absolute top-1/2 left-2 -translate-y-1/2 transform text-gray-400" />
+                <input
+                  type="date"
+                  {...register("start_date", {
+                    required: t("projectInformation.validation.startDate"),
+                  })}
+                  className="mt-1 h-6 w-5/5 rounded-lg border border-gray-300 p-2 pl-9 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                  min="2025-01-01"
+                />
+              </div>
+
+              {errors.start_date && (
+                <p className="text-sm text-red-500">
+                  {errors.start_date.message}
+                </p>
+              )}
+            </div>
+
+            <div className="ml-15">
+              <label className="block text-sm font-medium text-gray-700">
+                {t("projectInformation.createProject.endDate")}
+              </label>
+              <div className="relative w-4/5">
+                <Calendar className="absolute top-1/2 left-2 -translate-y-1/2 transform text-gray-400" />
+                <input
+                  type="date"
+                  {...register("end_date", {
+                    required: t("projectInformation.validation.startDate"),
+                  })}
+                  className="mt-1 h-6 w-5/5 rounded-lg border border-gray-300 p-2 pl-9 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                  min="2025-01-01"
+                />
+              </div>
+              {/* <input
+                type="date"
+                {...register("end_date", {
+                  required: t("projectInformation.validation.endDate"),
+                })}
+                className="mt-1 h-6 w-4/5 rounded-lg border border-gray-300 p-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                min="2025-01-01"
+              /> */}
+              {errors.end_date && (
+                <p className="text-sm text-red-500">
+                  {errors.end_date.message}
+                </p>
+              )}
+            </div>
+
+            <div className="ml-15">
+              <label className="block text-sm font-medium text-gray-700">
+                {t("projectInformation.createProject.projectStatus")}
+              </label>
+              <Select
+                register={register("project_status")}
+                options={options}
+                placeholder="Select Project Status"
+                onChange={(value) => console.log(value)}
+                className="mt-1 h-11 w-90 rounded-lg border border-gray-300 p-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              ></Select>
+              {errors.project_status && (
+                <p className="text-sm text-red-500">
+                  {errors.project_status.message}
+                </p>
+              )}
+            </div>
+
+            <div className="flex justify-center space-x-2">
+              <button
+                type="submit"
+                className={styles.update_button}
+                disabled={checkingName}
+              >
+                {checkingName ? "Checking..." : "Create"}
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-    </Modal>
+    </div>
   );
 };
 
