@@ -28,7 +28,7 @@ const ProjectInformation: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const project = useSelector(selectAllProject) || [];
   const totalPage = useSelector(selectTotalPageOfAllProject) || 1;
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
   const [statusFilter, setStatusFilter] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [projectID, setProjectID] = useState<string>("");
@@ -42,31 +42,19 @@ const ProjectInformation: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      try {
-        console.log(
-          "Fetching projects for page:",
-          currentPage,
-          "with status:",
-          statusFilter,
-        );
-        const result = await dispatch(
-          fetchAllProjectAsync({
-            page: currentPage.toString(),
-            status: statusFilter || "all",
-          }),
-        );
-        console.log("Fetch result:", result);
-        await dispatch(
-          fetchTotalPage({
-            page: currentPage,
-            status: statusFilter || "all",
-          }),
-        );
-      } catch (error) {
-        console.error("Error fetching projects:", error);
-      } finally {
-        setLoading(false);
-      }
+      dispatch(
+        fetchAllProjectAsync({
+          page: currentPage.toString(),
+          status: statusFilter || "all",
+        }),
+      );
+      await dispatch(
+        fetchTotalPage({
+          page: currentPage,
+          status: statusFilter || "all",
+        }),
+      );
+      setLoading(false);
     };
     fetchData();
   }, [dispatch, currentPage, statusFilter]);
@@ -120,6 +108,11 @@ const ProjectInformation: React.FC = () => {
         "projects/" + id,
       );
       console.log(response.data.message);
+      toast.success("Project deleted successfully!");
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     } catch (error) {
       console.error("Delete project error " + error);
     }
@@ -130,12 +123,10 @@ const ProjectInformation: React.FC = () => {
     confirmModal({
       title: "Do you want to delete this project?",
       children: `Project ID: ${id} will be deleted`,
-      onOk: async () => {
+      onOk: () => {
         try {
-          await deleteProject(id);
+          deleteProject(id);
           console.log("Deleted project with ID:", id);
-          toast.success("Project deleted successfully!");
-          navigate(PATH.projectInformation);
         } catch (error) {
           console.error("Error deleting project:", error);
           toast.error("Failed to delete project. Please try again.");

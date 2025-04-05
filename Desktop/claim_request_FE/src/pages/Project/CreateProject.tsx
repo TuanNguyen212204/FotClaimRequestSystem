@@ -65,8 +65,10 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
     try {
       await httpClient.post("/projects/create-project", requestBody);
       toast.success("Create project successfully!");
-      setOpenModal(false);
-      navigate(PATH.projectInformation);
+      setTimeout(() => {
+        setOpenModal(false);
+        window.location.reload();
+      }, 1000);
     } catch (error) {
       console.error("Create project error:", error);
       toast.error("Failed to create project. Please try again.");
@@ -90,30 +92,30 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
   const projectName = watch("project_name");
   const [checkingName, setCheckingName] = useState(false);
 
-  useEffect(() => {
-    if (!projectName) return;
+  // useEffect(() => {
+  //   if (!projectName) return;
 
-    const checkProjectName = async () => {
-      setCheckingName(true);
-      try {
-        await httpClient.get<any>(`/projects/${projectName}`);
-        setError("project_name", {
-          type: "manual",
-          message: "Project Name already exists!",
-        });
-      } catch (error: any) {
-        if (error.response?.status === 404) {
-          clearErrors("project_name");
-        } else {
-          console.error("Error checking project name:", error);
-        }
-      }
-      setCheckingName(false);
-    };
+  //   const checkProjectName = async () => {
+  //     setCheckingName(true);
+  //     try {
+  //       await httpClient.get<any>(`/projects/${projectName}`);
+  //       setError("project_name", {
+  //         type: "manual",
+  //         message: "Project Name already exists!",
+  //       });
+  //     } catch (error: any) {
+  //       if (error.response?.status === 404) {
+  //         clearErrors("project_name");
+  //       } else {
+  //         console.error("Error checking project name:", error);
+  //       }
+  //     }
+  //     setCheckingName(false);
+  //   };
 
-    const timer = setTimeout(checkProjectName, 500);
-    return () => clearTimeout(timer);
-  }, [projectName]);
+  //   const timer = setTimeout(checkProjectName, 500);
+  //   return () => clearTimeout(timer);
+  // }, [projectName]);
 
   useEffect(() => {
     if (openModal) {
