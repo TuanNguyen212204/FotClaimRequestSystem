@@ -23,6 +23,7 @@ import { toast } from "react-toastify";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { UpdateProject } from "../Project/UpdateProject";
+import { PATH } from "@/constant/config";
 const ProjectInformation: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const project = useSelector(selectAllProject) || [];
@@ -35,7 +36,7 @@ const ProjectInformation: React.FC = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState<string>("All");
   const [UpdateOpen, setUpdateOpen] = useState(false);
-
+  const navigate = useNavigate();
   const { t } = useTranslation("projectInformation");
 
   useEffect(() => {
@@ -134,12 +135,7 @@ const ProjectInformation: React.FC = () => {
           await deleteProject(id);
           console.log("Deleted project with ID:", id);
           toast.success("Project deleted successfully!");
-          await dispatch(
-            fetchAllProjectAsync({
-              page: currentPage.toString(),
-              status: statusFilter || "all",
-            }),
-          );
+          navigate(PATH.projectInformation);
         } catch (error) {
           console.error("Error deleting project:", error);
           toast.error("Failed to delete project. Please try again.");
