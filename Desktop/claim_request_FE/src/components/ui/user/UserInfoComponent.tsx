@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import styles from "@components/ui/user/UserInfoComponent.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@redux/index";
@@ -27,6 +27,9 @@ export const UserInfoComponent: React.FC = () => {
   const [isOtRateVisible, setIsOtRateVisible] = useState(false);
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState<string>(
+    "https://i.pinimg.com/736x/63/f0/0d/63f00d6ebe2c93b945be3c39135503c2.jpg",
+  );
   const navigate = useNavigate();
 
   const accessToken = localStorage.getItem("access_token");
@@ -36,7 +39,9 @@ export const UserInfoComponent: React.FC = () => {
     import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
   const staticBaseUrl = "https://claimsystem.info.vn";
 
-  const getFullAvatarUrl = (avatarPath: string | undefined): string => {
+  const getFullAvatarUrl = async (
+    avatarPath: string | undefined,
+  ): Promise<string> => {
     const defaultAvatar =
       "https://i.pinimg.com/736x/63/f0/0d/63f00d6ebe2c93b945be3c39135503c2.jpg";
 
@@ -53,8 +58,18 @@ export const UserInfoComponent: React.FC = () => {
       : `/uploads/avatars/${
           avatarPath.startsWith("avatar-") ? "" : "avatar-"
         }${avatarPath}`;
+    const fullUrl = `${staticBaseUrl}${normalizedAvatarPath}?t=${new Date().getTime()}`;
 
-    return `${staticBaseUrl}${normalizedAvatarPath}?t=${new Date().getTime()}`;
+    try {
+      const response = await fetch(fullUrl, { method: "HEAD" });
+      if (response.ok) {
+        return fullUrl;
+      }
+      return defaultAvatar;
+    } catch (error) {
+      console.warn(`Failed to fetch avatar: ${fullUrl}`, error);
+      return defaultAvatar;
+    }
   };
 
   useEffect(() => {
@@ -62,6 +77,14 @@ export const UserInfoComponent: React.FC = () => {
       dispatch(fetchUserByIdAsync());
     }
   }, [dispatch, accessToken, userId]);
+
+  useEffect(() => {
+    const loadAvatar = async () => {
+      const url = await getFullAvatarUrl(selectedUser?.avatar);
+      setAvatarUrl(url);
+    };
+    loadAvatar();
+  }, [selectedUser?.avatar]);
 
   useEffect(() => {
     if (selectedUser) {
@@ -205,17 +228,24 @@ export const UserInfoComponent: React.FC = () => {
         }
       }
 
-      const userFormData = new FormData();
-      userFormData.append("email", editedUser.email || "");
+      const userData: { email: string; password?: string } = {
+        email: editedUser.email || "",
+      };
       if (editedUser.password && editedUser.password.trim() !== "") {
-        userFormData.append("password", editedUser.password);
+        userData.password = editedUser.password;
       }
 
-      await httpClient.put(`/admin/staff/${userId}`, userFormData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
+      const response = await httpClient.put(
+        `/admin/staff/${userId}`,
+        userData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
         },
-      });
+      );
+
+      console.log("Update response:", response.data);
 
       await dispatch(fetchUserByIdAsync());
       setIsEditing(false);
@@ -267,15 +297,7 @@ export const UserInfoComponent: React.FC = () => {
     <div className={styles.profileContainer}>
       <div className={styles.profileHeader}>
         <div className={styles.avatarSection}>
-          <img
-            src={getFullAvatarUrl(selectedUser.avatar)}
-            alt="Avatar"
-            className={styles.profileAvatar}
-            onError={(e) =>
-              (e.currentTarget.src =
-                "https://i.pinimg.com/736x/63/f0/0d/63f00d6ebe2c93b945be3c39135503c2.jpg")
-            }
-          />
+          <img src={avatarUrl} alt="Avatar" className={styles.profileAvatar} />
           <div className={styles.updateButtonWrapper}>
             <button
               onClick={() => setIsEditing(true)}
