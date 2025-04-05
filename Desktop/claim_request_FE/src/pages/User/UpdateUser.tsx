@@ -107,150 +107,150 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
     } catch (error) {
       console.error("Update user error: " + error);
     } finally {
-      setIsSubmitting(false); 
-  };
+      setIsSubmitting(false);
+    }
 
-  const handleCancel = () => {
-    setOpenModal(false);
-  };
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        handleCancel(); // Gọi hàm cancel khi nhấn Escape
-      }
+    const handleCancel = () => {
+      setOpenModal(false);
     };
+    useEffect(() => {
+      const handleKeyDown = (event: KeyboardEvent) => {
+        if (event.key === "Escape") {
+          handleCancel(); // Gọi hàm cancel khi nhấn Escape
+        }
+      };
 
-    document.addEventListener("keydown", handleKeyDown);
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
+      document.addEventListener("keydown", handleKeyDown);
+      return () => {
+        document.removeEventListener("keydown", handleKeyDown);
+      };
+    }, []);
+    interface CreateUserProps {
+      openModal: boolean;
+      setOpenModal: (value: boolean) => void;
+    }
+    type Department = {
+      id: string;
+      name: string;
     };
-  }, []);
-  interface CreateUserProps {
-    openModal: boolean;
-    setOpenModal: (value: boolean) => void;
-  }
-  type Department = {
-    id: string;
-    name: string;
-  };
-  type JobRank = {
-    id: number;
-    name: string;
-    ot_rate: string;
-  };
-  interface Option {
-    label: string;
-    value: string | number;
-  }
+    type JobRank = {
+      id: number;
+      name: string;
+      ot_rate: string;
+    };
+    interface Option {
+      label: string;
+      value: string | number;
+    }
 
-  interface SelectProps {
-    options: Option[];
-    value?: string | number;
-    onChange: (value: string | number) => void;
-    placeholder?: string;
-    isDisabled?: boolean;
-    multiple?: boolean;
-    register?: any;
-    className?: string;
-  }
-  const options: Option[] = [
-    { label: "Admin", value: "1" },
-    { label: "Approver", value: "2" },
-    { label: "Finance", value: "3" },
-    { label: "Claimer", value: "4" },
-  ];
+    interface SelectProps {
+      options: Option[];
+      value?: string | number;
+      onChange: (value: string | number) => void;
+      placeholder?: string;
+      isDisabled?: boolean;
+      multiple?: boolean;
+      register?: any;
+      className?: string;
+    }
+    const options: Option[] = [
+      { label: "Admin", value: "1" },
+      { label: "Approver", value: "2" },
+      { label: "Finance", value: "3" },
+      { label: "Claimer", value: "4" },
+    ];
 
-  return (
-    <div style={{ marginTop: "50px" }}>
-      <div className="8 mx-auto rounded-xl bg-white pr-0 pb-5 shadow-xl">
-        <div>
-          <button
-            onClick={() => handleCancel()}
-            className={styles.cancel_button}
-          >
-            <div>
-              <X />
-            </div>
-          </button>
-        </div>
-        <h1 className="mb-6 text-center text-3xl font-bold text-blue-700">
-          {t("allUserInformation.updateUser.title")}
-        </h1>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
-          <div className="ml-15">
-            <label
-              className="block text-sm font-medium text-gray-600"
-              htmlFor="full_name"
+    return (
+      <div style={{ marginTop: "50px" }}>
+        <div className="8 mx-auto rounded-xl bg-white pr-0 pb-5 shadow-xl">
+          <div>
+            <button
+              onClick={() => handleCancel()}
+              className={styles.cancel_button}
             >
-              <div className={styles.flex}>
-                <div className={styles.label_container}>
-                  <span>*</span>
-                </div>
-                <div className={styles.input_container}>
-                  <span>{t("allUserInformation.updateUser.fullName")}</span>
-                </div>
+              <div>
+                <X />
               </div>
-            </label>
-            {/* <input
+            </button>
+          </div>
+          <h1 className="mb-6 text-center text-3xl font-bold text-blue-700">
+            {t("allUserInformation.updateUser.title")}
+          </h1>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
+            <div className="ml-15">
+              <label
+                className="block text-sm font-medium text-gray-600"
+                htmlFor="full_name"
+              >
+                <div className={styles.flex}>
+                  <div className={styles.label_container}>
+                    <span>*</span>
+                  </div>
+                  <div className={styles.input_container}>
+                    <span>{t("allUserInformation.updateUser.fullName")}</span>
+                  </div>
+                </div>
+              </label>
+              {/* <input
               disabled
               id="full_name"
               {...register("full_name")}
               className="mt-1 h-6 w-4/5 rounded-lg border border-gray-300 p-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
             /> */}
-            <div className="relative w-4/5">
-              <User className="absolute top-1/2 left-2 -translate-y-1/2 transform text-gray-400" />
-              <input
-                disabled
-                id="full_name"
-                {...register("full_name")}
-                className="mt-1 h-6 w-full rounded-lg border border-gray-300 p-2 pl-9 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-              />
-            </div>
-            {errors.full_name && (
-              <p className="mt-1 text-sm text-red-500">
-                {errors.full_name.message}
-              </p>
-            )}
-          </div>
-          <div className="ml-15">
-            <label
-              className="block text-sm font-medium text-gray-600"
-              htmlFor="email"
-            >
-              <div className={styles.flex}>
-                <div className={styles.label_container}>
-                  <span>*</span>
-                </div>
-                <div className={styles.input_container}>
-                  <span>{t("allUserInformation.updateUser.email")}</span>
-                </div>
+              <div className="relative w-4/5">
+                <User className="absolute top-1/2 left-2 -translate-y-1/2 transform text-gray-400" />
+                <input
+                  disabled
+                  id="full_name"
+                  {...register("full_name")}
+                  className="mt-1 h-6 w-full rounded-lg border border-gray-300 p-2 pl-9 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                />
               </div>
-            </label>
-            <div className="relative w-4/5">
-              <Mail className="absolute top-1/2 left-2 -translate-y-1/2 transform text-gray-400" />
-              <input
-                {...register("email")}
-                disabled
-                id="email"
-                className="mt-1 h-6 w-full rounded-lg border border-gray-300 p-2 pl-9 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-              />
+              {errors.full_name && (
+                <p className="mt-1 text-sm text-red-500">
+                  {errors.full_name.message}
+                </p>
+              )}
             </div>
-          </div>
-          <div className="ml-15">
-            <label
-              className="block text-sm font-medium text-gray-600"
-              id="department"
-            >
-              <div className={styles.flex}>
-                <div className={styles.label_container}>
-                  <span>*</span>
+            <div className="ml-15">
+              <label
+                className="block text-sm font-medium text-gray-600"
+                htmlFor="email"
+              >
+                <div className={styles.flex}>
+                  <div className={styles.label_container}>
+                    <span>*</span>
+                  </div>
+                  <div className={styles.input_container}>
+                    <span>{t("allUserInformation.updateUser.email")}</span>
+                  </div>
                 </div>
-                <div className={styles.input_container}>
-                  <span>{t("allUserInformation.updateUser.department")}</span>
-                </div>
+              </label>
+              <div className="relative w-4/5">
+                <Mail className="absolute top-1/2 left-2 -translate-y-1/2 transform text-gray-400" />
+                <input
+                  {...register("email")}
+                  disabled
+                  id="email"
+                  className="mt-1 h-6 w-full rounded-lg border border-gray-300 p-2 pl-9 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                />
               </div>
-            </label>
-            {/* <input
+            </div>
+            <div className="ml-15">
+              <label
+                className="block text-sm font-medium text-gray-600"
+                id="department"
+              >
+                <div className={styles.flex}>
+                  <div className={styles.label_container}>
+                    <span>*</span>
+                  </div>
+                  <div className={styles.input_container}>
+                    <span>{t("allUserInformation.updateUser.department")}</span>
+                  </div>
+                </div>
+              </label>
+              {/* <input
               id="department"
               {...register("department", {
                 required: "Department is required",
@@ -265,51 +265,51 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
               })}
               className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200"
             /> */}
-            <Select
-              // register={{
-              //   ...register("department_id", {
-              //     required: t(
-              //       "allUserInformation.updateUser.validation.department",
-              //     ),
-              //   }),
-              // }}
-              options={department.map((a) => ({
-                label: a.name,
-                value: a.id,
-              }))}
-              register={{
-                ...register("department_id", {
-                  required: t(
-                    "allUserInformation.updateUser.validation.department",
-                  ),
-                }),
-              }}
-              placeholder="Select Department"
-              onChange={(value) => console.log(value)}
-              className="mt-1 h-10 w-83.5 rounded-lg border border-gray-300 p-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-            />
-            {errors.department_id && (
-              <p className="mt-1 text-sm text-red-500">
-                {errors.department_id.message}
-              </p>
-            )}
-          </div>
+              <Select
+                // register={{
+                //   ...register("department_id", {
+                //     required: t(
+                //       "allUserInformation.updateUser.validation.department",
+                //     ),
+                //   }),
+                // }}
+                options={department.map((a) => ({
+                  label: a.name,
+                  value: a.id,
+                }))}
+                register={{
+                  ...register("department_id", {
+                    required: t(
+                      "allUserInformation.updateUser.validation.department",
+                    ),
+                  }),
+                }}
+                placeholder="Select Department"
+                onChange={(value) => console.log(value)}
+                className="mt-1 h-10 w-83.5 rounded-lg border border-gray-300 p-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              />
+              {errors.department_id && (
+                <p className="mt-1 text-sm text-red-500">
+                  {errors.department_id.message}
+                </p>
+              )}
+            </div>
 
-          <div className="ml-15">
-            <label
-              className="block text-sm font-medium text-gray-600"
-              htmlFor="role_id"
-            >
-              <div className={styles.flex}>
-                <div className={styles.label_container}>
-                  <span>*</span>
+            <div className="ml-15">
+              <label
+                className="block text-sm font-medium text-gray-600"
+                htmlFor="role_id"
+              >
+                <div className={styles.flex}>
+                  <div className={styles.label_container}>
+                    <span>*</span>
+                  </div>
+                  <div className={styles.input_container}>
+                    <span>{t("allUserInformation.updateUser.roleID")}</span>
+                  </div>
                 </div>
-                <div className={styles.input_container}>
-                  <span>{t("allUserInformation.updateUser.roleID")}</span>
-                </div>
-              </div>
-            </label>
-            {/* <select
+              </label>
+              {/* <select
               {...register("role_id", { required: "Role ID is required" })}
               className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200"
             >
@@ -319,26 +319,26 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
               <option value="3">3 - Finance</option>
               <option value="4">4 - Claimer</option>
             </select> */}
-            <Select
-              options={options}
-              // register={register("role_id")}
-              register={{
-                ...register("role_id", {
-                  required: t(
-                    "allUserInformation.updateUser.validation.roleID",
-                  ),
-                }),
-              }}
-              onChange={(value) => console.log(value)}
-              placeholder="Select Role ID"
-              className="mt-1 h-10 w-83.5 rounded-lg border border-gray-300 p-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-            />
-            {errors.role_id && (
-              <p className="mt-1 text-sm text-red-500">
-                {errors.role_id.message}
-              </p>
-            )}
-            {/* <Select
+              <Select
+                options={options}
+                // register={register("role_id")}
+                register={{
+                  ...register("role_id", {
+                    required: t(
+                      "allUserInformation.updateUser.validation.roleID",
+                    ),
+                  }),
+                }}
+                onChange={(value) => console.log(value)}
+                placeholder="Select Role ID"
+                className="mt-1 h-10 w-83.5 rounded-lg border border-gray-300 p-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              />
+              {errors.role_id && (
+                <p className="mt-1 text-sm text-red-500">
+                  {errors.role_id.message}
+                </p>
+              )}
+              {/* <Select
               register={{
                 ...register("department", {
                   required: "Department is required",
@@ -357,23 +357,23 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
               onChange={(value) => console.log(value)}
               className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
             /> */}
-          </div>
+            </div>
 
-          <div className="ml-15">
-            <label
-              className="block text-sm font-medium text-gray-600"
-              htmlFor="job_rank"
-            >
-              <div className={styles.flex}>
-                <div className={styles.label_container}>
-                  <span>*</span>
+            <div className="ml-15">
+              <label
+                className="block text-sm font-medium text-gray-600"
+                htmlFor="job_rank"
+              >
+                <div className={styles.flex}>
+                  <div className={styles.label_container}>
+                    <span>*</span>
+                  </div>
+                  <div className={styles.input_container}>
+                    <span>{t("allUserInformation.updateUser.jobRank")}</span>
+                  </div>
                 </div>
-                <div className={styles.input_container}>
-                  <span>{t("allUserInformation.updateUser.jobRank")}</span>
-                </div>
-              </div>
-            </label>
-            {/* <input
+              </label>
+              {/* <input
               id="job_rank"
               {...register("job_rank", {
                 required: "Job Rank is required",
@@ -388,43 +388,44 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
               })}
               className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200"
             /> */}
-            <Select
-              options={jobRank.map((a) => ({ label: a.name, value: a.id }))}
-              register={{
-                ...register("job_rank_id", {
-                  required: t(
-                    "allUserInformation.updateUser.validation.jobRank",
-                  ),
-                }),
-              }}
-              placeholder="Select Job Rank"
-              onChange={(value) => console.log(value)}
-              className="mt-1 h-10 w-83.5 rounded-lg border border-gray-300 p-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-            />
-            {errors.job_rank_id && (
-              <p className="mt-1 text-sm text-red-500">
-                {errors.job_rank_id.message}
-              </p>
-            )}
-          </div>
+              <Select
+                options={jobRank.map((a) => ({ label: a.name, value: a.id }))}
+                register={{
+                  ...register("job_rank_id", {
+                    required: t(
+                      "allUserInformation.updateUser.validation.jobRank",
+                    ),
+                  }),
+                }}
+                placeholder="Select Job Rank"
+                onChange={(value) => console.log(value)}
+                className="mt-1 h-10 w-83.5 rounded-lg border border-gray-300 p-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              />
+              {errors.job_rank_id && (
+                <p className="mt-1 text-sm text-red-500">
+                  {errors.job_rank_id.message}
+                </p>
+              )}
+            </div>
 
-          {/* <div className={styles.update_button_container}>
+            {/* <div className={styles.update_button_container}>
             <button type="submit" className={styles.update_button}>
               {t("allUserInformation.buttonUpdate")}
             </button>
           </div> */}
 
-          <div className={styles.update_button_container}>
-            <button
-              type="submit"
-              className={styles.update_button}
-              disabled={isSubmitting}
-            >
-              {t("allUserInformation.buttonUpdate")}
-            </button>
-          </div>
-        </form>
+            <div className={styles.update_button_container}>
+              <button
+                type="submit"
+                className={styles.update_button}
+                disabled={isSubmitting}
+              >
+                {t("allUserInformation.buttonUpdate")}
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 };
