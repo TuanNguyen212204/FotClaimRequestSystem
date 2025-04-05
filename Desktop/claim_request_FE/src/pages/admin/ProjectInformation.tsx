@@ -228,8 +228,11 @@ const ProjectInformation: React.FC = () => {
 
   return (
     <div>
-      <h1>{t("projectInformation.title")}</h1>
-
+      <h1 className="m-3 p-0">Project Information</h1>
+      <p className="m-3 p-0">
+          The project information system manages project and project
+          assignments
+        </p>
       {isModalOpen && (
         <div className={styles.editModal}>
           <div>
@@ -249,7 +252,7 @@ const ProjectInformation: React.FC = () => {
       )}
 
       <div className="mt-5.5 ml-3 flex items-center">
-        <span className="mr-2 text-base font-bold text-gray-700">
+        <span className="mr-2 text-xl font-bold text-gray-700">
           Filter by status:
         </span>
         <div className="relative ml-1 inline-block text-left">
@@ -284,7 +287,7 @@ const ProjectInformation: React.FC = () => {
       </div>
 
       {/* <FilterStatus /> */}
-
+    <div className={styles.tableContainer}>
       <TableComponent
         // ref={tableRef as any}
         isHaveCheckbox={false}
@@ -298,6 +301,7 @@ const ProjectInformation: React.FC = () => {
         onPageChange={handlePageChange}
         onCreateButtonClick={handleCreateProject}
       />
+    </div>    
     </div>
   );
 };

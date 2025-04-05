@@ -10,7 +10,7 @@
   "project_name": "Tên dự án",
   "submitted_date": "Ngày gửi",
   "salary": "Lương",
-  "otRate": "Tỉ lệ OT",
+  "ot_rate": "Tỉ lệ OT",
   "salary_overtime": "Lương làm thêm giờ",
   "claims_status": "Trạng thái yêu cầu"
 }

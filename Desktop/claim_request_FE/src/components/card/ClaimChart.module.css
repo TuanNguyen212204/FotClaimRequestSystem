@@ -5,11 +5,12 @@
     border: 1px solid #ddd;
     box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
     margin-top: 20px;
-    width: 790px;
+    width: 990px;
+    height: 500px;
   }
   
   .chartTitle {
-    font-size: 1.25rem;
+    font-size: 2rem;
     font-weight: bold;
     text-align: center;
     margin-bottom: 1rem;

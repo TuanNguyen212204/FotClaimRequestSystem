@@ -39,6 +39,7 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
   const [department, setDepartment] = useState<DepartmentList>([]);
   const [jobRank, setJobRank] = useState<JobRankList>([]);
   const { t } = useTranslation("allUserInformation");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const fetchDepartment = async () => {
     try {
       const response =
@@ -86,11 +87,15 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
 
   const onSubmit = async (data: User) => {
     if (!user) return;
+
+    setIsSubmitting(true);
+
     const requestBody = {
       department_id: data.department_id || user.department_id,
       role_id: data.role_id || user.role_id,
       job_rank_id: data.job_rank_id || user.job_rank,
     };
+
     console.log(requestBody);
     try {
       await httpClient.put<ApiResponseNoGeneric>(
@@ -98,13 +103,14 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
         requestBody,
       );
       toast.success("User updated successfully!");
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
+      setOpenModal(false);
     } catch (error) {
       console.error("Update user error: " + error);
+    } finally {
+      setIsSubmitting(false); // ✅ kết thúc submit
     }
   };
+
   const handleCancel = () => {
     setOpenModal(false);
   };
@@ -391,8 +397,18 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
             )}
           </div>
 
-          <div className={styles.update_button_container}>
+          {/* <div className={styles.update_button_container}>
             <button type="submit" className={styles.update_button}>
+              {t("allUserInformation.buttonUpdate")}
+            </button>
+          </div> */}
+
+          <div className={styles.update_button_container}>
+            <button
+              type="submit"
+              className={styles.update_button}
+              disabled={isSubmitting}
+            >
               {t("allUserInformation.buttonUpdate")}
             </button>
           </div>

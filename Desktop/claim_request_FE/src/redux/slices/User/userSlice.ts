@@ -22,6 +22,7 @@ const initialState: {
   status: "",
   error: "null",
 };
+
 export const userSlice = createSlice({
   name: "user",
   initialState,
@@ -29,10 +30,14 @@ export const userSlice = createSlice({
     setUser(state, action) {
       state.user = action.payload;
     },
+    resetUser(state) {
+      state.user = null; 
+      state.status = "";
+      state.error = "null";
+    },
   },
   extraReducers: (builder) => {
     builder
-
       .addCase(fetchAllUserAsync.rejected, (state, action) => {
         state.status = "failed";
         state.error = String(action.error.message);
@@ -82,5 +87,6 @@ export const userSlice = createSlice({
       });
   },
 });
+
 export default userSlice.reducer;
-export const { setUser } = userSlice.actions;
+export const { setUser, resetUser } = userSlice.actions; 

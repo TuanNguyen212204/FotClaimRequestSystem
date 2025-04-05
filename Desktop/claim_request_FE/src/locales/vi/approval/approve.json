@@ -1,20 +1,18 @@
 {
   "title": "Yêu cầu đã được duyệt",
-  "loading": "Đang tải...",
-  "loadingMessage": "Vui lòng chờ...",
-  "successMessage": "Boom! Yêu cầu của bạn vừa được phê duyệt!",
+  "message": "Boom! Yêu cầu của bạn đã được phê duyệt!",
   "columns": {
-    "fullName": "Họ và Tên",
+    "full_name": "Họ và Tên",
     "email": "Email",
-    "startDate": "Ngày bắt đầu",
-    "endDate": "Ngày kết thúc",
-    "totalHours": "Tổng giờ",
-    "projectId": "Mã dự án",
-    "projectName": "Tên dự án",
-    "submittedDate": "Ngày gửi",
+    "start_date": "Ngày bắt đầu",
+    "end_date": "Ngày kết thúc",
+    "total_hours": "Tổng giờ",
+    "project_id": "Mã dự án",
+    "project_name": "Tên dự án",
+    "submitted_date": "Ngày gửi",
     "salary": "Lương",
-    "otRate": "Hệ số OT",
-    "salaryOvertime": "Lương làm thêm giờ",
-    "claimStatus": "Trạng thái yêu cầu"
+    "ot_rate": "Hệ số OT",
+    "salary_overtime": "Lương làm thêm giờ",
+    "claim_status": "Trạng thái yêu cầu"
   }
 }

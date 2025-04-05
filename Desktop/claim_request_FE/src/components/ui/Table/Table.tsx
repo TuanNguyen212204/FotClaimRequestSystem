@@ -339,7 +339,7 @@ const TableComponent = forwardRef(
                           tabIndex={-1}
                         >
                           <Cell
-                            className={`${col.key === "action" ? "justify-center" : ""} ${col.key === "claim_status" ? "justify-center" : ""} `}
+                          // className={`${col.key === "action" ? "justify-center" : ""} ${col.key === "claim_status" ? "justify-center" : ""} `}
                           >
                             {col.cell
                               ? col.cell({

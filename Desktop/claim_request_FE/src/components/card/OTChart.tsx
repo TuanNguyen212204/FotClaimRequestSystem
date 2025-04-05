@@ -45,7 +45,7 @@ const OTChart: React.FC = () => {
         options={{
           title: t("dashboard.otChart.title"),
           legend: { position: "none" },
-          chartArea: { width: "80%", height: "70%" },
+          chartArea: { width: "85%", height: "70%" },
           backgroundColor: "transparent",
           hAxis: { 
             title: "Project Name",

@@ -30,7 +30,9 @@ import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import { User, LogOut } from "lucide-react";
 import { Button } from "@components/ui/button/Button";
-import { selectUserById } from "@redux/selector/userSelector"; 
+import { selectUserById } from "@redux/selector/userSelector";
+import { fetchUserByIdAsync } from "@redux/thunk/User/userThunk";
+import { resetUser } from "@redux/slices/User/userSlice";
 
 interface Notification {
   id: string;
@@ -55,8 +57,14 @@ const Header: React.FC = () => {
   const notifications = useSelector(
     (state: any) => state.notifications?.notifications?.notifications,
   );
-  const selectedUser = useSelector(selectUserById); 
+  const selectedUser = useSelector(selectUserById);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (user_id) {
+      dispatch(fetchUserByIdAsync() as any);
+    }
+  }, [dispatch, user_id]);
 
   useEffect(() => {
     dispatch(fetchNotificationsAsync() as any);
@@ -195,6 +203,7 @@ const Header: React.FC = () => {
     if (value === "profile") {
       navigate(PATH.userInfo);
     } else if (value === "logout") {
+      dispatch(resetUser()); // Reset user state on logout
       localStorage.clear();
       navigate(PATH.login);
     }
@@ -254,7 +263,7 @@ const Header: React.FC = () => {
             <img
               src={getFullAvatarUrl(selectedUser?.avatar)}
               alt="User Avatar"
-              className={styles.avatarImage} 
+              className={styles.avatarImage}
               onError={(e) =>
                 (e.currentTarget.src =
                   "https://i.pinimg.com/736x/63/f0/0d/63f00d6ebe2c93b945be3c39135503c2.jpg")
