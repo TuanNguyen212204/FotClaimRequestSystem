@@ -12,6 +12,7 @@ import {
   selectApprovedClaimTotalPages,
 } from "@redux/selector/claimSelector";
 import { useTranslation } from "react-i18next";
+import { format } from "path";
 
 export const ApprovedApproval: React.FC = () => {
   const navigate = useNavigate();
@@ -30,7 +31,7 @@ export const ApprovedApproval: React.FC = () => {
       fetchApprovedClaimsApproverAsync({
         page: currentPage.toString(),
         limit: limit.toString(),
-      })
+      }),
     ).finally(() => setLoading(false));
   }, [currentPage]);
 
@@ -50,12 +51,19 @@ export const ApprovedApproval: React.FC = () => {
     console.log("Trang mới: ", newPage);
     setCurrentPage(newPage);
   };
-
+  const formatDateRange = (dateRange: any) => {
+    return dateRange.replace(
+      /(\d{1,2})\/(\d{1,2})\/(\d{4})/g,
+      (match, day, month, year) => {
+        return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
+      },
+    );
+  };
   const columns: Column<DataRecord>[] = [
     {
       key: "user_name",
       dataIndex: "user_full_name",
-      title: t("columns.fullName"),
+      title: t("columns.full_name"),
     },
     {
       key: "email",
@@ -65,35 +73,38 @@ export const ApprovedApproval: React.FC = () => {
     {
       key: "start_date",
       dataIndex: "start_date",
-      title: t("columns.startDate"),
-      cell: ({ value }) => formatDateToDDMMYYYY(value as string),
+      title: t("columns.start_date"),
+      cell: ({ value }) =>
+        formatDateRange(formatDateToDDMMYYYY(value as string)),
     },
     {
       key: "end_date",
       dataIndex: "end_date",
-      title: t("columns.endDate"),
-      cell: ({ value }) => formatDateToDDMMYYYY(value as string),
+      title: t("columns.end_date"),
+      cell: ({ value }) =>
+        formatDateRange(formatDateToDDMMYYYY(value as string)),
     },
     {
       key: "total_hours",
       dataIndex: "total_hours",
-      title: t("columns.totalHours"),
+      title: t("columns.total_hours"),
     },
     {
       key: "project_id",
       dataIndex: "project_id",
-      title: t("columns.projectId"),
+      title: t("columns.project_id"),
     },
     {
       key: "project_name",
       dataIndex: "project_name",
-      title: t("columns.projectName"),
+      title: t("columns.project_name"),
     },
     {
       key: "submitted_date",
       dataIndex: "submitted_date",
-      title: t("columns.submittedDate"),
-      cell: ({ value }) => formatDateToDDMMYYYY(value as string),
+      title: t("columns.submitted_date"),
+      cell: ({ value }) =>
+        formatDateRange(formatDateToDDMMYYYY(value as string)),
     },
     // {
     //   key: "salary",
@@ -117,7 +128,7 @@ export const ApprovedApproval: React.FC = () => {
     {
       key: "claim_status",
       dataIndex: "claim_status",
-      title: t("columns.claimStatus"),
+      title: t("columns.claim_status"),
       cell: ({ value }) => <StatusTag status={value as StatusType} />,
     },
     // {
@@ -145,20 +156,20 @@ export const ApprovedApproval: React.FC = () => {
   return (
     <div>
       <div className={styles.container}>
-        <h1 className={styles.title}>{loading ? t("loading") : t("title")}</h1>
-        <p className={styles.title2}>
-          {loading ? t("loadingMessage") : t("successMessage")}
-        </p>
+        <h1 className={styles.title}>{t("title")}</h1>
+        <p className={styles.title2}>{t("message")}</p>
       </div>
-      <TableComponent
-        columns={columns}
-        dataSource={dataSource}
-        loading={loading}
-        totalPage={totalPages}
-        pagination={true}
-        name="Claims"
-        onPageChange={handlePageChange}
-      />
+      <div className={styles.containerTable}>
+        <TableComponent
+          columns={columns}
+          dataSource={dataSource}
+          loading={loading}
+          totalPage={totalPages}
+          pagination={true}
+          name="Claims"
+          onPageChange={handlePageChange}
+        />
+      </div>
     </div>
   );
 };

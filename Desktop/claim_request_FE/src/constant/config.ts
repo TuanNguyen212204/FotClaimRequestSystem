@@ -39,4 +39,5 @@ export const PATH = {
   changePassword: "/change-password",
   draftApproval: "/draft-approval",
   home: "/home",
+  myProject: "/my-project",
 };

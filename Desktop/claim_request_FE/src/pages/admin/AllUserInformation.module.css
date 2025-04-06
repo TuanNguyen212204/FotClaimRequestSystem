@@ -1,9 +1,12 @@
 .update_button {
   color: #3674b5;
-  padding: 0.5rem;
-  border-radius: 5px;
+  padding: 5px;
+  border-radius: 12px;
   background-color: transparent;
   cursor: pointer;
+}
+.update_button:hover {
+  color: #308aeb;
 }
 .delete_button {
   color: red;
@@ -26,6 +29,15 @@
 .circleCheckButton {
   background-color: transparent;
   cursor: pointer;
+  color: #1b56fd;
+}
+.circleCheckButtonNotAllowed {
+  background-color: transparent;
+  cursor: not-allowed;
+  color: grey;
+}
+.circleCheckButton:hover {
+  color: #133eb4;
 }
 .filter_section {
   font-weight: 500;
@@ -36,4 +48,16 @@
 .filterStatusP {
   font-size: 1.5rem;
   color: black;
+}
+
+.tableContainer {
+  width: 95%;
+  margin: auto;
+  /* margin-top: 30px; */
+  margin: auto;
+  margin-top: 0.5rem;
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }

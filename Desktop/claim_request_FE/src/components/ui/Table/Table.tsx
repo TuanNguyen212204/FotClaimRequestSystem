@@ -47,15 +47,17 @@ export type TableComponentProps<T extends DataRecord> = {
   onPageChange?: (newPage: number) => void;
 };
 
-const Cell = ({ children }: { children: ReactNode }) => {
+const Cell = ({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className: string;
+}) => {
   return (
     <div
       tabIndex={-1}
-      // style={{
-      //   display: "flex",
-      //   justifyContent: "left",
-      // }}
-      className="flex justify-left pt-1 "
+      className={`justify-left ${className} flex pt-1 text-sm`}
     >
       {children}
     </div>
@@ -81,17 +83,17 @@ const TableComponent = forwardRef(
     ref: React.Ref<{
       getSelectedData: () => T[];
       getSortedData: () => T[];
-    }>
+    }>,
   ) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [selectedStatus, setSelectedStatus] = useState<string>("All");
     const [checkedItems, setCheckedItems] = useState<Set<string>>(new Set());
     const [sortOrder, setSortOrder] = useState<string | null>(
-      sortConfig?.order || null
+      sortConfig?.order || null,
     );
     const [sortColumn, setSortColumn] = useState<string | null>(
-      sortConfig?.columnKey || null
+      sortConfig?.columnKey || null,
     );
     const [isLoading, setIsLoading] = useState(loading);
 
@@ -208,7 +210,7 @@ const TableComponent = forwardRef(
 
     if (isLoading) {
       return (
-        <div className="flex justify-center items-center min-h-[300px]">
+        <div className="flex min-h-[300px] items-center justify-center">
           <LoadingProvider>
             <LoadingOverlay></LoadingOverlay>
           </LoadingProvider>
@@ -270,7 +272,7 @@ const TableComponent = forwardRef(
           )}
         </div>
 
-        <div className="mt-2">
+        <div className="mt-2 p-0">
           <section className={styles.table_body}>
             <table className={styles.table}>
               <thead className={styles.thead}>
@@ -286,7 +288,7 @@ const TableComponent = forwardRef(
                           checked={checkedItems.size === dataSource.length}
                           value=""
                           onChange={handleSelectAll}
-                          className=" text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 "
+                          className="rounded-sm border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                         />
                       </div>
                     </th>
@@ -305,9 +307,9 @@ const TableComponent = forwardRef(
                       {sortColumn === col.dataIndex && (
                         <span>
                           {sortOrder === "asc" ? (
-                            <ArrowUp className="w-4 h-4 ml-2" />
+                            <ArrowUp className="ml-2 h-4 w-4" />
                           ) : (
-                            <ArrowDown className="w-4 h-4 ml-2" />
+                            <ArrowDown className="ml-2 h-4 w-4" />
                           )}
                         </span>
                       )}
@@ -320,11 +322,7 @@ const TableComponent = forwardRef(
                   paginatedData.map((record) => (
                     <tr key={record.key || record.id}>
                       {isHaveCheckbox && (
-                        <td
-                          style={{ paddingTop: "3rem" }}
-                          tabIndex={-1}
-                          className="p-2"
-                        >
+                        <td tabIndex={-1} className="p-2 pt-[4rem]">
                           <div className={styles.checkbox}>
                             <input
                               type="checkbox"
@@ -336,11 +334,13 @@ const TableComponent = forwardRef(
                       )}
                       {columns.map((col) => (
                         <td
-                          className="p-2"
+                          className={`p-2`}
                           key={String(col.key || col.dataIndex)}
                           tabIndex={-1}
                         >
-                          <Cell>
+                          <Cell
+                          // className={`${col.key === "action" ? "justify-center" : ""} ${col.key === "claim_status" ? "justify-center" : ""} `}
+                          >
                             {col.cell
                               ? col.cell({
                                   value: record[col.dataIndex as keyof T],
@@ -378,7 +378,7 @@ const TableComponent = forwardRef(
         </div>
       </div>
     );
-  }
+  },
 );
 
 export default TableComponent;

@@ -14,6 +14,9 @@ import {
   XCircle,
   // ArrowLeftCircle,
   Undo2,
+  Check,
+  X,
+  RotateCcw,
 } from "lucide-react";
 import styles from "@/pages/Approver/PendingApproval.module.css";
 import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
@@ -26,6 +29,7 @@ import StatusTag, { StatusType } from "@/components/ui/StatusTag/StatusTag";
 import { DetailsApproval } from "./DetailsApproval";
 import { Button } from "@/components/ui/button/Button";
 import { useTranslation } from "react-i18next";
+import { formatDate } from "@/utils/date.ts";
 
 export const PendingComponent: React.FC = () => {
   const { t } = useTranslation("pending");
@@ -34,7 +38,7 @@ export const PendingComponent: React.FC = () => {
   const totalPages = useSelector(selectAllPendingTotalPages);
   const [loading, setLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [limit] = useState(8);
+  const [limit] = useState(6);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalContent, setModalContent] = useState<{
     title: string;
@@ -51,7 +55,7 @@ export const PendingComponent: React.FC = () => {
       fetchAllPendingClaimAsync({
         page: currentPage.toString(),
         limit: limit.toString(),
-      })
+      }),
     ).finally(() => setLoading(false));
   }, [currentPage]);
 
@@ -61,35 +65,6 @@ export const PendingComponent: React.FC = () => {
     indeterminate?: boolean;
   }>(null);
   const [selectedData, setSelectedData] = useState<DataRecord[]>([]);
-
-  // const handleSelectAll = () => {
-  //   const allChecked = checkedItems.size === dataSource.length;
-  //   if (allChecked) {
-  //     setCheckedItems(new Set());
-  //   } else {
-  //     setCheckedItems(new Set(dataSource.map((record) => record.id || "")));
-  //   }
-  // };
-
-  // const handleCheckboxChange = (requestId: string, checked: boolean) => {
-  //   setCheckedItems((prev) => {
-  //     const newCheckedItems = new Set(prev);
-  //     if (checked) {
-  //       newCheckedItems.add(requestId);
-  //     } else {
-  //       newCheckedItems.delete(requestId);
-  //     }
-  //     return newCheckedItems;
-  //   });
-  // };
-
-  // const handleGetSelectedData = () => {
-  //   const selectedClaims = dataSource.filter((record) =>
-  //     checkedItems.has(record.request_id)
-  //   );
-  //   setSelectedData(selectedClaims);
-  //   console.log("Selected claims:", selectedClaims);
-  // };
 
   const handleGetSelectedData = () => {
     if (checkboxRef.current) {
@@ -119,7 +94,7 @@ export const PendingComponent: React.FC = () => {
             fetchAllPendingClaimAsync({
               page: currentPage.toString(),
               limit: limit.toString(),
-            })
+            }),
           );
           toast.success("Claim approved successfully!");
         } catch (error) {
@@ -143,7 +118,7 @@ export const PendingComponent: React.FC = () => {
             fetchAllPendingClaimAsync({
               page: currentPage.toString(),
               limit: limit.toString(),
-            })
+            }),
           );
           toast.success("Claim rejected successfully!");
         } catch (error) {
@@ -167,7 +142,7 @@ export const PendingComponent: React.FC = () => {
             fetchAllPendingClaimAsync({
               page: currentPage.toString(),
               limit: limit.toString(),
-            })
+            }),
           );
           toast.success("Claim returned successfully!");
         } catch (error) {
@@ -198,7 +173,7 @@ export const PendingComponent: React.FC = () => {
             fetchAllPendingClaimAsync({
               page: currentPage.toString(),
               limit: limit.toString(),
-            })
+            }),
           );
           toast.success("Selected claims approved successfully!");
         } catch (error) {
@@ -228,7 +203,7 @@ export const PendingComponent: React.FC = () => {
             fetchAllPendingClaimAsync({
               page: currentPage.toString(),
               limit: limit.toString(),
-            })
+            }),
           );
           toast.success("Selected claims reject successfully!");
         } catch (error) {
@@ -258,7 +233,7 @@ export const PendingComponent: React.FC = () => {
             fetchAllPendingClaimAsync({
               page: currentPage.toString(),
               limit: limit.toString(),
-            })
+            }),
           );
           toast.success("Selected claims return successfully!");
         } catch (error) {
@@ -274,7 +249,7 @@ export const PendingComponent: React.FC = () => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-    }, 500);
+    }, 2500);
     setSelectedRequestId(value);
     setOpenModal(true);
   };
@@ -291,12 +266,21 @@ export const PendingComponent: React.FC = () => {
     const year = dateObj.getFullYear();
     return `${day}/${month}/${year}`;
   };
+  
+  const formatDateRange = (dateRange: any) => {
+    return dateRange.replace(
+      /(\d{1,2})\/(\d{1,2})\/(\d{4})/g,
+      (match, day, month, year) => {
+        return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
+      },
+    );
+  };
 
   const columns: Column<DataRecord>[] = [
     {
       key: "user_name",
       dataIndex: "user_full_name",
-      title: t("columns.fullName"),
+      title: t("columns.full_name"),
     },
     {
       key: "email",
@@ -306,68 +290,47 @@ export const PendingComponent: React.FC = () => {
     {
       key: "start_date",
       dataIndex: "start_date",
-      title: t("columns.startDate"),
-      cell: ({ value }) => formatDateToDDMMYYYY(value as string),
+      title: t("columns.start_date"),
+      cell: ({ value }) =>
+        formatDateRange(formatDateToDDMMYYYY(value as string)),
     },
     {
       key: "end_date",
       dataIndex: "end_date",
-      title: t("columns.endDate"),
-      cell: ({ value }) => formatDateToDDMMYYYY(value as string),
+      title: t("columns.end_date"),
+      cell: ({ value }) =>
+        formatDateRange(formatDateToDDMMYYYY(value as string)),
     },
     {
       key: "total_hours",
       dataIndex: "total_hours",
-      title: t("columns.totalHours"),
+      title: t("columns.total_hours"),
     },
-    // {
-    //   key: "project_id",
-    //   dataIndex: "project_id",
-    //   title: t("columns.projectId"),
-    // },
     {
       key: "project_name",
       dataIndex: "project_name",
-      title: t("columns.projectName"),
+      title: t("columns.project_name"),
     },
     {
       key: "submitted_date",
       dataIndex: "submitted_date",
-      title: t("columns.submittedDate"),
-      cell: ({ value }) => formatDateToDDMMYYYY(value as string),
+      title: t("columns.submitted_date"),
+      cell: ({ value }) =>
+        formatDateRange(formatDateToDDMMYYYY(value as string)),
     },
-    // {
-    //   key: "salary",
-    //   dataIndex: "user_salary",
-    //   title: t("columns.salary"),
-    //   cell: ({ value }) => <div>{isSalaryVisible ? value : "******"}</div>,
-    // },
-    // {
-    //   key: "ot_rate",
-    //   dataIndex: "user_ot_rate",
-    //   title: t("columns.otRate"),
-    // },
-    // {
-    //   key: "salary_overtime",
-    //   dataIndex: "salary_overtime",
-    //   title: t("columns.salaryOvertime"),
-    //   cell: ({ value }) => (
-    //     <div>{isSalaryVisible ? value : "*****************"}</div>
-    //   ),
-    // },
     {
       key: "claim_status",
       dataIndex: "claim_status",
-      title: t("columns.claimStatus"),
+      title: t("columns.claim_status"),
       cell: ({ value }) => <StatusTag status={value as StatusType} />,
     },
     {
       key: "action",
       dataIndex: "request_id",
-      title: "Action",
+      title: t("columns.action"),
       cell: ({ value }) => (
         <div className={styles.actions}>
-          <Tooltip text="View Details" position="top">
+          <Tooltip text={t("tooltip.details")} position="top">
             <FileSearchIcon
               className={styles.iconSearch}
               onClick={() => handleViewDetail(value as string)}
@@ -380,20 +343,20 @@ export const PendingComponent: React.FC = () => {
               limit={limit.toString()}
             />
           </Tooltip>
-          <Tooltip text="Approve" position="top">
+          <Tooltip text={t("tooltip.approve")} position="top">
             <CheckCircle2
               className={styles.iconApprove}
               onClick={() => handleApproveClaim(value as string)}
             />
           </Tooltip>
-          <Tooltip text="Reject" position="top">
+          <Tooltip text={t("tooltip.reject")} position="top">
             <XCircle
               className={styles.iconReject}
               onClick={() => handleRejectClaim(value as string)}
             />
           </Tooltip>
-          <Tooltip text="Return" position="top">
-            <Undo2
+          <Tooltip text={t("tooltip.return")} position="top">
+            <RotateCcw
               className={styles.iconReturn}
               onClick={() => handleReturnClaim(value as string)}
             />
@@ -417,51 +380,68 @@ export const PendingComponent: React.FC = () => {
   return (
     <div>
       <div className={styles.container}>
-        <h1 className={styles.title}>{loading ? t("loading") : t("title")}</h1>
-        <p className={styles.title2}>
-          {loading ? t("pleaseWait") : t("subtitle")}
-        </p>
+        <div className="flex">
+          <h1 className={styles.title}>{t("title")}</h1>
+          <p className={styles.title2}>{t("subtitle")}</p>
+        </div>
       </div>
-      <div className={styles.buttonContainer}>
-        <Button
-          color="white"
-          backgroundColor="#89AC46"
-          size="small"
-          style={{ borderRadius: "10px" }}
-          onClick={handleApproveSelect}
-          disabled={loading}
-        >
-          {loading ? "..." : t("approveSelected")}
-        </Button>
-        <Button
-          danger
-          size="small"
-          onClick={handleRejectSelect}
-          style={{ borderRadius: "10px" }}
-          disabled={loading}
-        >
-          {loading ? "..." : t("rejectSelected")}
-        </Button>
-        <Button
-          type="primary"
-          size="small"
-          onClick={handleReturnSelect}
-          style={{ borderRadius: "10px" }}
-          disabled={loading}
-        >
-          {loading ? "..." : t("returnSelected")}
-        </Button>
+      <div className={styles.containerTable}>
+        <div className={styles.buttonContainer}>
+          {!loading && (
+            <>
+              <Button
+                color="white"
+                // backgroundColor="linear-gradient(90deg, #89AC46, #6B8E23)"
+                size="large"
+                style={{
+                  borderRadius: "10px",
+                  background: "linear-gradient(90deg, #89AC46, #6B8E23)",
+                }}
+                onClick={handleApproveSelect}
+                icon={<Check />}
+              >
+                {t("approve_selected")}
+              </Button>
+              <Button
+                danger
+                size="large"
+                onClick={handleRejectSelect}
+                style={{
+                  borderRadius: "10px",
+                  background: "linear-gradient(90deg, #FF6347, #FF4500)",
+                  color: "white",
+                }}
+                icon={<X />}
+              >
+                {t("reject_selected")}
+              </Button>
+              <Button
+                type="primary"
+                size="large"
+                onClick={handleReturnSelect}
+                style={{
+                  borderRadius: "10px",
+                  background: "linear-gradient(90deg, #4682B4, #1E90FF)",
+                  color: "white",
+                }}
+                icon={<RotateCcw />}
+              >
+                {t("return_selected")}
+              </Button>
+            </>
+          )}
+        </div>
+        <TableComponent
+          ref={checkboxRef}
+          columns={columns}
+          dataSource={dataSource}
+          loading={loading}
+          totalPage={totalPages}
+          pagination={true}
+          onPageChange={handlePageChange}
+          isHaveCheckbox={true}
+        />
       </div>
-      <TableComponent
-        ref={checkboxRef}
-        columns={columns}
-        dataSource={dataSource}
-        loading={loading}
-        totalPage={totalPages}
-        pagination={true}
-        onPageChange={handlePageChange}
-        isHaveCheckbox={true}
-      />
       <Modal
         open={modalVisible}
         title={modalContent?.title}

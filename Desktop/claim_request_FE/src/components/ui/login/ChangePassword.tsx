@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "@components/ui/login/LoginForm.module.css";
 import fot from "@assets/fot.png";
@@ -9,6 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PasswordProgress from "./PasswordProgress";
 import { FIRST_PAGE_BY_ROLE } from "@/constant/firstPageByRole";
+import ROLE from "@/constant/role";
 
 const passwordCriteria = [
   {
@@ -36,7 +36,7 @@ const passwordCriteria = [
 const countValidCriteria = (password: string): number => {
   return passwordCriteria.reduce(
     (count, crit) => (crit.test(password) ? count + 1 : count),
-    0
+    0,
   );
 };
 
@@ -46,7 +46,7 @@ async function changePasswordAPI(
     newPassword: string;
     confirmPassword: string;
   },
-  token: string
+  token: string,
 ): Promise<void> {
   try {
     await httpClient.post("auth/change-password", payload, {
@@ -64,7 +64,6 @@ async function changePasswordAPI(
 
 function ChangePassword() {
   const navigate = useNavigate();
-  const [globalError, setGlobalError] = useState("");
   const token = localStorage.getItem("access_token");
 
   const initialValues = {
@@ -78,7 +77,7 @@ function ChangePassword() {
     newPassword: Yup.string()
       .required("New password is required")
       .test("length-rule", "Password must be 6–10 characters", (value) =>
-        value ? /^.{6,10}$/.test(value) : false
+        value ? /^.{6,10}$/.test(value) : false,
       )
       .test(
         "optional-rules",
@@ -88,10 +87,10 @@ function ChangePassword() {
           const optionalRules = [/[a-z]/, /[A-Z]/, /[0-9]/, /[@$!%*?&]/];
           const count = optionalRules.reduce(
             (acc, rule) => (rule.test(value) ? acc + 1 : acc),
-            0
+            0,
           );
           return count >= 3;
-        }
+        },
       ),
     confirmPassword: Yup.string().when("newPassword", (password, schema) => {
       return password
@@ -120,16 +119,16 @@ function ChangePassword() {
           });
           setTimeout(() => {
             const role_id = localStorage.getItem("role_id");
-            if (role_id === "1") {
+            if (role_id === ROLE.ADMIN) {
               localStorage.setItem("selectedClaim", "usersetting");
               navigate(`${FIRST_PAGE_BY_ROLE.ADMIN}`);
-            } else if (role_id === "2") {
+            } else if (role_id === ROLE.APPROVER) {
               localStorage.setItem("selectedClaim", "pendingClaim");
               navigate(`${FIRST_PAGE_BY_ROLE.APPROVER}`);
-            } else if (role_id === "3") {
+            } else if (role_id === ROLE.FINANCE) {
               localStorage.setItem("selectedClaim", "approvedFinance");
               navigate(`${FIRST_PAGE_BY_ROLE.FINANCE}`);
-            } else if (role_id === "4") {
+            } else if (role_id === ROLE.CLAIMER) {
               localStorage.setItem("selectedClaim", "all");
               navigate(`${FIRST_PAGE_BY_ROLE.CLAIMER}`);
             } else {
@@ -148,21 +147,23 @@ function ChangePassword() {
         if (
           error.errorCode === 1 ||
           error.errorCode === 4 ||
-          error.errorCode === 6 ||
           error.errorCode === 7
         ) {
           toast.error(error.message, {
             position: "top-right",
             autoClose: 2000,
           });
-        } else if (error.errorCode === 2) {
+        } else if (error.errorCode === 2 || error.errorCode === 6) {
           setFieldError("newPassword", error.message);
         } else if (error.errorCode === 3) {
           setFieldError("confirmPassword", error.message);
         } else if (error.errorCode === 5) {
           setFieldError("currentPassword", error.message);
         } else {
-          setGlobalError(error.message || "An error occurred");
+          toast.error(error.message || "An error occurred catch useFormik", {
+            position: "top-right",
+            autoClose: 3000,
+          });
         }
       } finally {
         setSubmitting(false);
@@ -189,9 +190,6 @@ function ChangePassword() {
         </div>
         <div className={styles.rightSide}>
           <div className={styles.rightSideContainer}>
-            {globalError && (
-              <div className={styles.globalError}>{globalError}</div>
-            )}
             <h1>Change Password</h1>
             <div className={styles.passwordCriteria}>
               {passwordCriteria.map((criterion, index) => {

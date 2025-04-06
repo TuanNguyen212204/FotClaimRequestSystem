@@ -53,7 +53,7 @@ const Header: React.FC = () => {
   const socketRef = useRef<Socket | null>(null);
   const user_id = localStorage.getItem("user_id");
   const notifications = useSelector(
-    (state: any) => state.notifications?.notifications?.notifications
+    (state: any) => state.notifications?.notifications?.notifications,
   );
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
@@ -219,7 +219,6 @@ const Header: React.FC = () => {
           <img src={fptlogo} alt="logo" className={styles.logoImage} />
         </div>
         <div className={styles.rightSection}>
-          <SearchBar /> 
           <div>
             <Badge count={unreadCount}>
               <FaBell className={styles.icon} onClick={toggleDropdown} />
@@ -329,7 +328,7 @@ const Header: React.FC = () => {
                     setOptionsVisibleId(
                       optionsVisibleId === notification.id
                         ? null
-                        : notification.id
+                        : notification.id,
                     );
                   }}
                 >

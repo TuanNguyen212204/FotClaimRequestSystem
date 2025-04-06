@@ -12,7 +12,8 @@ import { EyeIcon } from "lucide-react";
 import TableComponent, { Column, DataRecord } from "@components/ui/Table/Table";
 import UserClaimDetailsModal from "@components/ui/claimer/UserClaimDetails";
 import StatusTag from "@components/ui/StatusTag/StatusTag";
-import { useTranslation } from "react-i18next"; 
+import { useTranslation } from "react-i18next";
+import { Claim } from "@/types/Claim";
 
 const ApprovedClaimByUserID = () => {
   const { t } = useTranslation("approvedClaim");
@@ -26,19 +27,39 @@ const ApprovedClaimByUserID = () => {
   const [selectedClaim, setSelectedClaim] = useState<string>("");
   const [limit] = useState(5);
 
+  // useEffect(() => {
+  //   setLoading(true);
+  //   const fetchData = async () => {
+  //     await dispatch(
+  //       fetchClaimByUserAsync({ page: currentPage, status: "APPROVED" }),
+  //     );
+  //     setLoading(false);
+  //     dispatch(fetchTotalClaimByUserAsync({ status: "APPROVED" }));
+  //   };
+  //   fetchData();
+  //   console.log(totalPage);
+  // }, [currentPage, dispatch, totalPage]);
   useEffect(() => {
     setLoading(true);
     const fetchData = async () => {
       await dispatch(
-        fetchClaimByUserAsync({ page: currentPage, status: "APPROVED" })
+        fetchClaimByUserAsync({ page: currentPage, status: "APPROVED" }),
       );
+      await dispatch(fetchTotalClaimByUserAsync({ status: "APPROVED" }));
       setLoading(false);
-      dispatch(fetchTotalClaimByUserAsync({ status: "APPROVED" }));
     };
     fetchData();
     console.log(totalPage);
   }, [currentPage, dispatch, totalPage]);
 
+  const formatDateRange = (dateRange: any) => {
+    return dateRange.replace(
+      /(\d{1,2})\/(\d{1,2})\/(\d{4})/g,
+      (match: string, day: string, month: string, year: string) => {
+        return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
+      },
+    );
+  };
   const handleViewDetail = (id: string) => {
     setLoading(true);
     setTimeout(() => {
@@ -59,11 +80,11 @@ const ApprovedClaimByUserID = () => {
     const month = dateObj.getMonth() + 1;
     const year = dateObj.getFullYear();
     return t("language") === "en"
-      ? `${month}/${day}/${year}` 
-      : `${day}/${month}/${year}`; 
+      ? `${month}/${day}/${year}`
+      : `${day}/${month}/${year}`;
   };
 
-  const columns: Column[] = [
+  const columns: Column<Claim>[] = [
     {
       key: "project_id",
       dataIndex: "project_id",
@@ -78,25 +99,26 @@ const ApprovedClaimByUserID = () => {
       key: "time_duration",
       dataIndex: "time_duration",
       title: t("time_duration_label"),
+      cell: ({ value }) => formatDateRange(value as string),
     },
     {
       key: "total_hours",
       dataIndex: "total_hours",
       title: t("total_working_hours_label"),
-      cell: ({ value }) => `${value} ${t("hours_suffix")}`,
+      cell: ({ value }: { value: string }) => `${value} ${t("hours_suffix")}`,
     },
     {
       key: "submitted_date",
       dataIndex: "submitted_date",
       title: t("submitted_date_label"),
-      cell: ({ value }) => formatDateToDDMMYYYY(value as string),
+      cell: ({ value }: { value: string }) =>
+        formatDateRange(formatDateToDDMMYYYY(value as string)),
     },
     {
       key: "claim_status",
       dataIndex: "claim_status",
       title: t("claim_status_label"),
-      cell: ({ value }: { value: unknown }) => {
-        const stringValue = value as string;
+      cell: ({ value }: { value: string }) => {
         return (
           <div>
             <StatusTag
@@ -139,23 +161,50 @@ const ApprovedClaimByUserID = () => {
     time_duration:
       claim.start_date && claim.end_date
         ? `${formatDateToDDMMYYYY(claim.start_date)} - ${formatDateToDDMMYYYY(
-            claim.end_date
+            claim.end_date,
           )}`
         : t("no_data"),
   }));
 
   return (
-    <div className={styles.container}>
-      <TableComponent
-        columns={columns}
-        dataSource={dataSource}
-        loading={loading}
-        pagination={true}
-        name={t("approved_claims_title")}
-        totalPage={totalPage}
-        onPageChange={handlePageChange}
-      />
-    </div>
+    // <div className={styles.container}>
+    //   <div>
+    //     <h1>Approved Claim</h1>
+    //   </div>
+    //   <div>
+    //     <TableComponent
+    //       columns={columns}
+    //       dataSource={dataSource}
+    //       loading={loading}
+    //       pagination={true}
+    //       name="My Claims"
+    //       totalPage={totalPage}
+    //       onPageChange={handlePageChange}
+    //     />
+    //   </div>
+    // </div>
+    <>
+      <div className="mt-2 p-0">
+        <div className="mb-10 ml-5">
+          <h1 className="m-0 p-0">Approved Claims</h1>
+          <p className="m-0 p-0">
+            Here you can view your approved claims and their statuses.
+          </p>
+        </div>
+        <div className={`${styles.tableContainer}`}>
+          <TableComponent
+            isHaveCheckbox={false}
+            columns={columns as Column<DataRecord>[]}
+            dataSource={dataSource}
+            loading={loading}
+            pagination={true}
+            name="My Claims"
+            totalPage={totalPage}
+            onPageChange={handlePageChange}
+          />
+        </div>
+      </div>
+    </>
   );
 };
 

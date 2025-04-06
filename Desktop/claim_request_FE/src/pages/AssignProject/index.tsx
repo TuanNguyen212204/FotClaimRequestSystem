@@ -37,7 +37,7 @@ export const AssignProject: React.FC<AssignProjectProps> = ({
         page: 1,
         order: "ASC",
         sortBy: "project_id",
-      })
+      }),
     );
   }, [dispatch]);
 
@@ -48,12 +48,12 @@ export const AssignProject: React.FC<AssignProjectProps> = ({
     formState: { errors },
   } = useForm<Project>();
   const listProjectStatus: Project[] = projectList.filter(
-    (proj) => proj.project_status !== 2
+    (proj) => proj.project_status !== 2,
   );
 
   const handleProjectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const project = listProjectStatus.find(
-      (proj) => proj.project_id === e.target.value
+      (proj) => proj.project_id === e.target.value,
     );
     setSelectedProject(project || null);
     if (project) {
@@ -74,12 +74,12 @@ export const AssignProject: React.FC<AssignProjectProps> = ({
     try {
       const response = await httpClient.post<ApiResponseNoGeneric>(
         "/projects/assign-user",
-        requestBody
+        requestBody,
       );
       if (response.data.httpStatus === 200) {
         console.log(response.data);
         toast.success("Assign user to project successfully!");
-        return;
+        setOpen(false);
       }
     } catch (error: any) {
       if (error.response) {
@@ -111,28 +111,35 @@ export const AssignProject: React.FC<AssignProjectProps> = ({
   return (
     <div>
       <div style={{ marginTop: "50px" }}>
-        <div className="mx-auto pr-0 pb-5  bg-white shadow-xl rounded-xl">
+        <div className="mx-auto rounded-xl bg-white pr-0 pb-5 shadow-xl">
           <button
             onClick={() => handleCancel()}
             className={styles.cancel_button}
           >
             <X />
           </button>
-          <h1 className="text-3xl font-bold  mb-6 text-center">
+          <h1 className="mb-6 text-center text-3xl font-bold">
             {t("allUserInformation.assignUser.title")}
           </h1>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
             {/* Select Project */}
             <div className="ml-15">
-              <label className="block text-sm font-medium text-gray-600">
-                {t("allUserInformation.assignUser.project")}
-              </label>
+              <div className="flex">
+                <div className={styles.label_container}>
+                  <span>*</span>
+                </div>
+                <div className={styles.input_container}>
+                  <label className="block text-sm font-medium text-gray-600">
+                    {t("allUserInformation.assignUser.project")}
+                  </label>
+                </div>
+              </div>
               <select
                 {...register("project_id", {
                   required: t("allUserInformation.assignUser.validate.project"),
                 })}
                 onChange={handleProjectChange}
-                className="mt-1  h-11 w-83.5 p-2 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="mt-1 h-11 w-83.5 rounded-lg border border-gray-300 p-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               >
                 <option value="">Select Project</option>
                 {listProjectStatus?.map((proj) => (
@@ -142,7 +149,7 @@ export const AssignProject: React.FC<AssignProjectProps> = ({
                 ))}
               </select>
               {errors.project_id?.message && (
-                <p className="text-red-500 text-sm mt-1">
+                <p className="mt-1 text-sm text-red-500">
                   {String(errors.project_id.message)}
                 </p>
               )}
@@ -150,14 +157,21 @@ export const AssignProject: React.FC<AssignProjectProps> = ({
 
             {/* Project Name */}
             <div className="ml-15">
-              <label className="block text-sm font-medium text-gray-600">
-                {t("allUserInformation.assignUser.projectName")}
-              </label>
+              <div className="flex">
+                <div className={styles.label_container}>
+                  <span>*</span>
+                </div>
+                <div className={styles.input_container}>
+                  <label className="block text-sm font-medium text-gray-600">
+                    {t("allUserInformation.assignUser.projectName")}
+                  </label>
+                </div>
+              </div>
               <input
                 type="text"
                 {...register("project_name")}
                 disabled
-                className="mt-1 w-4/5 p-2 h-6 border border-gray-300 rounded-lg bg-gray-100"
+                className="mt-1 h-6 w-4/5 rounded-lg border border-gray-300 bg-gray-100 p-2"
               />
             </div>
 
@@ -170,7 +184,7 @@ export const AssignProject: React.FC<AssignProjectProps> = ({
                 type="date"
                 {...register("start_date")}
                 disabled
-                className="mt-1 w-4/5 p-2 h-6 border border-gray-300 rounded-lg bg-gray-100"
+                className="mt-1 h-6 w-4/5 rounded-lg border border-gray-300 bg-gray-100 p-2"
               />
             </div>
 
@@ -183,7 +197,7 @@ export const AssignProject: React.FC<AssignProjectProps> = ({
                 type="date"
                 {...register("end_date")}
                 disabled
-                className="mt-1 w-4/5 p-2 h-6 border border-gray-300 rounded-lg bg-gray-100"
+                className="mt-1 h-6 w-4/5 rounded-lg border border-gray-300 bg-gray-100 p-2"
               />
             </div>
 
@@ -196,7 +210,7 @@ export const AssignProject: React.FC<AssignProjectProps> = ({
                 type="text"
                 {...register("project_status")}
                 disabled
-                className="mt-1 w-4/5 p-2 h-6 border border-gray-300 rounded-lg bg-gray-100"
+                className="mt-1 h-6 w-4/5 rounded-lg border border-gray-300 bg-gray-100 p-2"
               />
             </div>
 

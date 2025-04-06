@@ -4,7 +4,7 @@ import fot from "@assets/fot.png";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import httpClient from "@/constant/apiInstance";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PasswordProgress from "./PasswordProgress";
@@ -35,7 +35,7 @@ const passwordCriteria = [
 const countValidCriteria = (password: string): number => {
   return passwordCriteria.reduce(
     (count, crit) => (crit.test(password) ? count + 1 : count),
-    0
+    0,
   );
 };
 
@@ -58,7 +58,6 @@ function CreateNewPassword() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
-  const [globalError, setGlobalError] = useState("");
 
   useEffect(() => {
     if (!token) {
@@ -75,7 +74,7 @@ function CreateNewPassword() {
     password: Yup.string()
       .required("Password is Required")
       .test("length-rule", "Password must be 6–10 characters", (value) =>
-        value ? /^.{6,10}$/.test(value) : false
+        value ? /^.{6,10}$/.test(value) : false,
       )
       .test(
         "optional-rules",
@@ -85,10 +84,10 @@ function CreateNewPassword() {
           const optionalRules = [/[a-z]/, /[A-Z]/, /[0-9]/, /[@$!%*?&]/];
           const count = optionalRules.reduce(
             (acc, rule) => (rule.test(value) ? acc + 1 : acc),
-            0
+            0,
           );
           return count >= 3;
-        }
+        },
       ),
     confirmPassword: Yup.string().when("password", (password, schema) => {
       return password
@@ -128,7 +127,10 @@ function CreateNewPassword() {
         } else if (error.errorCode === 5) {
           setFieldError("confirmPassword", error.message);
         } else {
-          setGlobalError(error.message || "An error occurred");
+          toast.error(error.message || "An error occurred in catch useFormik", {
+            position: "top-right",
+            autoClose: 3000,
+          });
         }
       } finally {
         setSubmitting(false);
@@ -158,9 +160,6 @@ function CreateNewPassword() {
         {/* Login Section */}
         <div className={styles.rightSide}>
           <div className={styles.rightSideContainer}>
-            {globalError && (
-              <div className={styles.globalError}>{globalError}</div>
-            )}
             <h1>Create new password</h1>
             <div className={styles.passwordCriteria}>
               {passwordCriteria.map((criterion, index) => {

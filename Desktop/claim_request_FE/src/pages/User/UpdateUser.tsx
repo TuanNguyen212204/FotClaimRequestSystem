@@ -39,11 +39,11 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
   const [department, setDepartment] = useState<DepartmentList>([]);
   const [jobRank, setJobRank] = useState<JobRankList>([]);
   const { t } = useTranslation("allUserInformation");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const fetchDepartment = async () => {
     try {
-      const response = await httpClient.get<ApiResponseNoGeneric>(
-        `/admin/departments`
-      );
+      const response =
+        await httpClient.get<ApiResponseNoGeneric>(`/admin/departments`);
       setDepartment(response.data.data);
     } catch (error) {
       console.error("Fetch department error:", error);
@@ -52,9 +52,8 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
   // Chỗ này fetch api lấy list job rank từ BE về
   const fetchJobRank = async () => {
     try {
-      const response = await httpClient.get<ApiResponseNoGeneric>(
-        `/admin/job-ranks`
-      );
+      const response =
+        await httpClient.get<ApiResponseNoGeneric>(`/admin/job-ranks`);
       setJobRank(response.data.data);
     } catch (error) {
       console.error("Fetch job rank error:", error);
@@ -69,7 +68,7 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
   const fetchUserById = async (id: string) => {
     try {
       const response = await httpClient.get<ApiResponse<User[]>>(
-        `/admin/staff/${id}`
+        `/admin/staff/${id}`,
       );
       const userData = response.data.data[0];
       console.log(userData);
@@ -88,25 +87,30 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
 
   const onSubmit = async (data: User) => {
     if (!user) return;
+
+    setIsSubmitting(true);
+
     const requestBody = {
       department_id: data.department_id || user.department_id,
       role_id: data.role_id || user.role_id,
       job_rank_id: data.job_rank_id || user.job_rank,
     };
+
     console.log(requestBody);
     try {
       await httpClient.put<ApiResponseNoGeneric>(
         `/admin/staff/${id}`,
-        requestBody
+        requestBody,
       );
       toast.success("User updated successfully!");
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
+      setOpenModal(false);
     } catch (error) {
       console.error("Update user error: " + error);
+    } finally {
+      setIsSubmitting(false); // ✅ kết thúc submit
     }
   };
+
   const handleCancel = () => {
     setOpenModal(false);
   };
@@ -159,7 +163,7 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
 
   return (
     <div style={{ marginTop: "50px" }}>
-      <div className="mx-auto  pr-0 pb-5 8 bg-white shadow-xl rounded-xl">
+      <div className="8 mx-auto rounded-xl bg-white pr-0 pb-5 shadow-xl">
         <div>
           <button
             onClick={() => handleCancel()}
@@ -170,7 +174,7 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
             </div>
           </button>
         </div>
-        <h1 className="text-3xl font-bold text-blue-700 mb-6 text-center">
+        <h1 className="mb-6 text-center text-3xl font-bold text-blue-700">
           {t("allUserInformation.updateUser.title")}
         </h1>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
@@ -192,10 +196,10 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
               disabled
               id="full_name"
               {...register("full_name")}
-              className="mt-1 w-4/5 p-2 h-6 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+              className="mt-1 h-6 w-4/5 rounded-lg border border-gray-300 p-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
             />
             {errors.full_name && (
-              <p className="text-red-500 text-sm mt-1">
+              <p className="mt-1 text-sm text-red-500">
                 {errors.full_name.message}
               </p>
             )}
@@ -218,7 +222,7 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
               {...register("email")}
               disabled
               id="email"
-              className="mt-1 w-4/5 p-2 h-6 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+              className="mt-1 h-6 w-4/5 rounded-lg border border-gray-300 p-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
             />
           </div>
           <div className="ml-15">
@@ -251,29 +255,31 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
               className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200"
             /> */}
             <Select
-              register={{
-                ...register("department_id", {
-                  required: t(
-                    "allUserInformation.updateUser.validation.department"
-                  ),
-                }),
-              }}
+              // register={{
+              //   ...register("department_id", {
+              //     required: t(
+              //       "allUserInformation.updateUser.validation.department",
+              //     ),
+              //   }),
+              // }}
               options={department.map((a) => ({
                 label: a.name,
                 value: a.id,
               }))}
-              // register={{
-              //   ...register("department", {
-              //     required: "Department is required",
-              //   }),
-              // }}
+              register={{
+                ...register("department_id", {
+                  required: t(
+                    "allUserInformation.updateUser.validation.department",
+                  ),
+                }),
+              }}
               placeholder="Select Department"
               onChange={(value) => console.log(value)}
-              className="mt-1  h-10 w-83.5 p-2  border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+              className="mt-1 h-10 w-83.5 rounded-lg border border-gray-300 p-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
             />
-            {errors.department && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.department.message}
+            {errors.department_id && (
+              <p className="mt-1 text-sm text-red-500">
+                {errors.department_id.message}
               </p>
             )}
           </div>
@@ -304,11 +310,23 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
             </select> */}
             <Select
               options={options}
-              register={register("role_id")}
+              // register={register("role_id")}
+              register={{
+                ...register("role_id", {
+                  required: t(
+                    "allUserInformation.updateUser.validation.roleID",
+                  ),
+                }),
+              }}
               onChange={(value) => console.log(value)}
               placeholder="Select Role ID"
-              className="mt-1  h-10 w-83.5 p-2  border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+              className="mt-1 h-10 w-83.5 rounded-lg border border-gray-300 p-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
             />
+            {errors.role_id && (
+              <p className="mt-1 text-sm text-red-500">
+                {errors.role_id.message}
+              </p>
+            )}
             {/* <Select
               register={{
                 ...register("department", {
@@ -328,12 +346,6 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
               onChange={(value) => console.log(value)}
               className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
             /> */}
-
-            {errors.role_id && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.role_id.message}
-              </p>
-            )}
           </div>
 
           <div className="ml-15">
@@ -370,23 +382,33 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
               register={{
                 ...register("job_rank_id", {
                   required: t(
-                    "allUserInformation.updateUser.validation.department"
+                    "allUserInformation.updateUser.validation.jobRank",
                   ),
                 }),
               }}
               placeholder="Select Job Rank"
               onChange={(value) => console.log(value)}
-              className="mt-1  h-10 w-83.5 p-2  border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+              className="mt-1 h-10 w-83.5 rounded-lg border border-gray-300 p-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
             />
-            {errors.job_rank && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.job_rank.message}
+            {errors.job_rank_id && (
+              <p className="mt-1 text-sm text-red-500">
+                {errors.job_rank_id.message}
               </p>
             )}
           </div>
 
-          <div className={styles.update_button_container}>
+          {/* <div className={styles.update_button_container}>
             <button type="submit" className={styles.update_button}>
+              {t("allUserInformation.buttonUpdate")}
+            </button>
+          </div> */}
+
+          <div className={styles.update_button_container}>
+            <button
+              type="submit"
+              className={styles.update_button}
+              disabled={isSubmitting}
+            >
               {t("allUserInformation.buttonUpdate")}
             </button>
           </div>

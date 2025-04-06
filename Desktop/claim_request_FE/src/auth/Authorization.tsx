@@ -12,14 +12,14 @@ const Authorization: React.FC<RoleProps> = ({ children, role_id }) => {
   const roleIDStr = localStorage.getItem("role_id");
   const roleID = roleIDStr ? parseInt(roleIDStr) : null;
 
-  if(roleID === null) {
+  if (roleID === null) {
     return <Navigate to={`/error/${HTTP_STATUS.UNAUTHORIZED}`} />;
   }
 
   const allowedRoles = Array.isArray(role_id) ? role_id : [role_id];
 
   if (!allowedRoles.includes(roleID)) {
-      return <Navigate to={`/error/${HTTP_STATUS.FORBIDDEN}`} />;
+    return <Navigate to={`/error/${HTTP_STATUS.FORBIDDEN}`} />;
   }
   if (roleID === 4) {
     return (
@@ -30,7 +30,6 @@ const Authorization: React.FC<RoleProps> = ({ children, role_id }) => {
     );
   }
   return children;
-
 };
 
 export default Authorization;

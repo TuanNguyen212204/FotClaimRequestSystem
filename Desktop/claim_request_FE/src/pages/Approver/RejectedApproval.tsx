@@ -12,6 +12,7 @@ import {
   selectAllRejectedTotalPages,
 } from "@/redux/selector/rejectedSelector.ts";
 import { useTranslation } from "react-i18next";
+import { formatDate } from "@/utils/date.ts";
 
 export const RejectedComponent: React.FC = () => {
   // const navigate = useNavigate();
@@ -30,7 +31,7 @@ export const RejectedComponent: React.FC = () => {
       fetchAllRejectedClaimAsync({
         page: currentPage.toString(),
         limit: limit.toString(),
-      })
+      }),
     ).finally(() => setLoading(false));
   }, [currentPage]);
 
@@ -38,12 +39,21 @@ export const RejectedComponent: React.FC = () => {
   //   navigate(`/reject-details?id=${id}`);
   // };
 
+  // const formatDateToDDMMYYYY = (date: string) => {
+  //   const dateObj = new Date(date);
+  //   const day = dateObj.getDate();
+  //   const month = dateObj.getMonth() + 1;
+  //   const year = dateObj.getFullYear();
+  //   return `${day}/${month}/${year}`;
+  // };
   const formatDateToDDMMYYYY = (date: string) => {
     const dateObj = new Date(date);
     const day = dateObj.getDate();
     const month = dateObj.getMonth() + 1;
     const year = dateObj.getFullYear();
-    return `${day}/${month}/${year}`;
+    return t("language") === "en"
+      ? `${month}/${day}/${year}`
+      : `${day}/${month}/${year}`;
   };
 
   const handlePageChange = (newPage: number) => {
@@ -54,12 +64,19 @@ export const RejectedComponent: React.FC = () => {
   const toggleSalaryVisibility = () => {
     setIsSalaryVisible(!isSalaryVisible);
   };
-
+  const formatDateRange = (dateRange: any) => {
+    return dateRange.replace(
+      /(\d{1,2})\/(\d{1,2})\/(\d{4})/g,
+      (match, day, month, year) => {
+        return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
+      },
+    );
+  };
   const columns: Column<DataRecord>[] = [
     {
       key: "user_name",
       dataIndex: "user_full_name",
-      title: t("fullName"),
+      title: t("full_name"),
     },
     {
       key: "email",
@@ -69,35 +86,38 @@ export const RejectedComponent: React.FC = () => {
     {
       key: "start_date",
       dataIndex: "start_date",
-      title: t("startDate"),
-      cell: ({ value }) => formatDateToDDMMYYYY(value as string),
+      title: t("start_date"),
+      cell: ({ value }) =>
+        formatDateRange(formatDateToDDMMYYYY(value as string)),
     },
     {
       key: "end_date",
       dataIndex: "end_date",
-      title: t("endDate"),
-      cell: ({ value }) => formatDateToDDMMYYYY(value as string),
+      title: t("end_date"),
+      cell: ({ value }) =>
+        formatDateRange(formatDateToDDMMYYYY(value as string)),
     },
     {
       key: "total_hours",
       dataIndex: "total_hours",
-      title: t("totalHours"),
+      title: t("total_hours"),
     },
     {
       key: "project_id",
       dataIndex: "project_id",
-      title: t("projectId"),
+      title: t("project_id"),
     },
     {
       key: "project_name",
       dataIndex: "project_name",
-      title: t("projectName"),
+      title: t("project_name"),
     },
     {
       key: "submitted_date",
       dataIndex: "submitted_date",
-      title: t("submittedDate"),
-      cell: ({ value }) => formatDateToDDMMYYYY(value as string),
+      title: t("submitted_date"),
+      cell: ({ value }) =>
+        formatDateRange(formatDateToDDMMYYYY(value as string)),
     },
     // {
     //   key: "salary",
@@ -121,7 +141,7 @@ export const RejectedComponent: React.FC = () => {
     {
       key: "claim_status",
       dataIndex: "claim_status",
-      title: t("claimStatus"),
+      title: t("claim_status"),
       cell: ({ value }) => <StatusTag status={value as StatusType} />,
     },
   ].filter((column) => !column.hidden);
@@ -139,25 +159,20 @@ export const RejectedComponent: React.FC = () => {
   return (
     <div>
       <div className={styles.container}>
-        <h1 className={styles.title}>
-          {loading ? t("loading") : t("rejectedClaims")}
-        </h1>
-        <p className={styles.title2}>
-          {loading ? t("pleaseWait") : t("rejectedMessage")}
-        </p>
+        <h1 className={styles.title}>{t("title")}</h1>
+        <p className={styles.title2}>{t("message")}</p>
       </div>
-      {/* <button onClick={toggleSalaryVisibility}>
-        {isSalaryVisible ? t("hideSalary") : t("showSalary")}
-      </button> */}
-      <TableComponent
-        columns={columns}
-        dataSource={dataSource}
-        loading={loading}
-        totalPage={totalPages}
-        pagination={true}
-        name={t("claims")}
-        onPageChange={handlePageChange}
-      />
+      <div className={styles.containerTable}>
+        <TableComponent
+          columns={columns}
+          dataSource={dataSource}
+          loading={loading}
+          totalPage={totalPages}
+          pagination={true}
+          name={t("claims")}
+          onPageChange={handlePageChange}
+        />
+      </div>
     </div>
   );
 };

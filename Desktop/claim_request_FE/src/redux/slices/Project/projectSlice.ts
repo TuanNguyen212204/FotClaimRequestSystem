@@ -48,11 +48,11 @@ const projectSlice = createSlice({
       .addCase(
         fetchProjectByID.fulfilled,
         (state, action: PayloadAction<ProjectListResponse>) => {
-          state.projectList = action.payload.ProjectList.sort((a, b) =>
-            a.projectName.localeCompare(b.projectName)
-          );
+          state.projectList = action.payload.ProjectList
+        .filter(project => project.projectName !== null)
+        .sort((a, b) => a.projectName.localeCompare(b.projectName));
           state.loading = "succeeded";
-        }
+        },
       )
       .addCase(fetchProjectByID.rejected, (state) => {
         state.loading = "failed";

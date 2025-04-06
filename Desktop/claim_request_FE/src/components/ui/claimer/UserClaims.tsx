@@ -12,10 +12,12 @@ import { EyeIcon } from "lucide-react";
 import TableComponent, { Column, DataRecord } from "../Table/Table";
 import UserClaimDetailsModal from "./UserClaimDetails";
 import StatusTag from "../StatusTag/StatusTag";
-import { useTranslation } from "react-i18next"; 
+import { useTranslation } from "react-i18next";
+import { Claim } from "@/types/Claim";
+import { C } from "node_modules/framer-motion/dist/types.d-B50aGbjN";
 
 const UserClaims = () => {
-  const { t } = useTranslation("userClaims"); 
+  const { t } = useTranslation("userClaims");
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const userClaim = useSelector(selectMyClaim);
@@ -29,10 +31,9 @@ const UserClaims = () => {
   useEffect(() => {
     setLoading(true);
     const fetchData = async () => {
-      dispatch(fetchClaimByUserAsync({ page: currentPage })).finally(() =>
-        setLoading(false)
-      );
-      dispatch(fetchTotalClaimByUserAsync({}));
+      await dispatch(fetchClaimByUserAsync({ page: currentPage }));
+      await dispatch(fetchTotalClaimByUserAsync({}));
+      setLoading(false);
     };
     fetchData();
     console.log(totalPage);
@@ -65,15 +66,13 @@ const UserClaims = () => {
   const formatDateRange = (dateRange: any) => {
     return dateRange.replace(
       /(\d{1,2})\/(\d{1,2})\/(\d{4})/g,
-      (match, day, month, year) => {
-        return t("language") === "en"
-          ? `${month.padStart(2, "0")}/${day.padStart(2, "0")}/${year}` 
-          : `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`; 
-      }
+      (match: string, day: string, month: string, year: string) => {
+        return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
+      },
     );
   };
 
-  const columns: Column[] = [
+  const columns: Column<Claim>[] = [
     {
       key: "project_id",
       dataIndex: "project_id",
@@ -103,14 +102,14 @@ const UserClaims = () => {
       key: "submitted_date",
       dataIndex: "submitted_date",
       title: t("submitted_date_label"),
-      cell: ({ value }) => formatDateToDDMMYYYY(value as string),
+      cell: ({ value }) =>
+        formatDateRange(formatDateToDDMMYYYY(value as string)),
     },
     {
       key: "claim_status",
       dataIndex: "claim_status",
       title: t("claim_status_label"),
       cell: ({ value }: { value: unknown }) => {
-        const stringValue = value as string;
         return (
           <div>
             <StatusTag
@@ -125,7 +124,7 @@ const UserClaims = () => {
       dataIndex: "request_id",
       title: t("action_label"),
       cell: ({ value }) => (
-        <>
+        <div className="flex items-center justify-center gap-2">
           <EyeIcon
             className="cursor-pointer"
             onClick={() => handleViewDetail(value as string)}
@@ -137,7 +136,7 @@ const UserClaims = () => {
             currentPage={currentPage.toString()}
             limit={limit.toString()}
           />
-        </>
+        </div>
       ),
     },
   ];
@@ -153,24 +152,34 @@ const UserClaims = () => {
     time_duration:
       claim.start_date && claim.end_date
         ? `${formatDateToDDMMYYYY(claim.start_date)} - ${formatDateToDDMMYYYY(
-            claim.end_date
+            claim.end_date,
           )}`
         : t("no_data"),
   }));
 
   return (
-    <div>
-      <TableComponent
-        isHaveCheckbox={false}
-        columns={columns}
-        dataSource={dataSource}
-        loading={loading}
-        pagination={true}
-        name={t("my_claims_title")}
-        totalPage={totalPage}
-        onPageChange={handlePageChange}
-      />
-    </div>
+    <>
+      <div className="mt-2 p-0">
+        <div className="mb-10 ml-5">
+          <h1 className="m-0 p-0">My Claims</h1>
+          <p className="m-0 p-0">
+            Here you can view all your claims and their statuses.
+          </p>
+        </div>
+        <div className={`${styles.tableContainer}`}>
+          <TableComponent
+            isHaveCheckbox={false}
+            columns={columns as Column<DataRecord>[]}
+            dataSource={dataSource}
+            loading={loading}
+            pagination={true}
+            name="My Claims"
+            totalPage={totalPage}
+            onPageChange={handlePageChange}
+          />
+        </div>
+      </div>
+    </>
   );
 };
 

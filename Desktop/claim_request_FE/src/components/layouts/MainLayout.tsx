@@ -11,9 +11,9 @@ const MainLayout = () => {
       <div className={styles.mainContent}>
         <Sidebar setIsCollapsed={setIsCollapsed} />
         <div
-          className={styles.outletContainer}
+          className={`${styles.outletContainer} m-0 mt-11 p-0`}
           style={{
-            marginLeft: isCollapse ? "80px" : "320px",
+            marginLeft: isCollapse ? "4.5rem" : "0rem",
             transition: "margin-left 0.3s ease-in-out",
           }}
         >

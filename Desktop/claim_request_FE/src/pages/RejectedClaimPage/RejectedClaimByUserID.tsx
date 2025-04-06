@@ -13,6 +13,7 @@ import TableComponent, { Column, DataRecord } from "@components/ui/Table/Table";
 import UserClaimDetailsModal from "@components/ui/claimer/UserClaimDetails";
 import StatusTag from "@components/ui/StatusTag/StatusTag";
 import { title } from "process";
+import { Claim } from "@/types/Claim";
 const RejectedClaimByUserID = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -41,14 +42,27 @@ const RejectedClaimByUserID = () => {
   //   setIsModalOpen(true);
   // };
 
+  // useEffect(() => {
+  //   setLoading(true);
+  //   const fetchData = async () => {
+  //     await dispatch(
+  //       fetchClaimByUserAsync({ page: currentPage, status: "REJECTED" }),
+  //     );
+  //     setLoading(false);
+  //     dispatch(fetchTotalClaimByUserAsync({ status: "REJECTED" }));
+  //   };
+  //   fetchData();
+  //   console.log(totalPage);
+  // }, [currentPage, dispatch, totalPage]);
+
   useEffect(() => {
     setLoading(true);
     const fetchData = async () => {
       await dispatch(
-        fetchClaimByUserAsync({ page: currentPage, status: "REJECTED" })
+        fetchClaimByUserAsync({ page: currentPage, status: "REJECTED" }),
       );
+      await dispatch(fetchTotalClaimByUserAsync({ status: "REJECTED" }));
       setLoading(false);
-      dispatch(fetchTotalClaimByUserAsync({ status: "REJECTED" }));
     };
     fetchData();
     console.log(totalPage);
@@ -81,11 +95,11 @@ const RejectedClaimByUserID = () => {
       /(\d{1,2})\/(\d{1,2})\/(\d{4})/g,
       (match, day, month, year) => {
         return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
-      }
+      },
     );
   };
 
-  const columns: Column[] = [
+  const columns: Column<Claim>[] = [
     {
       key: "project_id",
       dataIndex: "project_id",
@@ -100,7 +114,7 @@ const RejectedClaimByUserID = () => {
       key: "time_duration",
       dataIndex: "time_duration",
       title: "Time Duration",
-      cell: ({ value }) => {
+      cell: ({ value }: { value: string }) => {
         const formattedValue = formatDateRange(value as string);
         return <span>{formattedValue}</span>;
       },
@@ -109,16 +123,16 @@ const RejectedClaimByUserID = () => {
       key: "total_hours",
       dataIndex: "total_hours",
       title: "Total Working Hours",
-      cell: ({ value }) => `${value} hours`,
+      cell: ({ value }: { value: string }) => `${value} hours`,
     },
     {
       key: "submitted_date",
       dataIndex: "submitted_date",
       title: "Submitted Date",
 
-      cell: ({ value }) => {
+      cell: ({ value }: { value: string }) => {
         const formattedValue = formatDateRange(
-          formatDateToDDMMYYYY(value as string)
+          formatDateToDDMMYYYY(value as string),
         );
         return <span>{formattedValue}</span>;
       },
@@ -128,22 +142,7 @@ const RejectedClaimByUserID = () => {
       dataIndex: "claim_status",
       title: "Claim Status",
       cell: ({ value }: { value: unknown }) => {
-        const stringValue = value as string;
         return (
-          // <span
-          //   style={{
-          //     color:
-          //       stringValue === "APPROVED"
-          //         ? "green"
-          //         : stringValue === "REJECTED"
-          //         ? "red"
-          //         : stringValue === "PENDING"
-          //         ? "orange"
-          //         : "inherit",
-          //   }}
-          // >
-          //   {stringValue}
-          // </span>
           <div>
             <StatusTag
               status={value as "PENDING" | "APPROVED" | "REJECTED" | "PAID"}
@@ -184,22 +183,44 @@ const RejectedClaimByUserID = () => {
     time_duration:
       claim.start_date && claim.end_date
         ? `${formatDateToDDMMYYYY(claim.start_date)} - ${formatDateToDDMMYYYY(
-            claim.end_date
+            claim.end_date,
           )}`
         : "N/A",
   }));
   return (
-    <div className={styles.container}>
-      <TableComponent
-        columns={columns}
-        dataSource={dataSource}
-        loading={loading}
-        pagination={true}
-        name="My Claims"
-        totalPage={totalPage}
-        onPageChange={handlePageChange}
-      />
-    </div>
+    // <div className={styles.container}>
+    //   <TableComponent
+    //     columns={columns}
+    //     dataSource={dataSource}
+    //     loading={loading}
+    //     pagination={true}
+    //     name="My Claims"
+    //     totalPage={totalPage}
+    //     onPageChange={handlePageChange}
+    //   />
+    // </div>
+    <>
+      <div className="mt-2 p-0">
+        <div className="mb-10 ml-5">
+          <h1 className="m-0 p-0">Rejected Claims</h1>
+          <p className="m-0 p-0">
+            Here you can view your rejected claims and their statuses.
+          </p>
+        </div>
+        <div className={`${styles.tableContainer}`}>
+          <TableComponent
+            isHaveCheckbox={false}
+            columns={columns as Column<DataRecord>[]}
+            dataSource={dataSource}
+            loading={loading}
+            pagination={true}
+            name="My Claims"
+            totalPage={totalPage}
+            onPageChange={handlePageChange}
+          />
+        </div>
+      </div>
+    </>
   );
 };
 export default RejectedClaimByUserID;

@@ -22,18 +22,18 @@ export const createClaim = createAsyncThunk(
       }
       return rejectWithValue(error);
     }
-  }
+  },
 );
 export const updateClaim = createAsyncThunk(
   "project/updateClaim",
   async (
     payload: { claimData: CreateClaimData; requestID: string },
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       const response = await projectService.updateClaim(
         payload.claimData,
-        payload.requestID
+        payload.requestID,
       );
       return response;
     } catch (error) {
@@ -47,7 +47,7 @@ export const updateClaim = createAsyncThunk(
       }
       return rejectWithValue(error);
     }
-  }
+  },
 );
 export const fetchProjectByID = createAsyncThunk(
   "project/fetchProject",
@@ -82,7 +82,7 @@ export const fetchProjectByID = createAsyncThunk(
       }
       return rejectWithValue(error);
     }
-  }
+  },
 );
 export const getAllProjects = createAsyncThunk(
   "project/getAllProjects",
@@ -101,5 +101,5 @@ export const getAllProjects = createAsyncThunk(
       }
       return rejectWithValue(error);
     }
-  }
+  },
 );

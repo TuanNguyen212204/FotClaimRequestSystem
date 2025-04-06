@@ -10,7 +10,7 @@
   "project_name": "Project Name",
   "submitted_date": "Submitted Date",
   "salary": "Salary",
-  "otRate": "OT Rate",
+  "ot_rate": "OT Rate",
   "salary_overtime": "Salary Overtime",
   "claims_status": "Claim Status"
 }
