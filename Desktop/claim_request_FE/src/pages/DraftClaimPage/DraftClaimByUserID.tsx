@@ -1,6 +1,6 @@
 import { selectMyClaim, selectTotalPage } from "@/redux/selector/claimSelector";
 import { useEffect, useState } from "react";
-import styles from "@components/ui/claimer/UserClaims.module.css";
+import styles from "@pages/DraftClaimPage/DraftClaimByUserID.module.css";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@redux/index";
@@ -8,11 +8,15 @@ import {
   fetchClaimByUserAsync,
   fetchTotalClaimByUserAsync,
 } from "@redux/thunk/Claim/claimThunk";
-import { EyeIcon } from "lucide-react";
+import { EyeIcon, SquarePen } from "lucide-react";
 import TableComponent, { Column, DataRecord } from "@components/ui/Table/Table";
 import UserClaimDetailsModal from "@components/ui/claimer/UserClaimDetails";
 import StatusTag from "@components/ui/StatusTag/StatusTag";
 import { Claim } from "@/types/Claim";
+import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
+import { selectInitialValues } from "@/redux/slices/UpdateDraft";
+import CreateClaimPage from "../CreateClaim";
+import fetchClaims from "@/redux/thunk/Draft";
 const DraftClaimByUserID = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -23,7 +27,9 @@ const DraftClaimByUserID = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedClaim, setSelectedClaim] = useState<string>("");
   const [limit] = useState(5);
-
+  const initValue = useSelector(selectInitialValues);
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [record, setRecord] = useState<any>();
   // useEffect(() => {
   //   setLoading(true);
   //   const fetchData = async () => {
@@ -81,6 +87,14 @@ const DraftClaimByUserID = () => {
         return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
       },
     );
+  };
+  const handleUpdate = async (record: any) => {
+    console.log("Update", record);
+    setOpenModal(true);
+    setRecord(record);
+    console.log(record.request_id);
+    console.table(record);
+    dispatch(fetchClaims(record.request_id));
   };
   const columns: Column<Claim>[] = [
     {
@@ -140,10 +154,12 @@ const DraftClaimByUserID = () => {
       title: "Action",
       cell: ({ value }: { value: string }) => (
         <>
-          <EyeIcon
-            className="cursor-pointer"
-            onClick={() => handleViewDetail(value as string)}
-          />
+          <Tooltip text="View Claim Details" placement="top">
+            <EyeIcon
+              className="cursor-pointer"
+              onClick={() => handleViewDetail(value as string)}
+            />
+          </Tooltip>
           <UserClaimDetailsModal
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
@@ -152,6 +168,14 @@ const DraftClaimByUserID = () => {
             limit={limit.toString()}
           />
         </>
+      ),
+    },
+    {
+      key: "update",
+      dataIndex: "update",
+      title: "Update",
+      cell: ({ record }: { record: any }) => (
+        <SquarePen onClick={() => handleUpdate(record)} />
       ),
     },
   ];
@@ -183,6 +207,31 @@ const DraftClaimByUserID = () => {
     //   />
     // </div>
     <>
+      {openModal && (
+        <div className={`m-0 p-0`}>
+          <div>
+            <div className="relative w-full rounded-lg shadow-lg">
+              {initValue && (
+                <span
+                  className="absolute top-3 right-5 flex h-6 w-6 cursor-pointer items-center justify-center rounded-full text-gray-600 hover:bg-gray-300 hover:text-gray-800"
+                  onClick={() => setOpenModal(false)}
+                >
+                  X
+                </span>
+              )}
+              {initValue && (
+                <CreateClaimPage
+                  initialValues={initValue}
+                  mode="update"
+                  formStatus="Draft"
+                  requestID={record.request_id}
+                />
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="mt-2 p-0">
         <div className="mb-10 ml-5">
           <h1 className="m-0 p-0">Draft Claims</h1>

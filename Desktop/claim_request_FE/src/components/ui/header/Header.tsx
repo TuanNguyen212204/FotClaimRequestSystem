@@ -199,12 +199,10 @@ const Header: React.FC = () => {
     setAvatarDropdownVisible(false);
   };
 
-
   const avatarDropdownOptions = [
     { value: "profile", label: t("profile"), icon: <User size={16} /> },
     { value: "logout", label: t("logout"), icon: <LogOut size={16} /> },
   ];
-
 
   const allRead =
     notifications &&
@@ -251,7 +249,7 @@ const Header: React.FC = () => {
               </div>
             )}
           </div>
-          <span className={styles.username}>{username}</span>
+          {/* <span className={styles.username}>{username}</span> */}
           <LanguageSwitcher />
         </div>
       </header>

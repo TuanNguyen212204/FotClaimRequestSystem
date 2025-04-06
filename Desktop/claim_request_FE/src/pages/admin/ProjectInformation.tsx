@@ -24,6 +24,7 @@ import { ArrowDown, ArrowUp } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { UpdateProject } from "../Project/UpdateProject";
 import { PATH } from "@/constant/config";
+import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
 const ProjectInformation: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const project = useSelector(selectAllProject) || [];
@@ -190,13 +191,15 @@ const ProjectInformation: React.FC = () => {
       cell: ({ value }) => {
         return (
           <div className={styles.button_container}>
-            <button
-              className={`${styles.icon_button} ${styles.editButton}`}
-              onClick={() => handleUpdate(value as string)}
-              title="Update"
-            >
-              <FilePen size={20} />
-            </button>
+            <Tooltip text="Update Project" placement="top">
+              <button
+                className={`${styles.icon_button} ${styles.editButton}`}
+                onClick={() => handleUpdate(value as string)}
+                title="Update"
+              >
+                <FilePen size={20} />
+              </button>
+            </Tooltip>
           </div>
         );
       },
