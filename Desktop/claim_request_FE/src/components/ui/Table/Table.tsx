@@ -52,7 +52,7 @@ const Cell = ({
   className,
 }: {
   children: ReactNode;
-  className: string;
+  className?: string;
 }) => {
   return (
     <div
@@ -338,9 +338,7 @@ const TableComponent = forwardRef(
                           key={String(col.key || col.dataIndex)}
                           tabIndex={-1}
                         >
-                          <Cell
-                            className={`${col.key === "action" ? "justify-center" : ""} ${col.key === "claim_status" ? "justify-center" : ""} `}
-                          >
+                          <Cell>
                             {col.cell
                               ? col.cell({
                                   value: record[col.dataIndex as keyof T],

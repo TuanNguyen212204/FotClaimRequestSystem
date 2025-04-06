@@ -197,13 +197,6 @@ const ProjectInformation: React.FC = () => {
             >
               <FilePen size={20} />
             </button>
-            <button
-              className={`${styles.icon_button} ${styles.deleteButton}`}
-              onClick={() => handleDelete(value as string)}
-              title="Delete"
-            >
-              <Trash2 size={20} />
-            </button>
           </div>
         );
       },
@@ -274,7 +267,7 @@ const ProjectInformation: React.FC = () => {
         <TableComponent
           // ref={tableRef as any}
           isHaveCheckbox={false}
-          columns={columns}
+          columns={columns as Column<DataRecord>[]}
           dataSource={dataSource}
           loading={loading}
           pagination={true}
