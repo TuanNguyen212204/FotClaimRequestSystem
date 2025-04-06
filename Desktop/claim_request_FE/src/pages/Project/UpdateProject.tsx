@@ -117,7 +117,7 @@ export const UpdateProject: React.FC<UpdateProjectProps> = ({
           </div>
         )}
       </div>
-      <div style={{ marginTop: "50px" }}>
+      <div>
         <div className="mx-auto rounded-xl bg-white pr-5 pb-5 pl-1 shadow-xl">
           <button onClick={handleClose} className={styles.cancel_button}>
             <X />

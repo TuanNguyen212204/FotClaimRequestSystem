@@ -98,7 +98,6 @@ const ProjectInformation: React.FC = () => {
     : [];
 
   const handlePageChange = (newPage: number) => {
-    console.log("Trang mới:", newPage);
     setCurrentPage(newPage);
   };
 
@@ -141,8 +140,7 @@ const ProjectInformation: React.FC = () => {
 
   const handleUpdate = (id?: string) => {
     if (!id) return;
-    console.log("Update project with ID:", id);
-    setProjectID(id ? id : "");
+    setProjectID(id);
     setUpdateOpen(true);
   };
 

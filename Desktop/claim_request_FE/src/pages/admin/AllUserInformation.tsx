@@ -155,7 +155,7 @@ const AllUserInformation: React.FC = () => {
       setLoading(false);
     };
     fetchData();
-  }, [dispatch, currentPage]);
+  }, [dispatch, currentPage, departmentID]);
 
   const handleCreateUser = async () => {
     handleOpenModal();

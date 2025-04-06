@@ -69,9 +69,20 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
         setOpenModal(false);
         window.location.reload();
       }, 1000);
-    } catch (error) {
-      console.error("Create project error:", error);
-      toast.error("Failed to create project. Please try again.");
+    } catch (error: any) {
+      setLoading(false);
+      if (error.response) {
+        const { status, data } = error.response;
+        if (status === 400) {
+          toast.error(data.message);
+        } else {
+          toast.error("Create user failed!");
+        }
+      } else if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("Create user failed!");
+      }
     }
   };
 
