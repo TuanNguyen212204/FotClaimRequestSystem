@@ -3,5 +3,6 @@
   "Hello": "Xin Chào",
   "mark_all_as_read": "Đánh dấu tất cả đã đọc",
   "clear_all": "Xóa tất cả",
-  "notification": "Thông báo"
+  "notification": "Thông báo",
+  "no_notification": "Không có thông báo"
 }

@@ -3,5 +3,6 @@
     "Hello": "Hello",
     "mark_all_as_read": "Mark All As Read",
     "clear_all": "Clear All",
-    "notification": "Notification"
+    "notification": "Notification",
+    "no_notification": "No Notification"
 }
