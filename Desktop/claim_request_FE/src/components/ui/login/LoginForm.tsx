@@ -11,6 +11,7 @@ import { HTTP_STATUS } from "@/constant/httpStatus";
 import { FIRST_PAGE_BY_ROLE } from "@/constant/firstPageByRole";
 import { USER_STATUS } from "@/types/userStatus";
 import ROLE_STRING from "@/constant/roleString";
+import { PATH } from "@/constant/config";
 
 async function loginUser(values: {
   username: string;
@@ -62,16 +63,23 @@ function LoginForm() {
         }
         const role_id = localStorage.getItem("role_id");
         if (role_id === ROLE_STRING.ADMIN) {
-          localStorage.setItem("selectedClaim", "usersetting");
+          localStorage.setItem(
+            "selectedClaim",
+            PATH.allUserInformation as string,
+          );
           navigate(`${FIRST_PAGE_BY_ROLE.ADMIN}`);
         } else if (role_id === ROLE_STRING.APPROVER) {
-          localStorage.setItem("selectedClaim", "pendingClaim");
+          // localStorage.setItem("selectedClaim", "pendingClaim");
+          localStorage.setItem("selectedClaim", PATH.pending as string);
           navigate(`${FIRST_PAGE_BY_ROLE.APPROVER}`);
         } else if (role_id === ROLE_STRING.FINANCE) {
-          localStorage.setItem("selectedClaim", "approvedFinance");
+          // localStorage.setItem("selectedClaim", "approvedFinance");
+          localStorage.setItem("selectedClaim", PATH.approvedFinance as string);
           navigate(`${FIRST_PAGE_BY_ROLE.FINANCE}`);
         } else if (role_id === ROLE_STRING.CLAIMER) {
-          localStorage.setItem("selectedClaim", "all");
+          // localStorage.setItem("selectedClaim", "all");
+
+          localStorage.setItem("selectedClaim", PATH.myClaims as string);
           navigate(`${FIRST_PAGE_BY_ROLE.CLAIMER}`);
         } else {
           toast.error("Login failed");

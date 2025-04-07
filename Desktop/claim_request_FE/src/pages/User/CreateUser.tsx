@@ -374,7 +374,7 @@ export const CreateUser: React.FC<CreateUserProps> = ({
               <div className="relative w-4/5">
                 <CircleDollarSign className="absolute top-1/2 left-2 -translate-y-1/2 transform text-gray-400" />
                 <input
-                  placeholder="Enter your salary"
+                  placeholder="Enter your salary ($)"
                   id="salary"
                   {...register("salary", {
                     required: t(

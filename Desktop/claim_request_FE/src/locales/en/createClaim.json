@@ -35,7 +35,8 @@
   },
   "buttons": {
     "send": "Send",
-    "update": "Update"
+    "update": "Update",
+    "GoBack": "Go Back"
   },
   "loading": "Loading...",
   "validation": {

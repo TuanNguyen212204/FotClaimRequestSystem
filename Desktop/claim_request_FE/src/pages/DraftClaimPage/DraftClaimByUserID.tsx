@@ -94,6 +94,7 @@ const DraftClaimByUserID = () => {
     console.log("Editing record:", record);
     setRecordToEdit(record);
     await dispatch(fetchClaims(record.request_id));
+    localStorage.setItem("selectedClaim", "/draft-claim-by-user-id");
     setIsEditing(true);
   };
 
@@ -173,23 +174,23 @@ const DraftClaimByUserID = () => {
         </>
       ),
     },
-    {
-      key: "Submit",
-      dataIndex: "submit",
-      title: t("submit_label"),
-      cell: ({ record }: { record: any }) => {
-        return (
-          <Tooltip text={t("submit_tooltip")} placement="top">
-            <button
-              className="rounded-md bg-blue-500 px-4 py-2 text-white"
-              onClick={() => {}}
-            >
-              {t("submit_label")}
-            </button>
-          </Tooltip>
-        );
-      },
-    },
+    // {
+    //   key: "Submit",
+    //   dataIndex: "submit",
+    //   title: t("submit_label"),
+    //   cell: ({ record }: { record: any }) => {
+    //     return (
+    //       <Tooltip text={t("submit_tooltip")} placement="top">
+    //         <button
+    //           className="rounded-md bg-blue-500 px-4 py-2 text-white"
+    //           onClick={() => {}}
+    //         >
+    //           {t("submit_label")}
+    //         </button>
+    //       </Tooltip>
+    //     );
+    //   },
+    // },
     {
       key: "update",
       dataIndex: "update",
