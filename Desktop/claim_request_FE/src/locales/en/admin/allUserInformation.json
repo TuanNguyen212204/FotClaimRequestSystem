@@ -101,7 +101,17 @@
       "projectName": "Project Name",
       "startDate": "Start Date",
       "endDate": "End Date",
-      "projectStatus": "Project Status"
+      "projectStatus": "Project Status",
+      "selectProjectPlaceholder": "Select Project",
+      "validate": {
+        "project": "Project is required"
+      },
+      "assignSuccess": "Assign user to project successfully!",
+      "assignError": "Failed to assign user to project: {message}",
+      "projectStatuses": {
+        "active": "Active",
+        "inactive": "Inactive"
+      }
     },
     "buttonCreate": "Submit",
     "buttonUpdate": "Update",

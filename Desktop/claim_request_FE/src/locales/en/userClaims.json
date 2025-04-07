@@ -1,6 +1,7 @@
 {
   "my_claims_title": "My Claims",
   "description": "Here you can view all your claims and their statuses.",
+  "welcome_message": "Welcome {username} to the Claim Request System!",
   "project_id_label": "Project ID",
   "project_name_label": "Project Name",
   "time_duration_label": "Time Duration",

@@ -1,6 +1,7 @@
 {
   "title": "Pending Claims",
   "subtitle": "Your claims are still cooking!",
+  "welcome_message": "Welcome {username} to the Claim Request System!",
   "approve_selected": "Approve Selected",
   "reject_selected": "Reject Selected",
   "return_selected": "Return Selected",
@@ -24,5 +25,31 @@
     "approve": "Approve",
     "reject": "Reject",
     "return": "Return"
+  },
+  "modal": {
+    "approve_title": "Are you sure you want to approve this claim?",
+    "reject_title": "Are you sure you want to reject this claim?",
+    "return_title": "Are you sure you want to return this claim?",
+    "approve_multiple_title": "Are you sure you want to approve {count} claim(s)?",
+    "reject_multiple_title": "Are you sure you want to reject {count} claim(s)?",
+    "return_multiple_title": "Are you sure you want to return {count} claim(s)?",
+    "confirm_message": "Do you want to proceed?",
+    "cancel_button": "Cancel",
+    "confirm_button": "Confirm",
+    "select_at_least_one_to_approve": "Please select at least one claim to approve.",
+    "select_at_least_one_to_reject": "Please select at least one claim to reject.",
+    "select_at_least_one_to_return": "Please select at least one claim to return.",
+    "approve_success": "Claim approved successfully!",
+    "approve_error": "Failed to approve claim.",
+    "reject_success": "Claim rejected successfully!",
+    "reject_error": "Failed to reject claim.",
+    "return_success": "Claim returned successfully!",
+    "return_error": "Failed to return claim.",
+    "approve_multiple_success": "Selected claims approved successfully!",
+    "approve_multiple_error": "Failed to approve selected claims.",
+    "reject_multiple_success": "Selected claims rejected successfully!",
+    "reject_multiple_error": "Failed to reject selected claims.",
+    "return_multiple_success": "Selected claims returned successfully!",
+    "return_multiple_error": "Failed to return selected claims."
   }
 }

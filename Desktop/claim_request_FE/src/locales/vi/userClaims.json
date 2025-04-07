@@ -1,6 +1,7 @@
 {
   "my_claims_title": "Yêu cầu của tôi",
   "description": "Tại đây bạn có thể xem tất cả yêu cầu của mình và trạng thái của chúng.",
+  "welcome_message": "Chào mừng {username} đến với Hệ thống Yêu Cầu Thanh Toán!",
   "project_id_label": "Mã dự án",
   "project_name_label": "Tên dự án",
   "time_duration_label": "Thời gian",

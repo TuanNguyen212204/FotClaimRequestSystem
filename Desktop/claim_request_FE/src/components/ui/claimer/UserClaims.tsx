@@ -16,6 +16,7 @@ import { useTranslation } from "react-i18next";
 import { Claim } from "@/types/Claim";
 import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
 import { toast } from "react-toastify";
+
 const UserClaims = () => {
   const { t } = useTranslation("userClaims");
   const dispatch = useDispatch<AppDispatch>();
@@ -44,14 +45,14 @@ const UserClaims = () => {
   useEffect(() => {
     if (count === "0") {
       toast.success(
-        // t("allUserInformation.welcome_message", {
-        //   username: username || "User",
-        // }),
-        `Welcome ${username || "User"} to the Claim Request System!`,
+        t("welcome_message", {
+          username: username || "User",
+        }),
       );
       localStorage.setItem("count", "1");
     }
   }, [username, t]);
+
   const handleViewDetail = (id: string) => {
     setLoading(true);
     setTimeout(() => {

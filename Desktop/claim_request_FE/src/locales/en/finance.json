@@ -1,6 +1,7 @@
 {
   "finance": {
     "title": "Approved Claims",
+    "welcome_message": "Welcome {username} to the Claim Request System!",
     "table": {
       "name": "Claims",
       "userName": "User Name",
