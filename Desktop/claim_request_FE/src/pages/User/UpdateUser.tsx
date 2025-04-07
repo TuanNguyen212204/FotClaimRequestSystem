@@ -5,6 +5,7 @@ import httpClient from "@constant/apiInstance";
 import { ApiResponse } from "@/types/ApiResponse";
 import { ApiResponseNoGeneric } from "@/types/ApiResponse";
 import { User } from "@/types/User";
+import { BriefcaseBusiness, Mail, User2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { PATH } from "@constant/config";
 import { X } from "lucide-react";
@@ -103,7 +104,10 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
         requestBody,
       );
       toast.success("User updated successfully!");
-      setOpenModal(false);
+      setTimeout(() => {
+        setOpenModal(false);
+        window.location.reload();
+      }, 1000);
     } catch (error) {
       console.error("Update user error: " + error);
     } finally {
@@ -192,12 +196,32 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
                 </div>
               </div>
             </label>
-            <input
-              disabled
-              id="full_name"
-              {...register("full_name")}
-              className="mt-1 h-6 w-4/5 rounded-lg border border-gray-300 p-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-            />
+            <div className="relative w-4/5">
+              <User2 className="absolute top-1/2 left-2 -translate-y-1/2 transform text-gray-400" />
+              <input
+                placeholder="Enter your full name"
+                id="full_name"
+                {...register("full_name", {
+                  required: t(
+                    "allUserInformation.createUser.validation.fullName",
+                  ),
+                  minLength: {
+                    value: 3,
+                    message: t(
+                      "allUserInformation.createUser.validation.minLength",
+                    ),
+                  },
+                  maxLength: {
+                    value: 100,
+                    message: t(
+                      "allUserInformation.createUser.validation.maxLength",
+                    ),
+                  },
+                })}
+                className="mt-1 h-6 w-full rounded-lg border border-gray-300 p-2 pl-8 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              />
+            </div>
+
             {errors.full_name && (
               <p className="mt-1 text-sm text-red-500">
                 {errors.full_name.message}
@@ -218,12 +242,18 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
                 </div>
               </div>
             </label>
-            <input
-              {...register("email")}
-              disabled
-              id="email"
-              className="mt-1 h-6 w-4/5 rounded-lg border border-gray-300 p-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-            />
+            <div className="relative w-4/5">
+              <Mail className="absolute top-1/2 left-2 -translate-y-1/2 transform text-gray-400" />
+              <input
+                placeholder="Enter your email"
+                id="email"
+                type="email"
+                {...register("email", {
+                  required: t("allUserInformation.createUser.validation.email"),
+                })}
+                className="pl- mt-1 h-6 w-full rounded-lg border border-gray-300 p-2 pl-9 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              />
+            </div>
           </div>
           <div className="ml-15">
             <label

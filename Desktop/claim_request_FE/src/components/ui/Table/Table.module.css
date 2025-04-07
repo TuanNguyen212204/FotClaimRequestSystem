@@ -10,8 +10,7 @@ body {
   background-color: #fff5;
   width: 100%;
   min-width: 800px;
-  min-height: 200px;
-  max-height:;
+
   border-radius: 10px; /* Bo góc bảng */
   overflow: hidden;
 }
@@ -313,7 +312,7 @@ body {
 
 .create_button:hover {
   background: linear-gradient(90deg, #213555 0%, #3e5879 100%);
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  /* border:2px solid rgba(255, 255, 255, 0.3); */
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
   transform: scale(1.05);
 }

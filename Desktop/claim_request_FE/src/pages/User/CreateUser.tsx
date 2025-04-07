@@ -3,12 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { PATH } from "@constant/config";
 import { useEffect, useState } from "react";
 import httpClient from "@/constant/apiInstance";
-import { User } from "@/types/User";
 import { useForm } from "react-hook-form";
 import { fetchAllUserAsync, fetchTotalPage } from "@redux/thunk/User/userThunk";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch } from "@redux/index.ts";
-import { X } from "lucide-react";
+import { User, X, Mail, CircleDollarSign } from "lucide-react";
 import { toast } from "react-toastify";
 import styles from "./CreateUser.module.css";
 import {
@@ -20,6 +19,7 @@ import LoadingOverlay from "@/components/ui/Loading/LoadingOverlay";
 import { ApiResponseNoGeneric } from "@/types/ApiResponse";
 import { delay } from "@/utils/delay";
 import { useTranslation } from "react-i18next";
+import Input from "@/components/ui/Input/Input";
 interface CreateUserProps {
   openModal: boolean;
   setOpenModal: (value: boolean) => void;
@@ -222,11 +222,10 @@ export const CreateUser: React.FC<CreateUserProps> = ({
               </div>
             </button>
           </div>
-          <h1 className="mb-6 text-center text-3xl font-bold text-green-700">
+          <h1 className={`mb-6 text-center text-3xl font-bold ${styles.title}`}>
             {t("allUserInformation.createUser.title")}
           </h1>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
-            {/* Full Name */}
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="ml-15">
               <label
                 className="block text-sm font-medium text-gray-600"
@@ -241,27 +240,32 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                   </div>
                 </div>
               </label>
-              <input
-                id="full_name"
-                {...register("full_name", {
-                  required: t(
-                    "allUserInformation.createUser.validation.fullName",
-                  ),
-                  minLength: {
-                    value: 3,
-                    message: t(
-                      "allUserInformation.createUser.validation.minLength",
+              <div className="relative w-4/5">
+                <User className="absolute top-1/2 left-2 -translate-y-1/2 transform text-gray-400" />
+                <input
+                  placeholder="Enter your full name"
+                  id="full_name"
+                  {...register("full_name", {
+                    required: t(
+                      "allUserInformation.createUser.validation.fullName",
                     ),
-                  },
-                  maxLength: {
-                    value: 100,
-                    message: t(
-                      "allUserInformation.createUser.validation.maxLength",
-                    ),
-                  },
-                })}
-                className="mt-1 h-6 w-4/5 rounded-lg border border-gray-300 p-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-              />
+                    minLength: {
+                      value: 3,
+                      message: t(
+                        "allUserInformation.createUser.validation.minLength",
+                      ),
+                    },
+                    maxLength: {
+                      value: 100,
+                      message: t(
+                        "allUserInformation.createUser.validation.maxLength",
+                      ),
+                    },
+                  })}
+                  className="mt-1 h-6 w-full rounded-lg border border-gray-300 p-2 pl-8 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                />
+              </div>
+
               {errors.full_name && (
                 <p className="mt-1 text-sm text-red-500">
                   {errors.full_name.message}
@@ -282,14 +286,21 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                   </div>
                 </div>
               </label>
-              <input
-                id="email"
-                type="email"
-                {...register("email", {
-                  required: t("allUserInformation.createUser.validation.email"),
-                })}
-                className="mt-1 h-6 w-4/5 rounded-lg border border-gray-300 p-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-              />
+              <div className="relative w-4/5">
+                <Mail className="absolute top-1/2 left-2 -translate-y-1/2 transform text-gray-400" />
+                <input
+                  placeholder="Enter your email"
+                  id="email"
+                  type="email"
+                  {...register("email", {
+                    required: t(
+                      "allUserInformation.createUser.validation.email",
+                    ),
+                  })}
+                  className="pl- mt-1 h-6 w-full rounded-lg border border-gray-300 p-2 pl-9 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                />
+              </div>
+
               {errors.email && (
                 <p className="mt-1 text-sm text-red-500">
                   {errors.email.message}
@@ -310,21 +321,7 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                   </div>
                 </div>
               </label>
-              {/* <select
-                id="department"
-                {...register("department", {
-                  required: "Department is required",
-                })}
-                className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
-              >
-                <option value="">Select Department</option>
-                {department &&
-                  department.map((a) => (
-                    <option key={a.id} value={a.id}>
-                      {a.name}
-                    </option>
-                  ))}
-              </select> */}
+
               <Select
                 register={{
                   ...register("department", {
@@ -344,7 +341,7 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                 // }}
                 placeholder="Select Department"
                 onChange={(value) => console.log(value)}
-                className="mt-1 h-11 w-83.5 rounded-lg border border-gray-300 p-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="mt-1 h-11 w-90 rounded-lg border border-gray-300 p-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               />
 
               {errors.department && (
@@ -367,21 +364,26 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                   </div>
                 </div>
               </label>
-              <input
-                id="salary"
-                {...register("salary", {
-                  required: t(
-                    "allUserInformation.createUser.validation.salary",
-                  ),
-                  minLength: {
-                    value: 0,
-                    message: t(
-                      "allUserInformation.createUser.validation.salaryMesssage",
+              <div className="relative w-4/5">
+                <CircleDollarSign className="absolute top-1/2 left-2 -translate-y-1/2 transform text-gray-400" />
+                <input
+                  placeholder="Enter your salary ($)"
+                  id="salary"
+                  {...register("salary", {
+                    required: t(
+                      "allUserInformation.createUser.validation.salary",
                     ),
-                  },
-                })}
-                className="mt-1 h-6 w-4/5 rounded-lg border border-gray-300 p-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-              />
+                    minLength: {
+                      value: 0,
+                      message: t(
+                        "allUserInformation.createUser.validation.salaryMesssage",
+                      ),
+                    },
+                  })}
+                  className="mt-1 h-6 w-full rounded-lg border border-gray-300 p-2 pl-9 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                />
+              </div>
+
               {errors.salary && (
                 <p className="mt-1 text-sm text-red-500">
                   {errors.salary.message}
@@ -418,7 +420,7 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                 register={register("role_id")}
                 onChange={(value) => console.log(value)}
                 placeholder="Select Role ID"
-                className="mt-1 h-11 w-83.5 rounded-lg border border-gray-300 p-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="mt-1 h-11 w-90 rounded-lg border border-gray-300 p-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               />
               {errors.role_id && (
                 <p className="mt-1 text-sm text-red-500">
@@ -467,7 +469,7 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                 }}
                 placeholder="Select Job Rank"
                 onChange={(value) => console.log(value)}
-                className="mt-1 h-11 w-83.5 rounded-lg border border-gray-300 p-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="mt-1 h-11 w-90 rounded-lg border border-gray-300 p-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               />
 
               {errors.job_rank && (

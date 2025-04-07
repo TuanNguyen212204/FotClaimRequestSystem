@@ -54,8 +54,8 @@ function FileUpload({
       acceptedTypes.some((type) =>
         type.includes("/")
           ? file.type.startsWith(type.split("/")[0]) || file.type === type
-          : file.name.endsWith(type)
-      )
+          : file.name.endsWith(type),
+      ),
     );
   };
 
@@ -70,12 +70,13 @@ function FileUpload({
     const updatedList = fileList.filter((item) => item.name !== file.name);
     setFileList(updatedList);
     setPreviewUrls(updatedList.map((file) => URL.createObjectURL(file)));
+    onUpload(updatedList);
   };
 
   return (
     <div className={styles.container}>
       <div className={styles.box}>
-        <h2 className={styles.header}>Drop & Drag</h2>
+        <h2 className={styles.header}>Upload Avatar</h2>
         <div
           className={styles.drop_file_container}
           ref={wrapperRef}
@@ -93,14 +94,16 @@ function FileUpload({
             accept={accept}
             onChange={onFileDrop}
           />
-          <p className={styles.drop_file_label}>Drag & drop your files here</p>
         </div>
         {fileList.length > 0 && (
           <div className={styles.drop_file_preview}>
-            <p className={styles.drop_file_preview_title}>Ready to upload</p>
             {fileList.map((item, index) => (
               <div key={index} className={styles.drop_file_preview_item}>
-                <img src={previewUrls[index]} alt={item.name} />
+                <img
+                  src={previewUrls[index]}
+                  alt={item.name}
+                  style={{ width: "50px", height: "50px", objectFit: "cover" }}
+                />
                 <div className={styles.drop_file_preview_item_info}>
                   <p className={styles.name}>
                     {item.name.length > 30

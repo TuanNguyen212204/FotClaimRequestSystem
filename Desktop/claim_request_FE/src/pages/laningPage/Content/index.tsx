@@ -63,21 +63,21 @@ export default function Content() {
       description:
         "Ensure that users are logged in or authenticated to submit claim requests.",
       imageSrc:
-        "https://s3-alpha-sig.figma.com/img/b522/7561/772e70f317690e8bfd4b899f66bcf0c6?Expires=1743984000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=okY5vQNQbNbWrPfOjtj1cRmsAvmo7afQ3diQdYqEF2qCupo9~pU9wPh8Ev3fQ8sFM21Az~c83Sia4nwC7v9x~Lx3K1r34XiAXn1w~EpuxBHuWdm4l8qS1v42EL8Kh3EmJEO7t7ZhFyCJck3HSbEx9aAzb5LSeuoE2esjWsPr7BUF1tVnTSKsqkg61LVmPXbww~0sjjtAjZO2tYf0xjqchGHucWD8xHHni34qWuxctcwARc2yseauDjoMWvmZNByeBn7bynCOPZwu-9fuVqz~hOO--NRUzX2JUxugVtG~V3h1ZJYRtQuq8C8KdZeBoqYlKtwonEALOdFEj9D71YimBA__",
+        "https://s3-alpha-sig.figma.com/img/b522/7561/772e70f317690e8bfd4b899f66bcf0c6?Expires=1745193600&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=GhCOFm2dvl9azTki7cxCCkdNcobLGSfmLrU8FXvC1NznQbRsJcdzWDThCPDy4t3nS5HfatPNtcKfg18pxXgqWoUjV02qgGkkVnZlbnzC9ProPcOGfVrOYsXtx8d6ldw0QPV7fWyp8-qw-iTcv-zax73ozUgUz7aNX7NpDFMGXe-V5mYm2HKOBrZPH1-M9h-437c82Dk~MPH6wPgSh~XiDAEWS4VIAQgNwKsi6-0esLRboyjn1VamfygRGlsS2~o6Vq0mF2PihPBk3rIq9TD9PCCVba8nR8ZFSv4KtiX9B2mTq-9N8Lozr0zRSr7P4BOpTreTJuNUDWtt3tKgHO6lFg__",
       altText: "Illustration for User Authentication",
     },
     {
       title: "Real-time Tracking",
       description: "Employees can check their claim status anytime.",
       imageSrc:
-        "https://s3-alpha-sig.figma.com/img/27ef/0d83/a2f147ee018077e6a64f84b504606edb?Expires=1743984000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=enAvcvpcjKvTt3hEPQqKJqk60n9csXXFuMBXhV~L7nq8w8D9MVEP6-~UYi~NhYAcNime~pW3~cH3xoXQfOl3~2A1lp7GAr0jRs5OqZx~15AwUiYX8naoeC8Dq02WY2xgWkvweXhkER9F1TFL1RmZIOPNoTjhtPLVY~NDHX~unSg9gq1vXzFZxQldsxvpoBUSxZEaNfausg6acEIUL9c1f2S9K2l7pUW9uYmOxHccDbYT4kXT1KRV6QVHPjJ-mdeF5xJDH9jAyGQD~eg0WPznqZAvF65uadkFS3~vaOCY-n9cu6w1gnX5ctKYnggt59oG6jeX0DsFa5XNo14PLZLSnw__",
+        "https://s3-alpha-sig.figma.com/img/27ef/0d83/a2f147ee018077e6a64f84b504606edb?Expires=1745193600&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=jbl8fWgktXawnikh1pkLJ0KsPjr3Uec~0k3qxuJeb3xuOqaQCiqziDXQjYgxI3vNxrhPeB6bwMJ6SdsCRE7~NQ~7VgULvOhVxmRVEGb6uhjMFkPZHFrn77FR2hYPp9ekXvbXa94XlKfbvg8G-jlv1XaY99uOD1yx6jLU8nJvOrTX61ZbMeTV4fMkC6MZ9~6q5Hhx-vFRklIN40f8dbr6OPt4L7DcUlVBCzIscDwCl8KUJ0XsY7xs7jIMugWdtlMslWGUA1EvA9cYnNC42FT~oqyAVEw6HiAWbdzNJjFdU~lmGBKak4l3Y~KLUypcanRpb3YjOud9iUf5D~7IKaONxg__",
       altText: "Illustration for Real-time Tracking",
     },
     {
       title: "Claim Submission Form",
       description: "Provide a detailed form for users to submit their claim.",
       imageSrc:
-        "https://s3-alpha-sig.figma.com/img/2d1b/164a/260e6da6e7b9eb01a34ac3953382cc50?Expires=1743984000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=OizzY4VqtXZAL1TtQYetsdYGMYq9BiIJbdpAGuCT5bj1~DkUD4zGLGHyhZtU6uLchXQ5JCaY6Ytq6VV8gU32DSM9rEJNmuagDmXe07DUXuznCmD2~M55eULKTLcEz8AExLeTs29ILvL0oZbQYgABj8DA96xdpEj73--JUTScmbCQSvW~LGxtqN38D8Z5hMNpm0klMsrOd0OcUQ2VVHZEesZQdTVE8kKyqth4CluvfeUnyxR2vG3bJND3D6AozGBNkXdtF1795WJdanSv61tT~Tmo1q4z84CGGyxRgRBnYGLpmQIthnhvqxKKCTGiPNSuaGvg2Odd4~V7Q-BEEpoOMw__",
+        "https://s3-alpha-sig.figma.com/img/2d1b/164a/260e6da6e7b9eb01a34ac3953382cc50?Expires=1745193600&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=aN4TC77p39H18T540InOl66xSW9Kkdxq3uXXsX6f9ZvM-Q1XwAvIPa7-ARwvc5S1EscELjR~WkLc9e7zDhRxnKQ8cazvpTcpmxbqCfqYjLNtN-FfTOvLAlZ67KwymW2MBQ9L~XwFnV4xChet0RdUeQRpnICheNPngH6K3XxweY1V0b1kOENF4xQW4kqQAySYew9y20DW-~pruN~BXUMdwNtNa75HskvnuqssIhz7yo-sdhUiPlV-KI3KeFsiz2h9IJ3wttBrie2ruX61UW6~6-CLjsIXSEMnTyV~Z9YsilmRsO6zNkUTDacXsPhZUCeuFzkEi7t8FRo81jlBF0O5vA__",
       altText: "Illustration for Claim Submission Form",
     },
     {
@@ -85,7 +85,7 @@ export default function Content() {
       description:
         "Include approval processes where claims need to go through different levels of review.",
       imageSrc:
-        "https://s3-alpha-sig.figma.com/img/5285/9553/aebe8607ad85a965578f8f0f88238c9c?Expires=1743984000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=o64QS83uiSqnB4h~61uYZ4dzLbIEkNY6hjFiuSEZQGT16kp9LHzpSjGjYSYF4abOuqahKjsCLHw6SQ~Eh4DAX7s7yB1dpM5nRr-pAEMvXcanqhe-I4voQ8NNM9Fp8Xo1kIMXXh-Pqo5YV0w~36p21qNJZCARc1kw1Enw7blh3M5B5a1~FT673TQZdI51AnzL7mMjsPoLibynn60CH3Tx9K~Eg~SE6btm6wmZzXPDkMiXAPJOnTvjEk8q8BGrTjnOUQsbgQUW81GL60DEp6tXxyjh8unGi9vC9axl9OhRUPoXgF6TGdBmO~jMI7nhgTh9Aek9of-r55pChr-725R7mg__",
+        "https://s3-alpha-sig.figma.com/img/5285/9553/aebe8607ad85a965578f8f0f88238c9c?Expires=1745193600&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=cDL~NcU43GxHrRPwJ6qBbKgZxxdAlUpWlcGDIG-3sYE0MagXf1oXY8v8unOEOmxFxyIVuaB~8xkpmMuVs1xqNsar5ZfKxrP9h4SLSMMbx71hLW4aidJNUYFAYpxWDnqCOJIv259JjM-3xhPktURe1yAi-CtuaEm~yHI-5QpZ9iNJOpE~CyR3cKxYyqszv52FT9l3lksM~CbTK0t6Q~HaFj3zTZqqhwJ1EUhA7wL~WHxow28mb-JZe3hCD6PYEfCkNwPTHXVUtt~fZWZN0VEDD0kqlCODMn5HdqUfjV5sNDW~qC0SEcJnH3h-VcP6kLd7x~98W6azbU~i-Dlk6p-IYg__",
       altText: "Illustration for Multi-Level Approval Workflow",
     },
     {
@@ -93,14 +93,14 @@ export default function Content() {
       description:
         "Send automated email or in-app notifications to users regarding claim status updates.",
       imageSrc:
-        "https://s3-alpha-sig.figma.com/img/7977/dd22/f160639f86428dfb7f8ac8c8f058969a?Expires=1743984000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=Ep5eiD7dTBU544NtJmXXPKmSO2yT0Pd6PW4vJXg1A2hNh0lb5pPK1PmXnOfdS-1WXIvoZw23h6-6CpO1PGS~E9FIySh9kkmUGt~DzUbilZ3oXn1NZbt-SjA1amaNASpml05pIILzvgJdkNu7gXZVqtxabayPYda77rJnbikF9~Ei~nwMvI~-gR6Tm4lQFwPgorD3OJVk~B6flaldmkvWqxPUFrqv1~RiY70uHAfw4hivbdGa9taZd~hojY-di9QKrYqL50VBw0W4Wmm3lgyQzoE~-71YM3Lw1F0QmgJcuMgmMgdI2BZpsggaj2LIxsak-18Ah81s98BlDZjFFTKMEw__",
+        "https://s3-alpha-sig.figma.com/img/7977/dd22/f160639f86428dfb7f8ac8c8f058969a?Expires=1745193600&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=dJvE0Q4-SPmVDuYZYqzAkiTKxjLFLBndIQuYplfwqrqkqJ2yI5b84kdgcPfJ49SIxJjSBfFw6WQdyi9ottD9Qde6Oj5jHqAhsDhTpp7DJ-In2hg42QgoISEwOZhCzS5s5ne7oSMhFap2ZVZTiYuDdF-yudpOfXLh3N2fzSKN57APlutOWGnsQLl8yGOMz-l9DbUfPhLOZ-RTLKhGFO2meJX0gfqrLXvxMWcF0QXh61XxHIL0ChYVhdM46oGZLmJ1Ll9lul8OeDC7eV5BxB23yvyfl-UhOL8pVasD9wGFToCM5p86mIrxa76rCO053C4Eeeu9EdCWnHC7O5-ykFF-Ew__",
       altText: "Illustration for Automated Notifications",
     },
     {
       title: "Secure & Role-Based Access",
       description: "Ensures that only authorized personnel can manage claims.",
       imageSrc:
-        "https://s3-alpha-sig.figma.com/img/aa24/439f/3709e5be7bd698275d7a5cf7cb0601e2?Expires=1743984000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=gs7f40zJWuv~1ASxnWRfuhq5uhpQtx0cDo4eWUOhLRlv2X7A51HvbdkQZXZiO3nwKsUmhBuqqNWkZz34g9inO7T-2ZlzxUwHrSOBLDJlPUw2y9wBsLfuc1FjC4bc3gJhKQO4NiGM41GKrmEpT-~KbYzo-Qfs6GhZkzYXwgyyVF1c6eIQP6m01g6J980NW2a22G5T2fl7z277hJQeVK2R7xLYFTBI-0vJ153CaJ46wp7LZJG-8xBD3bvh7g1mShn6od3Egrj5i5kwNbpl-sA0DUrpMV5LhmTNx-0LZo8nJYnwlpTnyVi-s3D~qV-drV6zz2ov0z-mdFn4X4m5X0DJBg__",
+        "https://s3-alpha-sig.figma.com/img/aa24/439f/3709e5be7bd698275d7a5cf7cb0601e2?Expires=1745193600&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=qfgEpR1Ym-4LX7aS-Ra8Wc6WuuKIqeeOEw-g32aLqNcFS8-2whBMvdthN~smrPM5phmJLPb3olZtN~z2STaWnKOq-HVOAk0JOLe6OZ66m8qRmj3HQ9eFXpqnSHDTfYeEP7Ycj9ehCBFCRRHAXZGGbL0mVZL34d038j9uOoaEC2UyNArAEqm6b69kN-zuZGmHnmFCKKexOhMTyAVEnXn5LI4FkzWGW6e0gIxSRTnycUGp4D1~b0r4X8~uj0JMlk4IK0ms2V3p2UVbPA4q5BbA9RWA3kEnEqY7QV8lUiZT3~l78DfO3OCeSr26-d7Rvyt7l2lGg7xXlUWaa7vBnycduw__",
       altText: "Illustration for Secure & Role-Based Access",
     },
   ];

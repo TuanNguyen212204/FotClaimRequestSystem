@@ -52,8 +52,8 @@
 }
 
 .summaryCard {
-  width: 250px; 
-  height: 150px; 
+  width: 250px;
+  height: 150px;
   padding: 20px;
   border-radius: 10px;
   background-color: #f4f4f4;
@@ -63,7 +63,6 @@
   align-items: center;
   text-align: center;
 }
-
 
 .filter_section {
   font-weight: 500;
@@ -85,4 +84,17 @@
   padding: 1.5rem;
   border-radius: 0.75rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+.editModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
 }

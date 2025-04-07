@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import styles from "@components/ui/user/UserInfoComponent.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@redux/index";
@@ -10,6 +10,11 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import FileUpload from "@components/ui/FileUpload/FileUpload";
+
+interface AvatarUploadResponse {
+  avatar?: string;
+}
 
 export const UserInfoComponent: React.FC = () => {
   const { t } = useTranslation("userInfo");
@@ -21,6 +26,10 @@ export const UserInfoComponent: React.FC = () => {
   const [isSalaryVisible, setIsSalaryVisible] = useState(false);
   const [isOtRateVisible, setIsOtRateVisible] = useState(false);
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState<string>(
+    "https://i.pinimg.com/736x/63/f0/0d/63f00d6ebe2c93b945be3c39135503c2.jpg",
+  );
   const navigate = useNavigate();
 
   const accessToken = localStorage.getItem("access_token");
@@ -28,11 +37,11 @@ export const UserInfoComponent: React.FC = () => {
 
   const backendUrl =
     import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
-  const staticBaseUrl =
-    import.meta.env.VITE_STATIC_BASE_URL || "http://localhost:3000";
+  const staticBaseUrl = "https://claimsystem.info.vn";
 
-
-  const getFullAvatarUrl = (avatarPath: string | undefined): string => {
+  const getFullAvatarUrl = async (
+    avatarPath: string | undefined,
+  ): Promise<string> => {
     const defaultAvatar =
       "https://i.pinimg.com/736x/63/f0/0d/63f00d6ebe2c93b945be3c39135503c2.jpg";
 
@@ -40,20 +49,27 @@ export const UserInfoComponent: React.FC = () => {
       return defaultAvatar;
     }
 
-
     if (avatarPath.startsWith("http")) {
       return avatarPath;
     }
 
-    // Nếu avatarPath không bắt đầu bằng /uploads/avatars/, bổ sung phần này
     const normalizedAvatarPath = avatarPath.startsWith("/uploads/avatars/")
       ? avatarPath
       : `/uploads/avatars/${
           avatarPath.startsWith("avatar-") ? "" : "avatar-"
         }${avatarPath}`;
+    const fullUrl = `${staticBaseUrl}${normalizedAvatarPath}?t=${new Date().getTime()}`;
 
-    // Sử dụng staticBaseUrl để tạo URL cho file tĩnh
-    return `${staticBaseUrl}${normalizedAvatarPath}`;
+    try {
+      const response = await fetch(fullUrl, { method: "HEAD" });
+      if (response.ok) {
+        return fullUrl;
+      }
+      return defaultAvatar;
+    } catch (error) {
+      console.warn(`Failed to fetch avatar: ${fullUrl}`, error);
+      return defaultAvatar;
+    }
   };
 
   useEffect(() => {
@@ -61,6 +77,14 @@ export const UserInfoComponent: React.FC = () => {
       dispatch(fetchUserByIdAsync());
     }
   }, [dispatch, accessToken, userId]);
+
+  useEffect(() => {
+    const loadAvatar = async () => {
+      const url = await getFullAvatarUrl(selectedUser?.avatar);
+      setAvatarUrl(url);
+    };
+    loadAvatar();
+  }, [selectedUser?.avatar]);
 
   useEffect(() => {
     if (selectedUser) {
@@ -109,8 +133,8 @@ export const UserInfoComponent: React.FC = () => {
     }
   };
 
-  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+  const handleAvatarUpload = (files: File[]) => {
+    const file = files[0];
     if (file) {
       const validImageTypes = ["image/jpeg", "image/png", "image/gif"];
       if (!validImageTypes.includes(file.type)) {
@@ -145,7 +169,7 @@ export const UserInfoComponent: React.FC = () => {
       const users = response.data.data;
       const emailExists = users.some(
         (user: User) =>
-          user.email === editedUser.email && user.user_id !== userId
+          user.email === editedUser.email && user.user_id !== userId,
       );
       if (emailExists) {
         toast.error(t("toast.email_exists"));
@@ -181,48 +205,65 @@ export const UserInfoComponent: React.FC = () => {
       return;
     }
 
+    setIsUploading(true);
     try {
-      // 1. Cập nhật avatar nếu có file avatar
       if (avatarFile) {
         const avatarFormData = new FormData();
         avatarFormData.append("avatar", avatarFile);
 
-        await httpClient.post(`/users/${userId}/avatar`, avatarFormData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
+        const avatarResponse = await httpClient.post<AvatarUploadResponse>(
+          `/users/${userId}/avatar`,
+          avatarFormData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
           },
-        });
+        );
+
+        if (avatarResponse.data && avatarResponse.data.avatar) {
+          setEditedUser({ ...editedUser, avatar: avatarResponse.data.avatar });
+        } else {
+          console.warn("Backend did not return avatar URL in response");
+        }
       }
 
-      // 2. Cập nhật các thông tin khác (email, password) - không gửi department
-      const userFormData = new FormData();
-      userFormData.append("email", editedUser.email || "");
+      const userData: { email: string; password?: string } = {
+        email: editedUser.email || "",
+      };
       if (editedUser.password && editedUser.password.trim() !== "") {
-        userFormData.append("password", editedUser.password);
+        userData.password = editedUser.password;
       }
 
-      await httpClient.put(`/admin/staff/${userId}`, userFormData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
+      const response = await httpClient.put(
+        `/admin/staff/${userId}`,
+        userData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
         },
-      });
+      );
 
-      // 3. Sau khi cập nhật thành công, gọi lại API GET để làm mới dữ liệu người dùng
+      console.log("Update response:", response.data);
+
       await dispatch(fetchUserByIdAsync());
       setIsEditing(false);
       setAvatarFile(null);
       toast.success(t("toast.update_success"));
 
-      // 4. Nếu người dùng cần đổi mật khẩu lần đầu (user_status === 2)
       if (editedUser.password && editedUser.user_status === 2) {
         await httpClient.put(`/admin/staff/${userId}`, {
           user_status: 1,
         });
         dispatch(fetchUserByIdAsync());
       }
-    } catch (error) {
-      console.error("Update User error: ", error);
-      toast.error(`${t("toast.update_failed")} ${(error as any).message}`);
+    } catch (error: any) {
+      console.error("Update User error:", error);
+      const errorMessage = error.response?.data?.message || error.message;
+      toast.error(`${t("toast.update_failed")} ${errorMessage}`);
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -256,15 +297,7 @@ export const UserInfoComponent: React.FC = () => {
     <div className={styles.profileContainer}>
       <div className={styles.profileHeader}>
         <div className={styles.avatarSection}>
-          <img
-            src={getFullAvatarUrl(selectedUser.avatar)}
-            alt="Avatar"
-            className={styles.profileAvatar}
-            onError={(e) =>
-              (e.currentTarget.src =
-                "https://i.pinimg.com/736x/63/f0/0d/63f00d6ebe2c93b945be3c39135503c2.jpg")
-            }
-          />
+          <img src={avatarUrl} alt="Avatar" className={styles.profileAvatar} />
           <div className={styles.updateButtonWrapper}>
             <button
               onClick={() => setIsEditing(true)}
@@ -388,18 +421,11 @@ export const UserInfoComponent: React.FC = () => {
             </div>
             <div className={styles.formSection}>
               <label>{t("avatar_label")}</label>
-              <input
-                type="file"
+              <FileUpload
+                onUpload={handleAvatarUpload}
+                allowMultiple={false}
                 accept="image/*"
-                onChange={handleAvatarChange}
               />
-              {editedUser.avatar && (
-                <img
-                  src={editedUser.avatar}
-                  alt="Avatar Preview"
-                  style={{ width: "100px", height: "100px", marginTop: "10px" }}
-                />
-              )}
             </div>
             <div className={styles.formSection}>
               <label>{t("new_password_label")}</label>
@@ -444,12 +470,17 @@ export const UserInfoComponent: React.FC = () => {
               />
             </div>
             <div className={styles.buttonGroup}>
-              <button className={styles.saveButton} onClick={handleSave}>
-                {t("save")}
+              <button
+                className={styles.saveButton}
+                onClick={handleSave}
+                disabled={isUploading}
+              >
+                {isUploading ? t("uploading") : t("save")}
               </button>
               <button
                 className={styles.cancelButton}
                 onClick={() => setIsEditing(false)}
+                disabled={isUploading}
               >
                 {t("cancel")}
               </button>

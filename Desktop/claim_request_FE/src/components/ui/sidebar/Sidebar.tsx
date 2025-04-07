@@ -7,6 +7,7 @@ import RouteConfig from "@/types/Route";
 import { PRIVATE_ROUTE } from "@/constant/routeConfig";
 import ROLE from "@/constant/role";
 import { useTranslation } from "react-i18next";
+import { record } from "zod";
 
 export const Sidebar = ({
   setIsCollapsed,
@@ -25,7 +26,7 @@ export const Sidebar = ({
 
   const filterRoutesByRole = (
     routes: RouteConfig[],
-    role: number
+    role: number,
   ): RouteConfig[] => {
     return routes.reduce((acc: RouteConfig[], route: RouteConfig) => {
       if (route.role?.includes(role)) {
@@ -39,30 +40,41 @@ export const Sidebar = ({
   const currentPath = location.pathname;
 
   const route: RouteConfig[] = PRIVATE_ROUTE.filter(
-    (route) => route.protected === true
+    (route) => route.protected === true,
   );
   const routeByRole: RouteConfig[] = filterRoutesByRole(route, role as number);
   const navigate = useNavigate();
   useEffect(() => {
-    const record = String(localStorage.getItem("selectedClaim"));
+    const record = localStorage.getItem("selectedClaim");
     if (record) {
       setSelectedClaim(record);
     }
   }, []);
+
   useEffect(() => {
-    const record = Number(localStorage.getItem("role_id"));
-    if (record === 1) {
-      setSelectedClaim(PATH.allUserInformation as string);
-      setRole(ROLE.ADMIN);
-    } else if (record === 2) {
-      setSelectedClaim(PATH.pending as string);
-      setRole(ROLE.APPROVER);
-    } else if (record === 3) {
-      setSelectedClaim(PATH.approvedFinance as string);
-      setRole(ROLE.FINANCE);
-    } else if (record === 4) {
-      setSelectedClaim(PATH.myClaims as string);
-      setRole(ROLE.CLAIMER);
+    const role = Number(localStorage.getItem("role_id"));
+    setRole(role);
+    const savedClaim = localStorage.getItem("selectedClaim");
+    if (savedClaim) {
+      setSelectedClaim(savedClaim);
+      return;
+    }
+    switch (role) {
+      case ROLE.ADMIN:
+        setSelectedClaim(PATH.allUserInformation as string);
+
+        break;
+      case ROLE.APPROVER:
+        setSelectedClaim(PATH.pending as string);
+        break;
+      case ROLE.FINANCE:
+        setSelectedClaim(PATH.approvedFinance as string);
+        break;
+      case ROLE.CLAIMER:
+        setSelectedClaim(PATH.myClaims as string);
+        break;
+      default:
+        break;
     }
   }, []);
 

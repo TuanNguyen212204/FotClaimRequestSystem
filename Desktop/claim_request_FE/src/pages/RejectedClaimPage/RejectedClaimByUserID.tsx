@@ -14,6 +14,7 @@ import UserClaimDetailsModal from "@components/ui/claimer/UserClaimDetails";
 import StatusTag from "@components/ui/StatusTag/StatusTag";
 import { title } from "process";
 import { Claim } from "@/types/Claim";
+import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
 const RejectedClaimByUserID = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -157,10 +158,16 @@ const RejectedClaimByUserID = () => {
       title: "Action",
       cell: ({ value }) => (
         <>
-          <EyeIcon
-            className={styles.icon}
-            onClick={() => handleViewDetail(value as string)}
-          />
+          <Tooltip
+            text="View Detail"
+            placement="top"
+            // text={t("view_detail_tooltip")}
+          >
+            <EyeIcon
+              className="cursor-pointer"
+              onClick={() => handleViewDetail(value as string)}
+            />
+          </Tooltip>
           <UserClaimDetailsModal
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}

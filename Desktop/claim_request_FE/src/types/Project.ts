@@ -4,5 +4,6 @@ export interface Project {
   start_date: string;
   end_date: string;
   project_status: number;
-  project_managers: string;    
-} 
+  project_managers: string;
+  status: string;
+}

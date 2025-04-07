@@ -110,7 +110,7 @@ export const AssignProject: React.FC<AssignProjectProps> = ({
 
   return (
     <div>
-      <div style={{ marginTop: "50px" }}>
+      <div className="mt-3">
         <div className="mx-auto rounded-xl bg-white pr-0 pb-5 shadow-xl">
           <button
             onClick={() => handleCancel()}
@@ -118,7 +118,7 @@ export const AssignProject: React.FC<AssignProjectProps> = ({
           >
             <X />
           </button>
-          <h1 className="mb-6 text-center text-3xl font-bold">
+          <h1 className={`mb-6 text-center text-3xl font-bold ${styles.title}`}>
             {t("allUserInformation.assignUser.title")}
           </h1>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">

@@ -1,8 +1,9 @@
 {
-    "Search": "Search",
-    "Hello": "Hello",
-    "mark_all_as_read": "Mark All As Read",
-    "clear_all": "Clear All",
-    "notification": "Notification",
-    "no_notification": "No Notification"
+  "Search": "Search",
+  "Hello": "Hello",
+  "mark_all_as_read": "Mark All As Read",
+  "clear_all": "Clear All",
+  "no_notification": "Notification",
+  "profile": "Profile",
+  "logout": "Logout"
 }

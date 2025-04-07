@@ -14,6 +14,7 @@ import UserClaimDetailsModal from "@components/ui/claimer/UserClaimDetails";
 import StatusTag from "@components/ui/StatusTag/StatusTag";
 import { useTranslation } from "react-i18next";
 import { Claim } from "@/types/Claim";
+import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
 
 const ApprovedClaimByUserID = () => {
   const { t } = useTranslation("approvedClaim");
@@ -133,11 +134,17 @@ const ApprovedClaimByUserID = () => {
       dataIndex: "request_id",
       title: t("action_label"),
       cell: ({ value }) => (
-        <>
-          <EyeIcon
-            className="cursor-pointer"
-            onClick={() => handleViewDetail(value as string)}
-          />
+        <div className="cursor-pointer">
+          <Tooltip
+            // text={t("view_detail_tooltip")}
+            placement="top"
+            text="View Detail"
+          >
+            <EyeIcon
+              onClick={() => handleViewDetail(value as string)}
+              className="cursor-pointer"
+            />
+          </Tooltip>
           <UserClaimDetailsModal
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
@@ -145,7 +152,7 @@ const ApprovedClaimByUserID = () => {
             currentPage={currentPage.toString()}
             limit={limit.toString()}
           />
-        </>
+        </div>
       ),
     },
   ];

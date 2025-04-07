@@ -94,7 +94,7 @@ export default function Herro() {
   };
 
   const heroBgImage =
-    "url('https://s3-alpha-sig.figma.com/img/ece8/81e1/c879b3ca7917216b0433807c9e221046?Expires=1743984000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=DA2gYtBvf1STGdOtQiFLttNoLII9PdebMuILxsAMj1y6EloVOEfIKy2rK8~BLPphs2Geew1qOSqROfEEFaMomwRho~7VVgoTA6uJuIxHPU0NhM2IoSa1Piwv34utNIVU116VAdM3O-mco-bSX~GyA1oDFSgA5KLt-aoxTNKFP8octCa5-16mQZo69OgFtPco2juGTIHl-fF9usAw31bAhE-1dVkqdohRl94WVwWwe~bG1NC0lb8HlNFf~rIwaMvceGyRpirOvjG8DJbsgPOtZ8vL0LTOJ0YqubXG-AfgnrxSYUdYFi6q~DkNi6K4JiN1sTXnQPeTzdp7HRMymkBexg__')";
+    "url('https://s3-alpha-sig.figma.com/img/ece8/81e1/c879b3ca7917216b0433807c9e221046?Expires=1745193600&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=WyRqje5jKYG-S2mMjoiEr3sL8LoVm3GmE3YGB7svypeKow2Aqb1fEcnrPCOUt3QITnpL6ZayzhvmBdtLEsS9~qXxPew0dDW7C97qHQuBW2-xgS67cOJzx4fGeWvJWlG9u-c9YOJ2jAJrunSg3AVWkAUZ9bz029db1u-hGhBjdf4ZaGEYy9uEl82K5N~puStkjCYRzu0SCLYJped9dqbLjIS~hY5HyRuwgnwVrYqYg5yiVbSIOC4jqwKQgcFi0Q4U0tl010tak-ytS8~nUJjpdnzEjqDtJlQlwjCqyYoxhCGu~iW2mHpCcugyJOzIOzrnVTUr8G70rF~3QZln5QrqfA__')";
 
   const overlayVariants: Variants = {
     hidden: { opacity: 0 },

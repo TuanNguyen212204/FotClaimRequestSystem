@@ -28,12 +28,14 @@
 .icon {
   font-size: 25px;
   cursor: pointer;
+  color: white;
 }
 
 .username {
   font-size: 20px;
   font-weight: 600;
 }
+
 .logoImage {
   top: 0;
   left: 0;
@@ -53,7 +55,6 @@
   font-size: 12px;
   font-weight: normal;
 }
-
 
 .dropdown {
   z-index: 1000;
@@ -108,7 +109,6 @@
   font-weight: normal;
   color: #9a9a9a;
 }
-
 
 .unread {
   background-color: #ffffff;
@@ -179,14 +179,12 @@
   background-color: #f0f0f0;
 }
 
-
-
 .threeDots {
-  position: absolute; 
-  right: 0; 
-  top: 0; 
-  transform: translate(-75%, 75%) rotate(90deg); 
-  font-size: 16px; 
+  position: absolute;
+  right: 0;
+  top: 0;
+  transform: translate(-75%, 75%) rotate(90deg);
+  font-size: 16px;
   color: #333;
   cursor: pointer;
 }
@@ -199,18 +197,27 @@
   display: flex;
 }
 
-
 .redDot {
   width: 8px;
   height: 8px;
   background-color: rgb(211, 0, 0);
-  border-radius: 50%; 
-  margin-left: 8px; 
+  border-radius: 50%;
+  margin-left: 8px;
 }
+
 .avatarDropdown {
   position: relative;
   display: flex;
   align-items: center;
+}
+
+.avatarImage {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+  border: 2px solid #ffffff;
 }
 
 .avatarDropdownMenu {
@@ -267,7 +274,6 @@
 .logoutItem:hover {
   background-color: rgba(163, 163, 163, 0.64);
   border-radius: 8px;
-  /* color: rgb(255, 255, 255) */
   color: #333;
 }
 
