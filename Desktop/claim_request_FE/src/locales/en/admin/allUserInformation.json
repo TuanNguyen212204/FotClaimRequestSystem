@@ -1,5 +1,18 @@
 {
   "allUserInformation": {
+    "title": "Staff Information",
+    "description": "The staff information system manages user accounts and project assignments",
+    "welcome_message": "Welcome back {username} to the system!",
+    "no_permission_change_status": "You don't have permission to change this user status!",
+    "no_permission_assign": "You don't have permission to assign this user!",
+    "no_permission_update": "You don't have permission to update this user!",
+    "no_permission": "Don't have permission",
+    "assign_project": "Assign project",
+    "user_disabled": "This user is disabled",
+    "update_user": "Update user",
+    "create_success": "Create user successfully!",
+    "update_success": "User updated successfully!",
+    "create_failed": "Create user failed!",
     "table": {
       "fullName": "Full Name",
       "userName": "Username",
@@ -9,9 +22,42 @@
       "status": "Status",
       "assign": "Assign",
       "action": "Action",
-      "role": "Role"
+      "role": "Role",
+      "addNew": "Add New",
+      "noData": "No Data"
     },
     "filter": "Filter By",
+    "filterStatuses": {
+      "all": "All"
+    },
+    "roles": {
+      "admin": "Admin",
+      "approver": "Approver",
+      "finance": "Finance",
+      "claimer": "Claimer"
+    },
+    "departments": {
+      "Development": "Development",
+      "DevOps": "DevOps",
+      "Finance": "Finance",
+      "Business Analysis": "Business Analysis",
+      "Business Manager": "Business Manager",
+      "QC/QA": "QC/QA",
+      "Project Manager": "Project Manager"
+    },
+    "jobRanks": {
+      "Intern": "Intern",
+      "Fresher": "Fresher",
+      "Junior Developer": "Junior Developer",
+      "Mid-Level Developer": "Mid-Level Developer",
+      "Senior Developer": "Senior Developer",
+      "Lead Engineer": "Lead Engineer"
+    },
+    "placeholders": {
+      "selectRoleID": "Select Role ID",
+      "selectDepartment": "Select Department",
+      "selectJobRank": "Select Job Rank"
+    },
     "createUser": {
       "title": "Create User",
       "fullName": "Full Name",
@@ -24,13 +70,13 @@
       "validation": {
         "fullName": "Full name is required",
         "email": "Email is required",
-        "department": "Deparment is required",
+        "department": "Department is required",
         "salary": "Salary is required",
         "roleID": "Role ID is required",
         "jobRank": "Job Rank is required",
         "minLength": "Must be at least 3 characters",
         "maxLength": "Must be at most 50 characters",
-        "salaryMessage": "Salary must greater than 0 "
+        "salaryMessage": "Salary must greater than 0"
       }
     },
     "updateUser": {
@@ -44,7 +90,7 @@
       "validation": {
         "fullName": "Full name is required",
         "email": "Email is required",
-        "department": "Deparment is required",
+        "department": "Department is required",
         "roleID": "Role ID is required",
         "jobRank": "Job Rank is required"
       }
@@ -58,6 +104,9 @@
       "projectStatus": "Project Status"
     },
     "buttonCreate": "Submit",
-    "buttonUpdate": "Update"
+    "buttonUpdate": "Update",
+    "fetch_department_error": "Failed to fetch departments",
+    "fetch_data_error": "Failed to fetch data",
+    "toggle_status_error": "Failed to toggle user status"
   }
 }

@@ -1,0 +1,16 @@
+{
+  "toggle": {
+    "enableUser": "Enable User",
+    "disableUser": "Disable User",
+    "enableAction": "enable",
+    "disableAction": "disable",
+    "confirmMessage": "Are you sure you want to {action} this user?",
+    "cancelButton": "Cancel",
+    "confirmButton": "Confirm",
+    "toast": {
+      "success": "Update status successful!",
+      "error": "Update status failed!",
+      "permissionError": "You don't have permission to change this user status!"
+    }
+  }
+}

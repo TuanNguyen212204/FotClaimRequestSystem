@@ -25,6 +25,7 @@ import { useTranslation } from "react-i18next";
 import { UpdateProject } from "../Project/UpdateProject";
 import { PATH } from "@/constant/config";
 import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
+
 const ProjectInformation: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const project = useSelector(selectAllProject) || [];
@@ -180,7 +181,9 @@ const ProjectInformation: React.FC = () => {
             value === 1 ? styles.statusActive : styles.statusInactive
           }`}
         >
-          {value === 1 ? "Active" : "Inactive"}
+          {value === 1
+            ? t("projectInformation.filterStatuses.active")
+            : t("projectInformation.filterStatuses.inactive")}
         </span>
       ),
     },
@@ -191,7 +194,10 @@ const ProjectInformation: React.FC = () => {
       cell: ({ value }) => {
         return (
           <div className={styles.button_container}>
-            <Tooltip text="Update Project" placement="top">
+            <Tooltip
+              text={t("projectInformation.updateProject.title")}
+              placement="top"
+            >
               <button
                 className={`${styles.icon_button} ${styles.editButton}`}
                 onClick={() => handleUpdate(value as string)}
@@ -208,10 +214,10 @@ const ProjectInformation: React.FC = () => {
 
   return (
     <div>
-      <h1 className="m-3 p-0">Project Information</h1>
-      <p className="m-3 p-0">
-        The project information system manages project and project assignments
-      </p>
+      <h1 className={`${styles.title} m-3 p-0`}>
+        {t("projectInformation.title")}
+      </h1>
+      <p className="m-3 p-0">{t("projectInformation.description")}</p>
       {isModalOpen && (
         <div className={styles.editModal}>
           <div>
@@ -232,14 +238,20 @@ const ProjectInformation: React.FC = () => {
 
       <div className="mt-5.5 ml-3 flex items-center">
         <span className="mr-2 text-xl font-bold text-gray-700">
-          Filter by status:
+          {t("projectInformation.filter")}:
         </span>
         <div className="relative ml-1 inline-block text-left">
           <div
             onClick={toggleDropdown}
             className="flex items-center justify-between rounded-md border bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-100 focus:outline-none"
           >
-            <span>{selectedStatus}</span>
+            <span>
+              {selectedStatus === "All"
+                ? t("projectInformation.filterStatuses.all")
+                : selectedStatus === "Active"
+                  ? t("projectInformation.filterStatuses.active")
+                  : t("projectInformation.filterStatuses.inactive")}
+            </span>
             <ArrowDown className="ml-2 h-4 w-4" />
           </div>
 
@@ -253,10 +265,10 @@ const ProjectInformation: React.FC = () => {
                     className="block w-4/5 px-4 py-2 text-left text-sm text-black hover:bg-gray-200"
                   >
                     {status === "all"
-                      ? "All"
+                      ? t("projectInformation.filterStatuses.all")
                       : status === "1"
-                        ? "Active"
-                        : "Inactive"}
+                        ? t("projectInformation.filterStatuses.active")
+                        : t("projectInformation.filterStatuses.inactive")}
                   </div>
                 ))}
               </div>
@@ -265,10 +277,8 @@ const ProjectInformation: React.FC = () => {
         </div>
       </div>
 
-      {/* <FilterStatus /> */}
       <div className={styles.tableContainer}>
         <TableComponent
-          // ref={tableRef as any}
           isHaveCheckbox={false}
           columns={columns as Column<DataRecord>[]}
           dataSource={dataSource}

@@ -28,18 +28,6 @@ const ApprovedClaimByUserID = () => {
   const [selectedClaim, setSelectedClaim] = useState<string>("");
   const [limit] = useState(5);
 
-  // useEffect(() => {
-  //   setLoading(true);
-  //   const fetchData = async () => {
-  //     await dispatch(
-  //       fetchClaimByUserAsync({ page: currentPage, status: "APPROVED" }),
-  //     );
-  //     setLoading(false);
-  //     dispatch(fetchTotalClaimByUserAsync({ status: "APPROVED" }));
-  //   };
-  //   fetchData();
-  //   console.log(totalPage);
-  // }, [currentPage, dispatch, totalPage]);
   useEffect(() => {
     setLoading(true);
     const fetchData = async () => {
@@ -61,6 +49,7 @@ const ApprovedClaimByUserID = () => {
       },
     );
   };
+
   const handleViewDetail = (id: string) => {
     setLoading(true);
     setTimeout(() => {
@@ -135,11 +124,7 @@ const ApprovedClaimByUserID = () => {
       title: t("action_label"),
       cell: ({ value }) => (
         <div className="cursor-pointer">
-          <Tooltip
-            // text={t("view_detail_tooltip")}
-            placement="top"
-            text="View Detail"
-          >
+          <Tooltip text={t("view_detail_tooltip")} placement="top">
             <EyeIcon
               onClick={() => handleViewDetail(value as string)}
               className="cursor-pointer"
@@ -174,29 +159,11 @@ const ApprovedClaimByUserID = () => {
   }));
 
   return (
-    // <div className={styles.container}>
-    //   <div>
-    //     <h1>Approved Claim</h1>
-    //   </div>
-    //   <div>
-    //     <TableComponent
-    //       columns={columns}
-    //       dataSource={dataSource}
-    //       loading={loading}
-    //       pagination={true}
-    //       name="My Claims"
-    //       totalPage={totalPage}
-    //       onPageChange={handlePageChange}
-    //     />
-    //   </div>
-    // </div>
     <>
       <div className="mt-2 p-0">
         <div className="mb-10 ml-5">
-          <h1 className="m-0 p-0">Approved Claims</h1>
-          <p className="m-0 p-0">
-            Here you can view your approved claims and their statuses.
-          </p>
+          <h1 className="m-0 p-0">{t("approved_claims_title")}</h1>
+          <p className="m-0 p-0">{t("description")}</p>
         </div>
         <div className={`${styles.tableContainer}`}>
           <TableComponent
@@ -205,7 +172,7 @@ const ApprovedClaimByUserID = () => {
             dataSource={dataSource}
             loading={loading}
             pagination={true}
-            name="My Claims"
+            name={t("approved_claims_title")}
             totalPage={totalPage}
             onPageChange={handlePageChange}
           />

@@ -5,8 +5,8 @@
     "update": "Update Claim"
   },
   "header": {
-    "preparedBy": "Prepare By: {{name}}",
-    "claimStatus": "Claim Status: {{status}}"
+    "preparedBy": "Prepare By: {name}",
+    "claimStatus": "Claim Status: {status}"
   },
   "staffInfo": {
     "nameLabel": "Staff Name",

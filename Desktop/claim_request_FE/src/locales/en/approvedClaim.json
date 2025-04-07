@@ -1,5 +1,6 @@
 {
   "approved_claims_title": "Approved Claims",
+  "description": "Here you can view your approved claims and their statuses.",
   "project_id_label": "Project ID",
   "project_name_label": "Project Name",
   "time_duration_label": "Time Duration",
@@ -9,5 +10,6 @@
   "action_label": "Action",
   "hours_suffix": "hours",
   "no_data": "N/A",
-  "language": "en"
+  "language": "en",
+  "view_detail_tooltip": "View Detail"
 }

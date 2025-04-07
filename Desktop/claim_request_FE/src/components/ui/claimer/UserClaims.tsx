@@ -14,8 +14,8 @@ import UserClaimDetailsModal from "./UserClaimDetails";
 import StatusTag from "../StatusTag/StatusTag";
 import { useTranslation } from "react-i18next";
 import { Claim } from "@/types/Claim";
-import { C } from "node_modules/framer-motion/dist/types.d-B50aGbjN";
 import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
+
 const UserClaims = () => {
   const { t } = useTranslation("userClaims");
   const dispatch = useDispatch<AppDispatch>();
@@ -125,11 +125,7 @@ const UserClaims = () => {
       title: t("action_label"),
       cell: ({ value }) => (
         <div className="flex items-center justify-center gap-2">
-          <Tooltip
-            // text={t("view_detail_tooltip")}
-            placement="top"
-            text="View Detail"
-          >
+          <Tooltip text={t("view_detail_tooltip")} placement="top">
             <EyeIcon
               className="cursor-pointer"
               onClick={() => handleViewDetail(value as string)}
@@ -167,10 +163,8 @@ const UserClaims = () => {
     <>
       <div className="mt-2 p-0">
         <div className="mb-10 ml-5">
-          <h1 className="m-0 p-0">My Claims</h1>
-          <p className="m-0 p-0">
-            Here you can view all your claims and their statuses.
-          </p>
+          <h1 className="m-0 p-0">{t("my_claims_title")}</h1>
+          <p className="m-0 p-0">{t("description")}</p>
         </div>
         <div className={`${styles.tableContainer}`}>
           <TableComponent
@@ -179,7 +173,7 @@ const UserClaims = () => {
             dataSource={dataSource}
             loading={loading}
             pagination={true}
-            name="My Claims"
+            name={t("my_claims_title")}
             totalPage={totalPage}
             onPageChange={handlePageChange}
           />

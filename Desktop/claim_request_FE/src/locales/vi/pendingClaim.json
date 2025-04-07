@@ -1,5 +1,6 @@
 {
   "pending_claims_title": "Yêu cầu đang chờ",
+  "description": "Tại đây bạn có thể xem tất cả các yêu cầu đang chờ và trạng thái của chúng.",
   "project_id_label": "Mã dự án",
   "project_name_label": "Tên dự án",
   "time_duration_label": "Thời gian",
@@ -9,5 +10,6 @@
   "action_label": "Hành động",
   "hours_suffix": "giờ",
   "no_data": "Không có dữ liệu",
-  "language": "vi"
+  "language": "vi",
+  "view_detail_tooltip": "Xem chi tiết yêu cầu"
 }

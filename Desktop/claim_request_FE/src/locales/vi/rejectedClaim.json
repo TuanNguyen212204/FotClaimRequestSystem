@@ -1,5 +1,6 @@
 {
   "rejected_claims_title": "Yêu cầu bị từ chối",
+  "description": "Tại đây bạn có thể xem các yêu cầu bị từ chối và trạng thái của chúng.",
   "project_id_label": "Mã dự án",
   "project_name_label": "Tên dự án",
   "time_duration_label": "Thời gian",
@@ -8,5 +9,7 @@
   "claim_status_label": "Trạng thái yêu cầu",
   "action_label": "Hành động",
   "hours_suffix": "giờ",
-  "no_data": "Không có dữ liệu"
+  "no_data": "Không có dữ liệu",
+  "view_detail_tooltip": "Xem chi tiết",
+  "language": "vi"
 }

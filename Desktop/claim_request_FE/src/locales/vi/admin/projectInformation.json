@@ -1,6 +1,7 @@
 {
   "projectInformation": {
     "title": "Thông Tin Dự Án",
+    "description": "Hệ thống thông tin dự án quản lý dự án và phân công dự án",
     "table": {
       "projectID": "Mã Dự Án",
       "projectName": "Tên Dự Án",
@@ -10,22 +11,48 @@
       "action": "Thao tác"
     },
     "filter": "Lọc theo trạng thái",
+    "filterStatuses": {
+      "all": "Tất cả",
+      "active": "Đang hoạt động",
+      "inactive": "Không hoạt động"
+    },
     "createProject": {
+      "title": "Tạo Dự Án",
       "projectID": "Mã Dự Án",
       "projectName": "Tên Dự Án",
       "startDate": "Ngày Bắt Đầu",
       "endDate": "Ngày Kết Thúc",
       "projectStatus": "Trạng Thái Dự Án",
-      "selectStatus": "Chọn trạng thái",
-      "inProgress": "Đang thực hiện",
-      "completed": "Đã hoàn thành"
+      "selectStatus": "Chọn trạng thái dự án",
+      "active": "Đang hoạt động",
+      "inactive": "Không hoạt động",
+      "submitButton": "Tạo",
+      "success": "Tạo dự án thành công!",
+      "error": "Tạo dự án thất bại!",
+      "checking": "Đang kiểm tra...",
+      "submitting": "Đang tạo..."
+    },
+    "updateProject": {
+      "title": "Cập Nhật Dự Án",
+      "projectName": "Tên Dự Án",
+      "startDate": "Ngày Bắt Đầu",
+      "endDate": "Ngày Kết Thúc",
+      "projectStatus": "Trạng Thái Dự Án",
+      "selectStatus": "Chọn trạng thái dự án",
+      "active": "Đang hoạt động",
+      "inactive": "Không hoạt động",
+      "submitButton": "Cập Nhật",
+      "success": "Cập nhật dự án thành công!",
+      "error": "Cập nhật dự án thất bại.",
+      "submitting": "Đang cập nhật..."
     },
     "validation": {
       "projectID": "Mã Dự Án là bắt buộc",
       "projectName": "Tên Dự Án là bắt buộc",
       "startDate": "Ngày Bắt Đầu là bắt buộc",
       "endDate": "Ngày Kết Thúc là bắt buộc",
-      "projectStatus": "Trạng Thái Dự Án là bắt buộc"
+      "projectStatus": "Trạng Thái Dự Án là bắt buộc",
+      "endDateAfterStartDate": "Ngày Kết Thúc phải sau Ngày Bắt Đầu"
     }
   }
 }

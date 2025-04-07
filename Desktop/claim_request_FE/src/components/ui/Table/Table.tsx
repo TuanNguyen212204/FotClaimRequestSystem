@@ -13,6 +13,8 @@ import React from "react";
 import { LoadingProvider } from "../Loading/LoadingContext";
 import LoadingOverlay from "../Loading/LoadingOverlay";
 import { Plus } from "lucide-react";
+import { useTranslation } from "react-i18next";
+
 export type Column<T> = {
   key?: string;
   dataIndex?: keyof T | string;
@@ -39,7 +41,6 @@ export type TableComponentProps<T extends DataRecord> = {
   pagination?: boolean;
   name?: string;
   sortConfig?: SortConfig;
-  // pageLength?: number;
   totalPage?: number;
   isHaveCheckbox?: boolean;
   createButton?: boolean;
@@ -76,7 +77,6 @@ const TableComponent = forwardRef(
       isHaveCheckbox,
       createButton,
       totalPage = 3,
-      // pageLength = 10,
       onCreateButtonClick,
       onPageChange,
     }: TableComponentProps<T>,
@@ -85,6 +85,7 @@ const TableComponent = forwardRef(
       getSortedData: () => T[];
     }>,
   ) => {
+    const { t } = useTranslation("allUserInformation");
     const [currentPage, setCurrentPage] = useState(1);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [selectedStatus, setSelectedStatus] = useState<string>("All");
@@ -120,6 +121,7 @@ const TableComponent = forwardRef(
     const totalPages = totalPage;
 
     const paginatedData = sortedData;
+
     useEffect(() => {
       setCurrentPage(1);
     }, [selectedStatus]);
@@ -132,6 +134,7 @@ const TableComponent = forwardRef(
         }
       }
     };
+
     const toggleDropdown = () => {
       setIsDropdownOpen(!isDropdownOpen);
     };
@@ -152,6 +155,7 @@ const TableComponent = forwardRef(
         return newCheckedItems;
       });
     };
+
     const handleSort = (columnKey: string) => {
       setSortColumn(columnKey);
       setSortOrder((prev) => {
@@ -161,6 +165,7 @@ const TableComponent = forwardRef(
         return "asc";
       });
     };
+
     const handleSelectAll = () => {
       const allChecked = checkedItems.size === dataSource.length;
       if (allChecked) {
@@ -169,6 +174,7 @@ const TableComponent = forwardRef(
         setCheckedItems(new Set(dataSource.map((record) => record.id || "")));
       }
     };
+
     const checkboxRef = useRef<HTMLInputElement>(null);
     useEffect(() => {
       if (checkboxRef.current) {
@@ -193,6 +199,7 @@ const TableComponent = forwardRef(
         });
       },
     }));
+
     useEffect(() => {
       if (loading) {
         setIsLoading(true);
@@ -204,6 +211,7 @@ const TableComponent = forwardRef(
         setIsLoading(false);
       }
     }, [loading]);
+
     useEffect(() => {
       setCurrentPage(1);
     }, [totalPages]);
@@ -212,9 +220,8 @@ const TableComponent = forwardRef(
       return (
         <div className="flex min-h-[300px] items-center justify-center">
           <LoadingProvider>
-            <LoadingOverlay></LoadingOverlay>
+            <LoadingOverlay />
           </LoadingProvider>
-          {/* <h1>Loading...</h1> */}
         </div>
       );
     }
@@ -222,39 +229,6 @@ const TableComponent = forwardRef(
     return (
       <div className={styles.container}>
         <div style={{ display: "flex" }}>
-          {/* <section className={styles.filter_section}>
-            <div className={styles.filterStatusP}>
-              <p>Filter By {name}:</p>
-            </div>
-            <div
-              className="relative inline-block text-left"
-              style={{ marginTop: "15px", marginLeft: "15px" }}
-            >
-              <button
-                onClick={toggleDropdown}
-                className="flex items-center justify-between px-4 py-2 text-sm font-medium text-gray-700 bg-white border rounded-md shadow-sm hover:bg-gray-100 focus:outline-none"
-              >
-                <span>{selectedStatus}</span>
-                <ArrowDown className="w-4 h-4 ml-2" />
-              </button>
-
-              {isDropdownOpen && (
-                <div className="absolute right-0 z-10 mt-2 origin-top-right bg-white border border-gray-300 rounded-md shadow-lg w-48">
-                  <div className="py-1">
-                    {uniqueStatuses.map((status) => (
-                      <button
-                        key={status}
-                        onClick={() => handleStatusSelect(status)}
-                        className="block px-4 py-2 text-sm text-gray-700 w-full text-left hover:bg-gray-100"
-                      >
-                        {status}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          </section> */}
           {createButton && (
             <div style={{ marginLeft: "auto" }}>
               <button
@@ -265,7 +239,9 @@ const TableComponent = forwardRef(
               >
                 <span className={styles.create_button_content}>
                   <Plus className={styles.create_button_icon} />
-                  <span className={styles.create_button_text}>Add New</span>
+                  <span className={styles.create_button_text}>
+                    {t("allUserInformation.table.addNew")}
+                  </span>
                 </span>
               </button>
             </div>
@@ -356,7 +332,7 @@ const TableComponent = forwardRef(
                       colSpan={columns.length + (isHaveCheckbox ? 1 : 0)}
                       style={{ textAlign: "center", paddingLeft: "200px" }}
                     >
-                      <h1>No Data</h1>
+                      <h1>{t("allUserInformation.table.noData")}</h1>
                     </td>
                   </tr>
                 )}

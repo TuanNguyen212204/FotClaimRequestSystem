@@ -17,22 +17,25 @@ import {
 import { LoadingProvider } from "@/components/ui/Loading/LoadingContext";
 import LoadingOverlay from "@/components/ui/Loading/LoadingOverlay";
 import { ApiResponseNoGeneric } from "@/types/ApiResponse";
-import { delay } from "@/utils/delay";
 import { useTranslation } from "react-i18next";
 import Input from "@/components/ui/Input/Input";
+
 interface CreateUserProps {
   openModal: boolean;
   setOpenModal: (value: boolean) => void;
 }
+
 type Department = {
   id: string;
   name: string;
 };
+
 type JobRank = {
   id: number;
   name: string;
   ot_rate: string;
 };
+
 interface Option {
   label: string;
   value: string | number;
@@ -48,12 +51,10 @@ interface SelectProps {
   register?: any;
   className?: string;
 }
-const options: Option[] = [
-  { label: "Admin", value: "1" },
-  { label: "Approver", value: "2" },
-  { label: "Finance", value: "3" },
-  { label: "Claimer", value: "4" },
-];
+
+type DepartmentList = Department[];
+type JobRankList = JobRank[];
+
 export const Select: React.FC<SelectProps> = ({
   options,
   value,
@@ -92,8 +93,6 @@ export const Select: React.FC<SelectProps> = ({
   );
 };
 
-type DepartmentList = Department[];
-type JobRankList = JobRank[];
 export const CreateUser: React.FC<CreateUserProps> = ({
   openModal,
   setOpenModal,
@@ -112,7 +111,14 @@ export const CreateUser: React.FC<CreateUserProps> = ({
   } = useForm<User>();
   const [department, setDepartment] = useState<DepartmentList>([]);
   const [jobRank, setJobRank] = useState<JobRankList>([]);
-  // Chỗ này để fetch api lấy list department từ BE về
+
+  const options: Option[] = [
+    { label: t("allUserInformation.roles.admin"), value: "1" },
+    { label: t("allUserInformation.roles.approver"), value: "2" },
+    { label: t("allUserInformation.roles.finance"), value: "3" },
+    { label: t("allUserInformation.roles.claimer"), value: "4" },
+  ];
+
   const fetchDepartment = async () => {
     try {
       const response =
@@ -122,7 +128,7 @@ export const CreateUser: React.FC<CreateUserProps> = ({
       console.error("Fetch department error:", error);
     }
   };
-  // Chỗ này fetch api lấy list job rank từ BE về
+
   const fetchJobRank = async () => {
     try {
       const response =
@@ -137,18 +143,20 @@ export const CreateUser: React.FC<CreateUserProps> = ({
     fetchDepartment();
     fetchJobRank();
   }, []);
+
   useEffect(() => {
     console.log(jobRank);
     console.log(department);
   }, [jobRank, department]);
+
   const handleCreateUser = async (data: any) => {
     try {
-      const response = httpClient.post<ApiResponseNoGeneric>(
+      const response = await httpClient.post<ApiResponseNoGeneric>(
         "/admin/create-staff",
         data,
       );
-      if ((await response).status === 200) {
-        toast.success("Create user successfully!");
+      if (response.status === 200) {
+        toast.success(t("allUserInformation.create_success"));
         reset();
         setLoading(false);
         navigate(PATH.allUserInformation);
@@ -160,12 +168,12 @@ export const CreateUser: React.FC<CreateUserProps> = ({
         if (status === 400) {
           toast.error(data.message);
         } else {
-          toast.error("Create user failed!");
+          toast.error(t("allUserInformation.create_failed"));
         }
       } else if (error instanceof Error) {
         toast.error(error.message);
       } else {
-        toast.error("Create user failed!");
+        toast.error(t("allUserInformation.create_failed"));
       }
     }
   };
@@ -183,9 +191,11 @@ export const CreateUser: React.FC<CreateUserProps> = ({
     console.log(requestBody);
     handleCreateUser(requestBody);
   };
+
   const handleCancel = () => {
     setOpenModal(false);
   };
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -331,15 +341,12 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                   }),
                 }}
                 options={department.map((a) => ({
-                  label: a.name,
+                  label: t(`allUserInformation.departments.${a.name}`),
                   value: a.id,
                 }))}
-                // register={{
-                //   ...register("department", {
-                //     required: "Department is required",
-                //   }),
-                // }}
-                placeholder="Select Department"
+                placeholder={t(
+                  "allUserInformation.placeholders.selectDepartment",
+                )}
                 onChange={(value) => console.log(value)}
                 className="mt-1 h-11 w-90 rounded-lg border border-gray-300 p-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               />
@@ -373,10 +380,10 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                     required: t(
                       "allUserInformation.createUser.validation.salary",
                     ),
-                    minLength: {
+                    min: {
                       value: 0,
                       message: t(
-                        "allUserInformation.createUser.validation.salaryMesssage",
+                        "allUserInformation.createUser.validation.salaryMessage",
                       ),
                     },
                   })}
@@ -404,22 +411,17 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                   </div>
                 </div>
               </label>
-              {/* <select
-                id="role_id"
-                {...register("role_id", { required: "Role ID is required" })}
-                className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
-              >
-                <option value="">Select Role</option>
-                <option value="1">1 - Admin</option>
-                <option value="2">2 - Approver</option>
-                <option value="3">3 - Finance</option>
-                <option value="4">4 - Claimer</option>
-              </select> */}
               <Select
                 options={options}
-                register={register("role_id")}
+                register={{
+                  ...register("role_id", {
+                    required: t(
+                      "allUserInformation.createUser.validation.roleID",
+                    ),
+                  }),
+                }}
+                placeholder={t("allUserInformation.placeholders.selectRoleID")}
                 onChange={(value) => console.log(value)}
-                placeholder="Select Role ID"
                 className="mt-1 h-11 w-90 rounded-lg border border-gray-300 p-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               />
               {errors.role_id && (
@@ -443,23 +445,11 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                   </div>
                 </div>
               </label>
-              {/* <select
-                id="job_rank"
-                {...register("job_rank", {
-                  required: "Department is required",
-                })}
-                className="mt-1 w-4/5 px-4 py-1.5 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
-              >
-                <option value="">Select Job Rank</option>
-                {jobRank &&
-                  jobRank.map((a) => (
-                    <option key={a.id} value={a.id}>
-                      {a.name} - {a.ot_rate}
-                    </option>
-                  ))}
-              </select> */}
               <Select
-                options={jobRank.map((a) => ({ label: a.name, value: a.id }))}
+                options={jobRank.map((a) => ({
+                  label: t(`allUserInformation.jobRanks.${a.name}`),
+                  value: a.id,
+                }))}
                 register={{
                   ...register("job_rank", {
                     required: t(
@@ -467,7 +457,7 @@ export const CreateUser: React.FC<CreateUserProps> = ({
                     ),
                   }),
                 }}
-                placeholder="Select Job Rank"
+                placeholder={t("allUserInformation.placeholders.selectJobRank")}
                 onChange={(value) => console.log(value)}
                 className="mt-1 h-11 w-90 rounded-lg border border-gray-300 p-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               />
@@ -479,7 +469,7 @@ export const CreateUser: React.FC<CreateUserProps> = ({
               )}
             </div>
 
-            <div className={`${styles.update_button_container} `}>
+            <div className={`${styles.update_button_container}`}>
               <button type="submit" className={styles.update_button}>
                 {t("allUserInformation.buttonCreate")}
               </button>

@@ -1,6 +1,7 @@
 {
   "projectInformation": {
     "title": "Project Information",
+    "description": "The project information system manages project and project assignments",
     "table": {
       "projectID": "Project ID",
       "projectName": "Project Name",
@@ -10,22 +11,48 @@
       "action": "Action"
     },
     "filter": "Filter By Status",
+    "filterStatuses": {
+      "all": "All",
+      "active": "Active",
+      "inactive": "Inactive"
+    },
     "createProject": {
+      "title": "Create Project",
       "projectID": "Project ID",
       "projectName": "Project Name",
       "startDate": "Start Date",
       "endDate": "End Date",
       "projectStatus": "Project Status",
-      "selectStatus": "Select Status",
-      "inProgress": "inProgress",
-      "completed": "Completed"
+      "selectStatus": "Select Project Status",
+      "active": "Active",
+      "inactive": "Inactive",
+      "submitButton": "Create",
+      "success": "Create project successfully!",
+      "error": "Create project failed!",
+      "checking": "Checking...",
+      "submitting": "Creating..."
+    },
+    "updateProject": {
+      "title": "Update Project",
+      "projectName": "Project Name",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "projectStatus": "Project Status",
+      "selectStatus": "Select Project Status",
+      "active": "Active",
+      "inactive": "Inactive",
+      "submitButton": "Update",
+      "success": "Project updated successfully!",
+      "error": "Failed to update project.",
+      "submitting": "Updating..."
     },
     "validation": {
       "projectID": "Project ID is required",
       "projectName": "Project Name is required",
       "startDate": "Start Date is required",
       "endDate": "End Date is required",
-      "projectStatus": "Project Status is required"
+      "projectStatus": "Project Status is required",
+      "endDateAfterStartDate": "End Date must be after Start Date"
     }
   }
 }

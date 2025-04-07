@@ -2,12 +2,14 @@
   "finance": {
     "title": "Approved Claims",
     "table": {
+      "name": "Claims",
       "userName": "User Name",
       "projectName": "Project Name",
       "timeDuration": "Time Duration",
       "totalHours": "Total Working Hours",
       "hours": "hours",
-      "action": "Action"
+      "action": "Action",
+      "claimStatus": "Claim Status"
     },
     "modal": {
       "title": "Claim Detail",

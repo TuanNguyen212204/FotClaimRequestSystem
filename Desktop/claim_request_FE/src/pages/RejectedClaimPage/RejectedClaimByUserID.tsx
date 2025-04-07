@@ -12,10 +12,12 @@ import { EyeIcon } from "lucide-react";
 import TableComponent, { Column, DataRecord } from "@components/ui/Table/Table";
 import UserClaimDetailsModal from "@components/ui/claimer/UserClaimDetails";
 import StatusTag from "@components/ui/StatusTag/StatusTag";
-import { title } from "process";
+import { useTranslation } from "react-i18next";
 import { Claim } from "@/types/Claim";
 import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
+
 const RejectedClaimByUserID = () => {
+  const { t } = useTranslation("rejectedClaim");
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const userClaim = useSelector(selectMyClaim);
@@ -25,36 +27,6 @@ const RejectedClaimByUserID = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedClaim, setSelectedClaim] = useState<string>("");
   const [limit] = useState(5);
-
-  // useEffect(() => {
-  //   setLoading(true);
-  //   const fetchData = async () => {
-  //     await dispatch(fetchClaimByUserAsync());
-  //     setLoading(false);
-  //   };
-  //   fetchData();
-  // }, [dispatch, currentPage]);
-  // useEffect(() => {
-  //   console.log(userClaim);
-  // }, [userClaim]);
-
-  // const handleViewDetail = (id: string) => {
-  //   setSelectedClaim(id);
-  //   setIsModalOpen(true);
-  // };
-
-  // useEffect(() => {
-  //   setLoading(true);
-  //   const fetchData = async () => {
-  //     await dispatch(
-  //       fetchClaimByUserAsync({ page: currentPage, status: "REJECTED" }),
-  //     );
-  //     setLoading(false);
-  //     dispatch(fetchTotalClaimByUserAsync({ status: "REJECTED" }));
-  //   };
-  //   fetchData();
-  //   console.log(totalPage);
-  // }, [currentPage, dispatch, totalPage]);
 
   useEffect(() => {
     setLoading(true);
@@ -88,13 +60,15 @@ const RejectedClaimByUserID = () => {
     const day = dateObj.getDate();
     const month = dateObj.getMonth() + 1;
     const year = dateObj.getFullYear();
-    return `${day}/${month}/${year}`;
+    return t("language") === "en"
+      ? `${month}/${day}/${year}`
+      : `${day}/${month}/${year}`;
   };
 
   const formatDateRange = (dateRange: any) => {
     return dateRange.replace(
       /(\d{1,2})\/(\d{1,2})\/(\d{4})/g,
-      (match, day, month, year) => {
+      (match: string, day: string, month: string, year: string) => {
         return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
       },
     );
@@ -104,17 +78,17 @@ const RejectedClaimByUserID = () => {
     {
       key: "project_id",
       dataIndex: "project_id",
-      title: "Project ID",
+      title: t("project_id_label"),
     },
     {
       key: "project_name",
       dataIndex: "project_name",
-      title: "Project Name",
+      title: t("project_name_label"),
     },
     {
       key: "time_duration",
       dataIndex: "time_duration",
-      title: "Time Duration",
+      title: t("time_duration_label"),
       cell: ({ value }: { value: string }) => {
         const formattedValue = formatDateRange(value as string);
         return <span>{formattedValue}</span>;
@@ -123,14 +97,13 @@ const RejectedClaimByUserID = () => {
     {
       key: "total_hours",
       dataIndex: "total_hours",
-      title: "Total Working Hours",
-      cell: ({ value }: { value: string }) => `${value} hours`,
+      title: t("total_working_hours_label"),
+      cell: ({ value }: { value: string }) => `${value} ${t("hours_suffix")}`,
     },
     {
       key: "submitted_date",
       dataIndex: "submitted_date",
-      title: "Submitted Date",
-
+      title: t("submitted_date_label"),
       cell: ({ value }: { value: string }) => {
         const formattedValue = formatDateRange(
           formatDateToDDMMYYYY(value as string),
@@ -141,7 +114,7 @@ const RejectedClaimByUserID = () => {
     {
       key: "claim_status",
       dataIndex: "claim_status",
-      title: "Claim Status",
+      title: t("claim_status_label"),
       cell: ({ value }: { value: unknown }) => {
         return (
           <div>
@@ -155,14 +128,10 @@ const RejectedClaimByUserID = () => {
     {
       key: "action",
       dataIndex: "request_id",
-      title: "Action",
+      title: t("action_label"),
       cell: ({ value }) => (
         <>
-          <Tooltip
-            text="View Detail"
-            placement="top"
-            // text={t("view_detail_tooltip")}
-          >
+          <Tooltip text={t("view_detail_tooltip")} placement="top">
             <EyeIcon
               className="cursor-pointer"
               onClick={() => handleViewDetail(value as string)}
@@ -179,6 +148,7 @@ const RejectedClaimByUserID = () => {
       ),
     },
   ];
+
   const dataSource: DataRecord[] = userClaim.map((claim, index) => ({
     ...claim,
     key: index,
@@ -192,27 +162,15 @@ const RejectedClaimByUserID = () => {
         ? `${formatDateToDDMMYYYY(claim.start_date)} - ${formatDateToDDMMYYYY(
             claim.end_date,
           )}`
-        : "N/A",
+        : t("no_data"),
   }));
+
   return (
-    // <div className={styles.container}>
-    //   <TableComponent
-    //     columns={columns}
-    //     dataSource={dataSource}
-    //     loading={loading}
-    //     pagination={true}
-    //     name="My Claims"
-    //     totalPage={totalPage}
-    //     onPageChange={handlePageChange}
-    //   />
-    // </div>
     <>
       <div className="mt-2 p-0">
         <div className="mb-10 ml-5">
-          <h1 className="m-0 p-0">Rejected Claims</h1>
-          <p className="m-0 p-0">
-            Here you can view your rejected claims and their statuses.
-          </p>
+          <h1 className="m-0 p-0">{t("rejected_claims_title")}</h1>
+          <p className="m-0 p-0">{t("description")}</p>
         </div>
         <div className={`${styles.tableContainer}`}>
           <TableComponent
@@ -221,7 +179,7 @@ const RejectedClaimByUserID = () => {
             dataSource={dataSource}
             loading={loading}
             pagination={true}
-            name="My Claims"
+            name={t("rejected_claims_title")}
             totalPage={totalPage}
             onPageChange={handlePageChange}
           />
@@ -230,4 +188,5 @@ const RejectedClaimByUserID = () => {
     </>
   );
 };
+
 export default RejectedClaimByUserID;

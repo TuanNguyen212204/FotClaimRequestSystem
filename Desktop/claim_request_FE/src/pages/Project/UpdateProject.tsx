@@ -7,19 +7,26 @@ import Modal from "react-modal";
 import httpClient from "@/constant/apiInstance";
 import { toast } from "react-toastify";
 import { ApiResponse } from "@/types/ApiResponse";
-import { use } from "i18next";
 import { useTranslation } from "react-i18next";
 import { Select } from "../User/CreateUser";
 import { LoadingProvider } from "@/components/ui/Loading/LoadingContext";
 import LoadingOverlay from "@/components/ui/Loading/LoadingOverlay";
+
+interface Option {
+  label: string;
+  value: string | number;
+}
+
 interface UpdateProjectProps {
   projectid: string;
   setOpenModal: (open: boolean) => void;
 }
+
 const options: Option[] = [
   { label: "Active", value: "1" },
   { label: "Inactive", value: "2" },
 ];
+
 export const UpdateProject: React.FC<UpdateProjectProps> = ({
   projectid,
   setOpenModal,
@@ -28,7 +35,6 @@ export const UpdateProject: React.FC<UpdateProjectProps> = ({
   const {
     register,
     handleSubmit,
-
     setError,
     reset,
     formState: { errors },
@@ -37,19 +43,20 @@ export const UpdateProject: React.FC<UpdateProjectProps> = ({
   const [loading, setLoading] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [project, setProject] = useState<Project | null>(null);
+
+  const statusOptions: Option[] = [
+    { label: t("projectInformation.updateProject.active"), value: "1" },
+    { label: t("projectInformation.updateProject.inactive"), value: "2" },
+  ];
+
   const handleClose = () => {
     setOpenModal(false);
   };
-  const formatDateToDDMMYYYY = (dateString: string): string => {
-    const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months start from 0
-    const year = date.getFullYear();
-    return `${day}/${month}/${year}`;
-  };
+
   const formatDateToInput = (date: string) => {
     return new Date(date).toISOString().split("T")[0]; // yyyy-mm-dd
   };
+
   const fetchProject = async () => {
     try {
       setLoading(true);
@@ -66,11 +73,12 @@ export const UpdateProject: React.FC<UpdateProjectProps> = ({
       console.log(project);
     } catch (error) {
       console.error("Fetch error:", error);
-      toast.error("Failed to load project data.");
+      toast.error(t("projectInformation.updateProject.error"));
     } finally {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     console.log(project);
   }, [project]);
@@ -83,7 +91,7 @@ export const UpdateProject: React.FC<UpdateProjectProps> = ({
     if (new Date(data.end_date) < new Date(data.start_date)) {
       setError("end_date", {
         type: "manual",
-        message: "End date must be after start date",
+        message: t("projectInformation.validation.endDateAfterStartDate"),
       });
       return;
     }
@@ -96,11 +104,11 @@ export const UpdateProject: React.FC<UpdateProjectProps> = ({
     try {
       setLoading(true);
       await httpClient.put(`/projects/${projectid}`, requestBody);
-      toast.success("Project updated successfully!");
+      toast.success(t("projectInformation.updateProject.success"));
       setOpenModal(false);
     } catch (error) {
       console.error("Update error:", error);
-      toast.error("Failed to update project.");
+      toast.error(t("projectInformation.updateProject.error"));
     } finally {
       setLoading(false);
     }
@@ -123,7 +131,7 @@ export const UpdateProject: React.FC<UpdateProjectProps> = ({
             <X />
           </button>
           <h2 className="mb-6 text-center text-3xl font-bold text-blue-700">
-            Update Project
+            {t("projectInformation.updateProject.title")}
           </h2>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
             <div className="ml-15">
@@ -136,14 +144,18 @@ export const UpdateProject: React.FC<UpdateProjectProps> = ({
                     <span>*</span>
                   </div>
                   <div className={styles.input_container}>
-                    <span>Project Name</span>
+                    <span>
+                      {t("projectInformation.updateProject.projectName")}
+                    </span>
                   </div>
                 </div>
               </label>
               <div className="relative w-4/5">
                 <BriefcaseBusiness className="absolute top-1/2 left-2 -translate-y-1/2 transform text-gray-400" />
                 <input
-                  placeholder="Enter the project name"
+                  placeholder={t(
+                    "projectInformation.updateProject.projectName",
+                  )}
                   type="text"
                   {...register("project_name", {
                     required: t("projectInformation.validation.projectName"),
@@ -165,7 +177,9 @@ export const UpdateProject: React.FC<UpdateProjectProps> = ({
                     <span>*</span>
                   </div>
                   <div className={styles.input_container}>
-                    <span> Start Date</span>
+                    <span>
+                      {t("projectInformation.updateProject.startDate")}
+                    </span>
                   </div>
                 </div>
               </label>
@@ -180,18 +194,23 @@ export const UpdateProject: React.FC<UpdateProjectProps> = ({
                   min="2025-01-01"
                 />
               </div>
+              {errors.start_date && (
+                <p className="text-sm text-red-500">
+                  {errors.start_date.message}
+                </p>
+              )}
             </div>
 
             <div className="ml-15">
               <label className="block text-sm font-medium text-gray-700">
-                End Date
+                {t("projectInformation.updateProject.endDate")}
               </label>
               <div className="relative w-4/5">
                 <Calendar className="absolute top-1/2 left-2 -translate-y-1/2 transform text-gray-400" />
                 <input
                   type="date"
                   {...register("end_date", {
-                    required: t("projectInformation.validation.startDate"),
+                    required: t("projectInformation.validation.endDate"),
                   })}
                   className="mt-1 h-6 w-5/5 rounded-lg border border-gray-300 p-2 pl-9 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                   min="2025-01-01"
@@ -206,15 +225,17 @@ export const UpdateProject: React.FC<UpdateProjectProps> = ({
 
             <div className="ml-15">
               <label className="block text-sm font-medium text-gray-700">
-                Project Status
+                {t("projectInformation.updateProject.projectStatus")}
               </label>
               <Select
-                register={register("project_status")}
-                options={options}
-                placeholder="Select Project Status"
+                register={register("project_status", {
+                  required: t("projectInformation.validation.projectStatus"),
+                })}
+                options={statusOptions}
+                placeholder={t("projectInformation.updateProject.selectStatus")}
                 onChange={(value) => console.log(value)}
                 className="mt-1 h-11 w-90 rounded-lg border border-gray-300 p-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-              ></Select>
+              />
               {errors.project_status && (
                 <p className="text-sm text-red-500">
                   {errors.project_status.message}
@@ -228,7 +249,9 @@ export const UpdateProject: React.FC<UpdateProjectProps> = ({
                 className={styles.update_button}
                 disabled={loading}
               >
-                {loading ? "Updating..." : "Update"}
+                {loading
+                  ? t("projectInformation.updateProject.submitting")
+                  : t("projectInformation.updateProject.submitButton")}
               </button>
             </div>
           </form>

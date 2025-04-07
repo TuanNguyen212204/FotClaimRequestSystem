@@ -78,13 +78,13 @@
 .tableContainer {
   width: 95%;
   margin: auto;
-  margin: auto;
   margin-top: 0.5rem;
   background-color: white;
   padding: 1.5rem;
   border-radius: 0.75rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
+
 .editModal {
   position: fixed;
   top: 0;
@@ -97,4 +97,20 @@
   justify-content: center;
   z-index: 1000;
   backdrop-filter: blur(5px);
+}
+
+.title {
+  color: #2c3e50; 
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(90deg, #1b56fd 0%, #133eb4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }

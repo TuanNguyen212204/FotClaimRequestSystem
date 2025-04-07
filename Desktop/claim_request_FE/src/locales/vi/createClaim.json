@@ -5,8 +5,8 @@
     "update": "Cập Nhật Yêu Cầu"
   },
   "header": {
-    "preparedBy": "Chuẩn bị bởi: {{name}}",
-    "claimStatus": "Trạng thái: {{status}}"
+    "preparedBy": "Chuẩn bị bởi: {name}",
+    "claimStatus": "Trạng thái: {status}"
   },
   "staffInfo": {
     "nameLabel": "Tên Nhân Viên",
