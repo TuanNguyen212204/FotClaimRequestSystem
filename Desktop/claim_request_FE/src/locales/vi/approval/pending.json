@@ -1,6 +1,7 @@
 {
   "title": "Yêu Cầu Đang Chờ",
   "subtitle": "Yêu cầu của bạn đang được xử lý!",
+  "welcome_message": "Chào mừng {username} đến với Hệ thống Yêu Cầu Thanh Toán!",
   "approve_selected": "Duyệt Yêu Cầu Đã Chọn",
   "reject_selected": "Từ Chối Yêu Cầu Đã Chọn",
   "return_selected": "Trả Lại Yêu Cầu Đã Chọn",
@@ -24,5 +25,31 @@
     "approve": "Duyệt",
     "reject": "Từ chối",
     "return": "Trả lại"
+  },
+  "modal": {
+    "approve_title": "Bạn có chắc chắn muốn duyệt yêu cầu này không?",
+    "reject_title": "Bạn có chắc chắn muốn từ chối yêu cầu này không?",
+    "return_title": "Bạn có chắc chắn muốn trả lại yêu cầu này không?",
+    "approve_multiple_title": "Bạn có chắc chắn muốn duyệt {count} yêu cầu không?",
+    "reject_multiple_title": "Bạn có chắc chắn muốn từ chối {count} yêu cầu không?",
+    "return_multiple_title": "Bạn có chắc chắn muốn trả lại {count} yêu cầu không?",
+    "confirm_message": "Bạn có muốn tiếp tục không?",
+    "cancel_button": "Hủy",
+    "confirm_button": "Xác nhận",
+    "select_at_least_one_to_approve": "Vui lòng chọn ít nhất một yêu cầu để duyệt.",
+    "select_at_least_one_to_reject": "Vui lòng chọn ít nhất một yêu cầu để từ chối.",
+    "select_at_least_one_to_return": "Vui lòng chọn ít nhất một yêu cầu để trả lại.",
+    "approve_success": "Yêu cầu đã được duyệt thành công!",
+    "approve_error": "Không thể duyệt yêu cầu.",
+    "reject_success": "Yêu cầu đã được từ chối thành công!",
+    "reject_error": "Không thể từ chối yêu cầu.",
+    "return_success": "Yêu cầu đã được trả lại thành công!",
+    "return_error": "Không thể trả lại yêu cầu.",
+    "approve_multiple_success": "Các yêu cầu đã chọn đã được duyệt thành công!",
+    "approve_multiple_error": "Không thể duyệt các yêu cầu đã chọn.",
+    "reject_multiple_success": "Các yêu cầu đã chọn đã được từ chối thành công!",
+    "reject_multiple_error": "Không thể từ chối các yêu cầu đã chọn.",
+    "return_multiple_success": "Các yêu cầu đã chọn đã được trả lại thành công!",
+    "return_multiple_error": "Không thể trả lại các yêu cầu đã chọn."
   }
 }

@@ -15,6 +15,7 @@ import ApprovedDetailFinanceModal from "@ui/finance/ApprovedDetailFinanceModal";
 import StatusTag, { StatusType } from "../StatusTag/StatusTag";
 import { Claim } from "@/types/Claim";
 import { toast } from "react-toastify";
+
 const formatDateToDDMMYYYY = (date: string) => {
   const dateObj = new Date(date);
   const day = dateObj.getDate();
@@ -66,19 +67,20 @@ export const ApprovedFinanceComponent: React.FC = () => {
       },
     );
   };
+
   const username = localStorage.getItem("username");
   const count = localStorage.getItem("count");
   useEffect(() => {
     if (count === "0") {
       toast.success(
-        // t("allUserInformation.welcome_message", {
-        //   username: username || "User",
-        // }),
-        `Welcome ${username || "User"} to the Claim Request System!`,
+        t("finance.welcome_message", {
+          username: username || "User",
+        }),
       );
       localStorage.setItem("count", "1");
     }
   }, [username, t]);
+
   const columns: Column<Claim>[] = [
     {
       key: "full_name",
