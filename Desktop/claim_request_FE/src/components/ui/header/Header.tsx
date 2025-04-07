@@ -43,7 +43,7 @@ interface Notification {
 }
 
 const Header: React.FC = () => {
-  const { t, i18n } = useTranslation("header");
+  const { t } = useTranslation("header");
   const [_, setRole] = useState<string>();
   const [dropdownVisible, setDropdownVisible] = useState<boolean>(false);
   const [avatarDropdownVisible, setAvatarDropdownVisible] =
@@ -140,7 +140,7 @@ const Header: React.FC = () => {
           console.log("Attempting to reconnect...");
           socketRef.current.connect();
         }
-      }, 3000);
+      }, 7000);
     });
 
     if (!socket.connected) {
