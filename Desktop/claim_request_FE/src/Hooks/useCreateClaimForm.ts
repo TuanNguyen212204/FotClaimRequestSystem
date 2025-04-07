@@ -135,7 +135,7 @@ export default function useCreateClaimForm({
         updateClaim({ claimData: DataToSend, requestID }),
       );
       if (resultAction.type.endsWith("/fulfilled")) {
-        dispatch(fetchClaims(requestID));
+        location.reload();
       }
       handleSubmissionResult(
         resultAction,

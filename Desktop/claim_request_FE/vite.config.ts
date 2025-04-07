@@ -13,7 +13,7 @@ export default defineConfig({
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
       "@components": fileURLToPath(
-        new URL("./src/components", import.meta.url)
+        new URL("./src/components", import.meta.url),
       ),
       "@ui": fileURLToPath(new URL("./src/components/ui", import.meta.url)),
       "@constant": fileURLToPath(new URL("./src/constant", import.meta.url)),
@@ -30,6 +30,7 @@ export default defineConfig({
     },
   },
   server: {
-    port: 3000,
+    port: 7000,
+    allowedHosts: ["  claimsystem.info.vn"],
   },
 });

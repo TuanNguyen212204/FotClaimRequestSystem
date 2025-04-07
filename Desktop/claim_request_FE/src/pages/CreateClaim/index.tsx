@@ -2,7 +2,7 @@ import React from "react";
 import CreateClaim from "@/pages/CreateClaim/Components/Create-Claim/CreateClaim";
 import { FormData } from "@/types/claimForm.type";
 import { ArrowLeft } from "lucide-react";
-
+import { useTranslation } from "react-i18next";
 export interface CreateClaimPageProps {
   mode: "create" | "view" | "update";
   initialValues?: FormData;
@@ -18,6 +18,7 @@ const CreateClaimPage: React.FC<CreateClaimPageProps> = ({
   requestID,
   onReturn,
 }) => {
+  const { t } = useTranslation("claim");
   return (
     <div
       className={`box-border overflow-auto bg-gray-100 p-4 font-['Roboto'] leading-relaxed text-gray-800 md:p-6`}
@@ -30,7 +31,7 @@ const CreateClaimPage: React.FC<CreateClaimPageProps> = ({
             aria-label="Return to table"
           >
             <ArrowLeft size={16} className="mr-1" />
-            Return
+            {t("buttons.GoBack")}
           </button>
         )}
 

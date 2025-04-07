@@ -35,7 +35,8 @@
   },
   "buttons": {
     "send": "Gửi",
-    "update": "Cập Nhật"
+    "update": "Cập Nhật",
+    "GoBack": "Quay Lại"
   },
   "loading": "Đang tải...",
   "validation": {
