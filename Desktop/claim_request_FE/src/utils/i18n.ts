@@ -111,7 +111,7 @@ i18n.use(initReactI18next).init({
     "approve",
     "reject",
     "details",
-    "draft"
+    "draft",
   ],
   defaultNS: "header",
   debug: true,
