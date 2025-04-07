@@ -15,7 +15,7 @@
   color: white;
   border-radius: 15px;
   font-weight: 800;
-  background: linear-gradient(135deg, #5e22ce 0%, #94208a 100%);
+  background: linear-gradient(90deg, #3e5879 0%, #213555 100%);
 }
 
 /* .input_container {
@@ -35,4 +35,7 @@
 .input_container span {
   font-size: 14px;
   font-weight: bold;
+}
+.title {
+  color: #3e5879;
 }

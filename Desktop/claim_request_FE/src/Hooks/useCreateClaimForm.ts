@@ -12,6 +12,7 @@ import { useWatch } from "react-hook-form";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import fetchClaims from "@/redux/thunk/Draft";
+import { PATH } from "@/constant/config";
 interface CreateClaimFormProps {
   initialValues?: FormData;
   mode: "create" | "view" | "update";
@@ -136,6 +137,7 @@ export default function useCreateClaimForm({
       );
       if (resultAction.type.endsWith("/fulfilled")) {
         location.reload();
+        localStorage.setItem("selectedClaim", "/draft-claim-by-user-id");
       }
       handleSubmissionResult(
         resultAction,
