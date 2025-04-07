@@ -1,5 +1,6 @@
 {
   "my_claims_title": "My Claims",
+  "description": "Here you can view all your claims and their statuses.",
   "project_id_label": "Project ID",
   "project_name_label": "Project Name",
   "time_duration_label": "Time Duration",
@@ -25,5 +26,6 @@
   "status_draft": "Draft",
   "cancel_button": "Cancel",
   "confirm_button": "Confirm",
-  "language": "en"
+  "language": "en",
+  "view_detail_tooltip": "View Detail"
 }

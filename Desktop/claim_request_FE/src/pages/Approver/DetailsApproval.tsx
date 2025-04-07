@@ -64,7 +64,7 @@ export const DetailsApproval: React.FC<PendingDetailModalProps> = ({
           page: currentPage,
           limit,
           request_id: requestId,
-        })
+        }),
       );
     } else {
       document.body.style.overflow = "";
@@ -81,13 +81,13 @@ export const DetailsApproval: React.FC<PendingDetailModalProps> = ({
         fetchAllPendingClaimAsync({
           page: currentPage.toString(),
           limit: limit.toString(),
-        })
+        }),
       );
-      toast.success("Claim approved successfully!");
+      toast.success(t("toast.success")); // Thêm key nếu cần
       onClose();
     } catch (error) {
       console.log("Error approving claim: ", error);
-      toast.error("Failed to approve claim.");
+      toast.error(t("toast.error")); // Thêm key nếu cần
     }
   };
 
@@ -96,23 +96,21 @@ export const DetailsApproval: React.FC<PendingDetailModalProps> = ({
     const historyContainer = document.querySelector(`.${styles.history}`);
     if (historyContainer) {
       if (!isChevronDown) {
-        historyContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        historyContainer.scrollIntoView({ behavior: "smooth", block: "start" });
       } else {
-        historyContainer.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        historyContainer.scrollIntoView({ behavior: "smooth", block: "end" });
       }
     }
   };
-
-  
 
   return (
     <Modal
       open={isOpen}
       onCancel={onClose}
       onOk={() => handleApproveClaimDetention(requestId)}
-      buttonCancel={t("closeButton")}
-      buttonOk={t("approveButton")}
-      title={t("claimDetailTitle")}
+      buttonCancel={t("close_button")}
+      buttonOk={t("approve_button")}
+      title={t("claim_detail_title")}
       width={600}
       centered={false}
       position={{ right: 5, top: 23 }}
@@ -140,20 +138,19 @@ export const DetailsApproval: React.FC<PendingDetailModalProps> = ({
           <hr className={styles.divider} />
           <div className={styles.containerProject}>
             <div className={styles.projectRow}>
-              <span className={styles.projectLabel}>{t("projectId")}:</span>
+              <span className={styles.projectLabel}>{t("project_id")}:</span>
               <span className={styles.projectValue}>
                 {claimDetail?.project_id}
               </span>
             </div>
             <div className={styles.projectRow}>
-              <span className={styles.projectLabel}>{t("projectName")}:</span>
+              <span className={styles.projectLabel}>{t("project_name")}:</span>
               <span className={styles.projectValue}>
                 {claimDetail?.project_name}
               </span>
             </div>
-
             <div className={styles.projectRow}>
-              <span className={styles.projectLabel}>{t("timeDuration")}:</span>
+              <span className={styles.projectLabel}>{t("time_duration")}:</span>
               <span className={styles.projectValue}>
                 {formatDateToMonthDay(`${claimDetail?.start_date}`)}
                 <MoveRight size={20} className={styles.iconMoveRight} />
@@ -161,7 +158,9 @@ export const DetailsApproval: React.FC<PendingDetailModalProps> = ({
               </span>
             </div>
             <div className={styles.projectRow}>
-              <span className={styles.projectLabel}>{t("submittedDate")}:</span>
+              <span className={styles.projectLabel}>
+                {t("submitted_date")}:
+              </span>
               <span className={styles.projectValue}>
                 {formatDateToMonthDay(`${claimDetail?.submitted_date}`)}
               </span>
@@ -173,10 +172,10 @@ export const DetailsApproval: React.FC<PendingDetailModalProps> = ({
                   <StatusTag
                     status={
                       claimDetail.claim_status as
-                      | "PENDING"
-                      | "APPROVED"
-                      | "REJECTED"
-                      | "PAID"
+                        | "PENDING"
+                        | "APPROVED"
+                        | "REJECTED"
+                        | "PAID"
                     }
                   />
                 ) : (
@@ -186,7 +185,7 @@ export const DetailsApproval: React.FC<PendingDetailModalProps> = ({
             </div>
             <div className={styles.projectRow}>
               <span className={styles.projectLabel}>
-                {t("totalWorkingHours")}:
+                {t("total_working_hours")}:
               </span>
               <span className={styles.projectValue}>
                 {claimDetail?.total_hours} {t("hours")}
@@ -195,7 +194,7 @@ export const DetailsApproval: React.FC<PendingDetailModalProps> = ({
           </div>
           <div className={styles.containerHistory}>
             {claimDetail?.claim_details &&
-              claimDetail.claim_details.length > 0 ? (
+            claimDetail.claim_details.length > 0 ? (
               <div className={styles.history}>
                 <div className={styles.historyHeader}>
                   <p>{t("history")}</p>
@@ -211,26 +210,25 @@ export const DetailsApproval: React.FC<PendingDetailModalProps> = ({
                     />
                   )}
                 </div>
-                {isChevronDown ? (
-                  claimDetail.claim_details.map((detail, index) => (
-                    <div key={index} className={styles.historyItem}>
-                      <span className={styles.historyItemDate}>
-                        {formatDateToMonthDay(detail.date)}
-                      </span>
-
-                      <div className={styles.historyItemInfo}>
-                        <div className={styles.historyItemRow}>
-                          <span className={styles.historyItemLabel}>
-                            {t("workingHours")}:
-                          </span>
-                          <span className={styles.historyItemValue}>
-                            {detail.working_hours} {t("hours")}
-                          </span>
+                {isChevronDown
+                  ? claimDetail.claim_details.map((detail, index) => (
+                      <div key={index} className={styles.historyItem}>
+                        <span className={styles.historyItemDate}>
+                          {formatDateToMonthDay(detail.date)}
+                        </span>
+                        <div className={styles.historyItemInfo}>
+                          <div className={styles.historyItemRow}>
+                            <span className={styles.historyItemLabel}>
+                              {t("working_hours")}:
+                            </span>
+                            <span className={styles.historyItemValue}>
+                              {detail.working_hours} {t("hours")}
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))
-                ) : null}
+                    ))
+                  : null}
               </div>
             ) : null}
           </div>

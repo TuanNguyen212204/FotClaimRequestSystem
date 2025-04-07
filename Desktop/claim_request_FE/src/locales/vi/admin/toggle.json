@@ -1,0 +1,16 @@
+{
+  "toggle": {
+    "enableUser": "Kích Hoạt Người Dùng",
+    "disableUser": "Vô Hiệu Hóa Người Dùng",
+    "enableAction": "kích hoạt",
+    "disableAction": "vô hiệu hóa",
+    "confirmMessage": "Bạn có chắc chắn muốn {action} người dùng này không?",
+    "cancelButton": "Hủy",
+    "confirmButton": "Xác Nhận",
+    "toast": {
+      "success": "Cập nhật trạng thái thành công!",
+      "error": "Cập nhật trạng thái thất bại!",
+      "permissionError": "Bạn không có quyền thay đổi trạng thái người dùng này!"
+    }
+  }
+}

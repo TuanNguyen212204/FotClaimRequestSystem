@@ -17,7 +17,7 @@ import { Claim } from "@/types/Claim";
 import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
 
 const PendingClaimByUserID = () => {
-  const { t } = useTranslation("userClaims");
+  const { t } = useTranslation("pendingClaim");
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const userClaim = useSelector(selectMyClaim);
@@ -127,7 +127,7 @@ const PendingClaimByUserID = () => {
       title: t("action_label"),
       cell: ({ value }) => (
         <div className="flex items-center justify-center gap-2">
-          <Tooltip text="View Claim Details" placement="top">
+          <Tooltip text={t("view_detail_tooltip")} placement="top">
             <EyeIcon
               className="cursor-pointer"
               onClick={() => handleViewDetail(value as string)}
@@ -165,10 +165,8 @@ const PendingClaimByUserID = () => {
     <>
       <div className="mt-2 p-0">
         <div className="mb-10 ml-5">
-          <h1 className="m-0 p-0">My Claims</h1>
-          <p className="m-0 p-0">
-            Here you can view all your pending claims and their statuses.
-          </p>
+          <h1 className="m-0 p-0">{t("pending_claims_title")}</h1>
+          <p className="m-0 p-0">{t("description")}</p>
         </div>
         <div className={`${styles.tableContainer}`}>
           <TableComponent
@@ -177,7 +175,7 @@ const PendingClaimByUserID = () => {
             dataSource={dataSource}
             loading={loading}
             pagination={true}
-            name="My Claims"
+            name={t("pending_claims_title")}
             totalPage={totalPage}
             onPageChange={handlePageChange}
           />

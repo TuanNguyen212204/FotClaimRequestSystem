@@ -29,14 +29,17 @@ import { ApiError } from "@/api";
 import { set } from "date-fns";
 import { useTranslation } from "react-i18next";
 import ToggleButtonForAdmin from "@/components/ui/ToggleButton/ToggleButton";
-import { u } from "node_modules/framer-motion/dist/types.d-B50aGbjN";
 import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
+
 type Department = {
   id: string;
   name: string;
 };
 type DepartmentList = Department[];
+
 const AllUserInformation: React.FC = () => {
+  const { t } = useTranslation("allUserInformation");
+
   const fetchDepartment = async () => {
     try {
       const response =
@@ -46,19 +49,19 @@ const AllUserInformation: React.FC = () => {
       console.error("Fetch department error:", error);
     }
   };
+
   const tableRef = useRef<{
     getSelectedData: () => DataRecord[];
   }>(null);
   const [selectedData, setSelectedData] = useState<DataRecord[]>([]);
   const [department, setDepartment] = useState<DepartmentList>([]);
+
   const handleGetSelectedData = () => {
     if (tableRef.current) {
       const a = tableRef.current.getSelectedData();
       setSelectedData(a);
     }
   };
-
-  // const listUserIDisDeleted: string[] = selectedData.map((data) => data.id);
 
   const deleteAllOFSelectedData = () => {
     handleGetSelectedData();
@@ -67,17 +70,23 @@ const AllUserInformation: React.FC = () => {
 
   const username = localStorage.getItem("username");
   const count = localStorage.getItem("count");
+
   useEffect(() => {
     if (count === "0") {
-      toast.success("Welcome back" + username + " to the system!");
+      toast.success(
+        t("allUserInformation.welcome_message", {
+          username: username || "User",
+        }),
+      );
       localStorage.setItem("count", "1");
     }
-  }, [username]);
+  }, [username, t]);
+
   useEffect(() => {
     fetchDepartment();
   }, []);
+
   const navigate = useNavigate();
-  const { t } = useTranslation("allUserInformation");
   const dispatch = useDispatch<AppDispatch>();
   const users = useSelector(selectAllUser);
   const totalPage = useSelector(selectTotalPageOfAllUser);
@@ -98,6 +107,7 @@ const AllUserInformation: React.FC = () => {
     {},
   );
   const [departmentID, setDepartmentID] = useState<number>(0);
+
   useEffect(() => {
     const statuses = users.reduce(
       (acc, user) => {
@@ -108,10 +118,12 @@ const AllUserInformation: React.FC = () => {
     );
     setUserStatuses(statuses);
   }, [users]);
+
   useEffect(() => {
     console.log("Total PAge" + totalPage);
     setPage(totalPage);
   }, [totalPage, currentPage]);
+
   const [assignID, setAssignID] = useState<string>("");
   const [toggleState, setToggleState] = useState<{ [key: string]: boolean }>(
     {},
@@ -193,13 +205,8 @@ const AllUserInformation: React.FC = () => {
     setOpenAssign(true);
     setAssignID(id);
   };
+
   const columns: Column<User>[] = [
-    // {
-    //   key: "index",
-    //   dataIndex: "index",
-    //   title: t("paidclaims.table.no"),
-    //   cell: ({ value }) => String(value).padStart(3, "0"),
-    // },
     {
       key: "full_name",
       dataIndex: "full_name",
@@ -261,7 +268,7 @@ const AllUserInformation: React.FC = () => {
                 checked={record.user_status === 1}
                 onClick={() => {
                   toast.error(
-                    "You don't have permission to change this user status!",
+                    t("allUserInformation.no_permission_change_status"),
                   );
                 }}
               />
@@ -275,24 +282,6 @@ const AllUserInformation: React.FC = () => {
       dataIndex: "assign",
       title: t("allUserInformation.table.assign"),
       cell: ({ record }: { record: User }) => {
-        // return (
-        //   <div tabIndex={-1}>
-        //     <button
-        //       tabIndex={-1}
-        //       className={styles.circleCheckButton}
-        //       onClick={() => handleAssignUser(record.user_id as string)}
-        //       disabled={userStatuses[record.user_id] === 0}
-        //     >
-        //       <div>
-        //         {userStatuses[record.user_id] === 1 ? (
-        //           <CircleCheck size={20} />
-        //         ) : (
-        //           <X size={20} />
-        //         )}
-        //       </div>
-        //     </button>
-        //   </div>
-        // );
         return record.role_id !== 1 ? (
           <div tabIndex={-1}>
             <button
@@ -303,12 +292,18 @@ const AllUserInformation: React.FC = () => {
             >
               <div>
                 {record.user_status === 1 ? (
-                  <Tooltip text="Assign project" position="top">
+                  <Tooltip
+                    text={t("allUserInformation.assign_project")}
+                    position="top"
+                  >
                     <CircleCheck size={20} />
                   </Tooltip>
                 ) : (
                   <div className={styles.circleCheckButtonNotAllowed}>
-                    <Tooltip text="This user is disabled" position="top">
+                    <Tooltip
+                      text={t("allUserInformation.user_disabled")}
+                      position="top"
+                    >
                       <X size={20} />
                     </Tooltip>
                   </div>
@@ -322,14 +317,15 @@ const AllUserInformation: React.FC = () => {
               tabIndex={-1}
               className={styles.circleCheckButtonNotAllowed}
               onClick={() => {
-                toast.error("You don't have permission to assign this user!");
+                toast.error(t("allUserInformation.no_permission_assign"));
               }}
               disabled
             >
               <div>
-                {/* <X size={20} />
-                <Tooltip></Tooltip> */}
-                <Tooltip text="Don't have permission" position="top">
+                <Tooltip
+                  text={t("allUserInformation.no_permission")}
+                  position="top"
+                >
                   <X size={20} />
                 </Tooltip>
               </div>
@@ -343,27 +339,6 @@ const AllUserInformation: React.FC = () => {
       dataIndex: "user_id",
       title: t("allUserInformation.table.action"),
       cell: ({ value, record }: { value: string; record: User }) => {
-        // return (
-        //   <div style={{ display: "flex" }}>
-        //     <div>
-        //       <button
-        //         tabIndex={-1}
-        //         className={styles.update_button}
-        //         style={{ cursor: "pointer" }}
-        //         onClick={() => handleUpdate(value as string)}
-        //         disabled={userStatuses[record.user_id] === 0}
-        //       >
-        //         <div>
-        //           {userStatuses[record.user_id] === 1 ? (
-        //             <SquarePen size={20} />
-        //           ) : (
-        //             <X size={20} />
-        //           )}
-        //         </div>
-        //       </button>
-        //     </div>
-        //   </div>
-        // );
         return record.role_id !== 1 ? (
           <div style={{ display: "flex" }}>
             <div>
@@ -376,13 +351,18 @@ const AllUserInformation: React.FC = () => {
               >
                 <div>
                   {record.user_status === 1 ? (
-                    // <SquarePen size={20} />
-                    <Tooltip text="Update user" position="top">
+                    <Tooltip
+                      text={t("allUserInformation.update_user")}
+                      position="top"
+                    >
                       <SquarePen size={20} />
                     </Tooltip>
                   ) : (
                     <div className={styles.circleCheckButtonNotAllowed}>
-                      <Tooltip text="This user is disabled" position="top">
+                      <Tooltip
+                        text={t("allUserInformation.user_disabled")}
+                        position="top"
+                      >
                         <X size={20} />
                       </Tooltip>
                     </div>
@@ -399,12 +379,15 @@ const AllUserInformation: React.FC = () => {
                 className={styles.circleCheckButtonNotAllowed}
                 style={{ cursor: "pointer" }}
                 onClick={() => {
-                  toast.error("You don't have permission to update this user!");
+                  toast.error(t("allUserInformation.no_permission_update"));
                 }}
                 disabled
               >
                 <div className={styles.circleCheckButtonNotAllowed}>
-                  <Tooltip text="This user is disabled" position="top">
+                  <Tooltip
+                    text={t("allUserInformation.no_permission")}
+                    position="top"
+                  >
                     <X size={20} />
                   </Tooltip>
                 </div>
@@ -415,15 +398,18 @@ const AllUserInformation: React.FC = () => {
       },
     },
   ];
+
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
+
   const [selectedStatus, setSelectedStatus] = useState<string>("All");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const uniqueStatuses = [
     "All",
     ...new Set(department.map((item) => item.name)),
   ];
+
   const fetchStaffByDepartmentID = async (department_name: string) => {
     const a = department.find((item) => item.name === department_name);
     const department_id = a?.id;
@@ -444,16 +430,19 @@ const AllUserInformation: React.FC = () => {
       console.error("Fetch staff by department error:", error);
     }
   };
+
   const handleStatusSelect = (status: string) => {
     setSelectedStatus(status);
     fetchStaffByDepartmentID(status);
     setCurrentPage(1);
     setIsDropdownOpen(false);
   };
+
   useEffect(() => {
     console.log(dataSource);
     console.log(page);
   }, [dataSource, page]);
+
   return (
     <div className="m-0 p-0">
       {openModal && (
@@ -479,11 +468,10 @@ const AllUserInformation: React.FC = () => {
         </div>
       )}
       <div className="ml-5">
-        <h1 className="m-0 p-0">Staff Information</h1>
-        <p className="m-0 p-0">
-          The staff information system manages user accounts and project
-          assignments
-        </p>
+        <h1 className={`${styles.title} m-0 p-0`}>
+          {t("allUserInformation.title")}
+        </h1>
+        <p className="m-0 p-0">{t("allUserInformation.description")}</p>
       </div>
       <div className="ml-5">
         <div className="m-0 flex p-0">
@@ -493,15 +481,16 @@ const AllUserInformation: React.FC = () => {
                 {t("allUserInformation.filter")} {name}:
               </p>
             </div>
-            <div
-              className="relative mt-5.5 ml-3 inline-block text-left"
-              // style={{ marginTop: "15px", marginLeft: "15px" }}
-            >
+            <div className="relative mt-5.5 ml-3 inline-block text-left">
               <div
                 onClick={toggleDropdown}
                 className="flex items-center justify-between rounded-md border bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-100 focus:outline-none"
               >
-                <span>{selectedStatus}</span>
+                <span>
+                  {selectedStatus === "All"
+                    ? t("allUserInformation.filterStatuses.all")
+                    : t(`allUserInformation.departments.${selectedStatus}`)}
+                </span>
                 <ArrowDown className="ml-2 h-4 w-4" />
               </div>
 
@@ -514,7 +503,9 @@ const AllUserInformation: React.FC = () => {
                         onClick={() => handleStatusSelect(status)}
                         className="block w-4/5 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-200"
                       >
-                        {status}
+                        {status === "All"
+                          ? t("allUserInformation.filterStatuses.all")
+                          : t(`allUserInformation.departments.${status}`)}
                       </div>
                     ))}
                   </div>
@@ -526,7 +517,6 @@ const AllUserInformation: React.FC = () => {
       </div>
       <div className={styles.tableContainer}>
         <TableComponent
-          // sortConfig={sortConfig}
           ref={tableRef as any}
           isHaveCheckbox={false}
           columns={columns as Column<DataRecord>[]}

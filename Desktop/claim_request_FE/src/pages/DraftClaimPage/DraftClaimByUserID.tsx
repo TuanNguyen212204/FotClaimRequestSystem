@@ -12,6 +12,7 @@ import { EyeIcon, SquarePen } from "lucide-react";
 import TableComponent, { Column, DataRecord } from "@components/ui/Table/Table";
 import UserClaimDetailsModal from "@components/ui/claimer/UserClaimDetails";
 import StatusTag from "@components/ui/StatusTag/StatusTag";
+import { useTranslation } from "react-i18next";
 import { Claim } from "@/types/Claim";
 import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
 import { selectInitialValues } from "@/redux/slices/UpdateDraft";
@@ -19,6 +20,7 @@ import CreateClaimPage from "../CreateClaim";
 import fetchClaims from "@/redux/thunk/Draft";
 
 const DraftClaimByUserID = () => {
+  const { t } = useTranslation("draftClaim");
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const userClaim = useSelector(selectMyClaim);
@@ -62,22 +64,24 @@ const DraftClaimByUserID = () => {
   };
 
   const formatDateToDDMMYYYY = (date: string) => {
-    if (!date) return "N/A";
+    if (!date) return t("no_data");
     try {
       const dateObj = new Date(date);
-      if (isNaN(dateObj.getTime())) return "Invalid Date";
+      if (isNaN(dateObj.getTime())) return t("no_data");
       const day = dateObj.getDate().toString().padStart(2, "0");
       const month = (dateObj.getMonth() + 1).toString().padStart(2, "0");
       const year = dateObj.getFullYear();
-      return `${day}/${month}/${year}`;
+      return t("language") === "en"
+        ? `${month}/${day}/${year}`
+        : `${day}/${month}/${year}`;
     } catch (error) {
       console.error("Error formatting date:", date, error);
-      return "Invalid Date";
+      return t("no_data");
     }
   };
 
   const formatDateRange = (dateRange: any) => {
-    if (typeof dateRange !== "string") return "N/A";
+    if (typeof dateRange !== "string") return t("no_data");
     return dateRange.replace(
       /(\d{1,2})\/(\d{1,2})\/(\d{4})/g,
       (match, day, month, year) => {
@@ -102,17 +106,17 @@ const DraftClaimByUserID = () => {
     {
       key: "project_id",
       dataIndex: "project_id",
-      title: "Project ID",
+      title: t("project_id_label"),
     },
     {
       key: "project_name",
       dataIndex: "project_name",
-      title: "Project Name",
+      title: t("project_name_label"),
     },
     {
       key: "time_duration",
       dataIndex: "time_duration",
-      title: "Time Duration",
+      title: t("time_duration_label"),
       cell: ({ value }: { value: string }) => {
         const formattedValue = formatDateRange(value as string);
         return <span>{formattedValue}</span>;
@@ -121,13 +125,13 @@ const DraftClaimByUserID = () => {
     {
       key: "total_hours",
       dataIndex: "total_hours",
-      title: "Total Working Hours",
-      cell: ({ value }: { value: string }) => `${value} hours`,
+      title: t("total_working_hours_label"),
+      cell: ({ value }: { value: string }) => `${value} ${t("hours_suffix")}`,
     },
     {
       key: "submitted_date",
       dataIndex: "submitted_date",
-      title: "Submitted Date",
+      title: t("submitted_date_label"),
       cell: ({ value }) => {
         const formattedValue = formatDateToDDMMYYYY(value as string);
         return <span>{formattedValue}</span>;
@@ -136,7 +140,7 @@ const DraftClaimByUserID = () => {
     {
       key: "claim_status",
       dataIndex: "claim_status",
-      title: "Claim Status",
+      title: t("claim_status_label"),
       cell: ({ value }: { value: unknown }) => {
         return (
           <div>
@@ -150,10 +154,10 @@ const DraftClaimByUserID = () => {
     {
       key: "action",
       dataIndex: "request_id",
-      title: "Action",
+      title: t("action_label"),
       cell: ({ value }: { value: string }) => (
         <>
-          <Tooltip text="View Claim Details" placement="top">
+          <Tooltip text={t("view_detail_tooltip")} placement="top">
             <EyeIcon
               className="cursor-pointer"
               onClick={() => handleViewDetail(value as string)}
@@ -172,15 +176,15 @@ const DraftClaimByUserID = () => {
     {
       key: "Submit",
       dataIndex: "submit",
-      title: "Submit",
+      title: t("submit_label"),
       cell: ({ record }: { record: any }) => {
         return (
-          <Tooltip text="Submit Claim" placement="top">
+          <Tooltip text={t("submit_tooltip")} placement="top">
             <button
               className="rounded-md bg-blue-500 px-4 py-2 text-white"
               onClick={() => {}}
             >
-              Submit
+              {t("submit_label")}
             </button>
           </Tooltip>
         );
@@ -189,9 +193,9 @@ const DraftClaimByUserID = () => {
     {
       key: "update",
       dataIndex: "update",
-      title: "Update",
+      title: t("update_label"),
       cell: ({ record }: { record: any }) => (
-        <Tooltip text="Edit Claim" placement="top">
+        <Tooltip text={t("edit_tooltip")} placement="top">
           <SquarePen
             className="cursor-pointer"
             onClick={() => handleEditClick(record)}
@@ -214,12 +218,12 @@ const DraftClaimByUserID = () => {
         ? `${formatDateToDDMMYYYY(claim.start_date)} - ${formatDateToDDMMYYYY(
             claim.end_date,
           )}`
-        : "N/A",
+        : t("no_data"),
   }));
 
   if (isEditing) {
     if (!initValue) {
-      return <div>Loading editor...</div>;
+      return <div>{t("loading_editor")}</div>;
     }
     return (
       <CreateClaimPage
@@ -235,10 +239,8 @@ const DraftClaimByUserID = () => {
       <>
         <div className="mt-2 p-0">
           <div className="mb-10 ml-5">
-            <h1 className="m-0 p-0">Draft Claims</h1>
-            <p className="m-0 p-0">
-              Here you can view all your draft claims and their statuses.
-            </p>
+            <h1 className="m-0 p-0">{t("draft_claims_title")}</h1>
+            <p className="m-0 p-0">{t("description")}</p>
           </div>
           <div className={styles.tableContainer}>
             <TableComponent
@@ -247,7 +249,7 @@ const DraftClaimByUserID = () => {
               dataSource={dataSource}
               loading={loading}
               pagination={true}
-              name="My Claims"
+              name={t("draft_claims_title")}
               totalPage={totalPage}
               onPageChange={handlePageChange}
             />

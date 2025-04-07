@@ -14,15 +14,6 @@ import {
 import ApprovedDetailFinanceModal from "@ui/finance/ApprovedDetailFinanceModal";
 import StatusTag, { StatusType } from "../StatusTag/StatusTag";
 
-// interface claimList {
-//   claim_id?: string;
-//   user_id?: string;
-//   project_id?: string;
-//   total_working_hours?: number;
-//   submitted_date?: Date;
-//   claim_status?: string;
-//   project_name?: string;
-// }
 const formatDateToDDMMYYYY = (date: string) => {
   const dateObj = new Date(date);
   const day = dateObj.getDate();
@@ -51,7 +42,7 @@ export const ApprovedFinanceComponent: React.FC = () => {
         limit: limit.toString(),
       }),
     ).finally(() => setLoading(false));
-  }, [currentPage]);
+  }, [currentPage, dispatch]);
 
   const handleViewDetail = (value: string) => {
     setLoading(true);
@@ -65,6 +56,7 @@ export const ApprovedFinanceComponent: React.FC = () => {
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
   };
+
   const formatDateRange = (dateRange: any) => {
     return dateRange.replace(
       /(\d{1,2})\/(\d{1,2})\/(\d{4})/g,
@@ -73,12 +65,8 @@ export const ApprovedFinanceComponent: React.FC = () => {
       },
     );
   };
+
   const columns: Column[] = [
-    // {
-    //   key: "request_id",
-    //   dataIndex: "request_id",
-    //   title: "Request ID",
-    // },
     {
       key: "full_name",
       dataIndex: "full_name",
@@ -106,20 +94,19 @@ export const ApprovedFinanceComponent: React.FC = () => {
     {
       key: "status",
       dataIndex: "status",
-      title: "Claim Status",
+      title: t("finance.modal.status"),
       cell: ({ value }) => <StatusTag status={value as StatusType} />,
     },
     {
       key: "action",
       dataIndex: "request_id",
-      title: "Action",
+      title: t("finance.table.action"),
       cell: ({ value }) => (
         <>
           <EyeIcon
             className={styles.icon}
             onClick={() => handleViewDetail(value as string)}
           />
-
           <ApprovedDetailFinanceModal
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
@@ -131,6 +118,7 @@ export const ApprovedFinanceComponent: React.FC = () => {
       ),
     },
   ];
+
   const dataSource: DataRecord[] = claimList.map((claim, index) => {
     return {
       ...claim,
@@ -149,6 +137,7 @@ export const ApprovedFinanceComponent: React.FC = () => {
           : "N/A",
     };
   });
+
   return (
     <div>
       <div className={styles.header}>
@@ -161,7 +150,7 @@ export const ApprovedFinanceComponent: React.FC = () => {
           loading={loading}
           totalPage={totalPages}
           pagination={true}
-          name="Claims"
+          name={t("finance.table.name")} 
           onPageChange={handlePageChange}
         />
       </div>

@@ -1,5 +1,18 @@
 {
   "allUserInformation": {
+    "title": "Thông tin nhân viên",
+    "description": "Hệ thống thông tin nhân viên quản lý tài khoản người dùng và phân công dự án",
+    "welcome_message": "Chào mừng {username} quay lại hệ thống!",
+    "no_permission_change_status": "Bạn không có quyền thay đổi trạng thái người dùng này!",
+    "no_permission_assign": "Bạn không có quyền phân công người dùng này!",
+    "no_permission_update": "Bạn không có quyền cập nhật người dùng này!",
+    "no_permission": "Không có quyền",
+    "assign_project": "Phân công dự án",
+    "user_disabled": "Người dùng này đã bị vô hiệu hóa",
+    "update_user": "Cập nhật người dùng",
+    "create_success": "Tạo người dùng thành công!",
+    "update_success": "Cập nhật người dùng thành công!",
+    "create_failed": "Tạo người dùng thất bại!",
     "table": {
       "fullName": "Họ và tên",
       "userName": "Tên người dùng",
@@ -9,9 +22,42 @@
       "status": "Trạng thái",
       "assign": "Phân công",
       "action": "Thao tác",
-      "role": "Vai trò"
+      "role": "Vai trò",
+      "addNew": "Thêm mới",
+      "noData": "Không có dữ liệu"
     },
     "filter": "Lọc theo",
+    "filterStatuses": {
+      "all": "Tất cả"
+    },
+    "roles": {
+      "admin": "Quản trị viên",
+      "approver": "Người phê duyệt",
+      "finance": "Tài chính",
+      "claimer": "Người yêu cầu"
+    },
+    "departments": {
+      "Development": "Phát triển",
+      "DevOps": "DevOps",
+      "Finance": "Tài chính",
+      "Business Analysis": "Phân tích kinh doanh",
+      "Business Manager": "Quản lý kinh doanh",
+      "QC/QA": "Kiểm định chất lượng (QC/QA)",
+      "Project Manager": "Quản lý dự án"
+    },
+    "jobRanks": {
+      "Intern": "Thực tập sinh",
+      "Fresher": "Nhân viên mới",
+      "Junior Developer": "Lập trình viên sơ cấp",
+      "Mid-Level Developer": "Lập trình viên trung cấp",
+      "Senior Developer": "Lập trình viên cao cấp",
+      "Lead Engineer": "Kỹ sư trưởng"
+    },
+    "placeholders": {
+      "selectRoleID": "Chọn mã vai trò",
+      "selectDepartment": "Chọn phòng ban",
+      "selectJobRank": "Chọn chức vụ"
+    },
     "createUser": {
       "title": "Tạo người dùng",
       "fullName": "Họ và tên",
@@ -27,7 +73,10 @@
         "department": "Phòng ban là bắt buộc",
         "salary": "Lương là bắt buộc",
         "roleID": "Mã vai trò là bắt buộc",
-        "jobRank": "Chức vụ là bắt buộc"
+        "jobRank": "Chức vụ là bắt buộc",
+        "minLength": "Phải có ít nhất 3 ký tự",
+        "maxLength": "Phải có tối đa 50 ký tự",
+        "salaryMessage": "Lương phải lớn hơn 0"
       }
     },
     "updateUser": {
@@ -55,6 +104,9 @@
       "projectStatus": "Trạng thái dự án"
     },
     "buttonCreate": "Tạo",
-    "buttonUpdate": "Cập nhật"
+    "buttonUpdate": "Cập nhật",
+    "fetch_department_error": "Không thể lấy danh sách phòng ban",
+    "fetch_data_error": "Không thể lấy dữ liệu",
+    "toggle_status_error": "Không thể thay đổi trạng thái người dùng"
   }
 }

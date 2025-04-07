@@ -1,5 +1,6 @@
 {
   "draft_claims_title": "Draft Claims",
+  "description": "Here you can view all your draft claims and their statuses.",
   "project_id_label": "Project ID",
   "project_name_label": "Project Name",
   "time_duration_label": "Time Duration",
@@ -8,6 +9,11 @@
   "claim_status_label": "Claim Status",
   "action_label": "Action",
   "update_label": "Update",
+  "submit_label": "Submit",
   "hours_suffix": "hours",
-  "no_data": "N/A"
+  "no_data": "N/A",
+  "view_detail_tooltip": "View Claim Details",
+  "submit_tooltip": "Submit Claim",
+  "edit_tooltip": "Edit Claim",
+  "language": "en"
 }

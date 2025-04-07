@@ -10,5 +10,9 @@
   "total_working_hours": "Tổng Giờ Làm Việc",
   "hours": "giờ",
   "history": "Lịch Sử",
-  "working_hours": "Giờ Làm Việc"
+  "working_hours": "Giờ Làm Việc",
+  "toast": {
+    "success": "Yêu cầu đã được phê duyệt thành công!",
+    "error": "Không thể phê duyệt yêu cầu."
+  }
 }

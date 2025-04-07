@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
-import "./ToggleButton.css"; // Import file CSS
-import Modal from "@/components/ui/modal/Modal"; // Import the Modal component=
+import { useTranslation } from "react-i18next";
+import "./ToggleButton.css";
+import Modal from "@/components/ui/modal/Modal";
 import { toast, ToastContainer } from "react-toastify";
+
 const ToggleButton = ({
   userId,
   checked,
@@ -11,6 +13,7 @@ const ToggleButton = ({
   checked: boolean;
   onChange?: (newChecked: boolean) => void;
 }) => {
+  const { t } = useTranslation("toggle");
   const [enabled, setEnabled] = useState(checked);
 
   useEffect(() => {
@@ -19,18 +22,22 @@ const ToggleButton = ({
 
   const handleClick = () => {
     const newStatus = !enabled;
+    const actionKey = newStatus ? "enableUser" : "disableUser";
+    const actionText = t(`${actionKey}`);
+    const actionVerb = newStatus ? t("enableAction") : t("disableAction");
+
     Modal.confirm({
-      title: newStatus ? "Enable User" : "Disable User",
-      children: `Are you sure you want to ${
-        newStatus ? "Enable" : "Disable"
-      } this user?`,
+      title: actionText,
+      children: t("confirmMessage", { action: actionVerb }),
+      buttonCancel: t("cancelButton"),
+      buttonOk: t("confirmButton"),
       onOk: () => {
         setEnabled(newStatus);
-        onChange(newStatus);
-        toast.success("Update status successful!");
+        if (onChange) onChange(newStatus);
+        toast.success(t("toast.success"));
       },
       onCancel: () => {
-        toast.error("Update status failed!");
+        toast.error(t("toast.error"));
       },
     });
   };
@@ -55,19 +62,21 @@ export const AdminButton = ({
   checked: boolean;
   onClick?: () => void;
 }) => {
+  const { t } = useTranslation("toggle");
   const [enabled, setEnabled] = useState(checked);
 
   return (
     <button
       tabIndex={-1}
       className={`toggle-wrapper ${enabled ? "enabled" : ""}`}
-      // Disable the button
       onClick={() => {
-        toast.error("You don't have permission to change this user status!");
+        toast.error(t("toast.permissionError"));
+        if (onClick) onClick();
       }}
     >
       <span className="toggle-circle"></span>
     </button>
   );
 };
+
 export default ToggleButton;

@@ -44,6 +44,9 @@ import rejectedClaimEn from "../locales/en/rejectedClaim.json";
 import rejectedClaimVn from "../locales/vi/rejectedClaim.json";
 import draftEn from "@/locales/en/approval/draft.json";
 import draftVn from "@/locales/vi/approval/draft.json";
+import toggleEn from "@/locales/en/admin/toggle.json";
+import toggleVi from "@/locales/vi/admin/toggle.json";
+
 i18n.use(initReactI18next).init({
   resources: {
     en: {
@@ -67,6 +70,7 @@ i18n.use(initReactI18next).init({
       draftClaim: draftClaimEn,
       rejectedClaim: rejectedClaimEn,
       draft: draftEn,
+      toggle: toggleEn.toggle,
     },
     vi: {
       header: headerVn,
@@ -89,6 +93,7 @@ i18n.use(initReactI18next).init({
       draftClaim: draftClaimVn,
       rejectedClaim: rejectedClaimVn,
       draft: draftVn,
+      toggle: toggleVi.toggle,
     },
   },
   lng: "en",
@@ -112,11 +117,15 @@ i18n.use(initReactI18next).init({
     "reject",
     "details",
     "draft",
+    "toggle",
   ],
   defaultNS: "header",
   debug: true,
   interpolation: {
     escapeValue: false,
+    formatSeparator: ",",
+    prefix: "{",
+    suffix: "}",
   },
   react: {
     useSuspense: false,

@@ -1,5 +1,6 @@
 {
   "rejected_claims_title": "Rejected Claims",
+  "description": "Here you can view your rejected claims and their statuses.",
   "project_id_label": "Project ID",
   "project_name_label": "Project Name",
   "time_duration_label": "Time Duration",
@@ -8,5 +9,7 @@
   "claim_status_label": "Claim Status",
   "action_label": "Action",
   "hours_suffix": "hours",
-  "no_data": "N/A"
+  "no_data": "N/A",
+  "view_detail_tooltip": "View Detail",
+  "language": "en"
 }

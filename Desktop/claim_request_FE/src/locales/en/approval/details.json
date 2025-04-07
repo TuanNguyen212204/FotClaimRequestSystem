@@ -10,5 +10,9 @@
   "total_working_hours": "Total Working Hours",
   "hours": "hours",
   "history": "History",
-  "working_hours": "Working Hours"
+  "working_hours": "Working Hours",
+  "toast": {
+    "success": "Claim approved successfully!",
+    "error": "Failed to approve claim."
+  }
 }

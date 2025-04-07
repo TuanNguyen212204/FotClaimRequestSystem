@@ -2,12 +2,14 @@
   "finance": {
     "title": "Yêu Cầu Đã Duyệt",
     "table": {
+      "name": "Yêu Cầu",
       "userName": "Tên Người Dùng",
       "projectName": "Tên Dự Án",
       "timeDuration": "Thời Gian",
       "totalHours": "Tổng Giờ Làm",
       "hours": "giờ",
-      "action": "Thao Tác"
+      "action": "Thao Tác",
+      "claimStatus": "Trạng Thái Yêu Cầu"
     },
     "modal": {
       "title": "Chi Tiết Yêu Cầu",
