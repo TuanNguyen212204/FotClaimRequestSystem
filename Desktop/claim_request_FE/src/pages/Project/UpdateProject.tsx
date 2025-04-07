@@ -135,21 +135,16 @@ export const UpdateProject: React.FC<UpdateProjectProps> = ({
           </h2>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
             <div className="ml-15">
-              <label
-                className="block text-sm font-medium text-gray-600"
-                htmlFor="project_name"
-              >
-                <div className={styles.flex}>
-                  <div className={styles.label_container}>
-                    <span>*</span>
-                  </div>
-                  <div className={styles.input_container}>
-                    <span>
-                      {t("projectInformation.updateProject.projectName")}
-                    </span>
-                  </div>
+              <div className="flex text-sm font-medium text-gray-600">
+                <div className={styles.label_container}>
+                  <span>*</span>
                 </div>
-              </label>
+                <div className={styles.input_container}>
+                  <span>
+                    {t("projectInformation.updateProject.projectName")}
+                  </span>
+                </div>
+              </div>
               <div className="relative w-4/5">
                 <BriefcaseBusiness className="absolute top-1/2 left-2 -translate-y-1/2 transform text-gray-400" />
                 <input
@@ -171,18 +166,15 @@ export const UpdateProject: React.FC<UpdateProjectProps> = ({
             </div>
 
             <div className="ml-15">
-              <label className="block text-sm font-medium text-gray-700">
-                <div className={styles.flex}>
-                  <div className={styles.label_container}>
-                    <span>*</span>
-                  </div>
-                  <div className={styles.input_container}>
-                    <span>
-                      {t("projectInformation.updateProject.startDate")}
-                    </span>
-                  </div>
+              <div className="flex text-sm font-medium text-gray-600">
+                <div className={styles.label_container}>
+                  <span>*</span>
                 </div>
-              </label>
+                <div className={styles.input_container}>
+                  <span>{t("projectInformation.updateProject.startDate")}</span>
+                </div>
+              </div>
+              {/* </label> */}
               <div className="relative w-4/5">
                 <Calendar className="absolute top-1/2 left-2 -translate-y-1/2 transform text-gray-400" />
                 <input
@@ -202,9 +194,17 @@ export const UpdateProject: React.FC<UpdateProjectProps> = ({
             </div>
 
             <div className="ml-15">
-              <label className="block text-sm font-medium text-gray-700">
+              {/* <label className="block text-sm font-medium text-gray-600">
                 {t("projectInformation.updateProject.endDate")}
-              </label>
+              </label> */}
+              <div className="flex text-sm font-medium text-gray-600">
+                <div className={styles.label_container}>
+                  <span>*</span>
+                </div>
+                <div className={styles.input_container}>
+                  <span>{t("projectInformation.updateProject.endDate")}</span>
+                </div>
+              </div>
               <div className="relative w-4/5">
                 <Calendar className="absolute top-1/2 left-2 -translate-y-1/2 transform text-gray-400" />
                 <input
@@ -224,9 +224,19 @@ export const UpdateProject: React.FC<UpdateProjectProps> = ({
             </div>
 
             <div className="ml-15">
-              <label className="block text-sm font-medium text-gray-700">
+              {/* <label className="block text-sm font-medium text-gray-700">
                 {t("projectInformation.updateProject.projectStatus")}
-              </label>
+              </label> */}
+              <div className="flex text-sm font-medium text-gray-600">
+                <div className={styles.label_container}>
+                  <span>*</span>
+                </div>
+                <div className={styles.input_container}>
+                  <span>
+                    {t("projectInformation.updateProject.projectStatus")}
+                  </span>
+                </div>
+              </div>
               <Select
                 register={register("project_status", {
                   required: t("projectInformation.validation.projectStatus"),

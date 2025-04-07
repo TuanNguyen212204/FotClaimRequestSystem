@@ -3,6 +3,7 @@ import type { User } from "@/types/User";
 import { ApiResponse, ApiResponseNoGeneric } from "@/types/ApiResponse";
 import { delay } from "@utils/delay";
 import httpClient from "@constant/apiInstance";
+import { ListMinus } from "lucide-react";
 //Hàm này dùng để fetchAllUser
 export const fetchAllUserAsync = createAsyncThunk<
   User[],
@@ -13,7 +14,7 @@ export const fetchAllUserAsync = createAsyncThunk<
       await delay(1000);
       const response = await httpClient.get<ApiResponseNoGeneric>(
         "/admin/staffs",
-        { page: page, limit: 8 }
+        { page: page, limit: 10 },
       );
       // response.data.data = response.data.data.filter((user: User) => {
       //   return String(user.role_id) !== "1";
@@ -29,7 +30,7 @@ export const fetchAllUserAsync = createAsyncThunk<
       await delay(1000);
       const response = await httpClient.get<ApiResponseNoGeneric>(
         "/admin/staffs",
-        { page: page, department_id: department_id }
+        { page: page, department_id: department_id, limit: 10 },
       );
       console.log("TotalPage :" + response.data.totalPages);
       return response.data.data;
@@ -48,7 +49,7 @@ export const fetchTotalPage = createAsyncThunk<
       await delay(1000);
       const response = await httpClient.get<ApiResponseNoGeneric>(
         "/admin/staffs",
-        { page: page }
+        { page: page },
       );
       return response.data.totalPages;
     } catch (error) {
@@ -60,7 +61,7 @@ export const fetchTotalPage = createAsyncThunk<
       await delay(1000);
       const response = await httpClient.get<ApiResponseNoGeneric>(
         "/admin/staffs",
-        { page: page, department_id: department_id }
+        { page: page, department_id: department_id },
       );
       console.log(response.data.totalPages);
       return response.data.totalPages;
@@ -77,12 +78,12 @@ export const fetchUserByIdAsync = createAsyncThunk<User[]>(
     try {
       const id = localStorage.getItem("user_id");
       const response = await httpClient.get<ApiResponse<User[]>>(
-        "/admin/staff/" + id
+        "/admin/staff/" + id,
       );
       return response.data.data;
     } catch (error) {
       console.error("Fetch Users error " + error);
       throw error;
     }
-  }
+  },
 );

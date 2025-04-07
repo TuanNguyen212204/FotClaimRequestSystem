@@ -61,6 +61,7 @@ export const AssignProject: React.FC<AssignProjectProps> = ({
       setValue("start_date", project.start_date.split("T")[0]);
       setValue("end_date", project.end_date.split("T")[0]);
       setValue("project_status", project.project_status);
+      setValue("status", project.status);
     }
   };
 
@@ -208,7 +209,7 @@ export const AssignProject: React.FC<AssignProjectProps> = ({
               </label>
               <input
                 type="text"
-                {...register("project_status")}
+                {...register("status")}
                 disabled
                 className="mt-1 h-6 w-4/5 rounded-lg border border-gray-300 bg-gray-100 p-2"
               />

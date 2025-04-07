@@ -13,7 +13,8 @@ import {
 } from "@/redux/selector/claimSelector";
 import ApprovedDetailFinanceModal from "@ui/finance/ApprovedDetailFinanceModal";
 import StatusTag, { StatusType } from "../StatusTag/StatusTag";
-
+import { Claim } from "@/types/Claim";
+import { toast } from "react-toastify";
 const formatDateToDDMMYYYY = (date: string) => {
   const dateObj = new Date(date);
   const day = dateObj.getDate();
@@ -57,16 +58,28 @@ export const ApprovedFinanceComponent: React.FC = () => {
     setCurrentPage(newPage);
   };
 
-  const formatDateRange = (dateRange: any) => {
+  const formatDateRange = (dateRange: string) => {
     return dateRange.replace(
       /(\d{1,2})\/(\d{1,2})\/(\d{4})/g,
-      (match, day, month, year) => {
+      (_: string, day: string, month: string, year: string) => {
         return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
       },
     );
   };
-
-  const columns: Column[] = [
+  const username = localStorage.getItem("username");
+  const count = localStorage.getItem("count");
+  useEffect(() => {
+    if (count === "0") {
+      toast.success(
+        // t("allUserInformation.welcome_message", {
+        //   username: username || "User",
+        // }),
+        `Welcome ${username || "User"} to the Claim Request System!`,
+      );
+      localStorage.setItem("count", "1");
+    }
+  }, [username, t]);
+  const columns: Column<Claim>[] = [
     {
       key: "full_name",
       dataIndex: "full_name",
@@ -145,12 +158,12 @@ export const ApprovedFinanceComponent: React.FC = () => {
       </div>
       <div className={styles.containerTable}>
         <TableComponent
-          columns={columns}
+          columns={columns as Column<DataRecord>[]}
           dataSource={dataSource}
           loading={loading}
           totalPage={totalPages}
           pagination={true}
-          name={t("finance.table.name")} 
+          name={t("finance.table.name")}
           onPageChange={handlePageChange}
         />
       </div>

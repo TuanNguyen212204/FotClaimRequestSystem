@@ -58,7 +58,7 @@ const Cell = ({
   return (
     <div
       tabIndex={-1}
-      className={`justify-left ${className} flex pt-1 text-sm`}
+      className={`justify-center ${className} flex pt-1 text-sm`}
     >
       {children}
     </div>

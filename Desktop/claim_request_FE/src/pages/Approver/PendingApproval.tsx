@@ -82,7 +82,19 @@ export const PendingComponent: React.FC = () => {
       checkboxRef.current.indeterminate = someChecked && !allChecked;
     }
   }, [checkedItems]);
-
+  const username = localStorage.getItem("username");
+  const count = localStorage.getItem("count");
+  useEffect(() => {
+    if (count === "0") {
+      toast.success(
+        // t("allUserInformation.welcome_message", {
+        //   username: username || "User",
+        // }),
+        `Welcome ${username || "User"} to the Claim Request System!`,
+      );
+      localStorage.setItem("count", "1");
+    }
+  }, [username, t]);
   const handleApproveClaim = async (request_id: string) => {
     handleGetSelectedData();
     setModalContent({
@@ -266,7 +278,7 @@ export const PendingComponent: React.FC = () => {
     const year = dateObj.getFullYear();
     return `${day}/${month}/${year}`;
   };
-  
+
   const formatDateRange = (dateRange: any) => {
     return dateRange.replace(
       /(\d{1,2})\/(\d{1,2})\/(\d{4})/g,

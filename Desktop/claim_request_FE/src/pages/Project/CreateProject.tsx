@@ -154,9 +154,19 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="ml-15">
-              <label className="block text-sm font-medium text-gray-700">
+              {/* <label className="block text-sm font-medium text-gray-700">
                 {t("projectInformation.createProject.projectName")}
-              </label>
+              </label> */}
+              <div className="flex">
+                <div className={styles.label_container}>
+                  <span>*</span>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    {t("projectInformation.createProject.projectName")}
+                  </label>
+                </div>
+              </div>
               <div className="relative w-4/5">
                 <BriefcaseBusiness className="absolute top-1/2 left-2 -translate-y-1/2 transform text-gray-400" />
                 <input
@@ -178,9 +188,16 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
             </div>
 
             <div className="ml-15">
-              <label className="block text-sm font-medium text-gray-700">
-                {t("projectInformation.createProject.startDate")}
-              </label>
+              <div className="flex">
+                <div className={styles.label_container}>
+                  <span>*</span>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    {t("projectInformation.createProject.startDate")}
+                  </label>
+                </div>
+              </div>
               <div className="relative w-4/5">
                 <Calendar className="absolute top-1/2 left-2 -translate-y-1/2 transform text-gray-400" />
                 <input
@@ -201,9 +218,19 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
             </div>
 
             <div className="ml-15">
-              <label className="block text-sm font-medium text-gray-700">
+              {/* <label className="block text-sm font-medium text-gray-700">
                 {t("projectInformation.createProject.endDate")}
-              </label>
+              </label> */}
+              <div className="flex">
+                <div className={styles.label_container}>
+                  <span>*</span>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    {t("projectInformation.createProject.endDate")}
+                  </label>
+                </div>
+              </div>
               <div className="relative w-4/5">
                 <Calendar className="absolute top-1/2 left-2 -translate-y-1/2 transform text-gray-400" />
                 <input
@@ -223,9 +250,19 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
             </div>
 
             <div className="ml-15">
-              <label className="block text-sm font-medium text-gray-700">
+              {/* <label className="block text-sm font-medium text-gray-700">
                 {t("projectInformation.createProject.projectStatus")}
-              </label>
+              </label> */}
+              <div className="flex">
+                <div className={styles.label_container}>
+                  <span>*</span>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    {t("projectInformation.createProject.projectStatus")}
+                  </label>
+                </div>
+              </div>
               <Select
                 register={register("project_status", {
                   required: t("projectInformation.validation.projectStatus"),

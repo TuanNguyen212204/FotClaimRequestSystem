@@ -146,14 +146,7 @@ export const PRIVATE_ROUTE: RouteConfig[] = [
     icon: <FileText size={24} />,
     protected: true,
   },
-  {
-    path: PATH.myProject,
-    component: lazy(() => import("@pages/User/MyProjectPage")),
-    label: "My Project",
-    icon: <BriefcaseBusiness size={24} />,
-    protected: true,
-    role: [ROLE.CLAIMER],
-  },
+
   {
     path: PATH.userInfo,
     component: lazy(() => import("@ui/user/UserInfoComponent")),

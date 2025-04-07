@@ -39,9 +39,9 @@
   border-radius: 10px;
   padding: 20px;
   width: 500px;
-  height: auto; 
-  max-height: none; 
-  overflow: hidden; 
+  height: auto;
+  max-height: none;
+  overflow: hidden;
   opacity: 0;
   animation: fadeIn 0.3s forwards;
   position: relative;
@@ -98,15 +98,14 @@
 }
 
 .calendarwrapperstartDateCalendar {
-  top: 50px; 
+  top: 50px;
 }
 
 .calendarwrapperendDateCalendar {
-  bottom: 50px; 
+  bottom: 50px;
 }
 
 .calendar {
   width: 80%;
   max-width: 200px;
 }
-
