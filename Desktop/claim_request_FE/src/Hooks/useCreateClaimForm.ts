@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import { useWatch } from "react-hook-form";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import fetchClaims from "@/redux/thunk/Draft";
 interface CreateClaimFormProps {
   initialValues?: FormData;
   mode: "create" | "view" | "update";
@@ -105,7 +106,7 @@ export default function useCreateClaimForm({
     const handleSubmissionResult = (
       resultAction: any,
       successMessage: string,
-      errorPrefix: string
+      errorPrefix: string,
     ) => {
       if (resultAction.type.endsWith("/fulfilled")) {
         toast.success(successMessage);
@@ -122,7 +123,7 @@ export default function useCreateClaimForm({
       handleSubmissionResult(
         resultAction,
         t("toast.createSuccess"),
-        t("toast.createError")
+        t("toast.createError"),
       );
     } else if (mode === "update") {
       if (!requestID) {
@@ -131,12 +132,15 @@ export default function useCreateClaimForm({
         return;
       }
       const resultAction = await dispatch(
-        updateClaim({ claimData: DataToSend, requestID })
+        updateClaim({ claimData: DataToSend, requestID }),
       );
+      if (resultAction.type.endsWith("/fulfilled")) {
+        dispatch(fetchClaims(requestID));
+      }
       handleSubmissionResult(
         resultAction,
         t("toast.updateSuccess"),
-        t("toast.updateError")
+        t("toast.updateError"),
       );
     }
   };

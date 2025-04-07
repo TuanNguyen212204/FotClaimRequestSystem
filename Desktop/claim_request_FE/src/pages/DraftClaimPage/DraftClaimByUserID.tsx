@@ -17,6 +17,7 @@ import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
 import { selectInitialValues } from "@/redux/slices/UpdateDraft";
 import CreateClaimPage from "../CreateClaim";
 import fetchClaims from "@/redux/thunk/Draft";
+
 const DraftClaimByUserID = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -28,37 +29,24 @@ const DraftClaimByUserID = () => {
   const [selectedClaim, setSelectedClaim] = useState<string>("");
   const [limit] = useState(5);
   const initValue = useSelector(selectInitialValues);
-  const [openModal, setOpenModal] = useState<boolean>(false);
-  const [record, setRecord] = useState<any>();
-  // useEffect(() => {
-  //   setLoading(true);
-  //   const fetchData = async () => {
-  //     await dispatch(fetchClaimByUserAsync());
-  //     setLoading(false);
-  //   };
-  //   fetchData();
-  // }, [dispatch, currentPage]);
-  // useEffect(() => {
-  //   console.log(userClaim);
-  // }, [userClaim]);
-
-  // const handleViewDetail = (id: string) => {
-  //   setSelectedClaim(id);
-  //   setIsModalOpen(true);
-  // };
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [recordToEdit, setRecordToEdit] = useState<any>(null);
 
   useEffect(() => {
-    setLoading(true);
-    const fetchData = async () => {
-      await dispatch(
-        fetchClaimByUserAsync({ page: currentPage, status: "DRAFT" }),
-      );
-      setLoading(false);
-      dispatch(fetchTotalClaimByUserAsync({ status: "DRAFT" }));
-    };
-    fetchData();
-    console.log(totalPage);
-  }, [currentPage, dispatch, totalPage]);
+    if (!isEditing) {
+      setLoading(true);
+      const fetchData = async () => {
+        await dispatch(
+          fetchClaimByUserAsync({ page: currentPage, status: "DRAFT" }),
+        );
+        setLoading(false);
+        dispatch(fetchTotalClaimByUserAsync({ status: "DRAFT" }));
+      };
+      fetchData();
+      console.log(totalPage);
+    }
+  }, [currentPage, dispatch, totalPage, isEditing]);
+
   const handleViewDetail = (id: string) => {
     setLoading(true);
     setTimeout(() => {
@@ -74,13 +62,22 @@ const DraftClaimByUserID = () => {
   };
 
   const formatDateToDDMMYYYY = (date: string) => {
-    const dateObj = new Date(date);
-    const day = dateObj.getDate();
-    const month = dateObj.getMonth() + 1;
-    const year = dateObj.getFullYear();
-    return `${day}/${month}/${year}`;
+    if (!date) return "N/A";
+    try {
+      const dateObj = new Date(date);
+      if (isNaN(dateObj.getTime())) return "Invalid Date";
+      const day = dateObj.getDate().toString().padStart(2, "0");
+      const month = (dateObj.getMonth() + 1).toString().padStart(2, "0");
+      const year = dateObj.getFullYear();
+      return `${day}/${month}/${year}`;
+    } catch (error) {
+      console.error("Error formatting date:", date, error);
+      return "Invalid Date";
+    }
   };
+
   const formatDateRange = (dateRange: any) => {
+    if (typeof dateRange !== "string") return "N/A";
     return dateRange.replace(
       /(\d{1,2})\/(\d{1,2})\/(\d{4})/g,
       (match, day, month, year) => {
@@ -88,14 +85,19 @@ const DraftClaimByUserID = () => {
       },
     );
   };
-  const handleUpdate = async (record: any) => {
-    console.log("Update", record);
-    setOpenModal(true);
-    setRecord(record);
-    console.log(record.request_id);
-    console.table(record);
-    dispatch(fetchClaims(record.request_id));
+
+  const handleEditClick = async (record: any) => {
+    console.log("Editing record:", record);
+    setRecordToEdit(record);
+    await dispatch(fetchClaims(record.request_id));
+    setIsEditing(true);
   };
+
+  const handleReturnToTable = () => {
+    setIsEditing(false);
+    setRecordToEdit(null);
+  };
+
   const columns: Column<Claim>[] = [
     {
       key: "project_id",
@@ -126,11 +128,8 @@ const DraftClaimByUserID = () => {
       key: "submitted_date",
       dataIndex: "submitted_date",
       title: "Submitted Date",
-
       cell: ({ value }) => {
-        const formattedValue = formatDateRange(
-          formatDateToDDMMYYYY(value as string),
-        );
+        const formattedValue = formatDateToDDMMYYYY(value as string);
         return <span>{formattedValue}</span>;
       },
     },
@@ -192,13 +191,19 @@ const DraftClaimByUserID = () => {
       dataIndex: "update",
       title: "Update",
       cell: ({ record }: { record: any }) => (
-        <SquarePen onClick={() => handleUpdate(record)} />
+        <Tooltip text="Edit Claim" placement="top">
+          <SquarePen
+            className="cursor-pointer"
+            onClick={() => handleEditClick(record)}
+          />
+        </Tooltip>
       ),
     },
   ];
+
   const dataSource: DataRecord[] = userClaim.map((claim, index) => ({
     ...claim,
-    key: index,
+    key: claim.request_id || index.toString(),
     id: claim.claim_id ? claim.claim_id.toString() : "",
     project_name: claim.project_name || "",
     start_date: claim.start_date || null,
@@ -211,65 +216,46 @@ const DraftClaimByUserID = () => {
           )}`
         : "N/A",
   }));
-  return (
-    // <div className={styles.container}>
-    //   <TableComponent
-    //     columns={columns}
-    //     dataSource={dataSource}
-    //     loading={loading}
-    //     pagination={true}
-    //     name="My Claims"
-    //     totalPage={totalPage}
-    //     onPageChange={handlePageChange}
-    //   />
-    // </div>
-    <>
-      {openModal && (
-        <div className={`m-0 p-0`}>
-          <div>
-            <div className="relative w-full rounded-lg shadow-lg">
-              {initValue && (
-                <span
-                  className="absolute top-3 right-5 flex h-6 w-6 cursor-pointer items-center justify-center rounded-full text-gray-600 hover:bg-gray-300 hover:text-gray-800"
-                  onClick={() => setOpenModal(false)}
-                >
-                  X
-                </span>
-              )}
-              {initValue && (
-                <CreateClaimPage
-                  initialValues={initValue}
-                  mode="update"
-                  formStatus="Draft"
-                  requestID={record.request_id}
-                />
-              )}
-            </div>
+
+  if (isEditing) {
+    if (!initValue) {
+      return <div>Loading editor...</div>;
+    }
+    return (
+      <CreateClaimPage
+        initialValues={initValue}
+        mode="update"
+        formStatus="Draft"
+        requestID={recordToEdit?.request_id}
+        onReturn={handleReturnToTable}
+      />
+    );
+  } else {
+    return (
+      <>
+        <div className="mt-2 p-0">
+          <div className="mb-10 ml-5">
+            <h1 className="m-0 p-0">Draft Claims</h1>
+            <p className="m-0 p-0">
+              Here you can view all your draft claims and their statuses.
+            </p>
+          </div>
+          <div className={styles.tableContainer}>
+            <TableComponent
+              isHaveCheckbox={false}
+              columns={columns as Column<DataRecord>[]}
+              dataSource={dataSource}
+              loading={loading}
+              pagination={true}
+              name="My Claims"
+              totalPage={totalPage}
+              onPageChange={handlePageChange}
+            />
           </div>
         </div>
-      )}
-
-      <div className="mt-2 p-0">
-        <div className="mb-10 ml-5">
-          <h1 className="m-0 p-0">Draft Claims</h1>
-          <p className="m-0 p-0">
-            Here you can view all your draft claims and their statuses.
-          </p>
-        </div>
-        <div className={`${styles.tableContainer}`}>
-          <TableComponent
-            isHaveCheckbox={false}
-            columns={columns as Column<DataRecord>[]}
-            dataSource={dataSource}
-            loading={loading}
-            pagination={true}
-            name="My Claims"
-            totalPage={totalPage}
-            onPageChange={handlePageChange}
-          />
-        </div>
-      </div>
-    </>
-  );
+      </>
+    );
+  }
 };
+
 export default DraftClaimByUserID;
