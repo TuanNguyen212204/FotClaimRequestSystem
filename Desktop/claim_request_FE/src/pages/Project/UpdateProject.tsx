@@ -1,129 +1,101 @@
 import React, { useEffect, useState } from "react";
-import { X } from "lucide-react";
+import { BriefcaseBusiness, X, Calendar } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { Project } from "@/types/Project";
-import styles from "./UpdateProject.module.css";
+import styles from "./CreateProject.module.css";
 import Modal from "react-modal";
 import httpClient from "@/constant/apiInstance";
 import { toast } from "react-toastify";
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
-
-Modal.setAppElement("#root");
-
+import { ApiResponse } from "@/types/ApiResponse";
+import { use } from "i18next";
+import { useTranslation } from "react-i18next";
+import { Select } from "../User/CreateUser";
+import { LoadingProvider } from "@/components/ui/Loading/LoadingContext";
+import LoadingOverlay from "@/components/ui/Loading/LoadingOverlay";
 interface UpdateProjectProps {
   projectid: string;
   setOpenModal: (open: boolean) => void;
 }
-
-export const UpdateProject: React.FC<UpdateProjectProps> = ({ projectid, setOpenModal }) => {
+const options: Option[] = [
+  { label: "Active", value: "1" },
+  { label: "Inactive", value: "2" },
+];
+export const UpdateProject: React.FC<UpdateProjectProps> = ({
+  projectid,
+  setOpenModal,
+}) => {
+  const { t } = useTranslation("projectInformation");
   const {
     register,
-    watch,
-    setValue,
+    handleSubmit,
+
     setError,
-    clearErrors,
+    reset,
     formState: { errors },
   } = useForm<Project>();
 
-  const [projectData, setProjectData] = useState({
-    project_name: "",
-    start_date: "",
-    end_date: "",
-    project_status: 1,
-  });
-
   const [loading, setLoading] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
-
-  const [startDateSelected, setStartDateSelected] = useState<Date | null>(null);
-  const [endDateSelected, setEndDateSelected] = useState<Date | null>(null);
-  const [showStartDateCalendar, setShowStartDateCalendar] = useState(false);
-  const [showEndDateCalendar, setShowEndDateCalendar] = useState(false);
-
-  const minDate = new Date("2025-01-01");
-
+  const [project, setProject] = useState<Project | null>(null);
   const handleClose = () => {
-    setIsClosing(true);
-    setTimeout(() => setOpenModal(false), 300);
+    setOpenModal(false);
   };
-
-  const formatDate = (date: Date | null) => {
-    return date ? date.toISOString().split("T")[0] : "";
+  const formatDateToDDMMYYYY = (dateString: string): string => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months start from 0
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
   };
-
+  const formatDateToInput = (date: string) => {
+    return new Date(date).toISOString().split("T")[0]; // yyyy-mm-dd
+  };
   const fetchProject = async () => {
     try {
       setLoading(true);
-      const res = await httpClient.get(`/projects/${projectid}`);
-      const { project_name, start_date, end_date, project_status } = res.data;
-
-      const parsedStart = new Date(start_date);
-      const parsedEnd = new Date(end_date);
-
-      setProjectData({
-        project_name,
-        start_date: formatDate(parsedStart),
-        end_date: formatDate(parsedEnd),
-        project_status,
+      const response = await httpClient.get<ApiResponse<Project>>(
+        `/projects/${projectid}`,
+      );
+      const project = response.data.data;
+      setProject(project);
+      reset({
+        ...project,
+        start_date: formatDateToInput(project.start_date),
+        end_date: formatDateToInput(project.end_date),
       });
-
-      setStartDateSelected(parsedStart);
-      setEndDateSelected(parsedEnd);
-
-      setValue("start_date", formatDate(parsedStart));
-      setValue("end_date", formatDate(parsedEnd));
-    } catch (err) {
-      console.error("Fetch error:", err);
+      console.log(project);
+    } catch (error) {
+      console.error("Fetch error:", error);
+      toast.error("Failed to load project data.");
     } finally {
       setLoading(false);
     }
   };
+  useEffect(() => {
+    console.log(project);
+  }, [project]);
 
   useEffect(() => {
     fetchProject();
   }, [projectid]);
 
-  useEffect(() => {
-    if (startDateSelected && endDateSelected && endDateSelected < startDateSelected) {
+  const onSubmit = async (data: Project) => {
+    if (new Date(data.end_date) < new Date(data.start_date)) {
       setError("end_date", {
         type: "manual",
-        message: "End Date must be after Start Date",
+        message: "End date must be after start date",
       });
-    } else {
-      clearErrors("end_date");
-    }
-  }, [startDateSelected, endDateSelected, setError, clearErrors]);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setProjectData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleStartDateChange = (newDate: Date) => {
-    setStartDateSelected(newDate);
-    setProjectData((prev) => ({ ...prev, start_date: formatDate(newDate) }));
-    setValue("start_date", formatDate(newDate));
-    setShowStartDateCalendar(false);
-  };
-
-  const handleEndDateChange = (newDate: Date) => {
-    setEndDateSelected(newDate);
-    setProjectData((prev) => ({ ...prev, end_date: formatDate(newDate) }));
-    setValue("end_date", formatDate(newDate));
-    setShowEndDateCalendar(false);
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (endDateSelected && startDateSelected && endDateSelected < startDateSelected) {
-      toast.error("End Date must be after Start Date");
       return;
     }
-
+    const requestBody = {
+      project_name: data.project_name || project?.project_name,
+      start_date: data.start_date || project?.start_date,
+      end_date: data.end_date || project?.end_date,
+      project_status: data.project_status || project?.project_status,
+    };
     try {
       setLoading(true);
-      await httpClient.put(`/projects/${projectid}`, projectData);
+      await httpClient.put(`/projects/${projectid}`, requestBody);
       toast.success("Project updated successfully!");
       setOpenModal(false);
     } catch (error) {
@@ -135,94 +107,122 @@ export const UpdateProject: React.FC<UpdateProjectProps> = ({ projectid, setOpen
   };
 
   return (
-    <Modal
-      isOpen={true}
-      onRequestClose={handleClose}
-      className={styles.modal}
-      overlayClassName={styles.overlay}
-    >
-      <div className="p-6 bg-white rounded-lg shadow-lg max-w-lg mx-auto relative">
-        <button onClick={handleClose} className={`${styles.close_button} absolute top-4 right-4`}>
-          <X />
-        </button>
-
-        <h2 className="text-2xl font-bold text-gray-700 mb-4 text-center">Update Project</h2>
-
-        {loading ? (
-          <p>Loading...</p>
-        ) : (
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Project Name</label>
-              <input
-                type="text"
-                name="project_name"
-                value={projectData.project_name}
-                onChange={handleChange}
-                required
-                className="w-full p-2 border border-gray-300 rounded-md"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Start Date</label>
-              <div
-                className="w-full p-2 border border-gray-300 rounded-md cursor-pointer"
-                onClick={() => setShowStartDateCalendar(!showStartDateCalendar)}
+    <div>
+      <div>
+        {loading && (
+          <div>
+            <LoadingProvider>
+              <LoadingOverlay />
+            </LoadingProvider>
+          </div>
+        )}
+      </div>
+      <div>
+        <div className="mx-auto rounded-xl bg-white pr-5 pb-5 pl-1 shadow-xl">
+          <button onClick={handleClose} className={styles.cancel_button}>
+            <X />
+          </button>
+          <h2 className="mb-6 text-center text-3xl font-bold text-blue-700">
+            Update Project
+          </h2>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
+            <div className="ml-15">
+              <label
+                className="block text-sm font-medium text-gray-600"
+                htmlFor="project_name"
               >
-                {startDateSelected ? startDateSelected.toLocaleDateString("vi-VN") : "DD/MM/YYYY"}
-              </div>
-              {showStartDateCalendar && (
-                <div className={styles.calendarwrapper}>
-                  <Calendar
-                    onChange={handleStartDateChange}
-                    value={startDateSelected}
-                    locale="vi-VN"
-                    className={styles.calendarwrapperstartDateCalendar}
-                    minDate={minDate}
-                  />
+                <div className={styles.flex}>
+                  <div className={styles.label_container}>
+                    <span>*</span>
+                  </div>
+                  <div className={styles.input_container}>
+                    <span>Project Name</span>
+                  </div>
                 </div>
+              </label>
+              <div className="relative w-4/5">
+                <BriefcaseBusiness className="absolute top-1/2 left-2 -translate-y-1/2 transform text-gray-400" />
+                <input
+                  placeholder="Enter the project name"
+                  type="text"
+                  {...register("project_name", {
+                    required: t("projectInformation.validation.projectName"),
+                  })}
+                  className="mt-1 h-6 w-full rounded-lg border border-gray-300 p-2 pl-8 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                />
+              </div>
+              {errors.project_name && (
+                <p className="text-sm text-red-500">
+                  {errors.project_name.message}
+                </p>
               )}
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700">End Date</label>
-              <div
-                className="w-full p-2 border border-gray-300 rounded-md cursor-pointer"
-                onClick={() => setShowEndDateCalendar(!showEndDateCalendar)}
-              >
-                {endDateSelected ? endDateSelected.toLocaleDateString("vi-VN") : "DD/MM/YYYY"}
+            <div className="ml-15">
+              <label className="block text-sm font-medium text-gray-700">
+                <div className={styles.flex}>
+                  <div className={styles.label_container}>
+                    <span>*</span>
+                  </div>
+                  <div className={styles.input_container}>
+                    <span> Start Date</span>
+                  </div>
+                </div>
+              </label>
+              <div className="relative w-4/5">
+                <Calendar className="absolute top-1/2 left-2 -translate-y-1/2 transform text-gray-400" />
+                <input
+                  type="date"
+                  {...register("start_date", {
+                    required: t("projectInformation.validation.startDate"),
+                  })}
+                  className="mt-1 h-6 w-5/5 rounded-lg border border-gray-300 p-2 pl-9 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                  min="2025-01-01"
+                />
+              </div>
+            </div>
+
+            <div className="ml-15">
+              <label className="block text-sm font-medium text-gray-700">
+                End Date
+              </label>
+              <div className="relative w-4/5">
+                <Calendar className="absolute top-1/2 left-2 -translate-y-1/2 transform text-gray-400" />
+                <input
+                  type="date"
+                  {...register("end_date", {
+                    required: t("projectInformation.validation.startDate"),
+                  })}
+                  className="mt-1 h-6 w-5/5 rounded-lg border border-gray-300 p-2 pl-9 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                  min="2025-01-01"
+                />
               </div>
               {errors.end_date && (
-                <p className="text-red-500 text-sm">{errors.end_date.message}</p>
-              )}
-              {showEndDateCalendar && (
-                <div className={styles.calendarwrapper}>
-                  <Calendar
-                    onChange={handleEndDateChange}
-                    value={endDateSelected}
-                    locale="vi-VN"
-                    className={styles.calendarwrapperendDateCalendar}
-                    minDate={minDate}
-                  />
-                </div>
+                <p className="text-sm text-red-500">
+                  {errors.end_date.message}
+                </p>
               )}
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Project Status</label>
-              <select
-                name="project_status"
-                value={projectData.project_status}
-                onChange={handleChange}
-                className="w-full p-2 border border-gray-300 rounded-md"
-              >
-                <option value="1">Active</option>
-                <option value="0">Inactive</option>
-              </select>
+            <div className="ml-15">
+              <label className="block text-sm font-medium text-gray-700">
+                Project Status
+              </label>
+              <Select
+                register={register("project_status")}
+                options={options}
+                placeholder="Select Project Status"
+                onChange={(value) => console.log(value)}
+                className="mt-1 h-11 w-90 rounded-lg border border-gray-300 p-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              ></Select>
+              {errors.project_status && (
+                <p className="text-sm text-red-500">
+                  {errors.project_status.message}
+                </p>
+              )}
             </div>
 
-            <div className="flex justify-end">
+            <div className="flex justify-center">
               <button
                 type="submit"
                 className={styles.update_button}
@@ -232,8 +232,8 @@ export const UpdateProject: React.FC<UpdateProjectProps> = ({ projectid, setOpen
               </button>
             </div>
           </form>
-        )}
+        </div>
       </div>
-    </Modal>
+    </div>
   );
 };

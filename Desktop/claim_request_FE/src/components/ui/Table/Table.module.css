@@ -10,8 +10,7 @@ body {
   background-color: #fff5;
   width: 100%;
   min-width: 800px;
-  min-height: 200px;
-  max-height:;
+
   border-radius: 10px; /* Bo góc bảng */
   overflow: hidden;
 }

@@ -15,7 +15,7 @@ import StatusTag from "../StatusTag/StatusTag";
 import { useTranslation } from "react-i18next";
 import { Claim } from "@/types/Claim";
 import { C } from "node_modules/framer-motion/dist/types.d-B50aGbjN";
-
+import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
 const UserClaims = () => {
   const { t } = useTranslation("userClaims");
   const dispatch = useDispatch<AppDispatch>();
@@ -125,10 +125,16 @@ const UserClaims = () => {
       title: t("action_label"),
       cell: ({ value }) => (
         <div className="flex items-center justify-center gap-2">
-          <EyeIcon
-            className="cursor-pointer"
-            onClick={() => handleViewDetail(value as string)}
-          />
+          <Tooltip
+            // text={t("view_detail_tooltip")}
+            placement="top"
+            text="View Detail"
+          >
+            <EyeIcon
+              className="cursor-pointer"
+              onClick={() => handleViewDetail(value as string)}
+            />
+          </Tooltip>
           <UserClaimDetailsModal
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}

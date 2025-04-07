@@ -290,7 +290,7 @@ const Header: React.FC = () => {
               </div>
             )}
           </div>
-          <span className={styles.username}>{username}</span>
+          {/* <span className={styles.username}>{username}</span> */}
           <LanguageSwitcher />
         </div>
       </header>

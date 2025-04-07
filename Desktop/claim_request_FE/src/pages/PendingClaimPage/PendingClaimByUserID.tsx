@@ -14,6 +14,7 @@ import UserClaimDetailsModal from "@components/ui/claimer/UserClaimDetails";
 import StatusTag from "@components/ui/StatusTag/StatusTag";
 import { useTranslation } from "react-i18next";
 import { Claim } from "@/types/Claim";
+import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
 
 const PendingClaimByUserID = () => {
   const { t } = useTranslation("userClaims");
@@ -126,10 +127,12 @@ const PendingClaimByUserID = () => {
       title: t("action_label"),
       cell: ({ value }) => (
         <div className="flex items-center justify-center gap-2">
-          <EyeIcon
-            className="cursor-pointer"
-            onClick={() => handleViewDetail(value as string)}
-          />
+          <Tooltip text="View Claim Details" placement="top">
+            <EyeIcon
+              className="cursor-pointer"
+              onClick={() => handleViewDetail(value as string)}
+            />
+          </Tooltip>
           <UserClaimDetailsModal
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
