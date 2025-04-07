@@ -171,6 +171,23 @@ const DraftClaimByUserID = () => {
       ),
     },
     {
+      key: "Submit",
+      dataIndex: "submit",
+      title: "Submit",
+      cell: ({ record }: { record: any }) => {
+        return (
+          <Tooltip text="Submit Claim" placement="top">
+            <button
+              className="rounded-md bg-blue-500 px-4 py-2 text-white"
+              onClick={() => {}}
+            >
+              Submit
+            </button>
+          </Tooltip>
+        );
+      },
+    },
+    {
       key: "update",
       dataIndex: "update",
       title: "Update",
