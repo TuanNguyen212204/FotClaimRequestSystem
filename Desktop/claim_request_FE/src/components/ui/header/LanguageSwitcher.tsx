@@ -12,12 +12,12 @@ const languageOptions = [
           alt="English"
           style={{ width: 20, height: 15, marginRight: 10 }}
         />
-        <span style={{color: "#000" }}>EN</span>
+        <span style={{ color: "#000" }}>EN</span>
       </div>
     ),
   },
   {
-    value: "vn",
+    value: "vi", 
     label: (
       <div style={{ display: "flex", alignItems: "center" }}>
         <img
@@ -25,7 +25,7 @@ const languageOptions = [
           alt="Vietnamese"
           style={{ width: 20, height: 15, marginRight: 10 }}
         />
-        <span style={{color: "#000" }}>VI</span>
+        <span style={{ color: "#000" }}>VI</span>
       </div>
     ),
   },
@@ -47,7 +47,9 @@ export const LanguageSwitcher: React.FC = () => {
       <Select
         options={languageOptions}
         onChange={changeLanguage}
-        defaultValue={languageOptions.find((opt) => opt.value === i18n.language)}
+        defaultValue={languageOptions.find(
+          (opt) => opt.value === i18n.language,
+        )}
         styles={{
           control: (base) => ({
             ...base,

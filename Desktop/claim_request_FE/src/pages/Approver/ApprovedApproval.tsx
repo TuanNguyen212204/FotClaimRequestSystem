@@ -12,7 +12,18 @@ import {
   selectApprovedClaimTotalPages,
 } from "@redux/selector/claimSelector";
 import { useTranslation } from "react-i18next";
-import { format } from "path";
+
+
+const formatDateByLanguage = (date: string, language: string) => {
+  const dateObj = new Date(date);
+  const day = dateObj.getDate().toString().padStart(2, "0"); 
+  const month = (dateObj.getMonth() + 1).toString().padStart(2, "0"); 
+  const year = dateObj.getFullYear();
+
+  return language === "vi"
+    ? `${day}/${month}/${year}` 
+    : `${month}/${day}/${year}`; 
+};
 
 export const ApprovedApproval: React.FC = () => {
   const navigate = useNavigate();
@@ -23,7 +34,7 @@ export const ApprovedApproval: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [limit] = useState(10);
   const [isSalaryVisible, setIsSalaryVisible] = useState(false);
-  const { t } = useTranslation("approve");
+  const { t, i18n } = useTranslation("approve");
 
   useEffect(() => {
     setLoading(true);
@@ -39,26 +50,11 @@ export const ApprovedApproval: React.FC = () => {
     navigate(`/approve-details?id=${id}`);
   };
 
-  const formatDateToDDMMYYYY = (date: string) => {
-    const dateObj = new Date(date);
-    const day = dateObj.getDate();
-    const month = dateObj.getMonth() + 1;
-    const year = dateObj.getFullYear();
-    return `${day}/${month}/${year}`;
-  };
-
   const handlePageChange = (newPage: number) => {
     console.log("Trang mới: ", newPage);
     setCurrentPage(newPage);
   };
-  const formatDateRange = (dateRange: any) => {
-    return dateRange.replace(
-      /(\d{1,2})\/(\d{1,2})\/(\d{4})/g,
-      (match, day, month, year) => {
-        return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
-      },
-    );
-  };
+
   const columns: Column<DataRecord>[] = [
     {
       key: "user_name",
@@ -74,15 +70,13 @@ export const ApprovedApproval: React.FC = () => {
       key: "start_date",
       dataIndex: "start_date",
       title: t("columns.start_date"),
-      cell: ({ value }) =>
-        formatDateRange(formatDateToDDMMYYYY(value as string)),
+      cell: ({ value }) => formatDateByLanguage(value as string, i18n.language),
     },
     {
       key: "end_date",
       dataIndex: "end_date",
       title: t("columns.end_date"),
-      cell: ({ value }) =>
-        formatDateRange(formatDateToDDMMYYYY(value as string)),
+      cell: ({ value }) => formatDateByLanguage(value as string, i18n.language),
     },
     {
       key: "total_hours",
@@ -103,46 +97,16 @@ export const ApprovedApproval: React.FC = () => {
       key: "submitted_date",
       dataIndex: "submitted_date",
       title: t("columns.submitted_date"),
-      cell: ({ value }) =>
-        formatDateRange(formatDateToDDMMYYYY(value as string)),
+      cell: ({ value }) => formatDateByLanguage(value as string, i18n.language),
     },
-    // {
-    //   key: "salary",
-    //   dataIndex: "user_salary",
-    //   title: t("columns.salary"),
-    //   cell: ({ value }) => <div>{isSalaryVisible ? value : "******"}</div>,
-    // },
-    // {
-    //   key: "ot_rate",
-    //   dataIndex: "user_ot_rate",
-    //   title: t("columns.otRate"),
-    // },
-    // {
-    //   key: "salary_overtime",
-    //   dataIndex: "salary_overtime",
-    //   title: t("columns.salaryOvertime"),
-    //   cell: ({ value }) => (
-    //     <div>{isSalaryVisible ? value : "*****************"}</div>
-    //   ),
-    // },
     {
       key: "claim_status",
       dataIndex: "claim_status",
       title: t("columns.claim_status"),
       cell: ({ value }) => <StatusTag status={value as StatusType} />,
     },
-    // {
-    //   key: "action",
-    //   dataIndex: "claim_id",
-    //   title: "",
-    //   cell: ({ value }) => (
-    //     <EyeIcon
-    //       className={styles.icon}
-    //       onClick={() => handleViewDetail(value as string)}
-    //     />
-    //   ),
-    // },
   ];
+
   const dataSource: DataRecord[] = claimList.map((claim) => ({
     key: claim.request_id,
     ...claim,

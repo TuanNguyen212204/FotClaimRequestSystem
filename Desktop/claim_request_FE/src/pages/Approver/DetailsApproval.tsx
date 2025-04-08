@@ -14,26 +14,16 @@ import { toast } from "react-toastify";
 import httpClient from "@/constant/apiInstance.ts";
 import { useTranslation } from "react-i18next";
 
-const formatDateToMonthDay = (date: string) => {
+
+const formatDateByLanguage = (date: string, language: string) => {
   const dateObj = new Date(date);
-  const day = dateObj.getDate();
-  const month = dateObj.toLocaleString("en-US", { month: "long" });
+  const day = dateObj.getDate().toString().padStart(2, "0"); 
+  const month = (dateObj.getMonth() + 1).toString().padStart(2, "0"); 
+  const year = dateObj.getFullYear();
 
-  const getDayWithSuffix = (day: number) => {
-    if (day > 3 && day < 21) return `${day}th`;
-    switch (day % 10) {
-      case 1:
-        return `${day}st`;
-      case 2:
-        return `${day}nd`;
-      case 3:
-        return `${day}rd`;
-      default:
-        return `${day}th`;
-    }
-  };
-
-  return `${month} ${getDayWithSuffix(day)}`;
+  return language === "vi"
+    ? `${day}/${month}/${year}` 
+    : `${month}/${day}/${year}`; 
 };
 
 interface PendingDetailModalProps {
@@ -51,7 +41,7 @@ export const DetailsApproval: React.FC<PendingDetailModalProps> = ({
   currentPage,
   limit,
 }) => {
-  const { t } = useTranslation("details");
+  const { t, i18n } = useTranslation("details");
   const dispatch = useDispatch<AppDispatch>();
   const claimDetail = useSelector(selectAllDetailPending);
   const [isChevronDown, setIsChevronDown] = useState<boolean>(false);
@@ -83,11 +73,11 @@ export const DetailsApproval: React.FC<PendingDetailModalProps> = ({
           limit: limit.toString(),
         }),
       );
-      toast.success(t("toast.success")); // Thêm key nếu cần
+      toast.success(t("toast.success"));
       onClose();
     } catch (error) {
       console.log("Error approving claim: ", error);
-      toast.error(t("toast.error")); // Thêm key nếu cần
+      toast.error(t("toast.error"));
     }
   };
 
@@ -152,9 +142,18 @@ export const DetailsApproval: React.FC<PendingDetailModalProps> = ({
             <div className={styles.projectRow}>
               <span className={styles.projectLabel}>{t("time_duration")}:</span>
               <span className={styles.projectValue}>
-                {formatDateToMonthDay(`${claimDetail?.start_date}`)}
-                <MoveRight size={20} className={styles.iconMoveRight} />
-                {formatDateToMonthDay(`${claimDetail?.end_date}`)}
+                {claimDetail?.start_date && claimDetail?.end_date ? (
+                  <>
+                    {formatDateByLanguage(
+                      claimDetail.start_date,
+                      i18n.language,
+                    )}
+                    <MoveRight size={20} className={styles.iconMoveRight} />
+                    {formatDateByLanguage(claimDetail.end_date, i18n.language)}
+                  </>
+                ) : (
+                  "-"
+                )}
               </span>
             </div>
             <div className={styles.projectRow}>
@@ -162,7 +161,12 @@ export const DetailsApproval: React.FC<PendingDetailModalProps> = ({
                 {t("submitted_date")}:
               </span>
               <span className={styles.projectValue}>
-                {formatDateToMonthDay(`${claimDetail?.submitted_date}`)}
+                {claimDetail?.submitted_date
+                  ? formatDateByLanguage(
+                      claimDetail.submitted_date,
+                      i18n.language,
+                    )
+                  : "-"}
               </span>
             </div>
             <div className={styles.projectRow}>
@@ -214,7 +218,7 @@ export const DetailsApproval: React.FC<PendingDetailModalProps> = ({
                   ? claimDetail.claim_details.map((detail, index) => (
                       <div key={index} className={styles.historyItem}>
                         <span className={styles.historyItemDate}>
-                          {formatDateToMonthDay(detail.date)}
+                          {formatDateByLanguage(detail.date, i18n.language)}
                         </span>
                         <div className={styles.historyItemInfo}>
                           <div className={styles.historyItemRow}>

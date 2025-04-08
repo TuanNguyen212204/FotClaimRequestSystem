@@ -12,23 +12,34 @@ import CustomModal from "@/components/ui/CustomModal/CustomModal";
 import StatusTag, { StatusType } from "@/components/ui/StatusTag/StatusTag";
 import { useTranslation } from "react-i18next";
 
-const formatDateToDDMMYYYY = (date: string) => {
-  const dateObj = new Date(date);
-  const day = dateObj.getDate();
-  const month = dateObj.getMonth() + 1;
-  const year = dateObj.getFullYear();
-  return `${day}/${month}/${year}`;
-};
 
-const formatDateToMonthDay = (date: string) => {
+const formatDateByLanguage = (
+  date: string,
+  language: string,
+  includeMonthName: boolean = false,
+) => {
   const dateObj = new Date(date);
-  const day = dateObj.getDate();
-  const month = dateObj.toLocaleString("en-US", { month: "long" });
-  return `${month} ${day}`;
+  const day = dateObj.getDate().toString().padStart(2, "0"); 
+  const month = (dateObj.getMonth() + 1).toString().padStart(2, "0"); 
+  const year = dateObj.getFullYear();
+  const monthName = dateObj.toLocaleString(
+    language === "vi" ? "vi-VN" : "en-US",
+    { month: "long" },
+  );
+
+  if (includeMonthName) {
+    return language === "vi"
+      ? `${monthName} ${day}` 
+      : `${monthName} ${day}`; 
+  }
+
+  return language === "vi"
+    ? `${day}/${month}/${year}` 
+    : `${month}/${day}/${year}`; 
 };
 
 const PaidClaims: React.FC = () => {
-  const { t } = useTranslation("paidclaims");
+  const { t, i18n } = useTranslation("paidclaims");
   const dispatch = useDispatch<AppDispatch>();
   const {
     data: claims,
@@ -53,14 +64,7 @@ const PaidClaims: React.FC = () => {
     setIsModalOpen(false);
     setSelectedRequestId("");
   };
-  const formatDateRange = (dateRange: any) => {
-    return dateRange.replace(
-      /(\d{1,2})\/(\d{1,2})\/(\d{4})/g,
-      (match, day, month, year) => {
-        return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
-      },
-    );
-  };
+
   const columns: Column[] = [
     {
       key: "index",
@@ -83,7 +87,7 @@ const PaidClaims: React.FC = () => {
       key: "time_duration",
       dataIndex: "time_duration",
       title: t("paidclaims.table.projectDuration"),
-      cell: ({ value }) => formatDateRange(value as string),
+      cell: ({ value }) => value as string, 
     },
     {
       key: "total_hours",
@@ -108,7 +112,7 @@ const PaidClaims: React.FC = () => {
     ...claim,
     key: claim.request_id,
     index: (currentPage - 1) * limit + index + 1,
-    time_duration: `${formatDateToDDMMYYYY(claim.start_date)} - ${formatDateToDDMMYYYY(claim.end_date)}`,
+    time_duration: `${formatDateByLanguage(claim.start_date, i18n.language)} - ${formatDateByLanguage(claim.end_date, i18n.language)}`,
   }));
 
   const selectedClaim = claims.find(
@@ -165,21 +169,37 @@ const PaidClaims: React.FC = () => {
           <div className={styles.projectRow}>
             <span className={styles.projectLabel}>Time Duration:</span>
             <span className={styles.projectValue}>
-              {formatDateToMonthDay(selectedClaim.start_date)}
+              {formatDateByLanguage(
+                selectedClaim.start_date,
+                i18n.language,
+                true,
+              )}
               <MoveRight size={20} className={styles.iconMoveRight} />
-              {formatDateToMonthDay(selectedClaim.end_date)}
+              {formatDateByLanguage(
+                selectedClaim.end_date,
+                i18n.language,
+                true,
+              )}
             </span>
           </div>
           <div className={styles.projectRow}>
             <span className={styles.projectLabel}>Submitted Date:</span>
             <span className={styles.projectValue}>
-              {formatDateToMonthDay(selectedClaim.submitted_date)}
+              {formatDateByLanguage(
+                selectedClaim.submitted_date,
+                i18n.language,
+                true,
+              )}
             </span>
           </div>
           <div className={styles.projectRow}>
             <span className={styles.projectLabel}>Approved Date:</span>
             <span className={styles.projectValue}>
-              {formatDateToMonthDay(selectedClaim.approved_date)}
+              {formatDateByLanguage(
+                selectedClaim.approved_date,
+                i18n.language,
+                true,
+              )}
             </span>
           </div>
           <div className={styles.projectRow}>
@@ -210,7 +230,7 @@ const PaidClaims: React.FC = () => {
             {selectedClaim.claim_details.map((detail: any, index: number) => (
               <div key={index} className={styles.historyItem}>
                 <span className={styles.historyItemDate}>
-                  {formatDateToMonthDay(detail.date)}
+                  {formatDateByLanguage(detail.date, i18n.language, true)}
                 </span>
                 <div className={styles.historyItemInfo}>
                   <div className={styles.historyItemRow}>

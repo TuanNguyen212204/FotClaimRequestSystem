@@ -16,16 +16,20 @@ import StatusTag, { StatusType } from "../StatusTag/StatusTag";
 import { Claim } from "@/types/Claim";
 import { toast } from "react-toastify";
 
-const formatDateToDDMMYYYY = (date: string) => {
+
+const formatDateByLanguage = (date: string, language: string) => {
   const dateObj = new Date(date);
-  const day = dateObj.getDate();
-  const month = dateObj.getMonth() + 1;
+  const day = dateObj.getDate().toString().padStart(2, "0"); 
+  const month = (dateObj.getMonth() + 1).toString().padStart(2, "0"); 
   const year = dateObj.getFullYear();
-  return `${day}/${month}/${year}`;
+
+  return language === "vi"
+    ? `${day}/${month}/${year}` 
+    : `${month}/${day}/${year}`; 
 };
 
 export const ApprovedFinanceComponent: React.FC = () => {
-  const { t } = useTranslation("finance");
+  const { t, i18n } = useTranslation("finance");
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const claimList = useSelector(selectApprovedClaimFinance);
@@ -59,15 +63,6 @@ export const ApprovedFinanceComponent: React.FC = () => {
     setCurrentPage(newPage);
   };
 
-  const formatDateRange = (dateRange: string) => {
-    return dateRange.replace(
-      /(\d{1,2})\/(\d{1,2})\/(\d{4})/g,
-      (_: string, day: string, month: string, year: string) => {
-        return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
-      },
-    );
-  };
-
   const username = localStorage.getItem("username");
   const count = localStorage.getItem("count");
   useEffect(() => {
@@ -96,7 +91,7 @@ export const ApprovedFinanceComponent: React.FC = () => {
       key: "time_duration",
       dataIndex: "time_duration",
       title: t("finance.table.timeDuration"),
-      cell: ({ value }) => formatDateRange(value as string),
+      cell: ({ value }) => value as string, 
     },
     {
       key: "total_hours",
@@ -146,8 +141,9 @@ export const ApprovedFinanceComponent: React.FC = () => {
       status: claim.claim_status || "",
       time_duration:
         claim.start_date && claim.end_date
-          ? `${formatDateToDDMMYYYY(claim.start_date)} - ${formatDateToDDMMYYYY(
+          ? `${formatDateByLanguage(claim.start_date, i18n.language)} - ${formatDateByLanguage(
               claim.end_date,
+              i18n.language,
             )}`
           : "N/A",
     };

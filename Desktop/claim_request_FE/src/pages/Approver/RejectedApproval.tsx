@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./RejectedApproval.module.css";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
-// import { useNavigate } from "react-router-dom";
 import TableComponent, { Column, DataRecord } from "@ui/Table/Table";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllRejectedClaimAsync } from "@redux/thunk/Claim/claimThunk";
@@ -12,10 +11,20 @@ import {
   selectAllRejectedTotalPages,
 } from "@/redux/selector/rejectedSelector.ts";
 import { useTranslation } from "react-i18next";
-import { formatDate } from "@/utils/date.ts";
+
+
+const formatDateByLanguage = (date: string, language: string) => {
+  const dateObj = new Date(date);
+  const day = dateObj.getDate().toString().padStart(2, "0"); 
+  const month = (dateObj.getMonth() + 1).toString().padStart(2, "0"); 
+  const year = dateObj.getFullYear();
+
+  return language === "vi"
+    ? `${day}/${month}/${year}` 
+    : `${month}/${day}/${year}`; 
+};
 
 export const RejectedComponent: React.FC = () => {
-  // const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const claimList = useSelector(selectAllRejected);
   const totalPages = useSelector(selectAllRejectedTotalPages);
@@ -23,7 +32,7 @@ export const RejectedComponent: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [limit] = useState(10);
   const [isSalaryVisible, setIsSalaryVisible] = useState(false);
-  const { t } = useTranslation("reject");
+  const { t, i18n } = useTranslation("reject");
 
   useEffect(() => {
     setLoading(true);
@@ -35,27 +44,6 @@ export const RejectedComponent: React.FC = () => {
     ).finally(() => setLoading(false));
   }, [currentPage]);
 
-  // const handleViewDetail = (id: string) => {
-  //   navigate(`/reject-details?id=${id}`);
-  // };
-
-  // const formatDateToDDMMYYYY = (date: string) => {
-  //   const dateObj = new Date(date);
-  //   const day = dateObj.getDate();
-  //   const month = dateObj.getMonth() + 1;
-  //   const year = dateObj.getFullYear();
-  //   return `${day}/${month}/${year}`;
-  // };
-  const formatDateToDDMMYYYY = (date: string) => {
-    const dateObj = new Date(date);
-    const day = dateObj.getDate();
-    const month = dateObj.getMonth() + 1;
-    const year = dateObj.getFullYear();
-    return t("language") === "en"
-      ? `${month}/${day}/${year}`
-      : `${day}/${month}/${year}`;
-  };
-
   const handlePageChange = (newPage: number) => {
     console.log("New Page: ", newPage);
     setCurrentPage(newPage);
@@ -64,14 +52,7 @@ export const RejectedComponent: React.FC = () => {
   const toggleSalaryVisibility = () => {
     setIsSalaryVisible(!isSalaryVisible);
   };
-  const formatDateRange = (dateRange: any) => {
-    return dateRange.replace(
-      /(\d{1,2})\/(\d{1,2})\/(\d{4})/g,
-      (match, day, month, year) => {
-        return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
-      },
-    );
-  };
+
   const columns: Column<DataRecord>[] = [
     {
       key: "user_name",
@@ -87,15 +68,13 @@ export const RejectedComponent: React.FC = () => {
       key: "start_date",
       dataIndex: "start_date",
       title: t("start_date"),
-      cell: ({ value }) =>
-        formatDateRange(formatDateToDDMMYYYY(value as string)),
+      cell: ({ value }) => formatDateByLanguage(value as string, i18n.language),
     },
     {
       key: "end_date",
       dataIndex: "end_date",
       title: t("end_date"),
-      cell: ({ value }) =>
-        formatDateRange(formatDateToDDMMYYYY(value as string)),
+      cell: ({ value }) => formatDateByLanguage(value as string, i18n.language),
     },
     {
       key: "total_hours",
@@ -116,28 +95,8 @@ export const RejectedComponent: React.FC = () => {
       key: "submitted_date",
       dataIndex: "submitted_date",
       title: t("submitted_date"),
-      cell: ({ value }) =>
-        formatDateRange(formatDateToDDMMYYYY(value as string)),
+      cell: ({ value }) => formatDateByLanguage(value as string, i18n.language),
     },
-    // {
-    //   key: "salary",
-    //   dataIndex: "user_salary",
-    //   title: t("salary"),
-    //   cell: ({ value }) => <div>{isSalaryVisible ? value : "******"}</div>,
-    // },
-    // {
-    //   key: "ot_rate",
-    //   dataIndex: "user_ot_rate",
-    //   title: t("otRate"),
-    // },
-    // {
-    //   key: "salary_overtime",
-    //   dataIndex: "salary_overtime",
-    //   title: t("salaryOvertime"),
-    //   cell: ({ value }) => (
-    //     <div>{isSalaryVisible ? value : "*****************"}</div>
-    //   ),
-    // },
     {
       key: "claim_status",
       dataIndex: "claim_status",
@@ -153,7 +112,7 @@ export const RejectedComponent: React.FC = () => {
     user_email: claim.user.email,
     user_salary: claim.user.salary,
     user_ot_rate: claim.user.ot_rate,
-    claim_status: "REJECTED", // Ensure this is correctly set
+    claim_status: "REJECTED",
   }));
 
   return (

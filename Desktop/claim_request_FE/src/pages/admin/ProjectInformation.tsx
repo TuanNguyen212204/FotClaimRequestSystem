@@ -1,7 +1,7 @@
 import TableComponent from "@components/ui/Table/Table";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch } from "@redux/index.ts";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import {
   selectAllProject,
   selectTotalPageOfAllProject,
@@ -39,7 +39,7 @@ const ProjectInformation: React.FC = () => {
   const [selectedStatus, setSelectedStatus] = useState<string>("All");
   const [UpdateOpen, setUpdateOpen] = useState(false);
   const navigate = useNavigate();
-  const { t } = useTranslation("projectInformation");
+  const { t, i18n } = useTranslation("projectInformation");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -74,6 +74,11 @@ const ProjectInformation: React.FC = () => {
     console.log("Current project state:", project);
   }, [project]);
 
+
+  useEffect(() => {
+    console.log("Language changed to:", i18n.language);
+  }, [i18n.language]);
+
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
@@ -85,19 +90,29 @@ const ProjectInformation: React.FC = () => {
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString("en-GB");
+    const language = i18n.language; 
+    console.log("Formatting date with language:", language); 
+    const day = date.getDate().toString().padStart(2, "0");
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const year = date.getFullYear();
+
+    return language === "en"
+      ? `${month}/${day}/${year}`
+      : `${day}/${month}/${year}`;
   };
 
-  const dataSource: DataRecord[] = Array.isArray(project)
-    ? project.map((project: Project) => ({
-        key: project.project_id,
-        projectID: project.project_id,
-        projectName: project.project_name,
-        startDate: formatDate(project.start_date),
-        endDate: formatDate(project.end_date || project.end_date),
-        projectStatus: project.project_status,
-      }))
-    : [];
+  const dataSource: DataRecord[] = useMemo(() => {
+    return Array.isArray(project)
+      ? project.map((project: Project) => ({
+          key: project.project_id,
+          projectID: project.project_id,
+          projectName: project.project_name,
+          startDate: formatDate(project.start_date),
+          endDate: project.end_date ? formatDate(project.end_date) : "N/A",
+          projectStatus: project.project_status,
+        }))
+      : [];
+  }, [project, i18n.language]); 
 
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);

@@ -213,7 +213,7 @@ const ApprovedDetailApproverModal = ({
                           </div>
                         </div>
                       </div>
-                    )
+                    ),
                   )
                 : null}
             </div>

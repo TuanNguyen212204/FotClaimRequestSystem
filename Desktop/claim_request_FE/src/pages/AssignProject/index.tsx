@@ -9,16 +9,17 @@ import { CloudCog, X } from "lucide-react";
 import { allProject } from "@/redux/slices/VySlice";
 import { Project } from "@/redux/slices/VySlice";
 import { getAllProjects } from "@/redux/thunk/CreateClaim";
-import { set } from "date-fns";
 import { setLoading } from "@/redux/slices/Project/projectSlice";
 import httpClient from "@/constant/apiInstance";
 import { ApiResponseNoGeneric } from "@/types/ApiResponse";
 import { useTranslation } from "react-i18next";
 import { Select } from "../User/CreateUser";
+
 interface AssignProjectProps {
   id: string;
   setOpen: (value: boolean) => void;
 }
+
 export const AssignProject: React.FC<AssignProjectProps> = ({
   id,
   setOpen,
@@ -29,7 +30,7 @@ export const AssignProject: React.FC<AssignProjectProps> = ({
   const [selectedProject, setSelectedProject] = useState<any>(null);
   const [userID, setUserID] = useState<string>(id);
   const [loading, setLoading] = useState<boolean>(false);
-  const { t } = useTranslation("allUserInformation");
+  const { t, i18n } = useTranslation("allUserInformation");
 
   useEffect(() => {
     dispatch(
@@ -52,6 +53,26 @@ export const AssignProject: React.FC<AssignProjectProps> = ({
     (proj) => proj.project_status !== 2,
   );
 
+
+  const formatDate = (dateString: string): string => {
+    const date = new Date(dateString);
+    const language = i18n.language; 
+    const day = date.getDate().toString().padStart(2, "0");
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const year = date.getFullYear();
+
+
+    return language === "en"
+      ? `${month}/${day}/${year}`
+      : `${day}/${month}/${year}`;
+  };
+
+
+  const getDatePlaceholder = (): string => {
+    const language = i18n.language;
+    return language === "en" ? "mm/dd/yyyy" : "dd/mm/yyyy";
+  };
+
   const handleProjectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const project = listProjectStatus.find(
       (proj) => proj.project_id === e.target.value,
@@ -59,8 +80,12 @@ export const AssignProject: React.FC<AssignProjectProps> = ({
     setSelectedProject(project || null);
     if (project) {
       setValue("project_name", project.project_name);
-      setValue("start_date", project.start_date.split("T")[0]);
-      setValue("end_date", project.end_date.split("T")[0]);
+
+      setValue("start_date", formatDate(project.start_date));
+      setValue(
+        "end_date",
+        project.end_date ? formatDate(project.end_date) : "N/A",
+      );
       setValue("project_status", project.project_status);
       setValue("status", project.status);
     }
@@ -205,8 +230,9 @@ export const AssignProject: React.FC<AssignProjectProps> = ({
                 {t("allUserInformation.assignUser.startDate")}
               </label>
               <input
-                type="date"
+                type="text"
                 {...register("start_date")}
+                placeholder={getDatePlaceholder()} // Thêm placeholder
                 disabled
                 className="mt-1 h-6 w-4/5 rounded-lg border border-gray-300 bg-gray-100 p-2"
               />
@@ -218,8 +244,9 @@ export const AssignProject: React.FC<AssignProjectProps> = ({
                 {t("allUserInformation.assignUser.endDate")}
               </label>
               <input
-                type="date"
+                type="text"
                 {...register("end_date")}
+                placeholder={getDatePlaceholder()} // Thêm placeholder
                 disabled
                 className="mt-1 h-6 w-4/5 rounded-lg border border-gray-300 bg-gray-100 p-2"
               />

@@ -9,54 +9,16 @@ import { MoveRight } from "lucide-react";
 import StatusTag from "../StatusTag/StatusTag";
 import { useTranslation } from "react-i18next";
 
-// Mảng ánh xạ các tháng bằng tiếng Việt
-const monthsVi = [
-  "Tháng Một",
-  "Tháng Hai",
-  "Tháng Ba",
-  "Tháng Tư",
-  "Tháng Năm",
-  "Tháng Sáu",
-  "Tháng Bảy",
-  "Tháng Tám",
-  "Tháng Chín",
-  "Tháng Mười",
-  "Tháng Mười Một",
-  "Tháng Mười Hai",
-];
-
-const formatDateToMonthDay = (date: string) => {
-  const { i18n } = useTranslation("userClaims");
+const formatDateByLanguage = (date: string, language: string) => {
+  console.log("Current language in formatDateByLanguage:", language); 
   const dateObj = new Date(date);
-  const day = dateObj.getDate();
-  const monthIndex = dateObj.getMonth();
+  const day = dateObj.getDate().toString().padStart(2, "0"); 
+  const month = (dateObj.getMonth() + 1).toString().padStart(2, "0"); 
+  const year = dateObj.getFullYear();
 
-  const month =
-    i18n.language === "vi"
-      ? monthsVi[monthIndex]
-      : dateObj.toLocaleString("en-US", { month: "long" });
-
-  const getDayWithSuffix = (day: number) => {
-    if (i18n.language === "vi") {
-      return day;
-    }
-    if (day > 3 && day < 21) return `${day}th`;
-    switch (day % 10) {
-      case 1:
-        return `${day}st`;
-      case 2:
-        return `${day}nd`;
-      case 3:
-        return `${day}rd`;
-      default:
-        return `${day}th`;
-    }
-  };
-
-  const formattedDay = getDayWithSuffix(day);
-  return i18n.language === "vi"
-    ? `${formattedDay} ${month}`
-    : `${month} ${formattedDay}`;
+  return language === "vi"
+    ? `${day}/${month}/${year}` 
+    : `${month}/${day}/${year}`; 
 };
 
 interface UserClaimDetailsModalProps {
@@ -72,7 +34,7 @@ const UserClaimDetailsModal = ({
   onClose,
   requestID,
 }: UserClaimDetailsModalProps) => {
-  const { t } = useTranslation("userClaims");
+  const { t, i18n } = useTranslation("userClaims");
   const dispatch = useDispatch<AppDispatch>();
   const claimDetail = useSelector(selectMyClaimDetail);
 
@@ -81,21 +43,8 @@ const UserClaimDetailsModal = ({
       dispatch(fetchMyClaimDetailAsync(requestID));
     }
   }, [isOpen, requestID, dispatch]);
-  const formatDateToDDMMYYYY = (date: string) => {
-    const dateObj = new Date(date);
-    const day = dateObj.getDate();
-    const month = dateObj.getMonth() + 1;
-    const year = dateObj.getFullYear();
-    return `${day}/${month}/${year}`;
-  };
-  const formatDateRange = (dateRange: any) => {
-    return dateRange.replace(
-      /(\d{1,2})\/(\d{1,2})\/(\d{4})/g,
-      (match, day, month, year) => {
-        return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
-      },
-    );
-  };
+
+  console.log("i18n.language in component:", i18n.language);
 
   return (
     <Modal
@@ -133,9 +82,9 @@ const UserClaimDetailsModal = ({
           <span className={styles.projectValue}>
             {claimDetail?.start_date && claimDetail?.end_date ? (
               <>
-                {formatDateToMonthDay(claimDetail.start_date)}
+                {formatDateByLanguage(claimDetail.start_date, i18n.language)}
                 <MoveRight size={20} className={styles.iconMoveRight} />
-                {formatDateToMonthDay(claimDetail.end_date)}
+                {formatDateByLanguage(claimDetail.end_date, i18n.language)}
               </>
             ) : (
               t("no_data")
@@ -148,9 +97,7 @@ const UserClaimDetailsModal = ({
           </span>
           <span className={styles.projectValue}>
             {claimDetail?.submitted_date
-              ? formatDateRange(
-                  formatDateToDDMMYYYY(claimDetail.submitted_date),
-                )
+              ? formatDateByLanguage(claimDetail.submitted_date, i18n.language)
               : t("no_data")}
           </span>
         </div>
@@ -195,7 +142,7 @@ const UserClaimDetailsModal = ({
               (detail, index) => (
                 <div key={index} className={styles.historyItem}>
                   <span className={styles.historyItemDate}>
-                    {formatDateToMonthDay(detail.date)}
+                    {formatDateByLanguage(detail.date, i18n.language)}
                   </span>
                   <div className={styles.historyItemInfo}>
                     <div className={styles.historyItemRow}>

@@ -28,10 +28,21 @@ import StatusTag, { StatusType } from "@/components/ui/StatusTag/StatusTag";
 import { DetailsApproval } from "./DetailsApproval";
 import { Button } from "@/components/ui/button/Button";
 import { useTranslation } from "react-i18next";
-import { formatDate } from "@/utils/date.ts";
+
+
+const formatDateByLanguage = (date: string, language: string) => {
+  const dateObj = new Date(date);
+  const day = dateObj.getDate().toString().padStart(2, "0");
+  const month = (dateObj.getMonth() + 1).toString().padStart(2, "0"); 
+  const year = dateObj.getFullYear();
+
+  return language === "vi"
+    ? `${day}/${month}/${year}` 
+    : `${month}/${day}/${year}`;
+};
 
 export const PendingComponent: React.FC = () => {
-  const { t } = useTranslation("pending");
+  const { t, i18n } = useTranslation("pending");
   const dispatch = useDispatch<AppDispatch>();
   const claimList = useSelector(selectAllPending);
   const totalPages = useSelector(selectAllPendingTotalPages);
@@ -267,23 +278,6 @@ export const PendingComponent: React.FC = () => {
     setCurrentPage(newPage);
   };
 
-  const formatDateToDDMMYYYY = (date: string) => {
-    const dateObj = new Date(date);
-    const day = dateObj.getDate();
-    const month = dateObj.getMonth() + 1;
-    const year = dateObj.getFullYear();
-    return `${day}/${month}/${year}`;
-  };
-
-  const formatDateRange = (dateRange: any) => {
-    return dateRange.replace(
-      /(\d{1,2})\/(\d{1,2})\/(\d{4})/g,
-      (match, day, month, year) => {
-        return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
-      },
-    );
-  };
-
   const columns: Column<DataRecord>[] = [
     {
       key: "user_name",
@@ -299,15 +293,13 @@ export const PendingComponent: React.FC = () => {
       key: "start_date",
       dataIndex: "start_date",
       title: t("columns.start_date"),
-      cell: ({ value }) =>
-        formatDateRange(formatDateToDDMMYYYY(value as string)),
+      cell: ({ value }) => formatDateByLanguage(value as string, i18n.language),
     },
     {
       key: "end_date",
       dataIndex: "end_date",
       title: t("columns.end_date"),
-      cell: ({ value }) =>
-        formatDateRange(formatDateToDDMMYYYY(value as string)),
+      cell: ({ value }) => formatDateByLanguage(value as string, i18n.language),
     },
     {
       key: "total_hours",
@@ -323,8 +315,7 @@ export const PendingComponent: React.FC = () => {
       key: "submitted_date",
       dataIndex: "submitted_date",
       title: t("columns.submitted_date"),
-      cell: ({ value }) =>
-        formatDateRange(formatDateToDDMMYYYY(value as string)),
+      cell: ({ value }) => formatDateByLanguage(value as string, i18n.language),
     },
     {
       key: "claim_status",

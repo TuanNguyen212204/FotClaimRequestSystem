@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Calendar from "react-calendar";
 import { Clock } from "lucide-react";
 import "react-calendar/dist/Calendar.css";
@@ -10,7 +10,7 @@ const DashboardHeader: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [showCalendar, setShowCalendar] = useState<boolean>(false);
   const [closing, setClosing] = useState<boolean>(false);
-  const { t } = useTranslation("dashboard");
+  const { t, i18n } = useTranslation("dashboard");
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -30,12 +30,30 @@ const DashboardHeader: React.FC = () => {
     };
   }, [showCalendar]);
 
-  const formattedDate: string = dateTime.toLocaleDateString("en-US", {
-    weekday: "long",
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-  });
+  useEffect(() => {
+    console.log("Language changed to:", i18n.language);
+  }, [i18n.language]);
+
+  const formatDate = (date: Date): string => {
+    const language = i18n.language; 
+    const day = date.getDate().toString().padStart(2, "0");
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const year = date.getFullYear();
+    const weekday = date.toLocaleDateString(
+      language === "en" ? "en-US" : "vi-VN",
+      { weekday: "long" },
+    );
+
+
+    const dateFormat =
+      language === "en" ? `${month}/${day}/${year}` : `${day}/${month}/${year}`;
+    return `${weekday}, ${dateFormat}`;
+  };
+
+  const formattedDate: string = useMemo(
+    () => formatDate(dateTime),
+    [dateTime, i18n.language],
+  );
 
   const closeModal = () => {
     setClosing(true);

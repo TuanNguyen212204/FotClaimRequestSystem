@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import styles from "./DraftApproval.module.css";
-// import { EyeIcon, EyeOffIcon } from "lucide-react";
 import TableComponent, { Column, DataRecord } from "@ui/Table/Table";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllDraftClaimAsync } from "@redux/thunk/Claim/claimThunk";
@@ -12,6 +11,7 @@ import {
 } from "@/redux/selector/draftSelector.ts";
 import { useTranslation } from "react-i18next";
 import { formatDate } from "@/utils/date";
+
 export const DraftApproval: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const claimList = useSelector(selectAllDraft);
@@ -19,7 +19,7 @@ export const DraftApproval: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [limit] = useState(10);
-  const { t } = useTranslation("draft");
+  const { t, i18n } = useTranslation("draft");
 
   useEffect(() => {
     setLoading(true);
@@ -35,13 +35,17 @@ export const DraftApproval: React.FC = () => {
     console.log("New Page: ", newPage);
     setCurrentPage(newPage);
   };
-  const formatDateRange = (dateRange: string) => {
-    return dateRange.replace(
-      /(\d{1,2})\/(\d{1,2})\/(\d{4})/g,
-      (_: string, day: string, month: string, year: string) => {
-        return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
-      },
-    );
+
+ 
+  const formatDateByLanguage = (date: string) => {
+    const dateObj = new Date(date);
+    const day = dateObj.getDate().toString().padStart(2, "0"); 
+    const month = (dateObj.getMonth() + 1).toString().padStart(2, "0"); 
+    const year = dateObj.getFullYear();
+
+    return i18n.language === "vi"
+      ? `${day}/${month}/${year}` 
+      : `${month}/${day}/${year}`; 
   };
 
   const columns: Column<DataRecord>[] = [
@@ -59,13 +63,13 @@ export const DraftApproval: React.FC = () => {
       key: "start_date",
       dataIndex: "start_date",
       title: t("start_date"),
-      cell: ({ value }) => formatDateRange(formatDate(value as string)),
+      cell: ({ value }) => formatDateByLanguage(formatDate(value as string)),
     },
     {
       key: "end_date",
       dataIndex: "end_date",
       title: t("end_date"),
-      cell: ({ value }) => formatDateRange(formatDate(value as string)),
+      cell: ({ value }) => formatDateByLanguage(formatDate(value as string)),
     },
     {
       key: "total_hours",
@@ -82,12 +86,6 @@ export const DraftApproval: React.FC = () => {
       dataIndex: "project_name",
       title: t("project_name"),
     },
-    // {
-    //   key: "submitted_date",
-    //   dataIndex: "submitted_date",
-    //   title: "Submitted Date",
-    //   cell: ({ value }) => formatDateRange(formatDate(value as string)),
-    // },
     {
       key: "claim_status",
       dataIndex: "claim_status",
@@ -95,6 +93,7 @@ export const DraftApproval: React.FC = () => {
       cell: ({ value }) => <StatusTag status={value as StatusType} />,
     },
   ];
+
   const dataSource: DataRecord[] = claimList.map((claim) => ({
     key: claim.request_id,
     ...claim,
