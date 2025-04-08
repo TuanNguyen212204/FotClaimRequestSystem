@@ -135,23 +135,25 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
           </div>
         )}
       </div>
-      <div style={{ marginTop: "50px" }}>
-        <div className="mx-auto rounded-xl bg-white pr-5 pb-5 pl-1 shadow-xl">
+      <div className="mt-3">
+        <div className="mx-auto rounded-xl bg-white pr-0 pb-5 shadow-xl">
           <div>
             <button
               onClick={() => handleCancel()}
-              className={`${styles.cancel_button}`}
+              className={styles.cancel_button}
             >
               <div>
                 <X />
               </div>
             </button>
           </div>
-
-          <h1 className={`mb-6 text-center text-3xl font-bold ${styles.title}`}>
-            {t("projectInformation.createProject.title")}
-          </h1>
-
+          <div className="block pt-5">
+            <h1
+              className={`mb-6 text-center text-3xl font-bold ${styles.title}`}
+            >
+              {t("projectInformation.createProject.title")}
+            </h1>
+          </div>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="ml-15">
               {/* <label className="block text-sm font-medium text-gray-700">
@@ -177,7 +179,7 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
                   {...register("project_name", {
                     required: t("projectInformation.validation.projectName"),
                   })}
-                  className="mt-1 h-6 w-full rounded-lg border border-gray-300 p-2 pl-8 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                  className="mt-1 h-6 w-72 rounded-lg border border-gray-300 p-2 pl-9 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                 />
               </div>
               {errors.project_name && (
@@ -205,8 +207,8 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
                   {...register("start_date", {
                     required: t("projectInformation.validation.startDate"),
                   })}
-                  className="mt-1 h-6 w-5/5 rounded-lg border border-gray-300 p-2 pl-9 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-                  min="2025-01-01"
+                  className="mt-1 h-6 w-72 rounded-lg border border-gray-300 p-2 pl-9 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                  // min="2025-01-01"
                 />
               </div>
 
@@ -238,8 +240,8 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
                   {...register("end_date", {
                     required: t("projectInformation.validation.endDate"),
                   })}
-                  className="mt-1 h-6 w-5/5 rounded-lg border border-gray-300 p-2 pl-9 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-                  min="2025-01-01"
+                  className="mt-1 h-6 w-72 rounded-lg border border-gray-300 p-2 pl-9 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                  // min="2025-01-01"
                 />
               </div>
               {errors.end_date && (
@@ -270,7 +272,7 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
                 options={options}
                 placeholder={t("projectInformation.createProject.selectStatus")}
                 onChange={(value) => console.log(value)}
-                className="mt-1 h-11 w-90 rounded-lg border border-gray-300 p-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="mt-1 h-11 w-83.5 rounded-lg border border-gray-300 p-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               />
               {errors.project_status && (
                 <p className="text-sm text-red-500">

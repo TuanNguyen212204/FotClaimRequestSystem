@@ -14,7 +14,7 @@ import { setLoading } from "@/redux/slices/Project/projectSlice";
 import httpClient from "@/constant/apiInstance";
 import { ApiResponseNoGeneric } from "@/types/ApiResponse";
 import { useTranslation } from "react-i18next";
-
+import { Select } from "../User/CreateUser";
 interface AssignProjectProps {
   id: string;
   setOpen: (value: boolean) => void;
@@ -149,6 +149,7 @@ export const AssignProject: React.FC<AssignProjectProps> = ({
                   </option>
                 ))}
               </select>
+
               {errors.project_id?.message && (
                 <p className="mt-1 text-sm text-red-500">
                   {String(errors.project_id.message)}
@@ -156,7 +157,6 @@ export const AssignProject: React.FC<AssignProjectProps> = ({
               )}
             </div>
 
-            {/* Project Name */}
             <div className="ml-15">
               <div className="flex">
                 <div className={styles.label_container}>
@@ -176,7 +176,6 @@ export const AssignProject: React.FC<AssignProjectProps> = ({
               />
             </div>
 
-            {/* Start Date */}
             <div className="ml-15">
               <label className="block text-sm font-medium text-gray-600">
                 {t("allUserInformation.assignUser.startDate")}
@@ -202,7 +201,6 @@ export const AssignProject: React.FC<AssignProjectProps> = ({
               />
             </div>
 
-            {/* Project Status */}
             <div className="ml-15">
               <label className="block text-sm font-medium text-gray-600">
                 {t("allUserInformation.assignUser.projectStatus")}

@@ -201,7 +201,7 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
                     ),
                   },
                 })}
-                className="mt-1 h-6 w-full rounded-lg border border-gray-300 p-2 pl-8 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="mt-1 h-6 w-72 rounded-lg border border-gray-300 p-2 pl-8 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               />
             </div>
 
@@ -234,7 +234,7 @@ export const UpdateUser: React.FC<UpdateUserProps> = ({ id, setOpenModal }) => {
                 {...register("email", {
                   required: t("allUserInformation.updateUser.validation.email"),
                 })}
-                className="pl- mt-1 h-6 w-full rounded-lg border border-gray-300 p-2 pl-9 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="pl- mt-1 h-6 w-72 rounded-lg border border-gray-300 p-2 pl-9 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               />
             </div>
             {errors.email && (

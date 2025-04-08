@@ -113,6 +113,22 @@ export const UpdateProject: React.FC<UpdateProjectProps> = ({
       setLoading(false);
     }
   };
+  const handleCancel = () => {
+    setOpenModal(false);
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        handleCancel();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   return (
     <div>
@@ -125,14 +141,28 @@ export const UpdateProject: React.FC<UpdateProjectProps> = ({
           </div>
         )}
       </div>
-      <div>
-        <div className="mx-auto rounded-xl bg-white pr-5 pb-5 pl-1 shadow-xl">
-          <button onClick={handleClose} className={styles.cancel_button}>
-            <X />
-          </button>
-          <h2 className="mb-6 text-center text-3xl font-bold text-blue-700">
+      <div className="mt-3">
+        <div className="mx-auto rounded-xl bg-white pr-0 pb-5 shadow-xl">
+          <div>
+            <button
+              onClick={() => handleCancel()}
+              className={styles.cancel_button}
+            >
+              <div>
+                <X />
+              </div>
+            </button>
+          </div>
+          {/* <h2 className="mb-6 text-center text-3xl font-bold text-blue-700">
             {t("projectInformation.updateProject.title")}
-          </h2>
+          </h2> */}
+          <div className="block pt-5">
+            <h1
+              className={`mb-6 text-center text-3xl font-bold ${styles.title}`}
+            >
+              {t("projectInformation.updateProject.title")}
+            </h1>
+          </div>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
             <div className="ml-15">
               <div className="flex text-sm font-medium text-gray-600">
@@ -155,7 +185,7 @@ export const UpdateProject: React.FC<UpdateProjectProps> = ({
                   {...register("project_name", {
                     required: t("projectInformation.validation.projectName"),
                   })}
-                  className="mt-1 h-6 w-full rounded-lg border border-gray-300 p-2 pl-8 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                  className="mt-1 h-6 w-72 rounded-lg border border-gray-300 p-2 pl-9 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                 />
               </div>
               {errors.project_name && (
@@ -182,7 +212,7 @@ export const UpdateProject: React.FC<UpdateProjectProps> = ({
                   {...register("start_date", {
                     required: t("projectInformation.validation.startDate"),
                   })}
-                  className="mt-1 h-6 w-5/5 rounded-lg border border-gray-300 p-2 pl-9 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                  className="mt-1 h-6 w-72 rounded-lg border border-gray-300 p-2 pl-9 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                   min="2025-01-01"
                 />
               </div>
@@ -212,7 +242,7 @@ export const UpdateProject: React.FC<UpdateProjectProps> = ({
                   {...register("end_date", {
                     required: t("projectInformation.validation.endDate"),
                   })}
-                  className="mt-1 h-6 w-5/5 rounded-lg border border-gray-300 p-2 pl-9 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                  className="mt-1 h-6 w-72 rounded-lg border border-gray-300 p-2 pl-9 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                   min="2025-01-01"
                 />
               </div>
@@ -244,7 +274,7 @@ export const UpdateProject: React.FC<UpdateProjectProps> = ({
                 options={statusOptions}
                 placeholder={t("projectInformation.updateProject.selectStatus")}
                 onChange={(value) => console.log(value)}
-                className="mt-1 h-11 w-90 rounded-lg border border-gray-300 p-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="mt-1 h-11 w-83.5 rounded-lg border border-gray-300 p-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               />
               {errors.project_status && (
                 <p className="text-sm text-red-500">
