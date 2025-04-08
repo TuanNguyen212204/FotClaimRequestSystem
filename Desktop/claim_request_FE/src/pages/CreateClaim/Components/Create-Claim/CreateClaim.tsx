@@ -34,6 +34,7 @@ export default function CreateClaim({
     onSubmit,
     setError,
     clearErrors,
+    reset,
     user,
   } = useCreateClaimForm({ initialValues, mode, requestID });
   const { t } = useTranslation("claim");
@@ -98,6 +99,7 @@ export default function CreateClaim({
         register={register}
         setValue={setValue}
         mode={mode}
+        reset={reset}
       />
     </form>
   ) : (

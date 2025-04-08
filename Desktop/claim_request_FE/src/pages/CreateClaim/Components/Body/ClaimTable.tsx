@@ -1,4 +1,9 @@
-import { useWatch, useFieldArray, UseFormSetValue } from "react-hook-form";
+import {
+  useWatch,
+  useFieldArray,
+  UseFormSetValue,
+  UseFormReset,
+} from "react-hook-form";
 import { Control, UseFormRegister, FieldErrors } from "react-hook-form";
 import styles from "@pages/CreateClaim/Claim.module.css";
 import { FormData } from "@/types/claimForm.type";
@@ -9,7 +14,9 @@ export interface ClaimTableProps {
   control: Control<FormData>;
   register: UseFormRegister<FormData>;
   errors: FieldErrors<FormData>;
+  reset: UseFormReset<FormData>;
   setValue: UseFormSetValue<FormData>;
+  mode: "create" | "view" | "update";
 }
 
 export default function ClaimTable({
@@ -17,6 +24,8 @@ export default function ClaimTable({
   control,
   errors,
   setValue,
+  reset,
+  mode,
 }: ClaimTableProps) {
   const { fields, append, remove } = useFieldArray({
     control,
@@ -40,6 +49,19 @@ export default function ClaimTable({
     );
     setHasEmptyRows(emptyRowExists);
   }, [claims]);
+
+  useEffect(() => {
+    if (mode !== "update") {
+      const initialClaimRow = { date: minDate || "", working_hours: 0 };
+
+      if (currentProject?.projectID) {
+        setValue("claims", [initialClaimRow], {
+          shouldValidate: true,
+          shouldDirty: true,
+        });
+      }
+    }
+  }, [currentProject, setValue, minDate]);
   return (
     <div className="mb-5 box-border overflow-x-auto">
       <h2 className="mb-4! pb-1.5! text-lg">{t("claimTable.ClaimEntries")}</h2>
@@ -69,7 +91,7 @@ export default function ClaimTable({
               >
                 <input
                   type="number"
-                  step="0.1"
+                  step="1"
                   disabled={!minDate || !maxDate}
                   className={styles.form_control}
                   {...register(`claims.${index}.working_hours`, {
