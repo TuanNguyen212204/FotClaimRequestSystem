@@ -46,6 +46,14 @@
       "error": "Cập nhật dự án thất bại.",
       "submitting": "Đang cập nhật..."
     },
+    "deleteProject": {
+      "deleteSuccess": "Xóa dự án thành công!",
+      "deleteError": "Xóa dự án thất bại. Vui lòng thử lại.",
+      "deleteCancelled": "Hủy xóa dự án.",
+      "confirmDeleteTitle": "Bạn có muốn xóa dự án này không?",
+      "confirmDeleteMessage": "Mã Dự Án: {id} sẽ bị xóa",
+      "deleteButtonTooltip": "Xóa Dự Án"
+    },
     "validation": {
       "projectID": "Mã Dự Án là bắt buộc",
       "projectName": "Tên Dự Án là bắt buộc",

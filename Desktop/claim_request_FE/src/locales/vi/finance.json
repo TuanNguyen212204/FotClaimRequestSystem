@@ -1,6 +1,7 @@
 {
   "finance": {
     "title": "Yêu Cầu Đã Duyệt",
+    "welcome_message": "Chào mừng {username} đến với Hệ thống Yêu Cầu Thanh Toán!",
     "table": {
       "name": "Yêu Cầu",
       "userName": "Tên Người Dùng",

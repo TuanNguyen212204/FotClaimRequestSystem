@@ -101,7 +101,17 @@
       "projectName": "Tên dự án",
       "startDate": "Ngày bắt đầu",
       "endDate": "Ngày kết thúc",
-      "projectStatus": "Trạng thái dự án"
+      "projectStatus": "Trạng thái dự án",
+      "selectProjectPlaceholder": "Chọn dự án",
+      "validate": {
+        "project": "Dự án là bắt buộc"
+      },
+      "assignSuccess": "Phân công người dùng vào dự án thành công!",
+      "assignError": "Không thể phân công người dùng vào dự án: {message}",
+      "projectStatuses": {
+        "active": "Đang hoạt động",
+        "inactive": "Không hoạt động"
+      }
     },
     "buttonCreate": "Tạo",
     "buttonUpdate": "Cập nhật",

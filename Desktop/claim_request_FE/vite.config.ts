@@ -31,6 +31,6 @@ export default defineConfig({
   },
   server: {
     port: 7000,
-    allowedHosts: ["  claimsystem.info.vn"],
+    allowedHosts: ['claimsystem.info.vn']
   },
 });

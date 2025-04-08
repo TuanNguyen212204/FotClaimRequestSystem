@@ -12,7 +12,6 @@ import {
   FileSearchIcon,
   CheckCircle2,
   XCircle,
-  // ArrowLeftCircle,
   Undo2,
   Check,
   X,
@@ -82,23 +81,20 @@ export const PendingComponent: React.FC = () => {
       checkboxRef.current.indeterminate = someChecked && !allChecked;
     }
   }, [checkedItems]);
+
   const username = localStorage.getItem("username");
   const count = localStorage.getItem("count");
   useEffect(() => {
-    if (count === "0") {
-      toast.success(
-        // t("allUserInformation.welcome_message", {
-        //   username: username || "User",
-        // }),
-        `Welcome ${username || "User"} to the Claim Request System!`,
-      );
+    if (count === "0" && username) {
+      toast.success(t("welcome_message", { username }));
       localStorage.setItem("count", "1");
     }
   }, [username, t]);
+
   const handleApproveClaim = async (request_id: string) => {
     handleGetSelectedData();
     setModalContent({
-      title: "Are you sure you want to approve this claim?",
+      title: t("modal.approve_title"),
       onOk: async () => {
         try {
           await httpClient.post(`/approvers/${request_id}/approve-claim`, {});
@@ -108,10 +104,10 @@ export const PendingComponent: React.FC = () => {
               limit: limit.toString(),
             }),
           );
-          toast.success("Claim approved successfully!");
+          toast.success(t("modal.approve_success"));
         } catch (error) {
           console.log("Error approving claim: ", error);
-          toast.error("Failed to approve claim.");
+          toast.error(t("modal.approve_error"));
         }
       },
     });
@@ -122,7 +118,7 @@ export const PendingComponent: React.FC = () => {
   const handleRejectClaim = async (request_id: string) => {
     handleGetSelectedData();
     setModalContent({
-      title: "Are you sure you want to reject this claim?",
+      title: t("modal.reject_title"),
       onOk: async () => {
         try {
           await httpClient.post(`/approvers/${request_id}/reject-claim`, {});
@@ -132,10 +128,10 @@ export const PendingComponent: React.FC = () => {
               limit: limit.toString(),
             }),
           );
-          toast.success("Claim rejected successfully!");
+          toast.success(t("modal.reject_success"));
         } catch (error) {
           console.log("Error rejecting claim: ", error);
-          toast.error("Failed to reject claim.");
+          toast.error(t("modal.reject_error"));
         }
       },
     });
@@ -146,7 +142,7 @@ export const PendingComponent: React.FC = () => {
   const handleReturnClaim = async (request_id: string) => {
     handleGetSelectedData();
     setModalContent({
-      title: "Are you sure you want to return this claim?",
+      title: t("modal.return_title"),
       onOk: async () => {
         try {
           await httpClient.post(`/approvers/${request_id}/return-claim`, {});
@@ -156,10 +152,10 @@ export const PendingComponent: React.FC = () => {
               limit: limit.toString(),
             }),
           );
-          toast.success("Claim returned successfully!");
+          toast.success(t("modal.return_success"));
         } catch (error) {
           console.log("Error returning claim: ", error);
-          toast.error("Failed to return claim.");
+          toast.error(t("modal.return_error"));
         }
       },
     });
@@ -171,11 +167,11 @@ export const PendingComponent: React.FC = () => {
     const selectedClaims = handleGetSelectedData();
     const requestIds = selectedClaims.map((claim) => claim.id as string);
     if (requestIds.length === 0) {
-      toast.warn("Please select at least one claim to approve.");
+      toast.warn(t("modal.select_at_least_one_to_approve"));
       return;
     }
     setModalContent({
-      title: `Are you sure you want to approve ${requestIds.length} claim(s)?`,
+      title: t("modal.approve_multiple_title", { count: requestIds.length }),
       onOk: async () => {
         try {
           await httpClient.post("/approvers/approve-multiple-claims", {
@@ -187,10 +183,10 @@ export const PendingComponent: React.FC = () => {
               limit: limit.toString(),
             }),
           );
-          toast.success("Selected claims approved successfully!");
+          toast.success(t("modal.approve_multiple_success"));
         } catch (error) {
           console.log("Error approving claims: ", error);
-          toast.error("Failed to approve selected claims.");
+          toast.error(t("modal.approve_multiple_error"));
         }
       },
     });
@@ -201,11 +197,11 @@ export const PendingComponent: React.FC = () => {
     const selectedClaims = handleGetSelectedData();
     const requestIds = selectedClaims.map((claim) => claim.id as string);
     if (requestIds.length === 0) {
-      toast.warn("Please select at least one claim to reject.");
+      toast.warn(t("modal.select_at_least_one_to_reject"));
       return;
     }
     setModalContent({
-      title: `Are you sure you want to reject ${requestIds.length} claim(s)?`,
+      title: t("modal.reject_multiple_title", { count: requestIds.length }),
       onOk: async () => {
         try {
           await httpClient.post("/approvers/reject-multiple-claims", {
@@ -217,10 +213,10 @@ export const PendingComponent: React.FC = () => {
               limit: limit.toString(),
             }),
           );
-          toast.success("Selected claims reject successfully!");
+          toast.success(t("modal.reject_multiple_success"));
         } catch (error) {
           console.log("Error approving claims: ", error);
-          toast.error("Failed to reject selected claims.");
+          toast.error(t("modal.reject_multiple_error"));
         }
       },
     });
@@ -231,11 +227,11 @@ export const PendingComponent: React.FC = () => {
     const selectedClaims = handleGetSelectedData();
     const requestIds = selectedClaims.map((claim) => claim.id as string);
     if (requestIds.length === 0) {
-      toast.warn("Please select at least one claim to return.");
+      toast.warn(t("modal.select_at_least_one_to_return"));
       return;
     }
     setModalContent({
-      title: `Are you sure you want to return ${requestIds.length} claim(s)?`,
+      title: t("modal.return_multiple_title", { count: requestIds.length }),
       onOk: async () => {
         try {
           await httpClient.post("/approvers/return-multiple-claims", {
@@ -247,10 +243,10 @@ export const PendingComponent: React.FC = () => {
               limit: limit.toString(),
             }),
           );
-          toast.success("Selected claims return successfully!");
+          toast.success(t("modal.return_multiple_success"));
         } catch (error) {
           console.log("Error approving claims: ", error);
-          toast.error("Failed to return selected claims.");
+          toast.error(t("modal.return_multiple_error"));
         }
       },
     });
@@ -403,7 +399,6 @@ export const PendingComponent: React.FC = () => {
             <>
               <Button
                 color="white"
-                // backgroundColor="linear-gradient(90deg, #89AC46, #6B8E23)"
                 size="large"
                 style={{
                   borderRadius: "10px",
@@ -462,10 +457,13 @@ export const PendingComponent: React.FC = () => {
           modalContent?.onOk();
           setModalVisible(false);
         }}
+        buttonCancel={t("modal.cancel_button")}
+        buttonOk={t("modal.confirm_button")}
       >
-        <p>Do you want to proceed?</p>
+        <p>{t("modal.confirm_message")}</p>
       </Modal>
     </div>
   );
 };
+
 export default PendingComponent;

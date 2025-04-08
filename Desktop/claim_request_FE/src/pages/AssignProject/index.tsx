@@ -30,6 +30,7 @@ export const AssignProject: React.FC<AssignProjectProps> = ({
   const [userID, setUserID] = useState<string>(id);
   const [loading, setLoading] = useState<boolean>(false);
   const { t } = useTranslation("allUserInformation");
+
   useEffect(() => {
     dispatch(
       getAllProjects({
@@ -79,23 +80,35 @@ export const AssignProject: React.FC<AssignProjectProps> = ({
       );
       if (response.data.httpStatus === 200) {
         console.log(response.data);
-        toast.success("Assign user to project successfully!");
+        toast.success(t("allUserInformation.assignUser.assignSuccess"));
         setOpen(false);
       }
     } catch (error: any) {
       if (error.response) {
         const { status, data } = error.response;
         if (status === 400) {
-          toast.error(data.message);
+          toast.error(
+            t("allUserInformation.assignUser.assignError", {
+              message: data.message,
+            }),
+          );
         }
       } else if (error instanceof Error) {
-        toast.error(error.message);
+        toast.error(
+          t("allUserInformation.assignUser.assignError", {
+            message: error.message,
+          }),
+        );
       }
+    } finally {
+      setLoading(false);
     }
   };
+
   const handleCancel = () => {
     setOpen(false);
   };
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -108,6 +121,15 @@ export const AssignProject: React.FC<AssignProjectProps> = ({
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
+
+  const translateProjectStatus = (status: string) => {
+    if (status === "Active") {
+      return t("allUserInformation.assignUser.projectStatuses.active");
+    } else if (status === "Inactive") {
+      return t("allUserInformation.assignUser.projectStatuses.inactive");
+    }
+    return status;
+  };
 
   return (
     <div>
@@ -142,7 +164,9 @@ export const AssignProject: React.FC<AssignProjectProps> = ({
                 onChange={handleProjectChange}
                 className="mt-1 h-11 w-83.5 rounded-lg border border-gray-300 p-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               >
-                <option value="">Select Project</option>
+                <option value="">
+                  {t("allUserInformation.assignUser.selectProjectPlaceholder")}
+                </option>
                 {listProjectStatus?.map((proj) => (
                   <option key={proj.project_id} value={proj.project_id}>
                     {proj.project_name} ({proj.project_id})
@@ -208,6 +232,11 @@ export const AssignProject: React.FC<AssignProjectProps> = ({
               <input
                 type="text"
                 {...register("status")}
+                value={
+                  selectedProject
+                    ? translateProjectStatus(selectedProject.status)
+                    : ""
+                }
                 disabled
                 className="mt-1 h-6 w-4/5 rounded-lg border border-gray-300 bg-gray-100 p-2"
               />

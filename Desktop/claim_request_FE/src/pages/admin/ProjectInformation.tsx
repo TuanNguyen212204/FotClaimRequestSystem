@@ -109,33 +109,36 @@ const ProjectInformation: React.FC = () => {
         "projects/" + id,
       );
       console.log(response.data.message);
-      toast.success("Project deleted successfully!");
+      toast.success(t("projectInformation.deleteProject.deleteSuccess"));
 
       setTimeout(() => {
         window.location.reload();
       }, 1000);
     } catch (error) {
       console.error("Delete project error " + error);
+      toast.error(t("projectInformation.deleteProject.deleteError"));
     }
   };
 
   const handleDelete = async (id?: string) => {
     if (!id) return;
     confirmModal({
-      title: "Do you want to delete this project?",
-      children: `Project ID: ${id} will be deleted`,
+      title: t("projectInformation.deleteProject.confirmDeleteTitle"),
+      children: t("projectInformation.deleteProject.confirmDeleteMessage", {
+        id,
+      }),
       onOk: () => {
         try {
           deleteProject(id);
           console.log("Deleted project with ID:", id);
         } catch (error) {
           console.error("Error deleting project:", error);
-          toast.error("Failed to delete project. Please try again.");
+          toast.error(t("projectInformation.deleteProject.deleteError"));
         }
       },
       onCancel: () => {
         console.log("Delete cancelled");
-        toast.error("Project deletion cancelled.");
+        toast.error(t("projectInformation.deleteProject.deleteCancelled"));
       },
     });
   };
@@ -206,6 +209,18 @@ const ProjectInformation: React.FC = () => {
                 <FilePen size={20} />
               </button>
             </Tooltip>
+            <Tooltip
+              text={t("projectInformation.deleteProject.deleteButtonTooltip")}
+              placement="top"
+            >
+              <button
+                className={`${styles.icon_button} ${styles.deleteButton}`}
+                onClick={() => handleDelete(value as string)}
+                title="Delete"
+              >
+                <Trash2 size={20} />
+              </button>
+            </Tooltip>
           </div>
         );
       },
@@ -252,7 +267,11 @@ const ProjectInformation: React.FC = () => {
                   ? t("projectInformation.filterStatuses.active")
                   : t("projectInformation.filterStatuses.inactive")}
             </span>
-            <ArrowDown className="ml-2 h-4 w-4" />
+            {isDropdownOpen ? (
+              <ArrowUp className="ml-2 h-4 w-4" />
+            ) : (
+              <ArrowDown className="ml-2 h-4 w-4" />
+            )}
           </div>
 
           {isDropdownOpen && (
@@ -284,7 +303,7 @@ const ProjectInformation: React.FC = () => {
           dataSource={dataSource}
           loading={loading}
           pagination={true}
-          name="Status"
+          name={t("projectInformation.table.status")}
           createButton={true}
           totalPage={totalPage}
           onPageChange={handlePageChange}
