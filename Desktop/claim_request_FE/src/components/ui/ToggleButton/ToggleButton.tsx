@@ -35,6 +35,9 @@ const ToggleButton = ({
         setEnabled(newStatus);
         if (onChange) onChange(newStatus);
         toast.success(t("toast.success"));
+        setTimeout(() => {
+          window.location.reload(); // Reload the page after 2 seconds
+        }, 1000); // Delay for 2 seconds before closing the modal
       },
       onCancel: () => {
         toast.error(t("toast.error"));

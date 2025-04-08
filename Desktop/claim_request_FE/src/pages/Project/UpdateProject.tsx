@@ -105,7 +105,10 @@ export const UpdateProject: React.FC<UpdateProjectProps> = ({
       setLoading(true);
       await httpClient.put(`/projects/${projectid}`, requestBody);
       toast.success(t("projectInformation.updateProject.success"));
-      setOpenModal(false);
+      setTimeout(() => {
+        setOpenModal(false);
+        window.location.reload();
+      }, 1000);
     } catch (error) {
       console.error("Update error:", error);
       toast.error(t("projectInformation.updateProject.error"));
@@ -213,7 +216,7 @@ export const UpdateProject: React.FC<UpdateProjectProps> = ({
                     required: t("projectInformation.validation.startDate"),
                   })}
                   className="mt-1 h-6 w-72 rounded-lg border border-gray-300 p-2 pl-9 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-                  min="2025-01-01"
+                  // min="2025-01-01"
                 />
               </div>
               {errors.start_date && (
@@ -243,7 +246,7 @@ export const UpdateProject: React.FC<UpdateProjectProps> = ({
                     required: t("projectInformation.validation.endDate"),
                   })}
                   className="mt-1 h-6 w-72 rounded-lg border border-gray-300 p-2 pl-9 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-                  min="2025-01-01"
+                  // min="2025-01-01"
                 />
               </div>
               {errors.end_date && (

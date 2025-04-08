@@ -209,7 +209,7 @@ const ProjectInformation: React.FC = () => {
                 <FilePen size={20} />
               </button>
             </Tooltip>
-            <Tooltip
+            {/* <Tooltip
               text={t("projectInformation.deleteProject.deleteButtonTooltip")}
               placement="top"
             >
@@ -220,7 +220,7 @@ const ProjectInformation: React.FC = () => {
               >
                 <Trash2 size={20} />
               </button>
-            </Tooltip>
+            </Tooltip> */}
           </div>
         );
       },
