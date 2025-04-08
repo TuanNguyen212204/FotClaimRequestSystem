@@ -81,9 +81,7 @@ const CustomModal = ({
       footerPosition="right"
       footer={
         <div className={styles.footer}>
-          <button onClick={onClose} className={styles.closeButton}>
-            {t('close')}
-          </button>
+          
           {onPrint && (
             <button onClick={onPrint} className={styles.printButton}>
               <Printer size={16} />
