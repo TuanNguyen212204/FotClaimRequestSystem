@@ -60,7 +60,12 @@
       "startDate": "Ngày Bắt Đầu là bắt buộc",
       "endDate": "Ngày Kết Thúc là bắt buộc",
       "projectStatus": "Trạng Thái Dự Án là bắt buộc",
-      "endDateAfterStartDate": "Ngày Kết Thúc phải sau Ngày Bắt Đầu"
+      "endDateAfterStartDate": "Ngày Kết Thúc phải sau Ngày Bắt Đầu",
+      "startDateInFuture": "Ngày Bắt Đầu phải trong tương lai",
+      "startDateWithIn50": "Ngày bắt đầu phải trong vòng 50 năm từ bây giờ",
+      "endDateInFuture": "Ngày kết thúc phải trong tương lai",
+      "endDateWithIn50": "Ngày kết thúc phải trong vòng 50 năm từ bây giờ",
+      "endDateAtLeast15Days": "Ngay Kết Thúc phải ít nhất 15 ngày sau Ngày Bắt Đầu"
     }
   }
 }

@@ -60,7 +60,12 @@
       "startDate": "Start Date is required",
       "endDate": "End Date is required",
       "projectStatus": "Project Status is required",
-      "endDateAfterStartDate": "End Date must be after Start Date"
+      "endDateAfterStartDate": "End Date must be after Start Date",
+      "startDateInFuture": "Start Date must be in the future",
+      "startDateWithIn50": "Start Date must be within 10 years from now",
+      "endDateInFuture": "End Date must be in the future",
+      "endDateWithIn50": "End Date must be within 10 years from now",
+      "endDateAtLeast15Days": "End Date must be at least 15 days from Start Date"
     }
   }
 }

@@ -3,6 +3,7 @@ import Header from "../ui/header/Header";
 import { Sidebar } from "../ui/sidebar/Sidebar";
 import styles from "./MainLayout.module.css"; // Dùng CSS Module để quản lý styles
 import { useState } from "react";
+import { ToastContainer } from "react-toastify";
 const MainLayout = () => {
   const [isCollapse, setIsCollapsed] = useState<boolean>(true);
   return (
@@ -17,6 +18,7 @@ const MainLayout = () => {
             transition: "margin-left 0.3s ease-in-out",
           }}
         >
+          <ToastContainer />
           <Outlet />
         </div>
       </div>
