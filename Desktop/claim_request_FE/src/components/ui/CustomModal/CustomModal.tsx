@@ -5,16 +5,15 @@ import { MoveRight, ChevronDown, Printer } from "lucide-react";
 import StatusTag from "../StatusTag/StatusTag";
 import { useTranslation } from "react-i18next";
 
-
 const formatDateByLanguage = (date: string, language: string) => {
   const dateObj = new Date(date);
-  const day = dateObj.getDate().toString().padStart(2, "0"); 
-  const month = (dateObj.getMonth() + 1).toString().padStart(2, "0"); 
+  const day = dateObj.getDate().toString().padStart(2, "0");
+  const month = (dateObj.getMonth() + 1).toString().padStart(2, "0");
   const year = dateObj.getFullYear();
 
   return language === "vi"
-    ? `${day}/${month}/${year}` 
-    : `${month}/${day}/${year}`; 
+    ? `${day}/${month}/${year}`
+    : `${month}/${day}/${year}`;
 };
 
 interface CustomModalProps {
@@ -37,7 +36,7 @@ interface CustomModalProps {
 }
 
 const CustomModal = ({ isOpen, onClose, onPrint, data }: CustomModalProps) => {
-  const { t, i18n } = useTranslation("claimstatus"); 
+  const { t, i18n } = useTranslation("claimstatus");
   const [isChevronDown, setIsChevronDown] = useState<boolean>(false);
 
   useEffect(() => {

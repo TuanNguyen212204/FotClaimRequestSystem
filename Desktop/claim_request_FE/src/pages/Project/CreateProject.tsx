@@ -206,9 +206,30 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
                   type="date"
                   {...register("start_date", {
                     required: t("projectInformation.validation.startDate"),
+                    validate: (value) => {
+                      const currentDate = new Date();
+                      const selectedDate = new Date(value);
+                      const tenYearsFromNow = new Date();
+                      tenYearsFromNow.setFullYear(
+                        currentDate.getFullYear() + 10,
+                      );
+
+                      if (selectedDate < currentDate) {
+                        return t(
+                          "projectInformation.validation.startDateInFuture",
+                        );
+                      }
+
+                      if (selectedDate > tenYearsFromNow) {
+                        return t(
+                          "projectInformation.validation.startDateWithIn50",
+                        );
+                      }
+
+                      return true;
+                    },
                   })}
                   className="mt-1 h-6 w-72 rounded-lg border border-gray-300 p-2 pl-9 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-                  // min="2025-01-01"
                 />
               </div>
 
@@ -239,9 +260,42 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
                   type="date"
                   {...register("end_date", {
                     required: t("projectInformation.validation.endDate"),
+                    validate: (value) => {
+                      const currentDate = new Date();
+                      const selectedDate = new Date(value);
+                      const tenYearsFromNow = new Date();
+                      const startDateValue = new Date(watch("start_date"));
+                      const fifteenDaysFromStartDate = new Date(startDateValue);
+                      fifteenDaysFromStartDate.setDate(
+                        startDateValue.getDate() + 15,
+                      );
+                      tenYearsFromNow.setFullYear(
+                        currentDate.getFullYear() + 10,
+                      );
+                      if (selectedDate < currentDate) {
+                        return t(
+                          "projectInformation.validation.endDateInFuture",
+                        );
+                      }
+                      if (selectedDate > tenYearsFromNow) {
+                        return t(
+                          "projectInformation.validation.endDateWithIn50",
+                        );
+                      }
+                      if (
+                        startDateValue &&
+                        selectedDate < fifteenDaysFromStartDate
+                      ) {
+                        return t(
+                          "projectInformation.validation.endDateAtLeast15Days",
+                        );
+                      }
+
+                      return true;
+                    },
                   })}
                   className="mt-1 h-6 w-72 rounded-lg border border-gray-300 p-2 pl-9 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-                  // min="2025-01-01"
+                  min="2025-01-01"
                 />
               </div>
               {errors.end_date && (
