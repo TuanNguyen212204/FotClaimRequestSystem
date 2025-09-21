@@ -40,8 +40,8 @@ function ResetPassword() {
   const resetPasswordSchema = Yup.object().shape({
     email: Yup.string()
       .required("Email is Required")
-      .test("includes-@fpt", "Email must be include @fpt", (value) =>
-        value ? value.includes("@fpt") : false
+      .test("includes-@fot", "Email must be include @fot", (value) => //Lúc đầu ở đây yêu cầu phải là @f p t nhưng sau đổi yêu cầu thành chỉ cần @fot 3 chỗ
+        value ? value.includes("@fot") : false
       ),
   });
 

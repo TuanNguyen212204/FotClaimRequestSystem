@@ -11,7 +11,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { PATH } from "../../../constant/config";
 import Badge from "@components/ui/Badge";
-import fptlogo from "@assets/fot.png";
+import fotlogo from "@assets/fot.png"; //Chỉ thay tên biến th
 import { useDispatch, useSelector } from "react-redux";
 import {
   deleteNotificationById,
@@ -165,7 +165,7 @@ const Header: React.FC = () => {
     <>
       <header className={styles.header}>
         <div>
-          <img src={fptlogo} alt="logo" className={styles.logoImage} />
+          <img src={fotlogo} alt="logo" className={styles.logoImage} />
         </div>
         <div className={styles.rightSection}>
           <SearchBar />
